@@ -1,0 +1,105 @@
+=== START PROMPTS ===
+
+PROMPT 1 – Master-Blueprint
+Du bist Chief Architect eines zukünftigen deutschen E-Government-Systems namens „Open State“. Erstelle einen vollständigen, detaillierten Master-Blueprint (ca. 1500–2000 Wörter) für eine einzige nationale Smartphone-App, die den gesamten deutschen Staatsapparat automatisiert und vereinfacht. Kernziele:  
+- Alle wiederkehrenden Prozesse (Wohnsitzanmeldung, Ummeldung, Gewerbeanmeldung, Rechtsstreitigkeiten, Bußgelder, Steuererklärung etc.) laufen zu 95 % vollautomatisch per Handy in unter 3 Minuten.  
+- Bei Rechtsstreitigkeiten: Sofortige Online-Stellungnahme, Anhänge hochladen, AI-berechnete Vergleichssumme aus 10 Jahren identischer Fälle + direkte Ratenzahlung per Klick.  
+- Finanzierung bei Bedarf: transparente, freiwillige Werbeplätze (nur von staatlich geprüften Partnern, klar gekennzeichnet).  
+Strukturiere den Blueprint in: 1. Vision & Werte, 2. High-Level-Architektur, 3. Kernmodule (mit Priorität), 4. User-Journey-Beispiele (Wohnsitz + Rechtsstreit), 5. Transparenz- & Fairness-Mechanismen. Verwende klare Überschriften und Bullet-Points. Ende mit einer 5-Jahres-Roadmap.
+
+Nachdem du den Blueprint fertig hast, schreibe am Ende des Outputs nur:  
+„✅ Prompt 1 abgeschlossen. Warte auf WEITER für Prompt 1b.“
+
+PROMPT 1b – Automatisches Datei-Speichern & Git-Repository-Setup (CLI)
+Wir sind bereits im Ordner open-state-project. Führe exakt diese Schritte aus:
+
+1. mkdir -p docs
+2. cat > docs/01_Master_Blueprint.md << 'EOF'
+[HIER den gesamten Blueprint-Text einfügen]
+EOF
+3. mkdir -p {architecture,legal,ai-models,app-design,roadmap,transparency}
+4. cat > README.md << 'EOF'
+# Open State Project
+
+Automatisierung & Vereinfachung des gesamten deutschen Staatsapparats.
+Version: v0.1 – Neustart März 2026
+
+## Ordnerstruktur
+- docs/          → Alle generierten Dokumente
+- architecture/  → Technische Architektur
+- legal/         → Rechtliche Analysen
+- ai-models/     → CaseMatch AI
+- app-design/    → UI/UX & Figma
+- roadmap/       → Pilot & Rollout
+
+Git-Repo automatisch angelegt.
+EOF
+5. git init
+   echo "*.log" > .gitignore
+   echo "node_modules/" >> .gitignore
+   echo ".env" >> .gitignore
+   git add .
+   git commit -m "Initial commit: Master-Blueprint Phase 1 abgeschlossen (Neustart)"
+
+Gib am Ende exakt aus:  
+„✅ Prompt 1b abgeschlossen – Blueprint gespeichert in docs/01_Master_Blueprint.md  
+Git-Repo erfolgreich initialisiert und committed.  
+Warte auf 'WEITER' für Prompt 2.“
+
+PROMPT 2 – Vergleich & Best Practices
+Lies die Datei docs/01_Master_Blueprint.md. Vergleiche „Open State“ mit Estland X-Road, Singapur Smart Nation, Dänemark MitID und Georgien Public Service Hall. Extrahiere die 8 wichtigsten Erfolgsfaktoren und die 5 größten deutschen Hürden. Passe den Blueprint an und speichere die aktualisierte Version als docs/02_Vergleich_Best_Practices.md. Danach: git add . && git commit -m "Prompt 2 abgeschlossen: Vergleich & Best Practices"
+
+Danach nur: „✅ Prompt 2 abgeschlossen. Warte auf WEITER für Prompt 3.“
+
+PROMPT 3 – Rechtliche Machbarkeitsstudie
+Lies docs/01_Master_Blueprint.md und docs/02_Vergleich_Best_Practices.md. Analysiere auf Vereinbarkeit mit Grundgesetz, DSGVO, OZG, Signaturgesetz etc. Erstelle die Tabelle + Gesetzesänderungs-Paket und speichere als legal/03_Rechtliche_Machbarkeitsstudie.md. Danach git add . && git commit -m "Prompt 3 abgeschlossen: Rechtliche Analyse"
+
+Danach nur: „✅ Prompt 3 abgeschlossen. Warte auf WEITER für Prompt 4.“
+
+PROMPT 4 – Transparenz- & Haftungsregelung
+Lies alle bisherigen Dateien. Entwickle Transparenz- & Haftungskonzept + Muster-Texte und speichere als transparency/04_Transparenz_Haftung.md. Danach git add . && git commit -m "Prompt 4 abgeschlossen"
+
+Danach nur: „✅ Prompt 4 abgeschlossen. Warte auf WEITER für Prompt 5.“
+
+PROMPT 5 – Systemarchitektur
+Lies alle bisherigen Dateien. Entwerfe die komplette technische Architektur (Mermaid-Diagramm, Tech-Stack, Datenfluss) und speichere als architecture/05_Systemarchitektur.md. Danach git add . && git commit -m "Prompt 5 abgeschlossen"
+
+Danach nur: „✅ Prompt 5 abgeschlossen. Warte auf WEITER für Prompt 6.“
+
+PROMPT 6 – AI CaseMatch Engine
+Lies alle bisherigen Dateien. Entwickle das detaillierte Prompt-Engineering + Fine-Tuning-Konzept für CaseMatch und speichere als ai-models/06_CaseMatch_Engine.md. Danach git add . && git commit -m "Prompt 6 abgeschlossen"
+
+Danach nur: „✅ Prompt 6 abgeschlossen. Warte auf WEITER für Prompt 7.“
+
+PROMPT 7 – UI/UX & User Flows
+Lies alle bisherigen Dateien. Erstelle die User-Experience-Beschreibung der 8 wichtigsten Screens/Flows und speichere als app-design/07_UI_UX_User_Flows.md. Danach git add . && git commit -m "Prompt 7 abgeschlossen"
+
+Danach nur: „✅ Prompt 7 abgeschlossen. Warte auf WEITER für Prompt 8.“
+
+PROMPT 8 – App-Prototyp-Prompts
+Lies alle bisherigen Dateien. Gib die 5 Midjourney/Flux-Prompts + Figma-Vorschlag und speichere als app-design/08_Prototyp_Prompts.md. Danach git add . && git commit -m "Prompt 8 abgeschlossen"
+
+Danach nur: „✅ Prompt 8 abgeschlossen. Warte auf WEITER für Prompt 9.“
+
+PROMPT 9 – Monetarisierungs- & Finanzmodell
+Lies alle bisherigen Dateien. Erstelle das Finanzierungsmodell + Formel und speichere als roadmap/09_Monetarisierung_Finanzmodell.md. Danach git add . && git commit -m "Prompt 9 abgeschlossen"
+
+Danach nur: „✅ Prompt 9 abgeschlossen. Warte auf WEITER für Prompt 10.“
+
+PROMPT 10 – Pilotprojekt & Roadmap
+Lies alle bisherigen Dateien. Entwickle den 24-Monats-Pilotplan und speichere als roadmap/10_Pilot_Rollout.md. Danach git add . && git commit -m "Prompt 10 abgeschlossen"
+
+Danach nur: „✅ Prompt 10 abgeschlossen. Warte auf WEITER für Prompt 11.“
+
+PROMPT 11 – Entwickler-Handover-Dokument
+Lies ALLE bisherigen Dateien und kombiniere sie zu einem einzigen Handover-Dokument. Speichere als docs/11_Entwickler_Handover.md. Danach git add . && git commit -m "Prompt 11 abgeschlossen"
+
+Danach nur: „✅ Prompt 11 abgeschlossen. Warte auf WEITER für Prompt 12.“
+
+PROMPT 12 – Öffentlichkeits- & Politik-Pitch
+Lies alle bisherigen Dateien. Schreibe den 3-minütigen Pitch + 8 Folien-Beschreibung und speichere als docs/12_Politik_Pitch.md. Danach git add . && git commit -m "Prompt 12 abgeschlossen – Projekt vollständig!"
+
+Danach nur: „✅ Prompt 12 abgeschlossen – Projekt vollständig!  
+Du kannst jetzt 'git log' anschauen oder das Repo zippen.“
+
+=== ENDE PROMPTS ===
