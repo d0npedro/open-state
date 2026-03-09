@@ -127,6 +127,7 @@ Zentrale Übersicht: Laufende Vorgänge, proaktive Hinweise, schnelle Aktionen.
 - Proaktive Hinweiskarte: KI erkennt Fristen und Ansprüche → schlägt Aktionen vor
 - Vorgangs-Karten: Farbcodiert (Grün = fertig, Amber = wartend, Blau = in Bearbeitung)
 - Datentresor-Widget: Transparenz-Reminder direkt auf Home
+- Rechts-Hinweis-Kachel: Juristische Referenzen aus KiJuP mit Quelle/Stand; Hinweis „Falldaten bleiben im führenden Fachverfahren“
 - Bottom Navigation: Home | Vorgänge | Datentresor | Profil
 - Dark Mode: Vollständig unterstützt
 

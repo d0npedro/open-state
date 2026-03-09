@@ -28,6 +28,7 @@ Wohnsitz anmelden, Gewerbe starten, Rechtsstreit in 3 Klicks mit AI-Vergleichssu
 | 11 | Entwickler-Handover (30–40 Seiten) | [docs/11_Entwickler_Handover.md](docs/11_Entwickler_Handover.md) |
 | 12 | 3-Minuten-Pitch für Bundestag/Investoren | [docs/12_Politik_Pitch.md](docs/12_Politik_Pitch.md) |
 | 13 | Jugendamt-Modul (HzE, Beratung, Unterhaltsvorschuss) | [docs/13_Jugendamt_Module.md](docs/13_Jugendamt_Module.md) |
+| 14 | KiJuP-Integration (Referenzquelle + lokale Fachverfahren) | [docs/14_KiJuP_Integration.md](docs/14_KiJuP_Integration.md) |
 
 ## Nächste Schritte (Phase 2 – ab jetzt)
 
