@@ -12,7 +12,7 @@
 
 **[0:00 – 0:20 | ERÖFFNUNG – Der Schmerz]**
 
-Stellen Sie sich vor: Sie ziehen um. In Deutschland bedeutet das heute: mindestens drei Behördengänge, vier Wochen Wartezeit, zwölf verschiedene Formulare – und das im Jahr 2026. Für einen Vorgang, der technisch in zwei Minuten erledigt sein könnte.
+Stellen Sie sich vor: Sie ziehen um. In Deutschland bedeutet das heute: mindestens drei Behördengänge, vier Wochen Wartezeit, zwölf verschiedene Formulare. Für einen Vorgang, der technisch in zwei Minuten erledigt sein könnte.
 
 Dieses Problem multipliziert sich: 84 Millionen Menschen, Hunderte von Verwaltungsvorgängen im Leben, Jahrzehnte der digitalen Rückständigkeit. Der deutsche Staat kostet sich selbst und seinen Bürgern jährlich Milliarden Euro und ungezählte Lebensarbeitsstunden – nicht weil die Menschen unfähig wären, sondern weil das System es so vorschreibt.
 
@@ -46,13 +46,13 @@ Und das Entscheidende: Die Daten gehören dem Bürger – technisch, nicht nur r
 
 ---
 
-**[1:35 – 1:55 | DAS GESCHÄFTSMODELL – Was es kostet und was es einbringt]**
+**[1:35 – 1:55 | DAS FINANZARGUMENT – Was es kostet und was es einspart]**
 
-Gesamtinvestition über fünf Jahre: eine Milliarde Euro. Das klingt viel.
+Gesamtinvestition: eine Milliarde Euro. Das klingt viel.
 
-Der Return: 7,2 Milliarden Euro jährlich ab 2030 – allein durch eingesparte Bearbeitungszeiten in Behörden und bei Bürgern. Break-Even im zweiten Jahr. Amortisation des gesamten CAPEX in weniger als zwölf Monaten ab Vollbetrieb.
+Die fiskalische Entlastung: 7,2 Milliarden Euro jährlich im validierten Vollbetrieb – allein durch eingesparte Bearbeitungszeiten in Behörden und bei Bürgern. Amortisation des gesamten CAPEX in weniger als zwölf Monaten nach Erreichen des Vollbetriebs.
 
-Eine Bundesautobahn kostet pro Kilometer 15 Millionen Euro und trägt keine Zinsen. Open State kostet einmalig eine Milliarde Euro und spart jedes Jahr das Siebenfache. Es ist die effizienteste Infrastrukturinvestition in der Geschichte der Bundesrepublik.
+Eine Bundesautobahn kostet pro Kilometer 15 Millionen Euro und trägt keine Zinsen. Open State kostet einmalig eine Milliarde Euro und entlastet den Staatshaushalt jedes Jahr um das Siebenfache. Es ist die effizienteste Infrastrukturinvestition der Bundesrepublik.
 
 ---
 
@@ -60,15 +60,15 @@ Eine Bundesautobahn kostet pro Kilometer 15 Millionen Euro und trägt keine Zins
 
 Wir brauchen keinen Neustart. Wir bauen auf dem auf, was existiert.
 
-Phase 1: Vier Pilotstädte, ab Juni 2026, 4.000 freiwillige Tester. Wohnsitzummeldung und Steuererklärung. Drei Monate, dann öffentliche Beta.
+Pilotphase: Vier Pilotstädte, 4.000 freiwillige Tester. Wohnsitzummeldung und Steuererklärung. Nach nachgewiesener Qualität: öffentliche Beta.
 
-Phase 2: Alle Einwohner der vier Pilotstädte können freiwillig nutzen. 100.000 aktive Nutzer bis Ende 2026.
+Open Beta: Alle Einwohner der vier Pilotstädte können freiwillig nutzen. Ziel: 100.000 aktive Nutzer nach Abschluss dieser Phase.
 
-Phase 3: Fünf Bundesländer vollständig angebunden. Zwei Millionen Nutzer. 2027.
+Föderale Anschlussfähigkeit: Fünf Bundesländer vollständig angebunden. Zwei Millionen Nutzer.
 
-Phase 4: Alle 16 Bundesländer. Zehn Millionen Nutzer. Februar 2028.
+Vollbetrieb: Alle 16 Bundesländer. Zehn Millionen Nutzer.
 
-Fünf Jahre nach heute: 50 Millionen Nutzer. Deutschland als Vorbild für Europa.
+Mit wachsender Systemintegration: 50 Millionen Nutzer. Deutschland als verlässliches Vorbild für Europa.
 
 ---
 
@@ -76,11 +76,11 @@ Fünf Jahre nach heute: 50 Millionen Nutzer. Deutschland als Vorbild für Europa
 
 Wir brauchen drei Dinge:
 
-Erstens: Einen Kabinettsbeschluss, der Open State als nationale Infrastrukturpflicht definiert – wie Straßen, wie Schulen, wie das Internet.
+Erstens: Einen Kabinettsbeschluss, der Open State als nationale Infrastrukturpflicht definiert – wie Straßen, wie Schulen, wie das öffentliche Rechtssystem.
 
 Zweitens: Ein Gesetzgebungspaket – OZG-Novelle, VwVfG-Änderung, Once-Only-Prinzip als Pflicht – damit Bürger ihre Daten wirklich nur einmal angeben müssen.
 
-Drittens: Eine Milliarde Euro Anschubfinanzierung. Mit dem Versprechen, dass diese Milliarde ab 2028 siebenfach zurückkommt.
+Drittens: Eine Milliarde Euro Anschubfinanzierung. Mit der nachgewiesenen Perspektive, dass diese Milliarde im validierten Vollbetrieb siebenfach als fiskalische Entlastung zurückkommt.
 
 ---
 
@@ -100,16 +100,16 @@ Open State. Ihr Staat. Für Sie. In drei Minuten.
 ### Slide 1 – TITELFOLIE
 
 **Titel:** OPEN STATE
-**Untertitel:** Der deutsche Staat. Vollautomatisch. In Ihrer Hosentasche.
+**Untertitel:** Der deutsche Staat. Transparent. Verlässlich. Für alle.
 **Visuell:** Großes, ruhiges Design. Zentriertes Wordmark „Open State" in Staatsblau (#003F8C) auf weißem Hintergrund. Darunter ein einzelnes Smartphone-Mockup mit dem Home-Dashboard. Keine Ablenkung.
-**Fußzeile:** Version 1.0 · März 2026 · Föderales Kompetenzzentrum Open State GmbH
-**Botschaft:** Professionell, staatlich, modern. Kein Tech-Startup-Feeling, kein Behördencharme.
+**Fußzeile:** Föderales Kompetenzzentrum Open State GmbH
+**Botschaft:** Professionell, staatsnah, modern. Kein Tech-Startup-Feeling, kein Behördencharme.
 
 ---
 
 ### Slide 2 – DAS PROBLEM
 
-**Titel:** „Heute. Im Jahr 2026."
+**Titel:** „Der Status quo. Und was möglich wäre."
 **Visuell:** Zwei-Spalten-Layout.
 
 LINKS – „Wohnsitzummeldung heute":
@@ -141,6 +141,7 @@ RECHTS – „Was technisch möglich wäre":
 - 🚗 KFZ
 - 💼 Gewerbe
 - 👶 Sozialleistungen
+- 💼 Arbeitsverwaltung
 - 🎓 Bildung
 - 🗳️ Bürgerpartizipation
 
@@ -194,36 +195,69 @@ RECHTS – Zero-Knowledge-Datentresor:
 
 ---
 
-### Slide 6 – FINANZMODELL
+### Slide 5b – DOMÄNENBEISPIEL: ARBEITSVERWALTUNG
 
-**Titel:** Die beste Infrastrukturinvestition der Bundesrepublik.
-**Visuell:** Balkendiagramm (2026–2030):
+**Titel:** Wie Open State Soziales neu denkt.
+**Visuell:** Fallakte-Dashboard mit Statusanzeige – beispielhaft für die Domäne Arbeitsverwaltung.
 
-- Rote Balken (Investition): 2026: -233 Mio. | 2027: -398 Mio.
-- Grüne Balken (ROI): 2027: +356 Mio. | 2028: +1.531 Mio. | 2029: +4.454 Mio. | 2030: +7.487 Mio.
-- Break-Even-Linie: Q2 2028 (senkrechte gestrichelte Linie)
+```
+FALLAKTE #AV-XXXXXX         Status: LEISTUNGSBERECHNUNG
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✅ Arbeitslosmeldung          abgeschlossen
+✅ Leistungsantrag ALG I      eingereicht
+⏳ Leistungsberechnung        läuft (Frist: [Datum])
+◻ Bescheiderstellung         ausstehend
+◻ Vermittlung                ausstehend
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📄 Dokument fehlt: Arbeitgeberbescheinigung
+   → Begründung: Pflicht nach § 312 SGB III
+   → Frist: [Datum]  [Jetzt hochladen →]
+```
 
-Drei Highlight-Boxen:
-- **Gesamtinvestition 5 Jahre:** ~1 Mrd. €
-- **Jährliche Einsparung ab 2030:** 7,2 Mrd. €
-- **ROI auf CAPEX:** > 1.000 %
+**Was heute passiert:** Statusanfragen per Telefon (40–60 % aller BA-Kontakte). Rückfragen ohne Begründung. Bürger wissen nicht, was fehlt.
 
-Finanzierungspyramide (klein, rechte Ecke):
-70% Bund · 20% Länder/EU · 10% Markt (Werbung + API)
+**Was Open State liefert:**
+- Transparente Fallakte: Bürger sehen jeden Schritt, jede Frist, jeden offenen Punkt
+- Strukturierte Rückfragen mit Begründung (kein Textbaustein-Chaos)
+- Bescheid in zwei Versionen: rechtlich + verständlich erklärt
+- Kein automatisierter Verwaltungsakt – jede Entscheidung bleibt beim Menschen
 
-**Fußzeile:** „Kosten pro Transaktion heute: ~18 €. Ziel 2030: < 0,50 €."
-**Botschaft:** Dies ist keine Ausgabe. Es ist die renditestärkste Infrastrukturinvestition seit der Digitalisierung der Deutschen Bahn.
+**Effizienzpotenzial (nach Pilotvalidierung messbar):** -60–75 % Statusanfragen, +35–45 Prozentpunkte vollständige Erstanträge
+
+**Botschaft:** Arbeitsverwaltung ist der härteste Test – sozial sensibel, rechtlich komplex, föderales Chaos. Wenn es hier funktioniert, funktioniert es überall.
 
 ---
 
-### Slide 7 – 24-MONATS-ROADMAP
+### Slide 6 – FINANZMODELL
 
-**Titel:** Konkret. Machbar. Messbar.
-**Visuell:** Horizontale Timeline mit 4 Phasen, farbcodiert:
+**Titel:** Die beste Infrastrukturinvestition der Bundesrepublik.
+**Visuell:** Phasendiagramm (Investition → Effizienzrendite):
+
+- Investitionsphase (Pilotbetrieb + föderale Anschlussfähigkeit): ~630 Mio. € kumuliert
+- Renditephase (Skalierung): Einsparungen übersteigen Investitionen
+- Vollbetrieb: Strukturelle Einsparung > 7 Mrd. € jährlich (nach validierten Pilotdaten)
+- Break-Even: Im validierten Skalierungsbetrieb (keine kalendarische Prognose)
+
+Drei Highlight-Boxen:
+- **Gesamtinvestition Aufbauphase:** ~1 Mrd. € (phasengebunden, nicht jahresgebunden)
+- **Jährliche Einsparung im Vollbetrieb:** Strukturell > 7 Mrd. € (Basis: Pilotvalidierung)
+- **ROI auf CAPEX:** > 1.000 % (nach nachgewiesener Skalierung)
+
+Finanzierungspyramide (klein, rechte Ecke):
+70% Bund · 20% Länder/EU · 10% API-Lizenzierung
+
+**Fußzeile:** „Kosten pro Transaktion heute: ~18 €. Ziel im validierten Vollbetrieb: < 0,50 €."
+**Botschaft:** Dies ist keine Ausgabe. Es ist die effizienteste Infrastrukturinvestition der Bundesrepublik – messbar, nachweisbar, phasengebunden.
+
+---
+
+### Slide 7 – ROLLOUT-STRATEGIE
+
+**Titel:** Phasenweise. Nachweisbar. Skalierbar.
+**Visuell:** Horizontale Phasenübersicht mit 4 Stufen, farbcodiert:
 
 ```
 PHASE 0          PHASE 1           PHASE 2            PHASE 3/4
-Mrz–Mai 2026     Jun–Aug 2026      Sep–Nov 2026        Dez 2026–Feb 2028
 [VORBEREITUNG]   [CLOSED ALPHA]    [OPEN BETA]         [ROLLOUT]
 
 Kabinett-         4.000 Tester      880.000             Alle 16
@@ -232,12 +266,12 @@ Kompetenzzentrum  Steuern           CaseMatch Beta      10 Mio. Nutzer
 4 Pilotstädte     NPS > 40          NPS > 60            NPS > 70
 ```
 
-Darunter 3 „Quick Wins" hervorgehoben:
-- ✅ **Juni 2026:** Erste Ummeldung in < 3 Minuten – live dokumentiert
-- ✅ **Oktober 2026:** Erster KI-gestützter Widerspruch eingereicht
-- ✅ **Februar 2028:** Alle 16 Bundesländer – bundesweite Pressekonferenz
+Darunter 3 Meilensteine:
+- ✅ **Alpha-Abschluss:** Erste Ummeldung in < 3 Minuten – live dokumentiert
+- ✅ **Beta-Betrieb:** Erster KI-gestützter Widerspruch eingereicht
+- ✅ **Vollbetrieb:** Alle 16 Bundesländer – bundesweite Transparenzpräsentation
 
-**Botschaft:** Kein Mammutprojekt ohne Meilensteine. Jede Phase liefert beweisbare Ergebnisse.
+**Botschaft:** Jede Phase beginnt erst nach nachgewiesener Qualität der vorherigen. Keine Terminversprechen – sondern Zustandsversprechen.
 
 ---
 
@@ -248,8 +282,8 @@ Darunter 3 „Quick Wins" hervorgehoben:
 
 | **OHNE Open State** | **MIT Open State** |
 |--------------------|-------------------|
-| Platz 22 EU Digital Index | EU-Vorreiter bis 2030 |
-| 12 Mrd. €/Jahr Verwaltungskosten | -7,2 Mrd. €/Jahr ab 2030 |
+| Platz 22 EU Digital Index | EU-Vorbild im validierten Vollbetrieb |
+| 12 Mrd. €/Jahr Verwaltungskosten | -7,2 Mrd. €/Jahr fiskalische Entlastung |
 | 4 Wochen Ummeldung | 2 Minuten |
 | Bürger gegen Staat | Staat für Bürger |
 | Internationale Rückständigkeit | Open-Source-Export an EU-Partner |
@@ -259,11 +293,11 @@ Mittig: Eine große Frage in Fett:
 
 Drei konkrete Forderungen (nummeriert, klar):
 1. **Kabinettsbeschluss** Open State als nationale Pflichtinfrastruktur
-2. **Gesetzgebungspaket** (OZG-Novelle + Once-Only + VwVfG) bis Q3 2026
-3. **1 Milliarde Euro** Anschubfinanzierung im Bundeshaushalt 2026
+2. **Gesetzgebungspaket** (OZG-Novelle + Once-Only + VwVfG) mit parlamentarischer Priorität
+3. **1 Milliarde Euro** Anschubfinanzierung im nächsten Bundeshaushalt
 
 Fußzeile groß:
-**OPEN STATE · openstate.bund.de · März 2026**
+**OPEN STATE · openstate.bund.de**
 
 Kontakt: bundesbeauftragter@openstate.bund.de
 
@@ -275,17 +309,16 @@ Kontakt: bundesbeauftragter@openstate.bund.de
 
 ### Variante A: 60-Sekunden-Elevator-Pitch (Flur-Gespräch)
 
-„Deutschland gibt jährlich 12 Milliarden Euro für Verwaltungsdigitalisierung aus – mit mäßigem Erfolg. Open State ist der Systemwechsel: Eine einzige staatliche App, die 95 % aller Behördenvorgänge in unter 3 Minuten erledigt. Wohnsitzummeldung, Steuererklärung, Bußgeld-Widerspruch mit KI-Analyse. Estland macht das seit 20 Jahren. Singapur seit 15. Wir haben alle Zutaten – Personalausweis-NFC, ELSTER, OZG. Was fehlt, ist der politische Wille. Die Investition: 1 Milliarde Euro. Der Return: 7,2 Milliarden pro Jahr ab 2030. Break-Even in 2 Jahren. Das ist keine Digitalisierung. Das ist die effizienteste Infrastrukturinvestition der Bundesrepublik."
+„Deutschland gibt jährlich 12 Milliarden Euro für Verwaltungsdigitalisierung aus – mit mäßigem Erfolg. Open State ist der Systemwechsel: Eine einzige staatliche App, die 95 % aller Behördenvorgänge in unter 3 Minuten erledigt. Wohnsitzummeldung, Steuererklärung, Bußgeld-Widerspruch mit KI-Analyse. Estland macht das seit über 20 Jahren vor. Singapur seit 15. Wir haben alle Zutaten – Personalausweis-NFC, ELSTER, OZG. Was fehlt, ist der politische Wille. Die Investition: 1 Milliarde Euro. Die fiskalische Entlastung im Vollbetrieb: 7,2 Milliarden pro Jahr. Das ist keine Digitalisierung. Das ist die effizienteste Infrastrukturinvestition der Bundesrepublik."
 
 ### Variante B: Tweet / Social-Media-Kurzform
 
-„Was kostet eine Wohnsitzummeldung in Deutschland? 3 Behördengänge, 4 Wochen, 12 Formulare. Was könnte sie kosten? 2 Minuten. 1 Fingerabdruck. 0 Warteschlangen. Open State macht es möglich. Estland zeigt seit 20 Jahren, dass es geht. Jetzt ist Deutschland dran. #OpenState #Digitalisierung #EGovernment"
+„Was kostet eine Wohnsitzummeldung in Deutschland? 3 Behördengänge, 4 Wochen, 12 Formulare. Was wäre technisch möglich? 2 Minuten. 1 Fingerabdruck. 0 Warteschlangen. Open State zeigt, wie es geht. Estland macht es seit Jahrzehnten vor. #OpenState #Digitalisierung #EGovernment"
 
 ### Variante C: Pressemitteilungs-Opener
 
-„Berlin, [Datum] – Die Bundesregierung hat heute das Pilotprojekt Open State gestartet – die erste einheitliche staatliche Smartphone-App für alle deutschen Verwaltungsdienste. Ziel: 95 Prozent aller Behördenvorgänge vollautomatisch, in unter drei Minuten, für 84 Millionen Bürgerinnen und Bürger. Das Projekt, entwickelt vom neu gegründeten Föderalen Kompetenzzentrum Open State GmbH, startet zunächst in vier Pilotstädten und soll bis 2028 bundesweit ausgerollt werden. Internationale Vorbilder wie Estlands X-Road und Singapurs Singpass zeigen: Was in Deutschland als Vision gilt, ist anderswo seit Jahren gelebte Realität."
+„Berlin – Die Bundesregierung startet das Pilotprojekt Open State – die erste einheitliche staatliche Smartphone-App für alle deutschen Verwaltungsdienste. Ziel: 95 Prozent aller Behördenvorgänge vollautomatisch, in unter drei Minuten, für 84 Millionen Bürgerinnen und Bürger. Das Projekt, betrieben vom neu gegründeten Föderalen Kompetenzzentrum Open State GmbH, beginnt in vier Pilotstädten und skaliert nach nachgewiesener Wirksamkeit auf alle 16 Bundesländer. Internationale Vorbilder wie Estlands X-Road und Singapurs Singpass zeigen: Was in Deutschland als Vision gilt, ist anderswo seit Jahren gelebte Realität."
 
 ---
 
 *Erstellt auf Basis aller Projektdokumente: docs/01–11*
-*Open State · Version 1.0 · März 2026*

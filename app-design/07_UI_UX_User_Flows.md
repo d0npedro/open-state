@@ -92,7 +92,7 @@ Zentrale Übersicht: Laufende Vorgänge, proaktive Hinweise, schnelle Aktionen.
 ```
 ┌─────────────────────────────────┐
 │  Guten Morgen, Anna 👋           │
-│  Montag, 9. März 2026            │
+│  [Wochentag, Datum]              │
 │                                  │
 │  ┌─────────────────────────┐    │
 │  │ ⚠️  HINWEIS              │    │

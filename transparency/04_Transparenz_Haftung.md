@@ -23,7 +23,7 @@ Open State folgt drei unverhandelbaren Grundprinzipien, die alle Transparenz- un
 Jeder Bürger hat in der App einen vollständigen Überblick über:
 
 - **Datentresor-Log:** Wer hat wann welche meiner Daten abgerufen?
-  - Beispieleintrag: `14.03.2026, 09:14 Uhr – Einwohnermeldeamt München hat Adressdaten abgerufen (Grund: Ummeldungsverarbeitung)`
+  - Beispieleintrag: `[Datum], 09:14 Uhr – Einwohnermeldeamt München hat Adressdaten abgerufen (Grund: Ummeldungsverarbeitung)`
 - **Aktive Datenweitergaben:** Welche Behörden haben aktuell Zugriff auf welche Daten?
 - **Einwilligungen:** Welche optionalen Einwilligungen habe ich erteilt? (mit 1-Klick-Widerruf)
 - **Prozess-Timeline:** Vollständiger Verlauf jedes Verwaltungsvorgangs, mit Zeitstempeln und handelnden Stellen
@@ -268,7 +268,7 @@ sind rechtlich wirksam und können nicht rückgängig gemacht werden.
 
 ```
 WIDERSPRUCHSBESTÄTIGUNG
-Aktenzeichen: OS-2026-[XXXXXX]
+Aktenzeichen: OS-[JJJJ]-[XXXXXX]
 
 Hiermit bestätigen wir den Eingang Ihres Widerspruchs:
 
@@ -290,14 +290,14 @@ Anhänge Ihres Widerspruchs:
 - Widerspruchsschreiben (automatisch generiert, von Ihnen bestätigt)
 - [Ihre hochgeladenen Dokumente]
 
-Bei Fragen: [Direktlink zur Behörde] | Aktenzeichen: OS-2026-[XXXXXX]
+Bei Fragen: [Direktlink zur Behörde] | Aktenzeichen: OS-[JJJJ]-[XXXXXX]
 ```
 
 ### 4.5 Datenpanne – Pflicht-Benachrichtigung an Bürger (Art. 34 DSGVO)
 
 ```
 WICHTIGE SICHERHEITSMITTEILUNG
-Aktenzeichen Vorfall: OS-SEC-2026-[XXX]
+Aktenzeichen Vorfall: OS-SEC-[JJJJ]-[XXX]
 
 Sehr geehrte Bürgerinnen und Bürger,
 
@@ -357,27 +357,26 @@ Wir entschuldigen uns für diesen Vorfall.
 
 ---
 
-## 6. Werbepartner-Haftungsrahmen
+## 6. Grundsatz zur kommerziellen Unabhängigkeit
 
-Da das Modell freiwillige, staatlich geprüfte Werbung als optionales Finanzierungselement vorsieht:
+Open State ist keine Werbeplattform. Staatliche Infrastruktur dient dem Bürger – nicht kommerziellen Interessen Dritter.
 
-**Zulassungskriterien für Werbepartner:**
-- Staatliche Prüfung und Zertifizierung (ähnlich Stiftung Warentest-Siegel)
-- Verbraucherschutz-Zertifikat aktuell (< 12 Monate)
-- Keine laufenden Bußgeldverfahren oder Abmahnungen
-- Jährliche Re-Zertifizierung
+**Verbotene Nutzung von Verwaltungsdaten:**
+- Keine Nutzung von Verwaltungsdaten für kommerzielle Zwecke
+- Keine Weitergabe von Nutzungsdaten an Dritte zu Analysezwecken
+- Keine Werbeplatzierung jeglicher Art innerhalb der App oder der Verwaltungsprozesse
+- Keine Kooperationen, die staatliche Vertrauenswürdigkeit mit kommerziellen Interessen vermengen
 
-**Haftung bei irreführender Werbung:**
-- Werbepartner haftet vollständig für Inhalte seiner Anzeigen
-- Open State haftet subsidiär für Zulassungsentscheidung (Auswahlverschulden)
-- Sofortige Abschaltung bei Beschwerde, Prüfung innerhalb 24h
+**API-Lizenzierung als einziger kommerzieller Berührungspunkt:**
+- Kommunen und EU-Partner können die Infrastruktur lizenzieren (klar abgegrenzte Vertragsbeziehung)
+- Lizenznehmer unterliegen denselben Datenschutz- und Transparenzpflichten wie der Bund
+- Lizenznehmer erhalten keinen Zugriff auf Nutzerdaten des Bundes-Systems
 
-**Strikte Trennung:**
-- Technische Firewall zwischen Verwaltungsdaten und Werbedaten
-- Kein Werbepartner erhält jemals Einblick in Verwaltungsvorgänge
-- Targeting ausschließlich auf Basis demographischer Merkmale (Alter, Region) – nie auf Basis von Verwaltungsdaten
+**Haftung für Drittanbieter-Integrationen:**
+- Behördenadapter unterliegen denselben Sicherheits- und Transparenzpflichten
+- Subdienstleister haften vertraglich; Bund haftet gegenüber Bürgern nach Staatshaftungsrecht
+- Sofortige Abschaltung bei Sicherheits- oder Datenschutzverstößen, Prüfung innerhalb 24h
 
 ---
 
 *Erstellt auf Basis: docs/01_Master_Blueprint.md, docs/02_Vergleich_Best_Practices.md, legal/03_Rechtliche_Machbarkeitsstudie.md*
-*Rechtsstand: März 2026*

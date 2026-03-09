@@ -59,7 +59,7 @@
 
 ## 3. Kernmodule (nach Priorität)
 
-### Priorität 1 – Sofort-Launch (Monate 1–6)
+### Priorität 1 – Initiale Ausbaustufe (Pilotbetrieb)
 
 **Modul 1.1 – Identitäts- & Verifikationsmodul**
 - eID-Onboarding in < 2 Minuten per NFC
@@ -78,7 +78,7 @@
 - Einreichung per Fingerabdruck-Bestätigung
 - Steuererstattung via IBAN in < 2 Wochen
 
-### Priorität 2 – Ausbau (Monate 7–18)
+### Priorität 2 – Erweiterter Ausbau (föderale Anschlussfähigkeit)
 
 **Modul 2.1 – Gewerbeanmeldung & Unternehmensstart**
 - Firmengründung (UG, GmbH, Einzelunternehmen) in < 5 Minuten
@@ -102,7 +102,18 @@
 - Führerscheinverlängerung
 - Feinstaubplakette, Parkerleichterungsausweis
 
-### Priorität 3 – Vollintegration (Monate 19–36)
+**Modul 2.5 – Arbeitsverwaltung** *(Vollständige Domänendokumentation: [docs/domains/arbeitsverwaltung/](domains/arbeitsverwaltung/README.md))*
+- Digitale Arbeitslosmeldung mit Eingangsbestätigung und Fallanlage
+- Leistungsantrag (ALG I / Bürgergeld) mit strukturierter Dateneingabe und Plausibilitätsprüfung
+- Transparente Fallakte: Bürger sehen Status, Dokumentenstatus, To-do-Liste, Fristen
+- Strukturierte Rückfragen mit Begründung und Frist (keine Standard-Textbausteine ohne Konkretisierung)
+- Bescheidtransparenz: rechtliche + erklärte Fassung jedes Bescheids
+- Vermittlungsprozess mit strukturierten Stellenvorschlägen und Nachweismöglichkeit
+- Änderungsmitteilungen strukturiert, ohne Medienbruch
+- Eskalationsmanagement für Härtefälle und dringende Situationen
+- Entlastungseffekt: weniger Statusanfragen, weniger Fehlbescheide, weniger Rückfragezyklen
+
+### Priorität 3 – Vollintegration (bundesweit übertragbares Modell)
 
 **Modul 3.1 – Bildung & Schule**
 - Schulanmeldung, Kita-Platzvergabe (KI-optimiert und fair)
@@ -171,11 +182,11 @@
 - Disaggregierte Auswertungen nach Bevölkerungsgruppen (veröffentlicht)
 - Barrierefreiheit: WCAG 2.1 AA, Spracheingabe, Einfache Sprache, 12 Sprachen
 
-**Werbung & Finanzierung (falls aktiviert):**
-- Nur staatlich geprüfte Partner (z.B. Verbraucherschutz-zertifizierte Versicherungen, Banken)
-- Werbung ist immer klar als „Werbung" gekennzeichnet – kein Native Advertising
-- Kein Targeting auf Basis von Verwaltungsdaten (strikte Trennung)
-- Bürger können Werbung jederzeit deaktivieren (kostenloses Premium-Tier für Bedürftige)
+**Finanzierung & Unabhängigkeit:**
+- Ausschließlich staatliche Finanzierung und fiskalische Effizienzrendite
+- Keine Werbefinanzierung in jeder Form – staatliche Infrastruktur ist keine Werbefläche
+- API-Lizenzierung für Kommunen und EU-Partner als ergänzende Einnahmequelle
+- Vollständige Unabhängigkeit von kommerziellen Interessen Dritter
 
 **Governance:**
 - Offener Quellcode für alle Kernmodule (GitHub)
@@ -184,19 +195,21 @@
 
 ---
 
-## 5-Jahres-Roadmap
+## Ausbaustufen-Übersicht
 
-| Jahr | Phase | Meilensteine |
-|------|-------|--------------|
-| **2026** | **Foundation** | Technisches Fundament, eID-Integration, Pilotkommune (50.000 Einwohner), Module: Wohnsitz + Steuern |
-| **2027** | **Expansion** | 5 Bundesländer, Gewerbeanmeldung, CaseMatch AI Beta, 500.000 Nutzer |
-| **2028** | **Scale** | Bundesweiter Rollout, alle Priorität-2-Module live, 5 Mio. Nutzer, erster internationaler Austausch |
-| **2029** | **Integration** | Alle 16 Bundesländer vollständig integriert, Priorität-3-Module, 20 Mio. Nutzer, EU-Kompatibilität |
-| **2030** | **Vollautomation** | 95 % aller Verwaltungsvorgänge volldigital, internationale Vorbildfunktion, Open-Source-Export für EU-Partner, 50+ Mio. Nutzer |
+| Ausbaustufe | Phase | Meilensteine |
+|-------------|-------|--------------|
+| **Fundament** | Initiale Ausbaustufe | Technisches Fundament, eID-Integration, Pilotkommune, Module: Wohnsitz + Steuern |
+| **Expansion** | Föderale Anschlussfähigkeit | 5 Bundesländer, Gewerbeanmeldung, CaseMatch AI Beta, 500.000 Nutzer |
+| **Skalierung** | Erweiterter Rollout | Bundesweiter Rollout, alle Priorität-2-Module, 5 Mio. Nutzer, erster internationaler Austausch |
+| **Integration** | Vollständige Bundesintegration | Alle 16 Bundesländer vollständig, Priorität-3-Module, 20 Mio. Nutzer, EU-Kompatibilität |
+| **Vollbetrieb** | Bundesweit übertragbares Modell | 95 % aller Verwaltungsvorgänge volldigital, internationale Vorbildfunktion, Open-Source-Export für EU-Partner, 50+ Mio. Nutzer |
 
-**Kritische Erfolgsfaktoren der Roadmap:**
+*Keine kalendarischen Versprechungen. Jede Stufe beginnt nach nachgewiesener Qualität der vorherigen.*
+
+**Kritische Erfolgsfaktoren:**
 - Politischer Wille: Ressortübergreifendes Bundesmandat
 - Behörden-Onboarding: Anreize für frühe Adopter-Kommunen
 - Interoperabilität: Legacy-Systeme schrittweise ablösen, nie abrupt
-- Vertrauen aufbauen: Pilotphase ohne Pflicht, dann freiwillige Massenmigration
+- Vertrauen aufbauen: Pilotphase ohne Nutzungspflicht, dann freiwillige Adoption
 - Fachkräfte: 500 spezialisierte Entwickler, Datenschützer, KI-Ethiker im Staatsdienst

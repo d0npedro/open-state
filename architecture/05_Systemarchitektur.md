@@ -47,6 +47,7 @@ graph TB
         KBA[KFZ-Zulassung\nAdapter KBA]
         GEW[Gewerbeamt\nAdapter XGewerbeanmeldung]
         SOZ[Sozialleistungen\nAdapter ARGE/BA]
+        AV[Arbeitsverwaltung\nAdapter BA/Jobcenter]
         EXT[Weitere Behörden\nAdapter-Template]
     end
 
@@ -62,6 +63,8 @@ graph TB
         FINANZ[Finanzamt\nBELEG / KONSENS]
         GERICHT[Amtsgericht\nLegacy-Systeme]
         KBA2[KFZ-Bundesamt]
+        BALEG[Bundesagentur für Arbeit\nVerfahren ALLEGRO/SGB III]
+        JC[Jobcenter\nVerfahren SGB II / kommunal]
     end
 
     CLIENT --> GATEWAY
@@ -356,4 +359,85 @@ graph LR
 
 ---
 
+## 9. Domänen-Architektur: Arbeitsverwaltung
+
+Die Domäne Arbeitsverwaltung fügt sich als eigenständige, abgegrenzte Fachdomäne in die bestehende Architektur ein. Sie nutzt den gemeinsamen Platform-Stack und ergänzt ihn um domänenspezifische Komponenten.
+
+```mermaid
+graph TB
+    subgraph AV_DOMAIN["Domäne: Arbeitsverwaltung"]
+        AVS[Arbeitsverwaltungs-Service\nFallsteuerung / Prozesslogik]
+        CS[Case Store\nFallakten-Datenbank]
+        ES[Event Store\nAudit-Log / Ereignisbus]
+        NS[Notification Router\nBürger + Sachbearbeitung]
+        DS[Document Store\nDokumentenindex + Klassifikation]
+        SS[Staff Dashboard\nSachbearbeitungs-UI]
+    end
+
+    subgraph AV_ADAPTER["Arbeitsverwaltungs-Adapter"]
+        BA_ADAPTER[BA-Adapter\nALLEGRO / SGB III API]
+        JC_ADAPTER[Jobcenter-Adapter\nSGB II / kommunale Systeme]
+        RV_ADAPTER[Rentenversicherung\nVersicherungszeiten]
+        AG_ADAPTER[Arbeitgeber-Portal\nBescheinigungen / Kurzarbeit]
+    end
+
+    GATEWAY[API Gateway] --> AVS
+    AVS --> CS
+    AVS --> ES
+    AVS --> NS
+    AVS --> DS
+    AVS --> AV_ADAPTER
+    SS --> AVS
+    ES --> AUDITDB[Audit-Log-DB\nimmutable]
+    DS --> DT[Datentresor\nDokumentenreferenzen]
+```
+
+### 9.1 Domänen-Komponenten
+
+| Komponente | Verantwortlichkeit |
+|------------|-------------------|
+| Arbeitsverwaltungs-Service | Fallsteuerung, Statustransitionen, Prozesslogik |
+| Case Store | Persistente Fallakten-Datenbank (PostgreSQL, verschlüsselt) |
+| Event Store | Unveränderliches Ereignisprotokoll (Apache Kafka + Audit-Persistence) |
+| Notification Router | Weiterleitung an Notification Service (Push, SMS, E-Mail) |
+| Document Store | Dokumentenindex, Klassifikation (OCR-gestützt), Verknüpfung mit Datentresor |
+| Staff Dashboard | Fachspezifische UI für Sachbearbeitung (React / separate Deployment-Einheit) |
+
+### 9.2 Schnittstellen nach außen
+
+| Schnittstelle | Richtung | Protokoll | Standard |
+|---------------|----------|-----------|---------|
+| BA ALLEGRO | Open State → BA | REST (geplant) / SOAP (Legacy) | XSoziales / BA-intern |
+| Jobcenter-Systeme | Open State ↔ Jobcenter | REST | XSoziales (föderale Abstimmung nötig) |
+| Rentenversicherung | Open State ← RV | REST | XRentenversicherung |
+| Arbeitgeber-Portal | Arbeitgeber → Open State | REST | XArbeitgeberbescheinigung |
+| ELSTER (Einkommensdaten) | Open State ← Finanzamt | ELSTER API | Bestehend |
+| Einwohnermeldeamt (Adressdaten) | Open State ← EWO | XMeld | Bestehend (Once-Only) |
+
+### 9.3 Rollenbasierte Zugriffssteuerung (Arbeitsverwaltung)
+
+```
+OAuth2 Scopes – Arbeitsverwaltung:
+
+citizen:av:read          → Fallstatus, Dokumente, Kommunikation (eigene)
+citizen:av:write         → Dokumente einreichen, Änderungen melden, Widerspruch
+staff:av:read            → Vollständige Fallakte (zugewiesene Fälle)
+staff:av:write           → Rückfragen, Entscheidungen, Statusänderungen
+staff:av:transfer        → Fallübertragung
+management:av:read       → Aggregierte Übersicht, Eskalationen
+partner:av:read          → Eingeschränkt, nach Bürger-Einwilligung
+employer:av:write        → Bescheinigungen einreichen
+```
+
+### 9.4 Besondere Anforderungen dieser Domäne
+
+- **Datenschutz-Folgenabschätzung (DSFA)** zwingend vor Pilotierung (Art. 35 DSGVO)
+- **Audit-Log** jedes Zugriffs auf Sozialdaten (§ 67a SGB X)
+- **Keine automatisierten Verwaltungsakte** – jede Entscheidung durch menschliche Sachbearbeitung bestätigt
+- **Besondere Datenkategorien** (Gesundheitsdaten bei Reha/SB-Ausweis) in separater Speicherzone
+- **Föderale Abstimmung** für Jobcenter-Adapter (gemeinsame Trägerschaft)
+
+---
+
 *Erstellt auf Basis: docs/01_Master_Blueprint.md, docs/02_Vergleich_Best_Practices.md, legal/03_Rechtliche_Machbarkeitsstudie.md, transparency/04_Transparenz_Haftung.md*
+*Erweitert um Domäne Arbeitsverwaltung: docs/domains/arbeitsverwaltung/*

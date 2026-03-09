@@ -1,6 +1,6 @@
 # 13_Jugendamt_Module – Vollständige Implementierung in Open State
 
-**Status:** Implementiert März 2026 | Priorität: Hoch (sozial sensibel + hohes Einsparungspotenzial)
+**Status:** In Entwicklung | Priorität: Hoch (sozial sensibel + hohes Einsparungspotenzial)
 
 ## 1. Vision
 Das Jugendamt wird in Open State zum schnellsten und transparentesten Unterstützungssystem für Familien in Deutschland.  
@@ -48,13 +48,16 @@ KI schlägt passgenaue Hilfen aus 10 Jahren anonymisierter Fälle vor – immer 
 ## 7. Transparenz & Haftung
 - Jede KI-Empfehlung protokolliert & erklärbar
 - „Menschliche Bearbeitung“ per Klick forderbar
-- Werbeeinnahmen (z. B. von geprüften Familien-Apps) klar ausgewiesen
+- Keine Werbung, keine Plattformlogik – staatliche Infrastruktur ohne kommerzielle Abhängigkeiten
 
 ## 8. Pilot in Hürth
-- Start Q3 2026: HzE + Unterhaltsvorschuss + Beratung
-- 3 Monate Test mit Jugendamt Rhein-Erft-Kreis (Standort Hürth)
-- KPIs: 80 % Anträge digital, Bearbeitungszeit von 14 Tagen → 48 h
-- Vorteil: Hürth als kreisangehörige Stadt → repräsentativ für ~70 % der deutschen Kommunen
+
+Pilotierung beginnt nach Abschluss der rechtlichen Voraussetzungen (DSFA, Datenschutzkoordination mit Rhein-Erft-Kreis) und technischer Freigabe.
+
+- Scope: HzE + Unterhaltsvorschuss + Beratung
+- Partner: Jugendamt Rhein-Erft-Kreis (Standort Hürth)
+- Erfolgskriterien: 80 % Anträge vollständig digital eingereicht, Bearbeitungszeit messbar verkürzt
+- Repräsentativität: Hürth als kreisangehörige Stadt steht für ~70 % der deutschen Kommunen
 
 **Nächste Schritte:**
 - UI-Flows ergänzen (in 07_UI_UX_User_Flows.md)

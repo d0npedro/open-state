@@ -190,9 +190,9 @@ Folgende Ergänzungen zum Master-Blueprint (01_Master_Blueprint.md) werden vorge
 - Once-Only-Gesetz als Voraussetzung für Phase-1-Launch definieren
 
 **Roadmap-Update:**
-- Jahr 2026 ergänzt um: Rechtliche Voraussetzungen schaffen (VwVfG-Änderung, Once-Only-Gesetz)
-- Jahr 2027 ergänzt um: X-Road-inspirierter Adapter-Layer für 5 Pilotbundesländer
-- Jahr 2028 ergänzt um: Physische Fallback-Stationen in allen Kommunen > 20.000 Einwohner
+- Initiale Ausbaustufe: Rechtliche Voraussetzungen schaffen (VwVfG-Änderung, Once-Only-Gesetz)
+- Föderale Anschlussfähigkeit: X-Road-inspirierter Adapter-Layer für 5 Pilotbundesländer
+- Erweiterter Rollout: Physische Fallback-Stationen in allen Kommunen > 20.000 Einwohner
 
 ---
 

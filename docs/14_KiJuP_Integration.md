@@ -1,6 +1,6 @@
 # 14_KiJuP_Integration – Schnittstelle zu KiJuP-online & lokale Fachanwendungen
 
-**Status:** Entwurf (09.03.2026)  
+**Status:** Entwurf
 **Ziel:** Belastbare Integrationsarchitektur, die KiJuP-online als juristische Referenzquelle nutzt, während lokale Fachverfahren führende operative Systeme bleiben.
 
 ---

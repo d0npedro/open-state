@@ -78,7 +78,7 @@ Diese Machbarkeitsstudie analysiert die rechtliche Vereinbarkeit von Open State 
 | Aspekt | Vereinbarkeit | Handlungsbedarf |
 |--------|---------------|-----------------|
 | eIDAS-Verordnung (EU 910/2014) | ✅ Vereinbar | Deutsche eID ist eIDAS-konform (Sicherheitsniveau „hoch") |
-| eIDAS 2.0 / EUDIW (ab 2026) | ✅ Zukunftssicher | Open State sollte EUDIW-kompatibel sein; EU Digital Identity Wallet als Erweiterung vorsehen |
+| eIDAS 2.0 / EUDIW (Rollout läuft) | ✅ Zukunftssicher | Open State sollte EUDIW-kompatibel sein; EU Digital Identity Wallet als Erweiterung vorsehen |
 | Qualifizierte elektronische Signatur (QES) | ⚠️ Für Notarfunktionen erforderlich | Digitales Notarmodul benötigt QES-Infrastruktur; Kooperation mit Bundesnetzagentur |
 | VDG (Vertrauensdienstegesetz) | ✅ Vereinbar | Zugelassener Vertrauensdiensteanbieter als Partner einbinden |
 | Schriftformerfordernis (§ 126 BGB) | ⚠️ Konfliktpotenzial | Für viele Verwaltungsakte gilt noch Schriftformerfordernis → Gesetzesänderungen für elektronische Form nötig |
@@ -238,4 +238,4 @@ Die technische Umsetzung kann **parallel zur Gesetzgebung** beginnen, wobei die 
 ---
 
 *Erstellt auf Basis: docs/01_Master_Blueprint.md, docs/02_Vergleich_Best_Practices.md*
-*Rechtsstand: März 2026*
+*Rechtsstand: Vor Pilotierung zu aktualisieren*

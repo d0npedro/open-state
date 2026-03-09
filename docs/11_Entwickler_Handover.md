@@ -1,7 +1,6 @@
 # Open State – Entwickler-Handover-Dokument
 
 **Version:** 1.0
-**Stand:** März 2026
 **Erstellt aus:** docs/01–10 (alle Projektphasen konsolidiert)
 
 ---
@@ -39,7 +38,7 @@ Open State ist die einzige offizielle deutsche Verwaltungs-App. Sie automatisier
 - Barrierefreiheit WCAG 2.1 AA als Mindeststandard
 - DSGVO by Design & by Default
 
-**Projektstand:** Phase 0 (Aufbau) – Beginn März 2026
+**Projektstand:** Phase 0 (Aufbau) – Initiale Ausbaustufe
 
 ---
 
@@ -716,14 +715,14 @@ P2 (Phase-2-Ziel):
 
 ### 15.2 Meilenstein-Übersicht
 
-| Meilenstein | Datum | Kriterium |
-|-------------|-------|-----------|
-| Alpha-Bereitschaft | Juni 2026 | eID + Ummeldung funktionsfähig, 0 kritische Bugs |
-| Public Beta | September 2026 | 4 Pilotstädte, alle P1-Module, NPS > 40 |
-| Steuer-Launch | Januar 2027 | ELSTER-Integration, Steuererklärung submitfähig |
-| CaseMatch Beta | Oktober 2026 | 5.000 Test-Analysen, Juristen-Audit bestanden |
-| 5-Länder-Rollout | Dezember 2026 | 5 Bundesländer vollständig angebunden |
-| Bundesweiter Launch | Oktober 2027 | 16/16 Bundesländer, 10 Mio. Nutzer |
+| Meilenstein | Eingangsvoraussetzung | Qualitätskriterium |
+|-------------|----------------------|--------------------|
+| Alpha-Bereitschaft | Infrastruktur vollständig, BSI-Audit bestanden | eID + Ummeldung funktionsfähig, 0 kritische Bugs |
+| Public Beta | Alpha-KPIs erfüllt (NPS > 55, 0 Datenpannen) | 4 Pilotstädte, alle P1-Module, NPS > 40 |
+| Steuer-Launch | ELSTER-Schnittstelle zertifiziert | ELSTER-Integration, Steuererklärung submitfähig |
+| CaseMatch Beta | 5.000 Test-Analysen intern abgeschlossen | Juristen-Audit bestanden, Bias-Audit grün |
+| 5-Länder-Rollout | Beta-KPIs erfüllt, Staatsverträge unterzeichnet | 5 Bundesländer vollständig angebunden |
+| Bundesweiter Launch | Alle Länder-Adapter deployed, politischer Beschluss | 16/16 Bundesländer, 10 Mio. Nutzer |
 
 ---
 
@@ -789,4 +788,4 @@ GitLab CI:             gitlab.openstate.bund.de (intern)
 
 *Dieses Dokument konsolidiert alle Inhalte aus docs/01–10 zu einem einzigen Entwickler-Handover.*
 *Bei Widersprüchen gilt: Rechtliche Dokumente (03, 04) > Technische Dokumente (05, 06) > Design-Dokumente (07, 08)*
-*Letzte Aktualisierung: März 2026 | Version: 1.0*
+*Version: 1.0*
