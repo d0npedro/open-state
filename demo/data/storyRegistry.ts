@@ -1,0 +1,102 @@
+import { StoryRegistryEntry } from '@/types';
+
+export const storyRegistry: StoryRegistryEntry[] = [
+  {
+    id: 'US-AV-001',
+    domain: 'Arbeitsverwaltung',
+    title: 'Fall anlegen',
+    role: 'Bürger',
+    status: 'DEMONSTRIERBAR',
+    problem: 'Bürger wissen nicht wie sie den Prozess nach Jobverlust digital starten',
+    screen: 'Fallübersicht',
+    transparency_focus: 'Sofortige Fallnummer und Eingangsbestätigung sichtbar',
+    acceptance_criteria_count: 6,
+    implemented_criteria: 5,
+    route: '/fall',
+    source_file: 'docs/stories/arbeitsverwaltung/US-AV-001_Fall_anlegen.md'
+  },
+  {
+    id: 'US-AV-002',
+    domain: 'Arbeitsverwaltung',
+    title: 'Status einsehen',
+    role: 'Bürger',
+    status: 'DEMONSTRIERBAR',
+    problem: '40–60 % aller BA-Kontakte sind Statusanfragen',
+    screen: 'Fallübersicht / Status-Timeline',
+    transparency_focus: 'Status in Klartext mit Begründung und nächstem Schritt',
+    acceptance_criteria_count: 5,
+    implemented_criteria: 5,
+    route: '/fall',
+    source_file: 'docs/stories/arbeitsverwaltung/US-AV-002_Status_einsehen.md'
+  },
+  {
+    id: 'US-AV-003',
+    domain: 'Arbeitsverwaltung',
+    title: 'Unterlagen nachreichen',
+    role: 'Bürger',
+    status: 'DEMONSTRIERBAR',
+    problem: 'Dokumentanforderungen kommen ohne Kontext und Begründung',
+    screen: 'Dokumente',
+    transparency_focus: 'Jede Anforderung mit Rechtsgrundlage und Begründung',
+    acceptance_criteria_count: 5,
+    implemented_criteria: 4,
+    route: '/fall/dokumente',
+    source_file: 'docs/stories/arbeitsverwaltung/US-AV-003_Unterlagen_nachreichen.md'
+  },
+  {
+    id: 'US-AV-004',
+    domain: 'Arbeitsverwaltung',
+    title: 'Rückfrage verstehen',
+    role: 'Bürger',
+    status: 'DEMONSTRIERBAR',
+    problem: 'Rückfragen kommen in unverständlicher Behördensprache ohne Erklärung',
+    screen: 'Rückfragen',
+    transparency_focus: 'Begründung, Frist und Konsequenz je Rückfrage sichtbar',
+    acceptance_criteria_count: 5,
+    implemented_criteria: 5,
+    route: '/fall/rueckfragen',
+    source_file: 'docs/stories/arbeitsverwaltung/US-AV-004_Rueckfrage_verstehen.md'
+  },
+  {
+    id: 'US-AV-005',
+    domain: 'Arbeitsverwaltung',
+    title: 'Termin einsehen und verstehen',
+    role: 'Bürger',
+    status: 'DEMONSTRIERBAR',
+    problem: 'Termine kommen per Post ohne Zweck und Vorbereitung',
+    screen: 'Termine',
+    transparency_focus: 'Zweck und Vorbereitung je Termin erläutert',
+    acceptance_criteria_count: 5,
+    implemented_criteria: 5,
+    route: '/fall/termine',
+    source_file: 'docs/stories/arbeitsverwaltung/US-AV-005_Termin_einsehen_und_verstehen.md'
+  },
+  {
+    id: 'US-AV-006',
+    domain: 'Arbeitsverwaltung',
+    title: 'Bescheid verstehen',
+    role: 'Bürger',
+    status: 'DEMONSTRIERBAR',
+    problem: 'Bescheide in Juristensprache, Widerspruchsfristen werden versäumt',
+    screen: 'Bescheide',
+    transparency_focus: 'Zwei-Schichten-Darstellung: rechtlich + erklärt',
+    acceptance_criteria_count: 6,
+    implemented_criteria: 6,
+    route: '/fall/bescheide',
+    source_file: 'docs/stories/arbeitsverwaltung/US-AV-006_Bescheid_verstehen.md'
+  },
+  {
+    id: 'US-AV-007',
+    domain: 'Arbeitsverwaltung',
+    title: 'Historie nachvollziehen',
+    role: 'Bürger',
+    status: 'DEMONSTRIERBAR',
+    problem: 'Keine Übersicht über Verlauf – wer hat was wann entschieden?',
+    screen: 'Verlauf / Audit-Log',
+    transparency_focus: 'Lückenlose chronologische Timeline aller Ereignisse',
+    acceptance_criteria_count: 6,
+    implemented_criteria: 6,
+    route: '/fall/verlauf',
+    source_file: 'docs/stories/arbeitsverwaltung/US-AV-007_Historie_nachvollziehen.md'
+  }
+];

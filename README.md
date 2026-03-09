@@ -106,6 +106,16 @@ Eine laufende Demo wird über den `demo`-Branch bereitgestellt. Feature-Branches
 
 ---
 
+## Demo
+
+Eine klickbare Demo zeigt den ersten Vertical Slice der Domäne Arbeitsverwaltung: Fallübersicht, Status, Dokumente, Rückfragen, Termine, Bescheidtransparenz und Verlauf.
+
+Jede Funktion ist auf eine User Story zurückführbar. Die Story Coverage ist direkt im Demonstrator einsehbar.
+
+→ [Demo starten (lokal)](demo/) · [Setup-Anleitung](docs/DEMO_APP_SETUP.md)
+
+---
+
 ## Mitmachen / Beitragen
 
 - Issues & Pull Requests willkommen
