@@ -85,6 +85,71 @@ graph TB
 
 ---
 
+## 2a. Verfahrensfairness Engine – Querschnittsschicht
+
+Die Verfahrensfairness Engine ist keine eigenständige Domäne, sondern eine domänenübergreifende Querschnittskomponente. Sie ist zwischen dem Process Orchestrator und den Domänenadaptern angesiedelt und empfängt strukturierte Ereignisse aus allen Domänen.
+
+```mermaid
+graph TB
+    subgraph VFE["Verfahrensfairness Engine (Querschnittsschicht)"]
+        VFE_CORE[Verfahrensfairness Engine\nPrüfmuster · Signale · Erklärschicht]
+        subgraph VFE_MOD["Spezialisierte Module"]
+            CM_MOD[CaseMatch\nFallvergleich Rechtsstreit/Bußgeld]
+            AUDIT_CHK[Audit-Konsistenzprüfung]
+            EXPLAIN[Erklärungsgenerator\nVerwaltungs- & Alltagssprache]
+        end
+    end
+
+    subgraph DOMAINS["Domänen-Adapter-Layer"]
+        D_AV[Arbeitsverwaltung]
+        D_SOZ[Sozialleistungen]
+        D_JUS[Rechtsstreit & Bußgeld]
+        D_JUG[Jugendhilfe]
+        D_GRD[Unternehmensgründung\nGewerbeamt · Finanzamt · IHK/HWK]
+    end
+
+    PO[Process Orchestrator] --> VFE_CORE
+    VFE_CORE --> CM_MOD
+    VFE_CORE --> AUDIT_CHK
+    VFE_CORE --> EXPLAIN
+    VFE_CORE --> D_AV
+    VFE_CORE --> D_SOZ
+    VFE_CORE --> D_JUS
+    VFE_CORE --> D_JUG
+    VFE_CORE --> D_GRD
+    CM_MOD --> AIDB[(CaseMatch-DB\nanonymisiert)]
+    AUDIT_CHK --> AUDITDB[(Audit-Log-DB\nimmutable)]
+```
+
+### Architektonische Prinzipien der Querschnittsschicht
+
+Alle Domänen teilen dieselben Grundprinzipien:
+
+| Prinzip | Umsetzung |
+|---------|-----------|
+| **Fallakte** | Jede Domäne führt eine strukturierte Akte mit Audit-Log |
+| **Statusmodell** | Zustandsbasierte Verfahrensführung mit definierten Übergangsbedingungen |
+| **Audit-Log** | Unveränderlich, kryptografisch gesichert, domänenübergreifend konsistent |
+| **Erklärschicht** | Verwaltungssprache für Sachbearbeitende, Alltagssprache für Bürger |
+| **Keine Letztentscheidung** | Engine-Ausgaben sind Informationen, keine Verwaltungsentscheidungen |
+| **Anfechtbarkeit** | Alle Engine-Markierungen können kommentiert oder übersteuert werden |
+
+### CaseMatch als spezialisiertes Modul
+
+CaseMatch ist ein Analyse-Modul innerhalb der Verfahrensfairness Engine, nicht eine eigenständige KI-Entscheidungsinstanz. Es liefert Fallvergleichsanalysen für die Domäne Rechtsstreit und Bußgeld und nutzt dieselben Grundprinzipien (Erklärbarkeit, Anfechtbarkeit, keine Letztentscheidung) wie die übergeordnete Engine.
+
+### Unternehmensgründung als neue Domäne im Adapter-Layer
+
+Die Domäne Unternehmensgründung ist im Adapter-Layer angebunden. Sie nutzt:
+- XGewerbeanmeldung-Standard (XÖV) für Gewerbeamtsanbindung
+- ELSTER-Protokoll für Finanzamtsanbindung
+- Direkte IHK/HWK-Schnittstellen (in Entwicklung)
+- Sozialversicherungs-Meldeschnittstellen
+
+Technische Details zur Domäne: [docs/domains/unternehmensgruendung/](../docs/domains/unternehmensgruendung/README.md)
+
+---
+
 ## 3. Tech-Stack
 
 ### 3.1 Frontend

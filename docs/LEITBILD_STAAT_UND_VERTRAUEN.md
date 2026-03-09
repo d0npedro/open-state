@@ -103,4 +103,38 @@ Es kennt nur eine Logik: **Staatliche Aufgaben so gut wie möglich erfüllen.**
 
 ---
 
+## 9. Fairness entsteht durch Struktur, nicht durch wohlklingende Behauptungen
+
+Es reicht nicht, Fairness zu versprechen. Fairness muss in Strukturen eingebaut sein: in Prüfmuster, in Dokumentationsanforderungen, in Vergleichsmöglichkeiten, in Begründungspflichten.
+
+Die Verfahrensfairness Engine ist die strukturelle Antwort von Open State auf diese Anforderung. Sie ist keine "Gerechtigkeitsmaschine" – dieser Begriff wird bewusst vermieden, weil er irreführend wäre. Gerechtigkeit im Einzelfall erfordert menschliche Urteilsbildung. Was die Engine leisten kann und soll, ist etwas anderes: Sie prüft, ob die strukturellen Voraussetzungen fairer Verfahren erfüllt sind. Sie macht sichtbar, wo Begründungen fehlen, wo Fristen inkonsistent sind, wo ähnliche Fälle ungleich behandelt werden. Sie informiert. Sie entscheidet nicht.
+
+Diese Unterscheidung ist nicht akademisch. Sie hat praktische Konsequenzen:
+
+- Keine Engine-Ausgabe hat automatische Wirkung auf Verwaltungsentscheidungen.
+- Keine Engine-Ausgabe ersetzt menschliche Prüfung.
+- Keine Engine-Ausgabe begründet Rechtsansprüche.
+
+Was die Engine begründet, ist ein strukturelles Qualitätsniveau: Verfahren sollen konsistent sein, Entscheidungen sollen begründet sein, Bürger sollen verstehen, was mit ihren Vorgängen geschieht. Das ist keine Utopie. Es ist ein beschreibbarer Qualitätsstandard.
+
+---
+
+## 10. Open State ist pro Gründung, pro Leistung, pro Verantwortung
+
+Ein Staat, der wirtschaftliche Initiative bremst, handelt nicht neutral. Er handelt gegen die Menschen, die Verantwortung übernehmen, Risiken eingehen und wirtschaftlich aktiv sind.
+
+Open State steht auf einer anderen Grundlage:
+
+**Der Staat als Enabler, nicht als Gatekeeper.** Behörden sind keine Kontrollinstanzen, die Gründungen "erlauben". Sie erfüllen staatliche Aufgaben – Registrierung, Steuererfassung, Genehmigungsprüfung – und sollen das so tun, dass die berechtigten Anliegen der Menschen schnell, verständlich und verlässlich bearbeitet werden.
+
+**Gründung als volkswirtschaftlich wertvollen Akt behandeln.** Wer ein Unternehmen gründet, übernimmt wirtschaftliche Verantwortung. Der Staat hat ein Interesse daran, dass dieser Prozess funktioniert – nicht als Gefälligkeit gegenüber dem Gründer, sondern weil wirtschaftliche Aktivität steuerliche Basis, Beschäftigung und gesellschaftlichen Wohlstand erzeugt. Eine Verwaltung, die Gründungen bremst, schadet sich selbst.
+
+**Keine antiunternehmerische Sprache.** Wirtschaftliche Initiative ist kein Misstrauensthema. Open State behandelt Gründerinnen und Gründer als Respektspersonen, die eine staatliche Dienstleistung in Anspruch nehmen – nicht als Antragsteller, die dem Staat gegenüber in der Pflicht stehen.
+
+**Leistung und Verantwortung stärken den Standort.** Menschen, die leistungsfähig und leistungsbereit sind, wählen Umgebungen, die ihnen Planbarkeit, Verlässlichkeit und faire Bedingungen bieten. Ein Staat, der diese Umgebung schafft, stärkt seine eigene Grundlage. Das ist keine ideologische Frage. Es ist eine strukturpolitische.
+
+Deutschland soll als Standort wieder verständlich, planbar und handlungsfähig wirken. Nicht durch Kommunikation. Durch tatsächlich funktionierende staatliche Infrastruktur.
+
+---
+
 *Dieses Leitbild gilt für alle Komponenten, alle Module und alle Entscheidungen im Projekt Open State. Bei Widersprüchen zwischen technischer Machbarkeit, wirtschaftlichen Erwägungen und diesem Leitbild hat das Leitbild Vorrang.*

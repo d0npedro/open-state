@@ -113,7 +113,7 @@ Netto-Effizienzrendite Vollbetrieb (konservativ): ~3.583.000.000 €/Jahr
 
 **Vergleich:** Das Bundesministerium des Innern gibt jährlich ~12 Mrd. € für Verwaltungsdigitalisierung aus – mit deutlich geringerem Wirkungsgrad. Open State wäre der bisher effizienteste Einsatz dieser Mittel.
 
-### 3.3 Beispiel: Effizienzrendite Domäne Arbeitsverwaltung
+### 3.3 Effizienzrendite Domäne Arbeitsverwaltung
 
 Die Domäne Arbeitsverwaltung ist ein besonders deutliches Beispiel für strukturelle Effizienzgewinne:
 
@@ -128,6 +128,50 @@ Die Domäne Arbeitsverwaltung ist ein besonders deutliches Beispiel für struktu
 
 > Die Bundesagentur für Arbeit verwaltet jährlich Ausgaben von deutlich über 40 Mrd. € (ALG I, Bürgergeld, Eingliederungsleistungen, Verwaltungsaufwand). Selbst eine Effizienzverbesserung im Verwaltungsaufwand von 10–15 % bedeutet fiskalisch eine substanzielle Entlastung.
 > Valide Quantifizierung erst nach Pilotbetrieb möglich. Detaillierte Effizienzlogik: [docs/domains/arbeitsverwaltung/08_STEUERENTLASTUNG_UND_EFFIZIENZLOGIK.md](../docs/domains/arbeitsverwaltung/08_STEUERENTLASTUNG_UND_EFFIZIENZLOGIK.md)
+
+---
+
+### 3.4 Domäne Unternehmensgründung: Fiskalische Effizienzlogik
+
+Die Domäne Unternehmensgründung unterscheidet sich von der Arbeitsverwaltung in ihrer fiskalischen Logik: Hier geht es weniger um die Optimierung hoher Leistungsvolumina als um die Beseitigung struktureller Reibungsverluste, die wirtschaftliche Aktivität verzögern oder verhindern.
+
+**Ausgangslage: Verwaltungskosten je Gründungsvorgang**
+
+Ein Gründungsvorgang berührt typischerweise drei bis fünf Behörden. Jede dieser Behörden führt eigenständig Bearbeitungsschritte durch. Ohne systemseitige Koordination entstehen:
+
+- Redundante Dateneingaben: dieselben Grunddaten werden mehrfach erfasst
+- Rückfragezyklen durch unvollständige Ersteinreichungen
+- Koordinationsaufwand zwischen Behörden ohne gemeinsames System
+- Nachbearbeitungen durch fehlerhafte oder inkonsistente Angaben
+
+Eine belastbare Schätzung der Ist-Kosten je Gründungsvorgang setzt eine empirische Erhebung voraus, die im Rahmen des Pilotbetriebs durchzuführen ist. Strukturell lässt sich festhalten: Mehrfache Rückfragezyklen und behördenübergreifende Koordinationsaufwände stellen einen erheblichen Teil der Bearbeitungszeit dar.
+
+**Effizienzpotenziale durch Open State**
+
+| Reibungsverlust | Strukturelle Verbesserung |
+|----------------|--------------------------|
+| Unvollständige Ersteinreichungen | Fallspezifische Anforderungsliste vor Einreichung – höhere Vollständigkeitsquote |
+| Redundante Dateneingaben | Einmalige Eingabe, koordinierte Weiterleitung (mit Einwilligung) |
+| Unklare Anforderungen → Rückfragen | Verständliche, erklärte Anforderungen → weniger Nachfragebedarf |
+| Kein Statusüberblick → Statusanfragen | Echtzeit-Statusanzeige → Entlastung bei Inbound-Kontakten |
+| Verzögerte steuerliche Ersterfassung | Koordinierter Prozess → frühere Erfassung |
+
+**Fiskalische Bedeutung früher Betriebsaufnahme**
+
+Jede vermiedene Verzögerungswoche bei einer Gründung entspricht einer Woche ohne:
+- Umsatzsteuervoranmeldung
+- Einkommensteuer-Vorauszahlung
+- Sozialversicherungsbeiträge
+- Gewerbesteueranmeldung
+
+Bei einer hohen Gesamtzahl von Gründungen in Deutschland ist die fiskalische Bedeutung früherer Betriebsaufnahmen messbar, auch wenn eine exakte Schätzung erst nach Pilotbetrieb möglich ist.
+
+**Standortwirkung als mittelfristiger fiskalischer Faktor**
+
+Eine messbar verbesserte Gründungsinfrastruktur hat eine Standortwirkung, die sich mittelfristig in der Steuerbasis niederschlägt: Gründerinnen und Gründer, die sich für den Standort Deutschland entscheiden statt für Alternativen, generieren langfristige steuerliche und wirtschaftliche Aktivität. Dieser Effekt ist qualitativ beschreibbar, aber nicht mit Zuverlässigkeit zu quantifizieren.
+
+> Valide Quantifizierung aller Effizienzpotenziale erst nach Pilotbetrieb möglich.
+> Detaillierte Domänendokumentation: [docs/domains/unternehmensgruendung/](../docs/domains/unternehmensgruendung/README.md)
 
 ---
 

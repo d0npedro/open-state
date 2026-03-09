@@ -25,6 +25,8 @@ Wohnsitz anmelden, Gewerbe starten, Rechtsstreit per KI-Analyse klären, Soziall
 Open State ist kein Startup-Produkt, das den Staat „disrupten" will.
 Es ist ein transparentes Betriebs- und Vertrauensmodell für einen handlungsfähigen, gerechten, nachvollziehbaren und digital kompetenten Staat.
 
+Open State ist **pro Leistung, pro Gründung, pro Verantwortung.** Wer wirtschaftlich aktiv ist, Verantwortung übernimmt oder gründet, soll vom Staat unterstützt werden – durch klare Prozesse, verlässliche Fristen und eine Verwaltung, die koordiniert statt bremst. Deutschland soll als Standort wieder verständlich, planbar und handlungsfähig wirken – nicht durch Slogans, sondern durch tatsächlich funktionierende staatliche Infrastruktur.
+
 ---
 
 ## Kerndomänen
@@ -36,9 +38,11 @@ Open State ist in fachliche Domänen strukturiert. Jede Domäne deckt einen zusa
 | **Arbeitsverwaltung** | Arbeitslosmeldung, Leistungsantrag, Fallakte, Bescheidtransparenz, Vermittlung | [docs/domains/arbeitsverwaltung/](docs/domains/arbeitsverwaltung/README.md) |
 | **Wohnsitzmanagement** | An-, Um-, Abmeldung, Automatische Behördeninformation | (Modul 1.2 im Blueprint) |
 | **Steuern** | AutoFill-Steuererklärung via ELSTER | (Modul 1.3 im Blueprint) |
-| **Rechtsstreit & Bußgeld** | CaseMatch AI, Widerspruchsverwaltung | (Modul 2.2 im Blueprint) |
+| **Rechtsstreit & Bußgeld** | CaseMatch-Analyse, Widerspruchsverwaltung | (Modul 2.2 im Blueprint) |
 | **Sozialleistungen** | Bürgergeld, Wohngeld, Elterngeld, BAföG | (Modul 2.3 im Blueprint) |
 | **Jugendhilfe** | HzE, Unterhaltsvorschuss, KiJuP-Integration | [docs/13_Jugendamt_Module.md](docs/13_Jugendamt_Module.md) |
+| **Unternehmensgründung** | Gewerbeanmeldung, Gründungsakte, Statusverfolgung, koordinierte Behördenkommunikation | [docs/domains/unternehmensgruendung/](docs/domains/unternehmensgruendung/README.md) |
+| **Verfahrensfairness Engine** | Domänenübergreifende Querschnittskomponente: Konsistenzprüfung, Begründungsqualität, Erklärbarkeit | [docs/engines/verfahrensfairness/](docs/engines/verfahrensfairness/README.md) |
 
 ---
 
@@ -61,6 +65,8 @@ Open State ist in fachliche Domänen strukturiert. Jede Domäne deckt einen zusa
 | 13 | Jugendamt-Modul (HzE, Beratung, Unterhaltsvorschuss) | [docs/13_Jugendamt_Module.md](docs/13_Jugendamt_Module.md) |
 | 14 | KiJuP-Integration (Referenzquelle & lokale Fachverfahren) | [docs/14_KiJuP_Integration.md](docs/14_KiJuP_Integration.md) |
 | D1 | **Domäne: Arbeitsverwaltung** (vollständige Domänendokumentation) | [docs/domains/arbeitsverwaltung/](docs/domains/arbeitsverwaltung/README.md) |
+| D2 | **Domäne: Unternehmensgründung** (vollständige Domänendokumentation) | [docs/domains/unternehmensgruendung/](docs/domains/unternehmensgruendung/README.md) |
+| E1 | **Verfahrensfairness Engine** (Konzept, Funktionsweise, Signale, Transparenz) | [docs/engines/verfahrensfairness/](docs/engines/verfahrensfairness/README.md) |
 | L | Leitbild: Staat und Vertrauen | [docs/LEITBILD_STAAT_UND_VERTRAUEN.md](docs/LEITBILD_STAAT_UND_VERTRAUEN.md) |
 
 ---

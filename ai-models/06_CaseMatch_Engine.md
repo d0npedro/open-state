@@ -4,16 +4,34 @@
 
 ---
 
+## 0. Einordnung in die Verfahrensfairness Engine
+
+CaseMatch ist ein spezialisiertes Analyse-Modul innerhalb der Verfahrensfairness Engine von Open State. Es ist **keine eigenständige Gerechtigkeits-KI** und trifft keine Entscheidungen über Verwaltungsvorgänge.
+
+Die Verfahrensfairness Engine ist die übergeordnete Querschnittskomponente, die domänenübergreifend Verfahrensqualität prüft, erklärt und markiert. CaseMatch übernimmt in dieser Architektur die spezialisierte Aufgabe der **Fallvergleichsanalyse im Bereich Rechtsstreit und Bußgeld** – mit denselben Grundprinzipien, die für die gesamte Verfahrensfairness Engine gelten:
+
+- Die Engine entscheidet nicht. Sie prüft, erklärt, vergleicht, markiert Risiken und macht Verfahren nachvollziehbarer.
+- Jede Ausgabe ist erklärbar, anfechtbar und ohne automatische Wirkung.
+- Menschliche Letztverantwortung bleibt in jedem Fall erhalten.
+- KI-Ausgaben sind Informationen, keine Urteile.
+
+**Abgrenzung:** CaseMatch berechnet keine "Erfolgswahrscheinlichkeiten" im Sinne einer Prognose über Behördenentscheidungen. Es liefert statistische Informationen darüber, wie ähnlich gelagerte Fälle in der Vergangenheit verlaufen sind – als Orientierungsinformation für Bürgerinnen und Bürger, die selbst entscheiden, wie sie vorgehen.
+
+Zur vollständigen Konzeptbeschreibung der Verfahrensfairness Engine: [docs/engines/verfahrensfairness/](../docs/engines/verfahrensfairness/README.md)
+
+---
+
 ## 1. Überblick & Designziele
 
-CaseMatch AI ist das KI-Herzstück von Open State. Sie analysiert Verwaltungsrechtsfälle, berechnet Vergleichswahrscheinlichkeiten und generiert Handlungsempfehlungen – stets als **Assistenz**, nie als Entscheidungsträger.
+CaseMatch ist ein Analyse-Assistent für Verwaltungsrechtsfälle, insbesondere im Bereich Bußgeld und Ordnungswidrigkeiten. Es vergleicht strukturell ähnliche Fälle aus einer anonymisierten Fallbasis und bereitet diese Information verständlich auf. Es generiert keine Entscheidungen und ersetzt keine rechtliche Beratung.
 
 **Designziele:**
-- Höchste Erklärbarkeit (Explainable AI / XAI) – Bürger verstehen jede Empfehlung
-- Nachweisliche Fairness – keine systematische Benachteiligung nach Alter, Region, Herkunft
+- Höchste Erklärbarkeit (Explainable AI / XAI) – Bürger verstehen jede Ausgabe und ihre Grundlage
+- Nachweisliche Bias-Kontrolle – keine systematische Ungleichbehandlung nach Alter, Region, Herkunft
 - Rechtssichere Klassifikation als „allgemeine rechtliche Information" (kein RDG-Verstoß)
-- Kontinuierliches Lernen aus neuen Fällen (mit striktem Datenschutz)
+- Anfechtbarkeit jeder Ausgabe – Bürger und Behörden können Markierungen kommentieren
 - On-Device-Inferenz für unkritische Vorstufen (Datensparsamkeit)
+- Dokumentierte Modellgrenzen: Was das Modell nicht kann, wird explizit ausgewiesen
 
 ---
 
@@ -146,19 +164,23 @@ class CaseMatchRAG:
 
 ```
 SYSTEM:
-Du bist CaseMatch AI, ein Analyse-Assistent im deutschen Verwaltungsrecht.
+Du bist CaseMatch, ein Analyse-Assistent im deutschen Verwaltungsrecht.
 Deine Aufgabe ist ausschließlich die statistische Auswertung vergleichbarer
-Fälle und die Erstellung von Handlungsoptionen.
+Fälle und die Aufbereitung von Handlungsoptionen als Information.
 
 WICHTIGE EINSCHRÄNKUNGEN:
 - Du gibst KEINE Rechtsberatung im Sinne des RDG.
-- Du triffst KEINE Entscheidungen. Du präsentierst Optionen.
+- Du triffst KEINE Entscheidungen und empfiehlst KEINE Entscheidungen.
+  Du stellst dar, wie ähnliche Fälle verlaufen sind.
 - Du verwendest ausschließlich anonymisierte Vergleichsdaten.
 - Du weist immer auf professionelle Rechtsberatung hin.
 - Du verwendest Alltagssprache, keine Juristensprache.
 - Wenn die Datenbasis unter 50 Fällen liegt, sagst du das explizit.
+- Du weist explizit auf die Grenzen deiner Analyse hin.
 - Du speicherst NICHTS aus diesem Gespräch für zukünftige Trainings
   (Einwilligung des Bürgers nicht vorhanden).
+- Formulierungen wie "du solltest", "ich empfehle" oder "du wirst
+  wahrscheinlich gewinnen" sind nicht zulässig.
 
 AUSGABEFORMAT:
 Antworte immer im vorgegebenen JSON-Schema (siehe unten).
@@ -182,11 +204,13 @@ VERGLEICHSFÄLLE AUS DER DATENBANK:
 {top_50_anonymisierte_faelle_json}
 
 AUFGABE:
-1. Bewerte die Erfolgsaussichten eines Widerspruchs (0–100%)
-2. Berechne eine faire Vergleichssumme (falls relevant)
-3. Identifiziere die 3 wichtigsten Einflussfaktoren
-4. Erstelle 2–3 Handlungsoptionen mit Vor-/Nachteilen
-5. Weise auf Grenzen deiner Analyse hin
+1. Stelle dar, wie ähnliche Fälle statistisch verlaufen sind (historische Quote,
+   nicht als Prognose über den vorliegenden Fall)
+2. Berechne eine Vergleichssumme auf Basis historischer Vergleiche (falls relevant)
+3. Identifiziere die 3 wichtigsten Faktoren in ähnlichen Fällen
+4. Stelle 2–3 mögliche Vorgehensweisen mit ihren jeweiligen Merkmalen dar
+5. Weise explizit auf Grenzen deiner Analyse hin
+6. Weise darauf hin, dass diese Darstellung keine Prognose für den vorliegenden Fall ist
 
 Antworte ausschließlich im folgenden JSON-Format:
 {ausgabe_schema}
@@ -198,12 +222,13 @@ Antworte ausschließlich im folgenden JSON-Format:
 {
   "analyse_id": "uuid",
   "tatbestand": "string",
-  "widerspruchs_erfolgsquote": {
-    "wert": 78,
-    "einheit": "prozent",
+  "vergleichsfaelle_quoten": {
+    "anteil_widerspruch_stattgegeben": 78,
+    "einheit": "prozent_historischer_faelle",
     "datenbasis": 847,
     "zeitraum": "2015-2025",
-    "konfidenz": 74
+    "konfidenz_der_datenbasis": 74,
+    "hinweis": "Diese Quote beschreibt historische Verläufe ähnlicher Fälle, keine Prognose für diesen Fall."
   },
   "vergleichssumme": {
     "empfohlen": 62.00,
@@ -469,15 +494,22 @@ class InputSanitizer:
 
 ---
 
-## 9. Rollout-Plan CaseMatch AI
+## 9. Inbetriebnahme-Voraussetzungen
 
-| Phase | Zeitraum | Scope | Qualitätsschwelle |
-|-------|----------|-------|-------------------|
-| Alpha | Monate 1–3 | Interne Tests, 50 Juristen | Accuracy > 70 % |
-| Beta (geschlossen) | Monate 4–9 | 10.000 Pilotnutzer, nur Bußgelder | Accuracy > 75 %, NPS > 60 |
-| Beta (offen) | Monate 10–18 | Bundesweit, alle OWiG-Fälle | Accuracy > 78 %, Bias-Audit bestanden |
-| GA (General Availability) | Monat 19+ | Alle Module, inkl. Steuerbescheid | Accuracy > 80 %, ISO-Zertifizierung |
+CaseMatch wird erst in den Produktivbetrieb überführt, wenn folgende Qualitätsschwellen nachgewiesen sind:
+
+| Voraussetzung | Schwellenwert | Prüfmethode |
+|--------------|--------------|-------------|
+| Bias-Audit bestanden | Disparity < 5 % zwischen demographischen Gruppen | Externe Prüfstelle |
+| Erklärungsqualität | Bürger-Verständlichkeitsbewertung NPS > 60 | Nutzertests |
+| RDG-Konformitätsbestätigung | 100 % | Juristische Prüfung |
+| Modellgrenzen vollständig dokumentiert | Ja | Internes Review |
+| Anfechtungsverfahren implementiert | Ja | Technischer Audit |
+| Datenschutz-Folgenabschätzung abgeschlossen | Ja | Datenschutzbeauftragter |
+
+Die Inbetriebnahme erfolgt stufenweise mit internen Tests, kontrolliertem Pilotbetrieb und externer Überprüfung vor bundesweitem Einsatz. Kein konkreter Zeitplan ist an dieser Stelle vorgesehen – Zulassung folgt Qualitätsnachweisen, nicht Terminen.
 
 ---
 
 *Erstellt auf Basis: docs/01_Master_Blueprint.md bis architecture/05_Systemarchitektur.md*
+*Eingebettet in: [Verfahrensfairness Engine](../docs/engines/verfahrensfairness/README.md)*
