@@ -82,6 +82,14 @@ Open State ist in fachliche Domänen strukturiert. Jede Domäne deckt einen zusa
 
 ---
 
+## Architekturdokumentation
+
+Open State folgt der arc42-Architekturvorlage als strukturierte Dokumentation. Die arc42-Dokumentation übersetzt die User Stories und Domänenanforderungen in eine nachvollziehbare Systemarchitektur.
+
+→ [Architekturdokumentation (arc42)](architecture/arc42/README.md)
+
+---
+
 ## Entwicklungsansatz
 
 Open State wird anhand nachvollziehbarer User Stories entwickelt. Jede sichtbare Funktion führt auf ein konkretes Problem und definierte Akzeptanzkriterien zurück.

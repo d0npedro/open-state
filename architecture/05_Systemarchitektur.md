@@ -2,6 +2,8 @@
 
 *Basis: docs/01–04*
 
+> **Hinweis:** Dieses Dokument enthält technische Detaildiagramme und Spezifikationen. Die strukturierte arc42-Gesamtsicht ist unter [architecture/arc42/](arc42/README.md) dokumentiert. Beide Dokumente ergänzen sich – arc42 führt die Architekturlogik, dieses Dokument liefert technische Details.
+
 ---
 
 ## 1. Architektur-Übersicht
