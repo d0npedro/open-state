@@ -19,7 +19,7 @@ export default function Home() {
         <div className="container">
           <div style={{ maxWidth: '620px' }}>
             <p style={{ color: 'var(--color-primary)', fontWeight: 600, fontSize: '0.875rem', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-              Transparenter Demonstrator
+              Demonstrator · Arbeitsverwaltung · 7 Stories
             </p>
             <h1 style={{ marginBottom: '1rem' }}>Staatliche Verwaltung.<br />Verständlich. Nachvollziehbar.</h1>
             <p style={{ fontSize: '1.1rem', marginBottom: '1.5rem', color: 'var(--color-neutral)' }}>
@@ -30,6 +30,7 @@ export default function Home() {
             <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
               <Link href="/fall" className="btn btn-primary">Demo starten: Fallansicht →</Link>
               <Link href="/stories" className="btn btn-secondary">Story Coverage ansehen</Link>
+              <Link href="/feedback" className="btn btn-secondary">Feedback geben</Link>
             </div>
           </div>
         </div>
@@ -63,12 +64,6 @@ export default function Home() {
         </div>
       </section>
 
-      <footer style={{ marginTop: 'auto', borderTop: '1px solid var(--color-border)', background: 'white', padding: '1.25rem 0' }}>
-        <div className="container" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.875rem', color: 'var(--color-text-muted)' }}>
-          <span>Open State – Konzept &amp; Architektur</span>
-          <Link href="https://github.com/d0npedro/open-state" style={{ color: 'var(--color-text-muted)' }}>GitHub</Link>
-        </div>
-      </footer>
     </main>
   );
 }

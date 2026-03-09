@@ -108,11 +108,18 @@ Eine laufende Demo wird über den `demo`-Branch bereitgestellt. Feature-Branches
 
 ## Demo
 
-Eine klickbare Demo zeigt den ersten Vertical Slice der Domäne Arbeitsverwaltung: Fallübersicht, Status, Dokumente, Rückfragen, Termine, Bescheidtransparenz und Verlauf.
+Die erste klickbare Demo zeigt den Vertical Slice der Domäne Arbeitsverwaltung: Fallübersicht, Status, Dokumente, Rückfragen, Termine, Bescheidtransparenz, Verlauf und Story Coverage.
 
-Jede Funktion ist auf eine User Story zurückführbar. Die Story Coverage ist direkt im Demonstrator einsehbar.
+Jede Funktion ist auf eine User Story zurückführbar. Der aktuelle Demo-Stand zeigt Build-Version, Commit-SHA und Umgebungskennung transparent im Footer.
 
-→ [Demo starten (lokal)](demo/) · [Setup-Anleitung](docs/DEMO_APP_SETUP.md)
+**Lokal starten:**
+```bash
+cd demo && npm install && npm run dev
+```
+
+→ [Demo-Routen und Setup](docs/DEMO_APP_SETUP.md)
+→ [Deployment Playbook](docs/DEMO_DEPLOYMENT_PLAYBOOK.md)
+→ [Feedback zur Demo](/feedback) (im laufenden Demonstrator)
 
 ---
 
