@@ -69,7 +69,7 @@ Diese Machbarkeitsstudie analysiert die rechtliche Vereinbarkeit von Open State 
 | OZG-Reifegrade (1–4) | Open State zielt auf Reifegrad 4 (vollautomatisch) | OZG derzeit nur Reifegrad 3 als Standard; Gesetzesanpassung nötig |
 | OZG 2.0 (2024) | Grundlage vorhanden, Once-Only noch nicht verpflichtend | Once-Only-Pflicht als OZG-Ergänzung gesetzlich verankern |
 
-**Kernforderung:** OZG-Novelle mit verbindlichem Once-Only-Prinzip und Reifegrad-4-Standard als Pflicht für alle Verwaltungsleistungen bis 2030.
+**Kernforderung:** OZG-Novelle mit verbindlichem Once-Only-Prinzip und Reifegrad-4-Standard als Pflicht für alle Verwaltungsleistungen (mittelfristig verbindlich).
 
 ---
 
@@ -151,9 +151,9 @@ Diese Machbarkeitsstudie analysiert die rechtliche Vereinbarkeit von Open State 
 
 ### Paket A: Sofortmaßnahmen (ohne Verfassungsänderung)
 
-**A1 – OZG-Novelle 2026:**
+**A1 – OZG-Novelle (prioritär):**
 - Once-Only-Prinzip als Pflicht für alle Bundesbehörden (§ 2a OZG neu)
-- Reifegrad 4 als Standard bis 2030 (§ 1 Abs. 3 OZG neu)
+- Reifegrad 4 als Standard mittelfristig verbindlich (§ 1 Abs. 3 OZG neu)
 - Open State als zentrales Bundes-Frontend gesetzlich anerkannt
 
 **A2 – VwVfG-Änderung:**

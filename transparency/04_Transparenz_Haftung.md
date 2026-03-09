@@ -84,7 +84,7 @@ Das Open State KPI-Dashboard ist für jeden Bürger kostenlos einsehbar und zeig
 **Jährlicher Transparenzbericht:**
 - Vollständige Statistiken aller Module
 - Bias-Audit-Ergebnisse nach Bevölkerungsgruppen
-- Finanzbericht (Betriebskosten, Werbeeinnahmen, Subventionen)
+- Finanzbericht (Betriebskosten, Subventionen, API-Lizenzeinnahmen)
 - Sicherheitsvorfälle und Reaktionsmaßnahmen
 - Geplante Änderungen im nächsten Jahr
 - Veröffentlichung: jeweils 31. März für das Vorjahr

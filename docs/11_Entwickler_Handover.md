@@ -291,7 +291,7 @@ Sortierung: ?sort=-created_at (Minus = descending)
   "data": { ... },
   "meta": {
     "request_id": "uuid-v4",
-    "timestamp": "2026-03-09T10:14:00Z",
+    "timestamp": "YYYY-MM-DDTHH:MM:SSZ",
     "version": "1.0"
   },
   "errors": null
@@ -777,7 +777,7 @@ GitLab CI:             gitlab.openstate.bund.de (intern)
 | **OZG** | Onlinezugangsgesetz – Pflicht zur digitalen Verwaltungsleistung |
 | **OWiG** | Ordnungswidrigkeitengesetz – Rechtsgrundlage für Bußgelder |
 | **RDG** | Rechtsdienstleistungsgesetz – regelt erlaubte Rechtsberatung |
-| **EUDIW** | EU Digital Identity Wallet – europäische Identitätslösung ab 2026 |
+| **EUDIW** | EU Digital Identity Wallet – europäische Identitätslösung (Rollout läuft) |
 | **Zero-Knowledge** | Architektur, bei der der Betreiber keine Klartextdaten kennt |
 | **Saga-Pattern** | Verteiltes Transaktionsmuster für Microservices |
 | **RAG** | Retrieval-Augmented Generation – KI mit Wissensdatenbank |

@@ -313,7 +313,7 @@ graph LR
 | Prozesszeit Ummeldung | < 3 Min (End-to-End) | — |
 | Backup RPO | 1 Stunde | — |
 | Backup RTO | 4 Stunden | — |
-| Datenbankgröße (2030) | ~50 TB | 200 TB |
+| Datenbankgröße (Vollbetrieb) | ~50 TB | 200 TB |
 | CDN-Cache-Hit-Rate | > 80 % | — |
 
 **Skalierungsstrategie:**
@@ -329,7 +329,7 @@ graph LR
 | Standard | Anwendung |
 |----------|-----------|
 | XÖV (XML-basierte Standards) | Datenaustausch mit allen deutschen Behörden |
-| eIDAS 2.0 / EUDIW | Digitale Identität, EU-Kompatibilität ab 2027 |
+| eIDAS 2.0 / EUDIW | Digitale Identität, EU-Kompatibilität (Rollout läuft) |
 | FIDO2 / WebAuthn | Passwortlose Authentifizierung |
 | OpenAPI 3.1 | Alle öffentlichen APIs vollständig dokumentiert |
 | OAuth 2.1 + PKCE | Autorisierung |

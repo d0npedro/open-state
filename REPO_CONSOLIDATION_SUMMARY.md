@@ -125,5 +125,58 @@ Diese Punkte sind im Repo als offen gekennzeichnet und bedürfen externer Kläru
 
 ---
 
+---
+
+## Final Verification
+
+Durchgeführt nach dem initialen Konsolidierungs-Commit. Systematischer Scan des gesamten Repositories.
+
+### Geprüfte Suchmuster
+
+| Muster | Ergebnis |
+|--------|----------|
+| `Werbung`, `Werbeeinnahmen`, `Werbepartner`, `werbefinanz` | 7 Treffer – alle bewertet |
+| `Advertis`, `ad-based`, `monetize`, `monetization` | 1 Treffer – bewertet |
+| `engagement`, `platform logic` | 1 Treffer – bewertet |
+| Jahreszahlen `2026`–`2030` in Projekt-/Roadmap-Kontext | 8 Treffer – alle bewertet |
+| Quartalsreferenzen `Q1`–`Q4` als Meilensteine | Keine aktiven Treffer |
+| `Pilot` + Datum, `Rollout` + Datum | Keine aktiven Treffer |
+
+### Bereinigte Treffer (Final Verification)
+
+| Datei | Zeile | Alt | Neu |
+|-------|-------|-----|-----|
+| `transparency/04_Transparenz_Haftung.md` | 87 | „Finanzbericht (Betriebskosten, Werbeeinnahmen, Subventionen)" | „Finanzbericht (Betriebskosten, Subventionen, API-Lizenzeinnahmen)" |
+| `architecture/05_Systemarchitektur.md` | 316 | „Datenbankgröße (2030)" | „Datenbankgröße (Vollbetrieb)" |
+| `architecture/05_Systemarchitektur.md` | 332 | „EU-Kompatibilität ab 2027" | „EU-Kompatibilität (Rollout läuft)" |
+| `docs/11_Entwickler_Handover.md` | 294 | `"timestamp": "2026-03-09T10:14:00Z"` | `"timestamp": "YYYY-MM-DDTHH:MM:SSZ"` |
+| `docs/11_Entwickler_Handover.md` | 780 | „europäische Identitätslösung ab 2026" | „europäische Identitätslösung (Rollout läuft)" |
+| `legal/03_Rechtliche_Machbarkeitsstudie.md` | 72 | „als Pflicht für alle Verwaltungsleistungen bis 2030" | „als Pflicht für alle Verwaltungsleistungen (mittelfristig verbindlich)" |
+| `legal/03_Rechtliche_Machbarkeitsstudie.md` | 154 | „A1 – OZG-Novelle 2026:" | „A1 – OZG-Novelle (prioritär):" |
+| `legal/03_Rechtliche_Machbarkeitsstudie.md` | 156 | „Reifegrad 4 als Standard bis 2030" | „Reifegrad 4 als Standard mittelfristig verbindlich" |
+
+### Bewusst belassene Treffer
+
+| Datei | Inhalt | Begründung |
+|-------|--------|------------|
+| `transparency/04_Transparenz_Haftung.md` Z. 170 | „Weitergabe an Werbepartner ohne Einwilligung" | DSGVO-Verletzungstabelle – beschreibt eine verbotene Handlung, keine Funktion |
+| `transparency/04_Transparenz_Haftung.md` Z. 199 | „Verwaltungsdaten für Werbung nutzen" | Explizites Verbot im Bürgervertrag |
+| `docs/LEITBILD_STAAT_UND_VERTRAUEN.md` Z. 96, 100 | „Keine Werbung. Keine Plattformlogik." | Grundsatzdokument – Negierung ist inhaltlich korrekt |
+| `roadmap/09_Monetarisierung_Finanzmodell.md` Z. 252 | „Werbung: Ausgeschlossen. Keine Ausnahmen." | Explizite Ausschlussregelung |
+| `roadmap/10_Pilot_Rollout.md` Z. 341 | „kein bezahltes Advertising" | Korrekte Negierung für Kommunikationsstrategie |
+| `docs/02_Vergleich_Best_Practices.md` | „Seit 2002" (Estland), „Seit 2012" (Georgien) | Historische Länderdaten, keine Projektdaten |
+| `transparency/04_Transparenz_Haftung.md` | „2015–2025" Vergleichsfälle CaseMatch | Datenbasisangabe für KI-Modell, kein Delivery-Datum |
+| `legal/03_Rechtliche_Machbarkeitsstudie.md` | „OZG 2.0 (2024)" | Erlassenes Gesetz mit Jahresangabe – Faktum, kein Versprechen |
+
+### Manuell zu beobachtende Stellen
+
+| Datei | Stelle | Beobachtungsgrund |
+|-------|--------|-------------------|
+| `legal/03_Rechtliche_Machbarkeitsstudie.md` | Gesamtdatei | Rechtsstand vor Pilotierung vollständig aktualisieren |
+| `transparency/04_Transparenz_Haftung.md` | Z. 90: „31. März für das Vorjahr" | Betriebskalender-Datum, kein Delivery-Datum – bei operativer Umsetzung präzisieren |
+| `docs/11_Entwickler_Handover.md` | API-Beispiele | Alle Beispiel-Daten bei Pilotierung durch echte Testdaten ersetzen |
+
+---
+
 *Alle Änderungen sind im Git-Log nachvollziehbar.*
 *Dieses Dokument folgt dem Grundsatz: Was geändert wurde, wird dokumentiert. Was offen ist, bleibt offen.*

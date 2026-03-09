@@ -76,6 +76,14 @@ Open State ist in fachliche Domänen strukturiert. Jede Domäne deckt einen zusa
 
 ---
 
+## Demo & Deployment
+
+Eine laufende Demo wird über den `demo`-Branch bereitgestellt. Feature-Branches erhalten automatische Preview-Deployments. `main` bleibt stabiler Referenzstand ohne unkontrollierte Production-Deploys.
+
+→ [Deployment- und Demo-Strategie](docs/DEPLOYMENT_AND_DEMO_STRATEGY.md)
+
+---
+
 ## Mitmachen / Beitragen
 
 - Issues & Pull Requests willkommen
