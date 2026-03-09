@@ -71,6 +71,28 @@ Typische Akteure:
 
 ---
 
+---
+
+## User Stories dieser Domäne
+
+Die konkreten Anforderungen dieser Domäne sind als User Stories dokumentiert. Jede Story beschreibt ein spezifisches Bürgerproblem, die zugehörige Funktion, definierte Akzeptanzkriterien und UI-Zustände.
+
+→ [Story-Übersicht Arbeitsverwaltung](../../../docs/stories/arbeitsverwaltung/README.md)
+
+**Die 7 dokumentierten Stories:**
+
+| Story-ID | Titel | Problem |
+|----------|-------|---------|
+| US-AV-001 | Fall anlegen | Bürger wissen nicht, wie sie den Prozess nach Jobverlust digital starten |
+| US-AV-002 | Status einsehen | 40–60 % aller BA-Kontakte sind vermeidbare Statusanfragen |
+| US-AV-003 | Unterlagen nachreichen | Dokumentenanforderungen kommen ohne Kontext, Format und Fristangabe |
+| US-AV-004 | Rückfrage verstehen | Rückfragen in Behördensprache ohne Begründung oder Konsequenzbeschreibung |
+| US-AV-005 | Termin einsehen und verstehen | Termine per Post ohne Zweck, Vorbereitungshinweise oder Format |
+| US-AV-006 | Bescheid verstehen | Juristische Bescheide führen zu versäumten Widerspruchsfristen |
+| US-AV-007 | Historie nachvollziehen | Kein Überblick über Fallverlauf, Entscheidungen und Kommunikation |
+
+---
+
 *Diese Domäne ist Teil von Open State – dem transparenten Betriebs- und Vertrauensmodell für staatliches Handeln.*
 *Verweis auf Gesamtarchitektur: [architecture/05_Systemarchitektur.md](../../../architecture/05_Systemarchitektur.md)*
 *Verweis auf Leitbild: [docs/LEITBILD_STAAT_UND_VERTRAUEN.md](../../LEITBILD_STAAT_UND_VERTRAUEN.md)*

@@ -82,6 +82,14 @@ Open State ist in fachliche Domänen strukturiert. Jede Domäne deckt einen zusa
 
 ---
 
+## Entwicklungsansatz
+
+Open State wird anhand nachvollziehbarer User Stories entwickelt. Jede sichtbare Funktion führt auf ein konkretes Problem und definierte Akzeptanzkriterien zurück.
+
+→ [Story-System und Traceability](docs/stories/README.md)
+
+---
+
 ## Demo & Deployment
 
 Eine laufende Demo wird über den `demo`-Branch bereitgestellt. Feature-Branches erhalten automatische Preview-Deployments. `main` bleibt stabiler Referenzstand ohne unkontrollierte Production-Deploys.

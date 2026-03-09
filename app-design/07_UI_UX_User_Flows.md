@@ -2,6 +2,8 @@
 
 *Basis: docs/01–06*
 
+> **Hinweis zum Story-System:** Die User Flows in diesem Dokument werden schrittweise auf das Story-System in `docs/stories/` überführt. Story-IDs werden dort definiert und mit UI-Komponenten verknüpft. Jede dokumentierte Funktion erhält eine Story-ID als Traceability-Anker. Der aktuelle Implementierungsstand je Story ist im [Story Coverage Screen](09_Story_Coverage_UI.md) und in der [Traceability Matrix](../docs/stories/TRACEABILITY_MATRIX.md) nachvollziehbar.
+
 ---
 
 ## 1. Design-Philosophie

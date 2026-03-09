@@ -1,0 +1,86 @@
+[
+  {
+    "id": "US-AV-001",
+    "domain": "Arbeitsverwaltung",
+    "title": "Fall anlegen",
+    "role": "Bürger",
+    "status": "ENTWURF",
+    "problem": "Bürger werden arbeitslos und wissen nicht, wie sie den Prozess digital starten, welche Schritte folgen und ob ihre Meldung angekommen ist.",
+    "screen": "Fallanlage / Arbeitslosmeldung",
+    "transparency_focus": "Eingangsbestätigung und Fallnummer sofort sichtbar nach Absenden",
+    "acceptance_criteria_count": 6,
+    "source_file": "docs/stories/arbeitsverwaltung/US-AV-001_Fall_anlegen.md"
+  },
+  {
+    "id": "US-AV-002",
+    "domain": "Arbeitsverwaltung",
+    "title": "Status einsehen",
+    "role": "Bürger",
+    "status": "ENTWURF",
+    "problem": "Bürger wissen nicht, wo ihr Fall steht. Schätzungsweise 40–60 % aller eingehenden Kontakte bei der Bundesagentur für Arbeit sind Statusanfragen, die durch transparente Statusanzeige vermeidbar wären.",
+    "screen": "Fallstatus-Übersicht",
+    "transparency_focus": "Statuserklärung in Klartext mit letztem Aktualisierungszeitpunkt und nächstem Schritt",
+    "acceptance_criteria_count": 6,
+    "source_file": "docs/stories/arbeitsverwaltung/US-AV-002_Status_einsehen.md"
+  },
+  {
+    "id": "US-AV-003",
+    "domain": "Arbeitsverwaltung",
+    "title": "Unterlagen nachreichen",
+    "role": "Bürger",
+    "status": "ENTWURF",
+    "problem": "Rückfragen nach Dokumenten kommen ohne ausreichenden Kontext. Bürger wissen nicht genau, welches Dokument fehlt, warum es benötigt wird und in welchem Format es einzureichen ist.",
+    "screen": "Dokumenten-Upload",
+    "transparency_focus": "Upload-Zeitstempel und Dokumentenstatus je Dokument nachverfolgbar",
+    "acceptance_criteria_count": 6,
+    "source_file": "docs/stories/arbeitsverwaltung/US-AV-003_Unterlagen_nachreichen.md"
+  },
+  {
+    "id": "US-AV-004",
+    "domain": "Arbeitsverwaltung",
+    "title": "Rückfrage verstehen",
+    "role": "Bürger",
+    "status": "ENTWURF",
+    "problem": "Rückfragen kommen in Behördensprache ohne Erklärung des Hintergrunds. Bürger verstehen nicht, was konkret gefordert wird, warum es gefordert wird und was passiert, wenn sie nicht reagieren.",
+    "screen": "Rückfragen-Ansicht",
+    "transparency_focus": "Jede Rückfrage zeigt Begründung, Frist und Konsequenz bei Nichterfüllung",
+    "acceptance_criteria_count": 6,
+    "source_file": "docs/stories/arbeitsverwaltung/US-AV-004_Rueckfrage_verstehen.md"
+  },
+  {
+    "id": "US-AV-005",
+    "domain": "Arbeitsverwaltung",
+    "title": "Termin einsehen und verstehen",
+    "role": "Bürger",
+    "status": "ENTWURF",
+    "problem": "Termine werden per Post mitgeteilt, ohne Kontext über den Zweck des Termins und ohne Hinweise zur Vorbereitung. Bürger erscheinen unvorbereitet oder verpassen Termine mangels klarer Information.",
+    "screen": "Termin-Übersicht",
+    "transparency_focus": "Terminzweck in Klarsprache mit Vorbereitungshinweisen und mitzubringenden Unterlagen",
+    "acceptance_criteria_count": 5,
+    "source_file": "docs/stories/arbeitsverwaltung/US-AV-005_Termin_einsehen_und_verstehen.md"
+  },
+  {
+    "id": "US-AV-006",
+    "domain": "Arbeitsverwaltung",
+    "title": "Bescheid verstehen",
+    "role": "Bürger",
+    "status": "ENTWURF",
+    "problem": "Bescheide sind juristische Texte, die viele Bürger nicht verstehen. Widerspruchsfristen werden versäumt, weil Bürger weder den Bescheid vollständig lesen noch die Frist oder ihre Handlungsoptionen kennen.",
+    "screen": "Bescheid-Ansicht",
+    "transparency_focus": "Zwei-Schichten-Darstellung: juristische Fassung und erklärte Fassung mit Widerspruchsfrist",
+    "acceptance_criteria_count": 6,
+    "source_file": "docs/stories/arbeitsverwaltung/US-AV-006_Bescheid_verstehen.md"
+  },
+  {
+    "id": "US-AV-007",
+    "domain": "Arbeitsverwaltung",
+    "title": "Historie nachvollziehen",
+    "role": "Bürger",
+    "status": "ENTWURF",
+    "problem": "Bürger haben keinen Überblick über den Verlauf ihres Falls. Wer hat wann was entschieden oder angefordert? Ohne diese Transparenz entsteht Misstrauen und eine hohe Zahl von Rückfragen.",
+    "screen": "Fall-Timeline",
+    "transparency_focus": "Vollständige chronologische Timeline aller Ereignisse mit handelnder Stelle und Begründung",
+    "acceptance_criteria_count": 6,
+    "source_file": "docs/stories/arbeitsverwaltung/US-AV-007_Historie_nachvollziehen.md"
+  }
+]

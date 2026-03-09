@@ -97,6 +97,23 @@ github.com/bundesrepublik/open-state/
 
 ---
 
+## Story-IDs als Traceability-Ankerpunkte
+
+Alle Features in Open State sind auf dokumentierte User Stories zurückführbar. Jede Story trägt eine eindeutige ID im Format `US-[DOMÄNE]-[NNN]` (z.B. `US-AV-001`).
+
+Diese Story-IDs dienen als Ankerpunkte in der gesamten Entwicklungsdokumentation:
+
+- **Code und Commits:** Story-IDs werden in Commit-Messages und PR-Beschreibungen referenziert.
+- **UI-Komponenten:** Jede Komponente, die eine Story-Funktion abbildet, trägt einen Story-Badge mit der entsprechenden ID.
+- **API-Endpunkte:** Die technischen Anschlussstellen je Story sind in der jeweiligen Story-Datei dokumentiert.
+- **Akzeptanzkriterien:** Die Story definiert die Abnahmekriterien; eine Funktion gilt erst dann als demonstrierbar, wenn alle nummerierten Kriterien erfüllt sind.
+
+Übersicht aller Stories und ihr Implementierungsstand:
+→ [docs/stories/TRACEABILITY_MATRIX.md](stories/TRACEABILITY_MATRIX.md)
+→ [docs/stories/story_registry.json](stories/story_registry.json) (maschinenlesbar)
+
+---
+
 ## 3. Architektur-Zusammenfassung
 
 ### 3.1 Schichtenmodell
