@@ -98,5 +98,19 @@ export const storyRegistry: StoryRegistryEntry[] = [
     implemented_criteria: 6,
     route: '/fall/verlauf',
     source_file: 'docs/stories/arbeitsverwaltung/US-AV-007_Historie_nachvollziehen.md'
+  },
+  {
+    id: 'US-AV-008',
+    domain: 'Arbeitsverwaltung',
+    title: 'Verfahrenslage verstehen',
+    role: 'Bürger',
+    status: 'DEMONSTRIERBAR',
+    problem: 'Bürger wissen nicht, warum ein Fall stockt oder was als nächstes zu tun ist – ohne direkte Erklärung bleibt der Verfahrensstand unklar',
+    screen: 'Hinweise zur Verfahrenslage',
+    transparency_focus: 'Regelbasierte Hinweise aus Falldaten: Fristlage, fehlende Unterlagen, Bescheidstatus – erklärt und begründet',
+    acceptance_criteria_count: 5,
+    implemented_criteria: 5,
+    route: '/fall/hinweise',
+    source_file: 'docs/stories/arbeitsverwaltung/US-AV-008_Verfahrenslage_verstehen.md'
   }
 ];

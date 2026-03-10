@@ -1,8 +1,13 @@
 import { demoFall } from '@/data/mockFall';
+import { berechneFairnessSignale } from '@/lib/fairness/rules';
+import { FairnessPanel } from '@/components/fairness/FairnessPanel';
 
 export default function RueckfragenPage() {
   const { rueckfragen } = demoFall;
   const offen = rueckfragen.filter(r => !r.beantwortet);
+  const fristSignale = berechneFairnessSignale(demoFall).filter(
+    s => s.typ === 'RUECKFRAGE_OFFEN_FRIST_RELEVANT'
+  );
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
       <div style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', display: 'flex', gap: '0.5rem' }}>
@@ -13,6 +18,10 @@ export default function RueckfragenPage() {
         <h1 style={{ marginBottom: '0.5rem' }}>Rückfragen</h1>
         <p>{offen.length > 0 ? `${offen.length} offene Rückfrage(n) erfordern Ihre Antwort.` : 'Keine offenen Rückfragen.'}</p>
       </div>
+
+      {fristSignale.length > 0 && (
+        <FairnessPanel signale={fristSignale} kompakt={false} />
+      )}
       {rueckfragen.map(rq => (
         <div key={rq.id} className="card" style={{ borderLeft: rq.beantwortet ? '3px solid var(--color-success)' : '3px solid var(--color-warning)' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem', flexWrap: 'wrap', gap: '0.5rem' }}>

@@ -7,6 +7,7 @@ const nav = [
   { href: '/fall/termine', label: 'Termine' },
   { href: '/fall/bescheide', label: 'Bescheide' },
   { href: '/fall/verlauf', label: 'Verlauf' },
+  { href: '/fall/hinweise', label: 'Hinweise' },
 ];
 
 export default function FallLayout({ children }: { children: React.ReactNode }) {

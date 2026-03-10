@@ -1,4 +1,6 @@
 import { demoFall } from '@/data/mockFall';
+import { berechneFairnessSignale } from '@/lib/fairness/rules';
+import { FairnessSummaryCard } from '@/components/fairness/FairnessPanel';
 
 const statusLabels: Record<string, { label: string; badge: string }> = {
   ANGELEGT: { label: 'Angelegt', badge: 'badge-neutral' },
@@ -18,6 +20,7 @@ export default function FallPage() {
   const fall = demoFall;
   const s = statusLabels[fall.status];
   const currentIndex = statusFlow.indexOf(fall.status);
+  const fairnessSignale = berechneFairnessSignale(fall);
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
@@ -89,6 +92,9 @@ export default function FallPage() {
           ))}
         </div>
       )}
+
+      {/* Fairness-Zusammenfassung */}
+      <FairnessSummaryCard signale={fairnessSignale} href="/fall/hinweise" />
 
       {/* Info-Kacheln */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>

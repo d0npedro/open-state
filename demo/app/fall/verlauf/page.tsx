@@ -1,5 +1,7 @@
 import { demoFall } from '@/data/mockFall';
 import { EreignisTyp } from '@/types';
+import { berechneFairnessSignale } from '@/lib/fairness/rules';
+import { FairnessPanel } from '@/components/fairness/FairnessPanel';
 
 const ereignisLabels: Record<EreignisTyp, string> = {
   FALL_ANGELEGT: 'Fall angelegt',
@@ -22,6 +24,9 @@ const stelleLabel: Record<string, string> = {
 
 export default function VerlaufPage() {
   const { timeline } = demoFall;
+  const pauseSignale = berechneFairnessSignale(demoFall).filter(
+    s => s.typ === 'FALL_PAUSIERT'
+  );
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
       <div style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', display: 'flex', gap: '0.5rem' }}>
@@ -32,6 +37,10 @@ export default function VerlaufPage() {
         <h1 style={{ marginBottom: '0.5rem' }}>Verlauf</h1>
         <p>Chronologische Übersicht aller Ereignisse in Ihrem Fall. Jede Handlung ist dokumentiert und nachvollziehbar.</p>
       </div>
+
+      {pauseSignale.length > 0 && (
+        <FairnessPanel signale={pauseSignale} kompakt={true} />
+      )}
       <div style={{ position: 'relative', paddingLeft: '1.5rem' }}>
         <div style={{ position: 'absolute', left: '0.65rem', top: 0, bottom: 0, width: '2px', background: 'var(--color-border)' }} />
         {[...timeline].reverse().map((e, i) => (

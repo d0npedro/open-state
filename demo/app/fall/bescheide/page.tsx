@@ -1,7 +1,12 @@
 import { demoFall } from '@/data/mockFall';
+import { berechneFairnessSignale } from '@/lib/fairness/rules';
+import { FairnessPanel } from '@/components/fairness/FairnessPanel';
 
 export default function BescheidePage() {
   const { bescheide } = demoFall;
+  const bescheidSignale = berechneFairnessSignale(demoFall).filter(
+    s => s.typ === 'BESCHEID_VORLAEUFIG' || s.typ === 'BESCHEID_BEGRUENDUNG_ERWEITERBAR'
+  );
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
       <div style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', display: 'flex', gap: '0.5rem' }}>
@@ -9,6 +14,10 @@ export default function BescheidePage() {
         <span>Bescheid verstehen</span>
       </div>
       <div><h1 style={{ marginBottom: '0.5rem' }}>Bescheide</h1><p>Ihre Bescheide in verständlicher und rechtlicher Fassung.</p></div>
+
+      {bescheidSignale.length > 0 && (
+        <FairnessPanel signale={bescheidSignale} kompakt={false} />
+      )}
       {bescheide.map(b => (
         <div key={b.id} className="card">
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1.25rem', flexWrap: 'wrap', gap: '0.5rem' }}>
