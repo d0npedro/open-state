@@ -49,7 +49,7 @@ export const demoFall: Fall = {
       begründung: 'Das Datum der Beschäftigungsaufnahme ist notwendig, um zu prüfen, ob die Rahmenfrist von 30 Monaten und die Anwartschaftszeit von 12 Monaten erfüllt sind.',
       konsequenz: 'Ohne diese Angabe kann die Leistungsberechnung nicht abgeschlossen werden und Ihr Antrag pausiert.',
       frist: '26. November 2024',
-      fristTage: 7,
+      fristDatum: '2024-11-26',
       beantwortet: false,
       gestelltAm: '19. November 2024'
     }

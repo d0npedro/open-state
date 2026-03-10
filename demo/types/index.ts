@@ -28,7 +28,8 @@ export interface Rueckfrage {
   begründung: string;
   konsequenz: string;
   frist: string;
-  fristTage: number;
+  /** ISO-Datum der Frist (YYYY-MM-DD) – Grundlage für berechnete Fristtagezahl in rules.ts */
+  fristDatum: string;
   beantwortet: boolean;
   gestelltAm: string;
 }

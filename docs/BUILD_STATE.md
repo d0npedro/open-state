@@ -1,6 +1,6 @@
 # BUILD_STATE.md – Aktueller Projektstand
 
-Zuletzt aktualisiert: nach Queue-Repriorisierung (hebelorientiert)
+Zuletzt aktualisiert: nach Q-004 (echte Datumsberechnung in Fairness-Regeln)
 
 Dieser Stand beschreibt, was tatsächlich existiert und funktioniert.
 Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
@@ -45,7 +45,7 @@ Weitere Domänen (Kita, Unternehmensgründung): nur Dokumentation, keine UI-Rout
 | Mock-Falldaten (ALG I) | `demo/data/mockFall.ts` | ✓ Vollständig |
 | Story Registry | `demo/data/storyRegistry.ts` | ✓ 8 Stories (US-AV-001–008) |
 | Fairness-Typen | `demo/types/fairness.ts` | ✓ |
-| Fairness-Regelwerk | `demo/lib/fairness/rules.ts` | ✓ 5 Regeln |
+| Fairness-Regelwerk | `demo/lib/fairness/rules.ts` | ✓ 5 Regeln, berechnete Fristtagezahl (ISO-Datum + FIKTIVES_HEUTE) |
 | FairnessPanel-Komponente | `demo/components/fairness/FairnessPanel.tsx` | ✓ |
 | BuildInfo-Komponente | `demo/components/BuildInfo.tsx` | ✓ |
 
@@ -121,7 +121,7 @@ aber die Story-Datei `docs/stories/arbeitsverwaltung/US-AV-008_*.md` fehlt noch.
 
 | Lücke | Demo-Auswirkung | Queue-ID |
 |-------|----------------|----------|
-| Fairness-Fristen sind statische Zahlen, kein berechnetes Datum | Glaubwürdigkeitsproblem | Q-004 |
+| ~~Fairness-Fristen sind statische Zahlen~~ | ~~Glaubwürdigkeitsproblem~~ | Q-004 ✓ |
 | Demo vollständig statisch — keine Interaktion verändert State | Demo wirkt wie Slideshow, kein lebendes System | Q-031 |
 | Keine Kita-/JA-Demo-Route | Einzigartigster Inhalt fehlt komplett | Q-020–Q-024 |
 | Keine Unternehmensgründungs-Demo-Route | Plattformgedanke nicht sichtbar | Q-011–Q-015 |

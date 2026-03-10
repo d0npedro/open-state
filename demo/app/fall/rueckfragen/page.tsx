@@ -1,5 +1,5 @@
 import { demoFall } from '@/data/mockFall';
-import { berechneFairnessSignale } from '@/lib/fairness/rules';
+import { berechneFairnessSignale, berechneFristTage, FIKTIVES_HEUTE } from '@/lib/fairness/rules';
 import { FairnessPanel } from '@/components/fairness/FairnessPanel';
 
 export default function RueckfragenPage() {
@@ -42,7 +42,7 @@ export default function RueckfragenPage() {
               <p style={{ fontSize: '0.875rem', marginTop: '0.25rem' }}>{rq.konsequenz}</p>
             </div>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.75rem' }}>
-              <span style={{ fontSize: '0.875rem', color: 'var(--color-warning)', fontWeight: 600 }}>Frist: {rq.frist} (noch {rq.fristTage} Tage)</span>
+              <span style={{ fontSize: '0.875rem', color: 'var(--color-warning)', fontWeight: 600 }}>Frist: {rq.frist} (noch {berechneFristTage(rq.fristDatum, FIKTIVES_HEUTE)} Tage)</span>
               {!rq.beantwortet && <button className="btn btn-primary">Rückfrage beantworten</button>}
             </div>
           </div>

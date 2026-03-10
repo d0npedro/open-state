@@ -14,27 +14,56 @@ import { FairnessSignal } from '@/types/fairness';
 // Schwellenwert: Rückfragefrist gilt als "relevant" ab <= dieser Anzahl Tage
 const FRIST_RELEVANT_AB_TAGEN = 10;
 
+/**
+ * Fiktives Demo-Datum (ISO).
+ *
+ * Der Demo-Fall spielt im November 2024. Damit die Fairness-Regeln realistische
+ * Fristdrucksituationen zeigen, wird ein festes fiktives Heute verwendet.
+ * Wert 24.11.2024 → 2 Tage bis zur Rückfragen-Frist (26.11.) → Signal RELEVANT.
+ *
+ * In einem produktiven System würde hier new Date() stehen.
+ */
+export const FIKTIVES_HEUTE = '2024-11-24';
+
+/**
+ * Berechnet die verbleibenden Kalendertage zwischen heute und einem Fristdatum.
+ * Negatives Ergebnis bedeutet: Frist bereits abgelaufen.
+ */
+export function berechneFristTage(fristDatum: string, heute: string): number {
+  const frist = new Date(fristDatum);
+  const jetzt = new Date(heute);
+  const diffMs = frist.getTime() - jetzt.getTime();
+  return Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+}
+
 export function berechneFairnessSignale(fall: Fall): FairnessSignal[] {
   const signale: FairnessSignal[] = [];
 
   // ─── Signal 1: Offene Rückfrage mit nahender Frist ───────────────────────
-  // Regel: Wenn eine Rückfrage unbeantwortet ist und die Frist <= 10 Tage beträgt,
-  //        ist dies für Bürger und Sachbearbeitung relevant zu wissen.
+  // Regel: Wenn eine Rückfrage unbeantwortet ist und die berechnete Frist
+  //        <= FRIST_RELEVANT_AB_TAGEN beträgt, ist dies relevant zu wissen.
   for (const rq of fall.rueckfragen) {
-    if (!rq.beantwortet && rq.fristTage <= FRIST_RELEVANT_AB_TAGEN) {
+    const fristTage = berechneFristTage(rq.fristDatum, FIKTIVES_HEUTE);
+    if (!rq.beantwortet && fristTage <= FRIST_RELEVANT_AB_TAGEN) {
+      const fristLabel =
+        fristTage < 0
+          ? `${Math.abs(fristTage)} Tage überschritten`
+          : fristTage === 0
+            ? 'heute'
+            : `noch ${fristTage} Tag${fristTage === 1 ? '' : 'e'}`;
       signale.push({
         id: `FH-${rq.id}-FRIST`,
         typ: 'RUECKFRAGE_OFFEN_FRIST_RELEVANT',
         titel: 'Rückfrage offen – Frist nähert sich',
         erklaerung:
           `Eine Rückfrage vom ${rq.gestelltAm} wartet noch auf Ihre Antwort. ` +
-          `Die Antwortfrist endet am ${rq.frist} (noch ${rq.fristTage} Tage).`,
+          `Die Antwortfrist endet am ${rq.frist} (${fristLabel}).`,
         auswirkung: rq.konsequenz,
         naechsterSchritt:
           'Bitte beantworten Sie die Rückfrage im Bereich „Rückfragen". ' +
           'Dort finden Sie die vollständige Frage, die Begründung und die Frist.',
         bezug: `Rückfrage ${rq.id}, gestellt am ${rq.gestelltAm}`,
-        prioritaet: rq.fristTage <= 3 ? 'RELEVANT' : 'HINWEIS',
+        prioritaet: fristTage <= 3 ? 'RELEVANT' : 'HINWEIS',
       });
     }
   }
