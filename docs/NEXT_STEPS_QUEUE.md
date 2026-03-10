@@ -34,7 +34,7 @@ Das ist ein Glaubwürdigkeitsproblem gegenüber jedem, der die Demo kritisch bet
 
 | ID | Schritt | Typ | Aufwand | Abhängigkeit | Status |
 |----|---------|-----|---------|--------------|--------|
-| Q-004 | Fairness-Regelwerk: Fristen als ISO-Datum in `mockFall.ts`, Delta gegen fiktives „Heute" berechnen — entfernt statische `fristTage`-Angaben | DEMO | S | – | DONE `a→` |
+| Q-004 | Fairness-Regelwerk: Fristen als ISO-Datum in `mockFall.ts`, Delta gegen fiktives „Heute" berechnen — entfernt statische `fristTage`-Angaben | DEMO | S | – | DONE `27a5f87` |
 
 ---
 
