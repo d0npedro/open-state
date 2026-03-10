@@ -89,7 +89,8 @@ Befehl: „Entwickle weiter" → obersten `OFFEN`-Eintrag nehmen und umsetzen.
 | – | Demo-Deployment auf Vercel konfiguriert | `e038699` |
 | – | Verfahrensfairness-Hinweisschicht in Demo integriert | `9966c5e` |
 | – | Domäne Kita-Betrieb & Jugendamt-Steuerung dokumentiert (10 Stories, 7 Domänendokumente) | `50c0f69` |
-| – | Agent-Betriebssystem angelegt | aktuell |
+| – | Agent-Betriebssystem angelegt | `<agent-os>` |
+| – | Theme-Architektur & Design System (4 Themes, 2 Density Modes, ThemeSwitcher) | aktuell |
 
 ---
 

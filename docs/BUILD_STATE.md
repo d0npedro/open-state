@@ -1,6 +1,6 @@
 # BUILD_STATE.md – Aktueller Projektstand
 
-Zuletzt aktualisiert: nach Commit `50c0f69`
+Zuletzt aktualisiert: nach Theme-Architektur-Commit
 
 Dieser Zustand beschreibt, was tatsächlich existiert und funktioniert –
 nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
@@ -41,7 +41,10 @@ nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | Fairness-Typen | `demo/types/fairness.ts` | ✓ |
 | Fairness-Regelwerk | `demo/lib/fairness/rules.ts` | ✓ 5 Regeln |
 | FairnessPanel-Komponenten | `demo/components/fairness/FairnessPanel.tsx` | ✓ |
-| Design System | `demo/app/globals.css` | ✓ CSS-Variablen, Utility-Klassen |
+| Design System – CSS-Tokens | `demo/app/globals.css` | ✓ 4 Themes, 2 Density Modes, semantische Tokens |
+| Design System – Theme-Registry | `demo/design-system/themes/themes.ts` | ✓ ThemeId/DensityMode-Typen |
+| Design System – ThemeProvider | `demo/design-system/provider/ThemeProvider.tsx` | ✓ React Context, localStorage |
+| ThemeSwitcher-Komponente | `demo/components/ThemeSwitcher.tsx` | ✓ Im Footer sichtbar |
 | BuildInfo-Komponente | `demo/components/BuildInfo.tsx` | ✓ |
 
 ---

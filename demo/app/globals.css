@@ -1,33 +1,233 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-:root {
-  --color-primary: #003F8C;
-  --color-primary-light: #E8F0FB;
-  --color-secondary: #5B7CB0;
-  --color-success: #1A6B3C;
-  --color-success-light: #E8F5EE;
-  --color-warning: #7A4F00;
-  --color-warning-light: #FFF3CD;
-  --color-danger: #8B1A1A;
-  --color-danger-light: #FDECEA;
-  --color-neutral: #4A5568;
-  --color-neutral-light: #F7F8FA;
-  --color-border: #D1D9E6;
-  --color-text: #1A202C;
-  --color-text-muted: #718096;
-  --color-white: #FFFFFF;
-  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --radius: 6px;
-  --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
-  --shadow: 0 2px 8px rgba(0,0,0,0.10);
+/* ═══════════════════════════════════════════════════════════════════
+   DESIGN SYSTEM – SEMANTIC TOKEN LAYER
+   Alle Komponenten verwenden ausschließlich diese CSS-Variablen.
+   Themes überschreiben diese Variablen – Komponenten bleiben unverändert.
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ─── THEME: CIVIC NEUTRAL (Standard) ──────────────────────────── */
+:root,
+[data-theme="civic-neutral"] {
+  /* Farbpalette */
+  --color-primary:        #003F8C;
+  --color-primary-light:  #E8F0FB;
+  --color-secondary:      #5B7CB0;
+  --color-success:        #1A6B3C;
+  --color-success-light:  #E8F5EE;
+  --color-warning:        #7A4F00;
+  --color-warning-light:  #FFF3CD;
+  --color-danger:         #8B1A1A;
+  --color-danger-light:   #FDECEA;
+  --color-neutral:        #4A5568;
+  --color-neutral-light:  #F7F8FA;
+  --color-border:         #D1D9E6;
+  --color-text:           #1A202C;
+  --color-text-muted:     #718096;
+  --color-white:          #FFFFFF;
+
+  /* Semantische Oberflächen-Tokens */
+  --color-surface:        #FFFFFF;
+  --color-surface-muted:  #F7F8FA;
+  --color-surface-raised: #FFFFFF;
+
+  /* Fokus & Interaktion */
+  --color-focus-ring:     rgba(0, 63, 140, 0.35);
+  --color-focus-outline:  #003F8C;
+
+  /* Typografie */
+  --font-sans:            -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-size-base:       16px;
+  --font-size-sm:         0.875rem;
+  --font-size-xs:         0.75rem;
+  --line-height-base:     1.6;
+
+  /* Geometrie */
+  --radius:               6px;
+  --radius-sm:            4px;
+  --radius-lg:            10px;
+
+  /* Schatten */
+  --shadow-sm:            0 1px 3px rgba(0,0,0,0.08);
+  --shadow:               0 2px 8px rgba(0,0,0,0.10);
+  --shadow-focus:         0 0 0 3px var(--color-focus-ring);
+
+  /* Abstände (Density-Tokens) */
+  --card-padding:         1.5rem;
+  --space-xs:             0.25rem;
+  --space-sm:             0.5rem;
+  --space-md:             1rem;
+  --space-lg:             1.5rem;
+  --space-xl:             2rem;
 }
+
+/* ─── THEME: CITIZEN WARM ───────────────────────────────────────── */
+[data-theme="citizen-warm"] {
+  --color-primary:        #1A4E8A;
+  --color-primary-light:  #EBF1FA;
+  --color-secondary:      #4A7DB0;
+  --color-success:        #1D7840;
+  --color-success-light:  #EAF5EE;
+  --color-warning:        #8B5E00;
+  --color-warning-light:  #FFF4D0;
+  --color-danger:         #9B2020;
+  --color-danger-light:   #FEF0EE;
+  --color-neutral:        #5A6370;
+  --color-neutral-light:  #FAF8F5;
+  --color-border:         #D4CEC6;
+  --color-text:           #1E1A17;
+  --color-text-muted:     #7A6E62;
+  --color-white:          #FEFCFA;
+
+  --color-surface:        #FEFCFA;
+  --color-surface-muted:  #FAF8F5;
+  --color-surface-raised: #FFFFFF;
+
+  --color-focus-ring:     rgba(26, 78, 138, 0.35);
+  --color-focus-outline:  #1A4E8A;
+
+  --font-size-base:       16px;
+  --font-size-sm:         0.875rem;
+  --font-size-xs:         0.75rem;
+  --line-height-base:     1.65;
+
+  --radius:               8px;
+  --radius-sm:            5px;
+  --radius-lg:            14px;
+
+  --shadow-sm:            0 1px 4px rgba(60,40,10,0.09);
+  --shadow:               0 3px 10px rgba(60,40,10,0.11);
+  --shadow-focus:         0 0 0 3px var(--color-focus-ring);
+
+  --card-padding:         1.5rem;
+  --space-xs:             0.25rem;
+  --space-sm:             0.5rem;
+  --space-md:             1rem;
+  --space-lg:             1.5rem;
+  --space-xl:             2rem;
+}
+
+/* ─── THEME: OFFICE DENSE ───────────────────────────────────────── */
+[data-theme="office-dense"] {
+  --color-primary:        #1B2A4A;
+  --color-primary-light:  #E3EAF2;
+  --color-secondary:      #3D5475;
+  --color-success:        #145C2F;
+  --color-success-light:  #E2EEE8;
+  --color-warning:        #6A4100;
+  --color-warning-light:  #F8EFBF;
+  --color-danger:         #7A1212;
+  --color-danger-light:   #FAE8E8;
+  --color-neutral:        #3D4A5C;
+  --color-neutral-light:  #EFF2F5;
+  --color-border:         #C0CAD6;
+  --color-text:           #0F1622;
+  --color-text-muted:     #5A6678;
+  --color-white:          #FFFFFF;
+
+  --color-surface:        #FFFFFF;
+  --color-surface-muted:  #EFF2F5;
+  --color-surface-raised: #FFFFFF;
+
+  --color-focus-ring:     rgba(27, 42, 74, 0.4);
+  --color-focus-outline:  #1B2A4A;
+
+  --font-size-base:       14px;
+  --font-size-sm:         0.8125rem;
+  --font-size-xs:         0.7rem;
+  --line-height-base:     1.5;
+
+  --radius:               3px;
+  --radius-sm:            2px;
+  --radius-lg:            6px;
+
+  --shadow-sm:            0 1px 2px rgba(0,0,0,0.07);
+  --shadow:               0 2px 5px rgba(0,0,0,0.09);
+  --shadow-focus:         0 0 0 2px var(--color-focus-ring);
+
+  --card-padding:         0.875rem;
+  --space-xs:             0.2rem;
+  --space-sm:             0.4rem;
+  --space-md:             0.75rem;
+  --space-lg:             1.125rem;
+  --space-xl:             1.5rem;
+}
+
+/* ─── THEME: ACCESSIBLE CONTRAST ───────────────────────────────── */
+[data-theme="accessible-contrast"] {
+  --color-primary:        #002E8F;
+  --color-primary-light:  #D0DCF5;
+  --color-secondary:      #264E8A;
+  --color-success:        #005226;
+  --color-success-light:  #CCEADA;
+  --color-warning:        #5A3400;
+  --color-warning-light:  #FCE9A0;
+  --color-danger:         #6E0000;
+  --color-danger-light:   #FCCECE;
+  --color-neutral:        #2D3748;
+  --color-neutral-light:  #EDF0F5;
+  --color-border:         #5A6575;
+  --color-text:           #000000;
+  --color-text-muted:     #2D3748;
+  --color-white:          #FFFFFF;
+
+  --color-surface:        #FFFFFF;
+  --color-surface-muted:  #EDF0F5;
+  --color-surface-raised: #FFFFFF;
+
+  --color-focus-ring:     rgba(0, 46, 143, 0.6);
+  --color-focus-outline:  #002E8F;
+
+  --font-size-base:       17px;
+  --font-size-sm:         0.9375rem;
+  --font-size-xs:         0.8125rem;
+  --line-height-base:     1.7;
+
+  --radius:               4px;
+  --radius-sm:            3px;
+  --radius-lg:            8px;
+
+  --shadow-sm:            none;
+  --shadow:               0 0 0 1px rgba(0,0,0,0.18);
+  --shadow-focus:         0 0 0 3px var(--color-focus-ring);
+
+  --card-padding:         1.5rem;
+  --space-xs:             0.3rem;
+  --space-sm:             0.6rem;
+  --space-md:             1rem;
+  --space-lg:             1.5rem;
+  --space-xl:             2rem;
+}
+
+/* ─── DENSITY MODE: COMPACT (theme-unabhängig überlagerbar) ─────── */
+[data-density="compact"] {
+  --card-padding:     0.75rem;
+  --space-md:         0.75rem;
+  --space-lg:         1rem;
+  --font-size-base:   14px;
+  --font-size-sm:     0.8rem;
+}
+
+/* ─── DENSITY MODE: ACCESSIBLE (theme-unabhängig überlagerbar) ──── */
+[data-density="accessible"] {
+  --card-padding:     1.75rem;
+  --space-md:         1.25rem;
+  --space-lg:         2rem;
+  --font-size-base:   18px;
+  --font-size-sm:     1rem;
+  --line-height-base: 1.75;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   BASIS-STILE – verwenden ausschließlich CSS-Variablen
+   ═══════════════════════════════════════════════════════════════════ */
 
 body {
   font-family: var(--font-sans);
   color: var(--color-text);
-  background: var(--color-neutral-light);
-  line-height: 1.6;
-  font-size: 16px;
+  background: var(--color-surface-muted);
+  line-height: var(--line-height-base, 1.6);
+  font-size: var(--font-size-base, 16px);
 }
 
 a { color: var(--color-primary); text-decoration: none; }
@@ -38,15 +238,58 @@ h2 { font-size: 1.25rem; font-weight: 600; line-height: 1.3; }
 h3 { font-size: 1rem; font-weight: 600; }
 p { color: var(--color-neutral); }
 
-.container { max-width: 900px; margin: 0 auto; padding: 0 1.5rem; }
-.card { background: var(--color-white); border: 1px solid var(--color-border); border-radius: var(--radius); padding: 1.5rem; box-shadow: var(--shadow-sm); }
-.badge { display: inline-flex; align-items: center; gap: 0.25rem; padding: 0.2rem 0.6rem; border-radius: 20px; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.03em; }
+*:focus-visible {
+  outline: 2px solid var(--color-focus-outline);
+  outline-offset: 2px;
+  box-shadow: var(--shadow-focus);
+}
+
+/* ─── KOMPONENTEN-BASISKLASSEN ──────────────────────────────────── */
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: var(--card-padding, 1.5rem);
+  box-shadow: var(--shadow-sm);
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: 20px;
+  font-size: var(--font-size-xs, 0.75rem);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
 .badge-success { background: var(--color-success-light); color: var(--color-success); }
 .badge-warning { background: var(--color-warning-light); color: var(--color-warning); }
-.badge-danger { background: var(--color-danger-light); color: var(--color-danger); }
+.badge-danger  { background: var(--color-danger-light);  color: var(--color-danger);  }
 .badge-primary { background: var(--color-primary-light); color: var(--color-primary); }
-.badge-neutral { background: var(--color-border); color: var(--color-neutral); }
-.btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.6rem 1.2rem; border-radius: var(--radius); font-size: 0.9rem; font-weight: 500; cursor: pointer; border: none; transition: opacity 0.15s; }
+.badge-neutral { background: var(--color-border);        color: var(--color-neutral); }
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.2rem;
+  border-radius: var(--radius);
+  font-size: var(--font-size-sm, 0.875rem);
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  transition: opacity 0.15s;
+}
 .btn:hover { opacity: 0.88; }
-.btn-primary { background: var(--color-primary); color: white; }
-.btn-secondary { background: var(--color-white); color: var(--color-primary); border: 1px solid var(--color-primary); }
+.btn-primary   { background: var(--color-primary); color: var(--color-white); }
+.btn-secondary { background: var(--color-surface); color: var(--color-primary); border: 1px solid var(--color-primary); }
