@@ -16,91 +16,151 @@ Befehl: „Entwickle weiter" → obersten `OFFEN`-Eintrag nehmen und umsetzen.
 
 ---
 
+## Priorisierungslogik
+
+1. Sichtbarer Produktwert vor Dokumentationspflege
+2. Klickbare Demo vor zusätzlicher Story-Verwaltung
+3. Öffentliche Transparenz- und Berichtsschicht vor interner Strukturkosmetik
+4. Technische Korrektheit und Build-Stabilität vor neuen Seitengleisen
+
+---
+
 ## Queue
 
-### Priorität 1 – Demo-Qualität und Story-Konsistenz
+### Priorität 1 – Technische Korrektheit (Demo-Glaubwürdigkeit)
+
+Die Fairness-Signale zeigen statische Fristtage statt berechneter Daten.
+Das ist ein Glaubwürdigkeitsproblem gegenüber jedem, der die Demo kritisch betrachtet.
 
 | ID | Schritt | Typ | Aufwand | Abhängigkeit | Status |
 |----|---------|-----|---------|--------------|--------|
-| Q-001 | Story-Datei `US-AV-008_Verfahrenslage_verstehen.md` in `docs/stories/arbeitsverwaltung/` anlegen — Route `/fall/hinweise` existiert, Datei fehlt | DOCS | S | – | OFFEN |
-| Q-002 | `demo/data/storyRegistry.ts` um US-KJ-001 bis US-KJ-010 erweitern, damit `/stories` die Kita-Domäne zeigt | DEMO | S | – | OFFEN |
-| Q-003 | `/stories`-Seite: Domänen-Filterung oder Gruppierung (AV / KJ / UG) hinzufügen — bei 18+ Stories nötig | DEMO | M | Q-002 | OFFEN |
-| Q-004 | Fairness-Regelwerk: echte Datumsberechnung statt statischem `fristTage`-Feld — Frist als ISO-Datum in mockFall, Delta gegen fiktives „Heute" berechnen | DEMO | S | – | OFFEN |
+| Q-004 | Fairness-Regelwerk: Fristen als ISO-Datum in `mockFall.ts`, Delta gegen fiktives „Heute" berechnen — entfernt statische `fristTage`-Angaben | DEMO | S | – | OFFEN |
 
-### Priorität 2 – Neue Demo-Domäne: Unternehmensgründung
+---
 
-| ID | Schritt | Typ | Aufwand | Abhängigkeit | Status |
-|----|---------|-----|---------|--------------|--------|
-| Q-010 | Story-Map und Stories anlegen: `docs/stories/unternehmensgruendung/STORY_MAP.md` + mind. 6 Stories (US-UG-001–006) | DOCS | M | – | OFFEN |
-| Q-011 | Mock-Daten für Gründungsfall anlegen (`demo/data/mockGruendungsfall.ts`): Gewerbeanmeldung, Dokumente, Behörden, Status | DEMO | M | Q-010 | OFFEN |
-| Q-012 | Typen für Unternehmensgründung anlegen (`demo/types/gruendung.ts`) | DEMO | S | Q-011 | OFFEN |
-| Q-013 | Demo-Routen `/gruendung` und Subseiten anlegen (Übersicht, Dokumente, Behörden, Verlauf) | DEMO | L | Q-012 | OFFEN |
-| Q-014 | Navigation und Landing Page um zweite Demo-Domäne erweitern | DEMO | S | Q-013 | OFFEN |
-| Q-015 | Fairness-Regeln für Unternehmensgründung anlegen (fehlende Genehmigung, blockierter nächster Schritt, Fristlage) | DEMO | M | Q-013 | OFFEN |
+### Priorität 2 – Demo-Interaktivität (größter qualitativer Sprung)
 
-### Priorität 3 – Öffentliche Berichtsschicht (Kita-Domäne Demo)
+Die Demo ist vollständig statisch. Nichts verändert sich, wenn man handelt.
+Das macht es unmöglich zu zeigen, wie das Regelwerk auf Statuswechsel reagiert.
+React State-Einführung ist der größte Demo-Qualitätssprung ohne neue Routen.
 
 | ID | Schritt | Typ | Aufwand | Abhängigkeit | Status |
 |----|---------|-----|---------|--------------|--------|
-| Q-020 | Mock-Daten für Kita-Lagebild anlegen (`demo/data/mockKitaLagebild.ts`): Einrichtungen, Planungsräume, Kennzahlen, Zeitreihen | DEMO | M | – | OFFEN |
+| Q-031 | Mock-State via React Context einführen: Demo-Interaktionen (z. B. „Rückfrage beantworten") lösen echten State-Wechsel aus | DEMO | M | – | OFFEN |
+| Q-032 | `/fall/hinweise` nach State-Wechsel: Fairness-Signale reduzieren sich live — Demonstration des Regelwerks in Aktion | DEMO | S | Q-031 | OFFEN |
+
+---
+
+### Priorität 3 – Öffentliche Berichtsschicht Kita (einzigartiger Demo-Inhalt)
+
+Das konzeptionell stärkste Alleinstellungsmerkmal von Open State:
+eine öffentlich zugängliche, methodisch transparente Berichtsschicht für Kindertagesbetreuung.
+Kein anderes Verwaltungssystem demonstriert dies klickbar.
+Die Kita-Domäne ist mit 7 Dokumenten und 10 Stories am stärksten vorbereitete unimplementierte Domäne.
+
+| ID | Schritt | Typ | Aufwand | Abhängigkeit | Status |
+|----|---------|-----|---------|--------------|--------|
+| Q-020 | Mock-Daten für Kita-Lagebild anlegen (`demo/data/mockKitaLagebild.ts`): Einrichtungen, Planungsräume, Versorgungsquoten, Zeitreihen nach Monaten | DEMO | M | – | OFFEN |
 | Q-021 | Typen für Kita-Kennzahlen anlegen (`demo/types/kita.ts`) | DEMO | S | Q-020 | OFFEN |
-| Q-022 | Demo-Route `/kita`: öffentlicher Transparenzbericht-Screen (US-KJ-009) | DEMO | L | Q-021 | OFFEN |
-| Q-023 | Demo-Route `/kita/lagebild`: Jugendamt-Steuerungs-Screen (US-KJ-005, US-KJ-006) mit Planungsraumübersicht | DEMO | L | Q-022 | OFFEN |
-| Q-024 | Zeitreihen-Visualisierung: tabellarische Darstellung ohne Chart-Bibliothek (HTML-Tabelle reicht für Demo) | DEMO | M | Q-022 | OFFEN |
+| Q-022 | Demo-Route `/kita`: öffentlicher Transparenzbericht mit Versorgungsquoten, Planungsraumübersicht und Methodik-Hinweis (US-KJ-009) | DEMO | L | Q-021 | OFFEN |
+| Q-024 | Monatsvergleich / Trenddarstellung: HTML-Tabelle mit Zeitreihe, Veränderung zum Vormonat sichtbar — ohne Chart-Bibliothek | DEMO | M | Q-022 | OFFEN |
+| Q-023 | Demo-Route `/kita/lagebild`: Jugendamt-Steuerungsansicht mit Planungsräumen, Bedarfslücken, Handlungsfeldern (US-KJ-005, US-KJ-006) — nur intern zugänglich in Demo-Logik | DEMO | L | Q-022 | OFFEN |
 
-### Priorität 4 – Demo-Infrastruktur und Interaktivität
+---
 
-| ID | Schritt | Typ | Aufwand | Abhängigkeit | Status |
-|----|---------|-----|---------|--------------|--------|
-| Q-030 | Navigationsstruktur für mehrere Domänen überarbeiten (Landing Page zeigt alle Demo-Domänen) | DEMO | M | Q-014 | OFFEN |
-| Q-031 | Mock-State via React Context einführen: Demo-Interaktionen (z. B. „Rückfrage beantworten") zeigen echten State-Wechsel | DEMO | M | – | OFFEN |
-| Q-032 | `/fall/hinweise` nach State-Wechsel: weniger Signale sichtbar — Demonstration des Regelwerks live | DEMO | S | Q-031 | OFFEN |
+### Priorität 4 – Zweite klickbare Domäne: Unternehmensgründung
 
-### Priorität 5 – API-Verträge und Datenschnittstellen
-
-| ID | Schritt | Typ | Aufwand | Abhängigkeit | Status |
-|----|---------|-----|---------|--------------|--------|
-| Q-040 | API-Vertrag für Arbeitsverwaltungs-Fallakte als OpenAPI-Entwurf (`docs/api/arbeitsverwaltung-fall-api.yaml`) | DOCS | M | – | OFFEN |
-| Q-041 | API-Vertrag für Kita-Meldeschnittstelle (`docs/api/kita-meldung-api.yaml`) | DOCS | M | Q-020 | OFFEN |
-| Q-042 | Datenvertrag: wie Betriebsdaten in Steuerungsdaten aggregiert werden (formal, nicht nur Prosa) | DOCS | M | Q-041 | OFFEN |
-
-### Priorität 6 – Architektur und Dokumentation
+Eine zweite Demo-Domäne macht die Plattformidee greifbar:
+Open State ist kein Ein-Zweck-System, sondern eine Infrastruktur für mehrere Verwaltungsbereiche.
+Die Domänendokumentation existiert bereits (`docs/domains/unternehmensgruendung/`).
+Story-Dokumentation ist kein Pflicht-Vorläufer für Mock-Daten und Typen.
 
 | ID | Schritt | Typ | Aufwand | Abhängigkeit | Status |
 |----|---------|-----|---------|--------------|--------|
-| Q-050 | arc42 Kapitel 05 (Bausteinsicht) um Kita-Domäne und Berichtsschicht erweitern | ARCH | M | – | OFFEN |
+| Q-011 | Mock-Daten für Gründungsfall anlegen (`demo/data/mockGruendungsfall.ts`): Gewerbeanmeldung, Dokumente, beteiligte Behörden, Statusverlauf | DEMO | M | – | OFFEN |
+| Q-012 | Typen für Unternehmensgründung anlegen (`demo/types/gruendung.ts`) | DEMO | S | Q-011 | OFFEN |
+| Q-013 | Demo-Routen `/gruendung` und Subseiten (Übersicht, Dokumente, Behörden, Verlauf) | DEMO | L | Q-012 | OFFEN |
+| Q-014 | Navigation und Landing Page um zweite Demo-Domäne erweitern | DEMO | S | Q-013 | OFFEN |
+| Q-015 | Fairness-Regeln für Unternehmensgründung anlegen (fehlende Genehmigung, blockierter Folgeschritt, Fristlage) | DEMO | M | Q-013 | OFFEN |
+| Q-030 | Navigationsstruktur für mehrere Domänen: Landing Page zeigt alle klickbaren Demo-Domänen mit kurzem Kontext | DEMO | M | Q-014 | OFFEN |
+
+---
+
+### Priorität 5 – Story-System-Ausbau (ergänzend, kein Demo-Blocker)
+
+Sinnvoll, aber kein Endnutzerwert. Verbessert Nachvollziehbarkeit auf `/stories`,
+nicht die klickbare Demo selbst.
+Q-001 und Q-010 sind reine Dokumentationsarbeiten ohne Demo-Effekt.
+
+| ID | Schritt | Typ | Aufwand | Abhängigkeit | Status |
+|----|---------|-----|---------|--------------|--------|
+| Q-002 | `demo/data/storyRegistry.ts` um US-KJ-001–010 erweitern — macht Kita-Domäne auf `/stories` sichtbar | DEMO | S | – | OFFEN |
+| Q-003 | `/stories`-Seite: Domänen-Gruppierung (AV / KJ / UG) — bei 18+ Stories nötig | DEMO | M | Q-002 | OFFEN |
+| Q-010 | Story-Map und Stories anlegen: `docs/stories/unternehmensgruendung/` + 6 Stories (US-UG-001–006) | DOCS | M | – | OFFEN |
+| Q-001 | Story-Datei `US-AV-008_Verfahrenslage_verstehen.md` anlegen — Docs-Konsistenz, kein Demo-Effekt | DOCS | S | – | OFFEN |
+
+---
+
+### Priorität 6 – Technische Infrastruktur
+
+| ID | Schritt | Typ | Aufwand | Abhängigkeit | Status |
+|----|---------|-----|---------|--------------|--------|
+| Q-062 | GitHub Actions Workflow für Build-Check bei PR — verhindert kaputte Builds im main | CHORE | M | – | OFFEN |
+| Q-053 | `CLAUDE.md` aktualisieren: Design System, ThemeProvider, ThemeSwitcher als Teil des Architekturwissens ergänzen | DOCS | S | – | OFFEN |
+
+---
+
+### Priorität 7 – Architektur-Dokumentation
+
+| ID | Schritt | Typ | Aufwand | Abhängigkeit | Status |
+|----|---------|-----|---------|--------------|--------|
+| Q-050 | arc42 Kapitel 05 (Bausteinsicht) um Kita-Domäne und Berichtsschicht erweitern | ARCH | M | Q-022 | OFFEN |
 | Q-051 | arc42 Kapitel 08 (Querschnittskonzepte) um Theme-Architektur ergänzen | ARCH | S | – | OFFEN |
-| Q-052 | arc42 Kapitel 09 (ADRs) um Entscheidung „Drei-Schichten-Modell" ergänzen | ARCH | S | – | OFFEN |
-| Q-053 | `CLAUDE.md` aktualisieren: Design System, ThemeProvider, ThemeSwitcher als Teil des Architekturwissens | DOCS | S | – | OFFEN |
+| Q-052 | arc42 Kapitel 09 (ADRs) um Drei-Schichten-Entscheidung ergänzen | ARCH | S | – | OFFEN |
 
-### Priorität 7 – Contributor- und Feedback-Struktur
+---
+
+### Priorität 8 – API-Verträge
+
+| ID | Schritt | Typ | Aufwand | Abhängigkeit | Status |
+|----|---------|-----|---------|--------------|--------|
+| Q-040 | OpenAPI-Entwurf für Arbeitsverwaltungs-Fallakte (`docs/api/arbeitsverwaltung-fall-api.yaml`) | DOCS | M | – | OFFEN |
+| Q-041 | OpenAPI-Entwurf für Kita-Meldeschnittstelle (`docs/api/kita-meldung-api.yaml`) | DOCS | M | Q-022 | OFFEN |
+| Q-042 | Datenvertrag: Betriebsdaten → Steuerungsdaten-Aggregation (formal, nicht nur Prosa) | DOCS | M | Q-041 | OFFEN |
+
+---
+
+### Priorität 9 – Contributor-Struktur
 
 | ID | Schritt | Typ | Aufwand | Abhängigkeit | Status |
 |----|---------|-----|---------|--------------|--------|
 | Q-060 | `CONTRIBUTING.md` anlegen: Beitragsstandards, Story-Beantragung, Review-Prozess | DOCS | M | – | OFFEN |
-| Q-061 | GitHub Issue-Templates anlegen (`.github/ISSUE_TEMPLATE/`): Fachlicher Hinweis, Bug, Story-Antrag, Rechtliche Einschätzung | CHORE | S | – | OFFEN |
-| Q-062 | GitHub Actions Workflow für Build-Check bei PR (verhindert kaputte Builds im main) | CHORE | M | – | OFFEN |
+| Q-061 | GitHub Issue-Templates: Fachlicher Hinweis, Bug, Story-Antrag, Rechtliche Einschätzung | CHORE | S | – | OFFEN |
 
 ---
 
-## Abgeschlossene Schritte
+## Stabile Bausteine (kein Handlungsbedarf)
 
-| ID | Schritt | Commit |
-|----|---------|--------|
-| – | Arbeitsverwaltungs-Demo Vertical Slice (7 Screens, 8 Stories) | `3b6dc30` |
-| – | Demo-Deployment auf Vercel konfiguriert | `e038699` |
-| – | Verfahrensfairness-Hinweisschicht in Demo integriert | `9966c5e` |
-| – | Domäne Kita-Betrieb & Jugendamt-Steuerung dokumentiert (10 Stories, 7 Domänendokumente) | `50c0f69` |
-| – | Agenten-Betriebssystem v1 angelegt (AGENTS.md, DELIVERY_SYSTEM.md, NEXT_STEPS_QUEUE.md, BUILD_STATE.md, DECISION_LOG.md) | `<agent-os-v1>` |
-| – | Theme-Architektur: 4 Themes, 2 Density Modes, ThemeSwitcher, Anti-Flash, Design System Docs | `d6fc0c7` |
-| – | Agenten-Betriebssystem v2 — vollständige Überarbeitung und Aktualisierung | aktuell |
+Diese Punkte wurden in früheren Iterationen abgeschlossen und sind produktionsreif:
+
+| Baustein | Status |
+|---------|--------|
+| `/feedback`-Route → GitHub Issues | ✓ vorhanden und funktional |
+| BuildInfo-Footer (Env / Version / Commit-SHA) | ✓ vorhanden |
+| Vercel-Deployment aus `demo/` | ✓ konfiguriert und stabil |
+| Theme-Architektur (4 Themes, 2 Density Modes) | ✓ vollständig |
+| Fairness-Signale in allen AV-Routen | ✓ integriert |
 
 ---
 
-## Priorisierungslogik
+## Abgeschlossene Iterationen
 
-- **Priorität 1** schließt bekannte Inkonsistenzen (fehlende Story-Datei, fehlende Registry-Einträge) — kleiner Aufwand, sofortige Qualitätsverbesserung.
-- **Priorität 2** (Unternehmensgründung) ergibt den größten sichtbaren Demo-Fortschritt — zweite Domäne macht die Plattformidee greifbar.
-- **Priorität 3** (Kita-Demo) ist konzeptionell stark — jetzt Demo-Umsetzung, um die Drei-Schichten-Idee klickbar zu machen.
-- **Priorität 4** (Interaktivität) wäre ein wichtiger Qualitätssprung für die Demo-Wirkung.
-- **Priorität 5–7** sind sinnvoll, aber nicht dringend — eher für stabilisierende Phasen.
+| Iteration | Ergebnis | Commit |
+|-----------|---------|--------|
+| AV Vertical Slice | 7 Screens, 8 Stories, Mock-Falldaten | `3b6dc30` |
+| Vercel-Deployment | Konfiguration und Build-Config | `e038699` |
+| Verfahrensfairness | 5 Regeln, FairnessPanel, `/fall/hinweise` | `9966c5e` |
+| Kita-Domäne Dokumentation | 7 Dokumente, 10 Stories | `50c0f69` |
+| Agenten-Betriebssystem v1 | AGENTS.md, DELIVERY_SYSTEM.md, Queue, Build-State, Decision-Log | — |
+| Theme-Architektur | 4 Themes, 2 Density Modes, ThemeSwitcher, Anti-Flash | `d6fc0c7` |
+| Agenten-Betriebssystem v2 + v3 | Vollständige Überarbeitung, hebelorientierte Queue | `dc72ff9` |

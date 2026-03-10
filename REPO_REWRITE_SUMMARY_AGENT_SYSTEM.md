@@ -1,21 +1,29 @@
-# Repo Summary: Agenten-Betriebssystem v2
+# Repo Summary: Agenten-Betriebssystem v3
 
-Vollständige Überarbeitung des repo-internen Delivery- und Agentensystems.
-Alle fünf Steuerdateien wurden auf den aktuellen Projektstand gebracht
-und inhaltlich geschärft. Die Theme-Architektur ist vollständig erfasst.
+Vollständige Überarbeitung des repo-internen Delivery- und Agentensystems (v2),
+gefolgt von einer hebelorientierten Repriorisierung der Queue (v3).
+Alle fünf Steuerdateien spiegeln den tatsächlichen Produktstand wider.
+Die Queue ist jetzt nach sichtbarem Demo-Wert sortiert, nicht nach Dokumentationsnähe.
 
 ---
 
 ## Neu erstellte oder vollständig überarbeitete Dateien
 
+### v2 (vollständige Überarbeitung)
+
 | Datei | Änderung |
 |-------|---------|
-| `AGENTS.md` | Pflichtlektüre-Tabelle ergänzt, DECISION_LOG in Minimalbefehl aufgenommen, Prinzip Fachlogik/Darstellung-Trennung ergänzt, Entscheidungsverhalten-Tabelle, Steuerdatei-Übersicht |
-| `docs/DELIVERY_SYSTEM.md` | DECISION_LOG als Schritt 4 integriert, Schritt 10 (Summary) als optional markiert, Umgang mit Unsicherheit präzisiert, „Was Entwickle weiter bedeutet"-Abschnitt |
-| `docs/NEXT_STEPS_QUEUE.md` | Vollständige Neustrukturierung: Theme-Arbeit als DONE markiert, Q-051/Q-052/Q-053 ergänzt (arc42 Theme, CLAUDE.md Update), Priorisierungslogik-Abschnitt hinzugefügt |
-| `docs/BUILD_STATE.md` | Design System vollständig erfasst (4 Themes, Density Modes, ThemeSwitcher, Anti-Flash), Story-System-Tabelle mit Inkonsistenz-Hinweis, Deployment-Routen vollständig |
-| `docs/DECISION_LOG.md` | DEC-010 (Theme-Architektur als visuelle Querschnittskomponente), DEC-011 (Agenten-Betriebssystem), offene Entscheidungen aktualisiert |
-| `README.md` | Abschnitt „Repo-internes Delivery-System" mit Tabelle der 5 Steuerdateien und Hinweis auf Minimalbefehl |
+| `AGENTS.md` | Pflichtlektüre-Tabelle, DECISION_LOG in Minimalbefehl, Entscheidungsverhalten-Tabelle, Steuerdatei-Übersicht |
+| `docs/DELIVERY_SYSTEM.md` | DECISION_LOG als Schritt 4, Umgang mit Unsicherheit, „Was Entwickle weiter bedeutet" |
+| `docs/DECISION_LOG.md` | DEC-010 (Theme als visuell), DEC-011 (Agentensystem) |
+| `README.md` | Abschnitt „Repo-internes Delivery-System" mit Tabelle |
+
+### v3 (hebelorientierte Queue-Repriorisierung)
+
+| Datei | Änderung |
+|-------|---------|
+| `docs/NEXT_STEPS_QUEUE.md` | Vollständige Neuordnung: 9 Prioritätsstufen nach Demo-Wert, nicht Dokumentationsnähe. Stabile Bausteine-Abschnitt hinzugefügt. Q-001 von Prio 1 auf Prio 5. Q-031 von Prio 4 auf Prio 2. Kita-Berichtsschicht von Prio 3 auf Prio 3 (inhaltlich geschärft). Q-010 Abhängigkeit für UG-Demo entfernt. |
+| `docs/BUILD_STATE.md` | Bekannte-Lücken-Tabelle hebelorientiert: Demo-Auswirkung als Spalte statt Prioritätstext |
 
 ---
 
@@ -38,16 +46,17 @@ und inhaltlich geschärft. Die Theme-Architektur ist vollständig erfasst.
 
 ---
 
-## Aktuelle Top-Prioritäten aus der Queue
+## Aktuelle Top-Prioritäten (hebelorientiert)
 
-| ID | Schritt | Aufwand |
-|----|---------|---------|
-| Q-001 | Story-Datei `US-AV-008` in docs/stories/ anlegen | S |
-| Q-002 | storyRegistry.ts um US-KJ-001–010 erweitern | S |
-| Q-003 | `/stories`-Seite mit Domänen-Gruppierung | M |
-| Q-004 | Fairness-Regeln: echte Datumsberechnung | S |
-| Q-010 | Stories für Unternehmensgründung anlegen | M |
-| Q-013 | Demo-Routen `/gruendung` anlegen | L |
+| Prio | ID | Schritt | Aufwand | Begründung |
+|------|----|---------|---------|-----------|
+| 1 | Q-004 | Fairness-Fristen: echte Datumsberechnung | S | Glaubwürdigkeit der Regeln |
+| 2 | Q-031 | React State: echte Demo-Interaktion | M | Größter Qualitätssprung |
+| 2 | Q-032 | Hinweisseite reagiert auf State-Wechsel | S | Demonstriert Regelwerk live |
+| 3 | Q-020 | Kita Mock-Daten | M | Fundament für Berichtsschicht |
+| 3 | Q-022 | Öffentliche Kita-Report-Route | L | Einzigartiger Demo-Inhalt |
+| 4 | Q-011 | UG Mock-Daten | M | Zweite Domäne sichtbar machen |
+| 4 | Q-013 | UG Demo-Routen | L | Plattformgedanke klickbar |
 
 ---
 
