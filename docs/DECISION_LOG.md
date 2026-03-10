@@ -98,16 +98,21 @@ Verbesserung vorgesehen in Q-031 (React State) und später durch echte API.
 
 ---
 
-## DEC-007: Kein automatischer Push, kein automatisches Deployment
+## DEC-007: Push ist opt-in, kein automatischer Push
 
-**Entscheidung:** Kein Schritt im Agent-System führt automatisch `git push` oder Deployment-Trigger aus.
+**Entscheidung:** `git push` wird nie automatisch ausgeführt. Push ist explizit opt-in durch Nutzeranweisung.
 
 **Begründung:**
 - Kontrolle: Entwickler sieht jeden Commit, bevor er öffentlich wird
 - Sicherheit: Kein versehentliches Veröffentlichen von Entwürfen
-- Praxis: Deployment auf Vercel erfolgt manuell oder über Branch-Push
+- Praxis: Deployment auf Vercel erfolgt manuell oder durch bewussten Push
 
-**Status:** Fest. Teil des Agenten-Betriebssystems.
+**Opt-in-Regel (ergänzt):** Wenn der Nutzer ausdrücklich Formulierungen wie „pushe", „committe und pushe",
+„auf GitHub hochladen", „online bringen" oder „Entwickle weiter und pushe" verwendet,
+wird nach erfolgreichem Commit ein Push ausgeführt. Die vollständigen Trigger-Formulierungen
+sind in `AGENTS.md` (Push-Regel) und `docs/DELIVERY_SYSTEM.md` (Steuerbefehle) definiert.
+
+**Status:** Fest. Kein automatischer Push. Push auf ausdrückliche Nutzeranweisung erlaubt und erwartet.
 
 ---
 

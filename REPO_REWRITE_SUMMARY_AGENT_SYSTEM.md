@@ -1,9 +1,11 @@
-# Repo Summary: Agenten-Betriebssystem v3
+# Repo Summary: Agenten-Betriebssystem v4
 
-Vollständige Überarbeitung des repo-internen Delivery- und Agentensystems (v2),
-gefolgt von einer hebelorientierten Repriorisierung der Queue (v3).
-Alle fünf Steuerdateien spiegeln den tatsächlichen Produktstand wider.
-Die Queue ist jetzt nach sichtbarem Demo-Wert sortiert, nicht nach Dokumentationsnähe.
+v2: vollständige Überarbeitung aller Steuerdateien
+v3: hebelorientierte Queue-Repriorisierung
+v4: opt-in Push-Logik eingeführt
+
+Push ist jetzt sauber geregelt: Standard bleibt commit-only.
+Bei ausdrücklicher Nutzeranweisung wird nach erfolgreichem Commit gepusht.
 
 ---
 
@@ -25,6 +27,30 @@ Die Queue ist jetzt nach sichtbarem Demo-Wert sortiert, nicht nach Dokumentation
 | `docs/NEXT_STEPS_QUEUE.md` | Vollständige Neuordnung: 9 Prioritätsstufen nach Demo-Wert, nicht Dokumentationsnähe. Stabile Bausteine-Abschnitt hinzugefügt. Q-001 von Prio 1 auf Prio 5. Q-031 von Prio 4 auf Prio 2. Kita-Berichtsschicht von Prio 3 auf Prio 3 (inhaltlich geschärft). Q-010 Abhängigkeit für UG-Demo entfernt. |
 | `docs/BUILD_STATE.md` | Bekannte-Lücken-Tabelle hebelorientiert: Demo-Auswirkung als Spalte statt Prioritätstext |
 
+### v4 (opt-in Push-Logik)
+
+| Datei | Änderung |
+|-------|---------|
+| `AGENTS.md` | Push-Regel-Abschnitt: Trigger-Formulierungen, Ablauf vor/nach Push, erweitertes Ergebnisformat für Push-Läufe |
+| `docs/DELIVERY_SYSTEM.md` | Schritt 12 (Push, opt-in) und Schritt 13 (Ergebnis) ergänzt; Steuerbefehl-Tabelle mit Push-Spalte |
+| `docs/DECISION_LOG.md` | DEC-007 erweitert: Push als opt-in, Trigger-Formulierungen referenziert |
+| `README.md` | Minimalbefehl-Zeile um Push-Variante und opt-in-Hinweis ergänzt |
+
+---
+
+## Push-Logik
+
+| Befehl | Commit | Push |
+|--------|--------|------|
+| „Entwickle weiter" | ✓ | ✗ |
+| „Entwickle weiter und pushe" | ✓ | ✓ |
+| „committe und pushe" | ✓ | ✓ |
+| „auf GitHub hochladen" | ✓ | ✓ |
+| „online bringen" | ✓ | ✓ |
+| „pushe" / „push" | (nach Commit) | ✓ |
+
+Vollständige Trigger-Liste und Ablauf: `AGENTS.md` → Push-Regel.
+
 ---
 
 ## Agentenlogik: Wie „Entwickle weiter" funktioniert
@@ -40,8 +66,9 @@ Die Queue ist jetzt nach sichtbarem Demo-Wert sortiert, nicht nach Dokumentation
 8. Betroffene Dokumentation gezielt aktualisieren
 9. Queue aktualisieren: Schritt auf DONE
 10. BUILD_STATE.md aktualisieren
-11. Commit erstellen (kein Push)
-12. Ergebnis strukturiert ausgeben
+11. Commit erstellen
+12. Push nur bei ausdrücklicher Nutzeranweisung
+13. Ergebnis strukturiert ausgeben
 ```
 
 ---

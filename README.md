@@ -128,7 +128,9 @@ Es besteht aus fünf Steuerdateien:
 | [`docs/BUILD_STATE.md`](docs/BUILD_STATE.md) | Tatsächlicher Projektstand |
 | [`docs/DECISION_LOG.md`](docs/DECISION_LOG.md) | Begründete Architektur- und Strategieentscheidungen |
 
-Der Minimalbefehl für eine vollständige Iteration lautet: **„Entwickle weiter"**
+Der Minimalbefehl für eine vollständige Iteration lautet: **„Entwickle weiter"** (commit, kein push).
+Mit **„Entwickle weiter und pushe"** wird nach dem Commit auch gepusht.
+Push ist bewusst opt-in und erfordert eine ausdrückliche Nutzeranweisung.
 
 ---
 

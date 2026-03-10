@@ -23,12 +23,51 @@ Dieser Befehl löst exakt die folgende Sequenz aus:
 8. Betroffene Dokumentation gezielt aktualisieren
 9. Queue aktualisieren: Schritt auf DONE
 10. BUILD_STATE.md aktualisieren
-11. Commit erstellen (kein Push)
-12. Ergebnis strukturiert ausgeben
+11. Commit erstellen
+12. Push nur wenn ausdrücklich angewiesen (→ Push-Regel unten)
+13. Ergebnis strukturiert ausgeben
 ```
 
-Kein Push ohne ausdrückliche Anweisung.
 Kein Schritt überspringen ohne dokumentierten Grund.
+
+---
+
+## Push-Regel
+
+### Standard: kein Push
+
+`git push` wird nie automatisch ausgeführt.
+Jeder Commit bleibt lokal, bis der Nutzer ausdrücklich pushen lässt.
+
+### Ausnahme: ausdrückliche Push-Anweisung
+
+Wenn der Nutzer eine der folgenden Formulierungen verwendet, wird nach erfolgreichem Commit gepusht:
+
+| Formulierung | Interpretation |
+|-------------|---------------|
+| „pushe" | push nach commit |
+| „push" | push nach commit |
+| „committe und pushe" | commit, dann push |
+| „auf GitHub hochladen" | commit, dann push |
+| „online bringen" | commit, dann push |
+| „Entwickle weiter und pushe" | vollständiger Lauf + push |
+| „Entwickle weiter. Committe und pushe am Ende." | vollständiger Lauf + push |
+
+### Ablauf bei ausdrücklicher Push-Anweisung
+
+```bash
+# 1. Branch und Status vor dem Push prüfen
+git status --short
+git log --oneline -1
+
+# 2. Pushen
+git push
+
+# 3. Ergebnis ausgeben: Branch, Commit-Hash, Push-Bestätigung
+```
+
+Ein Push erfolgt **ausschließlich nach erfolgreichem Commit**.
+Kein Push bei fehlgeschlagenem Build oder nicht committeten Änderungen.
 
 ---
 
@@ -88,8 +127,10 @@ Datenverarbeitung folgt dem Zweckbindungsprinzip.
 Jede Iteration endet mit einem Commit. Kein Floating State.
 Commit-Messages: Conventional Commits Format (feat / fix / docs / chore / refactor).
 
-### Kein Push ohne ausdrückliche Anweisung
-`git push` wird nie automatisch ausgeführt.
+### Push nur auf ausdrückliche Anweisung
+`git push` ist opt-in. Standard ist commit-only.
+Ausdrückliche Anweisung durch den Nutzer schaltet Push für diesen Lauf frei.
+Erlaubte Trigger-Formulierungen: → Push-Regel-Abschnitt oben.
 
 ---
 
@@ -108,7 +149,7 @@ Commit-Messages: Conventional Commits Format (feat / fix / docs / chore / refact
 
 ## Ergebnisformat
 
-Nach jeder Iteration:
+### Standardlauf (commit, kein push)
 
 ```
 1. Was wurde gemacht (1–3 Sätze)
@@ -118,6 +159,20 @@ Nach jeder Iteration:
 5. Commit-Message
 6. Commit-Hash
 7. Offener nächster Schritt
+```
+
+### Lauf mit Push
+
+```
+1. Was wurde gemacht (1–3 Sätze)
+2. Geänderte / neu erstellte Dateien
+3. Build-Status
+4. Queue-Update (welcher Schritt auf DONE)
+5. Commit-Message
+6. Commit-Hash
+7. Branch
+8. Push-Ergebnis
+9. Offener nächster Schritt
 ```
 
 ---

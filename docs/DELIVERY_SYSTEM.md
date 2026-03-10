@@ -126,12 +126,34 @@ EOF
 
 Commit-Typen: `feat` / `fix` / `docs` / `chore` / `refactor`
 
-Kein Push.
+---
+
+### Schritt 12 – Push (nur bei ausdrücklicher Nutzeranweisung)
+
+**Standard:** kein Push. Commit bleibt lokal.
+
+**Mit ausdrücklicher Push-Anweisung:**
+
+```bash
+# Vor dem Push: Branch und letzten Commit prüfen
+git status --short
+git log --oneline -1
+
+# Pushen
+git push
+```
+
+Ein Push erfolgt ausschließlich nach erfolgreichem Commit.
+Kein Push bei fehlgeschlagenem Build, uncommitteten Änderungen oder ohne Nutzeranweisung.
+
+Erkannte Push-Trigger: „pushe", „push", „committe und pushe", „auf GitHub hochladen",
+„online bringen", „Entwickle weiter und pushe", „Committe und pushe am Ende."
 
 ---
 
-### Schritt 12 – Ergebnis strukturiert ausgeben
+### Schritt 13 – Ergebnis strukturiert ausgeben
 
+**Standardlauf (kein Push):**
 ```
 1. Was wurde gemacht (1–3 Sätze)
 2. Geänderte / neu erstellte Dateien
@@ -140,6 +162,19 @@ Kein Push.
 5. Commit-Message
 6. Commit-Hash
 7. Offener nächster Schritt
+```
+
+**Lauf mit Push:**
+```
+1. Was wurde gemacht (1–3 Sätze)
+2. Geänderte / neu erstellte Dateien
+3. Build-Status
+4. Queue-Update
+5. Commit-Message
+6. Commit-Hash
+7. Branch
+8. Push-Ergebnis
+9. Offener nächster Schritt
 ```
 
 ---
@@ -172,23 +207,42 @@ Wenn ein Schritt zu groß wirkt:
 
 ---
 
-## Wie „Entwickle weiter" interpretiert wird
+## Wie Steuerbefehle interpretiert werden
 
-Dieser Minimalbefehl bedeutet:
-1. Repo-Stand lesen (git log, git status)
+| Befehl | Commit | Push |
+|--------|--------|------|
+| „Entwickle weiter" | ✓ | ✗ |
+| „Entwickle weiter und pushe" | ✓ | ✓ |
+| „Entwickle weiter. Committe und pushe am Ende." | ✓ | ✓ |
+| „pushe" / „push" (nach vorherigem Commit) | — | ✓ |
+| „committe und pushe" | ✓ | ✓ |
+| „auf GitHub hochladen" | ✓ | ✓ |
+| „online bringen" | ✓ | ✓ |
+
+### „Entwickle weiter" (Standardlauf)
+
+1. Repo-Stand lesen
 2. BUILD_STATE.md lesen
-3. NEXT_STEPS_QUEUE.md lesen → obersten OFFEN-Eintrag nehmen
+3. NEXT_STEPS_QUEUE.md → obersten OFFEN-Eintrag nehmen
 4. DECISION_LOG.md prüfen
 5. Schritt direkt im Repo umsetzen
 6. Build prüfen
 7. Queue und BUILD_STATE aktualisieren
-8. Committen
+8. Committen — **kein Push**
 
-Er bedeutet ausdrücklich nicht:
+Bedeutet ausdrücklich nicht:
 - Einen neuen Themenblock beginnen, der nicht in der Queue steht
 - Mehrere Schritte gleichzeitig abarbeiten
-- Einen Push ausführen
-- Eine bloße Analyse liefern
+- Push ausführen
+- Bloße Analyse liefern
+
+### „Entwickle weiter und pushe" (Lauf mit Push)
+
+Identisch wie Standardlauf, zusätzlich nach Commit:
+
+9. Branch und Commit-Status prüfen (`git status`, `git log --oneline -1`)
+10. `git push` ausführen
+11. Push-Ergebnis im Ausgabeformat melden
 
 ---
 
