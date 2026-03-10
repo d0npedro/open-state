@@ -36,6 +36,7 @@ Open State ist in fachliche Domänen strukturiert. Jede Domäne deckt einen zusa
 | Domäne | Beschreibung | Link |
 |--------|-------------|------|
 | **Arbeitsverwaltung** | Arbeitslosmeldung, Leistungsantrag, Fallakte, Bescheidtransparenz, Vermittlung | [docs/domains/arbeitsverwaltung/](docs/domains/arbeitsverwaltung/README.md) |
+| **Kita-Betrieb & Jugendamt-Steuerung** | Operative Entlastung von Kitas, laufende Steuerungsdaten für das Jugendamt, öffentliche Transparenzberichte zur Kindertagesbetreuung | [docs/domains/kita_betrieb_und_jugendamt_steuerung/](docs/domains/kita_betrieb_und_jugendamt_steuerung/README.md) |
 | **Wohnsitzmanagement** | An-, Um-, Abmeldung, Automatische Behördeninformation | (Modul 1.2 im Blueprint) |
 | **Steuern** | AutoFill-Steuererklärung via ELSTER | (Modul 1.3 im Blueprint) |
 | **Rechtsstreit & Bußgeld** | CaseMatch-Analyse, Widerspruchsverwaltung | (Modul 2.2 im Blueprint) |
@@ -66,6 +67,7 @@ Open State ist in fachliche Domänen strukturiert. Jede Domäne deckt einen zusa
 | 14 | KiJuP-Integration (Referenzquelle & lokale Fachverfahren) | [docs/14_KiJuP_Integration.md](docs/14_KiJuP_Integration.md) |
 | D1 | **Domäne: Arbeitsverwaltung** (vollständige Domänendokumentation) | [docs/domains/arbeitsverwaltung/](docs/domains/arbeitsverwaltung/README.md) |
 | D2 | **Domäne: Unternehmensgründung** (vollständige Domänendokumentation) | [docs/domains/unternehmensgruendung/](docs/domains/unternehmensgruendung/README.md) |
+| D3 | **Domäne: Kita-Betrieb & Jugendamt-Steuerung** (operative Entlastung, Steuerung, öffentliche Berichtsschicht) | [docs/domains/kita_betrieb_und_jugendamt_steuerung/](docs/domains/kita_betrieb_und_jugendamt_steuerung/README.md) |
 | E1 | **Verfahrensfairness Engine** (Konzept, Funktionsweise, Signale, Transparenz) | [docs/engines/verfahrensfairness/](docs/engines/verfahrensfairness/README.md) |
 | L | Leitbild: Staat und Vertrauen | [docs/LEITBILD_STAAT_UND_VERTRAUEN.md](docs/LEITBILD_STAAT_UND_VERTRAUEN.md) |
 
@@ -79,6 +81,21 @@ Open State ist in fachliche Domänen strukturiert. Jede Domäne deckt einen zusa
 - **Barrierefreiheit als Mindeststandard** – WCAG 2.1 AA, Einfache Sprache, 12 Sprachen
 - **DSGVO by Design & by Default** – keine nachträgliche Compliance
 - **Keine Werbefinanzierung** – staatliche Infrastruktur finanziert sich durch fiskalische Einsparungen
+
+---
+
+## Operative Entlastung, Steuerung und öffentliche Transparenz
+
+Open State unterstützt nicht nur einzelne Bürgervorgänge, sondern verbindet operative Facharbeit, Verwaltungssteuerung und öffentliche Transparenzberichte als zusammenhängendes System.
+
+Das Prinzip:
+> Fachkräfte arbeiten für ihren eigenen Betrieb – nicht als Datenzulieferer.
+> Steuerungsdaten entstehen als sinnvolle Ableitung. Öffentliche Berichte entstehen durch aktive Freigabe.
+
+Diese Logik ist modellhaft ausgearbeitet für den Bereich **Kita-Betrieb & Jugendamt-Steuerung**:
+Einrichtungen werden im Alltag entlastet. Das Jugendamt erhält laufende Lagebilder für Bedarfsplanung und politische Vorlagen. Ein freigegebener Teil wird als öffentlicher Transparenzbericht zugänglich – mit nachvollziehbarer Methodik, sichtbaren Engpässen und ohne Weichzeichnung.
+
+→ [Domäne: Kita-Betrieb & Jugendamt-Steuerung](docs/domains/kita_betrieb_und_jugendamt_steuerung/README.md)
 
 ---
 
