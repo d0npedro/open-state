@@ -1,52 +1,69 @@
 # DELIVERY_SYSTEM.md – Verbindlicher Iterationsablauf
 
-Jede Iteration – ob durch expliziten Befehl oder durch „Entwickle weiter" ausgelöst –
-folgt exakt diesem Ablauf. Abweichungen müssen begründet und dokumentiert werden.
+Jede Iteration — ob durch expliziten Befehl oder durch „Entwickle weiter" ausgelöst —
+folgt exakt diesem Ablauf. Abweichungen müssen begründet und in `docs/DECISION_LOG.md` dokumentiert werden.
 
 ---
 
-## Schritt-für-Schritt-Ablauf
+## Der 12-Schritte-Ablauf
 
-### 1. Repo-Stand prüfen
+### Schritt 1 – Repo-Stand prüfen
 
 ```bash
 git log --oneline -5
 git status --short
 ```
 
-Verstehen: Was ist zuletzt passiert? Gibt es uncommittete Änderungen?
-Wenn uncommittete Änderungen vorhanden sind: klären, ob sie zum nächsten Schritt gehören oder ein früherer unfertige Zustand sind.
+Was ist zuletzt passiert? Gibt es uncommittete Änderungen?
+Uncommittete Änderungen → klären, ob sie zu diesem Schritt gehören oder ein unfertige vorheriger Zustand sind.
 
-### 2. BUILD_STATE.md lesen
+---
+
+### Schritt 2 – BUILD_STATE.md lesen
 
 → `docs/BUILD_STATE.md`
 
 Verstehen:
 - Welche Domänen sind dokumentiert / implementiert?
 - Welche Demo-Routen existieren?
-- Was ist der letzte abgeschlossene Stand?
-- Welche bekannten Blockierungen existieren?
+- Was ist der tatsächliche letzte abgeschlossene Stand?
+- Welche Blockierungen sind bekannt?
 
-### 3. NEXT_STEPS_QUEUE.md lesen
+---
+
+### Schritt 3 – NEXT_STEPS_QUEUE.md lesen
 
 → `docs/NEXT_STEPS_QUEUE.md`
 
 Den obersten Eintrag mit Status `OFFEN` identifizieren.
-Prüfen: Ist dieser Schritt jetzt implementierbar? Gibt es Abhängigkeiten, die noch fehlen?
+Prüfen: Ist dieser Schritt jetzt implementierbar? Gibt es fehlende Abhängigkeiten?
 
-Wenn nicht implementierbar: nächsten offenen Schritt wählen und den Grund für Überspringen dokumentieren.
+Wenn nicht implementierbar → nächsten offenen Schritt wählen, Grund für Überspringen notieren.
 
-### 4. Einen Schritt wählen und umsetzen
+---
 
-Maximal einen Schritt pro Iteration.
+### Schritt 4 – DECISION_LOG.md berücksichtigen
+
+→ `docs/DECISION_LOG.md`
+
+Prüfen, ob der gewählte Schritt getroffene Entscheidungen berührt oder widerspricht.
+Wenn eine neue Entscheidung nötig ist → nach der Implementierung dokumentieren.
+
+---
+
+### Schritt 5 – Genau einen Schritt implementieren
+
+Maximal ein gut abgegrenztes Arbeitspaket pro Iteration.
 Implementierung direkt im Repository:
 - Dateien erstellen oder anpassen
-- Typen, Logik, UI, Docs – je nach Schritt
+- Typen, Logik, UI, Docs — je nach Aufgabe
 
-Nicht: Analysieren und eine Vorschlagsliste liefern.
-Nicht: Mehrere Schritte parallel abarbeiten (außer explizit beauftragt).
+Nicht: Eine Analyse liefern und auf Freigabe warten.
+Nicht: Mehrere unabhängige Schritte parallel abarbeiten.
 
-### 5. Build prüfen (wenn Codepfad betroffen)
+---
+
+### Schritt 6 – Build prüfen (wenn Codepfad betroffen)
 
 ```bash
 cd demo && npm run build
@@ -55,39 +72,56 @@ cd demo && npm run build
 Build muss erfolgreich sein, bevor committet wird.
 Kein Commit mit fehlschlagendem Build.
 
-### 6. Dokumentation gezielt aktualisieren
+---
 
-Nur die Dokumentation, die sich durch den Schritt verändert hat:
-- Betroffene Story-Datei (Status, implementierte Kriterien)
-- Betroffene Domänen-README (wenn neue Komponenten hinzugekommen)
-- `CLAUDE.md`, wenn sich Architekturwissen ändert
+### Schritt 7 – Dokumentation gezielt aktualisieren
 
-Kein Masserewrite von nicht betroffener Dokumentation.
+Nur die Dokumentation, die sich durch den Schritt tatsächlich verändert hat:
+- Betroffene Story-Datei (Status, implementierte Akzeptanzkriterien)
+- Betroffene Domänen-README (wenn neue Komponenten hinzugekommen sind)
+- `CLAUDE.md` (wenn sich Architekturwissen ändert)
+- `docs/DECISION_LOG.md` (wenn neue Entscheidung getroffen wurde)
 
-### 7. NEXT_STEPS_QUEUE.md aktualisieren
+Kein Massen-Rewrite nicht betroffener Dokumentation.
 
-Den abgeschlossenen Schritt auf `DONE` setzen.
-Gegebenenfalls Folgeschritte ergänzen, die sich aus der Umsetzung ergeben haben.
+---
 
-### 8. BUILD_STATE.md aktualisieren
+### Schritt 8 – NEXT_STEPS_QUEUE.md aktualisieren
+
+Abgeschlossenen Schritt auf `DONE` setzen.
+Commit-Hash eintragen.
+Falls sich neue Folgeschritte ergeben haben → ergänzen.
+
+---
+
+### Schritt 9 – BUILD_STATE.md aktualisieren
 
 Neue Zeilen oder Änderungen dort, wo sich der Zustand verändert hat.
-Kein vollständiges Neuschreiben – nur Delta.
+Kein vollständiges Neuschreiben — nur das Delta.
+Datum / letzten Commit-Bezug aktualisieren.
 
-### 9. REPO_REWRITE_SUMMARY_<THEMA>.md
+---
 
-Neue Datei anlegen oder bestehende ergänzen.
+### Schritt 10 – Summary-Datei (optional, bei größeren Änderungen)
+
+Bei größeren Themenblöcken: `REPO_REWRITE_SUMMARY_<THEMA>.md` anlegen oder ergänzen.
 Inhalt: was wurde gemacht, welche Dateien, welche Logik, offene Punkte.
+Nicht bei jedem kleinen Schritt nötig.
 
-### 10. Commit erstellen
+---
+
+### Schritt 11 – Commit erstellen
 
 ```bash
-git add <betroffene Dateien>
-git commit -m "typ: kurze beschreibung
+git add <exakt die betroffenen Dateien>
+git commit -m "$(cat <<'EOF'
+typ: kurze beschreibung was sich geändert hat
 
-Details falls nötig.
+Details falls nötig. Warum, nicht nur Was.
 
-Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>"
+Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>
+EOF
+)"
 ```
 
 Commit-Typen: `feat` / `fix` / `docs` / `chore` / `refactor`
@@ -96,26 +130,65 @@ Kein Push.
 
 ---
 
-## Entscheidungsregeln
+### Schritt 12 – Ergebnis strukturiert ausgeben
+
+```
+1. Was wurde gemacht (1–3 Sätze)
+2. Geänderte / neu erstellte Dateien
+3. Build-Status
+4. Queue-Update
+5. Commit-Message
+6. Commit-Hash
+7. Offener nächster Schritt
+```
+
+---
+
+## Entscheidungsregeln für Sondersituationen
 
 | Situation | Verhalten |
 |-----------|----------|
-| Schritt in Queue ist unklar | Klärung einholen, nicht raten |
+| Schritt in Queue ist unklar | Klärung einholen — nicht raten |
 | Schritt in Queue ist zu groß | In Teilschritte aufteilen, Queue aktualisieren |
 | Build schlägt fehl | Fehler beheben, kein Commit bis grün |
 | Schritt wurde teils gemacht | Fortführen bis vollständig, dann committen |
 | Nächster Schritt ist blockiert | Übernächsten wählen, Blockierung dokumentieren |
+| Unerwartete Datei oder Branch gefunden | Untersuchen statt löschen oder überschreiben |
+| Neue Entscheidung nötig | Implementieren, dann DECISION_LOG ergänzen |
 
 ---
 
-## Erlaubte Abweichungen
+## Umgang mit Unsicherheit
 
-Ein Agent darf von der Queue abweichen, wenn:
-1. Der Nutzer explizit einen anderen Schritt benennt
-2. Ein kritischer Fehler im bestehenden Code gefunden wird, der zuerst behoben werden muss
-3. Ein Schritt eine unentdeckte Voraussetzung hat, die zuerst erfüllt sein muss
+Wenn ein Schritt unklar ist:
+- Nicht raten
+- Nicht einen anderen Schritt beginnen, um Aktivität zu simulieren
+- Frage stellen oder nächst-klaren Schritt aus Queue nehmen
 
-Jede Abweichung muss in `docs/DECISION_LOG.md` dokumentiert werden.
+Wenn ein Schritt zu groß wirkt:
+- Aufteilen
+- Ersten Teilschritt ausführen
+- Queue mit den neuen Teilschritten aktualisieren
+
+---
+
+## Wie „Entwickle weiter" interpretiert wird
+
+Dieser Minimalbefehl bedeutet:
+1. Repo-Stand lesen (git log, git status)
+2. BUILD_STATE.md lesen
+3. NEXT_STEPS_QUEUE.md lesen → obersten OFFEN-Eintrag nehmen
+4. DECISION_LOG.md prüfen
+5. Schritt direkt im Repo umsetzen
+6. Build prüfen
+7. Queue und BUILD_STATE aktualisieren
+8. Committen
+
+Er bedeutet ausdrücklich nicht:
+- Einen neuen Themenblock beginnen, der nicht in der Queue steht
+- Mehrere Schritte gleichzeitig abarbeiten
+- Einen Push ausführen
+- Eine bloße Analyse liefern
 
 ---
 
@@ -123,4 +196,5 @@ Jede Abweichung muss in `docs/DECISION_LOG.md` dokumentiert werden.
 
 - Kein Ersatz für fachliche Prüfung durch Domänenexperten
 - Kein Automatismus für rechtliche oder datenschutzrechtliche Entscheidungen
-- Kein Garant für Vollständigkeit – der Ablauf steuert Umsetzungsreihenfolge, nicht Qualitätsanforderungen
+- Kein Garant für Vollständigkeit — der Ablauf steuert Reihenfolge, nicht Qualitätsanforderungen
+- Kein Freischein für eigenmächtiges Scope-Creep

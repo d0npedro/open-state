@@ -1,9 +1,9 @@
 # BUILD_STATE.md – Aktueller Projektstand
 
-Zuletzt aktualisiert: nach Theme-Architektur-Commit
+Zuletzt aktualisiert: nach Commit `d6fc0c7` (Theme-Architektur)
 
-Dieser Zustand beschreibt, was tatsächlich existiert und funktioniert –
-nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
+Dieser Stand beschreibt, was tatsächlich existiert und funktioniert.
+Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 
 ---
 
@@ -11,18 +11,20 @@ nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 
 | Eigenschaft | Wert |
 |-------------|------|
-| Framework | Next.js 14.2.5, React 18, TypeScript 5 |
+| Framework | Next.js 14.2.5, React 18, TypeScript 5 strict |
 | Build-Status | ✓ Erfolgreich (13 statische Seiten) |
 | Deployment | Vercel, aus `demo/`-Verzeichnis |
 | Lokaler Start | `cd demo && npm install && npm run dev` |
-| Letzte Build-Prüfung | Commit `9966c5e` |
+| Letzte Build-Prüfung | Commit `d6fc0c7` — grün, 13/13 Seiten |
+
+---
 
 ## Demo-Routen
 
 | Route | Inhalt | Story-IDs | Status |
 |-------|--------|-----------|--------|
 | `/` | Landing Page | – | ✓ |
-| `/fall` | Fallübersicht, Status, Fairness-Summary | US-AV-001, 002 | ✓ |
+| `/fall` | Fallübersicht, Status, Fairness-Summary | US-AV-001, US-AV-002 | ✓ |
 | `/fall/dokumente` | Dokumentenanforderungen | US-AV-003 | ✓ |
 | `/fall/rueckfragen` | Rückfragen mit Fairness-Hinweis | US-AV-004 | ✓ |
 | `/fall/termine` | Termine | US-AV-005 | ✓ |
@@ -32,6 +34,10 @@ nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | `/stories` | Story Coverage Dashboard | – | ✓ |
 | `/feedback` | Feedback → GitHub Issues | – | ✓ |
 
+Weitere Domänen (Kita, Unternehmensgründung): nur Dokumentation, keine UI-Routen.
+
+---
+
 ## Implementierte Logik
 
 | Modul | Pfad | Status |
@@ -40,68 +46,99 @@ nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | Story Registry | `demo/data/storyRegistry.ts` | ✓ 8 Stories (US-AV-001–008) |
 | Fairness-Typen | `demo/types/fairness.ts` | ✓ |
 | Fairness-Regelwerk | `demo/lib/fairness/rules.ts` | ✓ 5 Regeln |
-| FairnessPanel-Komponenten | `demo/components/fairness/FairnessPanel.tsx` | ✓ |
-| Design System – CSS-Tokens | `demo/app/globals.css` | ✓ 4 Themes, 2 Density Modes, semantische Tokens |
-| Design System – Theme-Registry | `demo/design-system/themes/themes.ts` | ✓ ThemeId/DensityMode-Typen |
-| Design System – ThemeProvider | `demo/design-system/provider/ThemeProvider.tsx` | ✓ React Context, localStorage |
-| ThemeSwitcher-Komponente | `demo/components/ThemeSwitcher.tsx` | ✓ Im Footer sichtbar |
+| FairnessPanel-Komponente | `demo/components/fairness/FairnessPanel.tsx` | ✓ |
 | BuildInfo-Komponente | `demo/components/BuildInfo.tsx` | ✓ |
+
+---
+
+## Design System
+
+| Komponente | Pfad | Status |
+|------------|------|--------|
+| CSS-Tokens (4 Themes, 2 Density Modes) | `demo/app/globals.css` | ✓ Vollständig |
+| Theme-Registry (Typen, Konstanten) | `demo/design-system/themes/themes.ts` | ✓ |
+| ThemeProvider (React Context, localStorage) | `demo/design-system/provider/ThemeProvider.tsx` | ✓ |
+| ThemeSwitcher (Footer-UI) | `demo/components/ThemeSwitcher.tsx` | ✓ |
+| Anti-Flash-Script | `demo/app/layout.tsx` | ✓ |
+| Design System Dokumentation | `demo/design-system/README.md` u. a. | ✓ |
+
+### Verfügbare Themes
+
+| ID | Label | Basis-Schriftgröße | Empfohlene Density |
+|----|-------|-------------------|-------------------|
+| `civic-neutral` | Civic Neutral (Standard) | 16px | normal |
+| `citizen-warm` | Citizen Warm | 16px | normal |
+| `office-dense` | Office Dense | 14px | compact |
+| `accessible-contrast` | Barrierearm | 17px | accessible |
+
+---
+
+## Story-System
+
+| Domäne | Stories in docs/ | Stories in storyRegistry.ts | Status |
+|--------|-----------------|----------------------------|--------|
+| Arbeitsverwaltung (AV) | US-AV-001 – 008 | ✓ 8 registriert | DEMONSTRIERBAR |
+| Kita / Jugendamt (KJ) | US-KJ-001 – 010 | ✗ nicht registriert | ENTWURF (Docs only) |
+| Unternehmensgründung (UG) | 0 | ✗ | Nicht gestartet |
+
+**Bekannte Inkonsistenz:** US-AV-008 existiert im Code (Route `/fall/hinweise`, storyRegistry.ts),
+aber die Story-Datei `docs/stories/arbeitsverwaltung/US-AV-008_*.md` fehlt noch.
 
 ---
 
 ## Dokumentation
 
-### Domänen (vollständig dokumentiert)
+### Domänen
 
-| Domäne | Pfad | Umfang |
-|--------|------|--------|
-| Arbeitsverwaltung | `docs/domains/arbeitsverwaltung/` | 9 Dokumente + Story-System |
-| Unternehmensgründung | `docs/domains/unternehmensgruendung/` | 6 Dokumente |
-| Kita-Betrieb & JA-Steuerung | `docs/domains/kita_betrieb_und_jugendamt_steuerung/` | 7 Dokumente + 10 Stories |
+| Domäne | Pfad | Umfang | Status |
+|--------|------|--------|--------|
+| Arbeitsverwaltung | `docs/domains/arbeitsverwaltung/` | 9 Dok + Story-System | ✓ Vollständig |
+| Unternehmensgründung | `docs/domains/unternehmensgruendung/` | 6 Dok | Nur Docs, keine Demo |
+| Kita-Betrieb & JA-Steuerung | `docs/domains/kita_betrieb_und_jugendamt_steuerung/` | 7 Dok + 10 Stories | Nur Docs, keine Demo |
 
-### Engines
-
-| Engine | Pfad | Umfang |
-|--------|------|--------|
-| Verfahrensfairness Engine | `docs/engines/verfahrensfairness/` | 6 Dokumente |
-
-### Architektur
+### Querschnittsdokumentation
 
 | Dok | Pfad | Status |
 |-----|------|--------|
+| Verfahrensfairness Engine | `docs/engines/verfahrensfairness/` | ✓ 6 Dokumente |
 | arc42 (12 Kapitel) | `architecture/arc42/` | ✓ vollständig |
 | Systemarchitektur | `architecture/05_Systemarchitektur.md` | ✓ |
+| Master-Blueprint | `docs/01_Master_Blueprint.md` | ✓ |
 
-### Stories
+### Agenten-Betriebssystem
 
-| Domäne | Anzahl Stories | Status |
-|--------|---------------|--------|
-| Arbeitsverwaltung | 8 (US-AV-001–008) | DEMONSTRIERBAR |
-| Kita-Betrieb / JA | 10 (US-KJ-001–010) | ENTWURF |
-| Unternehmensgründung | 0 im Story-System | Offen |
+| Datei | Status |
+|-------|--------|
+| `AGENTS.md` | ✓ |
+| `docs/DELIVERY_SYSTEM.md` | ✓ |
+| `docs/NEXT_STEPS_QUEUE.md` | ✓ |
+| `docs/BUILD_STATE.md` | ✓ (diese Datei) |
+| `docs/DECISION_LOG.md` | ✓ |
 
 ---
 
-## Bekannte Lücken / Blockierungen
+## Bekannte Lücken
 
 | Lücke | Bereich | Priorität |
 |-------|---------|-----------|
-| Keine persistente Datenhaltung (alles Mock) | Demo | Mittel |
-| Keine Unternehmensgründungs-Demo-Route | Demo / Domäne | Hoch |
-| Story-Datei US-AV-008 fehlt noch in docs/stories/ | Docs | Niedrig |
-| Keine Story-Datei für US-KJ in story_registry.ts | Demo Code | Mittel |
-| Vercel-Deployment-Branch-Modell ungeprüft (aktiv?) | Deployment | Mittel |
-| app-design-Dokumente 07–10 noch nicht mit Demo verknüpft | Docs | Niedrig |
-| DSFA für Kita-Domäne noch ausstehend (konzeptionell) | Konzept | Hoch (extern) |
+| Story-Datei `US-AV-008` in docs/stories/ fehlt | Docs | Niedrig |
+| US-KJ-001–010 nicht in storyRegistry.ts | Demo Code | Mittel |
+| Keine Unternehmensgründungs-Demo-Route | Demo | Hoch |
+| Keine Kita-/JA-Demo-Route | Demo | Mittel |
+| Mock-Interaktionen haben keinen persistenten State | Demo | Mittel |
+| DSFA für Kita-Domäne noch ausstehend | Konzept | Hoch (extern) |
+| Keine automatisierten Tests | Qualität | Bewusste Schuld |
+| app-design Dok 07–10 nicht mit Demo verknüpft | Docs | Niedrig |
 
 ---
 
-## Nicht-existierende Teile (konzeptionell geplant, nicht implementiert)
+## Nicht implementiert (nur konzeptionell)
 
-- Backend / API (keine Serverlogik vorhanden)
+- Backend / API (kein Server, kein API-Endpunkt)
 - Authentifizierung (kein eID, kein FIDO2)
 - Datenbankanbindung
 - Echte Behördenschnittstellen (ALLEGRO, XMeld, ELSTER etc.)
-- Kita-Betrieb & Jugendamt-Demo (nur Dokumentation, keine UI)
+- Kita-Betrieb & Jugendamt-Demo (nur Dokumentation)
 - Öffentlicher Transparenzbericht (nur Konzept)
-- Zweite Vercel-Demo für weitere Domäne
+- Unternehmensgründungs-Demo (nur Dokumentation)
+- Chart-/Visualisierungsbibliothek

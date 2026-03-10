@@ -115,6 +115,23 @@ Open State wird anhand nachvollziehbarer User Stories entwickelt. Jede sichtbare
 
 ---
 
+## Repo-internes Delivery-System
+
+Das Repository enthält ein internes Betriebssystem für kontrollierte, schrittweise Weiterentwicklung.
+Es besteht aus fünf Steuerdateien:
+
+| Datei | Zweck |
+|-------|-------|
+| [`AGENTS.md`](AGENTS.md) | Verbindliche Arbeitsanweisung für jeden Entwicklungslauf |
+| [`docs/DELIVERY_SYSTEM.md`](docs/DELIVERY_SYSTEM.md) | 12-Schritte-Ablauf jeder Iteration |
+| [`docs/NEXT_STEPS_QUEUE.md`](docs/NEXT_STEPS_QUEUE.md) | Priorisierte Aufgabenliste |
+| [`docs/BUILD_STATE.md`](docs/BUILD_STATE.md) | Tatsächlicher Projektstand |
+| [`docs/DECISION_LOG.md`](docs/DECISION_LOG.md) | Begründete Architektur- und Strategieentscheidungen |
+
+Der Minimalbefehl für eine vollständige Iteration lautet: **„Entwickle weiter"**
+
+---
+
 ## Demo & Deployment
 
 Eine laufende Demo wird über den `demo`-Branch bereitgestellt. Feature-Branches erhalten automatische Preview-Deployments. `main` bleibt stabiler Referenzstand ohne unkontrollierte Production-Deploys.
