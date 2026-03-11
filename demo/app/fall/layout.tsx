@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { DemoStateProvider } from '@/context/DemoStateContext';
 
 const nav = [
   { href: '/fall', label: 'Übersicht' },
@@ -32,7 +33,9 @@ export default function FallLayout({ children }: { children: React.ReactNode }) 
         </div>
       </nav>
       <main style={{ padding: '2rem 0' }}>
-        <div className="container">{children}</div>
+        <div className="container">
+          <DemoStateProvider>{children}</DemoStateProvider>
+        </div>
       </main>
     </div>
   );

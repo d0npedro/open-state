@@ -1,11 +1,14 @@
-import { demoFall } from '@/data/mockFall';
+'use client';
+
+import { useDemoState } from '@/context/DemoStateContext';
 import { berechneFairnessSignale, berechneFristTage, FIKTIVES_HEUTE } from '@/lib/fairness/rules';
 import { FairnessPanel } from '@/components/fairness/FairnessPanel';
 
 export default function RueckfragenPage() {
-  const { rueckfragen } = demoFall;
+  const { fall, answerRueckfrage } = useDemoState();
+  const { rueckfragen } = fall;
   const offen = rueckfragen.filter(r => !r.beantwortet);
-  const fristSignale = berechneFairnessSignale(demoFall).filter(
+  const fristSignale = berechneFairnessSignale(fall).filter(
     s => s.typ === 'RUECKFRAGE_OFFEN_FRIST_RELEVANT'
   );
   return (
@@ -22,6 +25,19 @@ export default function RueckfragenPage() {
       {fristSignale.length > 0 && (
         <FairnessPanel signale={fristSignale} kompakt={false} />
       )}
+
+      {/* Demo-Hinweis auf Interaktivität */}
+      <div style={{
+        padding: '0.625rem 0.875rem',
+        background: 'var(--color-primary-light)',
+        borderRadius: 'var(--radius)',
+        borderLeft: '3px solid var(--color-primary)',
+        fontSize: '0.8rem',
+        color: 'var(--color-primary)',
+      }}>
+        Demo-Interaktion: Der Button „Rückfrage beantworten" aktualisiert den Fallzustand sichtbar — auf dieser Seite und in der Fallübersicht.
+      </div>
+
       {rueckfragen.map(rq => (
         <div key={rq.id} className="card" style={{ borderLeft: rq.beantwortet ? '3px solid var(--color-success)' : '3px solid var(--color-warning)' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem', flexWrap: 'wrap', gap: '0.5rem' }}>
@@ -37,13 +53,30 @@ export default function RueckfragenPage() {
               <strong style={{ fontSize: '0.875rem' }}>Warum wird das gefragt?</strong>
               <p style={{ fontSize: '0.875rem', marginTop: '0.25rem' }}>{rq.begründung}</p>
             </div>
-            <div style={{ background: 'var(--color-warning-light)', borderRadius: 'var(--radius)', padding: '0.75rem' }}>
-              <strong style={{ fontSize: '0.875rem' }}>Was passiert, wenn Sie nicht antworten?</strong>
-              <p style={{ fontSize: '0.875rem', marginTop: '0.25rem' }}>{rq.konsequenz}</p>
-            </div>
+            {!rq.beantwortet && (
+              <div style={{ background: 'var(--color-warning-light)', borderRadius: 'var(--radius)', padding: '0.75rem' }}>
+                <strong style={{ fontSize: '0.875rem' }}>Was passiert, wenn Sie nicht antworten?</strong>
+                <p style={{ fontSize: '0.875rem', marginTop: '0.25rem' }}>{rq.konsequenz}</p>
+              </div>
+            )}
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.75rem' }}>
-              <span style={{ fontSize: '0.875rem', color: 'var(--color-warning)', fontWeight: 600 }}>Frist: {rq.frist} (noch {berechneFristTage(rq.fristDatum, FIKTIVES_HEUTE)} Tage)</span>
-              {!rq.beantwortet && <button className="btn btn-primary">Rückfrage beantworten</button>}
+              {!rq.beantwortet ? (
+                <>
+                  <span style={{ fontSize: '0.875rem', color: 'var(--color-warning)', fontWeight: 600 }}>
+                    Frist: {rq.frist} (noch {berechneFristTage(rq.fristDatum, FIKTIVES_HEUTE)} Tage)
+                  </span>
+                  <button
+                    className="btn btn-primary"
+                    onClick={() => answerRueckfrage(rq.id)}
+                  >
+                    Rückfrage beantworten
+                  </button>
+                </>
+              ) : (
+                <span style={{ fontSize: '0.875rem', color: 'var(--color-success)', fontWeight: 600 }}>
+                  ✓ Beantwortet — Sachbearbeitung wurde informiert.
+                </span>
+              )}
             </div>
           </div>
         </div>

@@ -46,7 +46,7 @@ React State-Einführung ist der größte Demo-Qualitätssprung ohne neue Routen.
 
 | ID | Schritt | Typ | Aufwand | Abhängigkeit | Status |
 |----|---------|-----|---------|--------------|--------|
-| Q-031 | Mock-State via React Context einführen: Demo-Interaktionen (z. B. „Rückfrage beantworten") lösen echten State-Wechsel aus | DEMO | M | – | OFFEN |
+| Q-031 | Mock-State via React Context einführen: Demo-Interaktionen (z. B. „Rückfrage beantworten") lösen echten State-Wechsel aus | DEMO | M | – | DONE `→` |
 | Q-032 | `/fall/hinweise` nach State-Wechsel: Fairness-Signale reduzieren sich live — Demonstration des Regelwerks in Aktion | DEMO | S | Q-031 | OFFEN |
 
 ---

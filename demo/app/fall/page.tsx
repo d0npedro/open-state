@@ -1,4 +1,6 @@
-import { demoFall } from '@/data/mockFall';
+'use client';
+
+import { useDemoState } from '@/context/DemoStateContext';
 import { berechneFairnessSignale } from '@/lib/fairness/rules';
 import { FairnessSummaryCard } from '@/components/fairness/FairnessPanel';
 
@@ -17,7 +19,7 @@ const statusLabels: Record<string, { label: string; badge: string }> = {
 const statusFlow = ['ANGELEGT','EINGEGANGEN','IN_PRUEFUNG','RUECKFRAGE_OFFEN','TERMIN_ANGESETZT','ENTSCHEIDUNG_VORBEREITET','BESCHEID_ZUGESTELLT'];
 
 export default function FallPage() {
-  const fall = demoFall;
+  const { fall } = useDemoState();
   const s = statusLabels[fall.status];
   const currentIndex = statusFlow.indexOf(fall.status);
   const fairnessSignale = berechneFairnessSignale(fall);
