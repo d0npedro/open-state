@@ -77,8 +77,8 @@ Story-Dokumentation ist kein Pflicht-Vorläufer für Mock-Daten und Typen.
 
 | ID | Schritt | Typ | Aufwand | Abhängigkeit | Status |
 |----|---------|-----|---------|--------------|--------|
-| Q-011 | Mock-Daten für Gründungsfall anlegen (`demo/data/mockGruendungsfall.ts`): Gewerbeanmeldung, Dokumente, beteiligte Behörden, Statusverlauf | DEMO | M | – | OFFEN |
-| Q-012 | Typen für Unternehmensgründung anlegen (`demo/types/gruendung.ts`) | DEMO | S | Q-011 | OFFEN |
+| Q-011 | Mock-Daten für Gründungsfall anlegen (`demo/data/mockGruendungsfall.ts`): Gewerbeanmeldung, Dokumente, beteiligte Behörden, Statusverlauf | DEMO | M | – | DONE `12689b1` |
+| Q-012 | Typen für Unternehmensgründung anlegen (`demo/types/gruendung.ts`) | DEMO | S | Q-011 | DONE `12689b1` |
 | Q-013 | Demo-Routen `/gruendung` und Subseiten (Übersicht, Dokumente, Behörden, Verlauf) | DEMO | L | Q-012 | OFFEN |
 | Q-014 | Navigation und Landing Page um zweite Demo-Domäne erweitern | DEMO | S | Q-013 | OFFEN |
 | Q-015 | Fairness-Regeln für Unternehmensgründung anlegen (fehlende Genehmigung, blockierter Folgeschritt, Fristlage) | DEMO | M | Q-013 | OFFEN |
