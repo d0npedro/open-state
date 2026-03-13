@@ -1,5 +1,6 @@
 import { demoKitaLagebild } from '@/data/mockKitaLagebild';
 import { KitaCsvDownload } from '@/components/kita/KitaCsvDownload';
+import { KitaZeitreiheTabelle } from '@/components/kita/KitaZeitreiheTabelle';
 
 // ─── Hilfsfunktionen ────────────────────────────────────────────────────────
 
@@ -175,6 +176,18 @@ export default function KitaTransparenzberichtPage() {
           <span><span style={{ color: 'var(--color-success)', fontWeight: 600 }}>■</span> Normal</span>
           <span>Druck-Faktor: Wartelistenanfragen / freie Plätze. Wert &gt; 1 = Engpass</span>
         </div>
+      </section>
+
+      {/* Monatsvergleich / Trenddarstellung (Q-024, US-KJ-010) */}
+      <section>
+        <div style={{ marginBottom: '1rem' }}>
+          <div style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginBottom: '0.5rem' }}>
+            <span className="badge badge-primary">US-KJ-010</span>
+            <span>Zeitreihen · Saisonale Muster · Trenddarstellung</span>
+          </div>
+          <h2>Entwicklung der letzten 12 Monate</h2>
+        </div>
+        <KitaZeitreiheTabelle zeitreihe={lb.zeitreihe} />
       </section>
 
       {/* Kapazitätsmaßnahmen */}
