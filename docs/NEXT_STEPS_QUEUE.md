@@ -94,8 +94,8 @@ Q-001 und Q-010 sind reine Dokumentationsarbeiten ohne Demo-Effekt.
 
 | ID | Schritt | Typ | Aufwand | Abhängigkeit | Status |
 |----|---------|-----|---------|--------------|--------|
-| Q-002 | `demo/data/storyRegistry.ts` um US-KJ-001–010 erweitern — macht Kita-Domäne auf `/stories` sichtbar | DEMO | S | – | DONE `pending` |
-| Q-003 | `/stories`-Seite: Domänen-Gruppierung (AV / KJ / UG) — bei 18+ Stories nötig | DEMO | M | Q-002 | DONE `pending` |
+| Q-002 | `demo/data/storyRegistry.ts` um US-KJ-001–010 erweitern — macht Kita-Domäne auf `/stories` sichtbar | DEMO | S | – | DONE `0dc93da` |
+| Q-003 | `/stories`-Seite: Domänen-Gruppierung (AV / KJ / UG) — bei 18+ Stories nötig | DEMO | M | Q-002 | DONE `1a412b5` |
 | Q-010 | Story-Map und Stories anlegen: `docs/stories/unternehmensgruendung/` + 6 Stories (US-UG-001–006) | DOCS | M | – | OFFEN |
 | Q-001 | Story-Datei `US-AV-008_Verfahrenslage_verstehen.md` anlegen — Docs-Konsistenz, kein Demo-Effekt | DOCS | S | – | OFFEN |
 
