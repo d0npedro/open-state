@@ -6,6 +6,10 @@ on:
   pull_request:
     branches: [main]
 
+permissions:
+  contents: write
+  pull-requests: write
+
 jobs:
   test:
     name: Playwright E2E (chromium)
@@ -40,3 +44,15 @@ jobs:
           name: playwright-report
           path: demo/playwright-report/
           retention-days: 30
+
+  merge:
+    name: Auto-merge PR
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request' && needs.test.result == 'success'
+
+    steps:
+      - name: Merge PR into main
+        run: gh pr merge ${{ github.event.pull_request.number }} --merge --delete-branch --repo ${{ github.repository }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
