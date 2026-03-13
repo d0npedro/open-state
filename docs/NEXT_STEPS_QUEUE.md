@@ -62,7 +62,7 @@ Die Kita-Domäne ist mit 7 Dokumenten und 10 Stories am stärksten vorbereitete 
 |----|---------|-----|---------|--------------|--------|
 | Q-020 | Mock-Daten für Kita-Lagebild anlegen (`demo/data/mockKitaLagebild.ts`): Einrichtungen, Planungsräume, Versorgungsquoten, Zeitreihen nach Monaten | DEMO | M | – | DONE `f66a656` |
 | Q-021 | Typen für Kita-Kennzahlen anlegen (`demo/types/kita.ts`) | DEMO | S | Q-020 | DONE `f66a656` |
-| Q-022 | Demo-Route `/kita`: öffentlicher Transparenzbericht mit Versorgungsquoten, Planungsraumübersicht und Methodik-Hinweis (US-KJ-009) | DEMO | L | Q-021 | OFFEN |
+| Q-022 | Demo-Route `/kita`: öffentlicher Transparenzbericht mit Versorgungsquoten, Planungsraumübersicht und Methodik-Hinweis (US-KJ-009) | DEMO | L | Q-021 | DONE `650498b` |
 | Q-024 | Monatsvergleich / Trenddarstellung: HTML-Tabelle mit Zeitreihe, Veränderung zum Vormonat sichtbar — ohne Chart-Bibliothek | DEMO | M | Q-022 | OFFEN |
 | Q-023 | Demo-Route `/kita/lagebild`: Jugendamt-Steuerungsansicht mit Planungsräumen, Bedarfslücken, Handlungsfeldern (US-KJ-005, US-KJ-006) — nur intern zugänglich in Demo-Logik | DEMO | L | Q-022 | OFFEN |
 
