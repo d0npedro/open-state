@@ -2,6 +2,8 @@
 
 import Link from 'next/link';
 import { useGruendungState } from '@/context/GruendungStateContext';
+import { berechneFairnessSignaleGruendung } from '@/lib/fairness/gruendung-rules';
+import { FairnessSummaryCard } from '@/components/fairness/FairnessPanel';
 import type { BehördeStatus } from '@/types/gruendung';
 
 const statusFlow = [
@@ -27,6 +29,7 @@ const behördeTypLabel: Record<string, string> = {
 
 export default function GruendungPage() {
   const { akte } = useGruendungState();
+  const fairnessSignale = berechneFairnessSignaleGruendung(akte);
   const isRueckfrage = akte.status === 'RUECKFRAGE_AUSSTEHEND' || akte.status === 'RUECKFRAGE_BEANTWORTET';
   const currentFlowKey = isRueckfrage ? 'IN_BEARBEITUNG' : akte.status;
   const currentIndex = statusFlow.findIndex(s => s.key === currentFlowKey);
@@ -130,6 +133,9 @@ export default function GruendungPage() {
           })}
         </div>
       </div>
+
+      {/* Fairness-Zusammenfassung */}
+      <FairnessSummaryCard signale={fairnessSignale} href="/gruendung/hinweise" />
 
       {/* Navigations-Kacheln */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(190px, 1fr))', gap: '1rem' }}>

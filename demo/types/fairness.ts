@@ -7,11 +7,18 @@
  */
 
 export type FairnessSignalTyp =
+  // Arbeitsverwaltung
   | 'RUECKFRAGE_OFFEN_FRIST_RELEVANT'
   | 'UNTERLAGE_FEHLT_BLOCKIERT'
   | 'FALL_PAUSIERT'
   | 'BESCHEID_VORLAEUFIG'
-  | 'BESCHEID_BEGRUENDUNG_ERWEITERBAR';
+  | 'BESCHEID_BEGRUENDUNG_ERWEITERBAR'
+  // Unternehmensgründung
+  | 'UG_RUECKFRAGE_OFFEN_FRIST_RELEVANT'
+  | 'UG_BG_ANMELDUNG_AUSSTEHEND'
+  | 'UG_STEUERNUMMER_FEHLT'
+  | 'UG_BETRIEBSDATUM_UEBERSCHRITTEN'
+  | 'UG_PARALLELE_BEHOERDEN_AKTIV';
 
 /**
  * Priorität eines Hinweises – beeinflusst nur die visuelle Darstellung,

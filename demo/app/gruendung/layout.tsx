@@ -7,6 +7,7 @@ const nav = [
   { href: '/gruendung/dokumente',    label: 'Dokumente' },
   { href: '/gruendung/rueckfragen',  label: 'Rückfragen' },
   { href: '/gruendung/verlauf',      label: 'Verlauf' },
+  { href: '/gruendung/hinweise',     label: 'Hinweise' },
 ];
 
 export default function GruendungLayout({ children }: { children: React.ReactNode }) {
