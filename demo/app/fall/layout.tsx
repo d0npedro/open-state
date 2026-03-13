@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { DemoStateProvider } from '@/context/DemoStateContext';
+import { DomainNav } from '@/components/DomainNav';
 
 const nav = [
   { href: '/fall', label: 'Übersicht' },
@@ -16,8 +17,9 @@ export default function FallLayout({ children }: { children: React.ReactNode }) 
     <div style={{ minHeight: '100vh' }}>
       <header style={{ background: 'var(--color-primary)', color: 'white', padding: '0.875rem 0' }}>
         <div className="container" style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
-          <Link href="/" style={{ color: 'rgba(255,255,255,0.75)', fontSize: '0.875rem' }}>← Zurück</Link>
+          <Link href="/" style={{ color: 'rgba(255,255,255,0.65)', fontSize: '0.8rem', whiteSpace: 'nowrap' }}>← Open State</Link>
           <span style={{ fontWeight: 600 }}>Fallakte AV-2024-0042</span>
+          <DomainNav active="/fall" />
         </div>
       </header>
       <nav style={{ background: 'white', borderBottom: '1px solid var(--color-border)' }}>

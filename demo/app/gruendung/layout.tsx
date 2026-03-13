@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { GruendungStateProvider } from '@/context/GruendungStateContext';
+import { DomainNav } from '@/components/DomainNav';
 
 const nav = [
   { href: '/gruendung',              label: 'Übersicht' },
@@ -15,8 +16,9 @@ export default function GruendungLayout({ children }: { children: React.ReactNod
     <div style={{ minHeight: '100vh' }}>
       <header style={{ background: 'var(--color-primary)', color: 'white', padding: '0.875rem 0' }}>
         <div className="container" style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
-          <Link href="/" style={{ color: 'rgba(255,255,255,0.75)', fontSize: '0.875rem' }}>← Zurück</Link>
+          <Link href="/" style={{ color: 'rgba(255,255,255,0.65)', fontSize: '0.8rem', whiteSpace: 'nowrap' }}>← Open State</Link>
           <span style={{ fontWeight: 600 }}>Gründungsakte UG-2024-0117</span>
+          <DomainNav active="/gruendung" />
         </div>
       </header>
       <nav style={{ background: 'white', borderBottom: '1px solid var(--color-border)' }}>

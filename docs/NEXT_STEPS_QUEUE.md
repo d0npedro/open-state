@@ -82,7 +82,7 @@ Story-Dokumentation ist kein Pflicht-Vorläufer für Mock-Daten und Typen.
 | Q-013 | Demo-Routen `/gruendung` und Subseiten (Übersicht, Dokumente, Behörden, Verlauf) | DEMO | L | Q-012 | DONE `55ede29` |
 | Q-014 | Navigation und Landing Page um zweite Demo-Domäne erweitern | DEMO | S | Q-013 | DONE `2fafb78` |
 | Q-015 | Fairness-Regeln für Unternehmensgründung anlegen (fehlende Genehmigung, blockierter Folgeschritt, Fristlage) | DEMO | M | Q-013 | DONE `48e62e1` |
-| Q-030 | Navigationsstruktur für mehrere Domänen: Landing Page zeigt alle klickbaren Demo-Domänen mit kurzem Kontext | DEMO | M | Q-014 | OFFEN |
+| Q-030 | Navigationsstruktur für mehrere Domänen: Landing Page zeigt alle klickbaren Demo-Domänen mit kurzem Kontext | DEMO | M | Q-014 | DONE `pending` |
 
 ---
 
