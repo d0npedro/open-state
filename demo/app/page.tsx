@@ -1,44 +1,70 @@
+// UX-Grund: Landing Page für JEDEN Menschen — keine Developer-Sprache.
+// Klare Frage: "Was möchten Sie heute erledigen?"
+// Primäre Handlung: Eine Karte anklicken. Keine Ablenkung.
+
 import Link from 'next/link';
+import { Icon } from '@/components/Icon';
 
 const domains = [
   {
     id: 'av',
-    label: 'Arbeitsverwaltung',
-    badge: '8 Stories · 7 Screens',
-    title: 'Arbeitslosengeld I beantragen',
-    beschreibung:
-      'Vollständiger Verfahrens-Slice: Antrag, Dokumente, Rückfragen, Bescheid, Verlauf. Fairness-Signale zeigen in Echtzeit, wenn das Regelwerk auf Zustandsänderungen reagiert.',
-    merkmale: ['Verfahrensfairness-Regelwerk', 'Interaktive State-Demo', 'Bescheid mit Erklärschicht'],
+    icon: 'user' as const,
+    iconColor: '#003F8C',
+    iconBg: '#E8F0FB',
+    title: 'Arbeitslosengeld beantragen',
+    beschreibung: 'Sie haben Ihren Job verloren und möchten Unterstützung beantragen? Hier sehen Sie Ihren Antragsstatus, offene Aufgaben und alle Bescheide — in verständlicher Sprache.',
     href: '/fall',
-    cta: 'Fallakte öffnen →',
-    farbe: 'var(--color-primary)',
-    hintergrund: 'var(--color-primary-light)',
+    cta: 'Antrag öffnen',
+    farbe: '#003F8C',
+    randfarbe: '#003F8C',
   },
   {
     id: 'gruendung',
-    label: 'Unternehmensgründung',
-    badge: '4 Behörden · 5 Screens',
-    title: 'Gewerbeanmeldung Einzelunternehmen',
-    beschreibung:
-      'Multi-Behörden-Gründungsakte: Gewerbeamt, Finanzamt, IHK, Berufsgenossenschaft. Jeder Schritt erklärt — mit Rechtsgrundlage, Frist und Konsequenz.',
-    merkmale: ['Behördenübergreifende Akte', '§ 19 UStG Rückfrage interaktiv', 'Audit-Log unveränderlich'],
+    icon: 'building' as const,
+    iconColor: '#1a6335',
+    iconBg: '#d8f3dc',
+    title: 'Unternehmen anmelden',
+    beschreibung: 'Sie möchten ein Unternehmen gründen? Alle notwendigen Behördenschritte — Gewerbeamt, Finanzamt, IHK — an einem Ort, mit Fristen und klaren Erklärungen.',
     href: '/gruendung',
-    cta: 'Gründungsakte öffnen →',
-    farbe: '#2d6a4f',
-    hintergrund: '#d8f3dc',
+    cta: 'Gründungsakte öffnen',
+    farbe: '#1a6335',
+    randfarbe: '#1a6335',
   },
   {
     id: 'kita',
-    label: 'Kindertagesbetreuung',
-    badge: '5 Planungsräume · 12 Monate',
-    title: 'Öffentlicher Transparenzbericht',
-    beschreibung:
-      'Das konzeptionell stärkste Alleinstellungsmerkmal: öffentlich zugängliche, methodisch transparente Berichtsschicht. Versorgungsquoten, Wartelistentrends, Kapazitätsmaßnahmen — mit vollständiger Methodik.',
-    merkmale: ['Öffentlich, keine Registrierung', 'Jugendamt-Steuerungslagebild (Demo)', 'CSV-Export'],
+    icon: 'baby' as const,
+    iconColor: '#6b21a8',
+    iconBg: '#f3e8ff',
+    title: 'Kita-Plätze in Ihrer Stadt',
+    beschreibung: 'Öffentlicher Transparenzbericht zu Kita-Plätzen: Versorgungsquoten, Wartezeiten und Kapazitäten — ohne Anmeldung, offen für alle Bürgerinnen und Bürger.',
     href: '/kita',
-    cta: 'Transparenzbericht öffnen →',
-    farbe: '#7b2d8b',
-    hintergrund: '#f3d8f5',
+    cta: 'Transparenzbericht öffnen',
+    farbe: '#6b21a8',
+    randfarbe: '#6b21a8',
+  },
+];
+
+const prinzipien = [
+  {
+    icon: 'shield' as const,
+    title: 'Jede Entscheidung erklärt',
+    text: 'Kein Behördendeutsch. Jede Anforderung und jeder Bescheid wird in verständlicher Sprache erklärt.',
+    bg: '#EFF6FF',
+    tc: '#1D4ED8',
+  },
+  {
+    icon: 'eye' as const,
+    title: 'Vollständig transparent',
+    text: 'Sie sehen jederzeit, warum Ihr Antrag wo steht — mit vollständiger Verlaufshistorie.',
+    bg: '#F0FDF4',
+    tc: '#15803D',
+  },
+  {
+    icon: 'star' as const,
+    title: 'Keine KI-Entscheidungen',
+    text: 'KI ist nur ein Assistent. Alle Entscheidungen trifft ein Mensch — das Gesetz gilt, nicht ein Algorithmus.',
+    bg: '#FFF7ED',
+    tc: '#C2410C',
   },
 ];
 
@@ -46,75 +72,75 @@ export default function Home() {
   return (
     <main style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
 
-      {/* Header */}
+      {/* ─── Kopfzeile ─────────────────────────────────────────────── */}
       <header style={{ background: 'var(--color-primary)', color: 'white', padding: '1rem 0' }}>
         <div className="container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.5rem' }}>
           <div>
-            <span style={{ fontWeight: 700, fontSize: '1.1rem', letterSpacing: '0.02em' }}>OPEN STATE</span>
-            <span style={{ marginLeft: '1rem', opacity: 0.7, fontSize: '0.875rem' }}>Blueprint · Digitale Verwaltungsplattform</span>
+            <span style={{ fontWeight: 800, fontSize: '1.2rem', letterSpacing: '0.04em' }}>OPEN STATE</span>
+            <span style={{ marginLeft: '0.875rem', opacity: 0.65, fontSize: '0.875rem' }}>Digitale Verwaltungsplattform</span>
           </div>
-          <div style={{ display: 'flex', gap: '1.25rem', fontSize: '0.875rem' }}>
-            <Link href="/stories" style={{ color: 'rgba(255,255,255,0.8)' }}>Story Coverage</Link>
-            <Link href="/feedback" style={{ color: 'rgba(255,255,255,0.8)' }}>Feedback</Link>
+          <div style={{ display: 'flex', gap: '1.5rem', fontSize: '0.875rem' }}>
+            <Link href="/stories" style={{ color: 'rgba(255,255,255,0.75)', textDecoration: 'none' }}>Für Entwickler</Link>
+            <Link href="/feedback" style={{ color: 'rgba(255,255,255,0.75)', textDecoration: 'none' }}>Feedback</Link>
           </div>
         </div>
       </header>
 
-      {/* Hero */}
-      <section style={{ background: 'white', borderBottom: '1px solid var(--color-border)', padding: '3rem 0' }}>
+      {/* ─── Hero ───────────────────────────────────────────────────── */}
+      <section style={{ background: 'white', borderBottom: '1px solid var(--color-border)', padding: '3.5rem 0 2.5rem' }}>
         <div className="container">
-          <div style={{ maxWidth: '680px' }}>
-            <p style={{ color: 'var(--color-primary)', fontWeight: 600, fontSize: '0.875rem', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-              Konzeptphase · 3 Demo-Domänen · Alle Daten fiktiv
-            </p>
-            <h1 style={{ marginBottom: '1rem' }}>
-              Staatliche Verwaltung.<br />Verständlich. Nachvollziehbar.
-            </h1>
-            <p style={{ fontSize: '1.05rem', marginBottom: '1.5rem', color: 'var(--color-neutral)', lineHeight: 1.65 }}>
-              Open State demonstriert, wie alle Verwaltungsverfahren über eine einzige,
-              bürgerrespektierende Plattform abgewickelt werden könnten.
-              Drei klickbare Bereiche zeigen, dass die Idee domänenübergreifend trägt —
-              von der Sozialleistung bis zur Kita-Versorgungsplanung.
-            </p>
-            <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-              <Link href="/fall"      className="btn btn-primary">Arbeitsverwaltung →</Link>
-              <Link href="/gruendung" className="btn btn-secondary">Unternehmensgründung →</Link>
-              <Link href="/kita"      className="btn btn-secondary">Kita-Transparenz →</Link>
-            </div>
-          </div>
+          {/* UX-Grund: Eine Frage, keine Aussage — Nutzer fühlt sich direkt angesprochen */}
+          <p style={{ color: 'var(--color-primary)', fontWeight: 700, fontSize: '0.875rem', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+            Demo · Alle Daten sind fiktiv
+          </p>
+          <h1 style={{ fontSize: 'clamp(1.6rem, 4vw, 2.25rem)', marginBottom: '1rem', lineHeight: 1.15 }}>
+            Was möchten Sie heute erledigen?
+          </h1>
+          <p style={{ fontSize: '1.05rem', color: 'var(--color-neutral)', lineHeight: 1.7, maxWidth: '600px' }}>
+            Open State zeigt, wie Verwaltungsverfahren einfach, transparent und
+            verständlich sein können — egal ob Sozialleistung, Firmengründung oder Kita-Suche.
+          </p>
         </div>
       </section>
 
-      {/* Domain-Karten */}
-      <section style={{ padding: '2.5rem 0', background: 'var(--color-neutral-light)' }}>
+      {/* ─── Domain-Karten ──────────────────────────────────────────── */}
+      {/* UX-Grund: Drei Optionen — Hick's Law. Keine 7 Links, keine Menüs.
+          Jede Karte hat: Icon + klare Frage + ein einziger CTA */}
+      <section style={{ padding: '2.5rem 0', background: 'var(--color-neutral-light)', flex: 1 }}>
         <div className="container">
-          <h2 style={{ marginBottom: '0.5rem' }}>Klickbare Demo-Bereiche</h2>
-          <p style={{ fontSize: '0.875rem', color: 'var(--color-text-muted)', marginBottom: '1.5rem' }}>
-            Jeder Bereich ist ein eigenständiger Vertical Slice — vollständig klickbar, Story-dokumentiert, mit fiktiven Realdaten.
-          </p>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.25rem' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(290px, 1fr))', gap: '1.25rem' }}>
             {domains.map(d => (
-              <div key={d.id} className="card" style={{ borderTop: `4px solid ${d.farbe}`, display: 'flex', flexDirection: 'column' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.75rem' }}>
-                  <span style={{ fontSize: '0.75rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em', color: d.farbe }}>
-                    {d.label}
-                  </span>
-                  <span style={{ fontSize: '0.7rem', background: d.hintergrund, color: d.farbe, padding: '0.15rem 0.5rem', borderRadius: '3px', fontWeight: 600 }}>
-                    {d.badge}
-                  </span>
+              <div
+                key={d.id}
+                className="domain-card"
+                style={{ borderTop: `5px solid ${d.randfarbe}` }}
+              >
+                {/* Icon-Badge */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.875rem' }}>
+                  <div style={{
+                    width: 48, height: 48, borderRadius: '50%',
+                    background: d.iconBg, color: d.iconColor,
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    flexShrink: 0,
+                  }}>
+                    <Icon name={d.icon} size={24} />
+                  </div>
+                  <h2 style={{ fontSize: '1.1rem', fontWeight: 700, lineHeight: 1.3, margin: 0 }}>{d.title}</h2>
                 </div>
 
-                <h3 style={{ marginBottom: '0.75rem', fontSize: '1rem' }}>{d.title}</h3>
-                <p style={{ fontSize: '0.875rem', color: 'var(--color-neutral)', lineHeight: 1.55, marginBottom: '1rem', flex: 1 }}>
+                {/* Beschreibung */}
+                <p style={{ fontSize: '0.925rem', color: 'var(--color-neutral)', lineHeight: 1.65, margin: 0 }}>
                   {d.beschreibung}
                 </p>
 
-                <ul style={{ margin: '0 0 1.25rem', paddingLeft: '1rem', fontSize: '0.8rem', color: 'var(--color-text-muted)', lineHeight: 1.7 }}>
-                  {d.merkmale.map(m => <li key={m}>{m}</li>)}
-                </ul>
-
-                <Link href={d.href} className="btn btn-primary" style={{ textAlign: 'center', background: d.farbe, borderColor: d.farbe }}>
+                {/* CTA — Großer, klarer Button */}
+                <Link
+                  href={d.href}
+                  className="btn btn-primary btn-full"
+                  style={{ background: d.farbe, marginTop: 'auto' }}
+                >
                   {d.cta}
+                  <Icon name="arrow-right" size={18} />
                 </Link>
               </div>
             ))}
@@ -122,32 +148,35 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Prinzipien-Kacheln */}
-      <section style={{ padding: '2.5rem 0' }}>
+      {/* ─── Prinzipien ─────────────────────────────────────────────── */}
+      <section style={{ padding: '2.5rem 0', background: 'white' }}>
         <div className="container">
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
-            {[
-              { title: '3 Demo-Domänen',       sub: 'AV · Gründung · Kita',              color: 'var(--color-primary-light)',  tc: 'var(--color-primary)' },
-              { title: '20+ User Stories',      sub: 'Alle dokumentiert',                 color: 'var(--color-success-light)',  tc: 'var(--color-success)' },
-              { title: 'Jeder Status erklärt',  sub: 'Begründung · Frist · Konsequenz',   color: 'var(--color-warning-light)',  tc: 'var(--color-warning)' },
-              { title: 'Keine Entscheidungs-KI',sub: 'Mensch bleibt verantwortlich',      color: 'var(--color-border)',         tc: 'var(--color-neutral)' },
-            ].map(k => (
-              <div key={k.title} style={{ background: k.color, borderRadius: 'var(--radius)', padding: '1.25rem' }}>
-                <div style={{ fontWeight: 700, fontSize: '1.05rem', color: k.tc }}>{k.title}</div>
-                <div style={{ fontSize: '0.875rem', color: 'var(--color-neutral)', marginTop: '0.25rem' }}>{k.sub}</div>
+          <h2 style={{ marginBottom: '1.5rem', fontSize: '1.25rem' }}>Unsere Versprechen an Sie</h2>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1rem' }}>
+            {prinzipien.map(p => (
+              <div key={p.title} style={{ background: p.bg, borderRadius: 'var(--radius-lg)', padding: '1.25rem', display: 'flex', gap: '1rem', alignItems: 'flex-start' }}>
+                <div style={{ color: p.tc, flexShrink: 0, marginTop: '2px' }}>
+                  <Icon name={p.icon} size={22} />
+                </div>
+                <div>
+                  <div style={{ fontWeight: 700, fontSize: '0.95rem', color: p.tc, marginBottom: '0.375rem' }}>{p.title}</div>
+                  <div style={{ fontSize: '0.875rem', color: 'var(--color-neutral)', lineHeight: 1.55 }}>{p.text}</div>
+                </div>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Demo-Hinweis */}
-      <section style={{ padding: '0 0 2.5rem 0' }}>
+      {/* ─── Demo-Hinweis ───────────────────────────────────────────── */}
+      <section style={{ padding: '1.5rem 0 2rem' }}>
         <div className="container">
-          <div style={{ background: 'var(--color-primary-light)', border: '1px solid var(--color-secondary)', borderRadius: 'var(--radius)', padding: '1.25rem 1.5rem' }}>
-            <strong>Hinweis:</strong> Dies ist ein Demonstrator in der Konzeptphase. Alle Daten sind fiktiv.
-            Kein echtes Backend, keine echten Behördenanbindungen, keine rechtsverbindlichen Akte.
-            Ziel ist die Veranschaulichung transparenter, domänenübergreifender Verfahrensführung.
+          <div className="notice-box notice-box-neutral" style={{ borderRadius: 'var(--radius-lg)' }}>
+            <Icon name="info" size={18} style={{ flexShrink: 0, marginTop: '2px' }} />
+            <span>
+              <strong>Hinweis:</strong> Dies ist ein Demonstrator in der Konzeptphase.
+              Alle Daten sind fiktiv. Kein echtes Backend, keine Behördenanbindungen.
+            </span>
           </div>
         </div>
       </section>

@@ -279,17 +279,251 @@ p { color: var(--color-neutral); }
 .badge-neutral { background: var(--color-border);        color: var(--color-neutral); }
 
 .btn {
+  /* UX-Grund: Minimum 52px Höhe für arthritic Finger (Fitts's Law) */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.875rem 1.5rem;
+  min-height: 52px;
+  border-radius: var(--radius);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: opacity 0.15s, transform 0.1s;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.btn:hover  { opacity: 0.88; }
+.btn:active { transform: scale(0.98); }
+.btn-primary   { background: var(--color-primary); color: var(--color-white); }
+.btn-secondary { background: var(--color-surface); color: var(--color-primary); border: 2px solid var(--color-primary); }
+
+/* UX-Grund: Rote Zonen für nicht-reversible Aktionen (Widerspruch, Löschen) */
+.btn-danger { background: var(--color-danger); color: var(--color-white); }
+
+/* UX-Grund: Fullwidth auf Mobile für maximale Touch-Fläche */
+.btn-full { width: 100%; }
+
+/* ─── AKTION-BANNER ─────────────────────────────────────────────────
+   UX-Grund: Grandma-Test — "Was muss ich JETZT tun?" ist die erste
+   Frage jedes Besuchers. Dieser Banner muss nicht zu übersehen sein.
+   Maximal 1 primäre Handlung pro Screen (Hick's Law). */
+.action-banner {
+  background: #FFF8E1;
+  border: 2px solid #F59E0B;
+  border-left: 6px solid #F59E0B;
+  border-radius: var(--radius-lg);
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+}
+.action-banner-icon {
+  flex-shrink: 0;
+  color: #B45309;
+  margin-top: 2px;
+}
+.action-banner-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #92400E;
+  margin-bottom: 0.375rem;
+}
+.action-banner-text {
+  font-size: 0.95rem;
+  color: #78350F;
+  line-height: 1.5;
+  margin-bottom: 0.875rem;
+}
+.action-banner-deadline {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #92400E;
+  margin-bottom: 0.875rem;
+}
+
+/* ─── FORTSCHRITT-BALKEN ────────────────────────────────────────────
+   UX-Grund: "Bin ich fast fertig?" — einfache visuelle Antwort */
+.progress-bar-wrap {
+  background: var(--color-border);
+  border-radius: 99px;
+  height: 10px;
+  overflow: hidden;
+  margin-top: 0.5rem;
+}
+.progress-bar-fill {
+  height: 100%;
+  border-radius: 99px;
+  background: var(--color-primary);
+  transition: width 0.4s ease;
+}
+
+/* ─── UPLOAD-ZONE ───────────────────────────────────────────────────
+   UX-Grund: Dokument-Upload muss für 80-Jährige mit Smartphone
+   sofort erkennbar sein. Minimale Touch-Fläche: 120px×200px. */
+.upload-zone {
+  border: 3px dashed var(--color-primary);
+  border-radius: var(--radius-lg);
+  padding: 2rem 1.5rem;
+  text-align: center;
+  cursor: pointer;
+  min-height: 140px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.625rem;
+  color: var(--color-primary);
+  transition: background 0.2s;
+  width: 100%;
+}
+.upload-zone:hover,
+.upload-zone:focus-within {
+  background: var(--color-primary-light);
+}
+.upload-zone-icon { font-size: 2.5rem; }
+.upload-zone-label { font-size: 1rem; font-weight: 600; }
+.upload-zone-hint  { font-size: 0.875rem; color: var(--color-text-muted); }
+
+/* ─── NAVIGATION-TABS (Icon + Label) ───────────────────────────────
+   UX-Grund: Text-Only-Navigation schlägt bei älteren Nutzern und
+   niedrigem Literacy-Level fehl. Icons sind universell verständlich
+   (Fitts's Law: große, klar erkennbare Targets). */
+.tab-nav {
+  display: flex;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  gap: 0;
+  padding: 0;
+}
+.tab-nav::-webkit-scrollbar { display: none; }
+
+.tab-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.875rem 1.25rem;
+  min-height: 64px;
+  min-width: 72px;
+  color: var(--color-neutral);
+  text-decoration: none;
+  font-size: 0.75rem;
+  font-weight: 500;
+  border-bottom: 3px solid transparent;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: color 0.15s, border-color 0.15s;
+}
+.tab-nav-item:hover {
+  color: var(--color-primary);
+  text-decoration: none;
+  background: var(--color-primary-light);
+}
+.tab-nav-item.active {
+  color: var(--color-primary);
+  border-bottom-color: var(--color-primary);
+  font-weight: 700;
+}
+
+/* ─── STATUS-CHIP ───────────────────────────────────────────────────
+   UX-Grund: Status muss in unter 500ms erkannt werden → Traffic-Light
+   Farbsystem mit Icon */
+.status-chip {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.6rem 1.2rem;
-  border-radius: var(--radius);
-  font-size: var(--font-size-sm, 0.875rem);
-  font-weight: 500;
-  cursor: pointer;
-  border: none;
-  transition: opacity 0.15s;
+  padding: 0.5rem 1rem;
+  border-radius: 99px;
+  font-size: 0.875rem;
+  font-weight: 700;
 }
-.btn:hover { opacity: 0.88; }
-.btn-primary   { background: var(--color-primary); color: var(--color-white); }
-.btn-secondary { background: var(--color-surface); color: var(--color-primary); border: 1px solid var(--color-primary); }
+.status-chip-warning { background: var(--color-warning-light); color: var(--color-warning); }
+.status-chip-success { background: var(--color-success-light); color: var(--color-success); }
+.status-chip-primary { background: var(--color-primary-light); color: var(--color-primary); }
+.status-chip-neutral { background: var(--color-border);        color: var(--color-neutral); }
+.status-chip-danger  { background: var(--color-danger-light);  color: var(--color-danger);  }
+
+/* ─── STEP-INDICATOR (mobiltauglich) ───────────────────────────────
+   UX-Grund: Horizontale 7-Schritte-Timeline bricht auf Mobile
+   → vertikaler Fortschrittsstrang ist besser scrollbar */
+.step-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 0;
+}
+.step-dot {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+.step-dot-done    { background: var(--color-success); color: white; }
+.step-dot-active  { background: var(--color-primary); color: white; box-shadow: 0 0 0 4px var(--color-primary-light); }
+.step-dot-pending { background: var(--color-border);  color: var(--color-text-muted); }
+.step-label { font-size: 0.9rem; line-height: 1.3; }
+.step-label-active  { font-weight: 700; color: var(--color-primary); }
+.step-label-done    { color: var(--color-success); }
+.step-label-pending { color: var(--color-text-muted); }
+
+/* ─── NOTICE BOX ────────────────────────────────────────────────────
+   UX-Grund: Demo-Hinweise kontextuell platziert, nicht als Modal */
+.notice-box {
+  border-radius: var(--radius);
+  padding: 1rem 1.25rem;
+  font-size: 0.875rem;
+  line-height: 1.55;
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+}
+.notice-box-info    { background: var(--color-primary-light); color: var(--color-primary); border-left: 4px solid var(--color-primary); }
+.notice-box-warn    { background: var(--color-warning-light); color: var(--color-warning); border-left: 4px solid var(--color-warning); }
+.notice-box-success { background: var(--color-success-light); color: var(--color-success); border-left: 4px solid var(--color-success); }
+.notice-box-neutral { background: var(--color-neutral-light); color: var(--color-neutral); border-left: 4px solid var(--color-border); }
+
+/* ─── DOMAIN HERO CARD ──────────────────────────────────────────────
+   UX-Grund: Große, klickbare Karten mit klarer Hierarchie für
+   Landing Page (5-jähriges Kind soll die Karte verstehen) */
+.domain-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 1.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+  text-decoration: none;
+  color: inherit;
+  transition: box-shadow 0.2s, transform 0.15s;
+  cursor: pointer;
+}
+.domain-card:hover {
+  box-shadow: var(--shadow);
+  transform: translateY(-2px);
+  text-decoration: none;
+}
+
+/* ─── RESPONSIVE HELPERS ────────────────────────────────────────────
+   UX-Grund: Mobile-First für die Mehrheit der Nutzer */
+@media (max-width: 640px) {
+  .btn { width: 100%; justify-content: center; }
+  .btn-inline { width: auto; }
+  h1 { font-size: 1.5rem; }
+  .container { padding: 0 1rem; }
+  .card { padding: 1.125rem; }
+  .action-banner { flex-direction: column; }
+}
+
+/* ─── BASELINE: Typografie-Upgrade ─────────────────────────────────
+   UX-Grund: 16px ist für Ältere grenzwertig → Standard auf 17px */
+body { font-size: max(var(--font-size-base, 16px), 16px); }
