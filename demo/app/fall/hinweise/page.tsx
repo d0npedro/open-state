@@ -1,12 +1,23 @@
-import { demoFall } from '@/data/mockFall';
+'use client';
+
+import { useDemoState } from '@/context/DemoStateContext';
 import { berechneFairnessSignale } from '@/lib/fairness/rules';
+import { demoFall } from '@/data/mockFall';
 import { FairnessPanel } from '@/components/fairness/FairnessPanel';
 
+/** Initiale Signale aus dem unveränderten Mock – dienen als Vergleichsbasis */
+const INITIAL_SIGNALE = berechneFairnessSignale(demoFall);
+
 export default function HinweisePage() {
-  const signale = berechneFairnessSignale(demoFall);
+  const { fall } = useDemoState();
+  const signale = berechneFairnessSignale(fall);
+
   const relevant = signale.filter(s => s.prioritaet === 'RELEVANT');
-  const hinweis = signale.filter(s => s.prioritaet === 'HINWEIS');
-  const info = signale.filter(s => s.prioritaet === 'INFO');
+  const hinweis  = signale.filter(s => s.prioritaet === 'HINWEIS');
+  const info     = signale.filter(s => s.prioritaet === 'INFO');
+
+  const geloestCount = INITIAL_SIGNALE.length - signale.length;
+  const hatReaktion  = geloestCount > 0;
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
@@ -25,7 +36,28 @@ export default function HinweisePage() {
         </p>
       </div>
 
-      {/* Erklärungshinweis zur Funktion dieser Seite */}
+      {/* Regelwerk-Reaktions-Banner (erscheint nur nach State-Wechsel) */}
+      {hatReaktion && (
+        <div style={{
+          background: 'var(--color-success-light)',
+          border: '1px solid var(--color-success)',
+          borderLeft: '4px solid var(--color-success)',
+          borderRadius: 'var(--radius)',
+          padding: '1rem 1.25rem',
+          fontSize: '0.875rem',
+        }}>
+          <strong style={{ display: 'block', marginBottom: '0.4rem', color: 'var(--color-success)' }}>
+            Regelwerk hat reagiert
+          </strong>
+          <p style={{ margin: 0, color: 'var(--color-text)', lineHeight: 1.55 }}>
+            Durch Ihre Aktion (Rückfrage beantwortet) {geloestCount === 1 ? 'ist 1 Hinweis' : `sind ${geloestCount} Hinweise`} entfallen.
+            Das Verfahrensfairness-Regelwerk hat den geänderten Fallzustand erkannt und die Hinweisliste aktualisiert.
+            Das ist kein KI-Urteil — nur eine transparente Ableitung aus dem neuen Fallstatus.
+          </p>
+        </div>
+      )}
+
+      {/* Erklärungshinweis */}
       <div style={{ background: 'var(--color-primary-light)', border: '1px solid var(--color-border)', borderRadius: 'var(--radius)', padding: '1rem 1.25rem', fontSize: '0.875rem' }}>
         <strong style={{ display: 'block', marginBottom: '0.4rem', color: 'var(--color-primary)' }}>
           Was zeigt diese Seite?
@@ -48,7 +80,6 @@ export default function HinweisePage() {
         </div>
       ) : (
         <>
-          {/* Relevant */}
           {relevant.length > 0 && (
             <section>
               <h2 style={{ fontSize: '0.875rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--color-warning)', marginBottom: '0.75rem' }}>
@@ -58,7 +89,6 @@ export default function HinweisePage() {
             </section>
           )}
 
-          {/* Hinweise */}
           {hinweis.length > 0 && (
             <section>
               <h2 style={{ fontSize: '0.875rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--color-primary)', marginBottom: '0.75rem' }}>
@@ -68,7 +98,6 @@ export default function HinweisePage() {
             </section>
           )}
 
-          {/* Info */}
           {info.length > 0 && (
             <section>
               <h2 style={{ fontSize: '0.875rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--color-neutral)', marginBottom: '0.75rem' }}>
@@ -78,7 +107,6 @@ export default function HinweisePage() {
             </section>
           )}
 
-          {/* Methodischer Hinweis am Ende */}
           <div style={{ padding: '0.875rem 1rem', background: 'var(--color-neutral-light)', borderRadius: 'var(--radius)', fontSize: '0.8rem', color: 'var(--color-text-muted)', lineHeight: 1.5 }}>
             Die Hinweise auf dieser Seite werden automatisch aus den vorliegenden Falldaten abgeleitet.
             Sie sind Orientierung für Bürgerinnen und Bürger sowie für die Sachbearbeitung.
