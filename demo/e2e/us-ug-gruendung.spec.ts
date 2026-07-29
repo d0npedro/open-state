@@ -392,6 +392,40 @@ test.describe('UG – Behörden & Verfahrensschritte', () => {
     await expect(page.getByTestId('behoerde-schritt-VS-04')).toBeVisible();
   });
 
+  test('Nach Beantworten ist VS-04 als erledigt markiert', async ({ page }) => {
+    const { goUgTab } = await import('./helpers/sessionNav');
+    const schritt = page.getByTestId('behoerde-schritt-VS-04');
+    await expect(schritt).toBeVisible();
+    await expect(schritt).toContainText(/In Bearbeitung/i);
+    await expect(schritt).not.toContainText(/Erledigt am/i);
+
+    await goUgTab(page, 'Fragen', /\/gruendung\/rueckfragen/);
+    await page.getByRole('button', { name: /Rückfrage beantworten/i }).click();
+    await expect(page.getByText(/die Behörde wurde informiert|beantwortet/i).first()).toBeVisible();
+    await goUgTab(page, 'Behörden', /\/gruendung\/behoerden/);
+
+    const vs04 = page.getByTestId('behoerde-schritt-VS-04');
+    await expect(vs04).toBeVisible();
+    await expect(vs04.getByText('Erledigt', { exact: true })).toBeVisible();
+    await expect(vs04).toContainText(/Erledigt am/);
+    await expect(vs04).toContainText(/Rückfrage beantwortet/i);
+    // VS-05 bleibt ausstehend (nächster Finanzamt-Schritt)
+    await expect(page.getByTestId('behoerde-schritt-VS-05')).toContainText(/Ausstehend/i);
+    // Finanzamt-Zähler: 2 von 3 Schritten erledigt (VS-03, VS-04)
+    await expect(page.getByTestId('behoerde-karte-BEH-02')).toContainText(/2\/3 Schritte erledigt/);
+  });
+
+  test('Verlauf zeigt erledigten Rückfrage-Schritt nach Antwort', async ({ page }) => {
+    const { goUgTab } = await import('./helpers/sessionNav');
+    await goUgTab(page, 'Fragen', /\/gruendung\/rueckfragen/);
+    await page.getByRole('button', { name: /Rückfrage beantworten/i }).click();
+    await expect(page.getByText(/die Behörde wurde informiert|beantwortet/i).first()).toBeVisible();
+    await goUgTab(page, 'Verlauf', /\/gruendung\/verlauf/);
+
+    await expect(page.getByText(/Verfahrensschritt erledigt:/i)).toBeVisible();
+    await expect(page.getByText(/Kleinunternehmerregelung/i).first()).toBeVisible();
+  });
+
 });
 
 // ─── Unterlagen ───────────────────────────────────────────────────────────────
