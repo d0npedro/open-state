@@ -1,6 +1,6 @@
 # BUILD_STATE.md – Aktueller Projektstand
 
-Zuletzt aktualisiert: nach Supervisor-Pflicht-Push 2026-07-29 (Merge UG Q-121 VS-04-Abschluss + Kita Q-119 CSV-Export; lint+build+E2E chromium 226)
+Zuletzt aktualisiert: nach Supervisor-Pflicht-Push 2026-07-29 (Merge UG Q-122 VS-05-Start + Kita Regionenvergleich/CSV-Verlauf; lint+build+E2E chromium 227)
 
 Dieser Stand beschreibt, was tatsächlich existiert und funktioniert.
 Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
@@ -15,7 +15,7 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | Build-Status | ✓ Erfolgreich (27 statische Seiten) |
 | Deployment | Vercel, aus `demo/`-Verzeichnis |
 | Lokaler Start | `cd demo && npm install && npm run dev` |
-| Letzte Build-Prüfung | lint+build grün; `test:e2e:ci` 226 chromium passed (Supervisor) |
+| Letzte Build-Prüfung | lint+build grün; `test:e2e:ci` 227 chromium passed (Supervisor) |
 
 ---
 
@@ -34,7 +34,7 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | `/stories` | Story Coverage Dashboard | – | ✓ |
 | `/feedback` | Feedback → GitHub Issues | – | ✓ |
 | `/gruendung` … | Unternehmensgründung (Übersicht Fairness-Kurzblock+Kurz-CTAs, Behörden VS-04→Rückfrage, Hinweise-CTAs RQ/BG/Unterlagen/Steuernummer/Betriebsdatum/parallele Behörden, Verlauf Stelle+Ereignistyp-Filter, …) | US-UG-001–006 | ✓ |
-| `/kita` | Öffentlicher Transparenzbericht + Planungsraum-Filter + Residual↔Meldelücke + Engpass/Meldelücke-Schnellfilter + Zeitreihe Meldebasis + Regionenfilter + Regionenvergleich Zwei-Räume + CSV-Export Zeitreihe/Vergleich | US-KJ-009, US-KJ-010 | ✓ |
+| `/kita` | Öffentlicher Transparenzbericht + Planungsraum-Filter + Residual↔Meldelücke + Engpass/Meldelücke-Schnellfilter + Zeitreihe Meldebasis + Regionenfilter + Regionenvergleich Zwei-Räume inkl. 12-Monats-Verlauf A/B + CSV-Export Zeitreihe/Vergleich/Verlauf | US-KJ-009, US-KJ-010 | ✓ |
 | `/kita/lagebild` | Jugendamt-Steuerungsansicht + Meldeeingang + Meldebeitrag + Engpass-Rangliste Meldebasis + Monatsbericht-Vorschau-Kopplung | US-KJ-005, US-KJ-006 | ✓ |
 | `/kita/bedarfsplanung` | Bedarfsplanungsentwurf (§ 80 SGB VIII) + Meldebasis + Residual↔Meldelücke (Hinweis-only) | US-KJ-007 | ✓ |
 | `/kita/vorlage` | Politische Gremienvorlage + Freigabe + Meldebasis/Residual↔Meldelücke + Engpass-Liste Meldelücke-Filter | US-KJ-008 | ✓ |
@@ -74,7 +74,9 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | UG Übersicht Fairness-Kurz-CTAs | `/gruendung` Fairness-Block | ✓ RELEVANT/HINWEIS → RQ/Unterlagen/BG-Anker; CTA entfällt nach State-Wechsel (Q-116) |
 | UG Behörden VS-04 → Rückfrage | `/gruendung/behoerden` | ✓ Verfahrensschritt mit offener RQ: CTA „Zur Rückfrage“ `#rq-…`; entfällt nach Beantworten (Q-120) |
 | UG VS-04 Abschluss nach RQ | `GruendungStateContext` + Behörden/Verlauf | ✓ Nach Beantworten: VS-04 → ABGESCHLOSSEN, System-Verlaufsereignis (Q-121) |
-| Kita Zeitreihe/Vergleich CSV | `KitaZeitreiheTabelle` + `KitaRegionenVergleich` | ✓ CSV-Export gefilterter Ansicht inkl. Meldebasis/Δ; Semikolon, UTF-8 BOM (Q-119, US-KJ-010 AK4) |
+| UG VS-05 Start nach RQ | `GruendungStateContext` + Behörden/Verlauf | ✓ Nach Beantworten: nächster AUSSTEHEND-Schritt derselben Behörde → IN_BEARBEITUNG (VS-05 Steuernummer) + Verlauf (Q-122) |
+| Kita Zeitreihe/Vergleich CSV | `KitaZeitreiheTabelle` + `KitaRegionenVergleich` | ✓ CSV-Export gefilterter Ansicht inkl. Meldebasis/Δ und Verlauf A vs. B; Semikolon, UTF-8 BOM (Q-119, US-KJ-010 AK4) |
+| Kita Regionenvergleich Verlauf | `KitaRegionenVergleich` | ✓ 12-Monats-Verlauf A vs. B neben Kernkennzahlen (US-KJ-010, Q-118-Erweiterung) |
 
 ---
 

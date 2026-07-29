@@ -139,11 +139,14 @@ export default function KitaTransparenzberichtPage() {
         <div style={{ marginBottom: '1rem' }}>
           <div style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginBottom: '0.5rem' }}>
             <span className="badge badge-primary">US-KJ-010</span>
-            <span>Regionenvergleich · Zwei Planungsräume · CSV-Export</span>
+            <span>Regionenvergleich · Zwei Planungsräume · 12-Monats-Verlauf · CSV Stichtag/Verlauf</span>
           </div>
           <h2>Regionenvergleich</h2>
         </div>
-        <KitaRegionenVergleich planungsraeume={lb.planungsraeume} />
+        <KitaRegionenVergleich
+          planungsraeume={lb.planungsraeume}
+          zeitreihePlanungsraeume={lb.zeitreihePlanungsraeume}
+        />
       </section>
 
       {/* Einschränkungshinweise (AK 5) */}
@@ -161,7 +164,7 @@ export default function KitaTransparenzberichtPage() {
           <li>Alle Angaben zu freien Plätzen beziehen sich auf den Meldestichtag (31.10.2024), nicht auf den aktuellen Tag.</li>
           <li>Einrichtungen mit fehlender freigegebener Monatsmeldung mindern die Aussagekraft residualer Planungslücken (Hinweis only, keine Interpolation). Demo: Planungsraum Südost kann initial eine Meldelücke zeigen – nach Freigabe in der Monatsmeldung geschlossen.</li>
           <li>Zeitreihe (US-KJ-010 AK&nbsp;2 / AK&nbsp;4): Regionenfilter auf Gesamtkommune oder einzelnen Planungsraum. CSV-Export lädt die aktuell gefilterte Zeitreihentabelle (Semikolon, UTF-8 BOM) inkl. Region und Meldebasis-Hinweis — keine Kind- oder Personennamen. Raumreihen sind Demo-Verteilungen der kommunalen Monatsreihe nach Strukturanteilen. Der Berichtsmonat Oktober 2024 ist methodisch an die Meldebasis-Stichprobe gekoppelt (raumbezogen im Filter). Meldelücken werden markiert, ohne Kennzahlen zu verändern oder zu interpolieren.</li>
-          <li>Regionenvergleich (US-KJ-010 AK&nbsp;3 / AK&nbsp;4): Zwei Planungsräume mit denselben Kennzahlen; Δ (A − B) ist rechnerisch und keine automatische Bewertung. CSV-Export lädt die aktive Auswahl A/B inkl. Δ und Meldebasis (Semikolon, UTF-8 BOM) — keine Kind- oder Personennamen. Meldebasis je Raum session-sensitiv.</li>
+          <li>Regionenvergleich (US-KJ-010 AK&nbsp;3 / AK&nbsp;4 + Verlauf): Zwei Planungsräume mit denselben Stichtags-Kennzahlen; Δ (A − B) ist rechnerisch und keine automatische Bewertung. Zusätzlich 12-Monats-Verlauf derselben Auswahl A/B (Kennzahl wählbar: Warteliste, Auslastung, freie Plätze, Personalausfall) mit monatsweiser Δ und Meldebasis-Hinweis am Berichtsmonat. CSV-Export (AK&nbsp;4): (1) Stichtags-Auswahl A/B inkl. Δ und Meldebasis; (2) aktiver Verlauf der gewählten Kennzahl (12 Monate · Wert A/B · Δ · Meldebasis). Semikolon, UTF-8 BOM — keine Kind- oder Personennamen. Raumreihen wie Zeitreihenfilter (Demo-Verteilung). Meldebasis je Raum session-sensitiv.</li>
         </ul>
       </div>
 
