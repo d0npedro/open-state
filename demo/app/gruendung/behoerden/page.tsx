@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useGruendungState } from '@/context/GruendungStateContext';
 import { Icon } from '@/components/Icon';
 import type { BehördeStatus, SchrittStatus } from '@/types/gruendung';
@@ -44,6 +45,10 @@ export default function BehoerdenPage() {
         const chip = behördeChip[beh.status];
         const schritte = akte.verfahrensSchritte.filter(s => s.behördeId === beh.id);
         const abgeschlossen = schritte.filter(s => s.status === 'ABGESCHLOSSEN').length;
+        const offeneRueckfragen = akte.rueckfragen.filter(
+          r => r.anforderndeBehördeId === beh.id && !r.beantwortet
+        );
+        const ersteOffene = offeneRueckfragen[0];
 
         return (
           <div key={beh.id} className="card" style={{
@@ -84,6 +89,46 @@ export default function BehoerdenPage() {
                     {beh.kontakt}
                   </span>
                 )}
+              </div>
+            )}
+
+            {/* CTA: offene Rückfrage dieser Behörde */}
+            {ersteOffene && (
+              <div
+                className="notice-box notice-box-warning"
+                style={{ marginBottom: '1rem', display: 'flex', flexDirection: 'column', gap: '0.625rem', alignItems: 'flex-start' }}
+                data-testid={`behoerde-rueckfrage-cta-${beh.id}`}
+              >
+                <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.5rem' }}>
+                  <Icon name="alert" size={16} style={{ flexShrink: 0, marginTop: '2px' }} />
+                  <div>
+                    <strong style={{ display: 'block', marginBottom: '0.25rem' }}>
+                      {offeneRueckfragen.length === 1
+                        ? 'Offene Rückfrage dieser Behörde'
+                        : `${offeneRueckfragen.length} offene Rückfragen dieser Behörde`}
+                    </strong>
+                    <p style={{ margin: 0, fontSize: '0.875rem', lineHeight: 1.45 }}>
+                      {ersteOffene.text}
+                      {offeneRueckfragen.length > 1 && (
+                        <span style={{ color: 'var(--color-text-muted)' }}>
+                          {' '}(+{offeneRueckfragen.length - 1} weitere)
+                        </span>
+                      )}
+                    </p>
+                    <p style={{ margin: '0.35rem 0 0', fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>
+                      Frist: {ersteOffene.frist}
+                    </p>
+                  </div>
+                </div>
+                <Link
+                  href={`/gruendung/rueckfragen#rq-${ersteOffene.id}`}
+                  className="btn btn-primary"
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}
+                  aria-label={`Offene Rückfrage von ${beh.bezeichnung} beantworten`}
+                >
+                  <Icon name="chat" size={15} />
+                  Frage beantworten
+                </Link>
               </div>
             )}
 

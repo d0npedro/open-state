@@ -42,6 +42,7 @@ export default function RueckfragenPage() {
         return (
           <div
             key={rq.id}
+            id={`rq-${rq.id}`}
             className="card"
             style={{
               borderLeft: rq.beantwortet
@@ -49,6 +50,7 @@ export default function RueckfragenPage() {
                 : fristKritisch
                   ? '5px solid var(--color-danger)'
                   : '5px solid var(--color-warning)',
+              scrollMarginTop: '5rem',
             }}
           >
             {/* Status-Header */}

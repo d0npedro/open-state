@@ -158,6 +158,30 @@ test.describe('UG – Behörden & Verfahrensschritte', () => {
     await expect(page.locator('.tab-nav-item.active')).toContainText('Behörden');
   });
 
+  test('CTA zur offenen Rückfrage des Finanzamts sichtbar', async ({ page }) => {
+    const cta = page.getByTestId('behoerde-rueckfrage-cta-BEH-02');
+    await expect(cta).toBeVisible();
+    await expect(cta).toContainText('Offene Rückfrage dieser Behörde');
+    await expect(cta).toContainText('Kleinunternehmerregelung');
+    const link = cta.getByRole('link', { name: /Frage beantworten|Offene Rückfrage von Finanzamt/i });
+    await expect(link).toBeVisible();
+    await expect(link).toHaveAttribute('href', /\/gruendung\/rueckfragen#rq-RQ-01/);
+  });
+
+  test('CTA führt zur Rückfragen-Seite mit Anker', async ({ page }) => {
+    const cta = page.getByTestId('behoerde-rueckfrage-cta-BEH-02');
+    await cta.getByRole('link', { name: /Frage beantworten|Offene Rückfrage von Finanzamt/i }).click();
+    await expect(page).toHaveURL(/\/gruendung\/rueckfragen#rq-RQ-01/);
+    await expect(page.locator('#rq-RQ-01')).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Rückfragen der Behörden' })).toBeVisible();
+  });
+
+  test('Keine CTA bei Behörden ohne offene Rückfrage', async ({ page }) => {
+    await expect(page.getByTestId('behoerde-rueckfrage-cta-BEH-01')).toHaveCount(0);
+    await expect(page.getByTestId('behoerde-rueckfrage-cta-BEH-03')).toHaveCount(0);
+    await expect(page.getByTestId('behoerde-rueckfrage-cta-BEH-04')).toHaveCount(0);
+  });
+
 });
 
 // ─── Unterlagen ───────────────────────────────────────────────────────────────
