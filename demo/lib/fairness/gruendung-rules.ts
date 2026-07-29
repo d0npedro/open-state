@@ -302,24 +302,69 @@ export function berechneFairnessSignaleGruendung(akte: GruendungsAkte): Fairness
   // ─── Signal 1b: Angeforderte Unterlagen noch nicht eingereicht ────────────
   // Regel: Dokumente mit Status ANGEFORDERT (oder ABGELEHNT) blockieren bzw.
   //        verzögern die vollständige Aktenführung, auch wenn optional empfohlen.
+  // Frist: analog AV – berechnete Resttage gegen FIKTIVES_HEUTE_GRUENDUNG,
+  //        nächste Einreichungsfrist im Titel/Erklärung, Priorität bei ≤3 Tagen.
   const fehlendeDokumente = akte.dokumente.filter(
     d => d.status === 'ANGEFORDERT' || d.status === 'ABGELEHNT'
   );
   if (fehlendeDokumente.length > 0) {
+    const abgelehnt = fehlendeDokumente.filter(d => d.status === 'ABGELEHNT');
     const names = fehlendeDokumente.map(d => d.bezeichnung).join('; ');
+    const abgelehntHinweis =
+      abgelehnt.length > 0
+        ? ` Davon abgelehnt und erneut einzureichen: ${abgelehnt.map(d => d.bezeichnung).join('; ')}.`
+        : '';
+
+    const dokMitFrist = fehlendeDokumente
+      .filter(d => d.fristDatum && d.frist)
+      .map(d => ({
+        bezeichnung: d.bezeichnung,
+        frist: d.frist as string,
+        resttage: berechneFristTage(d.fristDatum as string, heute),
+      }))
+      .sort((a, b) => a.resttage - b.resttage);
+    const naechsteFrist = dokMitFrist[0];
+    let fristLabel = '';
+    let fristHinweis = '';
+    if (naechsteFrist) {
+      const t = naechsteFrist.resttage;
+      fristLabel =
+        t < 0
+          ? `${Math.abs(t)} Tage überschritten`
+          : t === 0
+            ? 'heute'
+            : `noch ${t} Tag${t === 1 ? '' : 'e'}`;
+      const gleicheFrist =
+        dokMitFrist.length > 1 && dokMitFrist.every(d => d.frist === naechsteFrist.frist);
+      fristHinweis =
+        ` Nächste Einreichungsfrist: ${naechsteFrist.frist} (${fristLabel}` +
+        (gleicheFrist
+          ? ' für die ausstehenden Unterlagen'
+          : ` für „${naechsteFrist.bezeichnung}"`) +
+        ').';
+    }
+    const fristDringend = naechsteFrist != null && naechsteFrist.resttage <= 3;
+
     signale.push({
       id: 'UG-UNTERLAGEN-FEHLEND',
       typ: 'UG_UNTERLAGE_FEHLT',
-      titel: `${fehlendeDokumente.length} Unterlage(n) noch nicht eingereicht`,
+      titel: naechsteFrist
+        ? `${fehlendeDokumente.length} Unterlage(n) offen – Frist ${fristLabel}`
+        : `${fehlendeDokumente.length} Unterlage(n) noch nicht eingereicht`,
       erklaerung:
-        `Folgende Unterlagen sind noch ausstehend: ${names}. ` +
-        `Details und Begründungen stehen im Bereich „Unterlagen“.`,
+        `Folgende Unterlagen sind noch ausstehend: ${names}.` +
+        abgelehntHinweis +
+        fristHinweis +
+        ` Details und Begründungen stehen im Bereich „Unterlagen“.`,
       auswirkung: fehlendeDokumente.map(d => d.konsequenz).join(' '),
-      naechsterSchritt:
-        'Unterlagen im Bereich „Unterlagen“ hochladen. ' +
-        'Demo: Der Upload speichert keine Datei, ändert aber den Aktenstatus und dieses Signal.',
+      naechsterSchritt: naechsteFrist
+        ? `Unterlagen im Bereich „Unterlagen“ bis ${naechsteFrist.frist} (${fristLabel}) hochladen. ` +
+          'Demo: Der Upload speichert keine Datei, ändert aber den Aktenstatus und dieses Signal.'
+        : 'Unterlagen im Bereich „Unterlagen“ hochladen. ' +
+          'Demo: Der Upload speichert keine Datei, ändert aber den Aktenstatus und dieses Signal.',
       bezug: `Dokumente: ${fehlendeDokumente.map(d => d.id).join(', ')}`,
-      prioritaet: 'HINWEIS',
+      // Abgelehnte Unterlagen oder knappe Frist (≤3 Tage) sind dringlicher
+      prioritaet: abgelehnt.length > 0 || fristDringend ? 'RELEVANT' : 'HINWEIS',
     });
   }
 

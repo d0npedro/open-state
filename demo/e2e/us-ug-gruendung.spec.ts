@@ -651,6 +651,21 @@ test.describe('UG – Unterlagen', () => {
     await expect(page.locator('.tab-nav-item.active')).toContainText('Unterlagen');
   });
 
+  test('Fairness-Signal UNTERLAGE enthält berechnete Dokumenten-Frist', async ({ page }) => {
+    // DOK-03: Frist 15.12.2024 · Demo-Heute 07.12.2024 → noch 8 Tage
+    await expect(page.getByTestId('fairness-signal-unterlagen')).toBeVisible();
+    await expect(page.getByTestId('fairness-signal-unterlagen-titel')).toContainText(
+      /Unterlage\(n\) offen – Frist noch 8 Tage/i
+    );
+    await expect(page.getByTestId('fairness-signal-unterlagen-erklaerung')).toContainText(
+      /Nächste Einreichungsfrist:\s*15\.12\.2024\s*\(noch 8 Tage/i
+    );
+    await expect(page.getByTestId('dok-hinweise-link')).toHaveAttribute(
+      'href',
+      '/gruendung/hinweise'
+    );
+  });
+
   test('Ohne Session-Upload keine lokale Upload-Quittung', async ({ page }) => {
     await expect(page.getByTestId('dok-upload-quittung-DOK-03')).toHaveCount(0);
     await expect(page.getByTestId('dokument-karte-DOK-03')).toBeVisible();
@@ -895,11 +910,58 @@ test.describe('UG – Hinweise zur Verfahrenslage', () => {
     await expect(hint).toContainText(/Unterlagen/i);
   });
 
+  test('UNTERLAGE-Signal enthält berechnete Dokumenten-Frist', async ({ page }) => {
+    // Mock DOK-03: Frist 15.12.2024 · FIKTIVES_HEUTE_GRUENDUNG 07.12.2024 → 8 Tage
+    await expect(page.getByTestId('hinweise-signal-count')).toContainText(/Aktuell \d+ Hinweise/i);
+
+    const signal = page.getByTestId('hinweise-signal-unterlagen');
+    await expect(signal).toBeVisible();
+    await expect(page.getByTestId('hinweise-signal-unterlagen-titel')).toContainText(
+      /Unterlage\(n\) offen – Frist noch 8 Tage/i
+    );
+    await expect(page.getByTestId('hinweise-signal-unterlagen-erklaerung')).toContainText(
+      /Nächste Einreichungsfrist:\s*15\.12\.2024\s*\(noch 8 Tage/i
+    );
+    await expect(page.getByTestId('hinweise-signal-unterlagen-erklaerung')).toContainText(
+      /Qualifikation/i
+    );
+    await expect(page.getByTestId('hinweise-unterlagen-cta')).toBeVisible();
+    await expect(page.getByTestId('hinweise-unterlagen-cta')).toHaveAttribute(
+      'href',
+      '/gruendung/dokumente#dok-DOK-03'
+    );
+    await expect(page.getByTestId('hinweise-unterlagen-cta-hint')).toContainText(/Unterlagen/i);
+  });
+
   test('CTA aus Unterlagen-Signal führt zur Dokumentenkarte', async ({ page }) => {
     await page.getByTestId('hinweise-unterlagen-cta').click();
     await expect(page).toHaveURL(/\/gruendung\/dokumente#dok-DOK-03/);
     await expect(page.locator('#dok-DOK-03')).toBeVisible();
     await expect(page.getByTestId('dokument-karte-DOK-03')).toContainText(/Qualifikation/i);
+  });
+
+  test('Nach Upload entfällt UNTERLAGE-Signal und CTA auf Hinweise (live)', async ({ page }) => {
+    // Kein page.goto nach State (DEC-012) — Session-Nav über Tabs + Link
+    const { goUgTab } = await import('./helpers/sessionNav');
+
+    await goUgTab(page, 'Unterlagen', /\/gruendung\/dokumente/);
+    await expect(page.getByTestId('fairness-signal-unterlagen')).toBeVisible();
+    await expect(page.getByTestId('fairness-signal-unterlagen-titel')).toContainText(
+      /Unterlage\(n\) offen – Frist noch 8 Tage/i
+    );
+    await page.getByRole('button', { name: /Als hochgeladen markieren/i }).click();
+    // Mock: nur DOK-03 offen → Signal auf Dokumente entfällt
+    await expect(page.getByTestId('fairness-signal-unterlagen')).toHaveCount(0);
+    await expect(page.getByTestId('dok-alle-vorliegend')).toBeVisible();
+
+    // Zur Verfahrenslage über Dok-Link (Session bleibt)
+    await goUgTab(page, 'Hinweise', /\/gruendung\/hinweise/);
+
+    await expect(page.getByTestId('hinweise-signal-unterlagen')).toHaveCount(0);
+    await expect(page.getByTestId('hinweise-unterlagen-cta')).toHaveCount(0);
+    await expect(page.getByTestId('hinweise-regelwerk-reaktion')).toBeVisible();
+    await expect(page.getByTestId('hinweise-regelwerk-reaktion')).toContainText(/Unterlagen/i);
+    await expect(page.getByTestId('hinweise-signal-geloest')).toBeVisible();
   });
 
   test('Nach Upload entfällt Unterlagen-CTA auf Hinweise', async ({ page }) => {

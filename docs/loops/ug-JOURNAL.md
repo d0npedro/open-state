@@ -8,6 +8,38 @@ Erlaubte Pfade nur: `demo/app/gruendung/**`, `demo/context/GruendungStateContext
 
 ---
 
+## 2026-07-29 – Iteration 37: Hinweise UNTERLAGE live + Dokumenten-Frist (AV Q-167)
+
+### Was
+UNTERLAGE-Signal live nach Session-Upload inkl. berechneter Frist und CTA
+(US-UG-003, Parität zu AV Q-167):
+
+1. **`gruendung-rules`**: Titel/Erklärung mit nächster Einreichungsfrist
+   (DOK-03: 15.12.2024 → noch 8 Tage); Priorität RELEVANT bei ≤3 Tagen/Ablehnung.
+2. **Hinweise**: eigene UNTERLAGE-Karte (`hinweise-signal-unterlagen*`),
+   Signal-Zähler, Reaktions-Banner session-sensitiv (Upload vs. RQ).
+3. **Dokumente**: Live-Signal mit `fairness-signal-unterlagen*` + `dok-hinweise-link`.
+4. E2E: Frist-Assertionen; nach Upload Signal/CTA entfallen + Banner „Unterlagen“
+   (DEC-012, kein `page.goto` nach State).
+
+### Dateien
+- `demo/lib/fairness/gruendung-rules.ts` – Frist im UNTERLAGE-Signal
+- `demo/app/gruendung/hinweise/page.tsx` – Live-Karte, Banner, Zähler
+- `demo/app/gruendung/dokumente/page.tsx` – Testids + Hinweise-Link
+- `demo/e2e/us-ug-gruendung.spec.ts` – 3 neue Tests (Frist + live)
+- `docs/loops/ug-JOURNAL.md` – dieses Journal
+
+### Build
+`npm run lint` + `npm run build` im Ordner `demo/` grün.
+`npm run test:e2e:ug` Exit 0 (121 passed).
+
+### Nächster sinnvoller UG-Schritt (Vorschlag)
+- `naechsterSchrittZiel` / `aufgabeZiel` ggf. in gruendung-rules (optional)
+- Verlauf: Tiefenlink von Fairness-CTA zu passendem Ereignis (optional)
+- Primär-CTA „Nächster Schritt“ weiter an Fairness-Priorität koppeln (optional)
+
+---
+
 ## 2026-07-29 – Iteration 36: Übersicht Upload-Quittung nach Session-Upload
 
 ### Was
