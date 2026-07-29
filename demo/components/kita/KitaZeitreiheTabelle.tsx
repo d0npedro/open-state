@@ -8,6 +8,8 @@
  * Markiert: Peak-Monat (höchste Warteliste), saisonale Muster.
  *
  * Regionenfilter (US-KJ-010 AK 2): Gesamtkommune oder einzelner Planungsraum.
+ * CSV-Export (US-KJ-010 AK 4): gefilterte Zeitreihe als maschinenlesbarer Download
+ * (Semikolon, UTF-8 BOM, Dezimal-Komma) — nur die aktive Filteransicht.
  *
  * Meldebasis (US-KJ-004 → 010): Der mit dem Meldeeingang übereinstimmende Berichtsmonat
  * (Demo: Oktober 2024) erhält bei unvollständiger Stichprobe eine Datenlücken-Markierung.
@@ -140,6 +142,102 @@ export function KitaZeitreiheTabelle({
         ? `${selectedRaum.bezeichnung} (${selectedRaum.id})`
         : filterId;
 
+  /** CSV-Export der aktiven (gefilterten) Zeitreihe — US-KJ-010 AK 4 */
+  function handleCsvDownload() {
+    const de = (n: number) => n.toFixed(1).replace('.', ',');
+    const header = [
+      'Monat',
+      'Monat_ISO',
+      'Region',
+      'Region_ID',
+      'Belegte_Plaetze',
+      'Freie_Plaetze',
+      'Genehmigte_Plaetze',
+      'Real_nutzbare_Plaetze',
+      'Auslastung_Prozent',
+      'Warteliste_Bestand',
+      'Warteliste_Delta_Vormonat',
+      'Personal_Ausfallquote_Prozent',
+      'Meldebasis',
+      'Ist_Peak',
+      'Ist_Aktuell',
+    ].join(';');
+
+    const regionId = filterId === FILTER_ALL ? 'GESAMT' : filterId;
+    const regionName =
+      filterId === FILTER_ALL
+        ? 'Gesamtkommune'
+        : selectedRaum?.bezeichnung ?? filterId;
+
+    const rows = activeSeries.map((m, i) => {
+      const isPeak = m.wartelisteBestand === maxWarteliste && maxWarteliste > 0;
+      const isLatest = i === activeSeries.length - 1;
+      const isMeldeMonat = m.monat === meldeMonatsIso;
+      let meldebasis = '–';
+      if (isMeldeMonat && hydrated) {
+        if (filterId === FILTER_ALL) {
+          meldebasis = hatGesamtLuecke
+            ? `Luecke (${freigegebenCount}/${erwartetCount})`
+            : `vollstaendig (${freigegebenCount}/${erwartetCount})`;
+        } else if (raumBasis) {
+          meldebasis = raumBasis.hatDatenluecke
+            ? `Luecke (${raumBasis.freigegeben}/${raumBasis.erwartet})`
+            : `vollstaendig (${raumBasis.freigegeben}/${raumBasis.erwartet})`;
+        } else {
+          meldebasis = 'keine_Stichprobe';
+        }
+      } else if (isMeldeMonat && !hydrated) {
+        meldebasis = '…';
+      }
+
+      return [
+        m.monatLabel,
+        m.monat,
+        regionName,
+        regionId,
+        m.belegtePlaetze,
+        m.freiePlaetze,
+        m.genehmmigtePlaetze,
+        m.realNutzbarePlaetze,
+        de(m.auslastungsgradProzent),
+        m.wartelisteBestand,
+        m.wartelisteDeltaVormonat === null ? '' : m.wartelisteDeltaVormonat,
+        de(m.personalAusfallquoteProzent),
+        meldebasis,
+        isPeak ? 'ja' : 'nein',
+        isLatest ? 'ja' : 'nein',
+      ].join(';');
+    });
+
+    const meta = [
+      '# Open State – Kita Zeitreihe (US-KJ-010 AK 4)',
+      `# Filter: ${filterLabel}`,
+      `# Region_ID: ${regionId}`,
+      `# Monate: ${activeSeries.length}`,
+      `# Meldebasis-Stichprobe (Demo): ${meldeMonatsLabel} (${meldeMonatsIso})`,
+      hydrated
+        ? `# Meldebasis freigegeben: ${freigegebenCount}/${erwartetCount}${hatGesamtLuecke ? ' · Meldeluecke' : ' · ohne Luecke'}`
+        : '# Meldebasis: Session noch nicht geladen',
+      '# Hinweis: Raumreihen sind Demo-Verteilungen der kommunalen Monatsreihe nach Strukturanteilen.',
+      '# Keine Kind- oder Personennamen. Keine Interpolation. Keine Trendbewertung.',
+      '# Trennzeichen: Semikolon · Dezimaltrennzeichen: Komma · Encoding: UTF-8 BOM',
+      '',
+    ];
+
+    const csv = [...meta, header, ...rows].join('\n');
+    const slug =
+      filterId === FILTER_ALL
+        ? 'gesamtkommune'
+        : (selectedRaum?.id ?? filterId).toLowerCase().replace(/[^a-z0-9_-]+/g, '-');
+    const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `kita-zeitreihe-${slug}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
   const chipBase: React.CSSProperties = {
     fontSize: '0.8rem',
     padding: '0.35rem 0.7rem',
@@ -249,7 +347,7 @@ export function KitaZeitreiheTabelle({
         </div>
       )}
 
-      {/* Trend-Hinweis */}
+      {/* Trend-Hinweis + CSV-Export (AK 4) */}
       <div style={{
         marginBottom: '1rem',
         padding: '0.75rem 1rem',
@@ -259,24 +357,41 @@ export function KitaZeitreiheTabelle({
         borderLeft: '3px solid var(--color-primary)',
         color: 'var(--color-text)',
         lineHeight: 1.5,
+        display: 'flex',
+        flexWrap: 'wrap',
+        gap: '0.75rem',
+        alignItems: 'flex-start',
+        justifyContent: 'space-between',
       }}>
-        Die Tabelle zeigt die letzten 12 Monate
-        {filterId !== FILTER_ALL ? (
-          <> für <strong>{filterLabel}</strong></>
-        ) : (
-          <> (Gesamtkommune)</>
-        )}
-        . Wartelistendelta (▲/▼) gibt die Veränderung gegenüber dem Vormonat an.
-        {peak && (
-          <> Der <strong>höchste Wartelistenbestand</strong> lag im <strong>{peak.monatLabel}</strong>
-          {peakMonatLabel && filterId === FILTER_ALL ? ` (${peakMonatLabel})` : ''} mit {peak.wartelisteBestand.toLocaleString('de-DE')} Anfragen
-          {filterId === FILTER_ALL ? ' — typisch für den Frühjahrs-Anmeldezeitraum' : ''}.</>
-        )}
-        {' '}Der Berichtsmonat <strong>{meldeMonatsLabel}</strong> ist methodisch an die Meldebasis
-        (Demo-Stichprobe Meldeeingang, US-KJ-004) gekoppelt
-        {filterId !== FILTER_ALL ? ' für diesen Planungsraum' : ''}: fehlende freigegebene
-        Einrichtungsmeldungen werden am Monatszeile markiert — ohne die Kennzahlen zu verändern
-        oder zu interpolieren.
+        <div style={{ flex: '1 1 16rem', minWidth: 0 }}>
+          Die Tabelle zeigt die letzten 12 Monate
+          {filterId !== FILTER_ALL ? (
+            <> für <strong>{filterLabel}</strong></>
+          ) : (
+            <> (Gesamtkommune)</>
+          )}
+          . Wartelistendelta (▲/▼) gibt die Veränderung gegenüber dem Vormonat an.
+          {peak && (
+            <> Der <strong>höchste Wartelistenbestand</strong> lag im <strong>{peak.monatLabel}</strong>
+            {peakMonatLabel && filterId === FILTER_ALL ? ` (${peakMonatLabel})` : ''} mit {peak.wartelisteBestand.toLocaleString('de-DE')} Anfragen
+            {filterId === FILTER_ALL ? ' — typisch für den Frühjahrs-Anmeldezeitraum' : ''}.</>
+          )}
+          {' '}Der Berichtsmonat <strong>{meldeMonatsLabel}</strong> ist methodisch an die Meldebasis
+          (Demo-Stichprobe Meldeeingang, US-KJ-004) gekoppelt
+          {filterId !== FILTER_ALL ? ' für diesen Planungsraum' : ''}: fehlende freigegebene
+          Einrichtungsmeldungen werden am Monatszeile markiert — ohne die Kennzahlen zu verändern
+          oder zu interpolieren.
+        </div>
+        <button
+          type="button"
+          className="btn btn-secondary"
+          onClick={handleCsvDownload}
+          style={{ fontSize: '0.8rem', flexShrink: 0, whiteSpace: 'nowrap' }}
+          title={`CSV der aktuellen Ansicht: ${filterLabel}`}
+          aria-label={`Zeitreihe als CSV herunterladen (${filterLabel})`}
+        >
+          CSV herunterladen ({filterId === FILTER_ALL ? 'Gesamtkommune' : selectedRaum?.bezeichnung ?? 'Filter'})
+        </button>
       </div>
 
       {/* Meldebasis-Summenhinweis (Session-sensitiv) */}
@@ -491,8 +606,10 @@ export function KitaZeitreiheTabelle({
       </div>
 
       <p style={{ margin: '0.75rem 0 0', fontSize: '0.8rem', color: 'var(--color-text-muted)', lineHeight: 1.5 }}>
-        Methodik (US-KJ-010 AK&nbsp;2 / AK&nbsp;6): Regionenfilter grenzt die Zeitreihe auf die
-        Gesamtkommune oder einen Planungsraum ein. Raumreihen sind Demo-Verteilungen der kommunalen
+        Methodik (US-KJ-010 AK&nbsp;2 / AK&nbsp;4 / AK&nbsp;6): Regionenfilter grenzt die Zeitreihe auf die
+        Gesamtkommune oder einen Planungsraum ein. Der CSV-Export (AK&nbsp;4) enthält genau die
+        aktuell gefilterte Zeitreihentabelle inkl. Meldebasis-Hinweis und Regionsspalten — kein
+        separater Gesamtexport aller Räume. Raumreihen sind Demo-Verteilungen der kommunalen
         Reihe nach Strukturanteilen — keine unabhängige Einrichtungsaggregation. Datenlücken im
         Zeitverlauf sind am Meldemonat sichtbar markiert
         {filterId !== FILTER_ALL ? ' (raumbezogen)' : ''}. Historische Monate ohne
