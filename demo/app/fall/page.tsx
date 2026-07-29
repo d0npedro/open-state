@@ -68,7 +68,7 @@ const statusToChip: Record<string, { label: string; css: string; icon: string }>
 };
 
 export default function FallPage() {
-  const { fall } = useDemoState();
+  const { fall, sessionUploadedIds } = useDemoState();
   const chip = statusToChip[fall.status] ?? { label: fall.status, css: 'status-chip-neutral', icon: 'info' };
   const currentIndex = resolveProgressIndex(fall.status);
   const fortschrittProzent = Math.round(((currentIndex + 1) / statusFlow.length) * 100);
@@ -91,6 +91,11 @@ export default function FallPage() {
     }))
     .sort((a, b) => a.resttage - b.resttage);
   const naechsteDokFrist = dokFristen[0];
+  /** Session-Uploads für Quittung auf der Übersicht (US-AV-003 / US-AV-002). */
+  const sessionUploads = sessionUploadedIds
+    .map(id => fall.dokumente.find(d => d.id === id))
+    .filter((d): d is NonNullable<typeof d> => Boolean(d));
+  const naechsteOffeneUnterlage = ausstehendeDokumente[0] ?? null;
   // Nächster Termin: bestätigt oder ausstehend (nicht abgesagt) — Status live auf Kachel (Q-104)
   const naechsterTermin = fall.termine.find(t => t.status !== 'ABGESAGT');
   const terminStatusLabel =
@@ -151,6 +156,116 @@ export default function FallPage() {
             <p style={{ margin: '0.5rem 0 0', fontSize: '0.85rem', color: 'var(--color-text-muted)' }}>
               {fall.statusBeschreibung}
             </p>
+          </div>
+        </div>
+      )}
+
+      {/* ─── 1c. UPLOAD-QUITTUNG: Session-Uploads auf der Übersicht ─
+          UX-Grund: Nach Upload muss klar sein, *was* eingegangen ist und
+          *welche* Unterlage als Nächstes noch fehlt (US-AV-002/003). */}
+      {sessionUploads.length > 0 && (
+        <div
+          className="notice-box notice-box-success"
+          role="status"
+          aria-live="polite"
+          data-testid="upload-quittung"
+        >
+          <Icon name="check-circle" size={20} style={{ flexShrink: 0, marginTop: '2px' }} />
+          <div style={{ flex: 1 }}>
+            <strong
+              style={{ display: 'block', marginBottom: '0.35rem', fontSize: '1rem' }}
+              data-testid="upload-quittung-titel"
+            >
+              {sessionUploads.length === 1
+                ? 'Unterlage eingegangen'
+                : `${sessionUploads.length} Unterlagen eingegangen`}
+            </strong>
+            <ul
+              style={{ margin: '0 0 0.5rem', paddingLeft: '1.15rem', fontSize: '0.9rem' }}
+              data-testid="upload-quittung-liste"
+            >
+              {sessionUploads.map(dok => (
+                <li key={dok.id} data-testid={`upload-quittung-item-${dok.id}`}>
+                  {dok.bezeichnung}
+                  {dok.hochgeladenAm ? (
+                    <span style={{ color: 'var(--color-text-muted)' }}>
+                      {' '}
+                      · eingereicht am {dok.hochgeladenAm}
+                    </span>
+                  ) : null}
+                </li>
+              ))}
+            </ul>
+            {naechsteOffeneUnterlage ? (
+              <div
+                data-testid="upload-quittung-naechste"
+                style={{
+                  marginTop: '0.5rem',
+                  padding: '0.75rem 0.875rem',
+                  borderRadius: 'var(--radius)',
+                  background: 'var(--color-warning-light)',
+                  borderLeft: '4px solid var(--color-warning)',
+                }}
+              >
+                <div
+                  style={{
+                    fontSize: '0.8rem',
+                    fontWeight: 600,
+                    color: 'var(--color-warning)',
+                    marginBottom: '0.25rem',
+                  }}
+                >
+                  Nächste offene Unterlage
+                </div>
+                <div style={{ fontWeight: 700, fontSize: '0.95rem', color: 'var(--color-text)' }}>
+                  {naechsteOffeneUnterlage.bezeichnung}
+                </div>
+                {naechsteOffeneUnterlage.frist && (
+                  <div
+                    style={{
+                      marginTop: '0.35rem',
+                      fontSize: '0.85rem',
+                      fontWeight: 600,
+                      color: 'var(--color-warning)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.35rem',
+                    }}
+                  >
+                    <Icon name="calendar" size={14} />
+                    Einreichen bis {naechsteOffeneUnterlage.frist}
+                    {naechsteOffeneUnterlage.fristDatum && (
+                      <span data-testid="upload-quittung-naechste-countdown">
+                        · {fristRestLabel(
+                          berechneFristTage(naechsteOffeneUnterlage.fristDatum, FIKTIVES_HEUTE)
+                        )}
+                      </span>
+                    )}
+                  </div>
+                )}
+                <Link
+                  href="/fall/dokumente"
+                  className="btn btn-primary"
+                  style={{
+                    marginTop: '0.75rem',
+                    background: '#B45309',
+                    borderColor: '#B45309',
+                    minHeight: 44,
+                  }}
+                  data-testid="upload-quittung-naechste-cta"
+                >
+                  Nächste Unterlage hochladen
+                  <Icon name="arrow-right" size={16} />
+                </Link>
+              </div>
+            ) : (
+              <p
+                style={{ margin: '0.25rem 0 0', fontSize: '0.875rem', color: 'var(--color-text-muted)' }}
+                data-testid="upload-quittung-vollstaendig"
+              >
+                Alle angeforderten Unterlagen liegen vor. Die Sachbearbeitung prüft den Antrag weiter.
+              </p>
+            )}
           </div>
         </div>
       )}

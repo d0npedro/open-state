@@ -211,6 +211,52 @@ test.describe('US-AV-002 – Status einsehen', () => {
     await expect(page.getByTestId('ruhezustand-banner')).toBeVisible();
     await expect(page.getByText('Kein Handeln von Ihnen erforderlich')).toBeVisible();
     await expect(page.locator('.action-banner')).toHaveCount(0);
+    // Upload-Quittung listet Session-Uploads und meldet Vollständigkeit
+    await expect(page.getByTestId('upload-quittung')).toBeVisible();
+    await expect(page.getByTestId('upload-quittung-vollstaendig')).toContainText(
+      /Alle angeforderten Unterlagen liegen vor/i
+    );
+    await expect(page.getByTestId('upload-quittung-naechste')).toHaveCount(0);
+  });
+
+  test('Nach Session-Upload: Übersicht zeigt Quittung und nächste offene Unterlage', async ({ page }) => {
+    // US-AV-002/003: nach Teil-Upload muss klar sein, was einging und was noch fehlt
+    // Kein page.goto nach State-Interaktion (DEC-012)
+    const { goFallTab } = await import('./helpers/sessionNav');
+
+    await goFallTab(page, 'Fragen', /\/fall\/rueckfragen/);
+    await page.getByRole('button', { name: /Jetzt beantworten|Rückfrage beantworten/i }).click();
+    await page.getByTestId('rq-antwort-absenden').click();
+
+    await goFallTab(page, 'Unterlagen', /\/fall\/dokumente/);
+    // Erstes ausstehendes Dokument (Einkommensteuerbescheid)
+    await page.getByRole('button', { name: /Als hochgeladen markieren/i }).first().click();
+    await expect(page.getByText(/Eingereicht am/i).first()).toBeVisible();
+
+    await goFallTab(page, 'Übersicht', /\/fall$/);
+
+    const quittung = page.getByTestId('upload-quittung');
+    await expect(quittung).toBeVisible();
+    await expect(page.getByTestId('upload-quittung-titel')).toHaveText('Unterlage eingegangen');
+    await expect(page.getByTestId('upload-quittung-item-DOK-003')).toContainText(
+      'Einkommensteuerbescheid letztes Jahr'
+    );
+    await expect(page.getByTestId('upload-quittung-item-DOK-003')).toContainText(
+      /eingereicht am 24\.\s*November 2024/i
+    );
+
+    const naechste = page.getByTestId('upload-quittung-naechste');
+    await expect(naechste).toBeVisible();
+    await expect(naechste).toContainText('Formular SG1');
+    await expect(page.getByTestId('upload-quittung-naechste-countdown')).toContainText(/noch 9 Tage/i);
+    await expect(page.getByTestId('upload-quittung-naechste-cta')).toHaveAttribute(
+      'href',
+      '/fall/dokumente'
+    );
+
+    // Fristen-Block enthält nur noch die verbliebene Unterlage
+    await expect(page.getByTestId('dok-frist-DOK-003')).toHaveCount(0);
+    await expect(page.getByTestId('dok-frist-DOK-004')).toBeVisible();
   });
 
 });

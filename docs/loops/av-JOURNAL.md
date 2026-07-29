@@ -6,6 +6,38 @@ Scope: nur `demo/app/fall/**`, DemoStateContext, fairness/rules, mockFall, e2e u
 
 ---
 
+## 2026-07-29 – Iteration 11: Übersicht Upload-Quittung + nächste offene Unterlage
+
+### Was
+Nach Session-Upload zeigt die Fall-Übersicht eine Quittung (US-AV-002/003):
+
+1. **`sessionUploadedIds`** im DemoStateContext — Session-Uploads für die Übersicht.
+2. **Upload-Quittung** (`data-testid="upload-quittung"`): Bezeichnung + Einreichungsdatum je Session-Dokument.
+3. **Nächste offene Unterlage** mit Frist-Countdown und CTA „Nächste Unterlage hochladen“; bei Vollständigkeit Hinweistext statt CTA.
+4. E2E: Teil-Upload → Quittung + Formular SG1; Voll-Upload → Quittung + `upload-quittung-vollstaendig` (session-nav, kein `page.goto`, DEC-012).
+
+### Dateien
+- `demo/context/DemoStateContext.tsx`
+- `demo/app/fall/page.tsx`
+- `demo/e2e/us-av-001-002-fall-uebersicht.spec.ts`
+- `docs/loops/av-JOURNAL.md`
+
+### Story-IDs
+- US-AV-002 (Status / Orientierung auf Übersicht)
+- US-AV-003 (Unterlagen nachreichen / Upload-Quittung)
+
+### Build
+`npm run lint` + `npm run build` + `npm run test:e2e:av` (PW_E2E_CI=1) → **130 passed**, Exit 0
+
+### Vorschlag Queue-ID
+- Q-160 (AV Übersicht: Upload-Quittung + nächste offene Unterlage nach Session-Upload)
+
+### Nächster sinnvoller AV-Schritt (Vorschlag)
+- Hinweise-Seite: Fristhinweis im UNTERLAGE-Signal explizit nach Session-Upload testen
+- Dokumente-Seite: lokale Upload-Quittung pro Karte (sofort nach Markieren)
+
+---
+
 ## 2026-07-29 – Iteration 10: Fairness-Signal UNTERLAGE mit Dokumenten-Frist
 
 ### Was
