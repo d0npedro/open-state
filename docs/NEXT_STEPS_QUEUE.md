@@ -155,6 +155,7 @@ Story-Dokumentation ist kein Pflicht-Vorläufer für Mock-Daten und Typen.
 | Q-118 | Kita Regionenvergleich: zwei Planungsräume nebeneinander mit Δ und Meldebasis (US-KJ-010 AK3) | DEMO | S | Q-115 | DONE `c4289dd` |
 | Q-119 | Kita Zeitreihe/Vergleich: CSV-Export gefilterter Daten (US-KJ-010 AK4) | DEMO | S | Q-117 | DONE `b0c070f`/`d63e54c` |
 | Q-121 | UG Behörden: VS-04 nach Beantworten der Rückfrage session-lokal auf ABGESCHLOSSEN; Verlauf-Ereignis | DEMO | S | Q-120 | DONE `5dce475` |
+| Q-122 | UG Behörden: nach RQ-Antwort nächster AUSSTEHEND-Schritt derselben Behörde (VS-05 Steuernummer) → IN_BEARBEITUNG + Verlauf | DEMO | S | Q-121 | DONE `84ff4fa` |
 
 ---
 
@@ -279,3 +280,4 @@ Diese Punkte wurden in früheren Iterationen abgeschlossen und sind produktionsr
 | Q-120 UG Behörden VS-04-Link | Verfahrensschritt → offene Rückfrage `#rq-…` | `67ad664` → main |
 | Q-119 Kita CSV-Export Zeitreihe/Vergleich | US-KJ-010 AK4 gefilterte Ansicht | `b0c070f`/`d63e54c` → main |
 | Q-121 UG VS-04 nach RQ-Antwort | Verfahrensschritt ABGESCHLOSSEN + Verlauf | `5dce475` → main |
+| Q-122 UG VS-05 nach RQ-Antwort | Steuernummer IN_BEARBEITUNG + Verlauf | `84ff4fa` → main |
