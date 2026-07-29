@@ -243,6 +243,20 @@ test.describe('UG – Übersicht', () => {
     await expect(page.getByRole('heading', { name: 'Hinweise zur Verfahrenslage' })).toBeVisible();
   });
 
+  test('Fairness RQ-Signal: Tiefenlink Im Verlauf ansehen (ERE-06)', async ({ page }) => {
+    // US-UG-005 Transparenz: Fairness → passendes Audit-Ereignis
+    const verlauf = page.getByTestId('uebersicht-fairness-verlauf-ERE-06');
+    await expect(verlauf).toBeVisible();
+    await expect(verlauf).toHaveAttribute('href', '/gruendung/verlauf#ere-ERE-06');
+    await expect(verlauf).toContainText(/Im Verlauf ansehen/i);
+    await verlauf.click();
+    await expect(page).toHaveURL(/\/gruendung\/verlauf#ere-ERE-06/);
+    const card = page.getByTestId('verlauf-ereignis-ERE-06');
+    await expect(card).toBeVisible();
+    await expect(card).toContainText(/Rückfrage gestellt/i);
+    await expect(card).toHaveAttribute('aria-current', 'location');
+  });
+
   test('Fairness-Kurzblock zeigt nur RELEVANT und HINWEIS, nicht INFO', async ({ page }) => {
     const block = page.getByTestId('uebersicht-fairness-kurzblock');
     await expect(block).toBeVisible();
@@ -882,6 +896,21 @@ test.describe('UG – Hinweise zur Verfahrenslage', () => {
     await expect(page.locator('#rq-RQ-01')).toBeVisible();
   });
 
+  test('Hinweise RQ: Tiefenlink Im Verlauf ansehen führt zu ERE-06', async ({ page }) => {
+    // Primär-CTA bleibt handlungsbezogen; Sekundär-CTA → Audit (US-UG-005)
+    const verlauf = page.getByTestId('hinweise-verlauf-cta-ERE-06');
+    await expect(verlauf).toBeVisible();
+    await expect(verlauf).toHaveAttribute('href', '/gruendung/verlauf#ere-ERE-06');
+    await expect(verlauf).toContainText(/Im Verlauf ansehen/i);
+    await verlauf.click();
+    await expect(page).toHaveURL(/\/gruendung\/verlauf#ere-ERE-06/);
+    const card = page.getByTestId('verlauf-ereignis-ERE-06');
+    await expect(card).toBeVisible();
+    await expect(card).toContainText(/Rückfrage gestellt/i);
+    await expect(card).toContainText(/Kleinunternehmerregelung|Finanzamt/i);
+    await expect(card).toHaveAttribute('aria-current', 'location');
+  });
+
   test('Nach Beantworten entfällt RELEVANT-CTA auf Hinweise', async ({ page }) => {
     // Session-State: NIE page.goto nach Antwort — Layout-Provider remountet sonst
     const { goUgTab } = await import('./helpers/sessionNav');
@@ -1189,6 +1218,19 @@ test.describe('UG – Verlauf', () => {
   test('Seitenüberschrift mit Transparenzversprechen', async ({ page }) => {
     await expect(page.getByRole('heading', { name: 'Verlauf Ihrer Akte' })).toBeVisible();
     await expect(page.getByText('unveränderlich dokumentiert')).toBeVisible();
+  });
+
+  test('Ereignis-Anker #ere-ERE-06 für Fairness-Tiefenlink', async ({ page }) => {
+    // Anker/Testid für Fairness-Tiefenlinks (US-UG-005)
+    const card = page.getByTestId('verlauf-ereignis-ERE-06');
+    await expect(card).toBeVisible();
+    await expect(page.locator('#ere-ERE-06')).toBeVisible();
+    await expect(card).toContainText(/Rückfrage gestellt/i);
+    // Hash setzen (wie Browser nach Fairness-Klick) – hashchange-Handler setzt aria-current
+    await page.evaluate(() => {
+      window.location.hash = 'ere-ERE-06';
+    });
+    await expect(card).toHaveAttribute('aria-current', 'location');
   });
 
   test('Zeitstempel sichtbar', async ({ page }) => {

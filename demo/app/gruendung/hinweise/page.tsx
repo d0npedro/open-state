@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useGruendungState } from '@/context/GruendungStateContext';
 import {
   berechneFairnessSignaleGruendung,
+  fairnessSignalVerlaufZiel,
   fairnessSignalZiel,
   type FairnessSignalZiel,
 } from '@/lib/fairness/gruendung-rules';
@@ -146,10 +147,17 @@ function FairnessSignalCta({
   akte: GruendungsAkte;
 }) {
   const ziel = fairnessSignalZiel(signal, akte);
-  if (!ziel) return null;
+  const verlaufZiel = fairnessSignalVerlaufZiel(signal, akte);
+  if (!ziel && !verlaufZiel) return null;
 
-  const ids = hinweiseCtaTestIds(ziel);
-  const hintText = unterlagenHintErweiterung(ziel, akte);
+  const ids = ziel
+    ? hinweiseCtaTestIds(ziel)
+    : {
+        wrap: `hinweise-cta-wrap-${signal.id}`,
+        cta: `hinweise-cta-${signal.id}`,
+        hint: `hinweise-cta-hint-${signal.id}`,
+      };
+  const hintText = ziel ? unterlagenHintErweiterung(ziel, akte) : '';
 
   return (
     <div style={ctaWrapStyle(signal.prioritaet)} data-testid={ids.wrap}>
@@ -161,16 +169,40 @@ function FairnessSignalCta({
           {hintText}
         </p>
       )}
-      <Link
-        href={ziel.href}
-        className="btn btn-primary"
-        style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', flexShrink: 0 }}
-        data-testid={ids.cta}
-        aria-label={ziel.ariaLabel ?? ziel.cta}
+      <div
+        style={{
+          display: 'flex',
+          flexWrap: 'wrap',
+          alignItems: 'center',
+          gap: '0.5rem 0.75rem',
+          flexShrink: 0,
+        }}
       >
-        <Icon name={ziel.icon as IconName} size={15} />
-        {ziel.cta}
-      </Link>
+        {ziel && (
+          <Link
+            href={ziel.href}
+            className="btn btn-primary"
+            style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', flexShrink: 0 }}
+            data-testid={ids.cta}
+            aria-label={ziel.ariaLabel ?? ziel.cta}
+          >
+            <Icon name={ziel.icon as IconName} size={15} />
+            {ziel.cta}
+          </Link>
+        )}
+        {verlaufZiel && (
+          <Link
+            href={verlaufZiel.href}
+            className="btn btn-secondary"
+            style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', flexShrink: 0 }}
+            data-testid={`hinweise-verlauf-cta-${verlaufZiel.ereignisId}`}
+            aria-label={verlaufZiel.ariaLabel ?? verlaufZiel.cta}
+          >
+            <Icon name="clock" size={15} />
+            {verlaufZiel.cta}
+          </Link>
+        )}
+      </div>
     </div>
   );
 }

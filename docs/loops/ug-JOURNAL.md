@@ -8,6 +8,38 @@ Erlaubte Pfade nur: `demo/app/gruendung/**`, `demo/context/GruendungStateContext
 
 ---
 
+## 2026-07-29 – Iteration 39: Fairness → Verlauf-Tiefenlink (US-UG-005)
+
+### Was
+Fairness-Signale verlinken sekundär auf das auslösende Audit-Ereignis
+(Transparenz US-UG-005; Primär-CTA bleibt handlungsbezogen):
+
+1. **`fairnessSignalVerlaufZiel`** in `gruendung-rules`: RQ → letztes
+   `rueckfrage_gestellt` (Mock ERE-06); UNTERLAGE nur bei `dokument_abgelehnt`.
+2. **Verlauf**: Anker `#ere-{id}`, `data-testid`, Hash-Scroll/Filter-Reset,
+   `aria-current` + optische Hervorhebung (inkl. `hashchange`).
+3. **Hinweise + Übersicht**: Sekundär-CTA „Im Verlauf ansehen“.
+4. E2E: Übersicht/Hinweise → ERE-06; Anker-Test auf Verlauf (DEC-012).
+
+### Dateien
+- `demo/lib/fairness/gruendung-rules.ts` – `FairnessVerlaufZiel`, Export
+- `demo/app/gruendung/verlauf/page.tsx` – Anker, Hash-Handling
+- `demo/app/gruendung/hinweise/page.tsx` – Sekundär-CTA
+- `demo/app/gruendung/page.tsx` – Fairness-Kurzblock-Verlaufslink
+- `demo/e2e/us-ug-gruendung.spec.ts` – 3 neue Tests
+- `docs/loops/ug-JOURNAL.md` – dieses Journal
+
+### Build
+`npm run lint` + `npm run build` im Ordner `demo/` grün.
+`npm run test:e2e:ug` Exit 0 (125 passed).
+
+### Nächster sinnvoller UG-Schritt (Vorschlag)
+- Fairness-Fallthrough nach BG (Steuernummer/Betriebsdatum) E2E absichern
+- Primär-CTA-Labels optional an Fairness-Kurz-CTAs angleichen (optional)
+- Verlauf: Session-Antwort-Ereignis nach RQ-Antwort hervorheben (optional)
+
+---
+
 ## 2026-07-29 – Iteration 38: naechsterSchrittZiel / aufgabeZiel in gruendung-rules
 
 ### Was

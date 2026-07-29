@@ -5,6 +5,7 @@ import { useGruendungState } from '@/context/GruendungStateContext';
 import {
   aufgabeZiel,
   berechneFairnessSignaleGruendung,
+  fairnessSignalVerlaufZiel,
   fairnessSignalZiel,
   FIKTIVES_HEUTE_GRUENDUNG,
   naechsterSchrittZiel,
@@ -489,6 +490,7 @@ export default function GruendungPage() {
           >
             {fairnessSignale.map(sig => {
               const ziel = fairnessSignalZiel(sig, akte);
+              const verlaufZiel = fairnessSignalVerlaufZiel(sig, akte);
               return (
                 <div
                   key={sig.id}
@@ -505,26 +507,56 @@ export default function GruendungPage() {
                         → {sig.naechsterSchritt}
                       </div>
                     )}
-                    {ziel && (
+                    {(ziel || verlaufZiel) && (
                       <div style={{ marginTop: '0.65rem' }}>
-                        <Link
-                          href={ziel.href}
-                          data-testid={`uebersicht-fairness-cta-${ziel.testKey}`}
+                        <div
                           style={{
-                            display: 'inline-flex',
+                            display: 'flex',
+                            flexWrap: 'wrap',
                             alignItems: 'center',
-                            gap: '0.3rem',
-                            fontSize: '0.8rem',
-                            fontWeight: 600,
-                            color: 'var(--color-primary)',
-                            textDecoration: 'none',
+                            gap: '0.35rem 0.85rem',
                           }}
-                          aria-label={`${ziel.cta}: ${sig.titel}`}
                         >
-                          <Icon name={ziel.icon} size={13} />
-                          {ziel.cta} →
-                        </Link>
-                        {ziel.hint && (
+                          {ziel && (
+                            <Link
+                              href={ziel.href}
+                              data-testid={`uebersicht-fairness-cta-${ziel.testKey}`}
+                              style={{
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: '0.3rem',
+                                fontSize: '0.8rem',
+                                fontWeight: 600,
+                                color: 'var(--color-primary)',
+                                textDecoration: 'none',
+                              }}
+                              aria-label={`${ziel.cta}: ${sig.titel}`}
+                            >
+                              <Icon name={ziel.icon} size={13} />
+                              {ziel.cta} →
+                            </Link>
+                          )}
+                          {verlaufZiel && (
+                            <Link
+                              href={verlaufZiel.href}
+                              data-testid={`uebersicht-fairness-verlauf-${verlaufZiel.ereignisId}`}
+                              style={{
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: '0.3rem',
+                                fontSize: '0.8rem',
+                                fontWeight: 600,
+                                color: 'var(--color-text-muted)',
+                                textDecoration: 'none',
+                              }}
+                              aria-label={verlaufZiel.ariaLabel ?? verlaufZiel.cta}
+                            >
+                              <Icon name="clock" size={13} />
+                              {verlaufZiel.cta} →
+                            </Link>
+                          )}
+                        </div>
+                        {ziel?.hint && (
                           <p
                             data-testid={`uebersicht-fairness-cta-hint-${ziel.testKey}`}
                             style={{
