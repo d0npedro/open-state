@@ -15,6 +15,7 @@ Diese Matrix gibt einen vollständigen Überblick über alle dokumentierten User
 | US-AV-005 | Arbeitsverwaltung | Termin einsehen und verstehen | Bürger | Termin-Übersicht | ENTWURF | 5 | Terminzweck in Klarsprache, Vorbereitungshinweise | `GET /api/v1/cases/{id}/appointments`, AppointmentService |
 | US-AV-006 | Arbeitsverwaltung | Bescheid verstehen | Bürger | Bescheid-Ansicht | ENTWURF | 6 | Zwei-Schichten-Darstellung (juristisch + erklärt) | `GET /api/v1/cases/{id}/notices`, NoticeService, ExplanationLayer |
 | US-AV-007 | Arbeitsverwaltung | Historie nachvollziehen | Bürger | Fall-Timeline | ENTWURF | 6 | Vollständige Timeline aller Ereignisse mit Zeitstempel und Urheber | `GET /api/v1/cases/{id}/history`, AuditLogService |
+| US-AV-008 | Arbeitsverwaltung | Verfahrenslage verstehen | Bürger | `/fall/hinweise` | ENTWURF | 5 | Regelbasierte Hinweise aus Falldaten, keine Personenbewertung | `berechneFairnessSignale`, FairnessPanel |
 
 ---
 

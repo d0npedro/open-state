@@ -28,8 +28,9 @@ Alle Stories dieser Domäne folgen dem Prinzip: Jeder Schritt ist für den Bürg
 | [US-AV-005](US-AV-005_Termin_einsehen_und_verstehen.md) | Termin einsehen und verstehen | Bürger | ENTWURF | 5 |
 | [US-AV-006](US-AV-006_Bescheid_verstehen.md) | Bescheid verstehen | Bürger | ENTWURF | 6 |
 | [US-AV-007](US-AV-007_Historie_nachvollziehen.md) | Historie nachvollziehen | Bürger | ENTWURF | 6 |
+| [US-AV-008](US-AV-008_Verfahrenslage_verstehen.md) | Verfahrenslage verstehen | Bürger | ENTWURF | 5 |
 
-**Gesamt:** 7 Stories · 41 Akzeptanzkriterien · alle im Status ENTWURF
+**Gesamt:** 8 Stories · 46 Akzeptanzkriterien · alle im Status ENTWURF
 
 ---
 
@@ -51,6 +52,7 @@ Diese Stories decken folgende Phasen einer Fallbearbeitung ab:
 4. **Termine / Kommunikation** – US-AV-005: Termin einsehen und verstehen
 5. **Entscheidung / Bescheid** – US-AV-006: Bescheid verstehen
 6. **Verlauf / Nachvollziehbarkeit** – US-AV-007: Historie nachvollziehen
+7. **Verfahrenslage / Fairness-Hinweise** – US-AV-008: Verfahrenslage verstehen
 
 ---
 

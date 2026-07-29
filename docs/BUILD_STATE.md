@@ -78,12 +78,11 @@ Weitere Domänen (Kita, Unternehmensgründung): nur Dokumentation, keine UI-Rout
 
 | Domäne | Stories in docs/ | Stories in storyRegistry.ts | Status |
 |--------|-----------------|----------------------------|--------|
-| Arbeitsverwaltung (AV) | US-AV-001 – 007 (US-AV-008 Datei fehlt) | ✓ 8 registriert | DEMONSTRIERBAR (Demo) |
+| Arbeitsverwaltung (AV) | US-AV-001 – 008 | ✓ 8 registriert | DEMONSTRIERBAR (Demo) |
 | Kita / Jugendamt (KJ) | US-KJ-001 – 010 | ✓ registriert | gemischt (teilweise Demo) |
 | Unternehmensgründung (UG) | US-UG-001 – 006 + STORY_MAP + README | ✗ noch nicht in Demo-Registry | ENTWURF (Docs); Demo-Routen existieren |
 
-**Bekannte Inkonsistenz:** US-AV-008 existiert im Code (Route `/fall/hinweise`, storyRegistry.ts),
-aber die Story-Datei `docs/stories/arbeitsverwaltung/US-AV-008_*.md` fehlt noch (Q-001).
+**Q-001 erledigt:** Story-Datei `US-AV-008_Verfahrenslage_verstehen.md` angelegt.
 
 **Q-010 erledigt:** `docs/stories/unternehmensgruendung/` mit 6 Stories, Story-Map, README;
 Einträge in `story_registry.json` und TRACEABILITY_MATRIX. Demo-`storyRegistry.ts` enthält UG noch nicht.
@@ -127,7 +126,6 @@ Einträge in `story_registry.json` und TRACEABILITY_MATRIX. Demo-`storyRegistry.
 |-------|----------------|----------|
 | ~~Fairness-Fristen sind statische Zahlen~~ | ~~Glaubwürdigkeitsproblem~~ | Q-004 ✓ |
 | ~~Demo vollständig statisch~~ | ~~Demo wirkt wie Slideshow~~ | Q-031 ✓ |
-| Story-Datei `US-AV-008` in docs/stories/ fehlt | Docs-Inkonsistenz, kein Demo-Effekt | Q-001 |
 | UG-Stories nicht in `demo/data/storyRegistry.ts` | `/stories` zeigt UG-Doku-Stories nicht | — |
 | DSFA für Kita-Domäne noch ausstehend | Konzeptlücke — extern abhängig | — |
 
