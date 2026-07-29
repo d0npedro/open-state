@@ -6,6 +6,7 @@ import { KitaHandlungsfelder } from '@/components/kita/KitaHandlungsfelder';
 import { KitaPlanungsraumDetailListe } from '@/components/kita/KitaPlanungsraumDetailListe';
 import { KitaLagebildDruck } from '@/components/kita/KitaLagebildDruck';
 import { KitaZeitreiheTabelle } from '@/components/kita/KitaZeitreiheTabelle';
+import { KitaRegionenVergleich } from '@/components/kita/KitaRegionenVergleich';
 
 // ─── Hauptseite ──────────────────────────────────────────────────────────────
 
@@ -78,9 +79,11 @@ export default function KitaLagebildPage() {
         >
           <span className="badge badge-primary">US-KJ-005</span>
           <span className="badge badge-primary">US-KJ-006</span>
+          <span className="badge badge-primary">US-KJ-010</span>
           <span>
             Versorgungslagebild · Engpass · Handlungsfelder · Detail Druck-Meta ·
-            Zeitreihe 12 Monate (UI + CSV) · Druck und CSV (Status/Meldebasis) · Jugendamt-intern
+            Zeitreihe 12 Monate · Regionenvergleich A/B · Druck und CSV (Status/Meldebasis) ·
+            Jugendamt-intern
           </span>
         </div>
         <h1 style={{ marginBottom: '0.4rem' }}>Steuerungslagebild Kindertagesbetreuung</h1>
@@ -225,6 +228,43 @@ export default function KitaLagebildPage() {
         />
       </section>
 
+      {/* Regionenvergleich im Lagebild-UI (US-KJ-005 / US-KJ-010) — Spiegel öffentlicher Bericht */}
+      <section id="kita-lagebild-regionenvergleich" aria-labelledby="kita-lagebild-regionen-heading">
+        <div style={{ marginBottom: '1rem' }}>
+          <div
+            className="no-print"
+            style={{
+              fontSize: '0.8rem',
+              color: 'var(--color-text-muted)',
+              display: 'flex',
+              gap: '0.5rem',
+              flexWrap: 'wrap',
+              marginBottom: '0.5rem',
+            }}
+          >
+            <span className="badge badge-primary">US-KJ-005</span>
+            <span className="badge badge-primary">US-KJ-010</span>
+            <span>
+              Regionenvergleich · Zwei Planungsräume · 12-Monats-Verlauf · CSV Stichtag/Verlauf ·
+              Druck-Filterstand A/B · Open-Data-Lizenz
+            </span>
+          </div>
+          <h2 id="kita-lagebild-regionen-heading" style={{ marginBottom: '0.35rem' }}>
+            Regionenvergleich
+          </h2>
+          <p style={{ margin: 0, fontSize: '0.875rem', color: 'var(--color-text-muted)', maxWidth: '48rem' }}>
+            Interne Steuerungsansicht desselben Zwei-Räume-Vergleichs wie im öffentlichen
+            Transparenzbericht (Stichtag + 12-Monats-Verlauf). Δ (A − B) ist rein rechnerisch —
+            keine automatische Bewertung. Meldebasis je Raum session-sensitiv. CSV Stichtag und
+            Verlauf an der Komponente; Gesamt-Steuerungs-CSV bleibt in der Export-Karte oben.
+          </p>
+        </div>
+        <KitaRegionenVergleich
+          planungsraeume={lb.planungsraeume}
+          zeitreihePlanungsraeume={lb.zeitreihePlanungsraeume}
+        />
+      </section>
+
       {/* Methodik-Verweis */}
       <div
         style={{
@@ -251,11 +291,14 @@ export default function KitaLagebildPage() {
         12-Monats-Tabelle mit Regionenfilter und Meldebasis-Hinweis im UI; CSV der aktiven
         Filteransicht an der Tabelle; im Ausdruck print-only Filterstand (Region, Meldebasis-Session,
         Peak, Monate — Filter-Chips/CSV no-print). Steuerungs-CSV Blatt 6 enthält Gesamtkommune und
-        alle Planungsräume. CSV-Export (US-KJ-005): freigabeunabhängig mit Lagebild-Status,
-        Meldebasis-Session und optionalem Export-Filter „Meldelücke“ (Blätter Versorgung,
-        Engpass-Rangliste, Handlungsfelder, Maßnahmen, Meldebasis-Stichprobe, Zeitreihe; Semikolon,
-        UTF-8 BOM). Keine Interpolation, keine Trendbewertung. Keine Kind- oder Personennamen
-        (DEC-004).
+        alle Planungsräume. Regionenvergleich (US-KJ-005 / US-KJ-010): Zwei Planungsräume
+        Stichtag + Verlauf im UI (Spiegel öffentlicher Bericht); Δ rein rechnerisch; CSV
+        Stichtag/Verlauf an der Komponente; im Ausdruck Auswahl A/B und Kennzahl-Chips no-print,
+        print-only Filterstand (Region A/B, Meldebasis-Session, Verlaufskennzahl, Stichprobenmonat).
+        CSV-Export (US-KJ-005): freigabeunabhängig mit Lagebild-Status, Meldebasis-Session und
+        optionalem Export-Filter „Meldelücke“ (Blätter Versorgung, Engpass-Rangliste,
+        Handlungsfelder, Maßnahmen, Meldebasis-Stichprobe, Zeitreihe; Semikolon, UTF-8 BOM). Keine
+        Interpolation, keine Trendbewertung. Keine Kind- oder Personennamen (DEC-004).
       </div>
 
       {/* Steuerungskette JA: Lagebild → Bedarfsplanung → Vorlage (+ Meldebasis) */}
@@ -344,8 +387,10 @@ export default function KitaLagebildPage() {
         (Planungslücken und Meldebasis). Engpass/Handlungsfelder/Detail: Druck print-only
         Filterstand inkl. Meldebasis-Session. Zeitreihe 12 Monate im UI (Filter + CSV aktiver
         Ansicht; Druck: print-only Filterstand Region/Meldebasis) und im Steuerungs-CSV (Blatt 6).
-        Druck und CSV: Status/Meldebasis und optionaler Meldelücke-Filter im Export. Öffentliche
-        Aggregation ohne Einrichtungsdetail im{' '}
+        Regionenvergleich A/B im UI (Stichtag + Verlauf, CSV an Komponente; Druck: print-only
+        Filterstand A/B/Meldebasis/Kennzahl — Spiegel öffentlicher Bericht). Druck und CSV:
+        Status/Meldebasis und optionaler Meldelücke-Filter im Export. Öffentliche Aggregation ohne
+        Einrichtungsdetail im{' '}
         <Link href="/kita" style={{ color: 'var(--color-primary)' }}>
           öffentlichen Bericht
         </Link>{' '}

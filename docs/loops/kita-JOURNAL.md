@@ -2,6 +2,30 @@
 
 Branch: `loop/kita` · Worktree: `D:\Projects\open-state-loop-kita`
 
+## Iteration 2026-07-29 – US-KJ-005/010 Lagebild Regionenvergleich (Spiegel öffentlicher Bericht)
+
+### Was
+Steuerungslagebild (`/kita/lagebild`, US-KJ-005 / US-KJ-010): Regionenvergleich Zwei-Räume nicht nur im öffentlichen Transparenzbericht, sondern im JA-Lagebild-UI. Einbindung `KitaRegionenVergleich` (Stichtag A/B, Δ rein rechnerisch, 12-Monats-Verlauf, Meldebasis-Session je Raum, CSV Stichtag/Verlauf, print-only Filterstand A/B). Anker `#kita-lagebild-regionenvergleich`. Methodik/Badge/Footer und Export-Hinweis in `KitaLagebildDruck`. Keine Interpolation, keine automatische Bewertung. Nur Aggregate, keine Kind- oder Personennamen. `origin/main` bereits auf Branch (kein Merge nötig).
+
+### Dateien
+- `demo/app/kita/lagebild/page.tsx` (Regionenvergleich-Sektion, Import, Methodik/Footer/Badge)
+- `demo/components/kita/KitaLagebildDruck.tsx` (Export-Hinweis Zeitreihe/Regionenvergleich UI)
+- `docs/loops/kita-JOURNAL.md` (dieses Journal)
+
+### Story
+US-KJ-005 / US-KJ-010 – Steuerungslagebild Regionenvergleich im UI (Spiegel öffentlicher Bericht)
+
+### Build
+`npm run lint` + `npm run build` im `demo/`-Verzeichnis (siehe Commit dieses Laufs)
+
+### Nicht angefasst (Supervisor / verboten)
+Queue, BUILD_STATE, storyRegistry, DECISION_LOG, andere Domänen, package.json, CI, push
+
+### Nächster sinnvoller Schritt (Hinweis Supervisor)
+Meldeeingang Druck-Meta falls offen, oder Bedarfsplanung Feinschliff falls Lücken, oder Lagebild-CSV um optionalen Regionenvergleich-Hinweis schärfen.
+
+---
+
 ## Iteration 2026-07-29 – US-KJ-005/006 Detailkarten Druck Filterstand + Meldebasis-Session
 
 ### Was
