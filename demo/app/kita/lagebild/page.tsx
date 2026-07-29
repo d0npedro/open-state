@@ -1,5 +1,6 @@
 import { demoKitaLagebild } from '@/data/mockKitaLagebild';
 import type { PlanungsraumKennzahlen, Kapazitaetsmassnahme } from '@/types/kita';
+import { KitaMeldeeingangPanel } from '@/components/kita/KitaMeldeeingangPanel';
 
 // ─── Hilfsfunktionen ────────────────────────────────────────────────────────
 
@@ -226,12 +227,8 @@ export default function KitaLagebildPage() {
         </div>
       </section>
 
-      {/* Datenlücken-Status (AK 4 US-KJ-005) */}
-      <div style={{ padding: '0.75rem 1rem', background: 'var(--color-neutral-light)', borderRadius: 'var(--radius)', fontSize: '0.875rem', borderLeft: '3px solid var(--color-success)' }}>
-        <strong style={{ color: 'var(--color-success)' }}>Datenvollständigkeit:</strong>{' '}
-        Alle 5 Planungsräume haben vollständige Meldedaten für {lb.berichtszeitraum} geliefert. Keine Datenlücken im aktuellen Bericht.
-        Letzter Meldestichtag: {lb.stand}.
-      </div>
+      {/* Meldeeingang / Datenbasis freigegebene Meldungen (US-KJ-004 → US-KJ-005, AK 4) */}
+      <KitaMeldeeingangPanel />
 
       {/* Engpass-Rangliste (AK 1+2 US-KJ-006) */}
       <section>
