@@ -1,0 +1,11 @@
+# Never upload local noise / multi-GB artifacts to Vercel CLI
+**/node_modules
+**/.next
+**/.next-e2e
+**/.next-ci-watcher
+**/playwright-report
+**/test-results
+**/.git
+**/demo/playwright-report
+**/demo/test-results
+**/*.log

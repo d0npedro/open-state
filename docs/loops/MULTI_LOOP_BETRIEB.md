@@ -1,5 +1,10 @@
 # Multi-Loop-Betrieb – Open State
 
+> **STOP 2026-07-29:** Dauerbetrieb und alle Scheduler sind **abgebrochen**.  
+> Ursache: Vercel Production **rate limited** durch Push-Spam (Docs-Commits alle paar Minuten).  
+> Details: `docs/loops/PIPELINE_STOP.md`.  
+> **Kein automatischer Push**, bis Vercel Production wieder READY und Production-Branch korrekt ist.
+
 Parallele Entwicklungs-Streams mit getrennten Worktrees und einem Supervisor, der geordnet nach `main` merget.
 
 ## Architektur
