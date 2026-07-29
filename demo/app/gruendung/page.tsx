@@ -2,7 +2,11 @@
 
 import Link from 'next/link';
 import { useGruendungState } from '@/context/GruendungStateContext';
-import { berechneFairnessSignaleGruendung } from '@/lib/fairness/gruendung-rules';
+import {
+  berechneFairnessSignaleGruendung,
+  FIKTIVES_HEUTE_GRUENDUNG,
+} from '@/lib/fairness/gruendung-rules';
+import { berechneFristTage } from '@/lib/fairness/rules';
 import { Icon } from '@/components/Icon';
 import type { IconName } from '@/components/Icon';
 import type { FairnessSignal } from '@/types/fairness';
@@ -131,6 +135,7 @@ function fairnessSignalZiel(
   akte: GruendungsAkte
 ): { href: string; cta: string; icon: IconName; testKey: string; hint?: string } | null {
   // Offene Rückfrage mit Frist
+  // Hilfstext: Fristlabel + kurze Konsequenz (Steuernummer/Erfassung)
   if (
     signal.typ === 'UG_RUECKFRAGE_OFFEN_FRIST_RELEVANT' ||
     signal.id.startsWith('UG-RQ-')
@@ -138,13 +143,25 @@ function fairnessSignalZiel(
     const match = signal.id.match(/^UG-RQ-(.+)-FRIST$/);
     const rqId = match?.[1];
     if (!rqId) return null;
-    const offen = akte.rueckfragen.some(r => r.id === rqId && !r.beantwortet);
-    if (!offen) return null;
+    const rq = akte.rueckfragen.find(r => r.id === rqId && !r.beantwortet);
+    if (!rq) return null;
+    const fristTage = berechneFristTage(rq.fristDatum, FIKTIVES_HEUTE_GRUENDUNG);
+    const fristLabel =
+      fristTage < 0
+        ? `${Math.abs(fristTage)} Tage überschritten`
+        : fristTage === 0
+          ? 'heute fällig'
+          : `noch ${fristTage} Tag${fristTage === 1 ? '' : 'e'}`;
+    const hint =
+      `Antwortfrist ${rq.frist} (${fristLabel}). ` +
+      'Ohne Antwort kann das Finanzamt die steuerliche Erfassung und die Steuernummer-Vergabe nicht abschließen. ' +
+      'Frage, Begründung und Formular finden Sie unter Rückfragen.';
     return {
       href: `/gruendung/rueckfragen#rq-${rqId}`,
       cta: 'Frage beantworten',
       icon: 'chat',
       testKey: `rq-${rqId}`,
+      hint,
     };
   }
 

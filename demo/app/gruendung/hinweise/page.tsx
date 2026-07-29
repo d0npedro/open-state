@@ -2,7 +2,11 @@
 
 import Link from 'next/link';
 import { useGruendungState } from '@/context/GruendungStateContext';
-import { berechneFairnessSignaleGruendung } from '@/lib/fairness/gruendung-rules';
+import {
+  berechneFairnessSignaleGruendung,
+  FIKTIVES_HEUTE_GRUENDUNG,
+} from '@/lib/fairness/gruendung-rules';
+import { berechneFristTage } from '@/lib/fairness/rules';
 import { demoGruendungsAkte } from '@/data/mockGruendungsfall';
 import { FairnessPanel } from '@/components/fairness/FairnessPanel';
 import { Icon } from '@/components/Icon';
@@ -119,9 +123,29 @@ export default function GruendungHinweisePage() {
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                 {relevant.map(sig => {
                   const rqId = rueckfrageIdAusSignal(sig);
-                  const rqNochOffen = rqId
-                    ? akte.rueckfragen.some(r => r.id === rqId && !r.beantwortet)
-                    : false;
+                  const rqOffen = rqId
+                    ? akte.rueckfragen.find(r => r.id === rqId && !r.beantwortet)
+                    : undefined;
+                  const rqNochOffen = !!rqOffen;
+                  // Hilfstext RQ-CTA: Fristlabel + kurze Konsequenz (wie Übersicht)
+                  const rqCtaHint = (() => {
+                    if (!rqOffen) return null;
+                    const fristTage = berechneFristTage(
+                      rqOffen.fristDatum,
+                      FIKTIVES_HEUTE_GRUENDUNG
+                    );
+                    const fristLabel =
+                      fristTage < 0
+                        ? `${Math.abs(fristTage)} Tage überschritten`
+                        : fristTage === 0
+                          ? 'heute fällig'
+                          : `noch ${fristTage} Tag${fristTage === 1 ? '' : 'e'}`;
+                    return (
+                      `Antwortfrist ${rqOffen.frist} (${fristLabel}). ` +
+                      'Ohne Antwort kann das Finanzamt die steuerliche Erfassung und die Steuernummer-Vergabe nicht abschließen. ' +
+                      'Frage, Begründung und Formular finden Sie unter Rückfragen.'
+                    );
+                  })();
                   const bgBehörde = isBgAnmeldungSignal(sig)
                     ? akte.beteiligteBehörden.find(b => b.typ === 'BERUFSGENOSSENSCHAFT')
                     : undefined;
@@ -136,7 +160,7 @@ export default function GruendungHinweisePage() {
                   return (
                     <div key={sig.id} data-testid={`hinweise-relevant-${sig.id}`}>
                       <FairnessPanel signale={[sig]} />
-                      {rqId && rqNochOffen && (
+                      {rqId && rqNochOffen && rqCtaHint && (
                         <div
                           style={{
                             marginTop: '0.5rem',
@@ -152,8 +176,11 @@ export default function GruendungHinweisePage() {
                           }}
                           data-testid={`hinweise-rq-cta-wrap-${rqId}`}
                         >
-                          <p style={{ margin: 0, fontSize: '0.875rem', lineHeight: 1.45 }}>
-                            Diese Rückfrage wartet auf Ihre Antwort. Frist und Begründung sind unter Rückfragen einsehbar.
+                          <p
+                            style={{ margin: 0, fontSize: '0.875rem', lineHeight: 1.45 }}
+                            data-testid={`hinweise-rq-cta-hint-${rqId}`}
+                          >
+                            {rqCtaHint}
                           </p>
                           <Link
                             href={`/gruendung/rueckfragen#rq-${rqId}`}
