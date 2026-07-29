@@ -177,10 +177,11 @@ test.describe('UG – Unterlagen', () => {
   });
 
   test('Alle 4 Dokumente sichtbar', async ({ page }) => {
-    await expect(page.getByText('Lichtbildausweis').first()).toBeVisible();
-    await expect(page.getByText('Gewerbeanmeldeformular')).toBeVisible();
-    await expect(page.getByText('Nachweis beruflicher Qualifikation')).toBeVisible();
-    await expect(page.getByText('Fragebogen zur steuerlichen Erfassung')).toBeVisible();
+    // Headings: Fairness-Hinweis listet dieselben Namen nochmals im Fließtext
+    await expect(page.getByRole('heading', { name: /Lichtbildausweis/ })).toBeVisible();
+    await expect(page.getByRole('heading', { name: /Gewerbeanmeldeformular/ })).toBeVisible();
+    await expect(page.getByRole('heading', { name: /Nachweis beruflicher Qualifikation/ })).toBeVisible();
+    await expect(page.getByRole('heading', { name: /Fragebogen zur steuerlichen Erfassung/ })).toBeVisible();
   });
 
   test('Begründung für jedes Dokument sichtbar', async ({ page }) => {
