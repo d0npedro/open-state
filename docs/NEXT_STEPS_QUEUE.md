@@ -106,7 +106,7 @@ Q-001 und Q-010 sind reine Dokumentationsarbeiten ohne Demo-Effekt.
 | ID | Schritt | Typ | Aufwand | Abhängigkeit | Status |
 |----|---------|-----|---------|--------------|--------|
 | Q-062 | GitHub Actions Workflow für Build-Check bei PR — verhindert kaputte Builds im main | CHORE | M | – | DONE |
-| Q-053 | `CLAUDE.md` aktualisieren: Design System, ThemeProvider, ThemeSwitcher als Teil des Architekturwissens ergänzen | DOCS | S | – | OFFEN |
+| Q-053 | `CLAUDE.md` aktualisieren: Design System, ThemeProvider, ThemeSwitcher als Teil des Architekturwissens ergänzen | DOCS | S | – | DONE |
 
 ---
 
@@ -114,9 +114,9 @@ Q-001 und Q-010 sind reine Dokumentationsarbeiten ohne Demo-Effekt.
 
 | ID | Schritt | Typ | Aufwand | Abhängigkeit | Status |
 |----|---------|-----|---------|--------------|--------|
-| Q-050 | arc42 Kapitel 05 (Bausteinsicht) um Kita-Domäne und Berichtsschicht erweitern | ARCH | M | Q-022 | OFFEN |
-| Q-051 | arc42 Kapitel 08 (Querschnittskonzepte) um Theme-Architektur ergänzen | ARCH | S | – | OFFEN |
-| Q-052 | arc42 Kapitel 09 (ADRs) um Drei-Schichten-Entscheidung ergänzen | ARCH | S | – | OFFEN |
+| Q-050 | arc42 Kapitel 05 (Bausteinsicht) um Kita-Domäne und Berichtsschicht erweitern | ARCH | M | Q-022 | DONE |
+| Q-051 | arc42 Kapitel 08 (Querschnittskonzepte) um Theme-Architektur ergänzen | ARCH | S | – | DONE |
+| Q-052 | arc42 Kapitel 09 (ADRs) um Drei-Schichten-Entscheidung ergänzen | ARCH | S | – | DONE |
 
 ---
 
@@ -124,9 +124,9 @@ Q-001 und Q-010 sind reine Dokumentationsarbeiten ohne Demo-Effekt.
 
 | ID | Schritt | Typ | Aufwand | Abhängigkeit | Status |
 |----|---------|-----|---------|--------------|--------|
-| Q-040 | OpenAPI-Entwurf für Arbeitsverwaltungs-Fallakte (`docs/api/arbeitsverwaltung-fall-api.yaml`) | DOCS | M | – | OFFEN |
-| Q-041 | OpenAPI-Entwurf für Kita-Meldeschnittstelle (`docs/api/kita-meldung-api.yaml`) | DOCS | M | Q-022 | OFFEN |
-| Q-042 | Datenvertrag: Betriebsdaten → Steuerungsdaten-Aggregation (formal, nicht nur Prosa) | DOCS | M | Q-041 | OFFEN |
+| Q-040 | OpenAPI-Entwurf für Arbeitsverwaltungs-Fallakte (`docs/api/arbeitsverwaltung-fall-api.yaml`) | DOCS | M | – | DONE |
+| Q-041 | OpenAPI-Entwurf für Kita-Meldeschnittstelle (`docs/api/kita-meldung-api.yaml`) | DOCS | M | Q-022 | DONE |
+| Q-042 | Datenvertrag: Betriebsdaten → Steuerungsdaten-Aggregation (formal, nicht nur Prosa) | DOCS | M | Q-041 | DONE |
 
 ---
 
@@ -134,8 +134,8 @@ Q-001 und Q-010 sind reine Dokumentationsarbeiten ohne Demo-Effekt.
 
 | ID | Schritt | Typ | Aufwand | Abhängigkeit | Status |
 |----|---------|-----|---------|--------------|--------|
-| Q-060 | `CONTRIBUTING.md` anlegen: Beitragsstandards, Story-Beantragung, Review-Prozess | DOCS | M | – | OFFEN |
-| Q-061 | GitHub Issue-Templates: Fachlicher Hinweis, Bug, Story-Antrag, Rechtliche Einschätzung | CHORE | S | – | OFFEN |
+| Q-060 | `CONTRIBUTING.md` anlegen: Beitragsstandards, Story-Beantragung, Review-Prozess | DOCS | M | – | DONE |
+| Q-061 | GitHub Issue-Templates: Fachlicher Hinweis, Bug, Story-Antrag, Rechtliche Einschätzung | CHORE | S | – | DONE |
 
 ---
 
@@ -164,4 +164,10 @@ Diese Punkte wurden in früheren Iterationen abgeschlossen und sind produktionsr
 | Agenten-Betriebssystem v1 | AGENTS.md, DELIVERY_SYSTEM.md, Queue, Build-State, Decision-Log | — |
 | Theme-Architektur | 4 Themes, 2 Density Modes, ThemeSwitcher, Anti-Flash | `d6fc0c7` |
 | Agenten-Betriebssystem v2 + v3 | Vollständige Überarbeitung, hebelorientierte Queue | `dc72ff9` |
-| Q-010 UG Stories | Story-Map + 6 Stories US-UG-001–006, Registry + Traceability | (dieser Commit) |
+| Q-010 UG Stories | Story-Map + 6 Stories US-UG-001–006 | `50d3827` |
+| Q-001 US-AV-008 | Story-Datei Verfahrenslage verstehen | `ee20fc6` |
+| Q-062 Build CI | GitHub Actions Build-Check | `e16c707` |
+| Q-053 CLAUDE.md | Design System / Themes dokumentiert | (Folge) |
+| Q-050–052 arc42 | Kita-Schicht, Theme, ADR-007 | (Folge) |
+| Q-040–042 API | OpenAPI AV + Kita + Aggregationsvertrag | (Folge) |
+| Q-060–061 Contrib | CONTRIBUTING.md + Issue-Templates | (Folge) |

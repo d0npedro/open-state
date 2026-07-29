@@ -20,7 +20,7 @@ npm run build      # Production build
 npm run lint       # ESLint (Next.js defaults)
 ```
 
-No test framework is configured yet.
+E2E tests: Playwright under `demo/e2e/` (`npm run test:e2e`). CI: `.github/workflows/e2e.yml` and `.github/workflows/build.yml`.
 
 ## Repository Structure
 
@@ -41,36 +41,53 @@ openState/
 
 **Path alias:** `@/*` maps to the `demo/` root.
 
-### Demo Routes (Arbeitsverwaltung vertical slice)
+### Demo Routes
 
 | Route | Purpose |
 |-------|---------|
-| `/` | Landing page |
-| `/fall` | Case overview & status |
-| `/fall/dokumente` | Document requests |
-| `/fall/rueckfragen` | Clarification questions |
-| `/fall/termine` | Appointments |
-| `/fall/bescheide` | Administrative decisions |
-| `/fall/verlauf` | Full audit log / timeline |
+| `/` | Landing page (all demo domains) |
+| `/fall` … `/fall/*` | Arbeitsverwaltung vertical slice |
+| `/fall/hinweise` | Fairness / Verfahrenslage (US-AV-008) |
+| `/gruendung` … `/gruendung/*` | Unternehmensgründung |
+| `/kita`, `/kita/lagebild` | Kita Transparenz + JA-Steuerung |
 | `/stories` | Story coverage dashboard |
 | `/feedback` | Feedback → GitHub issues |
 
 ### Key Files
 
-- `demo/data/mockFall.ts` — Single source of truth for all mock case data (realistic ALG I employment benefit case with proper § SGB III references)
-- `demo/data/storyRegistry.ts` — Maps user story IDs to screens and acceptance criteria
-- `demo/types/index.ts` — TypeScript types for all domain models (`Fall`, `Dokument`, `Rueckfrage`, `Termin`, `Bescheid`, `TimelineEreignis`)
-- `demo/app/globals.css` — Design system tokens (CSS variables) and utility classes
-- `demo/components/BuildInfo.tsx` — Footer showing env/version/commit SHA
+- `demo/data/mockFall.ts` — ALG I mock case (source of truth for AV)
+- `demo/data/mockGruendungsfall.ts` — Gründungsakte mock
+- `demo/data/mockKitaLagebild.ts` — Kita Kennzahlen mock
+- `demo/data/storyRegistry.ts` — Story IDs → screens / acceptance criteria
+- `demo/types/index.ts`, `gruendung.ts`, `kita.ts`, `fairness.ts` — domain models
+- `demo/lib/fairness/rules.ts` — rule-based fairness signals (no ML)
+- `demo/context/DemoStateContext.tsx` / `GruendungStateContext.tsx` — interactive demo state
+- `demo/app/globals.css` — design tokens and utility classes
+- `demo/components/BuildInfo.tsx` — footer env/version/commit SHA
 
-### Design System
+### Design System & Themes
 
-CSS variables (defined in `globals.css`):
-- `--color-primary: #003F8C` — Government blue
-- `--color-success/warning/danger` — Status colors
-- `--radius: 6px`, `--shadow` — Consistent decoration
+Visual-only layer — **never** changes domain logic, status calculations, or access rules (DEC-010).
 
-Utility classes: `.card`, `.badge`, `.btn`, `.btn-primary`, `.btn-secondary`
+| Piece | Path | Role |
+|-------|------|------|
+| CSS tokens | `demo/app/globals.css` | Colors, density, radius, shadows via CSS variables |
+| Theme registry | `demo/design-system/themes/themes.ts` | Theme IDs, labels, recommended density |
+| ThemeProvider | `demo/design-system/provider/ThemeProvider.tsx` | React context, `localStorage` (`os-theme`, `os-density`) |
+| ThemeSwitcher | `demo/components/ThemeSwitcher.tsx` | Footer UI to switch theme/density |
+| Anti-flash | `demo/app/layout.tsx` | Inline script applies stored theme before paint |
+| Docs | `demo/design-system/README.md` | Design system notes |
+
+**Themes:** `civic-neutral` (default), `citizen-warm`, `office-dense`, `accessible-contrast`  
+**Density:** normal / compact (and accessible where applicable)  
+**Mechanism:** `[data-theme]` and `[data-density]` on `<html>`
+
+Base tokens (defaults under civic-neutral):
+- `--color-primary` — government blue
+- `--color-success` / `--color-warning` / `--color-danger` — status colors
+- `--radius`, `--shadow` — decoration
+
+Utility classes: `.card`, `.badge`, `.btn`, `.btn-primary`, `.btn-secondary`, status chips
 
 ### Environment Variables
 

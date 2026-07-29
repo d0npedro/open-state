@@ -1,6 +1,6 @@
 # BUILD_STATE.md – Aktueller Projektstand
 
-Zuletzt aktualisiert: nach Q-010 (UG Story-System: US-UG-001–006)
+Zuletzt aktualisiert: nach Abschluss Queue P5–P9 (Q-001, Q-040–042, Q-050–053, Q-060–062)
 
 Dieser Stand beschreibt, was tatsächlich existiert und funktioniert.
 Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
