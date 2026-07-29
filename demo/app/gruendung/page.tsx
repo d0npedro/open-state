@@ -179,6 +179,7 @@ function fairnessSignalZiel(
   // Steuernummer fehlt (VS-05 AUSSTEHEND oder IN_BEARBEITUNG)
   // CTA-Text: bei offener Rückfrage/Ausstehend „Zum Finanzamt“;
   // nach Start der Vergabe (IN_BEARBEITUNG) „Steuernummer-Stand ansehen“.
+  // Hilfstext: session-sensitiv (offene RQ → zuerst klären; IN_BEARBEITUNG → Vergabe läuft).
   if (signal.typ === 'UG_STEUERNUMMER_FEHLT' || signal.id === 'UG-STEUERNUMMER-FEHLT') {
     const vs05 = akte.verfahrensSchritte.find(vs => vs.id === 'VS-05');
     const offen =
@@ -188,11 +189,18 @@ function fairnessSignalZiel(
     const finanzamt = akte.beteiligteBehörden.find(b => b.typ === 'FINANZAMT');
     if (!finanzamt) return null;
     const inBearbeitung = vs05.status === 'IN_BEARBEITUNG';
+    const hatOffeneRueckfrage = akte.rueckfragen.some(r => !r.beantwortet);
+    const hint = inBearbeitung
+      ? 'Die Vergabe der Steuernummer ist beim Finanzamt in Bearbeitung. Status und Kontakt finden Sie auf der Behördenkarte.'
+      : hatOffeneRueckfrage
+        ? 'Zuerst die offene Rückfrage des Finanzamts klären. Rolle, Kontakt und offene Schritte finden Sie auf der Behördenkarte.'
+        : 'Die Steuernummer vergibt das Finanzamt nach Abschluss der steuerlichen Erfassung. Rolle, Kontakt und offene Schritte finden Sie auf der Behördenkarte.';
     return {
       href: `/gruendung/behoerden#beh-${finanzamt.id}`,
       cta: inBearbeitung ? 'Steuernummer-Stand ansehen' : 'Zum Finanzamt',
       icon: 'building',
       testKey: `steuernummer-${finanzamt.id}`,
+      hint,
     };
   }
 

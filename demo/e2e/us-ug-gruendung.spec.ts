@@ -201,6 +201,11 @@ test.describe('UG – Übersicht', () => {
     await expect(steuernummerCta).toBeVisible();
     await expect(steuernummerCta).toHaveAttribute('href', '/gruendung/behoerden#beh-BEH-02');
     await expect(steuernummerCta).toContainText(/Zum Finanzamt/i);
+    // Hilfstext bei offener RQ: zuerst Finanzamt-Rückfrage klären
+    const steuernummerHint = page.getByTestId('uebersicht-fairness-cta-hint-steuernummer-BEH-02');
+    await expect(steuernummerHint).toBeVisible();
+    await expect(steuernummerHint).toContainText(/offene Rückfrage des Finanzamts klären/i);
+    await expect(steuernummerHint).toContainText(/Behördenkarte/i);
 
     const betriebsdatumCta = page.getByTestId('uebersicht-fairness-cta-betriebsdatum');
     await expect(betriebsdatumCta).toBeVisible();
@@ -263,6 +268,12 @@ test.describe('UG – Übersicht', () => {
     await expect(page.getByTestId('uebersicht-fairness-cta-steuernummer-BEH-02')).not.toContainText(
       /^Zum Finanzamt/i
     );
+    // Steuernummer-CTA-Hilfstext nach RQ-Antwort: Vergabe in Bearbeitung, keine RQ-Priorität
+    const steuernummerHint = page.getByTestId('uebersicht-fairness-cta-hint-steuernummer-BEH-02');
+    await expect(steuernummerHint).toBeVisible();
+    await expect(steuernummerHint).toContainText(/in Bearbeitung/i);
+    await expect(steuernummerHint).toContainText(/Behördenkarte/i);
+    await expect(steuernummerHint).not.toContainText(/offene Rückfrage des Finanzamts klären/i);
     // Betriebsdatum-Signal: keine „zuerst Rückfrage beantworten“-Anweisung mehr
     const betriebsSignal = page.getByTestId('uebersicht-fairness-UG-BETRIEBSDATUM');
     await expect(betriebsSignal).toContainText(/Rückfrage des Finanzamts ist beantwortet/i);
