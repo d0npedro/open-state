@@ -200,12 +200,13 @@ export const storyRegistry: StoryRegistryEntry[] = [
     domain: 'Kita-Betrieb & Jugendamt-Steuerung',
     title: 'Bedarfsplanungsentwurf erstellen',
     role: 'Jugendamt Planung',
-    status: 'BEREIT',
+    status: 'DEMONSTRIERBAR',
     problem: 'Bedarfsplanung (§ 80 SGB VIII) basiert auf Jahresberichten und Schätzungen statt auf aktuellen Betriebsdaten',
-    screen: 'Bedarfsplanung (nicht implementiert)',
-    transparency_focus: 'Planungsentwurf mit nachvollziehbarer Datengrundlage und Versorgungsprognose',
-    acceptance_criteria_count: 4,
-    implemented_criteria: 0,
+    screen: 'Bedarfsplanung · Entwurf',
+    transparency_focus: 'Planungsentwurf mit nachvollziehbarer Datengrundlage und ausgewiesener Planungslücke',
+    acceptance_criteria_count: 6,
+    implemented_criteria: 5,
+    route: '/kita/bedarfsplanung',
     source_file: 'docs/stories/kita_betrieb_und_jugendamt_steuerung/US-KJ-007_Bedarfsplanung_erstellen.md'
   },
   {
