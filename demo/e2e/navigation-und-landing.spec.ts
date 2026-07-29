@@ -72,7 +72,8 @@ test.describe('Tab-Navigation im Fall-Bereich', () => {
 
   test('Navigation zu Unterlagen', async ({ page }) => {
     await page.goto('/fall');
-    await page.getByRole('link', { name: /Unterlagen/i }).click();
+    // Tab-Nav: Seite hat zusätzlich Kacheln/CTAs mit „Unterlagen“ im Namen
+    await page.locator('.tab-nav-item').filter({ hasText: 'Unterlagen' }).click();
     await expect(page).toHaveURL('/fall/dokumente');
     const activeTab = page.locator('.tab-nav-item.active');
     await expect(activeTab).toContainText('Unterlagen');
