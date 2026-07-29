@@ -5,7 +5,10 @@
 'use client';
 
 import Link from 'next/link';
-import { useDemoState } from '@/context/DemoStateContext';
+import {
+  demoDokUploadEreignisId,
+  useDemoState,
+} from '@/context/DemoStateContext';
 import {
   berechneFairnessSignale,
   berechneFristTage,
@@ -190,7 +193,11 @@ export default function FallPage() {
               data-testid="upload-quittung-liste"
             >
               {sessionUploads.map(dok => (
-                <li key={dok.id} data-testid={`upload-quittung-item-${dok.id}`}>
+                <li
+                  key={dok.id}
+                  data-testid={`upload-quittung-item-${dok.id}`}
+                  style={{ marginBottom: '0.35rem' }}
+                >
                   {dok.bezeichnung}
                   {dok.hochgeladenAm ? (
                     <span style={{ color: 'var(--color-text-muted)' }}>
@@ -198,6 +205,25 @@ export default function FallPage() {
                       · eingereicht am {dok.hochgeladenAm}
                     </span>
                   ) : null}
+                  {' '}
+                  <Link
+                    href={`/fall/verlauf#ere-${demoDokUploadEreignisId(dok.id)}`}
+                    className="btn btn-secondary btn-inline"
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '0.3rem',
+                      minHeight: 36,
+                      fontSize: '0.8rem',
+                      marginLeft: '0.25rem',
+                      verticalAlign: 'middle',
+                    }}
+                    data-testid={`upload-quittung-verlauf-${dok.id}`}
+                    aria-label={`${dok.bezeichnung} im Verlauf ansehen`}
+                  >
+                    <Icon name="clock" size={14} />
+                    Im Verlauf ansehen
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -249,7 +275,7 @@ export default function FallPage() {
                   </div>
                 )}
                 <Link
-                  href="/fall/dokumente"
+                  href={`/fall/dokumente#dok-${naechsteOffeneUnterlage.id}`}
                   className="btn btn-primary"
                   style={{
                     marginTop: '0.75rem',

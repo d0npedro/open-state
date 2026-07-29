@@ -251,12 +251,63 @@ test.describe('US-AV-002 – Status einsehen', () => {
     await expect(page.getByTestId('upload-quittung-naechste-countdown')).toContainText(/noch 9 Tage/i);
     await expect(page.getByTestId('upload-quittung-naechste-cta')).toHaveAttribute(
       'href',
-      '/fall/dokumente'
+      '/fall/dokumente#dok-DOK-004'
     );
 
     // Fristen-Block enthält nur noch die verbliebene Unterlage
     await expect(page.getByTestId('dok-frist-DOK-003')).toHaveCount(0);
     await expect(page.getByTestId('dok-frist-DOK-004')).toBeVisible();
+  });
+
+  test('Übersicht Upload-Quittung: Verlauf-Tiefenlink zum Session-Upload (Q-194)', async ({ page }) => {
+    // US-AV-001/003/007: Quittung pro Session-Upload mit Tiefenlink #ere-E-DEMO-DOK-…
+    // Kein page.goto nach State (DEC-012) – Link navigiert im Layout
+    const { goFallTab } = await import('./helpers/sessionNav');
+
+    await goFallTab(page, 'Unterlagen', /\/fall\/dokumente/);
+    await page.getByRole('button', { name: /Als hochgeladen markieren/i }).first().click();
+    await expect(page.getByTestId('dok-upload-quittung-DOK-003')).toBeVisible();
+
+    await goFallTab(page, 'Übersicht', /\/fall$/);
+    await expect(page.getByTestId('upload-quittung')).toBeVisible();
+
+    const verlaufLink = page.getByTestId('upload-quittung-verlauf-DOK-003');
+    await expect(verlaufLink).toBeVisible();
+    await expect(verlaufLink).toHaveAttribute(
+      'href',
+      '/fall/verlauf#ere-E-DEMO-DOK-DOK-003'
+    );
+    await expect(verlaufLink).toContainText(/Im Verlauf ansehen/i);
+
+    await verlaufLink.click();
+    await expect(page).toHaveURL(/\/fall\/verlauf#ere-E-DEMO-DOK-DOK-003/);
+
+    const card = page.getByTestId('verlauf-ereignis-E-DEMO-DOK-DOK-003');
+    await expect(card).toBeVisible();
+    await expect(card).toHaveAttribute('aria-current', 'location');
+    await expect(card).toHaveAttribute('data-session-upload', 'true');
+    await expect(page.getByTestId('verlauf-session-upload-badge-E-DEMO-DOK-DOK-003')).toContainText(
+      /Ihr Upload/i
+    );
+  });
+
+  test('Übersicht Upload-Quittung: nächste Unterlage springt zum Dokument-Anker', async ({ page }) => {
+    const { goFallTab } = await import('./helpers/sessionNav');
+
+    await goFallTab(page, 'Fragen', /\/fall\/rueckfragen/);
+    await page.getByRole('button', { name: /Jetzt beantworten|Rückfrage beantworten/i }).click();
+    await page.getByTestId('rq-antwort-absenden').click();
+
+    await goFallTab(page, 'Unterlagen', /\/fall\/dokumente/);
+    await page.getByRole('button', { name: /Als hochgeladen markieren/i }).first().click();
+
+    await goFallTab(page, 'Übersicht', /\/fall$/);
+    const cta = page.getByTestId('upload-quittung-naechste-cta');
+    await expect(cta).toHaveAttribute('href', '/fall/dokumente#dok-DOK-004');
+    await cta.click();
+    await expect(page).toHaveURL(/\/fall\/dokumente#dok-DOK-004/);
+    await expect(page.locator('#dok-DOK-004')).toBeVisible();
+    await expect(page.getByTestId('dok-karte-DOK-004')).toContainText(/Formular SG1|Wird noch benötigt/i);
   });
 
 });

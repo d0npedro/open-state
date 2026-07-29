@@ -135,10 +135,12 @@ export default function DokumentePage() {
         return (
           <div
             key={dok.id}
+            id={`dok-${dok.id}`}
             className="card"
             data-testid={`dok-karte-${dok.id}`}
             style={{
               borderLeft: brauchtUpload ? '5px solid var(--color-warning)' : dok.status === 'AKZEPTIERT' ? '5px solid var(--color-success)' : dok.status === 'HOCHGELADEN' ? '5px solid var(--color-primary)' : '1px solid var(--color-border)',
+              scrollMarginTop: '5rem',
             }}
           >
             {/* Dokumentenheader: Titel + Status */}
