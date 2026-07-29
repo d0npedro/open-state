@@ -8,6 +8,30 @@ Erlaubte Pfade nur: `demo/app/gruendung/**`, `demo/context/GruendungStateContext
 
 ---
 
+## 2026-07-29 – Iteration 3: Behörden-CTA zu offener Rückfrage
+
+### Was
+Behörden-Karte zeigt bei offener Rückfrage der jeweiligen Stelle einen
+Warn-Hinweis mit Fragetext, Frist und CTA „Frage beantworten“ (Anker
+`#rq-{id}`). Rückfragen-Karten tragen `id` + `scroll-margin`. E2E deckt
+CTA, Navigation und Abwesenheit bei anderen Behörden ab.
+
+### Dateien
+- `demo/app/gruendung/behoerden/page.tsx` – CTA pro Behörde mit offenen Fragen
+- `demo/app/gruendung/rueckfragen/page.tsx` – Anker-IDs auf Karten
+- `demo/e2e/us-ug-gruendung.spec.ts` – Behörden-CTA-Tests
+- `docs/loops/ug-JOURNAL.md` – dieses Journal
+
+### Build
+`npm run lint` + `npm run build` im Ordner `demo/` grün.
+
+### Nächster sinnvoller UG-Schritt (Vorschlag)
+- Tab „Hinweise“ in der UG-Navigation (Seite existiert bereits)
+- Übersicht: Behörden-Zeile mit Link zur offenen Rückfrage
+- Verlauf: zusätzlicher Filter nach Ereignistyp (optional)
+
+---
+
 ## 2026-07-29 – Iteration 2: Verlauf-Filter nach handelnder Stelle
 
 ### Was
