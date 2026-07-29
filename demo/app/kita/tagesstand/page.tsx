@@ -7,6 +7,9 @@
  * Personalschlüssel-Unterschreitung sichtbar, nicht auto-gemeldet.
  * Freigabe durch Leitung sperrt den Stand. Session-lokal, kein Backend.
  * Prozesskette: Belegung (US-KJ-002) → Monatsbericht (US-KJ-003) → Meldung (US-KJ-004).
+ * Druck freigabeunabhängig: Status, Datenbasis (Belegung-Vorbelegung, Gruppen,
+ * Schlüssel-Hinweis) und Freigabenachweis im Ausdruck (Spiegel Monatsbericht/Meldung).
+ * Interaktive Phasen, Eingabefelder und Prozess-Hub no-print.
  * Keine Kind- oder Personennamen.
  */
 
@@ -208,9 +211,26 @@ export default function KitaTagesstandPage() {
     setPhase('ERFASSUNG');
   }
 
+  const phaseLabel =
+    phase === 'AUFFORDERUNG'
+      ? 'Aufforderung (noch nicht erfasst)'
+      : phase === 'ERFASSUNG'
+        ? 'Erfassung (Eingabe je Gruppe)'
+        : phase === 'ZUSAMMENFASSUNG'
+          ? 'Zusammenfassung (Freigabe ausstehend)'
+          : 'Freigegeben (schreibgeschützt)';
+
+  const validierungsFehler = validateGruppen(gruppen);
+  const gruppenGesamt = gruppen.length;
+  const gruppenGeschlossen = gruppen.filter(g => g.geschlossen).length;
+  const gruppenOffen = gruppenGesamt - gruppenGeschlossen;
+  const summenOk =
+    !validierungsFehler &&
+    gruppen.filter(g => !g.geschlossen).every(g => kinderSumme(g.kinder) === g.belegtePlaetze);
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1.75rem' }}>
-      <div>
+      <div className="no-print">
         <div
           style={{
             fontSize: '0.8rem',
@@ -231,6 +251,142 @@ export default function KitaTagesstandPage() {
           Kindlisten, keine Personennamen. Unterschreitung des Personalschlüssels wird
           markiert, aber nicht automatisch gemeldet.
         </p>
+      </div>
+
+      {/* Druck freigabeunabhängig – Spiegel Monatsbericht/Meldung/Bedarfsplanung */}
+      <div
+        className="no-print card"
+        style={{
+          display: 'flex',
+          flexWrap: 'wrap',
+          gap: '1rem',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+        }}
+      >
+        <div style={{ maxWidth: '40rem' }}>
+          <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>Export</div>
+          <strong style={{ fontSize: '0.95rem' }}>Druckansicht Tagesstand</strong>
+          <p
+            style={{
+              fontSize: '0.8rem',
+              color: 'var(--color-text-muted)',
+              margin: '0.25rem 0 0',
+              lineHeight: 1.5,
+            }}
+          >
+            Druck ist freigabeunabhängig (Aufforderung, Erfassung, Zusammenfassung und
+            freigegebene Fassung). Status, Datenbasis (Vorbelegung Belegung, Gruppenaggregate,
+            Schlüssel-Hinweis) und Freigabenachweis erscheinen im Ausdruck. Aktionsbuttons,
+            Eingabefelder, Bestätigungsdialog und Prozess-Hub sind no-print. Keine Kind- oder
+            Personennamen.
+          </p>
+        </div>
+        <button
+          type="button"
+          className="btn btn-secondary"
+          onClick={() => window.print()}
+          style={{ fontSize: '0.875rem', flexShrink: 0 }}
+        >
+          Drucken / als PDF speichern
+        </button>
+      </div>
+
+      {/* print-only Kopf + Status + Datenbasis + Freigabe */}
+      <div className="print-only print-block" style={{ margin: 0 }}>
+        <p style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', margin: '0 0 0.35rem' }}>
+          US-KJ-001 · Tagesstand erfassen · Demo Fachkraft / Kita-Leitung · DEC-004
+        </p>
+        <h1 style={{ margin: '0 0 0.35rem', fontSize: '1.35rem' }}>
+          Tagesstand {base.datumLabel}
+        </h1>
+        <p style={{ color: 'var(--color-text-muted)', margin: '0 0 0.75rem', fontSize: '0.9rem' }}>
+          {base.einrichtungBezeichnung} · {base.traeger} · Planungsraum{' '}
+          {base.planungsraumBezeichnung}
+        </p>
+        <div
+          style={{
+            marginBottom: '0.75rem',
+            padding: '0.75rem 1rem',
+            border: '1px solid var(--color-border)',
+            borderRadius: 'var(--radius)',
+            fontSize: '0.875rem',
+            background: 'var(--color-neutral-light)',
+            borderLeft: `4px solid ${st.color}`,
+          }}
+          role="status"
+        >
+          <strong style={{ color: st.color }}>Status im Ausdruck: {st.label}</strong>
+          <div style={{ marginTop: '0.25rem', color: 'var(--color-text-muted)', fontSize: '0.8rem' }}>
+            UI-Phase: {phaseLabel} · Tagesstand-ID{' '}
+            <span style={{ fontFamily: 'monospace' }}>{base.id}</span> · Stichtag {base.datumIso} ·
+            Demo-Bezug {base.fiktivesHeute}
+          </div>
+        </div>
+        <div
+          style={{
+            marginBottom: '0.75rem',
+            padding: '0.75rem 1rem',
+            border: '1px solid var(--color-border)',
+            borderRadius: 'var(--radius)',
+            fontSize: '0.875rem',
+          }}
+          role="note"
+        >
+          <strong style={{ display: 'block', marginBottom: '0.35rem' }}>
+            Datenbasis im Ausdruck
+          </strong>
+          <p style={{ margin: 0, fontSize: '0.8rem', lineHeight: 1.5 }}>
+            Vorbelegung aus Belegungsstand (US-KJ-002) derselben Einrichtung (
+            <span style={{ fontFamily: 'monospace' }}>{base.einrichtungId}</span>
+            ), editierbar bis Freigabe. Gruppen: {gruppenOffen} geöffnet, {gruppenGeschlossen}{' '}
+            temporär geschlossen (von {gruppenGesamt}). Aggregate Anwesend {summen.anwesend} ·
+            Krank {summen.krank} · Urlaub {summen.urlaub} · Sonstiges {summen.sonstiges} ·
+            Personal geplant {fmtStunden(summen.geplant)} h / Ist {fmtStunden(summen.ist)} h.
+            Schlüssel-Hinweis (Demo-Relation): {summen.unterschritten} Gruppe
+            {summen.unterschritten === 1 ? '' : 'n'} – sichtbar, keine automatische Meldung an das
+            Jugendamt.
+            {summenOk
+              ? ' Statussummen je geöffneter Gruppe entsprechen belegten Plätzen.'
+              : validierungsFehler
+                ? ` Prüfungshinweis: ${validierungsFehler}`
+                : ' Statussummen noch unvollständig oder abweichend von belegten Plätzen.'}
+            {phase === 'AUFFORDERUNG'
+              ? ' Erfassung noch nicht gestartet – Ausdruck zeigt Vorbelegung/aktuellen Stand ohne Freigabe.'
+              : ''}
+          </p>
+        </div>
+        <div
+          style={{
+            marginBottom: '0.5rem',
+            padding: '0.75rem 1rem',
+            border: '1px solid var(--color-border)',
+            borderRadius: 'var(--radius)',
+            fontSize: '0.875rem',
+            borderLeft: freigabe
+              ? '4px solid var(--color-success)'
+              : '4px solid var(--color-border)',
+          }}
+          role="note"
+        >
+          <strong style={{ display: 'block', marginBottom: '0.35rem' }}>
+            Freigabe im Ausdruck
+          </strong>
+          {freigabe ? (
+            <p style={{ margin: 0, fontSize: '0.8rem', lineHeight: 1.5 }}>
+              Freigegeben am {freigabe.freigegebenAm} · Rolle {freigabe.freigegebenDurchRolle} ·
+              aktive Bestätigung: ja. Schreibgeschützt (Revisionssicherheit). Freigegebene
+              Aggregate fließen als Datenbasis in den Monatsbericht (US-KJ-003) ein – keine
+              automatische Meldung an das Jugendamt (US-KJ-004).
+            </p>
+          ) : (
+            <p style={{ margin: 0, fontSize: '0.8rem', lineHeight: 1.5 }}>
+              Noch nicht freigegeben. Entwürfe und Zwischenstände sind für das Jugendamt nicht
+              verbindlich und speisen den Monatsbericht erst nach Leitungsfreigabe. Druck
+              dokumentiert den Erfassungsstand ohne stillen Versand (DEC-004).
+            </p>
+          )}
+        </div>
       </div>
 
       {/* Statusleiste */}
@@ -254,7 +410,7 @@ export default function KitaTagesstandPage() {
             Demo-Stichtag {base.fiktivesHeute}
           </div>
         </div>
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+        <div className="no-print" style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
           {phase === 'AUFFORDERUNG' && (
             <button type="button" className="btn btn-primary" onClick={startErfassung}>
               Erfassung starten
@@ -283,14 +439,14 @@ export default function KitaTagesstandPage() {
         </div>
       </div>
 
-      <div className="notice-box notice-box-neutral" role="note">
+      <div className="notice-box notice-box-neutral no-print" role="note">
         <div style={{ fontSize: '0.875rem' }}>
           <strong>Datenschutz:</strong> {base.datenschutzHinweis}
         </div>
       </div>
 
       {fehler && (
-        <div className="notice-box notice-box-warn" role="alert">
+        <div className="notice-box notice-box-warn no-print" role="alert">
           <div style={{ fontSize: '0.875rem' }}>
             <strong>Prüfung:</strong> {fehler}
           </div>
@@ -299,7 +455,7 @@ export default function KitaTagesstandPage() {
 
       {freigabe && (
         <div
-          className="card"
+          className="card no-print"
           style={{ borderLeft: '4px solid var(--color-success)', background: 'var(--color-neutral-light)' }}
         >
           <h2 style={{ margin: '0 0 0.5rem', fontSize: '1.05rem' }}>Freigabe dokumentiert</h2>
@@ -329,7 +485,7 @@ export default function KitaTagesstandPage() {
         </div>
       )}
 
-      {/* Gesamtübersicht */}
+      {/* Gesamtübersicht – Screen ab Erfassung; im Druck immer (print-only wenn Aufforderung) */}
       {(phase === 'ERFASSUNG' || phase === 'ZUSAMMENFASSUNG' || phase === 'FREIGEGEBEN') && (
         <section>
           <h2 style={{ marginBottom: '1rem' }}>Tagesübersicht (Aggregate)</h2>
@@ -387,8 +543,44 @@ export default function KitaTagesstandPage() {
         </section>
       )}
 
+      {/* Druck: Aggregate auch in Phase Aufforderung (Vorbelegung) */}
       {phase === 'AUFFORDERUNG' && (
-        <section className="card">
+        <section className="print-only print-block">
+          <h2 style={{ marginBottom: '1rem' }}>Tagesübersicht (Aggregate, Vorbelegung)</h2>
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))',
+              gap: '0.75rem',
+            }}
+          >
+            {[
+              { l: 'Anwesend', v: summen.anwesend },
+              { l: 'Krank', v: summen.krank },
+              { l: 'Urlaub', v: summen.urlaub },
+              { l: 'Sonstiges', v: summen.sonstiges },
+              { l: 'Personal geplant (h)', v: fmtStunden(summen.geplant) },
+              { l: 'Personal Ist (h)', v: fmtStunden(summen.ist) },
+              {
+                l: 'Gruppen mit Schlüssel-Hinweis',
+                v: summen.unterschritten,
+              },
+            ].map(k => (
+              <div
+                key={k.l}
+                className="card"
+                style={{ borderTop: '3px solid var(--color-primary)' }}
+              >
+                <div style={{ fontSize: '0.7rem', color: 'var(--color-text-muted)' }}>{k.l}</div>
+                <div style={{ fontSize: '1.35rem', fontWeight: 700 }}>{k.v}</div>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {phase === 'AUFFORDERUNG' && (
+        <section className="card no-print">
           <h2 style={{ marginTop: 0 }}>Tagesstand für {base.datumLabel} fehlt</h2>
           <p style={{ fontSize: '0.9rem', color: 'var(--color-text-muted)', maxWidth: '40rem' }}>
             Erfassen Sie je geöffneter Gruppe die Anzahl der Kinder in den Status anwesend,
@@ -402,11 +594,18 @@ export default function KitaTagesstandPage() {
         </section>
       )}
 
-      {/* Gruppenerfassung */}
-      {(phase === 'ERFASSUNG' || phase === 'ZUSAMMENFASSUNG' || phase === 'FREIGEGEBEN') && (
-        <section>
+      {/* Gruppenerfassung – Screen ab Erfassung; Druck inkl. Vorbelegung in Aufforderung */}
+      {(phase === 'ERFASSUNG' ||
+        phase === 'ZUSAMMENFASSUNG' ||
+        phase === 'FREIGEGEBEN' ||
+        phase === 'AUFFORDERUNG') && (
+        <section className={phase === 'AUFFORDERUNG' ? 'print-only print-block' : undefined}>
           <h2 style={{ marginBottom: '1rem' }}>
-            {phase === 'ERFASSUNG' ? 'Erfassung je Gruppe' : 'Gruppenwerte'}
+            {phase === 'ERFASSUNG'
+              ? 'Erfassung je Gruppe'
+              : phase === 'AUFFORDERUNG'
+                ? 'Gruppenwerte (Vorbelegung)'
+                : 'Gruppenwerte'}
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
             {gruppen.map(g => {
@@ -486,27 +685,40 @@ export default function KitaTagesstandPage() {
                             ['sonstiges', 'Sonstiges'],
                           ] as const
                         ).map(([key, label]) => (
-                          <label key={key} style={{ fontSize: '0.8rem', display: 'block' }}>
+                          <div key={key} style={{ fontSize: '0.8rem' }}>
                             <span style={{ color: 'var(--color-text-muted)' }}>{label}</span>
-                            <input
-                              type="number"
-                              min={0}
-                              step={1}
-                              disabled={readOnly || phase !== 'ERFASSUNG'}
-                              value={g.kinder[key]}
-                              onChange={e => updateKinder(g.gruppeId, key, e.target.value)}
+                            <span
+                              className="print-only print-block"
                               style={{
-                                display: 'block',
-                                width: '100%',
+                                display: 'none',
                                 marginTop: '0.2rem',
-                                padding: '0.4rem 0.5rem',
-                                border: '1px solid var(--color-border)',
-                                borderRadius: 'var(--radius)',
                                 fontSize: '0.95rem',
+                                fontWeight: 600,
                               }}
-                              aria-label={`${g.bezeichnung}: ${label}`}
-                            />
-                          </label>
+                            >
+                              {g.kinder[key]}
+                            </span>
+                            <label className="no-print" style={{ display: 'block' }}>
+                              <input
+                                type="number"
+                                min={0}
+                                step={1}
+                                disabled={readOnly || phase !== 'ERFASSUNG'}
+                                value={g.kinder[key]}
+                                onChange={e => updateKinder(g.gruppeId, key, e.target.value)}
+                                style={{
+                                  display: 'block',
+                                  width: '100%',
+                                  marginTop: '0.2rem',
+                                  padding: '0.4rem 0.5rem',
+                                  border: '1px solid var(--color-border)',
+                                  borderRadius: 'var(--radius)',
+                                  fontSize: '0.95rem',
+                                }}
+                                aria-label={`${g.bezeichnung}: ${label}`}
+                              />
+                            </label>
+                          </div>
                         ))}
                       </div>
 
@@ -518,54 +730,80 @@ export default function KitaTagesstandPage() {
                           marginBottom: '0.5rem',
                         }}
                       >
-                        <label style={{ fontSize: '0.8rem', display: 'block' }}>
+                        <div style={{ fontSize: '0.8rem' }}>
                           <span style={{ color: 'var(--color-text-muted)' }}>
                             Personal geplant (h)
                           </span>
-                          <input
-                            type="number"
-                            min={0}
-                            step={0.5}
-                            disabled={readOnly || phase !== 'ERFASSUNG'}
-                            value={g.personal.geplantStunden}
-                            onChange={e =>
-                              updatePersonal(g.gruppeId, 'geplantStunden', e.target.value)
-                            }
+                          <span
+                            className="print-only print-block"
                             style={{
-                              display: 'block',
-                              width: '100%',
+                              display: 'none',
                               marginTop: '0.2rem',
-                              padding: '0.4rem 0.5rem',
-                              border: '1px solid var(--color-border)',
-                              borderRadius: 'var(--radius)',
                               fontSize: '0.95rem',
+                              fontWeight: 600,
                             }}
-                            aria-label={`${g.bezeichnung}: Personal geplant`}
-                          />
-                        </label>
-                        <label style={{ fontSize: '0.8rem', display: 'block' }}>
+                          >
+                            {fmtStunden(g.personal.geplantStunden)}
+                          </span>
+                          <label className="no-print" style={{ display: 'block' }}>
+                            <input
+                              type="number"
+                              min={0}
+                              step={0.5}
+                              disabled={readOnly || phase !== 'ERFASSUNG'}
+                              value={g.personal.geplantStunden}
+                              onChange={e =>
+                                updatePersonal(g.gruppeId, 'geplantStunden', e.target.value)
+                              }
+                              style={{
+                                display: 'block',
+                                width: '100%',
+                                marginTop: '0.2rem',
+                                padding: '0.4rem 0.5rem',
+                                border: '1px solid var(--color-border)',
+                                borderRadius: 'var(--radius)',
+                                fontSize: '0.95rem',
+                              }}
+                              aria-label={`${g.bezeichnung}: Personal geplant`}
+                            />
+                          </label>
+                        </div>
+                        <div style={{ fontSize: '0.8rem' }}>
                           <span style={{ color: 'var(--color-text-muted)' }}>Personal Ist (h)</span>
-                          <input
-                            type="number"
-                            min={0}
-                            step={0.5}
-                            disabled={readOnly || phase !== 'ERFASSUNG'}
-                            value={g.personal.istStunden}
-                            onChange={e =>
-                              updatePersonal(g.gruppeId, 'istStunden', e.target.value)
-                            }
+                          <span
+                            className="print-only print-block"
                             style={{
-                              display: 'block',
-                              width: '100%',
+                              display: 'none',
                               marginTop: '0.2rem',
-                              padding: '0.4rem 0.5rem',
-                              border: '1px solid var(--color-border)',
-                              borderRadius: 'var(--radius)',
                               fontSize: '0.95rem',
+                              fontWeight: 600,
                             }}
-                            aria-label={`${g.bezeichnung}: Personal Ist`}
-                          />
-                        </label>
+                          >
+                            {fmtStunden(g.personal.istStunden)}
+                          </span>
+                          <label className="no-print" style={{ display: 'block' }}>
+                            <input
+                              type="number"
+                              min={0}
+                              step={0.5}
+                              disabled={readOnly || phase !== 'ERFASSUNG'}
+                              value={g.personal.istStunden}
+                              onChange={e =>
+                                updatePersonal(g.gruppeId, 'istStunden', e.target.value)
+                              }
+                              style={{
+                                display: 'block',
+                                width: '100%',
+                                marginTop: '0.2rem',
+                                padding: '0.4rem 0.5rem',
+                                border: '1px solid var(--color-border)',
+                                borderRadius: 'var(--radius)',
+                                fontSize: '0.95rem',
+                              }}
+                              aria-label={`${g.bezeichnung}: Personal Ist`}
+                            />
+                          </label>
+                        </div>
                       </div>
 
                       <div style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>
@@ -593,7 +831,7 @@ export default function KitaTagesstandPage() {
       )}
 
       {phase === 'ZUSAMMENFASSUNG' && (
-        <section className="card" style={{ borderLeft: '4px solid var(--color-primary)' }}>
+        <section className="card no-print" style={{ borderLeft: '4px solid var(--color-primary)' }}>
           <h2 style={{ marginTop: 0 }}>Freigabe durch Leitung</h2>
           <p style={{ fontSize: '0.9rem', color: 'var(--color-text-muted)' }}>
             Nach Freigabe ist der Tagesstand gegen nachträgliche Änderung gesperrt
@@ -629,7 +867,14 @@ export default function KitaTagesstandPage() {
       <section className="card" style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)' }}>
         <h2 style={{ marginTop: 0, fontSize: '1rem', color: 'var(--color-text)' }}>Methodik</h2>
         <p style={{ marginTop: 0 }}>{base.methodikKurz}</p>
-        <p style={{ marginBottom: 0 }}>{base.rechtsgrundlageHinweis}</p>
+        <p style={{ marginBottom: '0.65rem' }}>{base.rechtsgrundlageHinweis}</p>
+        <p style={{ marginBottom: 0 }}>
+          <strong style={{ color: 'var(--color-text)' }}>Druckansicht:</strong> freigabeunabhängig
+          (Aufforderung, Erfassung, Zusammenfassung, freigegebene Fassung). Status, Datenbasis
+          (Vorbelegung aus Belegung US-KJ-002, Gruppenaggregate, Schlüssel-Hinweis) und
+          Freigabenachweis erscheinen im Ausdruck; Eingabefelder, Bestätigungsdialog,
+          Aktionsbuttons und Prozess-Hub sind no-print (Spiegel Monatsbericht/Meldung).
+        </p>
       </section>
 
       {/* Betriebliche Prozesskette: Tagesstand → Belegung · Monatsbericht · Meldung */}
@@ -713,7 +958,7 @@ export default function KitaTagesstandPage() {
         </div>
       </section>
 
-      <div style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)' }}>
+      <div className="no-print" style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)' }}>
         Prozesskette Einrichtung {base.einrichtungBezeichnung}: Belegung → Tagesstand → Monatsbericht
         → Meldung (gleiche Demo-Einrichtung). Öffentliche Aggregation ohne Einrichtungsdetail im{' '}
         <Link href="/kita" style={{ color: 'var(--color-primary)' }}>
@@ -723,8 +968,35 @@ export default function KitaTagesstandPage() {
         <Link href="/kita/lagebild" style={{ color: 'var(--color-primary)' }}>
           Steuerungslagebild
         </Link>{' '}
-        (DEC-004).
+        (DEC-004). Druck: freigabeunabhängig mit dokumentiertem Status, Datenbasis und
+        Freigabenachweis.
       </div>
+
+      <div
+        className="print-only print-block"
+        style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', marginTop: '0.5rem' }}
+      >
+        Druckansicht US-KJ-001 freigabeunabhängig · Status {st.label} · Datenbasis Belegung-Vorbelegung
+        + Gruppenaggregate ·{' '}
+        {freigabe ? `freigegeben ${freigabe.freigegebenAm}` : 'nicht freigegeben'} · nur Aggregate,
+        keine Kind- oder Personennamen (DEC-004).
+      </div>
+
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
+            .print-only { display: none; }
+            @media print {
+              .no-print { display: none !important; }
+              .print-only { display: inline !important; }
+              .print-only.print-block { display: block !important; }
+              body > div > header,
+              body nav { display: none !important; }
+              main { padding: 0 !important; }
+            }
+          `,
+        }}
+      />
     </div>
   );
 }
