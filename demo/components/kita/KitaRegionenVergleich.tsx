@@ -5,6 +5,7 @@
  * Dieselben Kernkennzahlen, Differenzspalte, Meldebasis-Kurzmarkierung.
  * CSV-Export der aktiven Vergleichsansicht (US-KJ-010 AK 4).
  * Zeitlicher Verlauf A vs. B über Monate + CSV des aktiven Verlaufs (US-KJ-010 AK 4).
+ * Open-Data-Lizenzhinweis im CSV-Metakopf (Demo vorläufig, siehe kitaCsvLizenz).
  * Keine Chart-Bibliothek — HTML-Tabelle. Keine Bewertung, keine Kind-/Personennamen.
  */
 
@@ -16,6 +17,11 @@ import {
   useMeldeeingangFuerBedarfsplanung,
   type PlanungsraumMeldebasis,
 } from '@/components/kita/KitaBedarfsplanungDatenbasis';
+import {
+  KITA_CSV_LIZENZ_BUTTON_TITLE,
+  KITA_CSV_LIZENZ_META_LINES,
+  KITA_CSV_LIZENZ_UI_HINWEIS,
+} from '@/components/kita/kitaCsvLizenz';
 
 function fmt(n: number) {
   return n.toLocaleString('de-DE');
@@ -319,6 +325,7 @@ export function KitaRegionenVergleich({
       `# Meldebasis_A: ${meldebasisCsvLabel(basisA)}`,
       `# Meldebasis_B: ${meldebasisCsvLabel(basisB)}`,
       '# Keine Kind- oder Personennamen. Keine Einrichtungsindividualdaten. Keine Trendbewertung.',
+      ...KITA_CSV_LIZENZ_META_LINES,
       '# Trennzeichen: Semikolon · Dezimaltrennzeichen: Komma · Encoding: UTF-8 BOM',
       '',
     ];
@@ -380,17 +387,23 @@ export function KitaRegionenVergleich({
           inkl. eigener CSV-Export der aktiven Kennzahl.
           Meldebasis je Raum aus der Demo-Stichprobe (Session-sensitiv).
           Stichtags-CSV (AK&nbsp;4) lädt die aktive Auswahl A/B inkl. Δ und Meldebasis.
+          Lizenzhinweis im CSV-Metakopf (Open-Data vorläufig).
         </div>
-        <button
-          type="button"
-          className="btn btn-secondary"
-          onClick={handleCsvDownload}
-          style={{ fontSize: '0.8rem', flexShrink: 0, whiteSpace: 'nowrap' }}
-          title={`CSV der aktuellen Stichtags-Vergleichsansicht: ${csvButtonLabel}`}
-          aria-label={`Regionenvergleich Stichtag als CSV herunterladen (${csvButtonLabel})`}
-        >
-          CSV herunterladen (Stichtag)
-        </button>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem', alignItems: 'flex-end', flex: '0 1 auto' }}>
+          <button
+            type="button"
+            className="btn btn-secondary"
+            onClick={handleCsvDownload}
+            style={{ fontSize: '0.8rem', flexShrink: 0, whiteSpace: 'nowrap' }}
+            title={`CSV der aktuellen Stichtags-Vergleichsansicht: ${csvButtonLabel}. ${KITA_CSV_LIZENZ_BUTTON_TITLE}`}
+            aria-label={`Regionenvergleich Stichtag als CSV herunterladen (${csvButtonLabel}; Lizenzhinweis im Metakopf)`}
+          >
+            CSV herunterladen (Stichtag)
+          </button>
+          <p style={{ margin: 0, fontSize: '0.72rem', color: 'var(--color-text-muted)', lineHeight: 1.4, maxWidth: '22rem', textAlign: 'right' }}>
+            {KITA_CSV_LIZENZ_UI_HINWEIS}
+          </p>
+        </div>
       </div>
 
       {/* Auswahl */}
@@ -766,6 +779,7 @@ function VerlaufAvsB({
       `# Meldebasis_B (Stichprobe): ${meldebasisCsvLabel(basisB)}`,
       `# Berichtsmonat_Meldebasis: ${demoKitaMeldeeingang.monatsLabel} (${meldeMonatsIso})`,
       '# Keine Kind- oder Personennamen. Keine Einrichtungsindividualdaten. Keine Trendbewertung. Keine Interpolation.',
+      ...KITA_CSV_LIZENZ_META_LINES,
       '# Trennzeichen: Semikolon · Dezimaltrennzeichen: Komma · Encoding: UTF-8 BOM',
       '',
     ];
@@ -836,21 +850,27 @@ function VerlaufAvsB({
             {raumA.bezeichnung} · {raumB.bezeichnung}
           </span>
         </div>
-        <button
-          type="button"
-          className="btn btn-secondary"
-          onClick={handleVerlaufCsvDownload}
-          style={{ fontSize: '0.8rem', flexShrink: 0, whiteSpace: 'nowrap' }}
-          title={`CSV des aktiven Monatsverlaufs: ${verlaufCsvLabel}`}
-          aria-label={`Verlauf A vs. B als CSV herunterladen (${verlaufCsvLabel})`}
-        >
-          CSV herunterladen (Verlauf)
-        </button>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem', alignItems: 'flex-end', flex: '0 1 auto' }}>
+          <button
+            type="button"
+            className="btn btn-secondary"
+            onClick={handleVerlaufCsvDownload}
+            style={{ fontSize: '0.8rem', flexShrink: 0, whiteSpace: 'nowrap' }}
+            title={`CSV des aktiven Monatsverlaufs: ${verlaufCsvLabel}. ${KITA_CSV_LIZENZ_BUTTON_TITLE}`}
+            aria-label={`Verlauf A vs. B als CSV herunterladen (${verlaufCsvLabel}; Lizenzhinweis im Metakopf)`}
+          >
+            CSV herunterladen (Verlauf)
+          </button>
+          <p style={{ margin: 0, fontSize: '0.72rem', color: 'var(--color-text-muted)', lineHeight: 1.4, maxWidth: '22rem', textAlign: 'right' }}>
+            {KITA_CSV_LIZENZ_UI_HINWEIS}
+          </p>
+        </div>
       </div>
 
       <p style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)', margin: '0 0 0.75rem', lineHeight: 1.5 }}>
         Dieselbe Raumauswahl im Monatsverlauf (US-KJ-010 AK&nbsp;4). Eine Kennzahl wählen — Werte A/B und Δ je Monat.
-        CSV-Export lädt genau die aktive Kennzahl und Raumauswahl (12 Monate, Semikolon, UTF-8 BOM).
+        CSV-Export lädt genau die aktive Kennzahl und Raumauswahl (12 Monate, Semikolon, UTF-8 BOM)
+        inkl. Lizenzhinweis im Metakopf.
         Keine Interpolation, keine Trendbewertung. Meldemonat ({demoKitaMeldeeingang.monatsLabel}) mit
         Meldebasis-Hinweis, falls Lücke in A oder B.
       </p>
