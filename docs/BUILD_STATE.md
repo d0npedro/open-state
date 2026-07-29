@@ -1,6 +1,6 @@
 # BUILD_STATE.md – Aktueller Projektstand
 
-Zuletzt aktualisiert: nach Supervisor-Merge 2026-07-29 (UG Q-100/Q-101, Kita Q-102/Q-103/Q-108, AV Q-092; E2E chromium grün; Queue Q-104–Q-107/Q-109 OFFEN)
+Zuletzt aktualisiert: nach Supervisor-Merge 2026-07-29 (Kita Q-109 Vorlage Residual/Meldebasis DONE `5ec2ed8`; Q-104–Q-107/Q-110 OFFEN; lint+build grün)
 
 Dieser Stand beschreibt, was tatsächlich existiert und funktioniert.
 Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
@@ -37,7 +37,7 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | `/kita` | Öffentlicher Transparenzbericht + Planungsraum-Filter + Residual↔Meldelücke | US-KJ-009, US-KJ-010 | ✓ |
 | `/kita/lagebild` | Jugendamt-Steuerungsansicht + Meldeeingang + Meldebeitrag + Monatsbericht-Vorschau-Kopplung | US-KJ-005, US-KJ-006 | ✓ |
 | `/kita/bedarfsplanung` | Bedarfsplanungsentwurf (§ 80 SGB VIII) + Meldebasis + Residual↔Meldelücke (Hinweis-only) | US-KJ-007 | ✓ |
-| `/kita/vorlage` | Politische Gremienvorlage + Freigabe | US-KJ-008 | ✓ |
+| `/kita/vorlage` | Politische Gremienvorlage + Freigabe + Meldebasis/Residual↔Meldelücke (Hinweis-only) | US-KJ-008 | ✓ |
 | `/kita/einrichtung` | Belegungsstand Einrichtung (aggregiert) | US-KJ-002 | ✓ |
 | `/kita/tagesstand` | Tagesstand erfassen (Aggregate, Freigabe) | US-KJ-001 | ✓ |
 | `/kita/monatsbericht` | Monatsbericht + Vorschau laufender Monat + Rücklink Lagebild-Anker | US-KJ-003 | ✓ |
@@ -135,6 +135,8 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 **Q-101 erledigt:** UG Verlauf-Filter nach Ereignistyp (Vorgang/Dokumente/Rückfragen/Bescheide), kombiniert mit Stellen-Filter.
 **Q-102 erledigt:** Kita Monatsbericht-Vorschau Rücklink zum Lagebild (`#kita-monatsbericht-vorschau`).
 **Q-103 erledigt:** Kita Bedarfsplanung Residual ↔ Meldelücke Hinweis-only (Südost).
+**Q-108 erledigt:** Kita Lagebild/Planungsraum Residual↔Meldelücke-Hinweis spiegeln.
+**Q-109 erledigt:** Kita Vorlage Meldebasis-Kurzhinweis + Residual↔Meldelücke (Hinweis-only, Fokus Südost; Session-Freigabe).
 
 ---
 
