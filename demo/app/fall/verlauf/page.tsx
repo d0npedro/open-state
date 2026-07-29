@@ -2,8 +2,9 @@
 // wenn sie sehen, dass ALLES dokumentiert ist.
 // Farbcodierung: Bürger = blau, Behörde = grün, System = grau.
 // Zeitstempel: menschlich lesbar, nicht maschinenformat.
+'use client';
 
-import { demoFall } from '@/data/mockFall';
+import { useDemoState } from '@/context/DemoStateContext';
 import { EreignisTyp } from '@/types';
 import { berechneFairnessSignale } from '@/lib/fairness/rules';
 import { Icon, IconName } from '@/components/Icon';
@@ -48,10 +49,12 @@ const ereignisIcon: Partial<Record<EreignisTyp, IconName>> = {
 };
 
 export default function VerlaufPage() {
-  const { timeline } = demoFall;
-  const pauseSignale = berechneFairnessSignale(demoFall).filter(
+  const { fall } = useDemoState();
+  const { timeline } = fall;
+  const pauseSignale = berechneFairnessSignale(fall).filter(
     s => s.typ === 'FALL_PAUSIERT'
   );
+  const demoEvents = timeline.filter(e => e.id.startsWith('E-DEMO-'));
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
@@ -63,6 +66,20 @@ export default function VerlaufPage() {
           Alle Ereignisse sind unveränderlich dokumentiert — Sie können jederzeit nachvollziehen, was passiert ist.
         </p>
       </div>
+
+      {demoEvents.length > 0 && (
+        <div className="notice-box notice-box-success" role="status">
+          <Icon name="check-circle" size={16} style={{ flexShrink: 0 }} />
+          <div>
+            <strong style={{ fontSize: '0.875rem', display: 'block', marginBottom: '0.25rem' }}>
+              {demoEvents.length} neues Ereignis{demoEvents.length === 1 ? '' : 'se'} aus Ihrer Demo-Session
+            </strong>
+            <span style={{ fontSize: '0.875rem' }}>
+              Rückfragen und Uploads erscheinen hier sofort in der Timeline (keine Speicherung außerhalb der Session).
+            </span>
+          </div>
+        </div>
+      )}
 
       {/* Fairness-Hinweis bei pausierten Fällen */}
       {pauseSignale.length > 0 && (

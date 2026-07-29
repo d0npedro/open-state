@@ -5,16 +5,18 @@
  *
  * Hält den interaktiven Zustand der Demo-Session.
  * Ermöglicht State-Wechsel (Rückfrage beantworten, Dokument hochladen) ohne Backend.
+ * Interaktionen erzeugen Timeline-Ereignisse (sichtbar unter /fall/verlauf).
  *
  * Kein Ersatz für echte Fachlogik. Dient ausschließlich der Demo-Darstellung.
  */
 
 import { createContext, useContext, useState, useCallback, useMemo } from 'react';
 import { demoFall } from '@/data/mockFall';
-import type { Fall } from '@/types';
+import type { Fall, TimelineEreignis } from '@/types';
 
-/** Fiktives Upload-Datum (passt zum Demo-Zeitrahmen in mockFall / FIKTIVES_HEUTE). */
-const DEMO_UPLOAD_DATUM = '24. November 2024';
+/** Fiktives Aktions-Datum (passt zum Demo-Zeitrahmen in mockFall / FIKTIVES_HEUTE). */
+const DEMO_AKTION_DATUM = '24. November 2024';
+const DEMO_AKTION_ZEIT = '24.11.2024, 10:30';
 
 interface DemoStateContextValue {
   fall: Fall;
@@ -53,10 +55,12 @@ export function DemoStateProvider({ children }: { children: React.ReactNode }) {
       return {
         ...dok,
         status: 'HOCHGELADEN' as const,
-        hochgeladenAm: DEMO_UPLOAD_DATUM,
+        hochgeladenAm: DEMO_AKTION_DATUM,
       };
     });
-    const hasFehlendeUnterlagen = updatedDokumente.some(d => d.status === 'ANGEFORDERT');
+    const hasFehlendeUnterlagen = updatedDokumente.some(
+      d => d.status === 'ANGEFORDERT' || d.status === 'ABGELEHNT'
+    );
 
     let status = demoFall.status;
     let statusBeschreibung = demoFall.statusBeschreibung;
@@ -84,7 +88,6 @@ export function DemoStateProvider({ children }: { children: React.ReactNode }) {
     if (!hasOffeneRueckfragen) {
       offeneAufgaben = offeneAufgaben.filter(a => !a.toLowerCase().includes('rückfrage'));
     }
-    // Aufgaben zu hochgeladenen Dokumenten entfernen (heuristisch nach Stichworten)
     for (const dok of updatedDokumente) {
       if (dok.status === 'ANGEFORDERT' || dok.status === 'ABGELEHNT') continue;
       const keywords = dok.bezeichnung
@@ -93,15 +96,76 @@ export function DemoStateProvider({ children }: { children: React.ReactNode }) {
         .filter(w => w.length >= 4);
       offeneAufgaben = offeneAufgaben.filter(aufgabe => {
         const a = aufgabe.toLowerCase();
-        // Nur Aufgaben, die klar auf dieses Dokument deuten (z. B. „SG1“, „Formular“)
         if (dok.id === 'DOK-004' && (a.includes('sg1') || a.includes('selbstauskunft'))) {
           return false;
         }
         if (dok.id === 'DOK-003' && (a.includes('einkommensteuer') || a.includes('steuerbescheid'))) {
           return false;
         }
-        // Generisch: wenn Aufgabe das Dokument explizit nennt
         return !keywords.some(k => k.length >= 5 && a.includes(k) && a.includes('hochladen'));
+      });
+    }
+
+    // Timeline-Ereignisse aus Demo-Interaktionen anhängen (chronologisch ans Ende)
+    const extraEvents: TimelineEreignis[] = [];
+    let seq = 100;
+
+    for (const id of answeredIds) {
+      const rq = demoFall.rueckfragen.find(r => r.id === id);
+      extraEvents.push({
+        id: `E-DEMO-RQ-${id}`,
+        typ: 'RUECKFRAGE_BEANTWORTET',
+        zeitstempel: DEMO_AKTION_ZEIT,
+        handelndeStelle: 'BUERGER',
+        beschreibung: 'Rückfrage beantwortet',
+        details: rq
+          ? `Antwort zu ${rq.id} eingereicht (Demo-Interaktion).`
+          : `Rückfrage ${id} beantwortet (Demo-Interaktion).`,
+      });
+      seq += 1;
+      extraEvents.push({
+        id: `E-DEMO-ST-${seq}`,
+        typ: 'STATUS_GEAENDERT',
+        zeitstempel: DEMO_AKTION_ZEIT,
+        handelndeStelle: 'SYSTEM',
+        beschreibung: hasFehlendeUnterlagen
+          ? 'Status geändert: RUECKFRAGE_OFFEN → UNTERLAGEN_FEHLEN'
+          : 'Status geändert: RUECKFRAGE_OFFEN → IN_PRUEFUNG',
+        details: hasFehlendeUnterlagen
+          ? 'Rückfragen erledigt. Fall wartet auf ausstehende Unterlagen.'
+          : 'Rückfragen erledigt. Fallprüfung fortgesetzt.',
+      });
+    }
+
+    for (const id of uploadedIds) {
+      const dok = demoFall.dokumente.find(d => d.id === id);
+      extraEvents.push({
+        id: `E-DEMO-DOK-${id}`,
+        typ: 'DOKUMENT_EINGEREICHT',
+        zeitstempel: DEMO_AKTION_ZEIT,
+        handelndeStelle: 'BUERGER',
+        beschreibung: dok
+          ? `${dok.bezeichnung} hochgeladen`
+          : `Dokument ${id} hochgeladen`,
+        details: dok
+          ? `Dokument ${dok.id} eingereicht (Demo-Interaktion, keine echte Datei).`
+          : `Dokument ${id} eingereicht (Demo-Interaktion).`,
+      });
+    }
+
+    if (uploadedIds.length > 0 && !hasOffeneRueckfragen) {
+      seq += 1;
+      extraEvents.push({
+        id: `E-DEMO-ST-UP-${seq}`,
+        typ: 'STATUS_GEAENDERT',
+        zeitstempel: DEMO_AKTION_ZEIT,
+        handelndeStelle: 'SYSTEM',
+        beschreibung: hasFehlendeUnterlagen
+          ? 'Status: UNTERLAGEN_FEHLEN (noch ausstehende Unterlagen)'
+          : 'Status geändert: UNTERLAGEN_FEHLEN → IN_PRUEFUNG',
+        details: hasFehlendeUnterlagen
+          ? 'Teil der Unterlagen eingegangen. Weitere Dokumente ausstehend.'
+          : 'Alle angeforderten Unterlagen eingegangen. Prüfung fortgesetzt.',
       });
     }
 
@@ -113,9 +177,10 @@ export function DemoStateProvider({ children }: { children: React.ReactNode }) {
       statusBeschreibung,
       naechsterSchritt,
       offeneAufgaben,
+      timeline: [...demoFall.timeline, ...extraEvents],
       letzteAktivitaet:
         uploadedIds.length > 0 || answeredIds.length > 0
-          ? DEMO_UPLOAD_DATUM
+          ? DEMO_AKTION_DATUM
           : demoFall.letzteAktivitaet,
     };
   }, [answeredIds, uploadedIds]);

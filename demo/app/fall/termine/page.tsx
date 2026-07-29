@@ -1,12 +1,14 @@
 // UX-Grund: Termine sind zeitkritisch. Datum + Uhrzeit müssen SOFORT lesbar sein —
 // groß, hervorgehoben. Vorbereitung als Checkliste (vertrautes Mental-Modell).
 // Format-Chip: "Persönlich / Online" mit Icon.
+'use client';
 
-import { demoFall } from '@/data/mockFall';
+import { useDemoState } from '@/context/DemoStateContext';
 import { Icon } from '@/components/Icon';
 
 export default function TerminePage() {
-  const { termine } = demoFall;
+  const { fall } = useDemoState();
+  const { termine } = fall;
   const hatKommende = termine.some(t => t.status !== 'ABGESAGT');
 
   return (

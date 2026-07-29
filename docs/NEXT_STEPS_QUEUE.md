@@ -49,6 +49,7 @@ React State-Einführung ist der größte Demo-Qualitätssprung ohne neue Routen.
 | Q-031 | Mock-State via React Context einführen: Demo-Interaktionen (z. B. „Rückfrage beantworten") lösen echten State-Wechsel aus | DEMO | M | – | DONE `4552636` |
 | Q-032 | `/fall/hinweise` nach State-Wechsel: Fairness-Signale reduzieren sich live — Demonstration des Regelwerks in Aktion | DEMO | S | Q-031 | DONE `8db3c74` |
 | Q-071 | Dokument-Upload interaktiv: `uploadDokument` im DemoStateContext; `/fall/dokumente` ändert Status live; Fairness-Signal UNTERLAGE_FEHLT entfällt | DEMO | S | Q-031 | DONE |
+| Q-072 | Alle AV-Unterseiten an DemoState; Timeline-Ereignisse bei Rückfrage/Upload; Fairness auf Bescheid/Verlauf konsistent | DEMO | S | Q-071 | DONE |
 
 ---
 
@@ -174,4 +175,5 @@ Diese Punkte wurden in früheren Iterationen abgeschlossen und sind produktionsr
 | Q-040–042 API | OpenAPI AV + Kita + Aggregationsvertrag | (Folge) |
 | Q-060–061 Contrib | CONTRIBUTING.md + Issue-Templates | (Folge) |
 | Q-070 UG Registry | US-UG-001–006 in demo storyRegistry | `70937e8` |
-| Q-071 Dokument-Upload | Interaktiver Upload AV + Fairness live | (diese Iteration) |
+| Q-071 Dokument-Upload | Interaktiver Upload AV + Fairness live | `9a5f89a` |
+| Q-072 AV-State/Timeline | Alle AV-Seiten + Timeline-Events | (diese Iteration) |

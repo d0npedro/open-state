@@ -4,13 +4,14 @@
 // dann die rechtliche Fassung (optional, für wer sie braucht).
 // Widerspruchsfrist: klar hervorgehoben, mit Countdown-Hinweis.
 
-import { demoFall } from '@/data/mockFall';
+import { useDemoState } from '@/context/DemoStateContext';
 import { berechneFairnessSignale } from '@/lib/fairness/rules';
 import { Icon } from '@/components/Icon';
 
 export default function BescheidePage() {
-  const { bescheide } = demoFall;
-  const bescheidSignale = berechneFairnessSignale(demoFall).filter(
+  const { fall } = useDemoState();
+  const { bescheide } = fall;
+  const bescheidSignale = berechneFairnessSignale(fall).filter(
     s => s.typ === 'BESCHEID_VORLAEUFIG' || s.typ === 'BESCHEID_BEGRUENDUNG_ERWEITERBAR'
   );
 
