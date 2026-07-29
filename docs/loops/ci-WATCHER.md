@@ -2,18 +2,15 @@
 
 | Feld | Wert |
 |------|------|
-| last_checked | 2026-07-29T03:39:00Z |
-| last_run_id | 30420007018 |
-| last_status | success |
-| last_fix_sha | 5891957 |
-| fix_attempts | 0 |
+| last_checked | 2026-07-29T03:50:00Z |
+| last_run_id | 30420398875 |
+| last_status | failure → fixing |
+| last_fix_sha | (pending) |
+| fix_attempts | 1 |
 
 ## Log
 
-- 2026-07-29: Build Check `30418875933` success (SHA e910b2f). E2E `30418875918` failure — 5 tests.
-- Ursache A: Playwright strict-mode + Button-Locator `/Jetzt beantworten/` vs aria-label.
-- Fix attempt 1 (`40d961e`): e2e-Selektoren → 5→2 fails.
-- E2E `30419763082` (40d961e) failure — 2 tests (171 passed).
-- Ursache B: `page.goto()` remountet `DemoStateProvider` → Session-State verloren.
-- Fix attempt 2 (`5891957`): Client-Tab-Navigation in Fortschritt-/Ruhezustand-Tests.
-- **2026-07-29 E2E `30420007018` + Build `30420007033` success** (SHA 5891957). fix_attempts reset.
+- 2026-07-29 E2E `30420007018` + Build `30420007033` success (SHA 5891957) — prior auto-fix series closed.
+- Domain merges (loop/*) + supervisor sync: Build green; E2E `30420398875` failure — 1 test (177 passed).
+- Ursache: `us-av-004` „Bestätigung abbrechen“ nutzt `/Jetzt beantworten/` — accessible name ist aria-label `Rückfrage beantworten: …`.
+- Fix attempt 1: selector in us-av-004-rueckfragen.spec.ts.

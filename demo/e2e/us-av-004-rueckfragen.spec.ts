@@ -130,12 +130,14 @@ test.describe('US-AV-004 – Rückfrage beantworten (Interaktion)', () => {
 
   test('Bestätigung abbrechen lässt Rückfrage offen', async ({ page }) => {
     await page.goto('/fall/rueckfragen');
-    await page.getByRole('button', { name: /Jetzt beantworten/i }).click();
+    // Accessible name aus aria-label „Rückfrage beantworten: …“ (nicht sichtbarer Text allein)
+    const openBtn = page.getByRole('button', { name: /Rückfrage beantworten/i });
+    await openBtn.click();
     await expect(page.getByTestId('rq-bestaetigung')).toBeVisible();
     await page.getByTestId('rq-bestaetigung-abbrechen').click();
     await expect(page.getByTestId('rq-bestaetigung')).toHaveCount(0);
     await expect(page.getByText(/1 Frage braucht Ihre Antwort/)).toBeVisible();
-    await expect(page.getByRole('button', { name: /Jetzt beantworten/i })).toBeVisible();
+    await expect(openBtn).toBeVisible();
   });
 
   test('Freitext-Antwort wird in der Quittung angezeigt', async ({ page }) => {
