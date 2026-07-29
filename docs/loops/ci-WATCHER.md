@@ -2,7 +2,7 @@
 
 | Feld | Wert |
 |------|------|
-| last_checked | 2026-07-29T05:33:00Z |
+| last_checked | 2026-07-29T05:33:30Z |
 | last_run_id | 30425290682 |
 | last_status | success |
 | last_fix_sha | 3d7c00f |
@@ -27,6 +27,6 @@
 - E2E `30424263416` + `30424255255` + `30424309782` success; Build `30424255251` success. Catch-up push `92194cd..e62b9f2` (feat kita residual + merge). Build `30424521330` + E2E `30424521334` success (SHA e62b9f2). Local ahead again with kita filter merge → further catch-up pending. fix_attempts=0.
 - E2E `30424640618` success (SHA 9cac87a docs). Build `30424696025` + E2E `30424696077` success (SHA 6e05775 Merge loop/kita + Planungsraum-Filter). Catch-up push: origin/main..main = 0 (lint+build grün). HEAD docs/supervisor may still have in_progress runs next tick. fix_attempts=0.
 - E2E `30424738127` + `30424814049` success (SHA 298f265 Kita Q-110 / 3518cd8 UG Q-111). Build `30424814036` success. Catch-up push `93012ef` (docs ci-watcher) after lint+build; origin/main..main = 0. fix_attempts=0.
-- Build `30425008491` + E2E `30425008507` success (SHA a18556a Merge loop/kita).
-- E2E `30425071047` + `30425090019` failure (SHA b787f34 / bbd4565): next start without .next build (isE2eCi + plain test:e2e on GHA).
-- Fix `3d7c00f`: webServer `npm run build && next start`, workflow `test:e2e:ci`. Build `30425290659` + E2E `30425290682` success. Catch-up: origin/main..main = 0. fix_attempts=0.
+- Build `30425008491` + E2E `30425008507` success (SHA a18556a Merge loop/kita). Catch-up: origin/main..main = 0.
+- E2E `30425071047` + `30425090019` **failure** (SHA b787f34 / bbd4565): `next start` without production build — `Could not find a production build in the '.next' directory`. Root: isE2eCi (CI=true) → `next start`, GHA ran plain `test:e2e` without build. Fix attempt 1/2 → `3d7c00f`.
+- Build `30425290659` + E2E `30425290682` **success** (SHA `3d7c00f` fix(ci): webServer `npm run build && next start`, workflow `test:e2e:ci`). Catch-up: origin/main..main = 0. fix_attempts=0. HEAD may have later docs-only commits (e.g. ddc9052) still in_progress next tick.
