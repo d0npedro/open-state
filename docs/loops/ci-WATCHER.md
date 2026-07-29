@@ -2,14 +2,15 @@
 
 | Feld | Wert |
 |------|------|
-| last_checked | 2026-07-29T08:31:25Z |
-| last_run_id | 30435539817 |
+| last_checked | 2026-07-29T08:33:06Z |
+| last_run_id | 30435788048 |
 | last_status | success |
-| last_sha | e122947 |
+| last_sha | 91b5a43 |
 | fix_attempts | 0 |
 
 ## Log
 
+- E2E `30435788048` + Build `30435788121` **success** (SHA 91b5a43 Merge loop/kita — latest code path). Prior E2E `30435539817` **success** (SHA e122947). Catch-up this tick: origin/main..main was 9 (UG RQ-CTA Frist + Kita Meldung/Monatsbericht/Einrichtung CSV + merges) → lint+build grün → push `e122947..91b5a43` → origin/main..main = 0. Concurrent supervisor docs Q-154–Q-157 (`aede484`/`2b1f617` HEAD) path-skip; E2E `30435886963` docs `bb17972` may still be in_progress. No fix. fix_attempts=0.
 - E2E `30435539817` **success** (SHA e122947 docs ci-watcher HEAD). E2E `30435371225` **success** (SHA 7492966). Build latest `30435788121` **success** (SHA 91b5a43 Merge loop/kita — latest code path; concurrent supervisor Q-154–Q-156 docs `aede484` HEAD path-skip). Catch-up this tick: origin/main..main was 9 (UG RQ-CTA Frist + Kita Meldung/Monatsbericht CSV + merges) → lint+build grün (`NEXT_DIST_DIR=.next-ci-watcher`) + local `test:e2e:ci` **241 passed** → concurrent supervisor already pushed features + Q-154–Q-156 → origin/main..main = 1 (docs only) → push. E2E `30435788048` for Merge loop/kita may still be in_progress (code path). No fix. fix_attempts=0.
 - E2E `30435371225` **success** (SHA 7492966 docs ci-watcher HEAD). E2E `30435186900` **success** (SHA 5b784e9). E2E `30434989570` **success** (SHA 4ccc1bf). Build latest `30434812204` **success** (SHA e438548 supervisor Q-151–Q-153 UG Unterlagen-CTA + Kita Druck/CSV — latest code path; HEAD docs-only path-skip). Catch-up: origin/main..main = 0. No fix. fix_attempts=0.
 - E2E `30435186900` **success** (SHA 5b784e9 docs ci-watcher HEAD). E2E `30434989570` **success** (SHA 4ccc1bf). E2E `30434812379` + Build `30434812204` **success** (SHA e438548 supervisor Q-151–Q-153 UG Unterlagen-CTA + Kita Druck/CSV — latest code path; HEAD docs-only path-skip). Older E2E `30434513222` docs `a3beb10` now **success**. Catch-up: origin/main..main = 0. No fix. fix_attempts=0.
