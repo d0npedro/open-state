@@ -7,8 +7,9 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import { useDemoState } from '@/context/DemoStateContext';
-import { berechneFristTage, FIKTIVES_HEUTE } from '@/lib/fairness/rules';
+import { berechneFairnessSignale, berechneFristTage, FIKTIVES_HEUTE } from '@/lib/fairness/rules';
 import { Icon } from '@/components/Icon';
 import type { Rueckfrage } from '@/types';
 
@@ -25,6 +26,9 @@ export default function RueckfragenPage() {
   const { fall, answerRueckfrage } = useDemoState();
   const { rueckfragen } = fall;
   const offeneAnzahl = rueckfragen.filter(r => !r.beantwortet).length;
+  const rqSignal = berechneFairnessSignale(fall).find(
+    s => s.typ === 'RUECKFRAGE_OFFEN_FRIST_RELEVANT'
+  );
 
   /** Welche offene Rückfrage zeigt den Bestätigungsdialog? */
   const [confirmingId, setConfirmingId] = useState<string | null>(null);
@@ -51,6 +55,42 @@ export default function RueckfragenPage() {
           Nach dem Absenden ändert sich der Fallstatus sichtbar in der gesamten App.
         </span>
       </div>
+
+      {/* Live-Hinweis: Fairness-Signal offene Rückfrage inkl. berechneter Frist (US-AV-008) */}
+      {rqSignal && (
+        <div
+          className="notice-box notice-box-warn"
+          role="status"
+          data-testid="fairness-signal-rueckfrage"
+        >
+          <Icon name="alert" size={16} style={{ flexShrink: 0, marginTop: '2px' }} />
+          <div>
+            <strong
+              style={{ fontSize: '0.875rem', display: 'block', marginBottom: '0.25rem' }}
+              data-testid="fairness-signal-rueckfrage-titel"
+            >
+              {rqSignal.titel}
+            </strong>
+            <p
+              style={{ fontSize: '0.875rem', margin: 0 }}
+              data-testid="fairness-signal-rueckfrage-erklaerung"
+            >
+              {rqSignal.erklaerung}
+            </p>
+            <p style={{ fontSize: '0.8rem', margin: '0.5rem 0 0', color: 'var(--color-text-muted)' }}>
+              Demo: Nach dem Beantworten verschwindet dieses Signal auch unter{' '}
+              <Link
+                href="/fall/hinweise"
+                data-testid="rq-hinweise-link"
+                style={{ color: 'var(--color-primary)' }}
+              >
+                Verfahrenslage
+              </Link>
+              .
+            </p>
+          </div>
+        </div>
+      )}
 
       {/* ─── Rückfragen ───────────────────────────────────────────── */}
       {rueckfragen.map(raw => {

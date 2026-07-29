@@ -46,7 +46,9 @@ test.describe('US-AV-004 – Rückfrage verstehen (Anzeige)', () => {
   });
 
   test('AC1c: Frist als konkretes Datum sichtbar', async ({ page }) => {
-    await expect(page.getByText('26. November 2024')).toBeVisible();
+    // Datum erscheint in Karten-Frist und Live-Fairness-Signal — mind. ein Treffer
+    await expect(page.getByText(/26\.\s*November 2024/).first()).toBeVisible();
+    await expect(page.getByText(/^Frist:/)).toContainText(/26\.\s*November 2024/);
   });
 
   test('AC1c: Anzahl verbleibender Tage sichtbar', async ({ page }) => {
@@ -176,6 +178,65 @@ test.describe('US-AV-004 – Rückfrage beantworten (Interaktion)', () => {
 
     await expect(page.getByText('Ihre Antwort wird erwartet')).not.toBeVisible();
     await expect(page.getByText('Wird geprüft').first()).toBeVisible();
+  });
+
+});
+
+// ─── US-AV-008: Hinweise / RQ-Signal live nach Session-Antwort ─────────────
+
+test.describe('US-AV-008 – Hinweise RQ-Frist live (Parität UNTERLAGE)', () => {
+
+  test('Hinweise: RQ-Signal enthält berechnete Antwort-Frist', async ({ page }) => {
+    // Mock: RQ-001 Frist 26.11. ggü. FIKTIVES_HEUTE 24.11. → noch 2 Tage
+    await page.goto('/fall/hinweise');
+    await expect(page.getByRole('heading', { name: 'Hinweise zur Verfahrenslage' })).toBeVisible();
+
+    const signal = page.getByTestId('hinweise-signal-rueckfrage');
+    await expect(signal).toBeVisible();
+    await expect(page.getByTestId('hinweise-signal-rueckfrage-titel')).toContainText(
+      /Rückfrage offen – Frist noch 2 Tage/i
+    );
+    await expect(page.getByTestId('hinweise-signal-rueckfrage-erklaerung')).toContainText(
+      /Antwortfrist endet am\s*26\.\s*November 2024\s*\(noch 2 Tage\)/i
+    );
+    await expect(page.getByTestId('hinweise-rq-cta')).toBeVisible();
+    await expect(page.getByTestId('hinweise-rq-cta')).toHaveAttribute('href', '/fall/rueckfragen');
+    await expect(page.getByTestId('hinweise-rq-cta-hint')).toContainText(/Frist noch 2 Tage/i);
+  });
+
+  test('Rückfragen-Seite: Live-Signal mit Frist und Link zur Verfahrenslage', async ({ page }) => {
+    await page.goto('/fall/rueckfragen');
+    await expect(page.getByTestId('fairness-signal-rueckfrage')).toBeVisible();
+    await expect(page.getByTestId('fairness-signal-rueckfrage-titel')).toContainText(
+      /Frist noch 2 Tage/i
+    );
+    await expect(page.getByTestId('fairness-signal-rueckfrage-erklaerung')).toContainText(
+      /26\.\s*November 2024/i
+    );
+    await expect(page.getByTestId('rq-hinweise-link')).toHaveAttribute('href', '/fall/hinweise');
+  });
+
+  test('Hinweise: nach Session-Antwort entfällt RQ-Signal', async ({ page }) => {
+    // Kein page.goto nach State (DEC-012) — Session-Nav über Tabs + Link
+    const { goFallTab } = await import('./helpers/sessionNav');
+
+    await page.goto('/fall/rueckfragen');
+    await expect(page.getByTestId('fairness-signal-rueckfrage')).toBeVisible();
+    await rueckfrageBeantworten(page);
+    await expect(page.getByTestId('fairness-signal-rueckfrage')).toHaveCount(0);
+    await expect(page.getByText('Alle Fragen sind beantwortet')).toBeVisible();
+
+    await goFallTab(page, 'Übersicht', /\/fall$/);
+    await page.getByTestId('uebersicht-fairness-hinweise-link').click();
+    await expect(page).toHaveURL(/\/fall\/hinweise/);
+
+    await expect(page.getByTestId('hinweise-signal-rueckfrage')).toHaveCount(0);
+    await expect(page.getByTestId('hinweise-rq-cta')).toHaveCount(0);
+    await expect(page.getByTestId('hinweise-regelwerk-reaktion')).toBeVisible();
+    await expect(page.getByTestId('hinweise-regelwerk-reaktion')).toContainText(/Rückfrage/i);
+    await expect(page.getByTestId('hinweise-signal-geloest')).toBeVisible();
+    // UNTERLAGE bleibt offen (nur RQ beantwortet)
+    await expect(page.getByTestId('hinweise-signal-unterlagen')).toBeVisible();
   });
 
 });
