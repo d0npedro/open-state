@@ -8,6 +8,33 @@ Erlaubte Pfade nur: `demo/app/gruendung/**`, `demo/context/GruendungStateContext
 
 ---
 
+## 2026-07-29 – Iteration 19: Steuernummer-Signal bei VS-05 IN_BEARBEITUNG
+
+### Was
+Fairness-Signal `UG-STEUERNUMMER-FEHLT` gilt auch, wenn VS-05
+`IN_BEARBEITUNG` ist (nicht nur `AUSSTEHEND`). Text und nächster Schritt
+passen sich an: bei offener Rückfrage blockiert; nach Antwort „in
+Bearbeitung – noch nicht erteilt“. Hinweise-CTA „Zum Finanzamt“ bleibt
+bei beiden Status; CTA-Hilfstext wechselt. E2E: Initialtext + Session
+nach Antwort.
+
+### Dateien
+- `demo/lib/fairness/gruendung-rules.ts` – Regel + Status-abhängiger Text
+- `demo/app/gruendung/hinweise/page.tsx` – CTA bei AUSSTEHEND/IN_BEARBEITUNG
+- `demo/e2e/us-ug-gruendung.spec.ts` – zwei Tests (Initial + Session)
+- `docs/loops/ug-JOURNAL.md` – dieses Journal
+
+### Build
+`npm run lint` + `npm run build` im Ordner `demo/` grün.
+`npm run test:e2e:ug` Exit 0 (105 passed).
+
+### Nächster sinnvoller UG-Schritt (Vorschlag)
+- Übersicht: Fairness-CTA für Steuernummer/Betriebsdatum (optional)
+- Hinweise: nach Session-Wechsel CTA-Verschwinden für parallele Behörden (optional)
+- Betriebsdatum-Signal-Text nach beantworteter Rückfrage anpassen (optional)
+
+---
+
 ## 2026-07-29 – Iteration 18: VS-05 nach Antwort auf IN_BEARBEITUNG
 
 ### Was

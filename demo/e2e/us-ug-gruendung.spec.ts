@@ -690,11 +690,45 @@ test.describe('UG – Hinweise zur Verfahrenslage', () => {
     await expect(cta).toHaveAttribute('href', '/gruendung/behoerden#beh-BEH-02');
   });
 
+  test('Steuernummer-Signal bei VS-05 ausstehend: Text zu offener Rückfrage', async ({ page }) => {
+    const panel = page.getByTestId('hinweise-hinweis-UG-STEUERNUMMER-FEHLT');
+    await expect(panel).toBeVisible();
+    await expect(panel).toContainText(/Steuernummer noch nicht erteilt/i);
+    await expect(panel).toContainText(/blockiert durch die offene Rückfrage/i);
+    await expect(page.getByTestId('hinweise-steuernummer-cta-wrap-BEH-02')).toContainText(
+      /nach Abschluss der steuerlichen Erfassung/i
+    );
+  });
+
   test('CTA aus Steuernummer-Signal führt zur Finanzamt-Karte', async ({ page }) => {
     await page.getByTestId('hinweise-steuernummer-cta-BEH-02').click();
     await expect(page).toHaveURL(/\/gruendung\/behoerden#beh-BEH-02/);
     await expect(page.locator('#beh-BEH-02')).toBeVisible();
     await expect(page.getByTestId('behoerde-karte-BEH-02')).toContainText(/Finanzamt/i);
+  });
+
+  test('Nach Antwort: Steuernummer-Signal bleibt bei VS-05 in Bearbeitung', async ({ page }) => {
+    // Session: NIE page.goto nach State-Interaktion (DEC-012)
+    const { goUgTab } = await import('./helpers/sessionNav');
+    await goUgTab(page, 'Fragen', /\/gruendung\/rueckfragen/);
+    await page.getByRole('button', { name: /Rückfrage beantworten/i }).click();
+    await expect(page.getByText(/die Behörde wurde informiert|beantwortet/i).first()).toBeVisible();
+    await goUgTab(page, 'Hinweise', /\/gruendung\/hinweise/);
+
+    const panel = page.getByTestId('hinweise-hinweis-UG-STEUERNUMMER-FEHLT');
+    await expect(panel).toBeVisible();
+    await expect(panel).toContainText(/Steuernummer in Bearbeitung/i);
+    await expect(panel).toContainText(/Rückfrage zur Kleinunternehmerregelung ist beantwortet/i);
+    await expect(panel).not.toContainText(/blockiert durch die offene Rückfrage/i);
+
+    const ctaWrap = page.getByTestId('hinweise-steuernummer-cta-wrap-BEH-02');
+    await expect(ctaWrap).toBeVisible();
+    await expect(ctaWrap).toContainText(/in Bearbeitung/i);
+    await expect(page.getByTestId('hinweise-steuernummer-cta-BEH-02')).toBeVisible();
+    await expect(page.getByTestId('hinweise-steuernummer-cta-BEH-02')).toHaveAttribute(
+      'href',
+      '/gruendung/behoerden#beh-BEH-02'
+    );
   });
 
   test('HINWEIS-Betriebsdatum-Signal hat CTA „Zum Verfahrensstatus“ mit Anker', async ({ page }) => {
