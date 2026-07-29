@@ -91,6 +91,25 @@ export function GruendungStateProvider({ children }: { children: React.ReactNode
       return b;
     });
 
+    // Verfahrensschritte: „Rückfrage …“-Schritte abschließen, sobald die
+    // zugehörige Behörde keine offenen Rückfragen mehr hat (z. B. VS-04).
+    const updatedSchritte = demoGruendungsAkte.verfahrensSchritte.map(vs => {
+      if (vs.status === 'ABGESCHLOSSEN') return vs;
+      const name = vs.bezeichnung.toLowerCase();
+      if (!name.includes('rückfrage') && !name.includes('rueckfrage')) return vs;
+      const nochOffen = updatedRueckfragen.some(
+        r => r.anforderndeBehördeId === vs.behördeId && !r.beantwortet
+      );
+      if (nochOffen) return vs;
+      return {
+        ...vs,
+        status: 'ABGESCHLOSSEN' as const,
+        erledigtAm: DEMO_AKTION_DATUM,
+        ergebnis:
+          'Rückfrage beantwortet. Die Behörde setzt die Bearbeitung fort.',
+      };
+    });
+
     let status = demoGruendungsAkte.status;
     let statusBeschreibung = demoGruendungsAkte.statusBeschreibung;
     let naechsterSchritt = demoGruendungsAkte.naechsterSchritt;
@@ -153,6 +172,28 @@ export function GruendungStateProvider({ children }: { children: React.ReactNode
         beschreibung: 'Status: Rückfrage erledigt – Bearbeitung fortgesetzt',
         details: 'Finanzamt nimmt die Bearbeitung der steuerlichen Erfassung wieder auf.',
       });
+      const geschlosseneSchritte = updatedSchritte.filter(
+        vs =>
+          vs.status === 'ABGESCHLOSSEN' &&
+          vs.behördeId === rq?.anforderndeBehördeId &&
+          (vs.bezeichnung.toLowerCase().includes('rückfrage') ||
+            vs.bezeichnung.toLowerCase().includes('rueckfrage')) &&
+          demoGruendungsAkte.verfahrensSchritte.find(s => s.id === vs.id)?.status !==
+            'ABGESCHLOSSEN'
+      );
+      for (const vs of geschlosseneSchritte) {
+        extraEvents.push({
+          id: `UG-DEMO-VS-${vs.id}-${id}`,
+          typ: 'status_aktualisiert',
+          zeitstempel: DEMO_AKTION_ZEIT,
+          handelndeStelle: 'SYSTEM',
+          behördeId: vs.behördeId,
+          beschreibung: `Verfahrensschritt erledigt: ${vs.bezeichnung}`,
+          details:
+            vs.ergebnis ??
+            'Rückfrage-Schritt nach Antwort des Gründers als erledigt markiert.',
+        });
+      }
     }
 
     for (const id of uploadedIds) {
@@ -177,6 +218,7 @@ export function GruendungStateProvider({ children }: { children: React.ReactNode
       rueckfragen: updatedRueckfragen,
       dokumente: updatedDokumente,
       beteiligteBehörden: updatedBehörden,
+      verfahrensSchritte: updatedSchritte,
       status,
       statusBeschreibung,
       naechsterSchritt,

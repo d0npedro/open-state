@@ -8,6 +8,32 @@ Erlaubte Pfade nur: `demo/app/gruendung/**`, `demo/context/GruendungStateContext
 
 ---
 
+## 2026-07-29 – Iteration 17: VS-04 nach Antwort auf ABGESCHLOSSEN
+
+### Was
+Session: Beantworten der Finanzamt-Rückfrage schließt den zugehörigen
+Verfahrensschritt VS-04 (`IN_BEARBEITUNG` → `ABGESCHLOSSEN` mit Datum und
+Ergebnis). VS-05 bleibt ausstehend; Finanzamt-Zähler wird 2/3. Verlauf
+erhält ein System-Ereignis „Verfahrensschritt erledigt …“. Generische
+Regel für alle Schritte mit „Rückfrage“ im Namen und erledigter Behörden-RQ.
+E2E: Erledigt-Status, Zähler, Verlaufseintrag.
+
+### Dateien
+- `demo/context/GruendungStateContext.tsx` – `updatedSchritte` + VS-Event
+- `demo/e2e/us-ug-gruendung.spec.ts` – zwei Session-Tests
+- `docs/loops/ug-JOURNAL.md` – dieses Journal
+
+### Build
+`npm run lint` + `npm run build` im Ordner `demo/` grün.
+`npm run test:e2e:ug` Exit 0 (102 passed).
+
+### Nächster sinnvoller UG-Schritt (Vorschlag)
+- Hinweise: nach Session-Wechsel CTA-Verschwinden für parallele Behörden (optional)
+- Übersicht: Fairness-CTA für Steuernummer/Betriebsdatum (optional)
+- Behörden: nach Antwort VS-05 ggf. in IN_BEARBEITUNG heben (optional)
+
+---
+
 ## 2026-07-29 – Iteration 16: Behörden VS-04 → Link zur Rückfrage
 
 ### Was
