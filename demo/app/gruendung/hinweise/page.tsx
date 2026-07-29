@@ -21,6 +21,10 @@ function rueckfrageIdAusSignal(signal: FairnessSignal): string | null {
   return match?.[1] ?? null;
 }
 
+/** Erkennung des RELEVANT/HINWEIS-Signals zur ausstehenden BG-Anmeldung. */
+function isBgAnmeldungSignal(signal: FairnessSignal): boolean {
+  return signal.typ === 'UG_BG_ANMELDUNG_AUSSTEHEND' || signal.id === 'UG-BG-ANMELDUNG';}
+
 export default function GruendungHinweisePage() {
   const { akte } = useGruendungState();
   const signale = berechneFairnessSignaleGruendung(akte);
@@ -102,6 +106,10 @@ export default function GruendungHinweisePage() {
                   const rqNochOffen = rqId
                     ? akte.rueckfragen.some(r => r.id === rqId && !r.beantwortet)
                     : false;
+                  const bgBehörde = isBgAnmeldungSignal(sig)
+                    ? akte.beteiligteBehörden.find(b => b.typ === 'BERUFSGENOSSENSCHAFT')
+                    : undefined;
+                  const bgNochOffen = bgBehörde?.status === 'NICHT_GESTARTET';
                   return (
                     <div key={sig.id} data-testid={`hinweise-relevant-${sig.id}`}>
                       <FairnessPanel signale={[sig]} />
@@ -133,6 +141,38 @@ export default function GruendungHinweisePage() {
                           >
                             <Icon name="chat" size={15} />
                             Frage beantworten
+                          </Link>
+                        </div>
+                      )}
+                      {bgBehörde && bgNochOffen && (
+                        <div
+                          style={{
+                            marginTop: '0.5rem',
+                            display: 'flex',
+                            flexWrap: 'wrap',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                            gap: '0.75rem',
+                            padding: '0.75rem 1rem',
+                            background: 'var(--color-warning-light)',
+                            border: '1px solid var(--color-warning)',
+                            borderRadius: 'var(--radius)',
+                          }}
+                          data-testid={`hinweise-bg-cta-wrap-${bgBehörde.id}`}
+                        >
+                          <p style={{ margin: 0, fontSize: '0.875rem', lineHeight: 1.45 }}>
+                            Die BG-Anmeldung erfolgt außerhalb von Open State. Kontakt und Rolle der Stelle
+                            finden Sie auf der Behördenkarte.
+                          </p>
+                          <Link
+                            href={`/gruendung/behoerden#beh-${bgBehörde.id}`}
+                            className="btn btn-primary"
+                            style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', flexShrink: 0 }}
+                            data-testid={`hinweise-bg-cta-${bgBehörde.id}`}
+                            aria-label={`Zur Behördenkarte ${bgBehörde.bezeichnung}`}
+                          >
+                            <Icon name="building" size={15} />
+                            Zur Behördenkarte
                           </Link>
                         </div>
                       )}

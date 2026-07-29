@@ -8,6 +8,30 @@ Erlaubte Pfade nur: `demo/app/gruendung/**`, `demo/context/GruendungStateContext
 
 ---
 
+## 2026-07-29 – Iteration 7: Hinweise-CTA für BG-Anmeldung → Behördenkarte
+
+### Was
+Hinweise-Seite: RELEVANT-Signale zur ausstehenden BG-Anmeldung erhalten einen
+direkten CTA „Zur Behördenkarte“ mit Anker `/gruendung/behoerden#beh-{id}`.
+Behörden-Karten tragen `id` + `scroll-margin`. CTA nur solange BG-Status
+`NICHT_GESTARTET` ist. E2E: Linkziel und Navigation zur BG-Karte.
+
+### Dateien
+- `demo/app/gruendung/hinweise/page.tsx` – CTA für UG-BG-ANMELDUNG-Signal
+- `demo/app/gruendung/behoerden/page.tsx` – Anker-IDs auf Behörden-Karten
+- `demo/e2e/us-ug-gruendung.spec.ts` – zwei BG-CTA-Tests
+- `docs/loops/ug-JOURNAL.md` – dieses Journal
+
+### Build
+`npm run lint` + `npm run build` im Ordner `demo/` grün.
+
+### Nächster sinnvoller UG-Schritt (Vorschlag)
+- Verlauf: Filter nach Ereignistyp (optional)
+- Übersicht: Fairness-Signale auf RELEVANT+HINWEIS begrenzen, wenn Liste wächst
+- Hinweise: CTA für fehlende Unterlagen (HINWEIS) zu `/gruendung/unterlagen`
+
+---
+
 ## 2026-07-29 – Iteration 6: Hinweise-CTA aus RELEVANT-Rückfrage-Signal
 
 ### Was

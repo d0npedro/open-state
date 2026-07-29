@@ -411,6 +411,20 @@ test.describe('UG – Hinweise zur Verfahrenslage', () => {
     await expect(page.getByTestId('hinweise-rq-cta-RQ-01')).toHaveCount(0);
   });
 
+  test('RELEVANT-BG-Signal hat CTA „Zur Behördenkarte“ mit Anker', async ({ page }) => {
+    const cta = page.getByTestId('hinweise-bg-cta-BEH-04');
+    await expect(cta).toBeVisible();
+    await expect(cta).toContainText(/Zur Behördenkarte/i);
+    await expect(cta).toHaveAttribute('href', '/gruendung/behoerden#beh-BEH-04');
+  });
+
+  test('CTA aus BG-Signal führt zur Berufsgenossenschaft-Karte', async ({ page }) => {
+    await page.getByTestId('hinweise-bg-cta-BEH-04').click();
+    await expect(page).toHaveURL(/\/gruendung\/behoerden#beh-BEH-04/);
+    await expect(page.locator('#beh-BEH-04')).toBeVisible();
+    await expect(page.getByTestId('behoerde-karte-BEH-04')).toContainText(/Berufsgenossenschaft|BG ETEM/i);
+  });
+
 });
 
 // ─── Verlauf ──────────────────────────────────────────────────────────────────
