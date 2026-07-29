@@ -282,7 +282,9 @@ export default function KitaEinrichtungBelegungPage() {
         <Link href="/kita/lagebild" style={{ color: 'var(--color-primary)' }}>Steuerungslagebild</Link>
         {' '}und den{' '}
         <Link href="/kita" style={{ color: 'var(--color-primary)' }}>öffentlichen Bericht</Link>
-        {' '}ein — ohne Einrichtungsdetail in der Öffentlichkeit (DEC-004).
+        {' '}ein — ohne Einrichtungsdetail in der Öffentlichkeit (DEC-004).{' '}
+        Monatsauswertung:{' '}
+        <Link href="/kita/monatsbericht" style={{ color: 'var(--color-primary)' }}>Monatsbericht (US-KJ-003)</Link>.
       </div>
     </div>
   );
