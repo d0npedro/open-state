@@ -1,6 +1,11 @@
 'use client';
 
 import type { KitaLagebild } from '@/types/kita';
+import {
+  KITA_CSV_LIZENZ_BUTTON_TITLE,
+  KITA_CSV_LIZENZ_META_LINES,
+  KITA_CSV_LIZENZ_UI_HINWEIS,
+} from '@/components/kita/kitaCsvLizenz';
 
 export function KitaCsvDownload({ lagebild }: { lagebild: KitaLagebild }) {
   function handleDownload() {
@@ -37,9 +42,11 @@ export function KitaCsvDownload({ lagebild }: { lagebild: KitaLagebild }) {
     ].join(';'));
 
     const csv = [
-      `# Transparenzbericht Kindertagesbetreuung ${lagebild.kommuneBezeichnung}`,
+      `# Open State – Transparenzbericht Kindertagesbetreuung ${lagebild.kommuneBezeichnung}`,
       `# Datenstand: ${lagebild.stand} | Berichtszeitraum: ${lagebild.berichtszeitraum}`,
       `# Freigegeben: ${lagebild.freigegebenAm} | Version: ${lagebild.version}`,
+      ...KITA_CSV_LIZENZ_META_LINES,
+      '# Trennzeichen: Semikolon · Dezimaltrennzeichen: Komma · Encoding: UTF-8 BOM',
       '',
       header,
       ...rows,
@@ -55,8 +62,20 @@ export function KitaCsvDownload({ lagebild }: { lagebild: KitaLagebild }) {
   }
 
   return (
-    <button className="btn btn-secondary" onClick={handleDownload} style={{ fontSize: '0.875rem' }}>
-      CSV herunterladen (Planungsraumdaten)
-    </button>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem', alignItems: 'flex-start' }}>
+      <button
+        type="button"
+        className="btn btn-secondary"
+        onClick={handleDownload}
+        style={{ fontSize: '0.875rem' }}
+        title={KITA_CSV_LIZENZ_BUTTON_TITLE}
+        aria-label="Planungsraumdaten als CSV herunterladen (Lizenzhinweis im Metakopf)"
+      >
+        CSV herunterladen (Planungsraumdaten)
+      </button>
+      <p style={{ margin: 0, fontSize: '0.72rem', color: 'var(--color-text-muted)', lineHeight: 1.4, maxWidth: '28rem' }}>
+        {KITA_CSV_LIZENZ_UI_HINWEIS}
+      </p>
+    </div>
   );
 }

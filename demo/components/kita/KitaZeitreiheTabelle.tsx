@@ -10,6 +10,7 @@
  * Regionenfilter (US-KJ-010 AK 2): Gesamtkommune oder einzelner Planungsraum.
  * CSV-Export (US-KJ-010 AK 4): gefilterte Zeitreihe als maschinenlesbarer Download
  * (Semikolon, UTF-8 BOM, Dezimal-Komma) — nur die aktive Filteransicht.
+ * Open-Data-Lizenzhinweis im CSV-Metakopf (Demo vorläufig, siehe kitaCsvLizenz).
  *
  * Meldebasis (US-KJ-004 → 010): Der mit dem Meldeeingang übereinstimmende Berichtsmonat
  * (Demo: Oktober 2024) erhält bei unvollständiger Stichprobe eine Datenlücken-Markierung.
@@ -27,6 +28,11 @@ import {
   useMeldeeingangFuerBedarfsplanung,
   type PlanungsraumMeldebasis,
 } from '@/components/kita/KitaBedarfsplanungDatenbasis';
+import {
+  KITA_CSV_LIZENZ_BUTTON_TITLE,
+  KITA_CSV_LIZENZ_META_LINES,
+  KITA_CSV_LIZENZ_UI_HINWEIS,
+} from '@/components/kita/kitaCsvLizenz';
 
 // Minimaler Inline-Balken, CSS-only
 function MiniBar({ pct, maxPct = 100, color }: { pct: number; maxPct?: number; color: string }) {
@@ -220,6 +226,7 @@ export function KitaZeitreiheTabelle({
         : '# Meldebasis: Session noch nicht geladen',
       '# Hinweis: Raumreihen sind Demo-Verteilungen der kommunalen Monatsreihe nach Strukturanteilen.',
       '# Keine Kind- oder Personennamen. Keine Interpolation. Keine Trendbewertung.',
+      ...KITA_CSV_LIZENZ_META_LINES,
       '# Trennzeichen: Semikolon · Dezimaltrennzeichen: Komma · Encoding: UTF-8 BOM',
       '',
     ];
@@ -382,16 +389,21 @@ export function KitaZeitreiheTabelle({
           Einrichtungsmeldungen werden am Monatszeile markiert — ohne die Kennzahlen zu verändern
           oder zu interpolieren.
         </div>
-        <button
-          type="button"
-          className="btn btn-secondary"
-          onClick={handleCsvDownload}
-          style={{ fontSize: '0.8rem', flexShrink: 0, whiteSpace: 'nowrap' }}
-          title={`CSV der aktuellen Ansicht: ${filterLabel}`}
-          aria-label={`Zeitreihe als CSV herunterladen (${filterLabel})`}
-        >
-          CSV herunterladen ({filterId === FILTER_ALL ? 'Gesamtkommune' : selectedRaum?.bezeichnung ?? 'Filter'})
-        </button>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem', alignItems: 'flex-end', flex: '0 1 auto' }}>
+          <button
+            type="button"
+            className="btn btn-secondary"
+            onClick={handleCsvDownload}
+            style={{ fontSize: '0.8rem', flexShrink: 0, whiteSpace: 'nowrap' }}
+            title={`CSV der aktuellen Ansicht: ${filterLabel}. ${KITA_CSV_LIZENZ_BUTTON_TITLE}`}
+            aria-label={`Zeitreihe als CSV herunterladen (${filterLabel}; Lizenzhinweis im Metakopf)`}
+          >
+            CSV herunterladen ({filterId === FILTER_ALL ? 'Gesamtkommune' : selectedRaum?.bezeichnung ?? 'Filter'})
+          </button>
+          <p style={{ margin: 0, fontSize: '0.72rem', color: 'var(--color-text-muted)', lineHeight: 1.4, maxWidth: '22rem', textAlign: 'right' }}>
+            {KITA_CSV_LIZENZ_UI_HINWEIS}
+          </p>
+        </div>
       </div>
 
       {/* Meldebasis-Summenhinweis (Session-sensitiv) */}
