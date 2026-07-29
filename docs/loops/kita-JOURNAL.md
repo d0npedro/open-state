@@ -2,6 +2,33 @@
 
 Branch: `loop/kita` · Worktree: `D:\Projects\open-state-loop-kita`
 
+## Iteration 2026-07-29 – US-KJ-004→005 Meldeeingang im Lagebild
+
+### Was
+Steuerungslagebild zeigt Meldeeingang freigegebener Monatsmeldungen (US-KJ-004→005, AK 4 Datenlücken): Demo-Stichprobe 5 Einrichtungen, Kita Sonnenwinkel initial überfällig/ohne Aggregate, andere freigegeben mit Kurz-Kennzahlen. Freigabe in `/kita/meldung` schreibt Session (localStorage) und aktualisiert den Lagebild-Eintrag inkl. „Neu im Meldeeingang“. Entwürfe bleiben unsichtbar. Nur Aggregate, keine Kind- oder Personennamen.
+
+### Dateien
+- `demo/types/kitaMeldeeingang.ts` (neu)
+- `demo/data/mockKitaMeldeeingang.ts` (neu)
+- `demo/components/kita/KitaMeldeeingangPanel.tsx` (neu)
+- `demo/app/kita/lagebild/page.tsx` (Panel statt pauschaler „vollständig“-Hinweis)
+- `demo/app/kita/meldung/page.tsx` (Session-Write + Linktext)
+- `docs/loops/kita-JOURNAL.md` (dieses Journal)
+
+### Story
+US-KJ-005 – Versorgungslagebild (Datenbasis / Meldeeingang aus US-KJ-004)
+
+### Build
+`npm run lint` + `npm run build` im `demo/`-Verzeichnis (siehe Commit dieses Laufs)
+
+### Nicht angefasst (Supervisor / verboten)
+Queue, BUILD_STATE, storyRegistry, andere Domänen, package.json, CI, push
+
+### Nächster sinnvoller Schritt (Hinweis Supervisor)
+Planungsraum-Karte Südost: Beitrag freigegebener Einrichtungsmeldung (Sonnenwinkel) nach Session-Eingang hervorheben, oder Monatsbericht-Vorschau-Status bei laufendem Monat mit gemischten Tagesstand-Quellen.
+
+---
+
 ## Iteration 2026-07-29 – US-KJ-003 Datenbasis freigegebene Tagesstände
 
 ### Was

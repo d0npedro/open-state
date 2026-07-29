@@ -17,6 +17,8 @@ import type {
   MeldungKorrektur,
   MeldungStatus,
 } from '@/types/kitaMeldung';
+import type { MeldeeingangSessionFreigabe } from '@/types/kitaMeldeeingang';
+import { MELDEEINGANG_SESSION_KEY } from '@/types/kitaMeldeeingang';
 
 type UiPhase = 'PRUEFUNG' | 'KORREKTUR' | 'BESTAETIGUNG' | 'FREIGEGEBEN';
 
@@ -182,16 +184,33 @@ export default function KitaMeldungPage() {
     });
     // Simulierter JA-Eingang wenige Minuten später (Demo)
     const freigabeId = `FG-${base.id}-${Date.now().toString(36).toUpperCase()}`;
-    setFreigabe({
+    const freigabePayload: MeldungFreigabe = {
       freigabeId,
       freigegebenAm: am,
       freigegebenDurchRolle: 'Kita-Leitung (Demo-Rolle)',
       eingegangenBeimJugendamtAm: am,
       bestaetigt: true,
-    });
+    };
+    setFreigabe(freigabePayload);
     setStatus('FREIGEGEBEN');
     setFreigabeFehler(null);
     setPhase('FREIGEGEBEN');
+
+    // Session-Kopplung → Steuerungslagebild Meldeeingang (US-KJ-005)
+    try {
+      const session: MeldeeingangSessionFreigabe = {
+        meldungId: base.id,
+        einrichtungId: base.einrichtungId,
+        freigabeId,
+        freigegebenAm: am,
+        freigegebenDurchRolle: freigabePayload.freigegebenDurchRolle,
+        kennzahlen: { ...kennzahlen },
+        sessionWrittenAt: new Date().toISOString(),
+      };
+      localStorage.setItem(MELDEEINGANG_SESSION_KEY, JSON.stringify(session));
+    } catch {
+      // localStorage nicht verfügbar – Lagebild bleibt beim Mock-Ausgangszustand
+    }
   }
 
   function resetDemo() {
@@ -203,6 +222,11 @@ export default function KitaMeldungPage() {
     setFreigabe(null);
     setFreigabeFehler(null);
     setKorrekturFehler(null);
+    try {
+      localStorage.removeItem(MELDEEINGANG_SESSION_KEY);
+    } catch {
+      // ignore
+    }
   }
 
   const readOnly = freigegeben || phase === 'FREIGEGEBEN';
@@ -339,11 +363,12 @@ export default function KitaMeldungPage() {
             </dd>
           </dl>
           <p style={{ fontSize: '0.85rem', margin: '0.75rem 0 0', color: 'var(--color-text-muted)' }}>
-            Freigegebene Aggregate fließen in das{' '}
+            Freigegebene Aggregate sind im{' '}
             <Link href="/kita/lagebild" style={{ color: 'var(--color-primary)' }}>
               Steuerungslagebild (US-KJ-005)
             </Link>{' '}
-            ein – sobald dort die Meldungsaggregation angebunden ist (Konzept).
+            unter Meldeeingang &amp; Datenbasis sichtbar (Demo-Session, localStorage). Entwürfe
+            bleiben für das Jugendamt unsichtbar.
           </p>
         </div>
       )}
