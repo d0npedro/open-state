@@ -130,6 +130,7 @@ Story-Dokumentation ist kein Pflicht-Vorläufer für Mock-Daten und Typen.
 | Q-111 | UG Hinweise: CTA „Zum Verfahrensstatus“ aus HINWEIS-Betriebsdatum (`#verfahrensstatus`) | DEMO | S | Q-100 | DONE `18e395e` |
 | Q-113 | UG Hinweise: CTA „Zu den Behörden“ aus INFO parallele Behörden (`/gruendung/behoerden`) | DEMO | S | Q-111 | DONE `b603c71` |
 | Q-116 | UG Übersicht: Fairness-Signale RELEVANT/HINWEIS mit Kurz-CTAs (RQ/Unterlagen/BG) | DEMO | S | Q-107 | DONE `54700cb` |
+| Q-120 | UG Behörden: Verfahrensschritt mit offener Rückfrage (VS-04) verlinkt zur RQ-Karte (`#rq-…`) | DEMO | S | Q-084 | DONE `67ad664` |
 
 ---
 
@@ -274,3 +275,4 @@ Diese Punkte wurden in früheren Iterationen abgeschlossen und sind produktionsr
 | Q-116 UG Fairness Kurz-CTAs | Übersicht RELEVANT/HINWEIS → RQ/Unterlagen/BG | `54700cb` → main |
 | Q-117 Kita Zeitreihe Regionenfilter | Planungsraum-Chips in `KitaZeitreiheTabelle` (US-KJ-010 AK2) | `28d5cae` → main |
 | Q-118 Kita Regionenvergleich | Zwei-Räume-Vergleich `KitaRegionenVergleich` (US-KJ-010 AK3) | `c4289dd` → main |
+| Q-120 UG Behörden VS-04-Link | Verfahrensschritt → offene Rückfrage `#rq-…` | `67ad664` → main |
