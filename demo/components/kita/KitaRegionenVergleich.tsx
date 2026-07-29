@@ -3,6 +3,7 @@
 /**
  * Regionenvergleich: zwei Planungsräume nebeneinander (US-KJ-010 AK 3).
  * Dieselben Kernkennzahlen, Differenzspalte, Meldebasis-Kurzmarkierung.
+ * CSV-Export der aktiven Vergleichsansicht (US-KJ-010 AK 4).
  * Keine Chart-Bibliothek — HTML-Tabelle. Keine Bewertung, keine Kind-/Personennamen.
  */
 
@@ -11,6 +12,7 @@ import type { PlanungsraumKennzahlen } from '@/types/kita';
 import {
   MeldebasisBadge,
   useMeldeeingangFuerBedarfsplanung,
+  type PlanungsraumMeldebasis,
 } from '@/components/kita/KitaBedarfsplanungDatenbasis';
 
 function fmt(n: number) {
@@ -184,6 +186,107 @@ export function KitaRegionenVergleich({
   const basisA = raumA ? byRaumId.get(raumA.id) : undefined;
   const basisB = raumB ? byRaumId.get(raumB.id) : undefined;
 
+  function meldebasisCsvLabel(basis: PlanungsraumMeldebasis | undefined): string {
+    if (!hydrated) return '…';
+    if (!basis) return 'keine_Stichprobe';
+    return basis.hatDatenluecke
+      ? `Luecke (${basis.freigegeben}/${basis.erwartet})`
+      : `vollstaendig (${basis.freigegeben}/${basis.erwartet})`;
+  }
+
+  /** CSV-Export der aktiven Vergleichsansicht — US-KJ-010 AK 4 */
+  function handleCsvDownload() {
+    if (!raumA || !raumB) return;
+
+    const de = (n: number) => n.toFixed(1).replace('.', ',');
+    const header = [
+      'Kennzahl',
+      'Kennzahl_Key',
+      'Region_A',
+      'Region_A_ID',
+      'Wert_A',
+      'Region_B',
+      'Region_B_ID',
+      'Wert_B',
+      'Delta_A_minus_B',
+      'Einheit',
+      'Meldebasis_A',
+      'Meldebasis_B',
+    ].join(';');
+
+    const rows = METRICS.map(m => {
+      const va = m.get(raumA);
+      const vb = m.get(raumB);
+      let wertA: string;
+      let wertB: string;
+      let delta: string;
+      let einheit: string;
+
+      if (m.key === 'inklusion') {
+        wertA = `${raumA.inklusionsplaetzeBelegt}/${raumA.inklusionsplaetzeGenehmigt}`;
+        wertB = `${raumB.inklusionsplaetzeBelegt}/${raumB.inklusionsplaetzeGenehmigt}`;
+        delta = sameRoom
+          ? ''
+          : String(raumA.inklusionsplaetzeBelegt - raumB.inklusionsplaetzeBelegt);
+        einheit = 'belegt/genehmigt';
+      } else if (m.unit === 'pct') {
+        wertA = de(va);
+        wertB = de(vb);
+        delta = sameRoom ? '' : de(va - vb);
+        einheit = 'Prozent';
+      } else if (m.unit === 'faktor') {
+        wertA = de(va);
+        wertB = de(vb);
+        delta = sameRoom ? '' : de(va - vb);
+        einheit = 'Faktor';
+      } else {
+        wertA = String(va);
+        wertB = String(vb);
+        delta = sameRoom ? '' : String(Math.round(va - vb));
+        einheit = 'Zahl';
+      }
+
+      return [
+        m.label,
+        m.key,
+        raumA.bezeichnung,
+        raumA.id,
+        wertA,
+        raumB.bezeichnung,
+        raumB.id,
+        wertB,
+        delta,
+        einheit,
+        meldebasisCsvLabel(basisA),
+        meldebasisCsvLabel(basisB),
+      ].join(';');
+    });
+
+    const meta = [
+      '# Open State – Kita Regionenvergleich (US-KJ-010 AK 3 / AK 4)',
+      `# Region_A: ${raumA.bezeichnung} (${raumA.id})`,
+      `# Region_B: ${raumB.bezeichnung} (${raumB.id})`,
+      sameRoom
+        ? '# Hinweis: Region A und B sind identisch — Delta leer'
+        : '# Delta = Wert Region A minus Wert Region B (rechnerisch, keine Bewertung)',
+      `# Meldebasis_A: ${meldebasisCsvLabel(basisA)}`,
+      `# Meldebasis_B: ${meldebasisCsvLabel(basisB)}`,
+      '# Keine Kind- oder Personennamen. Keine Einrichtungsindividualdaten. Keine Trendbewertung.',
+      '# Trennzeichen: Semikolon · Dezimaltrennzeichen: Komma · Encoding: UTF-8 BOM',
+      '',
+    ];
+
+    const csv = [...meta, header, ...rows].join('\n');
+    const slug = `${raumA.id}-vs-${raumB.id}`.toLowerCase().replace(/[^a-z0-9_-]+/g, '-');
+    const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `kita-regionenvergleich-${slug}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
   if (!raumA || !raumB) {
     return (
       <p style={{ fontSize: '0.875rem', color: 'var(--color-text-muted)' }}>
@@ -202,6 +305,8 @@ export function KitaRegionenVergleich({
     minWidth: '10rem',
   };
 
+  const csvButtonLabel = `${raumA.bezeichnung} vs. ${raumB.bezeichnung}`;
+
   return (
     <div>
       <div
@@ -214,11 +319,29 @@ export function KitaRegionenVergleich({
           borderLeft: '3px solid var(--color-primary)',
           color: 'var(--color-text)',
           lineHeight: 1.5,
+          display: 'flex',
+          flexWrap: 'wrap',
+          gap: '0.75rem',
+          alignItems: 'flex-start',
+          justifyContent: 'space-between',
         }}
       >
-        Zwei Planungsräume mit denselben Kennzahlen nebeneinander (US-KJ-010 AK&nbsp;3).
-        Die Spalte <strong>Δ (A − B)</strong> zeigt die rechnerische Differenz — keine automatische
-        Bewertung und keine Empfehlung. Meldebasis je Raum aus der Demo-Stichprobe (Session-sensitiv).
+        <div style={{ flex: '1 1 16rem', minWidth: 0 }}>
+          Zwei Planungsräume mit denselben Kennzahlen nebeneinander (US-KJ-010 AK&nbsp;3).
+          Die Spalte <strong>Δ (A − B)</strong> zeigt die rechnerische Differenz — keine automatische
+          Bewertung und keine Empfehlung. Meldebasis je Raum aus der Demo-Stichprobe (Session-sensitiv).
+          CSV-Export (AK&nbsp;4) lädt genau die aktive Auswahl A/B inkl. Δ und Meldebasis.
+        </div>
+        <button
+          type="button"
+          className="btn btn-secondary"
+          onClick={handleCsvDownload}
+          style={{ fontSize: '0.8rem', flexShrink: 0, whiteSpace: 'nowrap' }}
+          title={`CSV der aktuellen Vergleichsansicht: ${csvButtonLabel}`}
+          aria-label={`Regionenvergleich als CSV herunterladen (${csvButtonLabel})`}
+        >
+          CSV herunterladen (Vergleich)
+        </button>
       </div>
 
       {/* Auswahl */}
@@ -409,10 +532,11 @@ export function KitaRegionenVergleich({
       </div>
 
       <p style={{ margin: '0.75rem 0 0', fontSize: '0.8rem', color: 'var(--color-text-muted)', lineHeight: 1.5 }}>
-        Methodik (US-KJ-010 AK&nbsp;3): Gegenüberstellung aggregierter Planungsraum-Kennzahlen am
+        Methodik (US-KJ-010 AK&nbsp;3 / AK&nbsp;4): Gegenüberstellung aggregierter Planungsraum-Kennzahlen am
         Berichtsstand — keine Einrichtungsindividualdaten, keine Personenbezüge. Farbliche
-        Differenzmarkierung ist Orientierung, keine automatische Bewertung. Meldebasis-Stichprobe
-        wie im Meldeeingang; Freigabe-Demo unter{' '}
+        Differenzmarkierung ist Orientierung, keine automatische Bewertung. CSV-Export enthält
+        Kennzahl, Werte A/B, Δ (A − B), Einheit und Meldebasis je Raum (aktive Auswahl).
+        Meldebasis-Stichprobe wie im Meldeeingang; Freigabe-Demo unter{' '}
         <a href="/kita/meldung" style={{ color: 'var(--color-primary)' }}>
           /kita/meldung
         </a>
