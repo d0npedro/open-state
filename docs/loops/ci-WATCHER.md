@@ -2,14 +2,15 @@
 
 | Feld | Wert |
 |------|------|
-| last_checked | 2026-07-29T09:45:07Z |
-| last_run_id | 30440725278 |
+| last_checked | 2026-07-29T09:48:30Z |
+| last_run_id | 30440931876 |
 | last_status | success |
-| last_sha | bd018cd |
+| last_sha | ff87328 |
 | fix_attempts | 0 |
 
 ## Log
 
+- Build `30440932295` + E2E `30440931876` **success** (SHA ff87328 docs ci-watcher HEAD). Build `30440899115` + E2E `30440899082` **success** (SHA bd018cd Merge loop/kita Explorer print-only Filterstand/Meldebasis + loop/ug Hinweise UNTERLAGE live — latest code path). Catch-up this tick: origin/main..main was 7 at start → lint+build grün; concurrent watcher already pushed `bd018cd` + docs `ff87328` (push race: remote ref lock) → origin/main..main = 0. Watched Build/E2E to green. No fix. fix_attempts=0.
 - Build `30440899115` + E2E `30440899082` **queued** (SHA bd018cd Merge loop/kita Explorer print-only Filterstand/Meldebasis + loop/ug Hinweise UNTERLAGE live — latest code path). Prior E2E `30440725278` **success** (SHA d8fab66 docs). Prior E2E `30440532397` **success** (SHA 455ff34). Prior Build `30439917970` + E2E `30439917958` **success** (SHA ddc414a). Catch-up this tick: origin/main..main was 7 → lint+build grün (`NEXT_DIST_DIR=.next-ci-watcher`) + local `test:e2e:ci` **256 passed** → push `d8fab66..bd018cd` → origin/main..main = 0. No fix. fix_attempts=0.
 - E2E `30440532397` **success** (SHA 455ff34 docs ci-watcher HEAD). E2E `30440327521` **success** (SHA 239012f). E2E `30440116486` **success** (SHA 341754f). Build `30439917970` + E2E `30439917958` **success** (SHA ddc414a Merge loop/kita — latest code path: UG Übersicht Upload-Quittung + Kita Zeitreihe UI/print-meta + Regionenvergleich print). Catch-up: origin/main..main = 0. No fix. fix_attempts=0.
 - E2E `30440327521` **success** (SHA 239012f docs ci-watcher HEAD). E2E `30440116486` **success** (SHA 341754f). E2E `30440074821` **success** (SHA 199ce68 docs supervisor Q-171–Q-174). Build `30439917970` + E2E `30439917958` **success** (SHA ddc414a Merge loop/kita — latest code path: UG Übersicht Upload-Quittung + Kita Zeitreihe UI/print-meta + Regionenvergleich print). Catch-up: origin/main..main = 0. No fix. fix_attempts=0.
