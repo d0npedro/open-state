@@ -405,9 +405,12 @@ test.describe('UG – Hinweise zur Verfahrenslage', () => {
   });
 
   test('Nach Beantworten entfällt RELEVANT-CTA auf Hinweise', async ({ page }) => {
-    await page.goto('/gruendung/rueckfragen');
+    // Client-Navigation: GruendungStateProvider im Layout verliert State bei page.goto()
+    await page.locator('.tab-nav-item').filter({ hasText: 'Fragen' }).click();
+    await expect(page).toHaveURL(/\/gruendung\/rueckfragen/);
     await page.getByRole('button', { name: /Rückfrage beantworten/i }).click();
-    await page.goto('/gruendung/hinweise');
+    await page.locator('.tab-nav-item').filter({ hasText: 'Hinweise' }).click();
+    await expect(page).toHaveURL(/\/gruendung\/hinweise/);
     await expect(page.getByTestId('hinweise-rq-cta-RQ-01')).toHaveCount(0);
   });
 

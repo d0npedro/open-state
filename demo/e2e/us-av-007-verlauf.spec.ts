@@ -134,7 +134,9 @@ test.describe('US-AV-007 – Antworttext in Timeline lesbar', () => {
     await page.getByTestId('rq-antwort-absenden').click();
     await expect(page.getByTestId('rq-antwort-quittung')).toBeVisible();
 
-    await page.goto('/fall/verlauf');
+    // Client-Navigation: DemoStateProvider sitzt im Fall-Layout und geht bei page.goto() verloren
+    await page.locator('.tab-nav-item').filter({ hasText: 'Verlauf' }).click();
+    await expect(page).toHaveURL(/\/fall\/verlauf/);
     const block = page.getByTestId('timeline-antwort-block');
     await expect(block).toBeVisible();
     await expect(block).toContainText('Ihre übermittelte Antwort');
