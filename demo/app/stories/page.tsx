@@ -28,7 +28,7 @@ const domainMeta: Record<string, { label: string; hint: string; farbe: string }>
   },
   'Unternehmensgründung': {
     label: 'Unternehmensgründung',
-    hint: 'Gewerbeanmeldung · Bürgersicht · Stories geplant',
+    hint: 'Gewerbeanmeldung · Mehrbehördenprozess · Demonstrierbar',
     farbe: '#7b1fa2',
   },
 };

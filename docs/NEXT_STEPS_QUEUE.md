@@ -98,6 +98,7 @@ Q-001 und Q-010 sind reine Dokumentationsarbeiten ohne Demo-Effekt.
 | Q-003 | `/stories`-Seite: Domänen-Gruppierung (AV / KJ / UG) — bei 18+ Stories nötig | DEMO | M | Q-002 | DONE `1a412b5` |
 | Q-010 | Story-Map und Stories anlegen: `docs/stories/unternehmensgruendung/` + 6 Stories (US-UG-001–006) | DOCS | M | – | DONE |
 | Q-001 | Story-Datei `US-AV-008_Verfahrenslage_verstehen.md` anlegen — Docs-Konsistenz, kein Demo-Effekt | DOCS | S | – | DONE |
+| Q-070 | `demo/data/storyRegistry.ts` um US-UG-001–006 erweitern — UG-Stories auf `/stories` sichtbar | DEMO | S | Q-010 | DONE |
 
 ---
 

@@ -1,6 +1,6 @@
 # BUILD_STATE.md – Aktueller Projektstand
 
-Zuletzt aktualisiert: nach Abschluss Queue P5–P9 (Q-001, Q-040–042, Q-050–053, Q-060–062)
+Zuletzt aktualisiert: nach Q-070 (UG-Stories in demo storyRegistry.ts)
 
 Dieser Stand beschreibt, was tatsächlich existiert und funktioniert.
 Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
@@ -80,7 +80,7 @@ Weitere Domänen (Kita, Unternehmensgründung): nur Dokumentation, keine UI-Rout
 |--------|-----------------|----------------------------|--------|
 | Arbeitsverwaltung (AV) | US-AV-001 – 008 | ✓ 8 registriert | DEMONSTRIERBAR (Demo) |
 | Kita / Jugendamt (KJ) | US-KJ-001 – 010 | ✓ registriert | gemischt (teilweise Demo) |
-| Unternehmensgründung (UG) | US-UG-001 – 006 + STORY_MAP + README | ✗ noch nicht in Demo-Registry | ENTWURF (Docs); Demo-Routen existieren |
+| Unternehmensgründung (UG) | US-UG-001 – 006 + STORY_MAP + README | ✓ 6 registriert | DEMONSTRIERBAR (Demo) |
 
 **Q-001 erledigt:** Story-Datei `US-AV-008_Verfahrenslage_verstehen.md` angelegt.
 
@@ -126,8 +126,8 @@ Einträge in `story_registry.json` und TRACEABILITY_MATRIX. Demo-`storyRegistry.
 |-------|----------------|----------|
 | ~~Fairness-Fristen sind statische Zahlen~~ | ~~Glaubwürdigkeitsproblem~~ | Q-004 ✓ |
 | ~~Demo vollständig statisch~~ | ~~Demo wirkt wie Slideshow~~ | Q-031 ✓ |
-| UG-Stories nicht in `demo/data/storyRegistry.ts` | `/stories` zeigt UG-Doku-Stories nicht | — |
 | DSFA für Kita-Domäne noch ausstehend | Konzeptlücke — extern abhängig | — |
+| Queue ohne weitere OFFEN-Einträge | Nächste Iteration braucht Queue-Nachfüllung | — |
 
 ---
 
