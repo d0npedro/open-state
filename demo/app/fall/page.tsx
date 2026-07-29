@@ -9,15 +9,43 @@ import { useDemoState } from '@/context/DemoStateContext';
 import { berechneFairnessSignale } from '@/lib/fairness/rules';
 import { Icon } from '@/components/Icon';
 
+/**
+ * Lineare Fortschrittsschritte (US-AV-002).
+ * Nebenstatus wie UNTERLAGEN_FEHLEN / PAUSIERT liegen nicht in der Kette —
+ * sie werden über resolveProgressIndex auf die passende Phase gemappt,
+ * damit die Anzeige nach Demo-Interaktionen nicht auf 0 % springt.
+ */
 const statusFlow = [
   { key: 'ANGELEGT',                  label: 'Antrag erstellt' },
   { key: 'EINGEGANGEN',               label: 'Antrag eingegangen' },
   { key: 'IN_PRUEFUNG',               label: 'Wird geprüft' },
-  { key: 'RUECKFRAGE_OFFEN',          label: 'Ihre Antwort erwartet' },
+  { key: 'RUECKFRAGE_OFFEN',          label: 'Handlung von Ihnen erwartet' },
   { key: 'TERMIN_ANGESETZT',          label: 'Termin geplant' },
   { key: 'ENTSCHEIDUNG_VORBEREITET',  label: 'Entscheidung wird vorbereitet' },
   { key: 'BESCHEID_ZUGESTELLT',       label: 'Abgeschlossen' },
 ];
+
+/** Mappt Fallstatus auf Index in statusFlow (inkl. Nebenstatus aus Demo-Session). */
+function resolveProgressIndex(status: string): number {
+  // Bürger-Handlungsphase: Rückfrage ODER fehlende Unterlagen (Demo-Status nach RQ)
+  if (status === 'UNTERLAGEN_FEHLEN' || status === 'RUECKFRAGE_OFFEN') {
+    return statusFlow.findIndex(s => s.key === 'RUECKFRAGE_OFFEN');
+  }
+  if (status === 'PAUSIERT') {
+    return statusFlow.findIndex(s => s.key === 'IN_PRUEFUNG');
+  }
+  const idx = statusFlow.findIndex(s => s.key === status);
+  // Fallback: nicht in der Kette → „Wird geprüft“ (kein 0 %-Sprung)
+  return idx >= 0 ? idx : statusFlow.findIndex(s => s.key === 'IN_PRUEFUNG');
+}
+
+/** Aktives Schrittlabe l dynamisch (Rückfrage vs. Unterlagen). */
+function activeStepLabel(status: string, defaultLabel: string): string {
+  if (status === 'UNTERLAGEN_FEHLEN') return 'Unterlagen fehlen noch';
+  if (status === 'RUECKFRAGE_OFFEN') return 'Ihre Antwort wird erwartet';
+  if (status === 'PAUSIERT') return 'Pausiert';
+  return defaultLabel;
+}
 
 // UX-Grund: Menschliche Beschreibungen statt Verwaltungsstatus-Codes
 const statusToChip: Record<string, { label: string; css: string; icon: string }> = {
@@ -35,13 +63,17 @@ const statusToChip: Record<string, { label: string; css: string; icon: string }>
 export default function FallPage() {
   const { fall } = useDemoState();
   const chip = statusToChip[fall.status] ?? { label: fall.status, css: 'status-chip-neutral', icon: 'info' };
-  const currentIndex = statusFlow.findIndex(s => s.key === fall.status);
+  const currentIndex = resolveProgressIndex(fall.status);
   const fortschrittProzent = Math.round(((currentIndex + 1) / statusFlow.length) * 100);
   const fairnessSignale = berechneFairnessSignale(fall);
   const hatOffeneAufgaben = fall.offeneAufgaben.length > 0;
   const offeneRueckfragen = fall.rueckfragen.filter(r => !r.beantwortet).length;
-  const ausstehendeUnterlagen = fall.dokumente.filter(d => d.status === 'ANGEFORDERT').length;
+  // ANGEFORDERT + ABGELEHNT blockieren den Fortschritt (parität zu /fall/dokumente)
+  const ausstehendeUnterlagen = fall.dokumente.filter(
+    d => d.status === 'ANGEFORDERT' || d.status === 'ABGELEHNT'
+  ).length;
   const naechsterTermin = fall.termine.find(t => t.status === 'BESTAETIGT');
+  const wartetAufBehoerde = !hatOffeneAufgaben && fall.status === 'IN_PRUEFUNG';
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
@@ -70,6 +102,29 @@ export default function FallPage() {
                 <Icon name="arrow-right" size={18} />
               </Link>
             )}
+          </div>
+        </div>
+      )}
+
+      {/* ─── 1b. RUHEZUSTAND: Kein Handeln nötig (nach Demo-Abschluss) ─
+          UX-Grund: Wenn alle Aufgaben erledigt sind, muss das ebenso
+          klar sein wie der Handlungsbedarf — sonst wirkt die Seite „leer“. */}
+      {wartetAufBehoerde && (
+        <div
+          className="notice-box notice-box-success"
+          role="status"
+          aria-live="polite"
+          data-testid="ruhezustand-banner"
+        >
+          <Icon name="check-circle" size={20} style={{ flexShrink: 0, marginTop: '2px' }} />
+          <div style={{ flex: 1 }}>
+            <strong style={{ display: 'block', marginBottom: '0.25rem', fontSize: '1rem' }}>
+              Kein Handeln von Ihnen erforderlich
+            </strong>
+            <p style={{ margin: 0, fontSize: '0.9rem' }}>{fall.naechsterSchritt}</p>
+            <p style={{ margin: '0.5rem 0 0', fontSize: '0.85rem', color: 'var(--color-text-muted)' }}>
+              {fall.statusBeschreibung}
+            </p>
           </div>
         </div>
       )}
@@ -116,6 +171,7 @@ export default function FallPage() {
             const active = idx === currentIndex;
             const dotCss   = done ? 'step-dot-done'   : active ? 'step-dot-active'   : 'step-dot-pending';
             const labelCss = done ? 'step-label-done' : active ? 'step-label-active' : 'step-label-pending';
+            const label = active ? activeStepLabel(fall.status, step.label) : step.label;
             return (
               <div key={step.key} className="step-row" style={{ padding: '0.5rem 0' }}>
                 <div className={`step-dot ${dotCss}`} aria-hidden="true">
@@ -125,7 +181,7 @@ export default function FallPage() {
                   }
                 </div>
                 <div>
-                  <span className={`step-label ${labelCss}`}>{step.label}</span>
+                  <span className={`step-label ${labelCss}`}>{label}</span>
                   {active && (
                     <div style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', marginTop: '0.125rem' }}>
                       ← Sie sind hier

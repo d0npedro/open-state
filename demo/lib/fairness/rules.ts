@@ -69,18 +69,26 @@ export function berechneFairnessSignale(fall: Fall): FairnessSignal[] {
   }
 
   // ─── Signal 2: Fehlende Unterlagen blockieren Fallfortschritt ─────────────
-  // Regel: Dokumente mit Status ANGEFORDERT, für die noch kein Eingang verzeichnet ist,
+  // Regel: Dokumente mit Status ANGEFORDERT oder ABGELEHNT (erneute Einreichung nötig)
   //        halten den nächsten Bearbeitungsschritt an.
-  const fehlendeDokumente = fall.dokumente.filter(d => d.status === 'ANGEFORDERT');
+  const fehlendeDokumente = fall.dokumente.filter(
+    d => d.status === 'ANGEFORDERT' || d.status === 'ABGELEHNT'
+  );
   if (fehlendeDokumente.length > 0) {
+    const abgelehnt = fehlendeDokumente.filter(d => d.status === 'ABGELEHNT');
     const names = fehlendeDokumente.map(d => d.bezeichnung).join(', ');
+    const abgelehntHinweis =
+      abgelehnt.length > 0
+        ? ` Davon abgelehnt und erneut einzureichen: ${abgelehnt.map(d => d.bezeichnung).join(', ')}.`
+        : '';
     signale.push({
       id: 'FH-UNTERLAGEN-FEHLEND',
       typ: 'UNTERLAGE_FEHLT_BLOCKIERT',
-      titel: `${fehlendeDokumente.length} Unterlage(n) noch nicht eingereicht`,
+      titel: `${fehlendeDokumente.length} Unterlage(n) noch nicht vollständig`,
       erklaerung:
-        `Folgende angeforderten Unterlagen liegen noch nicht vor: ${names}. ` +
-        `Ohne diese Unterlagen kann die Fallbearbeitung nicht vollständig abgeschlossen werden.`,
+        `Folgende Unterlagen fehlen oder müssen erneut eingereicht werden: ${names}.` +
+        abgelehntHinweis +
+        ` Ohne diese Unterlagen kann die Fallbearbeitung nicht vollständig abgeschlossen werden.`,
       auswirkung:
         'Die Sachbearbeitung kann erst mit der Entscheidungsvorbereitung fortfahren, ' +
         'wenn alle angeforderten Unterlagen vollständig und fristgerecht eingereicht wurden.',
@@ -88,7 +96,8 @@ export function berechneFairnessSignale(fall: Fall): FairnessSignal[] {
         'Unterlagen im Bereich „Dokumente" hochladen. ' +
         'Dort ist für jede Anforderung erläutert, warum das Dokument benötigt wird.',
       bezug: `Dokumente: ${fehlendeDokumente.map(d => d.id).join(', ')}`,
-      prioritaet: 'HINWEIS',
+      // Abgelehnte Unterlagen sind dringlicher als reine Anforderung
+      prioritaet: abgelehnt.length > 0 ? 'RELEVANT' : 'HINWEIS',
     });
   }
 
