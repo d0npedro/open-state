@@ -18,7 +18,10 @@ export interface Dokument {
   bezeichnung: string;
   status: DokumentStatus;
   begründung: string;
+  /** Anzeigefrist (deutsch, z. B. „3. Dezember 2024“) */
   frist?: string;
+  /** ISO-Datum der Frist (YYYY-MM-DD) – Grundlage für Countdown (analog Rückfrage) */
+  fristDatum?: string;
   hochgeladenAm?: string;
 }
 

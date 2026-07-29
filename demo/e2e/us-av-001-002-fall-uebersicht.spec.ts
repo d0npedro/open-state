@@ -131,6 +131,19 @@ test.describe('US-AV-002 – Status einsehen', () => {
     await expect(page.getByRole('tab', { name: /Unterlagen,\s*2 offen/i })).toBeVisible();
   });
 
+  test('Fristen-Countdown offener Unterlagen auf Übersicht (Q-086)', async ({ page }) => {
+    // FIKTIVES_HEUTE 2024-11-24, Frist 2024-12-03 → noch 9 Tage
+    const block = page.getByTestId('dok-fristen-uebersicht');
+    await expect(block).toBeVisible();
+    await expect(block.getByRole('heading', { name: /Fristen offener Unterlagen/i })).toBeVisible();
+    await expect(page.getByTestId('dok-frist-DOK-003')).toBeVisible();
+    await expect(page.getByTestId('dok-frist-DOK-004')).toBeVisible();
+    await expect(page.getByTestId('dok-frist-countdown-DOK-003')).toContainText(/noch 9 Tage/i);
+    await expect(page.getByTestId('dok-frist-countdown-DOK-004')).toContainText(/noch 9 Tage/i);
+    // Schnellzugriff-Kachel Unterlagen zeigt Countdown der nächsten Frist
+    await expect(page.getByRole('link', { name: /Unterlagen/i }).first()).toContainText(/noch 9 Tage/i);
+  });
+
   test('Tab-Badge Fragen entfällt nach Beantworten (Client-Navigation)', async ({ page }) => {
     await page.locator('.tab-nav-item').filter({ hasText: 'Fragen' }).click();
     await expect(page).toHaveURL(/\/fall\/rueckfragen/);
