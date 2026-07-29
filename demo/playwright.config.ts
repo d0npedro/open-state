@@ -1,17 +1,30 @@
 import { defineConfig, devices } from '@playwright/test';
 
+/**
+ * `npm run test:e2e:ci` (npm_lifecycle_event) oder CI=true:
+ * - 1 worker, 2 retries
+ * - Production-Server auf Port 3010 (kein Konflikt mit Dev auf 3000)
+ * - kein reuseExistingServer
+ */
+const isE2eCi =
+  process.env.npm_lifecycle_event === 'test:e2e:ci' ||
+  process.env.PW_E2E_CI === '1' ||
+  !!process.env.CI;
+
+const port = isE2eCi ? 3010 : 3000;
+const baseURL = `http://localhost:${port}`;
+
 export default defineConfig({
   testDir: './e2e',
   fullyParallel: true,
-  forbidOnly: !!process.env.CI,
-  retries: process.env.CI ? 2 : 0,
-  workers: process.env.CI ? 1 : undefined,
+  forbidOnly: isE2eCi,
+  retries: isE2eCi ? 2 : 0,
+  workers: isE2eCi ? 1 : undefined,
   reporter: [['html', { open: 'never' }], ['list']],
 
   use: {
-    baseURL: 'http://localhost:3000',
+    baseURL,
     trace: 'on-first-retry',
-    // Deutsch als Browser-Sprache (Behördenkontext)
     locale: 'de-DE',
   },
 
@@ -26,11 +39,12 @@ export default defineConfig({
     },
   ],
 
-  // Startet Next.js dev server automatisch vor den Tests
   webServer: {
-    command: 'npm run dev',
-    url: 'http://localhost:3000',
-    reuseExistingServer: !process.env.CI,
+    command: isE2eCi
+      ? `npx next start -p ${port}`
+      : `npm run dev -- -p ${port}`,
+    url: baseURL,
+    reuseExistingServer: !isE2eCi,
     timeout: 120_000,
   },
 });

@@ -1,6 +1,6 @@
 # BUILD_STATE.md – Aktueller Projektstand
 
-Zuletzt aktualisiert: nach Supervisor-Merge 2026-07-29 (Kita Q-109/Q-110 + UG Q-111 Betriebsdatum-CTA DONE; Q-104–Q-107 OFFEN; lint+build grün)
+Zuletzt aktualisiert: nach Supervisor-Merge 2026-07-29 (UG Q-106 Fairness-Filter, Kita Lagebild-Residual; E2E 210 chromium Port 3010; test:e2e:ci ? next start)
 
 Dieser Stand beschreibt, was tatsächlich existiert und funktioniert.
 Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
