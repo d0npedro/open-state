@@ -2,6 +2,29 @@
 
 Branch: `loop/kita` · Worktree: `D:\Projects\open-state-loop-kita`
 
+## Iteration 2026-07-29 – US-KJ-002 Einrichtung Belegungsstand-Druck Status/Datenbasis
+
+### Was
+Belegungsstand (`/kita/einrichtung`, US-KJ-002): Druckansicht mit Druckleiste analog Tagesstand/Monatsbericht/Meldung. Print-only: Status (aktuell / veraltet inkl. 3-Tage-Schwelle), Datenbasis (Stichtag, Gruppenaggregate, Einschränkungszähler, Summen genehmigt/belegt/reserviert/frei, Prozessbezug). Gesamtübersicht und Gruppenkarten im Ausdruck; CSV-Export, Metadatenleiste, Hinweise und Prozess-Hub no-print. Methodik- und Footer-Hinweis. Nur Aggregate, keine Kind- oder Personennamen (DEC-004). `origin/main` bereits auf Branch (kein Merge nötig).
+
+### Dateien
+- `demo/app/kita/einrichtung/page.tsx` (Druckleiste, print-only Status/Datenbasis, Print-CSS, Methodik)
+- `docs/loops/kita-JOURNAL.md` (dieses Journal)
+
+### Story
+US-KJ-002 – Belegungsstand einsehen (Druck Status + Datenbasis dokumentiert)
+
+### Build
+`npm run lint` + `npm run build` im `demo/`-Verzeichnis (siehe Commit dieses Laufs)
+
+### Nicht angefasst (Supervisor / verboten)
+Queue, BUILD_STATE, storyRegistry, DECISION_LOG, andere Domänen, package.json, CI, push
+
+### Nächster sinnvoller Schritt (Hinweis Supervisor)
+Tagesstand-CSV Aggregate-Export (DEC-004), oder Einrichtungs-Hub-Rücklink von Monatsbericht/Tagesstand spiegeln falls Lücken.
+
+---
+
 ## Iteration 2026-07-29 – US-KJ-001 Tagesstand-Druck freigabeunabhängig Status/Datenbasis/Freigabe
 
 ### Was

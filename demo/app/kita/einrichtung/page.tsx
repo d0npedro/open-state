@@ -5,6 +5,9 @@
  *
  * Aggregierte Platzzahlen je Gruppe. Keine Kind- oder Vertragsdaten.
  * Prozesskette: Tagesstand (US-KJ-001) → Monatsbericht (US-KJ-003) → Meldung (US-KJ-004).
+ * Druck: Status (aktuell / veraltet), Datenbasis (Stichtag, Aggregate, Einschränkungen)
+ * und Gruppenübersicht im Ausdruck dokumentiert (Spiegel Tagesstand/Monatsbericht).
+ * CSV-Export, Prozess-Hub und Aktionsbuttons no-print.
  */
 
 import { demoKitaEinrichtung } from '@/data/mockKitaEinrichtung';
@@ -89,6 +92,23 @@ export default function KitaEinrichtungBelegungPage() {
   const frei = summe(e.gruppen, 'freiePlaetze');
   const vollBelegt = frei === 0 && e.gruppen.every(g => g.einschraenkung !== 'TEMPORAER_GESCHLOSSEN' || g.belegtePlaetze === 0);
 
+  const gruppenGesamt = e.gruppen.length;
+  const gruppenGeschlossen = e.gruppen.filter(g => g.einschraenkung === 'TEMPORAER_GESCHLOSSEN').length;
+  const gruppenReduziert = e.gruppen.filter(g => g.einschraenkung === 'REDUZIERT').length;
+  const gruppenPersonal = e.gruppen.filter(g => g.einschraenkung === 'PERSONALMANGEL').length;
+  const gruppenOhne = e.gruppen.filter(g => g.einschraenkung === 'KEINE').length;
+  const gruppenEng = e.gruppen.filter(
+    g => g.freiePlaetze === 0 && g.einschraenkung !== 'TEMPORAER_GESCHLOSSEN'
+  ).length;
+
+  const statusLabel = datenVeraltet ? 'Veraltet' : 'Aktuell';
+  const statusColor = datenVeraltet ? 'var(--color-warning)' : 'var(--color-success)';
+  const statusHint = datenVeraltet
+    ? `Letzte Erfassung liegt mehr als 3 Tage zurück (vor ${alter} Tagen). Tagesstand (US-KJ-001) sollte aktualisiert werden.`
+    : alter === 0
+      ? 'Letzte Erfassung entspricht dem Demo-Heute – Stand gilt als aktuell.'
+      : `Letzte Erfassung vor ${alter} Tag${alter === 1 ? '' : 'en'} – innerhalb der 3-Tage-Schwelle.`;
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1.75rem' }}>
       <div>
@@ -102,7 +122,106 @@ export default function KitaEinrichtungBelegungPage() {
         </p>
       </div>
 
+      {/* Druck: Status + Datenbasis im Ausdruck – Spiegel Tagesstand/Monatsbericht */}
       <div
+        className="no-print card"
+        style={{
+          display: 'flex',
+          flexWrap: 'wrap',
+          gap: '1rem',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+        }}
+      >
+        <div style={{ maxWidth: '40rem' }}>
+          <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>Export</div>
+          <strong style={{ fontSize: '0.95rem' }}>Druckansicht Belegungsstand</strong>
+          <p
+            style={{
+              fontSize: '0.8rem',
+              color: 'var(--color-text-muted)',
+              margin: '0.25rem 0 0',
+              lineHeight: 1.5,
+            }}
+          >
+            Druck dokumentiert den Datenstand (aktuell / veraltet), die Datenbasis
+            (Stichtag, Aggregate je Gruppe, Einschränkungen) und die
+            Gesamtsummen. CSV-Export, Prozess-Hub und Aktionsbuttons sind no-print.
+            Nur Aggregate, keine Kind- oder Personennamen (DEC-004).
+          </p>
+        </div>
+        <button
+          type="button"
+          className="btn btn-secondary"
+          onClick={() => window.print()}
+          style={{ fontSize: '0.875rem', flexShrink: 0 }}
+        >
+          Drucken / als PDF speichern
+        </button>
+      </div>
+
+      {/* print-only Kopf + Status + Datenbasis */}
+      <div className="print-only print-block" style={{ margin: 0 }}>
+        <p style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', margin: '0 0 0.35rem' }}>
+          US-KJ-002 · Belegungsstand · Demo Einrichtung / Kita-Leitung · DEC-004
+        </p>
+        <h1 style={{ margin: '0 0 0.35rem', fontSize: '1.35rem' }}>
+          Belegungsstand {e.bezeichnung}
+        </h1>
+        <p style={{ color: 'var(--color-text-muted)', margin: '0 0 0.75rem', fontSize: '0.9rem' }}>
+          {e.traeger} · Planungsraum {e.planungsraumBezeichnung} ({e.planungsraumId})
+        </p>
+        <div
+          style={{
+            marginBottom: '0.75rem',
+            padding: '0.75rem 1rem',
+            border: '1px solid var(--color-border)',
+            borderRadius: 'var(--radius)',
+            fontSize: '0.875rem',
+            background: 'var(--color-neutral-light)',
+            borderLeft: `4px solid ${statusColor}`,
+          }}
+          role="status"
+        >
+          <strong style={{ color: statusColor }}>Status im Ausdruck: {statusLabel}</strong>
+          <div style={{ marginTop: '0.25rem', color: 'var(--color-text-muted)', fontSize: '0.8rem' }}>
+            Zeitlicher Stand: {e.standLabel} · Letzte Erfassung {e.letzteErfassung} · Demo-Bezug{' '}
+            {e.fiktivesHeute} · ID <span style={{ fontFamily: 'monospace' }}>{e.id}</span>
+          </div>
+          <p style={{ margin: '0.4rem 0 0', fontSize: '0.8rem', lineHeight: 1.45 }}>{statusHint}</p>
+        </div>
+        <div
+          style={{
+            marginBottom: '0.5rem',
+            padding: '0.75rem 1rem',
+            border: '1px solid var(--color-border)',
+            borderRadius: 'var(--radius)',
+            fontSize: '0.875rem',
+          }}
+          role="note"
+        >
+          <strong style={{ display: 'block', marginBottom: '0.35rem' }}>
+            Datenbasis im Ausdruck (Aggregate je Gruppe)
+          </strong>
+          <p style={{ margin: 0, fontSize: '0.8rem', lineHeight: 1.5 }}>
+            Gruppen: {gruppenGesamt} gesamt · ohne Einschränkung {gruppenOhne} · reduziert{' '}
+            {gruppenReduziert} · personalbedingt {gruppenPersonal} · temporär geschlossen{' '}
+            {gruppenGeschlossen} · voll belegt (ohne Geschlossene) {gruppenEng}. Summen:
+            genehmigt {genehmigt} · belegt {belegt} · reserviert {reserviert} · frei {frei}.
+            {frei === 0
+              ? vollBelegt
+                ? ' Derzeit keine freien Plätze in nutzbaren Gruppen.'
+                : ' Keine freien Plätze in den geöffneten Gruppen.'
+              : ` ${frei} freie Plätze in der Einrichtung.`}{' '}
+            Nur aggregierte Platzzahlen; keine Kindlisten, keine Vertrags- oder Adressdaten.
+            Stichtagsüberblick speist Tagesstand (US-KJ-001), Monatsbericht (US-KJ-003) und
+            Meldung (US-KJ-004).
+          </p>
+        </div>
+      </div>
+
+      <div
+        className="no-print"
         style={{
           display: 'flex',
           flexWrap: 'wrap',
@@ -132,7 +251,7 @@ export default function KitaEinrichtungBelegungPage() {
       </div>
 
       {datenVeraltet && (
-        <div className="notice-box notice-box-warn" role="status">
+        <div className="notice-box notice-box-warn no-print" role="status">
           <div>
             <strong style={{ fontSize: '0.875rem' }}>Daten veraltet</strong>
             <p style={{ fontSize: '0.875rem', margin: '0.25rem 0 0' }}>
@@ -147,7 +266,7 @@ export default function KitaEinrichtungBelegungPage() {
       )}
 
       {!datenVeraltet && (
-        <div className="notice-box notice-box-neutral" role="note">
+        <div className="notice-box notice-box-neutral no-print" role="note">
           <div style={{ fontSize: '0.875rem' }}>
             <strong>Datenschutz:</strong> Nur aggregierte Platzzahlen. Keine Namen von Kindern, keine Vertrags- oder
             Adressdaten. Einrichtung und Träger sind fiktiv.
@@ -155,11 +274,16 @@ export default function KitaEinrichtungBelegungPage() {
         </div>
       )}
 
-      {/* Gesamtübersicht (AK 4) */}
+      {/* Gesamtübersicht (AK 4) – Screen + Druck */}
       <section>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', flexWrap: 'wrap', gap: '0.75rem', marginBottom: '1rem' }}>
           <h2 style={{ margin: 0 }}>Gesamtübersicht Einrichtung</h2>
-          <button type="button" className="btn btn-secondary" onClick={downloadCsv} style={{ fontSize: '0.875rem' }}>
+          <button
+            type="button"
+            className="btn btn-secondary no-print"
+            onClick={downloadCsv}
+            style={{ fontSize: '0.875rem' }}
+          >
             CSV exportieren
           </button>
         </div>
@@ -189,7 +313,7 @@ export default function KitaEinrichtungBelegungPage() {
         )}
       </section>
 
-      {/* Gruppen (AK 1, 3) */}
+      {/* Gruppen (AK 1, 3) – Screen + Druck */}
       <section>
         <h2 style={{ marginBottom: '1rem' }}>Belegung je Gruppe</h2>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
@@ -349,14 +473,47 @@ export default function KitaEinrichtungBelegungPage() {
         </div>
       </section>
 
-      <div style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)' }}>
+      <div className="no-print" style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)' }}>
         Aggregierte Daten fließen in das{' '}
         <Link href="/kita/lagebild" style={{ color: 'var(--color-primary)' }}>Steuerungslagebild</Link>
         {' '}und den{' '}
         <Link href="/kita" style={{ color: 'var(--color-primary)' }}>öffentlichen Bericht</Link>
         {' '}ein — ohne Einrichtungsdetail in der Öffentlichkeit (DEC-004). Prozesskette oben:
-        Tagesstand → Monatsbericht → Meldung (gleiche Einrichtung).
+        Tagesstand → Monatsbericht → Meldung (gleiche Einrichtung). Druck: Status (aktuell /
+        veraltet) und Datenbasis-Aggregate im Ausdruck dokumentiert.
       </div>
+
+      <div
+        className="print-only print-block"
+        style={{
+          marginTop: '0.5rem',
+          fontSize: '0.8rem',
+          color: 'var(--color-text-muted)',
+          lineHeight: 1.45,
+        }}
+      >
+        Druckansicht US-KJ-002: Status {statusLabel}; Stand {e.standLabel}, letzte Erfassung{' '}
+        {e.letzteErfassung}; Summen genehmigt {genehmigt} / belegt {belegt} / reserviert{' '}
+        {reserviert} / frei {frei}; Gruppen {gruppenGesamt} (geschlossen {gruppenGeschlossen},
+        reduziert {gruppenReduziert}). Nur Aggregate, keine Kind- oder Personennamen. Einrichtung-ID{' '}
+        <span style={{ fontFamily: 'monospace' }}>{e.id}</span>.
+      </div>
+
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
+            .print-only { display: none; }
+            @media print {
+              .no-print { display: none !important; }
+              .print-only { display: inline !important; }
+              .print-only.print-block { display: block !important; }
+              body > div > header,
+              body nav { display: none !important; }
+              main { padding: 0 !important; }
+            }
+          `,
+        }}
+      />
     </div>
   );
 }
