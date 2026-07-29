@@ -6,6 +6,41 @@ Scope: nur `demo/app/fall/**`, DemoStateContext, fairness/rules, mockFall, e2e u
 
 ---
 
+## 2026-07-29 – Iteration 14: Hinweise RQ-Signal Frist live + Session-Antwort
+
+### Was
+Hinweise-Seite (`/fall/hinweise`, US-AV-008) und Rückfragen-Seite spiegeln die berechnete Antwortfrist live (Parität zu UNTERLAGE):
+
+1. **Regelwerk**: RQ-Titel mit Resttagen (`Rückfrage offen – Frist noch 2 Tage`).
+2. **Hinweise-Karte** `hinweise-signal-rueckfrage` / `-titel` / `-erklaerung` (gemeinsame LiveSignalCard mit UNTERLAGE).
+3. **RQ-CTA-Hint** enthält Fristtext; CTA → `/fall/rueckfragen`.
+4. **Rückfragen-Seite**: Live-Fairness-Signal + `rq-hinweise-link` (session-nav, DEC-012).
+5. **Reaktions-Banner** differenziert RQ/Upload-Kombinationen.
+6. **E2E**: Initial-Frist, Live-Signal auf Fragen-Seite, Session-Antwort → Signal entfällt (sessionNav).
+
+### Dateien
+- `demo/lib/fairness/rules.ts`
+- `demo/app/fall/hinweise/page.tsx`
+- `demo/app/fall/rueckfragen/page.tsx`
+- `demo/e2e/us-av-004-rueckfragen.spec.ts`
+- `docs/loops/av-JOURNAL.md`
+
+### Story-IDs
+- US-AV-008 (Verfahrenslage / Fairness-Signale)
+- US-AV-004 (Rückfrage / Session-Antwort)
+
+### Build
+`npm run lint` + `npm run build` + `npm run test:e2e:av` (PW_E2E_CI=1) → **138 passed**, Exit 0
+
+### Vorschlag Queue-ID
+- Q-175 (AV Hinweise: RQ-Signal live mit Fristhinweis + Session-Antwort E2E)
+
+### Nächster sinnvoller AV-Schritt (Vorschlag)
+- Hinweise: nach Voll-Upload/RQ verbleibende Bescheid-Signale mit stabilen testids
+- Hinweise: FALL_PAUSIERT entfällt live nach RQ+Upload
+
+---
+
 ## 2026-07-29 – Iteration 13: Hinweise UNTERLAGE live + Frist + CTA
 
 ### Was

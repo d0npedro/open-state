@@ -62,7 +62,9 @@ function SignalCta({ signal }: { signal: FairnessSignal }) {
           style={{ margin: 0, fontSize: '0.875rem', lineHeight: 1.45 }}
           data-testid="hinweise-rq-cta-hint"
         >
-          Offene Rückfrage mit nahender Antwortfrist. Antwort im Bereich „Fragen“ einreichen.
+          {signal.titel.includes('Frist')
+            ? `${signal.titel}. Antwort im Bereich „Fragen“ einreichen.`
+            : 'Offene Rückfrage mit nahender Antwortfrist. Antwort im Bereich „Fragen“ einreichen.'}
         </p>
         <Link
           href="/fall/rueckfragen"
@@ -106,8 +108,127 @@ function SignalCta({ signal }: { signal: FairnessSignal }) {
   return null;
 }
 
+/** Gemeinsame Signal-Karte mit stabilen Frist-/Live-Testids (US-AV-008). */
+function LiveSignalCard({
+  signal,
+  testIdBase,
+  badgeLabel,
+  badgeColor,
+}: {
+  signal: FairnessSignal;
+  testIdBase: string;
+  badgeLabel: string;
+  badgeColor: string;
+}) {
+  return (
+    <div
+      data-testid={testIdBase}
+      style={{
+        borderLeft: `3px solid ${badgeColor}`,
+        background:
+          signal.prioritaet === 'RELEVANT'
+            ? 'var(--color-warning-light)'
+            : 'var(--color-primary-light)',
+        borderRadius: 'var(--radius)',
+        padding: '1rem 1.25rem',
+      }}
+    >
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'flex-start',
+          gap: '0.75rem',
+          marginBottom: '0.5rem',
+          flexWrap: 'wrap',
+        }}
+      >
+        <span
+          style={{
+            fontSize: '0.68rem',
+            fontWeight: 700,
+            textTransform: 'uppercase',
+            letterSpacing: '0.06em',
+            color: badgeColor,
+            paddingTop: '0.1rem',
+            whiteSpace: 'nowrap',
+          }}
+        >
+          {badgeLabel}
+        </span>
+        <strong
+          style={{ fontSize: '0.9rem', color: 'var(--color-text)', lineHeight: 1.3 }}
+          data-testid={`${testIdBase}-titel`}
+        >
+          {signal.titel}
+        </strong>
+      </div>
+      <p
+        style={{
+          fontSize: '0.875rem',
+          color: 'var(--color-text)',
+          marginBottom: '0.75rem',
+          lineHeight: 1.5,
+        }}
+        data-testid={`${testIdBase}-erklaerung`}
+      >
+        {signal.erklaerung}
+      </p>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+        <div
+          style={{
+            background: 'rgba(255,255,255,0.55)',
+            borderRadius: '4px',
+            padding: '0.6rem 0.875rem',
+          }}
+        >
+          <span
+            style={{
+              fontSize: '0.75rem',
+              fontWeight: 600,
+              color: 'var(--color-text-muted)',
+              display: 'block',
+              marginBottom: '0.2rem',
+            }}
+          >
+            Auswirkung
+          </span>
+          <p style={{ fontSize: '0.84rem', color: 'var(--color-text)', margin: 0, lineHeight: 1.45 }}>
+            {signal.auswirkung}
+          </p>
+        </div>
+        <div
+          style={{
+            background: 'rgba(255,255,255,0.55)',
+            borderRadius: '4px',
+            padding: '0.6rem 0.875rem',
+          }}
+        >
+          <span
+            style={{
+              fontSize: '0.75rem',
+              fontWeight: 600,
+              color: 'var(--color-text-muted)',
+              display: 'block',
+              marginBottom: '0.2rem',
+            }}
+          >
+            Möglicher nächster Schritt
+          </span>
+          <p style={{ fontSize: '0.84rem', color: 'var(--color-text)', margin: 0, lineHeight: 1.45 }}>
+            {signal.naechsterSchritt}
+          </p>
+        </div>
+        <p style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', marginTop: '0.25rem' }}>
+          Bezug: {signal.bezug}
+        </p>
+      </div>
+    </div>
+  );
+}
+
 function SignalBlock({ signal }: { signal: FairnessSignal }) {
   const isUnterlagen = signal.typ === 'UNTERLAGE_FEHLT_BLOCKIERT';
+  const isRueckfrage = signal.typ === 'RUECKFRAGE_OFFEN_FRIST_RELEVANT';
   const section = prioritaetSection[signal.prioritaet];
 
   return (
@@ -116,66 +237,21 @@ function SignalBlock({ signal }: { signal: FairnessSignal }) {
       data-signal-typ={signal.typ}
       data-signal-id={signal.id}
     >
-      {/* UNTERLAGE: eigene Karte mit stabilen Frist-/Live-Testids (US-AV-008 / US-AV-003) */}
-      {isUnterlagen ? (
-        <div
-          data-testid="hinweise-signal-unterlagen"
-          style={{
-            borderLeft: '3px solid var(--color-primary)',
-            background: 'var(--color-primary-light)',
-            borderRadius: 'var(--radius)',
-            padding: '1rem 1.25rem',
-          }}
-        >
-          <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem', marginBottom: '0.5rem', flexWrap: 'wrap' }}>
-            <span
-              style={{
-                fontSize: '0.68rem',
-                fontWeight: 700,
-                textTransform: 'uppercase',
-                letterSpacing: '0.06em',
-                color: 'var(--color-primary)',
-                paddingTop: '0.1rem',
-                whiteSpace: 'nowrap',
-              }}
-            >
-              Hinweis
-            </span>
-            <strong
-              style={{ fontSize: '0.9rem', color: 'var(--color-text)', lineHeight: 1.3 }}
-              data-testid="hinweise-signal-unterlagen-titel"
-            >
-              {signal.titel}
-            </strong>
-          </div>
-          <p
-            style={{ fontSize: '0.875rem', color: 'var(--color-text)', marginBottom: '0.75rem', lineHeight: 1.5 }}
-            data-testid="hinweise-signal-unterlagen-erklaerung"
-          >
-            {signal.erklaerung}
-          </p>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-            <div style={{ background: 'rgba(255,255,255,0.55)', borderRadius: '4px', padding: '0.6rem 0.875rem' }}>
-              <span style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--color-text-muted)', display: 'block', marginBottom: '0.2rem' }}>
-                Auswirkung
-              </span>
-              <p style={{ fontSize: '0.84rem', color: 'var(--color-text)', margin: 0, lineHeight: 1.45 }}>
-                {signal.auswirkung}
-              </p>
-            </div>
-            <div style={{ background: 'rgba(255,255,255,0.55)', borderRadius: '4px', padding: '0.6rem 0.875rem' }}>
-              <span style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--color-text-muted)', display: 'block', marginBottom: '0.2rem' }}>
-                Möglicher nächster Schritt
-              </span>
-              <p style={{ fontSize: '0.84rem', color: 'var(--color-text)', margin: 0, lineHeight: 1.45 }}>
-                {signal.naechsterSchritt}
-              </p>
-            </div>
-            <p style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', marginTop: '0.25rem' }}>
-              Bezug: {signal.bezug}
-            </p>
-          </div>
-        </div>
+      {/* RQ / UNTERLAGE: eigene Karten mit stabilen Frist-/Live-Testids (US-AV-008) */}
+      {isRueckfrage ? (
+        <LiveSignalCard
+          signal={signal}
+          testIdBase="hinweise-signal-rueckfrage"
+          badgeLabel="Relevant"
+          badgeColor="var(--color-warning)"
+        />
+      ) : isUnterlagen ? (
+        <LiveSignalCard
+          signal={signal}
+          testIdBase="hinweise-signal-unterlagen"
+          badgeLabel="Hinweis"
+          badgeColor="var(--color-primary)"
+        />
       ) : (
         <FairnessPanel signale={[signal]} />
       )}
@@ -199,15 +275,22 @@ export default function HinweisePage() {
   const initialUnterlagen = INITIAL_SIGNALE.find(s => s.typ === 'UNTERLAGE_FEHLT_BLOCKIERT');
   const unterlagenEntfallen =
     Boolean(initialUnterlagen) && !unterlagenSignal;
+  const rqSignal = signale.find(s => s.typ === 'RUECKFRAGE_OFFEN_FRIST_RELEVANT');
+  const initialRq = INITIAL_SIGNALE.find(s => s.typ === 'RUECKFRAGE_OFFEN_FRIST_RELEVANT');
+  const rqEntfallen = Boolean(initialRq) && !rqSignal;
   const hatUploadInSession = sessionUploadedIds.length > 0;
 
   // Banner-Text: Rückfrage und/oder Upload (nicht nur RQ)
   let aktionsText = 'Ihre Aktion';
-  if (hatUploadInSession && unterlagenEntfallen) {
+  if (hatUploadInSession && unterlagenEntfallen && rqEntfallen) {
+    aktionsText = 'Ihre Aktion (Rückfrage beantwortet und Unterlagen eingereicht)';
+  } else if (hatUploadInSession && unterlagenEntfallen) {
     aktionsText = 'Ihre Aktion (Unterlagen eingereicht)';
+  } else if (hatUploadInSession && rqEntfallen) {
+    aktionsText = 'Ihre Aktion (Rückfrage beantwortet und Unterlagen teilweise eingereicht)';
   } else if (hatUploadInSession) {
-    aktionsText = 'Ihre Aktion (Unterlagen teilweise eingereicht oder Rückfrage beantwortet)';
-  } else {
+    aktionsText = 'Ihre Aktion (Unterlagen teilweise eingereicht)';
+  } else if (rqEntfallen) {
     aktionsText = 'Ihre Aktion (Rückfrage beantwortet)';
   }
 

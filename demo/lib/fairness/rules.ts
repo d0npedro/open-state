@@ -101,7 +101,8 @@ export function berechneFairnessSignale(fall: Fall): FairnessSignal[] {
       signale.push({
         id: `FH-${rq.id}-FRIST`,
         typ: 'RUECKFRAGE_OFFEN_FRIST_RELEVANT',
-        titel: 'Rückfrage offen – Frist nähert sich',
+        // Titel mit Resttagen – Parität zu UNTERLAGE_FEHLT_BLOCKIERT (US-AV-008)
+        titel: `Rückfrage offen – Frist ${fristLabel}`,
         erklaerung:
           `Eine Rückfrage vom ${rq.gestelltAm} wartet noch auf Ihre Antwort. ` +
           `Die Antwortfrist endet am ${rq.frist} (${fristLabel}).`,
