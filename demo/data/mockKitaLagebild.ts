@@ -131,6 +131,120 @@ const planungsraeume: PlanungsraumKennzahlen[] = [
 
 // ─── Zeitreihe (Nov 2023 – Okt 2024) ────────────────────────────────────────
 
+/**
+ * Demo-Näherung: verteilt die kommunale Monatsreihe auf Planungsräume
+ * nach Strukturanteilen am aktuellen Berichtsstand (US-KJ-010 AK 2).
+ * Absolute Platzzahlen skalieren mit der Kommunalreihe; Auslastung/Personal
+ * folgen parallel zur kommunalen Monatsbewegung mit Raum-Niveau am Endmonat.
+ * Keine Einrichtungsindividualdaten, keine Kind-/Personennamen.
+ */
+function buildZeitreihePlanungsraeume(
+  raeume: PlanungsraumKennzahlen[],
+  kommunal: MonatsKennzahl[]
+): Record<string, MonatsKennzahl[]> {
+  const sumBelegt = raeume.reduce(
+    (s, p) => s + p.belegtePlaetzeU3 + p.belegtePlaetzeUe3,
+    0
+  );
+  const sumFrei = raeume.reduce(
+    (s, p) => s + p.freiePlaetzeU3 + p.freiePlaetzeUe3,
+    0
+  );
+  const sumWarte = raeume.reduce((s, p) => s + p.wartelisteBestand, 0);
+  const sumGenehmigt = raeume.reduce(
+    (s, p) => s + p.genehmmigtePlaetzeU3 + p.genehmmigtePlaetzeUe3,
+    0
+  );
+  const sumReal = raeume.reduce(
+    (s, p) => s + p.realNutzbarePlaetzeU3 + p.realNutzbarePlaetzeUe3,
+    0
+  );
+
+  const last = kommunal[kommunal.length - 1];
+  const result: Record<string, MonatsKennzahl[]> = {};
+
+  for (const pr of raeume) {
+    const belegtShare =
+      sumBelegt > 0
+        ? (pr.belegtePlaetzeU3 + pr.belegtePlaetzeUe3) / sumBelegt
+        : 0;
+    const freiShare =
+      sumFrei > 0
+        ? (pr.freiePlaetzeU3 + pr.freiePlaetzeUe3) / sumFrei
+        : 0;
+    const warteShare =
+      sumWarte > 0 ? pr.wartelisteBestand / sumWarte : 0;
+    const genehmigtShare =
+      sumGenehmigt > 0
+        ? (pr.genehmmigtePlaetzeU3 + pr.genehmmigtePlaetzeUe3) / sumGenehmigt
+        : 0;
+    const realShare =
+      sumReal > 0
+        ? (pr.realNutzbarePlaetzeU3 + pr.realNutzbarePlaetzeUe3) / sumReal
+        : 0;
+
+    const series: MonatsKennzahl[] = kommunal.map(m => {
+      const auslastDelta = last
+        ? m.auslastungsgradProzent - last.auslastungsgradProzent
+        : 0;
+      const personalDelta = last
+        ? m.personalAusfallquoteProzent - last.personalAusfallquoteProzent
+        : 0;
+      const auslast = Math.min(
+        100,
+        Math.max(
+          0,
+          Math.round((pr.auslastungsgradProzent + auslastDelta) * 10) / 10
+        )
+      );
+      const personal = Math.min(
+        100,
+        Math.max(
+          0,
+          Math.round((pr.personalAusfallquoteProzent + personalDelta) * 10) / 10
+        )
+      );
+
+      return {
+        monat: m.monat,
+        monatLabel: m.monatLabel,
+        genehmmigtePlaetze: Math.round(m.genehmmigtePlaetze * genehmigtShare),
+        realNutzbarePlaetze: Math.round(m.realNutzbarePlaetze * realShare),
+        belegtePlaetze: Math.round(m.belegtePlaetze * belegtShare),
+        freiePlaetze: Math.max(0, Math.round(m.freiePlaetze * freiShare)),
+        auslastungsgradProzent: auslast,
+        wartelisteBestand: Math.round(m.wartelisteBestand * warteShare),
+        personalAusfallquoteProzent: personal,
+        wartelisteDeltaVormonat: null,
+      };
+    });
+
+    // Endmonat: Warteliste/Auslastung/Personal exakt am Raum-Snapshot;
+    // Platzzahlen bleiben anteilig an der Kommunalreihe (Trendkohärenz).
+    const end = series.length - 1;
+    if (end >= 0) {
+      series[end] = {
+        ...series[end],
+        auslastungsgradProzent: pr.auslastungsgradProzent,
+        wartelisteBestand: pr.wartelisteBestand,
+        personalAusfallquoteProzent: pr.personalAusfallquoteProzent,
+        freiePlaetze: pr.freiePlaetzeU3 + pr.freiePlaetzeUe3,
+      };
+    }
+
+    for (let i = 0; i < series.length; i++) {
+      series[i].wartelisteDeltaVormonat =
+        i === 0
+          ? null
+          : series[i].wartelisteBestand - series[i - 1].wartelisteBestand;
+    }
+
+    result[pr.id] = series;
+  }
+
+  return result;
+}
+
 const zeitreihe: MonatsKennzahl[] = [
   {
     monat: '2023-11', monatLabel: 'November 2023',
@@ -331,6 +445,7 @@ export const demoKitaLagebild: KitaLagebild = {
 
   planungsraeume,
   zeitreihe,
+  zeitreihePlanungsraeume: buildZeitreihePlanungsraeume(planungsraeume, zeitreihe),
   massnahmen,
   methodik,
 };

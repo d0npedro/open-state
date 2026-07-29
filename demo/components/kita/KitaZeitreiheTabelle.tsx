@@ -7,18 +7,23 @@
  * Zeigt: Auslastung, freie Plätze, Warteliste + Monatsdelta, Personalausfall.
  * Markiert: Peak-Monat (höchste Warteliste), saisonale Muster.
  *
+ * Regionenfilter (US-KJ-010 AK 2): Gesamtkommune oder einzelner Planungsraum.
+ *
  * Meldebasis (US-KJ-004 → 010): Der mit dem Meldeeingang übereinstimmende Berichtsmonat
  * (Demo: Oktober 2024) erhält bei unvollständiger Stichprobe eine Datenlücken-Markierung.
  * Session-sensitiv; nach Freigabe in /kita/meldung entfällt die Markierung.
+ * Bei Raumfilter: Meldebasis nur für den gewählten Planungsraum.
  * Hinweis only — keine Interpolation, keine Umbewertung der Zeitreihenwerte.
  * Nur Aggregate, keine Kind- oder Personennamen.
  */
 
-import type { MonatsKennzahl } from '@/types/kita';
+import { useMemo, useState } from 'react';
+import type { MonatsKennzahl, PlanungsraumKennzahlen } from '@/types/kita';
 import { demoKitaMeldeeingang } from '@/data/mockKitaMeldeeingang';
 import {
   MeldebasisBadge,
   useMeldeeingangFuerBedarfsplanung,
+  type PlanungsraumMeldebasis,
 } from '@/components/kita/KitaBedarfsplanungDatenbasis';
 
 // Minimaler Inline-Balken, CSS-only
@@ -52,25 +57,67 @@ function DeltaZelle({ delta }: { delta: number | null }) {
   );
 }
 
+const FILTER_ALL = 'ALL';
+
 interface Props {
   zeitreihe: MonatsKennzahl[];
+  /** Zeitreihe je Planungsraum (US-KJ-010 AK 2) */
+  zeitreihePlanungsraeume?: Record<string, MonatsKennzahl[]>;
+  /** Planungsräume für Filter-Chips */
+  planungsraeume?: PlanungsraumKennzahlen[];
   /** Label des Monats mit der höchsten Warteliste */
   peakMonatLabel?: string;
 }
 
-export function KitaZeitreiheTabelle({ zeitreihe, peakMonatLabel }: Props) {
-  const { basen, eintraege, hydrated } = useMeldeeingangFuerBedarfsplanung();
+export function KitaZeitreiheTabelle({
+  zeitreihe,
+  zeitreihePlanungsraeume = {},
+  planungsraeume = [],
+  peakMonatLabel,
+}: Props) {
+  const [filterId, setFilterId] = useState<string>(FILTER_ALL);
+  const { basen, byRaumId, eintraege, hydrated } = useMeldeeingangFuerBedarfsplanung();
   const meldeMonatsIso = demoKitaMeldeeingang.monatsIso;
   const meldeMonatsLabel = demoKitaMeldeeingang.monatsLabel;
 
-  const maxAuslastung = Math.max(...zeitreihe.map(m => m.auslastungsgradProzent));
-  const maxWarteliste = Math.max(...zeitreihe.map(m => m.wartelisteBestand));
-  const peak = zeitreihe.find(m => m.wartelisteBestand === maxWarteliste);
+  const activeSeries = useMemo(() => {
+    if (filterId === FILTER_ALL) return zeitreihe;
+    return zeitreihePlanungsraeume[filterId] ?? zeitreihe;
+  }, [filterId, zeitreihe, zeitreihePlanungsraeume]);
 
-  /** Stichproben-Lücken (Planungsräume) – nur wenn hydratisiert, um SSR-Mismatch zu vermeiden */
-  const lueckenBasen = basen.filter(b => b.hatDatenluecke);
-  const freigegebenCount = eintraege.filter(e => e.status === 'FREIGEGEBEN').length;
-  const erwartetCount = eintraege.length;
+  const selectedRaum = useMemo(
+    () => (filterId === FILTER_ALL ? undefined : planungsraeume.find(p => p.id === filterId)),
+    [filterId, planungsraeume]
+  );
+
+  const maxAuslastung = Math.max(...activeSeries.map(m => m.auslastungsgradProzent), 1);
+  const maxWarteliste = Math.max(...activeSeries.map(m => m.wartelisteBestand), 0);
+  const peak = activeSeries.find(m => m.wartelisteBestand === maxWarteliste);
+
+  /** Meldebasis-Kontext: Gesamt-Stichprobe oder einzelner Raum */
+  const raumBasis: PlanungsraumMeldebasis | undefined =
+    filterId === FILTER_ALL ? undefined : byRaumId.get(filterId);
+
+  const lueckenBasen =
+    filterId === FILTER_ALL
+      ? basen.filter(b => b.hatDatenluecke)
+      : raumBasis?.hatDatenluecke
+        ? [raumBasis]
+        : [];
+
+  const freigegebenCount =
+    filterId === FILTER_ALL
+      ? eintraege.filter(e => e.status === 'FREIGEGEBEN').length
+      : raumBasis
+        ? raumBasis.freigegeben
+        : 0;
+  const erwartetCount =
+    filterId === FILTER_ALL
+      ? eintraege.length
+      : raumBasis
+        ? raumBasis.erwartet
+        : 0;
+
   const hatGesamtLuecke = hydrated && lueckenBasen.length > 0;
   const schwereGesamt = lueckenBasen.some(b => b.schwere === 'UEBERFAELLIG')
     ? 'UEBERFAELLIG'
@@ -85,8 +132,123 @@ export function KitaZeitreiheTabelle({ zeitreihe, peakMonatLabel }: Props) {
     })
     .join('; ');
 
+  const hasRaumFilter = planungsraeume.length > 0;
+  const filterLabel =
+    filterId === FILTER_ALL
+      ? 'Gesamtkommune'
+      : selectedRaum
+        ? `${selectedRaum.bezeichnung} (${selectedRaum.id})`
+        : filterId;
+
+  const chipBase: React.CSSProperties = {
+    fontSize: '0.8rem',
+    padding: '0.35rem 0.7rem',
+    borderRadius: '999px',
+    border: '1px solid var(--color-border)',
+    background: 'var(--color-surface, #fff)',
+    color: 'var(--color-text)',
+    cursor: 'pointer',
+    fontWeight: 500,
+  };
+  const chipActive: React.CSSProperties = {
+    ...chipBase,
+    borderColor: 'var(--color-primary)',
+    background: 'var(--color-primary-light)',
+    color: 'var(--color-primary)',
+    fontWeight: 700,
+  };
+
   return (
     <div>
+      {/* Regionenfilter US-KJ-010 AK 2 */}
+      {hasRaumFilter && (
+        <div style={{ marginBottom: '1rem' }}>
+          <div
+            style={{
+              fontSize: '0.8rem',
+              fontWeight: 600,
+              color: 'var(--color-text-muted)',
+              marginBottom: '0.5rem',
+            }}
+          >
+            Regionenfilter (US-KJ-010 AK&nbsp;2)
+          </div>
+          <div
+            role="group"
+            aria-label="Zeitreihe nach Planungsraum filtern"
+            style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}
+          >
+            <button
+              type="button"
+              onClick={() => setFilterId(FILTER_ALL)}
+              style={filterId === FILTER_ALL ? chipActive : chipBase}
+              aria-pressed={filterId === FILTER_ALL}
+            >
+              Gesamtkommune
+            </button>
+            {planungsraeume.map(pr => {
+              const basis = byRaumId.get(pr.id);
+              const showLuecke = hydrated && basis?.hatDatenluecke;
+              return (
+                <button
+                  key={pr.id}
+                  type="button"
+                  onClick={() => setFilterId(pr.id)}
+                  style={{
+                    ...(filterId === pr.id ? chipActive : chipBase),
+                    borderColor:
+                      showLuecke && filterId !== pr.id
+                        ? basis?.schwere === 'UEBERFAELLIG'
+                          ? 'var(--color-danger)'
+                          : 'var(--color-warning)'
+                        : filterId === pr.id
+                          ? 'var(--color-primary)'
+                          : 'var(--color-border)',
+                  }}
+                  aria-pressed={filterId === pr.id}
+                  title={
+                    showLuecke
+                      ? `Meldelücke in ${pr.bezeichnung}`
+                      : `Zeitreihe ${pr.bezeichnung}`
+                  }
+                >
+                  {pr.bezeichnung}
+                  {showLuecke && (
+                    <span
+                      style={{
+                        marginLeft: '0.35rem',
+                        fontSize: '0.7rem',
+                        fontWeight: 700,
+                        color:
+                          basis?.schwere === 'UEBERFAELLIG'
+                            ? 'var(--color-danger)'
+                            : 'var(--color-warning)',
+                      }}
+                    >
+                      · Lücke
+                    </span>
+                  )}
+                </button>
+              );
+            })}
+          </div>
+          {filterId !== FILTER_ALL && (
+            <p
+              style={{
+                margin: '0.6rem 0 0',
+                fontSize: '0.8rem',
+                color: 'var(--color-text-muted)',
+                lineHeight: 1.45,
+              }}
+            >
+              Gefilterte Ansicht: <strong>{filterLabel}</strong>. Demo-Näherung: Verteilung der
+              kommunalen Monatsreihe nach Strukturanteilen am aktuellen Berichtsstand — keine
+              Einrichtungsindividualdaten, keine Trendbewertung.
+            </p>
+          )}
+        </div>
+      )}
+
       {/* Trend-Hinweis */}
       <div style={{
         marginBottom: '1rem',
@@ -98,14 +260,23 @@ export function KitaZeitreiheTabelle({ zeitreihe, peakMonatLabel }: Props) {
         color: 'var(--color-text)',
         lineHeight: 1.5,
       }}>
-        Die Tabelle zeigt die letzten 12 Monate. Wartelistendelta (▲/▼) gibt die Veränderung gegenüber dem Vormonat an.
+        Die Tabelle zeigt die letzten 12 Monate
+        {filterId !== FILTER_ALL ? (
+          <> für <strong>{filterLabel}</strong></>
+        ) : (
+          <> (Gesamtkommune)</>
+        )}
+        . Wartelistendelta (▲/▼) gibt die Veränderung gegenüber dem Vormonat an.
         {peak && (
           <> Der <strong>höchste Wartelistenbestand</strong> lag im <strong>{peak.monatLabel}</strong>
-          {peakMonatLabel ? ` (${peakMonatLabel})` : ''} mit {peak.wartelisteBestand} Anfragen — typisch für den Frühjahrs-Anmeldezeitraum.</>
+          {peakMonatLabel && filterId === FILTER_ALL ? ` (${peakMonatLabel})` : ''} mit {peak.wartelisteBestand.toLocaleString('de-DE')} Anfragen
+          {filterId === FILTER_ALL ? ' — typisch für den Frühjahrs-Anmeldezeitraum' : ''}.</>
         )}
         {' '}Der Berichtsmonat <strong>{meldeMonatsLabel}</strong> ist methodisch an die Meldebasis
-        (Demo-Stichprobe Meldeeingang, US-KJ-004) gekoppelt: fehlende freigegebene Einrichtungsmeldungen
-        werden am Monatszeile markiert — ohne die Kennzahlen zu verändern oder zu interpolieren.
+        (Demo-Stichprobe Meldeeingang, US-KJ-004) gekoppelt
+        {filterId !== FILTER_ALL ? ' für diesen Planungsraum' : ''}: fehlende freigegebene
+        Einrichtungsmeldungen werden am Monatszeile markiert — ohne die Kennzahlen zu verändern
+        oder zu interpolieren.
       </div>
 
       {/* Meldebasis-Summenhinweis (Session-sensitiv) */}
@@ -127,9 +298,18 @@ export function KitaZeitreiheTabelle({ zeitreihe, peakMonatLabel }: Props) {
           aria-live="polite"
         >
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem', alignItems: 'baseline', marginBottom: hatGesamtLuecke ? '0.35rem' : 0 }}>
-            <strong style={{ fontSize: '0.8rem' }}>Meldebasis {meldeMonatsLabel}</strong>
+            <strong style={{ fontSize: '0.8rem' }}>
+              Meldebasis {meldeMonatsLabel}
+              {filterId !== FILTER_ALL && selectedRaum
+                ? ` · ${selectedRaum.bezeichnung}`
+                : ''}
+            </strong>
             <span style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>
-              Demo-Stichprobe: {freigegebenCount}/{erwartetCount} freigegeben
+              {filterId === FILTER_ALL
+                ? `Demo-Stichprobe: ${freigegebenCount}/${erwartetCount} freigegeben`
+                : raumBasis
+                  ? `Einrichtungen im Raum: ${freigegebenCount}/${erwartetCount} freigegeben`
+                  : 'Keine Stichprobe für diesen Raum'}
             </span>
             {hatGesamtLuecke ? (
               <span
@@ -143,7 +323,9 @@ export function KitaZeitreiheTabelle({ zeitreihe, peakMonatLabel }: Props) {
               </span>
             ) : (
               <span style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--color-success)' }}>
-                · Stichprobe vollständig (ggf. nach Freigabe in /kita/meldung)
+                · {filterId === FILTER_ALL
+                  ? 'Stichprobe vollständig (ggf. nach Freigabe in /kita/meldung)'
+                  : 'Raum-Stichprobe ohne Lücke (ggf. nach Freigabe)'}
               </span>
             )}
           </div>
@@ -151,8 +333,9 @@ export function KitaZeitreiheTabelle({ zeitreihe, peakMonatLabel }: Props) {
             <p style={{ margin: 0, fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>
               Unvollständige Meldebasis in: {lueckenKurz}. Die Zeitreihenwerte bleiben unverändert
               (Lagebild-Stand); die Markierung ist ein methodischer Hinweis auf mögliche
-              Untererfassung freier Plätze / Warteliste in betroffenen Planungsräumen — keine
-              Umbewertung des Trends.
+              Untererfassung freier Plätze / Warteliste
+              {filterId !== FILTER_ALL ? ' in diesem Planungsraum' : ' in betroffenen Planungsräumen'}{' '}
+              — keine Umbewertung des Trends.
             </p>
           )}
         </div>
@@ -173,9 +356,9 @@ export function KitaZeitreiheTabelle({ zeitreihe, peakMonatLabel }: Props) {
             </tr>
           </thead>
           <tbody>
-            {zeitreihe.map((m, i) => {
-              const isPeak = m.wartelisteBestand === maxWarteliste;
-              const isLatest = i === zeitreihe.length - 1;
+            {activeSeries.map((m, i) => {
+              const isPeak = m.wartelisteBestand === maxWarteliste && maxWarteliste > 0;
+              const isLatest = i === activeSeries.length - 1;
               const isMeldeMonat = m.monat === meldeMonatsIso;
               const showMeldeLuecke = isMeldeMonat && hatGesamtLuecke;
               const auslastColor =
@@ -232,7 +415,7 @@ export function KitaZeitreiheTabelle({ zeitreihe, peakMonatLabel }: Props) {
                     )}
                   </td>
                   <td style={{ padding: '0.6rem 0.75rem', textAlign: 'right' }}>{m.belegtePlaetze.toLocaleString('de-DE')}</td>
-                  <td style={{ padding: '0.6rem 0.75rem', textAlign: 'right', color: m.freiePlaetze < 50 ? 'var(--color-danger)' : 'var(--color-text)', fontWeight: m.freiePlaetze < 50 ? 700 : 400 }}>
+                  <td style={{ padding: '0.6rem 0.75rem', textAlign: 'right', color: m.freiePlaetze < 50 && filterId === FILTER_ALL ? 'var(--color-danger)' : m.freiePlaetze < 5 && filterId !== FILTER_ALL ? 'var(--color-danger)' : 'var(--color-text)', fontWeight: (m.freiePlaetze < 50 && filterId === FILTER_ALL) || (m.freiePlaetze < 5 && filterId !== FILTER_ALL) ? 700 : 400 }}>
                     {m.freiePlaetze}
                   </td>
                   <td style={{ padding: '0.6rem 0.75rem' }}>
@@ -250,7 +433,15 @@ export function KitaZeitreiheTabelle({ zeitreihe, peakMonatLabel }: Props) {
                   <td style={{ padding: '0.6rem 0.75rem', verticalAlign: 'middle' }}>
                     {isMeldeMonat ? (
                       hydrated ? (
-                        showMeldeLuecke ? (
+                        filterId !== FILTER_ALL ? (
+                          raumBasis ? (
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.2rem' }}>
+                              <MeldebasisBadge basis={raumBasis} />
+                            </div>
+                          ) : (
+                            <span style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>–</span>
+                          )
+                        ) : showMeldeLuecke ? (
                           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.2rem' }}>
                             <span
                               style={{
@@ -300,9 +491,13 @@ export function KitaZeitreiheTabelle({ zeitreihe, peakMonatLabel }: Props) {
       </div>
 
       <p style={{ margin: '0.75rem 0 0', fontSize: '0.8rem', color: 'var(--color-text-muted)', lineHeight: 1.5 }}>
-        Methodik (US-KJ-010 AK&nbsp;6): Datenlücken im Zeitverlauf sind am Meldemonat sichtbar markiert.
-        Historische Monate ohne Stichproben-Meldeeingang zeigen „–“ in der Spalte Meldebasis.
-        Keine Schätzwerte, keine Trendkorrektur. Nur Aggregate; Freigabe-Demo unter{' '}
+        Methodik (US-KJ-010 AK&nbsp;2 / AK&nbsp;6): Regionenfilter grenzt die Zeitreihe auf die
+        Gesamtkommune oder einen Planungsraum ein. Raumreihen sind Demo-Verteilungen der kommunalen
+        Reihe nach Strukturanteilen — keine unabhängige Einrichtungsaggregation. Datenlücken im
+        Zeitverlauf sind am Meldemonat sichtbar markiert
+        {filterId !== FILTER_ALL ? ' (raumbezogen)' : ''}. Historische Monate ohne
+        Stichproben-Meldeeingang zeigen „–“ in der Spalte Meldebasis. Keine Schätzwerte, keine
+        Trendkorrektur. Nur Aggregate; Freigabe-Demo unter{' '}
         <a href="/kita/meldung" style={{ color: 'var(--color-primary)' }}>/kita/meldung</a>.
       </p>
     </div>

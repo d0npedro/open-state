@@ -128,8 +128,14 @@ export interface KitaLagebild {
   };
 
   planungsraeume: PlanungsraumKennzahlen[];
-  /** Letzte 12 Monate, chronologisch aufsteigend */
+  /** Letzte 12 Monate, chronologisch aufsteigend (Gesamtkommune) */
   zeitreihe: MonatsKennzahl[];
+  /**
+   * Zeitreihe je Planungsraum (US-KJ-010 AK 2).
+   * Schlüssel = Planungsraum-ID. Demo: Verteilung der kommunalen Reihe
+   * nach Strukturanteilen am aktuellen Berichtsstand — keine Einrichtungsdaten.
+   */
+  zeitreihePlanungsraeume: Record<string, MonatsKennzahl[]>;
   massnahmen: Kapazitaetsmassnahme[];
   methodik: MethodikHinweis[];
 }
