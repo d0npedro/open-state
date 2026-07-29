@@ -1,6 +1,6 @@
 # BUILD_STATE.md – Aktueller Projektstand
 
-Zuletzt aktualisiert: nach Supervisor-Merge 2026-07-29 (AV Q-089 Termine-Badge, UG Q-090 Fairness-Kurzblock, Kita Q-091 Meldebeitrag Planungsraum)
+Zuletzt aktualisiert: nach Supervisor-Merge 2026-07-29 (AV Q-095 Verlauf-Antwortquittung, UG Q-093/Q-096 Hinweise-CTAs, Kita Q-097 Monatsbericht-Vorschau)
 
 Dieser Stand beschreibt, was tatsächlich existiert und funktioniert.
 Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
@@ -29,18 +29,18 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | `/fall/rueckfragen` | Rückfragen mit Fairness-Hinweis | US-AV-004 | ✓ |
 | `/fall/termine` | Termine; Nav-Badge nur unbestätigt/bald fällig | US-AV-005 | ✓ |
 | `/fall/bescheide` | Bescheide mit Fairness-Hinweisen | US-AV-006 | ✓ |
-| `/fall/verlauf` | Timeline mit Fairness-Hinweis | US-AV-007 | ✓ |
+| `/fall/verlauf` | Timeline mit Fairness-Hinweis; Antwort-Quittungsblock mit vollem Text | US-AV-007 | ✓ |
 | `/fall/hinweise` | Vollständige Fairness-Hinweisseite | US-AV-008 | ✓ |
 | `/stories` | Story Coverage Dashboard | – | ✓ |
 | `/feedback` | Feedback → GitHub Issues | – | ✓ |
-| `/gruendung` … | Unternehmensgründung (Übersicht mit Fairness-Kurzblock, Dokumente, Behörden, Hinweise, …) | US-UG-001–006 | ✓ |
+| `/gruendung` … | Unternehmensgründung (Übersicht Fairness-Kurzblock, Hinweise-CTAs RQ/BG, Behörden-Anker, …) | US-UG-001–006 | ✓ |
 | `/kita` | Öffentlicher Transparenzbericht + Planungsraum-Filter | US-KJ-009, US-KJ-010 | ✓ |
 | `/kita/lagebild` | Jugendamt-Steuerungsansicht + Meldeeingang + Meldebeitrag je Planungsraum | US-KJ-005, US-KJ-006 | ✓ |
 | `/kita/bedarfsplanung` | Bedarfsplanungsentwurf (§ 80 SGB VIII) | US-KJ-007 | ✓ |
 | `/kita/vorlage` | Politische Gremienvorlage + Freigabe | US-KJ-008 | ✓ |
 | `/kita/einrichtung` | Belegungsstand Einrichtung (aggregiert) | US-KJ-002 | ✓ |
 | `/kita/tagesstand` | Tagesstand erfassen (Aggregate, Freigabe) | US-KJ-001 | ✓ |
-| `/kita/monatsbericht` | Monatsbericht je Gruppe + CSV/Druck + Tagesstand-Quellen | US-KJ-003 | ✓ |
+| `/kita/monatsbericht` | Monatsbericht + Vorschau laufender Monat (gemischte Quellen FREIGEGEBEN/FEHLT/IN_ERFASSUNG) | US-KJ-003 | ✓ |
 | `/kita/meldung` | Monatsmeldung prüfen, korrigieren, freigeben | US-KJ-004 | ✓ |
 
 ---
@@ -118,6 +118,10 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 **Q-089 erledigt:** AV Tab-Badge „Termine“ nur bei unbestätigt / bald fällig (`terminHatHandlungsbedarf`).
 **Q-090 erledigt:** UG Übersicht Fairness-Kurzblock mit Link zu `/gruendung/hinweise`.
 **Q-091 erledigt:** Kita Planungsraum-Karten Meldebeitrag; Südost/Sonnenwinkel nach Freigabe hervorgehoben.
+**Q-093 erledigt:** UG Hinweise CTA „Frage beantworten“ aus RELEVANT-Rückfrage-Signal (`#rq-…`).
+**Q-095 erledigt:** AV Verlauf Antworttext ungekürzt als Quittungsblock (`timeline-antwort-block`).
+**Q-096 erledigt:** UG Hinweise CTA „Zur Behördenkarte“ für BG-Anmeldung (`#beh-…`).
+**Q-097 erledigt:** Kita Monatsbericht Vorschau Nov 2024 mit gemischten Tagesstand-Quellen.
 
 ---
 
