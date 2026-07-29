@@ -44,10 +44,12 @@ export function KitaMeldeeingangMonatsberichtVorschau({
 
   return (
     <div
+      id="kita-monatsbericht-vorschau"
       className="card"
       style={{
         padding: '1rem 1.15rem',
         borderTop: '4px solid var(--color-primary)',
+        scrollMarginTop: '1.25rem',
       }}
       aria-labelledby="meldeeingang-vorschau-titel"
     >

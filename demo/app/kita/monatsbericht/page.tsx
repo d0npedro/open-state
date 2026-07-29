@@ -7,6 +7,7 @@
  * Datenlücken sichtbar. CSV-Export und druckoptimierte Ansicht (PDF via Browser).
  * Demo-Umschalter: Monatsabschluss (lückenhaft) vs. laufender Monat (VORSCHAU)
  * mit gemischten Tagesstand-Quellen (FREIGEGEBEN / FEHLT / IN_ERFASSUNG).
+ * VORSCHAU: Rücklink zum Meldeeingang im Steuerungslagebild (US-KJ-005).
  * Keine Kind- oder Personennamen.
  */
 
@@ -296,6 +297,17 @@ export default function KitaMonatsberichtPage() {
               {fehltCount}×) fließen nicht ein und werden nicht interpoliert. Noch ausstehende
               Betriebstage des Monats erscheinen erst nach dem jeweiligen Tag.
             </p>
+            <p style={{ fontSize: '0.875rem', margin: '0.65rem 0 0', lineHeight: 1.5 }}>
+              <strong>Im Steuerungslagebild als Vorschau sichtbar:</strong> derselbe Zwischenstand
+              (gemischte Tagesstand-Quellen) erscheint im Meldeeingang des Jugendamt-Lagebilds –
+              methodisch getrennt von der freigegebenen Monatsmeldung (US-KJ-004).{' '}
+              <Link
+                href="/kita/lagebild#kita-monatsbericht-vorschau"
+                style={{ color: 'var(--color-primary)', fontWeight: 600 }}
+              >
+                Vorschau im Lagebild öffnen
+              </Link>
+            </p>
           </div>
         </div>
       )}
@@ -345,6 +357,15 @@ export default function KitaMonatsberichtPage() {
         <Link href="/kita/einrichtung" className="btn btn-secondary" style={{ fontSize: '0.875rem' }}>
           Zum Belegungsstand
         </Link>
+        {istVorschau && (
+          <Link
+            href="/kita/lagebild#kita-monatsbericht-vorschau"
+            className="btn btn-secondary"
+            style={{ fontSize: '0.875rem' }}
+          >
+            Im Lagebild als Vorschau (US-KJ-005)
+          </Link>
+        )}
       </div>
 
       {/* Datenbasis: freigegebene Tagesstände (US-KJ-001 → US-KJ-003) */}
@@ -785,6 +806,18 @@ export default function KitaMonatsberichtPage() {
         <Link href="/kita/meldung" style={{ color: 'var(--color-primary)' }}>
           Meldung freigeben (US-KJ-004)
         </Link>
+        {istVorschau && (
+          <>
+            {' · '}
+            Vorschau im Steuerungslagebild:{' '}
+            <Link
+              href="/kita/lagebild#kita-monatsbericht-vorschau"
+              style={{ color: 'var(--color-primary)' }}
+            >
+              Meldeeingang · Monatsbericht-Vorschau
+            </Link>
+          </>
+        )}
         .
       </div>
 
