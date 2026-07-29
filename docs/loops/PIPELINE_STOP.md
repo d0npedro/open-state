@@ -1,9 +1,16 @@
 # PIPELINE STOP – 2026-07-29
 
-## Status: GESTOPPT
+## Status: DEPLOYMENT WIEDER GRÜN (2026-07-29 ~13:36)
 
-Alle Multi-Loop-Scheduler (Domain AV/UG/Kita, Supervisor, CI-Watcher) sind **abgebrochen**.
-Kein automatischer Push, kein Merge-Dauerbetrieb, bis Deployment wieder grün ist.
+| Check | Ergebnis |
+|-------|----------|
+| GitHub Actions Build | success |
+| GitHub Actions E2E | success |
+| **Vercel Production** | **READY** (`dpl_Gg7L6RTeifY6HEZrasW52ybc6VZj`) |
+| Production URL | HTTP 200 `https://open-state-peters-projects-1631d4ab.vercel.app/` |
+| Commit status Vercel | **success** — "Deployment has completed" |
+
+Multi-Loop-Scheduler bleiben **abgeschaltet**, bis bewusst und sparsam neu gestartet (kein Docs-Spam).
 
 ## Was wirklich rot war
 
