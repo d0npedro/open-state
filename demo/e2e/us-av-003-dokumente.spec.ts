@@ -180,4 +180,90 @@ test.describe('US-AV-003 – Unterlagen nachreichen', () => {
     await expect(page.locator('.upload-zone')).toHaveCount(0);
   });
 
+  // ─── US-AV-008: Hinweise / UNTERLAGE live nach Session-Upload ─────────────
+
+  test('Hinweise: UNTERLAGE-Signal enthält berechnete Dokumenten-Frist', async ({ page }) => {
+    // Initialer Mock: 2 offene Unterlagen, Frist 3.12. ggü. FIKTIVES_HEUTE → 9 Tage
+    await page.goto('/fall/hinweise');
+    await expect(page.getByRole('heading', { name: 'Hinweise zur Verfahrenslage' })).toBeVisible();
+    await expect(page.getByTestId('hinweise-signal-count')).toContainText(/Aktuell \d+ Hinweise/i);
+
+    const signal = page.getByTestId('hinweise-signal-unterlagen');
+    await expect(signal).toBeVisible();
+    await expect(page.getByTestId('hinweise-signal-unterlagen-titel')).toContainText(
+      /Unterlage\(n\) offen – Frist noch 9 Tage/i
+    );
+    await expect(page.getByTestId('hinweise-signal-unterlagen-erklaerung')).toContainText(
+      /Nächste Einreichungsfrist:\s*3\.\s*Dezember 2024\s*\(noch 9 Tage/i
+    );
+    await expect(page.getByTestId('hinweise-unterlagen-cta')).toBeVisible();
+    await expect(page.getByTestId('hinweise-unterlagen-cta')).toHaveAttribute('href', '/fall/dokumente');
+    await expect(page.getByTestId('hinweise-unterlagen-cta-hint')).toContainText(/Frist|Unterlagen/i);
+  });
+
+  test('Hinweise: Session-Teil-Upload aktualisiert UNTERLAGE-Count und behält Frist', async ({ page }) => {
+    // Kein page.goto nach State (DEC-012) — Session-Nav über Tabs + Link
+    const { goFallTab } = await import('./helpers/sessionNav');
+
+    await goFallTab(page, 'Fragen', /\/fall\/rueckfragen/);
+    await page.getByRole('button', { name: /Jetzt beantworten|Rückfrage beantworten/i }).click();
+    await page.getByTestId('rq-antwort-absenden').click();
+
+    await goFallTab(page, 'Unterlagen', /\/fall\/dokumente/);
+    await page.getByRole('button', { name: /Als hochgeladen markieren/i }).first().click();
+    // Solange SG1 fehlt: Signal auf Dokumente-Seite + Link zur Verfahrenslage
+    await expect(page.getByTestId('fairness-signal-unterlagen-titel')).toContainText(
+      /1 Unterlage\(n\) offen/i
+    );
+    await page.getByTestId('dok-hinweise-link').click();
+    await expect(page).toHaveURL(/\/fall\/hinweise/);
+
+    // UNTERLAGE live: 1 offen, Fristtext bleibt (nächste = verbleibende Unterlage)
+    await expect(page.getByTestId('hinweise-signal-unterlagen')).toBeVisible();
+    await expect(page.getByTestId('hinweise-signal-unterlagen-titel')).toContainText(
+      /1 Unterlage\(n\) offen – Frist noch 9 Tage/i
+    );
+    await expect(page.getByTestId('hinweise-signal-unterlagen-erklaerung')).toContainText(
+      /Nächste Einreichungsfrist:\s*3\.\s*Dezember 2024\s*\(noch 9 Tage/i
+    );
+    await expect(page.getByTestId('hinweise-signal-unterlagen-erklaerung')).toContainText(
+      /Formular SG1/
+    );
+    await expect(page.getByTestId('hinweise-signal-unterlagen-erklaerung')).not.toContainText(
+      /Einkommensteuerbescheid letztes Jahr/
+    );
+    await expect(page.getByTestId('hinweise-unterlagen-cta')).toBeVisible();
+    // RQ-Signal entfallen → Reaktions-Banner
+    await expect(page.getByTestId('hinweise-regelwerk-reaktion')).toBeVisible();
+    await expect(page.getByTestId('hinweise-signal-geloest')).toBeVisible();
+    await expect(page.getByTestId('hinweise-rq-cta')).toHaveCount(0);
+  });
+
+  test('Hinweise: nach allen Session-Uploads entfällt UNTERLAGE-Signal', async ({ page }) => {
+    const { goFallTab } = await import('./helpers/sessionNav');
+
+    await goFallTab(page, 'Fragen', /\/fall\/rueckfragen/);
+    await page.getByRole('button', { name: /Jetzt beantworten|Rückfrage beantworten/i }).click();
+    await page.getByTestId('rq-antwort-absenden').click();
+
+    await goFallTab(page, 'Unterlagen', /\/fall\/dokumente/);
+    const uploadButtons = page.getByRole('button', { name: /Als hochgeladen markieren/i });
+    const count = await uploadButtons.count();
+    for (let i = 0; i < count; i++) {
+      await uploadButtons.nth(0).click();
+    }
+    await expect(page.getByTestId('fairness-signal-unterlagen')).toHaveCount(0);
+
+    // Zur Verfahrenslage über Übersicht-Link (kein page.goto, DEC-012)
+    await goFallTab(page, 'Übersicht', /\/fall$/);
+    await page.getByTestId('uebersicht-fairness-hinweise-link').click();
+    await expect(page).toHaveURL(/\/fall\/hinweise/);
+
+    await expect(page.getByTestId('hinweise-signal-unterlagen')).toHaveCount(0);
+    await expect(page.getByTestId('hinweise-unterlagen-cta')).toHaveCount(0);
+    await expect(page.getByTestId('hinweise-regelwerk-reaktion')).toBeVisible();
+    await expect(page.getByTestId('hinweise-regelwerk-reaktion')).toContainText(/Unterlagen/i);
+    await expect(page.getByTestId('hinweise-signal-geloest')).toBeVisible();
+  });
+
 });

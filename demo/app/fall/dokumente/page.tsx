@@ -78,7 +78,14 @@ export default function DokumentePage() {
             </p>
             <p style={{ fontSize: '0.8rem', margin: '0.5rem 0 0', color: 'var(--color-text-muted)' }}>
               Demo: Nach dem Hochladen verschwindet dieses Signal auch unter{' '}
-              <Link href="/fall/hinweise" style={{ color: 'var(--color-primary)' }}>Verfahrenslage</Link>.
+              <Link
+                href="/fall/hinweise"
+                data-testid="dok-hinweise-link"
+                style={{ color: 'var(--color-primary)' }}
+              >
+                Verfahrenslage
+              </Link>
+              .
             </p>
           </div>
         </div>
