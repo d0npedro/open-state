@@ -222,6 +222,9 @@ Story-Dokumentation ist kein Pflicht-Vorläufer für Mock-Daten und Typen.
 | Q-185 | UG Verlauf: Session-Antwort hervorheben + RQ-Quittung Tiefenlink (US-UG-005) | DEMO | S | Q-181 | DONE `ef6288a` |
 | Q-186 | Kita Meldeeingang: CSV Aggregate Status/Lücken/Session freigabeunabhängig (US-KJ-004/005, DEC-004) | DEMO | S | Q-184 | DONE `699aff5` |
 | Q-187 | Kita Meldeeingang Monatsbericht-Vorschau: CSV Aggregate freigabeunabhängig (US-KJ-003/005, DEC-004) | DEMO | S | Q-186 | DONE `d376dc9` |
+| Q-188 | UG Dokumente: Upload-Quittung mit Verlauf-Tiefenlink + Session-Upload-Badge (US-UG-003/005) | DEMO | S | Q-185 | DONE `bde43d6` |
+| Q-189 | Kita Lagebild-CSV: Regionenvergleich Stichtag-Paare (Blatt 7, US-KJ-005/010) | DEMO | S | Q-182 | DONE `62437c6` |
+| Q-190 | Kita Lagebild-CSV: Regionenvergleich Verlauf-Paare 12 Monate (Blatt 8, US-KJ-005/010) | DEMO | S | Q-189 | DONE `3c46f00` |
 
 ---
 
@@ -414,3 +417,6 @@ Diese Punkte wurden in früheren Iterationen abgeschlossen und sind produktionsr
 | Q-185 UG Session-Antwort Verlauf | RQ-Quittung Tiefenlink + Badge im Verlauf (US-UG-005) | `ef6288a` → main |
 | Q-186 Kita Meldeeingang CSV Aggregate | Status/Lücken/Session freigabeunabhängig (US-KJ-004/005) | `699aff5` → main |
 | Q-187 Kita Monatsbericht-Vorschau CSV | Vorschau-CSV am Meldeeingang freigabeunabhängig (US-KJ-003/005) | `d376dc9` → main |
+| Q-188 UG Upload-Quittung Verlauf-Tiefenlink | Dokumente → `#ere-UG-DEMO-DOK-…` + Session-Upload-Badge (US-UG-003/005) | `bde43d6` → main |
+| Q-189 Kita Lagebild-CSV Regionenvergleich Stichtag | Blatt 7 Paare i&lt;j, Δ, Meldebasis (US-KJ-005/010) | `62437c6` → main |
+| Q-190 Kita Lagebild-CSV Regionenvergleich Verlauf | Blatt 8 Paare × 12 Monate, 4 Kennzahlen (US-KJ-005/010) | `3c46f00` → main |
