@@ -110,7 +110,7 @@ Story-Dokumentation ist kein Pflicht-Vorläufer für Mock-Daten und Typen.
 | Q-095 | AV Verlauf: Antworttext als lesbarer Quittungsblock (kein 80-Zeichen-Kürzel) | DEMO | S | Q-085 | DONE |
 | Q-092 | AV Termin-Bestätigung session-lokal (Badge entfällt live) | DEMO | S | Q-089 | DONE |
 | Q-104 | AV Übersicht: Termin-Kachel zeigt Status „Bestätigt“ live nach Session-Aktion | DEMO | S | Q-092 | DONE `a2ae873` |
-| Q-105 | AV Verlauf: Upload-Ereignisse mit Dokumentbezeichnung hervorheben | DEMO | S | Q-095 | OFFEN |
+| Q-105 | AV Verlauf: Upload-Ereignisse mit Dokumentbezeichnung hervorheben | DEMO | S | Q-095 | DONE `ab6b920` |
 
 ---
 
@@ -163,6 +163,9 @@ Story-Dokumentation ist kein Pflicht-Vorläufer für Mock-Daten und Typen.
 | Q-126 | Kita Lagebild Handlungsfelder: Schnellfilter Meldelücke (Session-sensitiv, analog Engpass Q-125) | DEMO | S | Q-125 | DONE `e8d51f1` |
 | Q-127 | UG Übersicht: Fairness-Kurz-CTAs für Steuernummer und Betriebsdatum (ergänzend zu Q-116) | DEMO | S | Q-116 | DONE `9e7ae4a` |
 | Q-128 | Kita Lagebild Planungsraum-Detail: Schnellfilter Meldelücke (`KitaPlanungsraumDetailListe`, Session-sensitiv) | DEMO | S | Q-126 | DONE `ef924c9` |
+| Q-129 | UG Fairness: Betriebsdatum-Signal-Text session-sensitiv nach RQ-Antwort | DEMO | S | Q-124 | DONE `7a28bed` |
+| Q-130 | Kita Lagebild: Druckansicht mit Meldelücke-Filter-Hinweisen (`KitaLagebildDruck`) | DEMO | S | Q-128 | DONE `0cdeae4` |
+| Q-131 | Kita Monatsbericht ↔ Einrichtung: Prozesskette (Hub-Karten, Datenlücke-Links, Story-Labels) | DEMO | S | Q-102 | DONE `ba2c4aa` |
 
 ---
 
@@ -295,3 +298,7 @@ Diese Punkte wurden in früheren Iterationen abgeschlossen und sind produktionsr
 | Q-104 AV Termin-Kachel live | Übersicht Status Ausstehend/Bestätigt | `a2ae873` → main |
 | Q-127 UG Übersicht Steuernummer/Betriebsdatum-CTAs | Fairness-Kurzblock erweiterte CTAs | `9e7ae4a` → main |
 | Q-128 Kita Planungsraum-Detail Meldelücke-Filter | `KitaPlanungsraumDetailListe` Schnellfilter | `ef924c9` → main |
+| Q-105 AV Verlauf Upload-Bezeichnung | `timeline-upload-block` Dokumentname | `ab6b920` → main |
+| Q-129 UG Betriebsdatum-Text nach RQ | Signal-Text session-sensitiv | `7a28bed` → main |
+| Q-130 Kita Lagebild Druck Meldelücke | `KitaLagebildDruck` print-only Hinweise | `0cdeae4` → main |
+| Q-131 Kita Monatsbericht↔Einrichtung | Prozesskette Hub-Karten | `ba2c4aa` → main |

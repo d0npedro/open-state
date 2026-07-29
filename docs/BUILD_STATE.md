@@ -1,6 +1,6 @@
 # BUILD_STATE.md – Aktueller Projektstand
 
-Zuletzt aktualisiert: nach Supervisor-Pflicht-Push 2026-07-29 (Merge AV Q-104, UG Q-124/127, Kita Q-125/126/128; lint+build+e2e grün)
+Zuletzt aktualisiert: nach Supervisor-Pflicht-Push 2026-07-29 (Merge AV Q-105, UG Q-129, Kita Q-130/131; lint+build grün)
 
 Dieser Stand beschreibt, was tatsächlich existiert und funktioniert.
 Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
@@ -15,7 +15,7 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | Build-Status | ✓ Erfolgreich (27 statische Seiten) |
 | Deployment | Vercel, aus `demo/`-Verzeichnis |
 | Lokaler Start | `cd demo && npm install && npm run dev` |
-| Letzte Build-Prüfung | lint+build grün; `test:e2e:ci` 233 chromium passed (Supervisor) |
+| Letzte Build-Prüfung | lint+build grün (Supervisor Merge AV/UG/Kita Q-105/129/130/131) |
 
 ---
 
@@ -29,18 +29,18 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | `/fall/rueckfragen` | Rückfragen mit Fairness-Hinweis | US-AV-004 | ✓ |
 | `/fall/termine` | Termine; session-lokale Bestätigung; Nav-Badge nur unbestätigt/bald fällig | US-AV-005 | ✓ |
 | `/fall/bescheide` | Bescheide mit Fairness-Hinweisen | US-AV-006 | ✓ |
-| `/fall/verlauf` | Timeline mit Fairness-Hinweis; Antwort-Quittungsblock mit vollem Text | US-AV-007 | ✓ |
+| `/fall/verlauf` | Timeline mit Fairness-Hinweis; Antwort-Quittungsblock; Upload-Blöcke mit Dokumentbezeichnung | US-AV-007 | ✓ |
 | `/fall/hinweise` | Vollständige Fairness-Hinweisseite | US-AV-008 | ✓ |
 | `/stories` | Story Coverage Dashboard | – | ✓ |
 | `/feedback` | Feedback → GitHub Issues | – | ✓ |
 | `/gruendung` … | Unternehmensgründung (Übersicht Fairness-Kurzblock+Kurz-CTAs inkl. Steuernummer/Betriebsdatum, Behörden VS-04→Rückfrage, Hinweise-CTAs RQ/BG/Unterlagen/Steuernummer/Betriebsdatum/parallele Behörden, Verlauf Stelle+Ereignistyp-Filter, …) | US-UG-001–006 | ✓ |
 | `/kita` | Öffentlicher Transparenzbericht + Planungsraum-Filter + Residual↔Meldelücke + Engpass/Meldelücke-Schnellfilter + Zeitreihe Meldebasis + Regionenfilter + Regionenvergleich Zwei-Räume inkl. 12-Monats-Verlauf A/B + CSV-Export Zeitreihe/Vergleich/Verlauf inkl. Open-Data-Lizenzhinweis | US-KJ-009, US-KJ-010 | ✓ |
-| `/kita/lagebild` | Jugendamt-Steuerungsansicht + Meldeeingang + Meldebeitrag + Engpass/Handlungsfelder/Planungsraum-Detail Meldelücke-Schnellfilter + Monatsbericht-Vorschau-Kopplung | US-KJ-005, US-KJ-006 | ✓ |
+| `/kita/lagebild` | Jugendamt-Steuerungsansicht + Meldeeingang + Meldebeitrag + Engpass/Handlungsfelder/Planungsraum-Detail Meldelücke-Schnellfilter + Druckansicht Meldelücke-Hinweise + Monatsbericht-Vorschau-Kopplung | US-KJ-005, US-KJ-006 | ✓ |
 | `/kita/bedarfsplanung` | Bedarfsplanungsentwurf (§ 80 SGB VIII) + Meldebasis + Residual↔Meldelücke (Hinweis-only) | US-KJ-007 | ✓ |
 | `/kita/vorlage` | Politische Gremienvorlage + Freigabe + Meldebasis/Residual↔Meldelücke + Engpass-Liste Meldelücke-Filter | US-KJ-008 | ✓ |
-| `/kita/einrichtung` | Belegungsstand Einrichtung (aggregiert) | US-KJ-002 | ✓ |
+| `/kita/einrichtung` | Belegungsstand Einrichtung (aggregiert) + Prozesskette Tagesstand→Monatsbericht→Meldung | US-KJ-002 | ✓ |
 | `/kita/tagesstand` | Tagesstand erfassen (Aggregate, Freigabe) | US-KJ-001 | ✓ |
-| `/kita/monatsbericht` | Monatsbericht + Vorschau laufender Monat + Rücklink Lagebild-Anker | US-KJ-003 | ✓ |
+| `/kita/monatsbericht` | Monatsbericht + Vorschau + Rücklink Lagebild + Einrichtungs-Kontext + Prozesskette | US-KJ-003 | ✓ |
 | `/kita/meldung` | Monatsmeldung prüfen, korrigieren, freigeben | US-KJ-004 | ✓ |
 
 ---
@@ -83,6 +83,10 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | Kita Lagebild Engpass Meldelücke-Filter | `KitaEngpassRangliste.tsx` | ✓ Schnellfilter Alle/Meldelücke, Rang-Erhalt, Session-sensitiv (Q-125, US-KJ-006) |
 | Kita Lagebild Handlungsfelder Meldelücke-Filter | `KitaHandlungsfelder.tsx` | ✓ Schnellfilter Alle/Meldelücke, Leerzustand nach Freigabe (Q-126, US-KJ-005/006) |
 | Kita Lagebild Planungsraum-Detail Meldelücke-Filter | `KitaPlanungsraumDetailListe.tsx` | ✓ Schnellfilter Alle/Meldelücke, Rang-Erhalt, Session-sensitiv (Q-128, US-KJ-005/006) |
+| AV Verlauf Upload-Bezeichnung | `/fall/verlauf` | ✓ `timeline-upload-block` mit Dokumentname (Q-105, US-AV-007) |
+| UG Betriebsdatum-Signal Text | `gruendung-rules.ts` | ✓ Text session-sensitiv nach RQ-Antwort (Q-129) |
+| Kita Lagebild Druck | `KitaLagebildDruck.tsx` | ✓ Druckleiste + print-only Meldelücke-Filterhinweise (Q-130) |
+| Kita Prozesskette Betrieb | `/kita/einrichtung` + `/kita/monatsbericht` | ✓ Hub-Karten, Datenlücke-Links, Story-Labels (Q-131) |
 
 ---
 
@@ -175,6 +179,10 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 **Q-104 erledigt:** AV Übersicht Termin-Kachel Status „Bestätigt“ live nach Session-Aktion.
 **Q-127 erledigt:** UG Übersicht Fairness-Kurz-CTAs Steuernummer (Finanzamt) und Betriebsdatum (Verfahrensstatus).
 **Q-128 erledigt:** Kita Lagebild Planungsraum-Detail Meldelücke-Schnellfilter (`KitaPlanungsraumDetailListe`).
+**Q-105 erledigt:** AV Verlauf Upload-Ereignisse mit Dokumentbezeichnung (`timeline-upload-block`).
+**Q-129 erledigt:** UG Betriebsdatum-Signal-Text session-sensitiv nach RQ-Antwort.
+**Q-130 erledigt:** Kita Lagebild Druckansicht mit Meldelücke-Filter-Hinweisen.
+**Q-131 erledigt:** Kita Monatsbericht ↔ Einrichtung Prozesskette.
 
 ---
 
