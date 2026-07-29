@@ -148,6 +148,7 @@ Story-Dokumentation ist kein Pflicht-Vorläufer für Mock-Daten und Typen.
 | Q-110 | Kita Planungsraum-Explorer: Filter-Chip „Engpass“ um Meldelücke ergänzen | DEMO | S | Q-108 | DONE `8868849` |
 | Q-112 | Kita Lagebild Engpass-Rangliste: Meldebasis-Kurzmarkierung je Planungsraum (Session-sensitiv, Hinweis-only) | DEMO | S | Q-108 | DONE `eda28fd` |
 | Q-114 | Kita Vorlage Engpass-Liste: Schnellfilter Meldelücke (Session-sensitiv, analog Planungsraum-Explorer) | DEMO | S | Q-109 | DONE `fe2f684` |
+| Q-115 | Kita Zeitreihe: Meldebasis-Datenlücken am Berichtsmonat markieren (Session-sensitiv, Hinweis-only, keine Interpolation) | DEMO | S | Q-112 | DONE `4486fe5` |
 
 ---
 
@@ -265,3 +266,4 @@ Diese Punkte wurden in früheren Iterationen abgeschlossen und sind produktionsr
 | Q-107 UG nächster Schritt Deep-Links | Übersicht Schritt + offene Aufgaben verlinkt | `ba026f5` → main |
 | Q-113 UG parallele-Behörden-CTA | Hinweise INFO → `/gruendung/behoerden` | `b603c71` → main |
 | Q-114 Kita Vorlage Engpass-Filter | Engpass-Liste Meldelücke-Schnellfilter | `fe2f684` → main |
+| Q-115 Kita Zeitreihe Meldebasis | Berichtsmonat Meldelücke in `KitaZeitreiheTabelle` | `4486fe5` → main |
