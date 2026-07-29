@@ -2,8 +2,8 @@
 
 | Feld | Wert |
 |------|------|
-| last_checked | 2026-07-29T05:17:50Z |
-| last_run_id | 30424521334 |
+| last_checked | 2026-07-29T05:21:30Z |
+| last_run_id | 30424696077 |
 | last_status | success |
 | last_fix_sha | — |
 | fix_attempts | 0 |
@@ -25,3 +25,4 @@
 - E2E `30423831646` + Build `30423831637` success (SHA 46b176a Merge loop/av; HEAD bb82357 docs). Catch-up push: origin/main..main = 0. fix_attempts=0.
 - E2E `30423943722` + `30424010720` + `30424108838` success (SHA bb82357 / 86ef35b / 1806d80 docs). Build `30424108844` success (HEAD 1806d80). Catch-up push: origin/main..main = 0. fix_attempts=0.
 - E2E `30424263416` + `30424255255` + `30424309782` success; Build `30424255251` success. Catch-up push `92194cd..e62b9f2` (feat kita residual + merge). Build `30424521330` + E2E `30424521334` success (SHA e62b9f2). Local ahead again with kita filter merge → further catch-up pending. fix_attempts=0.
+- E2E `30424640618` success (SHA 9cac87a docs). Build `30424696025` + E2E `30424696077` success (SHA 6e05775 Merge loop/kita + Planungsraum-Filter). Catch-up push: origin/main..main = 0 (lint+build grün). HEAD docs/supervisor may still have in_progress runs next tick. fix_attempts=0.
