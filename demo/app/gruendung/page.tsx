@@ -121,7 +121,8 @@ function naechsterSchrittZiel(
 }
 
 /**
- * Kurz-CTA für Fairness-Signale auf der Übersicht (Rückfrage / Unterlagen / BG).
+ * Kurz-CTA für Fairness-Signale auf der Übersicht
+ * (Rückfrage / Unterlagen / BG / Steuernummer / Betriebsdatum).
  * Nur solange der auslösende Aktenzustand noch greift.
  */
 function fairnessSignalZiel(
@@ -171,6 +172,40 @@ function fairnessSignalZiel(
       cta: 'Zur Behördenkarte',
       icon: 'building',
       testKey: `beh-${bg.id}`,
+    };
+  }
+
+  // Steuernummer fehlt (VS-05 AUSSTEHEND oder IN_BEARBEITUNG)
+  if (signal.typ === 'UG_STEUERNUMMER_FEHLT' || signal.id === 'UG-STEUERNUMMER-FEHLT') {
+    const vs05 = akte.verfahrensSchritte.find(vs => vs.id === 'VS-05');
+    const offen =
+      !!vs05 &&
+      (vs05.status === 'AUSSTEHEND' || vs05.status === 'IN_BEARBEITUNG');
+    if (!offen) return null;
+    const finanzamt = akte.beteiligteBehörden.find(b => b.typ === 'FINANZAMT');
+    if (!finanzamt) return null;
+    return {
+      href: `/gruendung/behoerden#beh-${finanzamt.id}`,
+      cta: 'Zum Finanzamt',
+      icon: 'building',
+      testKey: `steuernummer-${finanzamt.id}`,
+    };
+  }
+
+  // Geplantes Betriebsdatum überschritten – Verfahren noch offen
+  if (
+    signal.typ === 'UG_BETRIEBSDATUM_UEBERSCHRITTEN' ||
+    signal.id === 'UG-BETRIEBSDATUM'
+  ) {
+    const abgeschlossen = ['GENEHMIGT', 'AKTIVER_BETRIEB', 'BETRIEB_EINGESTELLT'].includes(
+      akte.status
+    );
+    if (abgeschlossen) return null;
+    return {
+      href: '/gruendung#verfahrensstatus',
+      cta: 'Zum Verfahrensstatus',
+      icon: 'refresh',
+      testKey: 'betriebsdatum',
     };
   }
 

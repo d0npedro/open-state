@@ -8,6 +8,32 @@ Erlaubte Pfade nur: `demo/app/gruendung/**`, `demo/context/GruendungStateContext
 
 ---
 
+## 2026-07-29 – Iteration 20: Übersicht Fairness-CTA Steuernummer/Betriebsdatum
+
+### Was
+Übersicht-Fairness-Kurzblock: Kurz-CTAs für Steuernummer
+(`Zum Finanzamt` → `#beh-BEH-02`) und Betriebsdatum
+(`Zum Verfahrensstatus` → `#verfahrensstatus`). CTA nur solange
+VS-05 offen bzw. Verfahren nicht genehmigt. Nach Beantworten der
+Rückfrage bleibt Steuernummer-CTA (VS-05 IN_BEARBEITUNG). E2E: Initial,
+Navigation, Session.
+
+### Dateien
+- `demo/app/gruendung/page.tsx` – `fairnessSignalZiel` um Steuernummer/Betriebsdatum
+- `demo/e2e/us-ug-gruendung.spec.ts` – erweiterte CTA-Tests + Session
+- `docs/loops/ug-JOURNAL.md` – dieses Journal
+
+### Build
+`npm run lint` + `npm run build` im Ordner `demo/` grün.
+`npm run test:e2e:ug` Exit 0 (107 passed).
+
+### Nächster sinnvoller UG-Schritt (Vorschlag)
+- Betriebsdatum-Signal-Text nach beantworteter Rückfrage anpassen (optional)
+- Hinweise: nach Session-Wechsel CTA-Verschwinden für parallele Behörden (optional)
+- Übersicht: Fairness-CTA-Text bei Steuernummer IN_BEARBEITUNG differenzieren (optional)
+
+---
+
 ## 2026-07-29 – Iteration 19: Steuernummer-Signal bei VS-05 IN_BEARBEITUNG
 
 ### Was

@@ -178,7 +178,7 @@ test.describe('UG – Übersicht', () => {
     await expect(link).toContainText(/weitere Hinweis/i);
   });
 
-  test('Fairness-Einträge haben Kurz-CTAs für Rückfrage, Unterlagen und BG', async ({ page }) => {
+  test('Fairness-Einträge haben Kurz-CTAs für Rückfrage, Unterlagen, BG, Steuernummer und Betriebsdatum', async ({ page }) => {
     const block = page.getByTestId('uebersicht-fairness-kurzblock');
     await expect(block).toBeVisible();
 
@@ -196,6 +196,16 @@ test.describe('UG – Übersicht', () => {
     await expect(bgCta).toBeVisible();
     await expect(bgCta).toHaveAttribute('href', '/gruendung/behoerden#beh-BEH-04');
     await expect(bgCta).toContainText(/Zur Behördenkarte/i);
+
+    const steuernummerCta = page.getByTestId('uebersicht-fairness-cta-steuernummer-BEH-02');
+    await expect(steuernummerCta).toBeVisible();
+    await expect(steuernummerCta).toHaveAttribute('href', '/gruendung/behoerden#beh-BEH-02');
+    await expect(steuernummerCta).toContainText(/Zum Finanzamt/i);
+
+    const betriebsdatumCta = page.getByTestId('uebersicht-fairness-cta-betriebsdatum');
+    await expect(betriebsdatumCta).toBeVisible();
+    await expect(betriebsdatumCta).toHaveAttribute('href', '/gruendung#verfahrensstatus');
+    await expect(betriebsdatumCta).toContainText(/Zum Verfahrensstatus/i);
   });
 
   test('Fairness-CTA Rückfrage führt zur Rückfragen-Karte', async ({ page }) => {
@@ -210,6 +220,22 @@ test.describe('UG – Übersicht', () => {
     await expect(page.locator('#dok-DOK-03')).toBeVisible();
   });
 
+  test('Fairness-CTA Steuernummer führt zur Finanzamt-Karte', async ({ page }) => {
+    await page.getByTestId('uebersicht-fairness-cta-steuernummer-BEH-02').click();
+    await expect(page).toHaveURL(/\/gruendung\/behoerden#beh-BEH-02/);
+    await expect(page.locator('#beh-BEH-02')).toBeVisible();
+    await expect(page.getByTestId('behoerde-karte-BEH-02')).toContainText(/Finanzamt/i);
+  });
+
+  test('Fairness-CTA Betriebsdatum führt zum Statusblock der Übersicht', async ({ page }) => {
+    await page.getByTestId('uebersicht-fairness-cta-betriebsdatum').click();
+    await expect(page).toHaveURL(/\/gruendung#verfahrensstatus/);
+    await expect(page.locator('#verfahrensstatus')).toBeVisible();
+    await expect(page.getByTestId('uebersicht-verfahrensstatus')).toContainText(
+      /IT-Beratung|Verfahrensfortschritt|Sie sind hier/i
+    );
+  });
+
   test('Nach Beantworten entfällt Fairness-CTA Rückfrage', async ({ page }) => {
     const { goUgTab } = await import('./helpers/sessionNav');
     await goUgTab(page, 'Fragen', /\/gruendung\/rueckfragen/);
@@ -218,9 +244,15 @@ test.describe('UG – Übersicht', () => {
     await goUgTab(page, 'Übersicht', /\/gruendung$/);
 
     await expect(page.getByTestId('uebersicht-fairness-cta-rq-RQ-01')).toHaveCount(0);
-    // Unterlagen- und BG-CTAs bleiben
+    // Unterlagen-, BG-, Steuernummer- und Betriebsdatum-CTAs bleiben
     await expect(page.getByTestId('uebersicht-fairness-cta-dok-DOK-03')).toBeVisible();
     await expect(page.getByTestId('uebersicht-fairness-cta-beh-BEH-04')).toBeVisible();
+    await expect(page.getByTestId('uebersicht-fairness-cta-steuernummer-BEH-02')).toBeVisible();
+    await expect(page.getByTestId('uebersicht-fairness-cta-betriebsdatum')).toBeVisible();
+    // Steuernummer-Signal wechselt auf „in Bearbeitung“, CTA bleibt zum Finanzamt
+    await expect(page.getByTestId('uebersicht-fairness-UG-STEUERNUMMER-FEHLT')).toContainText(
+      /Steuernummer in Bearbeitung/i
+    );
   });
 
   test('INFO-Signal parallele Behörden erscheint auf Hinweise-Seite', async ({ page }) => {
