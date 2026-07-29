@@ -1,6 +1,6 @@
 # BUILD_STATE.md – Aktueller Projektstand
 
-Zuletzt aktualisiert: nach Supervisor-Pflicht-Push 2026-07-29 (Merge UG Q-132/134 + Kita Q-133/135; E2E 237 chromium grün)
+Zuletzt aktualisiert: nach Supervisor-Pflicht-Push 2026-07-29 (Re-Verify: keine neuen Loop-Commits; lint+build+E2E 237 chromium grün; origin/main sync 0)
 
 Dieser Stand beschreibt, was tatsächlich existiert und funktioniert.
 Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
@@ -15,7 +15,7 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | Build-Status | ✓ Erfolgreich (27 statische Seiten) |
 | Deployment | Vercel, aus `demo/`-Verzeichnis |
 | Lokaler Start | `cd demo && npm install && npm run dev` |
-| Letzte Build-Prüfung | lint+build+`test:e2e:ci` **237 passed** (Supervisor Pflicht-Push, Merge Q-132–Q-135) |
+| Letzte Build-Prüfung | lint+build+`test:e2e:ci` **237 passed** (Supervisor Re-Verify, HEAD nach Q-132–Q-135 + ci-watcher) |
 
 ---
 
