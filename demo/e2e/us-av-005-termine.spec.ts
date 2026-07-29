@@ -129,6 +129,46 @@ test.describe('US-AV-005 – Termin einsehen und verstehen', () => {
     await expect(page.getByTestId('tab-badge-termine')).toHaveCount(0);
   });
 
+  test('Q-197: Übersicht Termin-Quittung mit Verlauf-Tiefenlink', async ({ page }) => {
+    // US-AV-005/007: nach Session-Bestätigung Quittung auf Übersicht + #ere-E-DEMO-TERM-…
+    // Kein page.goto nach State (DEC-012)
+    await page.getByTestId('termin-bestaetigen-T-001').click();
+    await expect(page.getByTestId('termin-bestaetigt-quittung-T-001')).toBeVisible();
+
+    await goFallTab(page, /^Übersicht/, /\/fall\/?$/);
+
+    const quittung = page.getByTestId('termin-quittung');
+    await expect(quittung).toBeVisible();
+    await expect(page.getByTestId('termin-quittung-titel')).toHaveText('Terminteilnahme bestätigt');
+    await expect(page.getByTestId('termin-quittung-item-T-001')).toContainText(
+      /Erstgespräch mit persönlicher Ansprechpartnerin/i
+    );
+    await expect(page.getByTestId('termin-quittung-item-T-001')).toContainText(/3\.\s*Dezember 2024/i);
+
+    const verlaufLink = page.getByTestId('termin-quittung-verlauf-T-001');
+    await expect(verlaufLink).toBeVisible();
+    await expect(verlaufLink).toHaveAttribute(
+      'href',
+      '/fall/verlauf#ere-E-DEMO-TERM-T-001'
+    );
+    await expect(verlaufLink).toContainText(/Im Verlauf ansehen/i);
+
+    await expect(page.getByTestId('termin-quittung-termine-cta')).toHaveAttribute(
+      'href',
+      '/fall/termine'
+    );
+
+    await verlaufLink.click();
+    await expect(page).toHaveURL(/\/fall\/verlauf#ere-E-DEMO-TERM-T-001/);
+    const card = page.getByTestId('verlauf-ereignis-E-DEMO-TERM-T-001');
+    await expect(card).toBeVisible();
+    await expect(card).toHaveAttribute('aria-current', 'location');
+    await expect(card).toHaveAttribute('data-session-termin', 'true');
+    await expect(page.getByTestId('verlauf-session-termin-badge-E-DEMO-TERM-T-001')).toContainText(
+      /Ihre Bestätigung/i
+    );
+  });
+
   test('Datum des Termins klar sichtbar', async ({ page }) => {
     await expect(page.getByText('3. Dezember 2024')).toBeVisible();
   });

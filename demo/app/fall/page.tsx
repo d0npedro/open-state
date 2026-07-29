@@ -7,6 +7,7 @@
 import Link from 'next/link';
 import {
   demoDokUploadEreignisId,
+  demoTerminBestaetigungEreignisId,
   useDemoState,
 } from '@/context/DemoStateContext';
 import {
@@ -76,7 +77,7 @@ const statusToChip: Record<string, { label: string; css: string; icon: string }>
 };
 
 export default function FallPage() {
-  const { fall, sessionUploadedIds } = useDemoState();
+  const { fall, sessionUploadedIds, sessionConfirmedTerminIds } = useDemoState();
   const chip = statusToChip[fall.status] ?? { label: fall.status, css: 'status-chip-neutral', icon: 'info' };
   const currentIndex = resolveProgressIndex(fall.status);
   const fortschrittProzent = Math.round(((currentIndex + 1) / statusFlow.length) * 100);
@@ -104,6 +105,10 @@ export default function FallPage() {
     .map(id => fall.dokumente.find(d => d.id === id))
     .filter((d): d is NonNullable<typeof d> => Boolean(d));
   const naechsteOffeneUnterlage = ausstehendeDokumente[0] ?? null;
+  /** Session-Terminbestätigungen für Quittung auf der Übersicht (Q-197, US-AV-005/007). */
+  const sessionTermine = sessionConfirmedTerminIds
+    .map(id => fall.termine.find(t => t.id === id))
+    .filter((t): t is NonNullable<typeof t> => Boolean(t));
   // Nächster Termin: bestätigt oder ausstehend (nicht abgesagt) — Status live auf Kachel (Q-104)
   const naechsterTermin = fall.termine.find(t => t.status !== 'ABGESAGT');
   const terminStatusLabel =
@@ -164,6 +169,85 @@ export default function FallPage() {
             <p style={{ margin: '0.5rem 0 0', fontSize: '0.85rem', color: 'var(--color-text-muted)' }}>
               {fall.statusBeschreibung}
             </p>
+          </div>
+        </div>
+      )}
+
+      {/* ─── 1b. TERMIN-QUITTUNG: Session-Bestätigung auf der Übersicht ─
+          UX: Nach Bestätigung muss klar sein, *welcher* Termin gilt und
+          wo die Aktion im Verlauf nachvollziehbar ist (US-AV-005/007). */}
+      {sessionTermine.length > 0 && (
+        <div
+          className="notice-box notice-box-success"
+          role="status"
+          aria-live="polite"
+          data-testid="termin-quittung"
+        >
+          <Icon name="check-circle" size={20} style={{ flexShrink: 0, marginTop: '2px' }} />
+          <div style={{ flex: 1 }}>
+            <strong
+              style={{ display: 'block', marginBottom: '0.35rem', fontSize: '1rem' }}
+              data-testid="termin-quittung-titel"
+            >
+              {sessionTermine.length === 1
+                ? 'Terminteilnahme bestätigt'
+                : `${sessionTermine.length} Termine bestätigt`}
+            </strong>
+            <ul
+              style={{ margin: '0 0 0.5rem', paddingLeft: '1.15rem', fontSize: '0.9rem' }}
+              data-testid="termin-quittung-liste"
+            >
+              {sessionTermine.map(t => (
+                <li
+                  key={t.id}
+                  data-testid={`termin-quittung-item-${t.id}`}
+                  style={{ marginBottom: '0.35rem' }}
+                >
+                  {t.zweck}
+                  <span style={{ color: 'var(--color-text-muted)' }}>
+                    {' '}
+                    · {t.datum}, {t.uhrzeit} Uhr
+                  </span>
+                  {' '}
+                  <Link
+                    href={`/fall/verlauf#ere-${demoTerminBestaetigungEreignisId(t.id)}`}
+                    className="btn btn-secondary btn-inline"
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '0.3rem',
+                      minHeight: 36,
+                      fontSize: '0.8rem',
+                      marginLeft: '0.25rem',
+                      verticalAlign: 'middle',
+                    }}
+                    data-testid={`termin-quittung-verlauf-${t.id}`}
+                    aria-label={`Terminbestätigung für ${t.zweck} im Verlauf ansehen`}
+                  >
+                    <Icon name="clock" size={14} />
+                    Im Verlauf ansehen
+                  </Link>
+                </li>
+              ))}
+            </ul>
+            <p style={{ margin: '0.25rem 0 0.5rem', fontSize: '0.875rem', color: 'var(--color-text-muted)' }}>
+              Keine weitere Handlung zu {sessionTermine.length === 1 ? 'diesem Termin' : 'diesen Terminen'} nötig.
+              Demo: Die Bestätigung gilt für diese Browser-Session.
+            </p>
+            <Link
+              href="/fall/termine"
+              className="btn btn-secondary btn-inline"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.4rem',
+                minHeight: 44,
+              }}
+              data-testid="termin-quittung-termine-cta"
+            >
+              Zu den Terminen
+              <Icon name="arrow-right" size={16} />
+            </Link>
           </div>
         </div>
       )}
