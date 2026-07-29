@@ -2,14 +2,15 @@
 
 | Feld | Wert |
 |------|------|
-| last_checked | 2026-07-29T06:27:04Z |
-| last_run_id | 30428080184 |
+| last_checked | 2026-07-29T06:37:00Z |
+| last_run_id | 30428581161 |
 | last_status | success |
-| last_fix_sha | 7434203 |
+| last_fix_sha | 124aee2 |
 | fix_attempts | 0 |
 
 ## Log
 
+- Build `30428580945` + E2E `30428581161` **success** (SHA 124aee2 supervisor Q-123 Kita Open-Data-Lizenz CSV). Prior Build `30428469325` + E2E `30428469313` **success** (SHA 929a28c Q-122 VS-05 + Kita Vergleich/CSV). Catch-up: origin/main..main = 0. No fix. fix_attempts=0.
 - E2E `30428080184` **success** (SHA 7434203 docs ci-watcher). Prior E2E `30427934277` **success** (SHA 55f09af). Build latest `30427581501` success (SHA c3432c9; newer HEAD docs-only path-skip). Catch-up: origin/main..main = 0. No fix. fix_attempts=0.
 - E2E `30427934277` **success** (SHA 55f09af docs ci-watcher). Prior E2E `30427802521` **success** (SHA b1fce53). Build latest `30427581501` success (SHA c3432c9; newer HEAD docs-only path-skip). Catch-up: origin/main..main = 0. No fix. fix_attempts=0.
 - E2E `30427802521` **success** (SHA b1fce53 docs ci-watcher). Prior E2E `30427760881` **success** (SHA 394422b). Build latest `30427581501` success (SHA c3432c9; newer HEAD docs-only path-skip). Catch-up: origin/main..main = 0. No fix. fix_attempts=0.
