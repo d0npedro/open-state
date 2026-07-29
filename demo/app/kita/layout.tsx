@@ -8,9 +8,10 @@ export const metadata: Metadata = {
 };
 
 const nav = [
-  { href: '/kita',               label: 'Transparenzbericht', hint: 'Öffentlich' },
-  { href: '/kita/lagebild',      label: 'Steuerungslagebild', hint: 'Demo: JA-intern' },
-  { href: '/kita/bedarfsplanung', label: 'Bedarfsplanung',   hint: 'Demo: Entwurf § 80' },
+  { href: '/kita',                label: 'Transparenzbericht', hint: 'Öffentlich' },
+  { href: '/kita/lagebild',       label: 'Steuerungslagebild', hint: 'Demo: JA-intern' },
+  { href: '/kita/bedarfsplanung', label: 'Bedarfsplanung',     hint: 'Demo: Entwurf § 80' },
+  { href: '/kita/vorlage',        label: 'Gremienvorlage',     hint: 'Demo: Freigabe' },
 ];
 
 export default function KitaLayout({ children }: { children: React.ReactNode }) {

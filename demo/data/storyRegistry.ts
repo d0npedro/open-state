@@ -214,12 +214,13 @@ export const storyRegistry: StoryRegistryEntry[] = [
     domain: 'Kita-Betrieb & Jugendamt-Steuerung',
     title: 'Politische Vorlage freigeben',
     role: 'Jugendamtsleitung',
-    status: 'BEREIT',
+    status: 'DEMONSTRIERBAR',
     problem: 'Vorlagen für den Jugendhilfeausschuss werden manuell erstellt – Datenbasis nicht transparent dokumentiert',
-    screen: 'Politische Vorlage (nicht implementiert)',
+    screen: 'Politische Vorlage · Freigabe',
     transparency_focus: 'Vorlage mit expliziter Datenquelle, Aktualität und Methodik für politische Gremien',
-    acceptance_criteria_count: 4,
-    implemented_criteria: 0,
+    acceptance_criteria_count: 6,
+    implemented_criteria: 5,
+    route: '/kita/vorlage',
     source_file: 'docs/stories/kita_betrieb_und_jugendamt_steuerung/US-KJ-008_Politische_Vorlage_freigeben.md'
   },
   {
