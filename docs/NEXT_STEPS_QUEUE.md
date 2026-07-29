@@ -105,7 +105,26 @@ Story-Dokumentation ist kein Pflicht-Vorläufer für Mock-Daten und Typen.
 |----|---------|-----|---------|--------------|--------|
 | Q-081 | AV Tab-Badges: Zähler offener Fragen/Unterlagen in Fall-Navigation, live mit DemoState | DEMO | S | Q-072 | DONE |
 | Q-085 | AV Rückfrage-Antwort: kurzer Bestätigungsdialog (was wurde beantwortet) | DEMO | S | Q-081 | DONE |
-| Q-086 | AV Fristen-Countdown auf Übersicht für offene Dokumente (analog RQ-Frist) | DEMO | S | Q-072 | OFFEN |
+| Q-086 | AV Fristen-Countdown auf Übersicht für offene Dokumente (analog RQ-Frist) | DEMO | S | Q-072 | DONE |
+| Q-089 | AV Tab-Badge „Termine“ nur bei unbestätigt / bald fällig | DEMO | S | Q-081 | OFFEN |
+
+---
+
+### Priorität 4c – UG Demo-Verfeinerung (Domain-Loop)
+
+| ID | Schritt | Typ | Aufwand | Abhängigkeit | Status |
+|----|---------|-----|---------|--------------|--------|
+| Q-087 | UG Hinweise-Tab in Navigation + Behörden-Zeile auf Übersicht mit Link zur offenen Rückfrage | DEMO | S | Q-084 | DONE |
+| Q-090 | UG Übersicht: Fairness-Kurzblock mit Link zu `/gruendung/hinweise` (analog AV) | DEMO | S | Q-087 | OFFEN |
+
+---
+
+### Priorität 4d – Kita Demo-Verfeinerung (Domain-Loop)
+
+| ID | Schritt | Typ | Aufwand | Abhängigkeit | Status |
+|----|---------|-----|---------|--------------|--------|
+| Q-088 | Kita Lagebild: Meldeeingang freigegebener Monatsmeldungen (Session-Link von `/kita/meldung`) | DEMO | M | Q-080 | DONE |
+| Q-091 | Kita Lagebild: Planungsraum Südost nach Session-Freigabe Sonnenwinkel hervorheben | DEMO | S | Q-088 | OFFEN |
 
 ---
 

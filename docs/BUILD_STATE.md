@@ -1,6 +1,6 @@
 # BUILD_STATE.md – Aktueller Projektstand
 
-Zuletzt aktualisiert: nach Supervisor-Merge 2026-07-29 (AV Q-085 Bestätigungsdialog, UG Q-084 Behörden-CTA, Kita Q-083 Tagesstand + Monatsbericht-Quellen)
+Zuletzt aktualisiert: nach Supervisor-Merge 2026-07-29 (AV Q-086 Fristen-Countdown, UG Q-087 Hinweise-Tab, Kita Q-088 Meldeeingang Lagebild)
 
 Dieser Stand beschreibt, was tatsächlich existiert und funktioniert.
 Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
@@ -24,8 +24,8 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | Route | Inhalt | Story-IDs | Status |
 |-------|--------|-----------|--------|
 | `/` | Landing Page | – | ✓ |
-| `/fall` | Fallübersicht, Status, Fairness-Summary | US-AV-001, US-AV-002 | ✓ |
-| `/fall/dokumente` | Dokumentenanforderungen | US-AV-003 | ✓ |
+| `/fall` | Fallübersicht, Status, Fairness-Summary, Fristen-Countdown offener Unterlagen | US-AV-001, US-AV-002 | ✓ |
+| `/fall/dokumente` | Dokumentenanforderungen + Frist-Resttage | US-AV-003 | ✓ |
 | `/fall/rueckfragen` | Rückfragen mit Fairness-Hinweis | US-AV-004 | ✓ |
 | `/fall/termine` | Termine | US-AV-005 | ✓ |
 | `/fall/bescheide` | Bescheide mit Fairness-Hinweisen | US-AV-006 | ✓ |
@@ -33,9 +33,9 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | `/fall/hinweise` | Vollständige Fairness-Hinweisseite | US-AV-008 | ✓ |
 | `/stories` | Story Coverage Dashboard | – | ✓ |
 | `/feedback` | Feedback → GitHub Issues | – | ✓ |
-| `/gruendung` … | Unternehmensgründung (Übersicht, Dokumente, Behörden, …) | US-UG-001–006 | ✓ |
+| `/gruendung` … | Unternehmensgründung (Übersicht, Dokumente, Behörden, Hinweise, …) | US-UG-001–006 | ✓ |
 | `/kita` | Öffentlicher Transparenzbericht + Planungsraum-Filter | US-KJ-009, US-KJ-010 | ✓ |
-| `/kita/lagebild` | Jugendamt-Steuerungsansicht | US-KJ-005, US-KJ-006 | ✓ |
+| `/kita/lagebild` | Jugendamt-Steuerungsansicht + Meldeeingang Monatsmeldungen | US-KJ-005, US-KJ-006 | ✓ |
 | `/kita/bedarfsplanung` | Bedarfsplanungsentwurf (§ 80 SGB VIII) | US-KJ-007 | ✓ |
 | `/kita/vorlage` | Politische Gremienvorlage + Freigabe | US-KJ-008 | ✓ |
 | `/kita/einrichtung` | Belegungsstand Einrichtung (aggregiert) | US-KJ-002 | ✓ |
@@ -52,12 +52,13 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | Mock-Falldaten (ALG I) | `demo/data/mockFall.ts` | ✓ Vollständig |
 | Story Registry | `demo/data/storyRegistry.ts` | ✓ AV + KJ + UG registriert |
 | Fairness-Typen | `demo/types/fairness.ts` | ✓ |
-| Fairness-Regelwerk | `demo/lib/fairness/rules.ts` | ✓ 5 Regeln, berechnete Fristtagezahl (ISO-Datum + FIKTIVES_HEUTE) |
+| Fairness-Regelwerk | `demo/lib/fairness/rules.ts` | ✓ 5 Regeln, berechnete Fristtagezahl (ISO-Datum + FIKTIVES_HEUTE); Dokument-Fristen via `fristDatum` |
 | FairnessPanel-Komponente | `demo/components/fairness/FairnessPanel.tsx` | ✓ |
 | BuildInfo-Komponente | `demo/components/BuildInfo.tsx` | ✓ |
 | Demo-State-Kontext | `demo/context/DemoStateContext.tsx` | ✓ Rückfrage/Upload/Reset + Timeline; alle AV-Routen angebunden |
 | Gründung-State-Kontext | `demo/context/GruendungStateContext.tsx` | ✓ Rückfrage/Upload/Reset + Verlauf; Fairness live |
 | DemoSessionBar | `demo/components/DemoSessionBar.tsx` | ✓ Leiste „Demo zurücksetzen“ nach Interaktion |
+| Kita Meldeeingang | `demo/components/kita/KitaMeldeeingangPanel.tsx` + `mockKitaMeldeeingang.ts` | ✓ freigegebene Monatsmeldungen im Lagebild, Session von `/kita/meldung` |
 
 ---
 
@@ -110,6 +111,9 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 **Q-083 erledigt:** `/kita/tagesstand` — aggregierte Tagesstand-Erfassung + Leitungsfreigabe (US-KJ-001); Monatsbericht zeigt freigegebene Tagesstände als Datenbasis.
 **Q-084 erledigt:** UG Behörden-Karte CTA zur offenen Rückfrage (Anker auf `/gruendung/rueckfragen`).
 **Q-085 erledigt:** AV Rückfrage-Antwort mit Bestätigungsdialog und Antwortquittung (US-AV-004).
+**Q-086 erledigt:** AV Fristen-Countdown offener Unterlagen auf Übersicht und Dokumente (`fristDatum` + `berechneFristTage`).
+**Q-087 erledigt:** UG Tab „Hinweise“ in Navigation; Übersicht-Behördenzeile mit Link zur offenen Rückfrage.
+**Q-088 erledigt:** Kita Lagebild Meldeeingang freigegebener Monatsmeldungen inkl. Session-Link von Meldungsfreigabe.
 
 ---
 
@@ -161,6 +165,9 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | ~~US-KJ-003 ohne Demo-Screen~~ | ~~Monatsbericht nur als Story dokumentiert~~ | Q-079 ✓ |
 | ~~US-KJ-004 ohne Demo-Screen~~ | ~~Meldefreigabe nur als Story dokumentiert~~ | Q-080 ✓ |
 | ~~US-KJ-001 Tagesstand-Erfassung fehlt~~ | ~~Betriebsdateneingabe nur konzeptionell~~ | Q-083 ✓ |
+| ~~AV Dokument-Fristen ohne Countdown~~ | ~~Frist nur als Datumstext~~ | Q-086 ✓ |
+| ~~UG Hinweise nicht in Navigation~~ | ~~Fairness-Seite schwer erreichbar~~ | Q-087 ✓ |
+| ~~Lagebild ohne Meldeeingang~~ | ~~Datenlücken der Monatsmeldung unsichtbar~~ | Q-088 ✓ |
 | DSFA für Kita-Domäne noch ausstehend | Konzeptlücke — extern abhängig | — |
 
 ---
