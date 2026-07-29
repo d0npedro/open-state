@@ -2,14 +2,15 @@
 
 | Feld | Wert |
 |------|------|
-| last_checked | 2026-07-29T10:30:04Z |
-| last_run_id | 30443648452 |
+| last_checked | 2026-07-29T10:38:00Z |
+| last_run_id | 30444170881 |
 | last_status | success |
-| last_sha | 8b329ca |
+| last_sha | 5e041a8 |
 | fix_attempts | 0 |
 
 ## Log
 
+- Build `30444170546` + E2E `30444170881` **success** (SHA 5e041a8 `fix(deploy): stop multi-loop spam and correct Vercel rootDirectory` — HEAD code path: Vercel rootDirectory/ignore + PIPELINE_STOP). E2E `30444018658` **success** (SHA d523020 supervisor Q-188–Q-190). Build `30444083070` **success** (SHA 630da54 docs held). Catch-up: origin/main..main = 0. **No push** per `docs/loops/PIPELINE_STOP.md` R1/R2/R5 (kein Docs-Spam; Rate-Limit/Deploy-Heilung abwarten). No GHA fix. fix_attempts=0.
 - E2E `30443648452` **success** (SHA 8b329ca docs; watched to green). E2E `30443397092` **success** (SHA 8b329ca/11c2845). Build `30442777657` **success** (SHA 5772335 / Merge loop/kita+ug tree — latest **remote** code path). **Vercel commit status failure** on origin HEAD `27f2f7a`: „Deployment rate limited — retry in 24 hours.“ (nicht App-Build). Catch-up: origin/main..main = 5 (local `752f5d8` Merge loop/kita Blatt 7–8 + Merge loop/ug Upload-Quittung) → lint+build grün (`NEXT_DIST_DIR=.next-ci-watcher`) — **Push unterlassen** per `docs/loops/PIPELINE_STOP.md` R1/R2/R5 (kein Docs-Spam, kein Catch-up-Push solange Vercel Rate-Limit). No GHA fix. fix_attempts=0.
 - E2E `30443397092` **success** (SHA 8b329ca docs ci-watcher HEAD). E2E `30443213202` **success** (SHA 11c2845 docs). E2E `30443008439` **success** (SHA ce52959 docs supervisor Q-185–Q-187). Build `30442777657` **success** (SHA 5772335; tree includes `814603f` Merge loop/kita + `3d0f954` Merge loop/ug — latest code path: Kita Meldeeingang/Monatsbericht CSV + UG Session-Antwort Verlauf/RQ). Catch-up: origin/main..main = 0. No fix. fix_attempts=0.
 - E2E `30443213202` **success** (SHA 11c2845 docs ci-watcher HEAD). E2E `30443008439` **success** (SHA ce52959 docs supervisor Q-185–Q-187). Build `30442777657` + E2E `30442777719` **success** (SHA 5772335; tree includes `814603f` Merge loop/kita + `3d0f954` Merge loop/ug — latest code path: Kita Meldeeingang/Monatsbericht CSV + UG Session-Antwort Verlauf/RQ). Catch-up: origin/main..main = 0. Watched tip E2E to green. No fix. fix_attempts=0.
