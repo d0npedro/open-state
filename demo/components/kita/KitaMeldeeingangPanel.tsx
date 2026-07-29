@@ -8,7 +8,9 @@
  *
  * Druck (US-KJ-004→005): print-only Status/Datenbasis/Session-Freigabe
  * (Vollständigkeit, Lückenliste, Freigabe-ID, Stichprobenmonat) — Spiegel
- * Engpass/Explorer/Zeitreihe. Aktionslinks no-print. Nur Aggregate – keine
+ * Engpass/Explorer/Zeitreihe. Aktionslinks no-print.
+ * CSV: Session-Stand freigabeunabhängig (Statusblatt, freigegebene Aggregate,
+ * Lückenliste) — Spiegel Meldung/Monatsbericht. Nur Aggregate – keine
  * Kind- oder Personennamen.
  */
 
@@ -46,6 +48,240 @@ function fmtNum(n: number, decimals = 0) {
     minimumFractionDigits: decimals,
     maximumFractionDigits: decimals,
   });
+}
+
+function csvNum(n: number, decimals = 0): string {
+  return n.toFixed(decimals).replace('.', ',');
+}
+
+function csvSafe(s: string): string {
+  return s.replace(/;/g, ',').replace(/\r?\n/g, ' ');
+}
+
+/**
+ * CSV Aggregate-Export Meldeeingang (US-KJ-004 → US-KJ-005).
+ * Metakopf: Berichtsmonat, Datenvollständigkeit, Session-Freigabe, Zähler.
+ * Blätter: 1 Eingangsstatus (alle), 2 freigegebene Aggregate, 3 Lückenliste.
+ * Unfreigegebene ohne Kennzahlen (DEC-004). Semikolon, UTF-8 BOM, Komma-Dezimal.
+ */
+function downloadCsv(args: {
+  monatsIso: string;
+  monatsLabel: string;
+  fiktivesHeute: string;
+  standLabel: string;
+  methodikKurz: string;
+  eintraege: MeldeeingangEintrag[];
+  freigegeben: MeldeeingangEintrag[];
+  luecken: MeldeeingangEintrag[];
+  ueberfaellig: number;
+  ausstehend: number;
+  session: MeldeeingangSessionFreigabe | null;
+  sessionNeu: boolean;
+  hydrated: boolean;
+}) {
+  const {
+    monatsIso,
+    monatsLabel,
+    fiktivesHeute,
+    standLabel,
+    methodikKurz,
+    eintraege,
+    freigegeben,
+    luecken,
+    ueberfaellig,
+    ausstehend,
+    session,
+    sessionNeu,
+    hydrated,
+  } = args;
+
+  const vollstaendig = luecken.length === 0;
+  const vollMeta = !hydrated
+    ? 'Datenvollständigkeit: Session-Stand noch nicht geladen (clientseitig)'
+    : vollstaendig
+      ? `Datenvollständigkeit: alle ${eintraege.length} Einrichtungen der Demo-Stichprobe freigegeben`
+      : `Datenlücken: ${freigegeben.length} von ${eintraege.length} freigegeben · ${luecken.length} fehlen (keine Interpolation)`;
+
+  const lueckenMeta =
+    luecken.length === 0
+      ? 'Offene Meldungen: keine'
+      : `Offen: ${luecken
+          .map(
+            e =>
+              `${e.einrichtungBezeichnung} (${e.planungsraumBezeichnung}, ${statusMeta(e.status).label})`
+          )
+          .join('; ')}`;
+
+  const sessionMeta = sessionNeu
+    ? `Session-Freigabe: Kita Sonnenwinkel · ID ${session?.freigabeId ?? '–'}${
+        session?.freigegebenAm ? ` · ${session.freigegebenAm}` : ''
+      }${session?.freigegebenDurchRolle ? ` · ${csvSafe(session.freigegebenDurchRolle)}` : ''}`
+    : 'Session-Freigabe: keine (Demo-Ausgangsstand Meldeeingang)';
+
+  const meta = [
+    `# Meldeeingang Kindertagesbetreuung (Jugendamt-intern, US-KJ-004 → US-KJ-005)`,
+    `# Berichtsmonat: ${csvSafe(monatsLabel)} (${monatsIso}) | Demo-Stichtag: ${fiktivesHeute}`,
+    `# Stand: ${csvSafe(standLabel)}`,
+    `# ${csvSafe(vollMeta)}`,
+    `# ${csvSafe(lueckenMeta)}`,
+    `# ${csvSafe(sessionMeta)}`,
+    `# Zähler: freigegeben ${freigegeben.length} · überfällig ${ueberfaellig} · ausstehend/Entwurf ${ausstehend} · Stichprobe ${eintraege.length}`,
+    `# Methodik: ${csvSafe(methodikKurz)}`,
+    `# Unfreigegebene Einrichtungen: keine Aggregate im Export (DEC-004) · keine Interpolation`,
+    `# Steuerungskette: Meldeeingang (US-KJ-004) → Lagebild (US-KJ-005) · Monatsmeldung /kita/meldung`,
+    `# Session-Stand, kein Backend · keine automatischen Handlungsempfehlungen`,
+    `# Keine personenbezogenen Daten · Keine Kind- oder Personennamen (DEC-004)`,
+    `# Trennzeichen: Semikolon · Dezimaltrennzeichen: Komma · Encoding: UTF-8 BOM`,
+  ];
+
+  const statusHeader = [
+    'Meldung_ID',
+    'Einrichtung_ID',
+    'Einrichtung',
+    'Traeger',
+    'Planungsraum_ID',
+    'Planungsraum',
+    'Status',
+    'Status_Label',
+    'Meldefrist',
+    'Meldefrist_Label',
+    'Freigegeben_am',
+    'Freigabe_ID',
+    'Freigegeben_durch_Rolle',
+    'Session_Eingang',
+    'Hinweise',
+  ].join(';');
+
+  const statusRows = eintraege.map(e => {
+    const isSession =
+      sessionNeu &&
+      session &&
+      e.status === 'FREIGEGEBEN' &&
+      e.freigabeId === session.freigabeId;
+    return [
+      e.meldungId,
+      e.einrichtungId,
+      csvSafe(e.einrichtungBezeichnung),
+      csvSafe(e.traeger),
+      e.planungsraumId,
+      csvSafe(e.planungsraumBezeichnung),
+      e.status,
+      csvSafe(statusMeta(e.status).label),
+      e.meldefrist,
+      csvSafe(e.meldefristLabel),
+      e.freigegebenAm ?? '',
+      e.freigabeId ?? '',
+      csvSafe(e.freigegebenDurchRolle ?? ''),
+      isSession ? 'ja' : 'nein',
+      csvSafe((e.hinweise ?? []).join(' | ')),
+    ].join(';');
+  });
+
+  const kennHeader = [
+    'Meldung_ID',
+    'Einrichtung_ID',
+    'Einrichtung',
+    'Planungsraum',
+    'Genehmigte_Plaetze',
+    'Belegte_Plaetze',
+    'Freie_Plaetze',
+    'Warteliste',
+    'Auslastung_Prozent',
+    'Anwesenheitsquote_Prozent',
+    'Personalausfall_Prozent',
+    'Tage_Personalschluessel_unterschritten',
+    'Freigegeben_am',
+    'Freigabe_ID',
+    'Session_Eingang',
+  ].join(';');
+
+  const kennRows = freigegeben
+    .filter(e => e.kennzahlen)
+    .map(e => {
+      const k = e.kennzahlen!;
+      const isSession =
+        sessionNeu &&
+        session &&
+        e.freigabeId === session.freigabeId;
+      return [
+        e.meldungId,
+        e.einrichtungId,
+        csvSafe(e.einrichtungBezeichnung),
+        csvSafe(e.planungsraumBezeichnung),
+        k.genehmigtePlaetze,
+        k.belegtePlaetze,
+        k.freiePlaetze,
+        k.wartelisteBestand,
+        csvNum(k.auslastungsgradProzent, 1),
+        csvNum(k.anwesenheitsquoteProzent, 1),
+        csvNum(k.personalAusfallquoteProzent, 1),
+        k.tagePersonalschluesselUnterschritten,
+        e.freigegebenAm ?? '',
+        e.freigabeId ?? '',
+        isSession ? 'ja' : 'nein',
+      ].join(';');
+    });
+
+  const lueckenHeader = [
+    'Meldung_ID',
+    'Einrichtung_ID',
+    'Einrichtung',
+    'Planungsraum',
+    'Status',
+    'Status_Label',
+    'Meldefrist',
+    'Meldefrist_Label',
+  ].join(';');
+
+  const lueckenRows = luecken.map(e =>
+    [
+      e.meldungId,
+      e.einrichtungId,
+      csvSafe(e.einrichtungBezeichnung),
+      csvSafe(e.planungsraumBezeichnung),
+      e.status,
+      csvSafe(statusMeta(e.status).label),
+      e.meldefrist,
+      csvSafe(e.meldefristLabel),
+    ].join(';')
+  );
+
+  const parts: string[] = [
+    ...meta,
+    '',
+    '# Blatt 1: Meldeeingang-Status je Einrichtung (Demo-Stichprobe, Session-sensitiv)',
+    statusHeader,
+    ...statusRows,
+    '',
+    '# Blatt 2: Aggregate freigegebener Meldungen (nur FREIGEGEBEN, DEC-004)',
+  ];
+
+  if (kennRows.length > 0) {
+    parts.push(kennHeader, ...kennRows);
+  } else {
+    parts.push('# (keine freigegebenen Aggregate im aktuellen Session-Stand)');
+  }
+
+  parts.push(
+    '',
+    '# Blatt 3: Lückenliste (unfreigegeben – Kennzahlen fließen nicht in Aggregation ein)'
+  );
+  if (lueckenRows.length > 0) {
+    parts.push(lueckenHeader, ...lueckenRows);
+  } else {
+    parts.push('# (keine offenen Meldungen in der Stichprobe)');
+  }
+
+  const csv = parts.join('\n');
+  const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  const lueckeSuffix = luecken.length > 0 ? '-mit-luecken' : '-vollstaendig';
+  const sessionSuffix = sessionNeu ? '-session' : '';
+  a.download = `meldeeingang-${monatsIso}${lueckeSuffix}${sessionSuffix}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
 }
 
 function readSessionFreigabe(): MeldeeingangSessionFreigabe | null {
@@ -172,24 +408,63 @@ export function KitaMeldeeingangPanel() {
       aria-labelledby="meldeeingang-titel"
       style={{ display: 'flex', flexDirection: 'column', gap: '1rem', scrollMarginTop: '1.25rem' }}
     >
-      <div>
-        <h2 id="meldeeingang-titel" style={{ marginBottom: '0.35rem' }}>
-          Meldeeingang &amp; Datenbasis
-        </h2>
-        <p style={{ fontSize: '0.875rem', color: 'var(--color-text-muted)', margin: 0, maxWidth: '46rem' }}>
-          {base.standLabel} · Berichtsmonat {base.monatsLabel} · Demo-Stichtag {base.fiktivesHeute}
-        </p>
-        <p
-          className="no-print"
-          style={{
-            fontSize: '0.8rem',
-            color: 'var(--color-text-muted)',
-            margin: '0.35rem 0 0',
-            maxWidth: '46rem',
-          }}
-        >
-          Im Ausdruck: print-only Status, Datenbasis und Session-Freigabe (DEC-004).
-        </p>
+      <div
+        style={{
+          display: 'flex',
+          flexWrap: 'wrap',
+          gap: '1rem',
+          alignItems: 'flex-start',
+          justifyContent: 'space-between',
+        }}
+      >
+        <div style={{ flex: '1 1 16rem', maxWidth: '46rem' }}>
+          <h2 id="meldeeingang-titel" style={{ marginBottom: '0.35rem' }}>
+            Meldeeingang &amp; Datenbasis
+          </h2>
+          <p style={{ fontSize: '0.875rem', color: 'var(--color-text-muted)', margin: 0 }}>
+            {base.standLabel} · Berichtsmonat {base.monatsLabel} · Demo-Stichtag {base.fiktivesHeute}
+          </p>
+          <p
+            className="no-print"
+            style={{
+              fontSize: '0.8rem',
+              color: 'var(--color-text-muted)',
+              margin: '0.35rem 0 0',
+              lineHeight: 1.5,
+            }}
+          >
+            Im Ausdruck: print-only Status, Datenbasis und Session-Freigabe (DEC-004). CSV:
+            Session-Stand freigabeunabhängig (Status, freigegebene Aggregate, Lückenliste;
+            Semikolon, UTF-8 BOM). Unfreigegebene ohne Kennzahlen.
+          </p>
+        </div>
+        <div className="no-print" style={{ flexShrink: 0 }}>
+          <button
+            type="button"
+            className="btn btn-secondary"
+            style={{ fontSize: '0.875rem' }}
+            onClick={() =>
+              downloadCsv({
+                monatsIso: base.monatsIso,
+                monatsLabel: base.monatsLabel,
+                fiktivesHeute: base.fiktivesHeute,
+                standLabel: base.standLabel,
+                methodikKurz: base.methodikKurz,
+                eintraege,
+                freigegeben,
+                luecken,
+                ueberfaellig,
+                ausstehend,
+                session,
+                sessionNeu,
+                hydrated,
+              })
+            }
+            aria-label="Meldeeingang-Aggregate als CSV herunterladen (keine Kind- oder Personennamen)"
+          >
+            CSV exportieren
+          </button>
+        </div>
       </div>
 
       {/* print-only: Status / Datenbasis / Session-Freigabe (immer) */}
@@ -398,11 +673,13 @@ export function KitaMeldeeingangPanel() {
           <Link href="/kita/monatsbericht" style={{ color: 'var(--color-primary)' }}>
             Monatsbericht-Vorschau (US-KJ-003)
           </Link>
-          .
+          . CSV: Statusblatt, freigegebene Aggregate und Lückenliste des aktuellen Session-Stands
+          (DEC-004).
         </span>
         <span className="print-only">
           Quelle Freigabe: Monatsmeldung (US-KJ-004). Laufende Betriebsdaten: Monatsbericht-Vorschau
-          (US-KJ-003). Druckdokumentation: Status, Datenbasis und Session-Freigabe oben.
+          (US-KJ-003). Druckdokumentation: Status, Datenbasis und Session-Freigabe oben. CSV
+          exportiert denselben Session-Stand (Status/Aggregate/Lücken).
         </span>
       </p>
     </section>

@@ -472,7 +472,8 @@ export function KitaLagebildDruck() {
             }}
           >
             Druck: Meldeeingang print-only Status/Datenbasis/Session-Freigabe (Stichprobe,
-            Lücken, Freigabe-ID); Monatsbericht-Vorschau print-only Status/Quellen. Filter-Chips
+            Lücken, Freigabe-ID); Meldeeingang-CSV an der Sektion (Status/Aggregate/Lücken,
+            Session-sensitiv). Monatsbericht-Vorschau print-only Status/Quellen. Filter-Chips
             no-print. Engpass, Handlungsfelder und Detailkarten: immer print-only Filterstand inkl.
             Meldebasis-Session. Zeitreihe und Regionenvergleich A/B mit eigenem print-only
             Filterstand und Komponenten-CSV. Gesamt-CSV: Aggregate mit Lagebild-Status,
