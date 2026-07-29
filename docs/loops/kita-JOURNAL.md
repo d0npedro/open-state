@@ -2,6 +2,32 @@
 
 Branch: `loop/kita` · Worktree: `D:\Projects\open-state-loop-kita`
 
+## Iteration 2026-07-29 – US-KJ-004/005 Meldeeingang Druck-Meta Status/Datenbasis/Session
+
+### Was
+Steuerungslagebild Meldeeingang (`KitaMeldeeingangPanel`, US-KJ-004→005 auf `/kita/lagebild`): Druck-Meta an Engpass/Explorer/Zeitreihe angeglichen. print-only immer: Berichtsmonat, Datenvollständigkeit bzw. Lückenliste (Einrichtung + Planungsraum + Status), Session-Freigabe (ID/Rolle/Zeitstempel oder Ausgangsstand), Zähler freigegeben/überfällig/ausstehend. Aktionslinks no-print; Methodik mit print-only Hinweis. Monatsbericht-Vorschau (`KitaMeldeeingangMonatsberichtVorschau`): print-only Status VORSCHAU, Tagesstand-Quellen (freigegeben/fehlt/in Erfassung), Meldeeingang-Abschlussstatus; Links no-print. Export-Hinweis in `KitaLagebildDruck`, Badge/Methodik/Footer auf `/kita/lagebild`. Keine Interpolation. Nur Aggregate, keine Kind- oder Personennamen. Merge `origin/main` (ci-watcher) vor dem Feature.
+
+### Dateien
+- `demo/components/kita/KitaMeldeeingangPanel.tsx` (print-only Status/Datenbasis/Session)
+- `demo/components/kita/KitaMeldeeingangMonatsberichtVorschau.tsx` (print-only Vorschau-Meta)
+- `demo/components/kita/KitaLagebildDruck.tsx` (Export-Hinweis Meldeeingang Druck-Meta)
+- `demo/app/kita/lagebild/page.tsx` (Badge, Methodik, Footer)
+- `docs/loops/kita-JOURNAL.md` (dieses Journal)
+
+### Story
+US-KJ-004 / US-KJ-005 – Meldeeingang Druck-Meta Status, Datenbasis und Session-Freigabe
+
+### Build
+`npm run lint` + `npm run build` im `demo/`-Verzeichnis (siehe Commit dieses Laufs)
+
+### Nicht angefasst (Supervisor / verboten)
+Queue, BUILD_STATE, storyRegistry, DECISION_LOG, andere Domänen, package.json, CI, push
+
+### Nächster sinnvoller Schritt (Hinweis Supervisor)
+Bedarfsplanung Feinschliff falls Lücken, oder Lagebild-CSV um optionalen Regionenvergleich-Hinweis schärfen, oder Meldeeingang-CSV Aggregate falls fachlich gewünscht.
+
+---
+
 ## Iteration 2026-07-29 – US-KJ-005/010 Lagebild Regionenvergleich (Spiegel öffentlicher Bericht)
 
 ### Was

@@ -6,7 +6,9 @@
  * Im Steuerungslagebild: neben dem Eingang freigegebener Monatsmeldungen
  * den laufenden Monatsbericht (Status VORSCHAU) mit gemischten Tagesstand-Quellen
  * der Demo-Einrichtung Kita Sonnenwinkel ausweisen.
- * Nur Aggregate – keine Kind- oder Personennamen.
+ *
+ * Druck: print-only Status/Datenbasis (VORSCHAU, Tagesstand-Quellen, Meldeeingang-
+ * Abschlussstatus); Aktionslinks no-print. Nur Aggregate – keine Kind- oder Personennamen.
  */
 
 import Link from 'next/link';
@@ -184,7 +186,34 @@ export function KitaMeldeeingangMonatsberichtVorschau({
         </div>
       )}
 
+      {/* print-only: Vorschau-Status und Datenbasis (Spiegel Monatsbericht-Druck) */}
       <div
+        className="print-only print-block"
+        style={{
+          marginBottom: '0.75rem',
+          padding: '0.65rem 0.9rem',
+          border: '1px solid var(--color-border)',
+          borderRadius: 'var(--radius)',
+          fontSize: '0.8rem',
+          background: 'var(--color-neutral-light)',
+          lineHeight: 1.5,
+        }}
+        role="note"
+      >
+        <strong>Druck Monatsbericht-Vorschau (US-KJ-003 ↔ US-KJ-005): </strong>
+        Status VORSCHAU · {v.einrichtungBezeichnung} · Planungsraum {v.planungsraumBezeichnung} ·{' '}
+        {v.monatsLabel} · ID <span style={{ fontFamily: 'monospace' }}>{v.id}</span>. Datenbasis
+        Tagesstände: freigegeben {freigegeben}, fehlt {fehlt}, in Erfassung {inErfassung} ·
+        Betriebstage {v.betriebstageImMonat}. Meldeeingang Abschlussmonat:{' '}
+        {melde ? melde.label : 'kein Eintrag'}
+        {meldeLuecke
+          ? ' – Vorschau ersetzt fehlende Monatsmeldung nicht'
+          : ' – parallel zur Abschlussmeldung, unterschiedliche Perioden'}
+        . Keine Interpolation. Nur Aggregate, keine Kind- oder Personennamen (DEC-004).
+      </div>
+
+      <div
+        className="no-print"
         style={{
           display: 'flex',
           flexWrap: 'wrap',
@@ -218,6 +247,10 @@ export function KitaMeldeeingangMonatsberichtVorschau({
         = Zwischenstand aus freigegebenen Tagesständen der Einrichtung. FEHLT und IN_ERFASSUNG
         bleiben Lücken bzw. Entwürfe – keine Schätzwerte. Nur Aggregate, keine Kind- oder
         Personennamen.
+        <span className="print-only">
+          {' '}
+          Druckdokumentation: Status VORSCHAU und Tagesstand-Quellen oben.
+        </span>
       </p>
     </div>
   );

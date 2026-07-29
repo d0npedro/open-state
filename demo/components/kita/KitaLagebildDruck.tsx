@@ -471,13 +471,13 @@ export function KitaLagebildDruck() {
               lineHeight: 1.5,
             }}
           >
-            Druck: Filter-Chips no-print. Engpass, Handlungsfelder und Detailkarten: immer
-            print-only Filterstand inkl. Meldebasis-Session (Schnellfilter, Stichprobenmonat).
-            Zeitreihe und Regionenvergleich A/B im UI mit eigenem print-only Filterstand und
-            Komponenten-CSV (Spiegel öffentlicher Bericht). Gesamt-CSV: Aggregate mit
-            Lagebild-Status, Meldebasis-Session, Zeitreihe (12 Monate Gesamt + Planungsräume) und
-            optionalem Export-Filter „Meldelücke“ (Semikolon, UTF-8 BOM). Nur Aggregate, keine
-            Kind- oder Personennamen (DEC-004).
+            Druck: Meldeeingang print-only Status/Datenbasis/Session-Freigabe (Stichprobe,
+            Lücken, Freigabe-ID); Monatsbericht-Vorschau print-only Status/Quellen. Filter-Chips
+            no-print. Engpass, Handlungsfelder und Detailkarten: immer print-only Filterstand inkl.
+            Meldebasis-Session. Zeitreihe und Regionenvergleich A/B mit eigenem print-only
+            Filterstand und Komponenten-CSV. Gesamt-CSV: Aggregate mit Lagebild-Status,
+            Meldebasis-Session, Zeitreihe und optionalem Export-Filter „Meldelücke“ (Semikolon,
+            UTF-8 BOM). Nur Aggregate, keine Kind- oder Personennamen (DEC-004).
           </p>
           <div
             style={{
