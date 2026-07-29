@@ -196,6 +196,11 @@ test.describe('UG – Übersicht', () => {
     await expect(bgCta).toBeVisible();
     await expect(bgCta).toHaveAttribute('href', '/gruendung/behoerden#beh-BEH-04');
     await expect(bgCta).toContainText(/Zur Behördenkarte/i);
+    // Hilfstext bei offener RQ: zuerst Finanzamt-Rückfrage klären
+    const bgHint = page.getByTestId('uebersicht-fairness-cta-hint-beh-BEH-04');
+    await expect(bgHint).toBeVisible();
+    await expect(bgHint).toContainText(/offene Rückfrage des Finanzamts klären/i);
+    await expect(bgHint).toContainText(/BG-Anmeldung|außerhalb von Open State/i);
 
     const steuernummerCta = page.getByTestId('uebersicht-fairness-cta-steuernummer-BEH-02');
     await expect(steuernummerCta).toBeVisible();
@@ -284,6 +289,11 @@ test.describe('UG – Übersicht', () => {
     await expect(betriebsHint).toContainText(/Rückfrage beantwortet/i);
     await expect(betriebsHint).toContainText(/Steuernummer-Vergabe|offene Punkte/i);
     await expect(betriebsHint).not.toContainText(/offene Rückfrage des Finanzamts klären/i);
+    // BG-CTA-Hilfstext nach RQ-Antwort: kein RQ-Vorrang, Fokus BG-Anmeldung
+    const bgHint = page.getByTestId('uebersicht-fairness-cta-hint-beh-BEH-04');
+    await expect(bgHint).toBeVisible();
+    await expect(bgHint).toContainText(/Keine offene Rückfrage mehr|BG-Anmeldung/i);
+    await expect(bgHint).not.toContainText(/offene Rückfrage des Finanzamts klären/i);
   });
 
   test('INFO-Signal parallele Behörden erscheint auf Hinweise-Seite', async ({ page }) => {
@@ -713,6 +723,11 @@ test.describe('UG – Hinweise zur Verfahrenslage', () => {
     await expect(cta).toBeVisible();
     await expect(cta).toContainText(/Zur Behördenkarte/i);
     await expect(cta).toHaveAttribute('href', '/gruendung/behoerden#beh-BEH-04');
+    // Hilfstext bei offener RQ: zuerst Finanzamt-Rückfrage klären
+    const hint = page.getByTestId('hinweise-bg-cta-hint-BEH-04');
+    await expect(hint).toBeVisible();
+    await expect(hint).toContainText(/offene Rückfrage des Finanzamts klären/i);
+    await expect(hint).toContainText(/BG-Anmeldung|außerhalb von Open State/i);
   });
 
   test('CTA aus BG-Signal führt zur Berufsgenossenschaft-Karte', async ({ page }) => {
@@ -720,6 +735,22 @@ test.describe('UG – Hinweise zur Verfahrenslage', () => {
     await expect(page).toHaveURL(/\/gruendung\/behoerden#beh-BEH-04/);
     await expect(page.locator('#beh-BEH-04')).toBeVisible();
     await expect(page.getByTestId('behoerde-karte-BEH-04')).toContainText(/Berufsgenossenschaft|BG ETEM/i);
+  });
+
+  test('Nach Antwort: BG-CTA-Hilfstext ohne RQ-Priorität', async ({ page }) => {
+    // Session-State: NIE page.goto nach Antwort (DEC-012)
+    const { goUgTab } = await import('./helpers/sessionNav');
+    await goUgTab(page, 'Fragen', /\/gruendung\/rueckfragen/);
+    await page.getByRole('button', { name: /Rückfrage beantworten/i }).click();
+    await expect(page.getByText(/die Behörde wurde informiert|beantwortet/i).first()).toBeVisible();
+    await goUgTab(page, 'Hinweise', /\/gruendung\/hinweise/);
+
+    // CTA bleibt (BG noch NICHT_GESTARTET); Hilfstext session-sensitiv
+    await expect(page.getByTestId('hinweise-bg-cta-BEH-04')).toBeVisible();
+    const hint = page.getByTestId('hinweise-bg-cta-hint-BEH-04');
+    await expect(hint).toBeVisible();
+    await expect(hint).toContainText(/Keine offene Rückfrage mehr|BG-Anmeldung/i);
+    await expect(hint).not.toContainText(/offene Rückfrage des Finanzamts klären/i);
   });
 
   test('HINWEIS-Unterlagen-Signal hat CTA „Zu den Unterlagen“ mit Anker', async ({ page }) => {
