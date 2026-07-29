@@ -2,6 +2,54 @@
 
 Branch: `loop/kita` · Worktree: `D:\Projects\open-state-loop-kita`
 
+## Iteration 2026-07-29 – US-KJ-010 Regionenvergleich Verlauf CSV-Export (AK 4)
+
+### Was
+Regionenvergleich: CSV-Export des aktiven 12-Monats-Verlaufs A vs. B (`KitaRegionenVergleich` / `VerlaufAvsB`, US-KJ-010 AK 4). Button „CSV herunterladen (Verlauf)“ lädt genau die aktive Kennzahl und Raumauswahl (Monate · Wert A/B · Δ · Meldebasis · Berichtsmonat-Flag). Stichtags-CSV umbenannt zu „CSV herunterladen (Stichtag)“ zur Unterscheidung. Semikolon, UTF-8 BOM, Dezimal-Komma; Meta-Kommentarkopf. Keine Kind- oder Personennamen, keine Trendbewertung, keine Interpolation.
+
+### Dateien
+- `demo/components/kita/KitaRegionenVergleich.tsx` (Verlauf-CSV, Methodik, Button-Labels)
+- `demo/app/kita/page.tsx` (Badge + Datenlage-Hinweis Verlauf-CSV)
+- `docs/loops/kita-JOURNAL.md` (dieses Journal)
+
+### Story
+US-KJ-010 – Zeitreihen und Regionenvergleich (AK 4: Export aktiver Verlaufsdaten)
+
+### Build
+`npm run lint` + `npm run build` im `demo/`-Verzeichnis (siehe Commit dieses Laufs)
+
+### Nicht angefasst (Supervisor / verboten)
+Queue, BUILD_STATE, storyRegistry, andere Domänen, package.json, CI, push
+
+### Nächster sinnvoller Schritt (Hinweis Supervisor)
+Druckansicht Lagebild/Vorlage Engpass-Filter dokumentieren, oder optional Open-Data-Lizenzhinweis am CSV-Export (US-KJ-010 offene Frage).
+
+---
+
+## Iteration 2026-07-29 – US-KJ-010 Regionenvergleich Zeitverlauf A vs. B
+
+### Was
+Regionenvergleich um 12-Monats-Verlauf der aktiven Auswahl A/B erweitert (`KitaRegionenVergleich`, US-KJ-010). Kennzahl-Chips (Warteliste, Auslastung, freie Plätze, Personalausfall); Tabelle Monat · Wert A · Wert B · Δ (A − B) · Meldebasis. Berichtsmonat Oktober 2024 mit Meldelücke-Hinweis (Session-sensitiv). Raumreihen aus `zeitreihePlanungsraeume`. Keine Interpolation, keine Trendbewertung, keine Kind- oder Personennamen.
+
+### Dateien
+- `demo/components/kita/KitaRegionenVergleich.tsx` (Verlauf A vs. B, Kennzahl-Chips, Meldebasis-Monat)
+- `demo/app/kita/page.tsx` (Props zeitreihePlanungsraeume, Badge + Datenlage-Hinweis)
+- `docs/loops/kita-JOURNAL.md` (dieses Journal)
+
+### Story
+US-KJ-010 – Zeitreihen und Regionenvergleich (Verlauf zweier Räume über Monate)
+
+### Build
+`npm run lint` + `npm run build` im `demo/`-Verzeichnis (siehe Commit dieses Laufs)
+
+### Nicht angefasst (Supervisor / verboten)
+Queue, BUILD_STATE, storyRegistry, andere Domänen, package.json, CI, push
+
+### Nächster sinnvoller Schritt (Hinweis Supervisor)
+Optional CSV-Export des aktiven Verlaufs A/B, oder Druckansicht Lagebild/Vorlage Engpass-Filter dokumentieren.
+
+---
+
 ## Iteration 2026-07-29 – US-KJ-010 Regionenvergleich CSV-Export (AK 4)
 
 ### Was
