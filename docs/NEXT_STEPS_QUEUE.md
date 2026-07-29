@@ -143,7 +143,7 @@ Story-Dokumentation ist kein Pflicht-Vorläufer für Mock-Daten und Typen.
 | Q-103 | Kita Bedarfsplanung: Residual ↔ Meldelücke Hinweis-only (Südost) | DEMO | S | Q-094 | DONE |
 | Q-108 | Kita Lagebild/Planungsraum: Residual↔Meldelücke-Hinweis spiegeln (wie Bedarfsplanung) | DEMO | S | Q-103 | DONE `007975c` |
 | Q-109 | Kita Vorlage: Meldebasis-Kurzhinweis aus Meldeeingang (methodisch, Aggregate only) | DEMO | S | Q-094 | DONE `5ec2ed8` |
-| Q-110 | Kita Planungsraum-Explorer: Filter-Chip „Engpass“ um Meldelücke ergänzen | DEMO | S | Q-108 | OFFEN |
+| Q-110 | Kita Planungsraum-Explorer: Filter-Chip „Engpass“ um Meldelücke ergänzen | DEMO | S | Q-108 | DONE `8868849` |
 
 ---
 
@@ -255,3 +255,4 @@ Diese Punkte wurden in früheren Iterationen abgeschlossen und sind produktionsr
 | Q-103 Kita Residual↔Melde | Bedarfsplanung Hinweis-only | `40ccc42` → main |
 | Q-108 Kita Residual-Explorer | Planungsraum Residual↔Meldelücke | `007975c` → main |
 | Q-109 Kita Vorlage Meldebasis | Residual/Meldebasis auf `/kita/vorlage` | `5ec2ed8` → main |
+| Q-110 Kita Engpass/Meldelücke-Filter | Planungsraum-Explorer Schnellfilter | `8868849` → main |
