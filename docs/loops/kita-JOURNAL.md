@@ -2,6 +2,29 @@
 
 Branch: `loop/kita` · Worktree: `D:\Projects\open-state-loop-kita`
 
+## Iteration 2026-07-29 – US-KJ-003 Monatsbericht-Druck Status/Datenbasis
+
+### Was
+Monatsbericht (`/kita/monatsbericht`, US-KJ-003): Druckansicht mit Druckleiste analog Lagebild/Bedarfsplanung/Vorlage. Print-only: Demo-Modus (Abschluss / Vorschau), Berichtsstatus (vollständig / lückenhaft / Vorschau), Datenbasis-Stand der Tagesstand-Quellen (freigegeben / fehlt / in Erfassung, fehlende Tage, Schlüssel-Tage). Methodik-Punkt und Footer-Hinweis zur Druckdokumentation; Print-CSS mit print-only. Demo-Umschalter, Prozess-Hub und Aktionen no-print. Nur Aggregate, keine Kind- oder Personennamen. Merge `origin/main` (ci-watcher docs) vor dem Feature.
+
+### Dateien
+- `demo/app/kita/monatsbericht/page.tsx` (Druckleiste, print-only Status/Datenbasis, Print-CSS, Methodik)
+- `docs/loops/kita-JOURNAL.md` (dieses Journal)
+
+### Story
+US-KJ-003 – Monatsbericht abrufen (Druck Status + Datenbasis dokumentiert)
+
+### Build
+`npm run lint` + `npm run build` im `demo/`-Verzeichnis (siehe Commit dieses Laufs)
+
+### Nicht angefasst (Supervisor / verboten)
+Queue, BUILD_STATE, storyRegistry, DECISION_LOG, andere Domänen, package.json, CI, push
+
+### Nächster sinnvoller Schritt (Hinweis Supervisor)
+Öffentlicher Bericht Hub zur Steuerungskette, oder Meldung-Druckansicht freigabeunabhängig spiegeln.
+
+---
+
 ## Iteration 2026-07-29 – US-KJ-005/007/008 Steuerungskette Rücklink-Hub Bedarfsplanung
 
 ### Was
