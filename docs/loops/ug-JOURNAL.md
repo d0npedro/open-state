@@ -8,6 +8,30 @@ Erlaubte Pfade nur: `demo/app/gruendung/**`, `demo/context/GruendungStateContext
 
 ---
 
+## 2026-07-29 – Iteration 12: Übersicht Fairness nur RELEVANT+HINWEIS
+
+### Was
+Übersicht-Fairness-Kurzblock filtert Signale auf Priorität RELEVANT und
+HINWEIS. INFO (z. B. parallele Behörden) erscheint nur noch auf
+`/gruendung/hinweise`. Linktext nennt die Anzahl weiterer Hinweise.
+E2E: Prioritäts-Filter, INFO-Abwesenheit auf Übersicht, INFO-Präsenz auf Hinweise.
+
+### Dateien
+- `demo/app/gruendung/page.tsx` – Filter, data-prioritaet, Linktext
+- `demo/e2e/us-ug-gruendung.spec.ts` – zwei Filter-/INFO-Tests
+- `docs/loops/ug-JOURNAL.md` – dieses Journal
+
+### Build
+`npm run lint` + `npm run build` im Ordner `demo/` grün.
+`npm run test:e2e:ug` Exit 0.
+
+### Nächster sinnvoller UG-Schritt (Vorschlag)
+- Übersicht: `naechsterSchritt` / offene Aufgaben mit Link zur betroffenen Stelle
+- Hinweise: CTA für parallele-Behörden-INFO zu `/gruendung/behoerden`
+- Übersicht: Fairness-Einträge mit Kurz-CTA (Rückfrage / Unterlagen / BG)
+
+---
+
 ## 2026-07-29 – Iteration 11: Hinweise-CTA für Betriebsdatum → Verfahrensstatus
 
 ### Was

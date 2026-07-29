@@ -30,7 +30,12 @@ export default function GruendungPage() {
   const isRueckfrage = akte.status === 'RUECKFRAGE_AUSSTEHEND';
   const offeneRueckfragen = akte.rueckfragen.filter(r => !r.beantwortet).length;
   const ausstehendeDoks = akte.dokumente.filter(d => d.status === 'ANGEFORDERT').length;
-  const fairnessSignale = berechneFairnessSignaleGruendung(akte);
+  const alleFairnessSignale = berechneFairnessSignaleGruendung(akte);
+  // Übersicht: nur handlungsrelevante Stufen — INFO bleibt auf /gruendung/hinweise
+  const fairnessSignale = alleFairnessSignale.filter(
+    s => s.prioritaet === 'RELEVANT' || s.prioritaet === 'HINWEIS'
+  );
+  const weitereInfoCount = alleFairnessSignale.filter(s => s.prioritaet === 'INFO').length;
 
   const flowKey = isRueckfrage ? 'IN_BEARBEITUNG' : akte.status;
   const currentIndex = statusFlow.findIndex(s => s.key === flowKey);
@@ -213,21 +218,28 @@ export default function GruendungPage() {
         </Link>
       </div>
 
-      {/* ─── Fairness-Kurzblock (parität AV-Übersicht) ─────────────── */}
+      {/* ─── Fairness-Kurzblock (nur RELEVANT + HINWEIS; INFO → Hinweise) ─ */}
       {fairnessSignale.length > 0 && (
         <div className="card" data-testid="uebersicht-fairness-kurzblock">
           <h2 style={{ fontSize: '1rem', marginBottom: '0.35rem' }}>
             Hinweise zu Ihrem Verfahren
           </h2>
           <p style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', margin: '0 0 1rem' }}>
-            Regelbasierte Orientierung aus dem Aktenzustand — keine Entscheidung der Behörden.
+            Handlungsrelevante Hinweise aus dem Aktenzustand — keine Entscheidung der Behörden.
+            {weitereInfoCount > 0 && (
+              <> Zusätzliche Hintergrund-Hinweise finden Sie unter „Alle Details“.</>
+            )}
           </p>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+          <div
+            style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}
+            data-testid="uebersicht-fairness-liste"
+          >
             {fairnessSignale.map(sig => (
               <div
                 key={sig.id}
                 data-testid={`uebersicht-fairness-${sig.id}`}
-                className={`notice-box ${sig.prioritaet === 'RELEVANT' ? 'notice-box-warn' : sig.prioritaet === 'HINWEIS' ? 'notice-box-info' : 'notice-box-neutral'}`}
+                data-prioritaet={sig.prioritaet}
+                className={`notice-box ${sig.prioritaet === 'RELEVANT' ? 'notice-box-warn' : 'notice-box-info'}`}
               >
                 <Icon name="info" size={16} style={{ flexShrink: 0, marginTop: '2px' }} />
                 <div>
@@ -247,7 +259,10 @@ export default function GruendungPage() {
             data-testid="uebersicht-fairness-hinweise-link"
             style={{ display: 'inline-flex', alignItems: 'center', gap: '0.375rem', marginTop: '0.875rem', fontSize: '0.875rem', color: 'var(--color-primary)' }}
           >
-            Alle Details ansehen <Icon name="arrow-right" size={14} />
+            {weitereInfoCount > 0
+              ? `Alle Details ansehen (${weitereInfoCount} weitere Hinweis${weitereInfoCount === 1 ? '' : 'e'})`
+              : 'Alle Details ansehen'}{' '}
+            <Icon name="arrow-right" size={14} />
           </Link>
         </div>
       )}
