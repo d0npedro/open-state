@@ -2,14 +2,15 @@
 
 | Feld | Wert |
 |------|------|
-| last_checked | 2026-07-29T07:55:00Z |
-| last_run_id | 30433237714 |
+| last_checked | 2026-07-29T07:57:30Z |
+| last_run_id | 30433411933 |
 | last_status | success |
-| last_sha | c86f040 |
+| last_sha | 78eee25 |
 | fix_attempts | 0 |
 
 ## Log
 
+- E2E `30433411933` **success** (SHA 78eee25 / c86f040 docs ci-watcher HEAD). E2E `30433328901` **success** (SHA 2c2f4ba / db76913). E2E `30433237714` **success** (SHA c86f040). Build latest `30433052345` **success** (SHA 1f03ff4 supervisor Q-141–Q-147 AV/UG/Kita — latest code path; HEAD docs-only path-skip). Catch-up: origin/main..main = 0. No fix. fix_attempts=0.
 - E2E `30433237714` **success** (SHA c86f040 docs ci-watcher HEAD). E2E `30433118264` **success** (SHA db76913). E2E `30433052352` + Build `30433052345` **success** (SHA 1f03ff4 supervisor Q-141–Q-147 AV/UG/Kita — latest code path). Prior E2E `30432844365` + Build `30432844364` **success** (SHA 2296820 Merge loop/kita). This tick: catch-up origin/main..main was 8 then 4 (Kita Steuerungskette/Monatsbericht-Druck + AV UNTERLAGE-Frist + UG parallele Behörden + merges) → lint+build grün (`NEXT_DIST_DIR=.next-ci-watcher`) + local `test:e2e:ci` **239 passed** → concurrent supervisor/ci-watcher pushed first → origin/main..main = 0. No fix. fix_attempts=0.
 - E2E `30433118264` **success** (SHA db76913 docs ci-watcher HEAD). E2E `30433052352` + Build `30433052345` **success** (SHA 1f03ff4 supervisor Q-141–Q-147 AV/UG/Kita — latest code path). Prior E2E `30432844365` + Build `30432844364` **success** (SHA 2296820 Merge loop/kita). Catch-up: origin/main..main = 0. HEAD docs `c86f040` E2E `30433237714` may still be in_progress (docs-only). No fix. fix_attempts=0.
 - E2E `30432844365` + Build `30432844364` **success** (SHA 2296820 Merge loop/kita). Catch-up this tick: origin/main..main was 8 → lint+build grün → push `513f487..2296820` → origin/main..main = 0. Concurrent local later ahead (AV Fairness UNTERLAGE + UG parallele Behörden + merges) → second catch-up after state update. No fix. fix_attempts=0.
