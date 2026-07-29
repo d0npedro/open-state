@@ -1,6 +1,6 @@
 # BUILD_STATE.md – Aktueller Projektstand
 
-Zuletzt aktualisiert: nach Supervisor-Pflicht-Push 2026-07-29 (Merge UG Q-107 Deep-Links + Kita Q-112; lint+build+E2E chromium Port 3010; Queue Q-106/Q-107 DONE)
+Zuletzt aktualisiert: nach Supervisor-Pflicht-Push 2026-07-29 (Merge UG Q-113 parallele-Behörden-CTA + Kita Q-114 Vorlage Engpass-Meldelücke-Filter; lint+build+E2E 216 chromium; Queue Q-113/Q-114 DONE)
 
 Dieser Stand beschreibt, was tatsächlich existiert und funktioniert.
 Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
@@ -15,7 +15,7 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | Build-Status | ✓ Erfolgreich (27 statische Seiten) |
 | Deployment | Vercel, aus `demo/`-Verzeichnis |
 | Lokaler Start | `cd demo && npm install && npm run dev` |
-| Letzte Build-Prüfung | lint+build grün; `test:e2e:ci` 210+ chromium Port 3010 (Supervisor-Pflichtlauf) |
+| Letzte Build-Prüfung | lint+build grün; `test:e2e:ci` 216 chromium Port 3010 (Supervisor-Pflichtlauf) |
 
 ---
 
@@ -33,11 +33,11 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | `/fall/hinweise` | Vollständige Fairness-Hinweisseite | US-AV-008 | ✓ |
 | `/stories` | Story Coverage Dashboard | – | ✓ |
 | `/feedback` | Feedback → GitHub Issues | – | ✓ |
-| `/gruendung` … | Unternehmensgründung (Übersicht Fairness-Kurzblock, Hinweise-CTAs RQ/BG/Unterlagen/Steuernummer, Verlauf Stelle+Ereignistyp-Filter, …) | US-UG-001–006 | ✓ |
+| `/gruendung` … | Unternehmensgründung (Übersicht Fairness-Kurzblock, Hinweise-CTAs RQ/BG/Unterlagen/Steuernummer/Betriebsdatum/parallele Behörden, Verlauf Stelle+Ereignistyp-Filter, …) | US-UG-001–006 | ✓ |
 | `/kita` | Öffentlicher Transparenzbericht + Planungsraum-Filter + Residual↔Meldelücke + Engpass/Meldelücke-Schnellfilter | US-KJ-009, US-KJ-010 | ✓ |
 | `/kita/lagebild` | Jugendamt-Steuerungsansicht + Meldeeingang + Meldebeitrag + Engpass-Rangliste Meldebasis + Monatsbericht-Vorschau-Kopplung | US-KJ-005, US-KJ-006 | ✓ |
 | `/kita/bedarfsplanung` | Bedarfsplanungsentwurf (§ 80 SGB VIII) + Meldebasis + Residual↔Meldelücke (Hinweis-only) | US-KJ-007 | ✓ |
-| `/kita/vorlage` | Politische Gremienvorlage + Freigabe + Meldebasis/Residual↔Meldelücke (Hinweis-only) | US-KJ-008 | ✓ |
+| `/kita/vorlage` | Politische Gremienvorlage + Freigabe + Meldebasis/Residual↔Meldelücke + Engpass-Liste Meldelücke-Filter | US-KJ-008 | ✓ |
 | `/kita/einrichtung` | Belegungsstand Einrichtung (aggregiert) | US-KJ-002 | ✓ |
 | `/kita/tagesstand` | Tagesstand erfassen (Aggregate, Freigabe) | US-KJ-001 | ✓ |
 | `/kita/monatsbericht` | Monatsbericht + Vorschau laufender Monat + Rücklink Lagebild-Anker | US-KJ-003 | ✓ |
@@ -66,6 +66,8 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | UG Verlauf Typ-Filter | `/gruendung/verlauf` | ✓ Stelle + Ereignistyp (Vorgang/Dokumente/Rückfragen/Bescheide), UND-Kombination |
 | UG Hinweise Steuernummer-CTA | `/gruendung/hinweise` | ✓ CTA „Zum Finanzamt“ → `#beh-BEH-02` solange VS-05 ausstehend |
 | UG Hinweise Betriebsdatum-CTA | `/gruendung/hinweise` + Übersicht `#verfahrensstatus` | ✓ CTA „Zum Verfahrensstatus“ aus HINWEIS-Betriebsdatum |
+| UG Hinweise parallele-Behörden-CTA | `/gruendung/hinweise` → `/gruendung/behoerden` | ✓ CTA „Zu den Behörden“ aus INFO parallele Behörden (Q-113) |
+| Kita Vorlage Engpass Meldelücke-Filter | `/kita/vorlage` Engpass-Liste | ✓ Schnellfilter Top-3 vs. Meldelücke, Session-sensitiv (Q-114) |
 
 ---
 
@@ -141,6 +143,8 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 **Q-110 erledigt:** Kita Planungsraum-Explorer Schnellfilter Engpass und Meldelücke (Zähler, Raum-Chips, Tabelle/Maßnahmen, Leerzustand).
 **Q-111 erledigt:** UG Hinweise CTA Betriebsdatum → Verfahrensstatus (`#verfahrensstatus` auf Übersicht).
 **Q-112 erledigt:** Kita Lagebild Engpass-Rangliste Meldebasis-Kurzmarkierung (`KitaEngpassRangliste`, Session-sensitiv, Hinweis-only).
+**Q-113 erledigt:** UG Hinweise CTA parallele Behörden → Behörden-Übersicht (`/gruendung/behoerden`).
+**Q-114 erledigt:** Kita Vorlage Engpass-Liste Schnellfilter Meldelücke (Session-sensitiv, analog Explorer).
 
 ---
 

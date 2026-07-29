@@ -128,6 +128,7 @@ Story-Dokumentation ist kein Pflicht-Vorläufer für Mock-Daten und Typen.
 | Q-106 | UG Übersicht: Fairness-Kurzblock auf RELEVANT+HINWEIS begrenzen (kein INFO-Lärm) | DEMO | S | Q-090 | DONE `4b53be4` |
 | Q-107 | UG Übersicht: nächster Schritt mit direktem Link zur betroffenen Stelle/Seite | DEMO | S | Q-106 | DONE `ba026f5` |
 | Q-111 | UG Hinweise: CTA „Zum Verfahrensstatus“ aus HINWEIS-Betriebsdatum (`#verfahrensstatus`) | DEMO | S | Q-100 | DONE `18e395e` |
+| Q-113 | UG Hinweise: CTA „Zu den Behörden“ aus INFO parallele Behörden (`/gruendung/behoerden`) | DEMO | S | Q-111 | DONE `b603c71` |
 
 ---
 
@@ -146,6 +147,7 @@ Story-Dokumentation ist kein Pflicht-Vorläufer für Mock-Daten und Typen.
 | Q-109 | Kita Vorlage: Meldebasis-Kurzhinweis aus Meldeeingang (methodisch, Aggregate only) | DEMO | S | Q-094 | DONE `5ec2ed8` |
 | Q-110 | Kita Planungsraum-Explorer: Filter-Chip „Engpass“ um Meldelücke ergänzen | DEMO | S | Q-108 | DONE `8868849` |
 | Q-112 | Kita Lagebild Engpass-Rangliste: Meldebasis-Kurzmarkierung je Planungsraum (Session-sensitiv, Hinweis-only) | DEMO | S | Q-108 | DONE `eda28fd` |
+| Q-114 | Kita Vorlage Engpass-Liste: Schnellfilter Meldelücke (Session-sensitiv, analog Planungsraum-Explorer) | DEMO | S | Q-109 | DONE `fe2f684` |
 
 ---
 
@@ -261,3 +263,5 @@ Diese Punkte wurden in früheren Iterationen abgeschlossen und sind produktionsr
 | Q-111 UG Betriebsdatum-CTA | Hinweise → `#verfahrensstatus` | `18e395e` → main |
 | Q-106 UG Fairness-Filter | Kurzblock nur RELEVANT+HINWEIS | `4b53be4` → main |
 | Q-107 UG nächster Schritt Deep-Links | Übersicht Schritt + offene Aufgaben verlinkt | `ba026f5` → main |
+| Q-113 UG parallele-Behörden-CTA | Hinweise INFO → `/gruendung/behoerden` | `b603c71` → main |
+| Q-114 Kita Vorlage Engpass-Filter | Engpass-Liste Meldelücke-Schnellfilter | `fe2f684` → main |
