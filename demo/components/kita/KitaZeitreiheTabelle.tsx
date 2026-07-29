@@ -1,7 +1,8 @@
 'use client';
 
 /**
- * Monatsvergleich / Trenddarstellung für den öffentlichen Kita-Transparenzbericht (US-KJ-010).
+ * Monatsvergleich / Trenddarstellung für den öffentlichen Kita-Transparenzbericht (US-KJ-010)
+ * und das Steuerungslagebild (US-KJ-005 / US-KJ-010, `/kita/lagebild`).
  * Keine Chart-Bibliothek — reine HTML-Tabelle mit CSS-Visualisierungen.
  *
  * Zeigt: Auslastung, freie Plätze, Warteliste + Monatsdelta, Personalausfall.
@@ -11,6 +12,10 @@
  * CSV-Export (US-KJ-010 AK 4): gefilterte Zeitreihe als maschinenlesbarer Download
  * (Semikolon, UTF-8 BOM, Dezimal-Komma) — nur die aktive Filteransicht.
  * Open-Data-Lizenzhinweis im CSV-Metakopf (Demo vorläufig, siehe kitaCsvLizenz).
+ *
+ * Druck (US-KJ-005 / US-KJ-009 / US-KJ-010): Filter-Chips und CSV-Button no-print;
+ * print-only Filterstand/Meta (Region, Meldebasis-Session, Peak, Monate).
+ * Spiegel Planungsraum-Explorer / Engpass-Rangliste.
  *
  * Meldebasis (US-KJ-004 → 010): Der mit dem Meldeeingang übereinstimmende Berichtsmonat
  * (Demo: Oktober 2024) erhält bei unvollständiger Stichprobe eine Datenlücken-Markierung.
@@ -263,11 +268,31 @@ export function KitaZeitreiheTabelle({
     fontWeight: 700,
   };
 
+  const meldebasisDruckText = !hydrated
+    ? 'Meldebasis: Session noch nicht geladen (clientseitig)'
+    : hatGesamtLuecke
+      ? filterId === FILTER_ALL
+        ? `Meldebasis ${meldeMonatsLabel}: Lücke (${freigegebenCount}/${erwartetCount} freigegeben)${
+            lueckenKurz ? ` — ${lueckenKurz}` : ''
+          }`
+        : `Meldebasis ${meldeMonatsLabel} · ${filterLabel}: Lücke (${freigegebenCount}/${erwartetCount} freigegeben)${
+            lueckenKurz ? ` — ${lueckenKurz}` : ''
+          }`
+      : filterId === FILTER_ALL
+        ? `Meldebasis ${meldeMonatsLabel}: Stichprobe vollständig (${freigegebenCount}/${erwartetCount} freigegeben)`
+        : raumBasis
+          ? `Meldebasis ${meldeMonatsLabel} · ${filterLabel}: ohne Lücke (${freigegebenCount}/${erwartetCount} freigegeben)`
+          : `Meldebasis ${meldeMonatsLabel} · ${filterLabel}: keine Stichprobe für diesen Raum`;
+
+  const peakDruckText = peak
+    ? `Peak Warteliste: ${peak.monatLabel} mit ${peak.wartelisteBestand.toLocaleString('de-DE')} Anfragen`
+    : null;
+
   return (
     <div>
-      {/* Regionenfilter US-KJ-010 AK 2 */}
+      {/* Regionenfilter US-KJ-010 AK 2 — interaktiv, no-print */}
       {hasRaumFilter && (
-        <div style={{ marginBottom: '1rem' }}>
+        <div className="no-print" style={{ marginBottom: '1rem' }}>
           <div
             style={{
               fontSize: '0.8rem',
@@ -354,7 +379,31 @@ export function KitaZeitreiheTabelle({
         </div>
       )}
 
-      {/* Trend-Hinweis + CSV-Export (AK 4) */}
+      {/* print-only: Filterstand + Meldebasis-Meta (Lagebild + öffentlicher Bericht) */}
+      <div
+        className="print-only print-block"
+        style={{
+          marginBottom: '0.75rem',
+          padding: '0.65rem 0.9rem',
+          border: '1px solid var(--color-border)',
+          borderRadius: 'var(--radius)',
+          fontSize: '0.8rem',
+          background: 'var(--color-neutral-light)',
+          lineHeight: 1.5,
+        }}
+        role="note"
+      >
+        <strong>Druckfilter Zeitreihe: </strong>
+        {filterId === FILTER_ALL
+          ? `Gesamtkommune (${activeSeries.length} Monate)`
+          : `Planungsraum ${filterLabel} (${activeSeries.length} Monate; Demo-Verteilung nach Strukturanteilen)`}
+        {peakDruckText ? ` · ${peakDruckText}` : ''}.{' '}
+        {meldebasisDruckText}. Kennzahlen unverändert; Regionenfilter ändert nur die sichtbare
+        Serie — keine Interpolation, keine Trendbewertung. Stichprobenmonat:{' '}
+        {meldeMonatsLabel} ({meldeMonatsIso}).
+      </div>
+
+      {/* Trend-Hinweis (screen + print) + CSV-Export no-print (AK 4) */}
       <div style={{
         marginBottom: '1rem',
         padding: '0.75rem 1rem',
@@ -389,7 +438,10 @@ export function KitaZeitreiheTabelle({
           Einrichtungsmeldungen werden am Monatszeile markiert — ohne die Kennzahlen zu verändern
           oder zu interpolieren.
         </div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem', alignItems: 'flex-end', flex: '0 1 auto' }}>
+        <div
+          className="no-print"
+          style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem', alignItems: 'flex-end', flex: '0 1 auto' }}
+        >
           <button
             type="button"
             className="btn btn-secondary"
@@ -618,8 +670,10 @@ export function KitaZeitreiheTabelle({
       </div>
 
       <p style={{ margin: '0.75rem 0 0', fontSize: '0.8rem', color: 'var(--color-text-muted)', lineHeight: 1.5 }}>
-        Methodik (US-KJ-010 AK&nbsp;2 / AK&nbsp;4 / AK&nbsp;6): Regionenfilter grenzt die Zeitreihe auf die
-        Gesamtkommune oder einen Planungsraum ein. Der CSV-Export (AK&nbsp;4) enthält genau die
+        Methodik (US-KJ-010 AK&nbsp;2 / AK&nbsp;4 / AK&nbsp;6; Druck US-KJ-005/009): Regionenfilter grenzt die
+        Zeitreihe auf die Gesamtkommune oder einen Planungsraum ein. Im Ausdruck sind Filter-Chips und
+        CSV-Button ausgeblendet; der aktive Filterstand inkl. Meldebasis-Session erscheint als
+        print-only-Hinweis (Spiegel Explorer/Engpass). Der CSV-Export (AK&nbsp;4) enthält genau die
         aktuell gefilterte Zeitreihentabelle inkl. Meldebasis-Hinweis und Regionsspalten — kein
         separater Gesamtexport aller Räume. Im CSV-Metakopf: Open-Data-Lizenzhinweis (Demo
         vorläufig, finale Lizenz je Bundesland zu klären). Raumreihen sind Demo-Verteilungen der
@@ -628,7 +682,8 @@ export function KitaZeitreiheTabelle({
         {filterId !== FILTER_ALL ? ' (raumbezogen)' : ''}. Historische Monate ohne
         Stichproben-Meldeeingang zeigen „–“ in der Spalte Meldebasis. Keine Schätzwerte, keine
         Trendkorrektur. Nur Aggregate; Freigabe-Demo unter{' '}
-        <a href="/kita/meldung" style={{ color: 'var(--color-primary)' }}>/kita/meldung</a>.
+        <a href="/kita/meldung" className="no-print" style={{ color: 'var(--color-primary)' }}>/kita/meldung</a>
+        <span className="print-only">/kita/meldung</span>.
       </p>
     </div>
   );
