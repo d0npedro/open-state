@@ -34,8 +34,9 @@ jobs:
       - name: Install Playwright browsers
         run: npx playwright install chromium --with-deps
 
+      # test:e2e:ci → isE2eCi; playwright webServer runs next build + start :3010
       - name: Run E2E tests
-        run: npm run test:e2e -- --project=chromium
+        run: npm run test:e2e:ci
 
       - name: Upload HTML report
         uses: actions/upload-artifact@v4

@@ -1,9 +1,10 @@
 import { defineConfig, devices } from '@playwright/test';
 
 /**
- * `npm run test:e2e:ci` (npm_lifecycle_event) oder CI=true:
+ * `npm run test:e2e:ci` (npm_lifecycle_event), PW_E2E_CI=1 oder CI=true:
  * - 1 worker, 2 retries
  * - Production-Server auf Port 3010 (kein Konflikt mit Dev auf 3000)
+ * - webServer: build + next start (kein separates Build-Skript nötig)
  * - kein reuseExistingServer
  */
 const isE2eCi =
@@ -40,11 +41,13 @@ export default defineConfig({
   ],
 
   webServer: {
+    // CI=true (GHA) und test:e2e:ci brauchen production build vor next start.
+    // Build hier bündeln, damit weder Workflow noch npm-Skript es vergessen können.
     command: isE2eCi
-      ? `npx next start -p ${port}`
+      ? `npm run build && npx next start -p ${port}`
       : `npm run dev -- -p ${port}`,
     url: baseURL,
     reuseExistingServer: !isE2eCi,
-    timeout: 120_000,
+    timeout: 180_000,
   },
 });
