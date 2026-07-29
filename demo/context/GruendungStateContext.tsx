@@ -24,6 +24,8 @@ interface GruendungStateContextValue {
   resetSession: () => void;
   /** True, sobald in dieser Session gehandelt wurde. */
   hasSessionChanges: boolean;
+  /** Dokument-IDs, die in dieser Demo-Session als hochgeladen markiert wurden. */
+  sessionUploadedIds: string[];
 }
 
 const DEMO_ANTWORT_FALLBACK =
@@ -35,6 +37,7 @@ const GruendungStateContext = createContext<GruendungStateContextValue>({
   uploadDokument: () => {},
   resetSession: () => {},
   hasSessionChanges: false,
+  sessionUploadedIds: [],
 });
 
 export function GruendungStateProvider({ children }: { children: React.ReactNode }) {
@@ -269,7 +272,14 @@ export function GruendungStateProvider({ children }: { children: React.ReactNode
 
   return (
     <GruendungStateContext.Provider
-      value={{ akte, answerRueckfrage, uploadDokument, resetSession, hasSessionChanges }}
+      value={{
+        akte,
+        answerRueckfrage,
+        uploadDokument,
+        resetSession,
+        hasSessionChanges,
+        sessionUploadedIds: uploadedIds,
+      }}
     >
       {children}
     </GruendungStateContext.Provider>
