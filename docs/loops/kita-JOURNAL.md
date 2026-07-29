@@ -2,6 +2,30 @@
 
 Branch: `loop/kita` · Worktree: `D:\Projects\open-state-loop-kita`
 
+## Iteration 2026-07-29 – US-KJ-010 Zeitreihe CSV-Export (AK 4)
+
+### Was
+Öffentlicher Transparenzbericht: CSV-Export der gefilterten Zeitreihe (`KitaZeitreiheTabelle`, US-KJ-010 AK 4). Button lädt genau die aktive Filteransicht (Gesamtkommune oder Planungsraum) inkl. Regionsspalten, Kennzahlen, Peak/Aktuell-Flags und Meldebasis-Hinweis (Session-sensitiv). Semikolon, UTF-8 BOM, Dezimal-Komma; Meta-Kommentarkopf. Keine Kind- oder Personennamen, keine Trendbewertung.
+
+### Dateien
+- `demo/components/kita/KitaZeitreiheTabelle.tsx` (CSV-Download der aktiven Serie, Methodik AK4)
+- `demo/app/kita/page.tsx` (Badge-Text + Datenlage-Hinweis AK4)
+- `docs/loops/kita-JOURNAL.md` (dieses Journal)
+
+### Story
+US-KJ-010 – Zeitreihen und Regionenvergleich (AK 4: Export gefilterter Zeitreihe)
+
+### Build
+`npm run lint` + `npm run build` im `demo/`-Verzeichnis (siehe Commit dieses Laufs)
+
+### Nicht angefasst (Supervisor / verboten)
+Queue, BUILD_STATE, storyRegistry, andere Domänen, package.json, CI, push
+
+### Nächster sinnvoller Schritt (Hinweis Supervisor)
+CSV-Export der Regionenvergleichs-Ansicht (AK 3 + AK 4), oder optional Zeitreihe in den Regionenvergleich einbinden.
+
+---
+
 ## Iteration 2026-07-29 – US-KJ-010 Zeitreihe Regionenfilter (AK 2)
 
 ### Was
