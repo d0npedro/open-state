@@ -105,7 +105,7 @@ Q-001 und Q-010 sind reine Dokumentationsarbeiten ohne Demo-Effekt.
 
 | ID | Schritt | Typ | Aufwand | Abhängigkeit | Status |
 |----|---------|-----|---------|--------------|--------|
-| Q-062 | GitHub Actions Workflow für Build-Check bei PR — verhindert kaputte Builds im main | CHORE | M | – | OFFEN |
+| Q-062 | GitHub Actions Workflow für Build-Check bei PR — verhindert kaputte Builds im main | CHORE | M | – | DONE |
 | Q-053 | `CLAUDE.md` aktualisieren: Design System, ThemeProvider, ThemeSwitcher als Teil des Architekturwissens ergänzen | DOCS | S | – | OFFEN |
 
 ---
