@@ -30,6 +30,8 @@ interface DemoStateContextValue {
   resetSession: () => void;
   /** True, sobald in dieser Session gehandelt wurde. */
   hasSessionChanges: boolean;
+  /** Dokument-IDs, die in dieser Session hochgeladen wurden (Upload-Quittung Übersicht). */
+  sessionUploadedIds: string[];
 }
 
 const DemoStateContext = createContext<DemoStateContextValue>({
@@ -39,6 +41,7 @@ const DemoStateContext = createContext<DemoStateContextValue>({
   confirmTermin: () => {},
   resetSession: () => {},
   hasSessionChanges: false,
+  sessionUploadedIds: [],
 });
 
 export function DemoStateProvider({ children }: { children: React.ReactNode }) {
@@ -270,6 +273,7 @@ export function DemoStateProvider({ children }: { children: React.ReactNode }) {
         confirmTermin,
         resetSession,
         hasSessionChanges,
+        sessionUploadedIds: uploadedIds,
       }}
     >
       {children}
