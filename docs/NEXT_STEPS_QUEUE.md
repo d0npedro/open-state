@@ -185,6 +185,9 @@ Story-Dokumentation ist kein Pflicht-Vorläufer für Mock-Daten und Typen.
 | Q-148 | UG BG-CTA-Hilfstext session-sensitiv (Übersicht Fairness + Hinweise, offene RQ priorisiert) | DEMO | S | Q-096 | DONE `35a5d95` |
 | Q-149 | Kita Meldung: Druck freigabeunabhängig Status/Korrekturen/Freigabenachweis (US-KJ-004) | DEMO | S | Q-135 | DONE `2952d04` |
 | Q-150 | Kita Tagesstand: Druck freigabeunabhängig Status/Datenbasis/Freigabenachweis (US-KJ-001) | DEMO | S | Q-133 | DONE `19d915b` |
+| Q-151 | UG Unterlagen-CTA-Hilfstext session-sensitiv (Übersicht Fairness + Hinweise, offene RQ priorisiert) | DEMO | S | Q-098 | DONE `b33b784` |
+| Q-152 | Kita Einrichtung: Belegungsstand-Druck Status und Datenbasis (US-KJ-002) | DEMO | S | Q-078 | DONE `53e3b27` |
+| Q-153 | Kita Tagesstand: CSV Aggregate-Export freigabeunabhängig (US-KJ-001, DEC-004) | DEMO | S | Q-150 | DONE `c0b9c3e` |
 
 ---
 
@@ -340,3 +343,6 @@ Diese Punkte wurden in früheren Iterationen abgeschlossen und sind produktionsr
 | Q-148 UG BG-CTA-Hilfstext session-sensitiv | Übersicht + Hinweise nach RQ | `35a5d95` → main |
 | Q-149 Kita Meldung Druck freigabeunabhängig | Status/Korrekturen/Freigabe print-only | `2952d04` → main |
 | Q-150 Kita Tagesstand Druck freigabeunabhängig | Status/Datenbasis/Freigabe print-only | `19d915b` → main |
+| Q-151 UG Unterlagen-CTA-Hilfstext session-sensitiv | Übersicht + Hinweise nach RQ | `b33b784` → main |
+| Q-152 Kita Einrichtung Belegungsstand-Druck | Status/Datenbasis print-only (US-KJ-002) | `53e3b27` → main |
+| Q-153 Kita Tagesstand CSV Aggregate-Export | freigabeunabhängig, DEC-004 Aggregate (US-KJ-001) | `c0b9c3e` → main |
