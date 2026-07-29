@@ -89,16 +89,36 @@ function aufgabeZiel(
   };
 }
 
+/**
+ * Hilfstext für Primär- und Fairness-CTA bei offener Rückfrage:
+ * Antwortfrist (Datum + Resttage) und Konsequenz (Erfassung/Steuernummer).
+ */
+function rqCtaHilfstext(rq: GruendungsAkte['rueckfragen'][number]): string {
+  const fristTage = berechneFristTage(rq.fristDatum, FIKTIVES_HEUTE_GRUENDUNG);
+  const fristLabel =
+    fristTage < 0
+      ? `${Math.abs(fristTage)} Tage überschritten`
+      : fristTage === 0
+        ? 'heute fällig'
+        : `noch ${fristTage} Tag${fristTage === 1 ? '' : 'e'}`;
+  return (
+    `Antwortfrist ${rq.frist} (${fristLabel}). ` +
+    'Ohne Antwort kann das Finanzamt die steuerliche Erfassung und die Steuernummer-Vergabe nicht abschließen. ' +
+    'Frage, Begründung und Formular finden Sie unter Rückfragen.'
+  );
+}
+
 /** Primärer CTA zum naechsterSchritt-Text (gleiche Heuristik wie Aufgaben). */
 function naechsterSchrittZiel(
   akte: GruendungsAkte
-): { href: string; cta: string; icon: IconName } | null {
+): { href: string; cta: string; icon: IconName; hint?: string } | null {
   const offeneRq = akte.rueckfragen.find(r => !r.beantwortet);
   if (offeneRq) {
     return {
       href: `/gruendung/rueckfragen#rq-${offeneRq.id}`,
       cta: 'Rückfrage beantworten',
       icon: 'chat',
+      hint: rqCtaHilfstext(offeneRq),
     };
   }
   const fehlendesDok = akte.dokumente.find(
@@ -109,6 +129,9 @@ function naechsterSchrittZiel(
       href: `/gruendung/dokumente#dok-${fehlendesDok.id}`,
       cta: 'Unterlage hochladen',
       icon: 'file',
+      // Session: keine offene RQ mehr (sonst wäre RQ-Zweig oben greifend)
+      hint:
+        'Keine offene Rückfrage mehr – ausstehende Unterlage nachreichen. Begründung und Upload-Möglichkeit finden Sie im Bereich Unterlagen.',
     };
   }
   const bg = akte.beteiligteBehörden.find(
@@ -119,6 +142,8 @@ function naechsterSchrittZiel(
       href: `/gruendung/behoerden#beh-${bg.id}`,
       cta: 'BG-Hinweis ansehen',
       icon: 'building',
+      hint:
+        'Keine offene Rückfrage mehr – BG-Anmeldung außerhalb von Open State vornehmen. Kontakt und Rolle finden Sie auf der Behördenkarte.',
     };
   }
   return null;
@@ -135,7 +160,7 @@ function fairnessSignalZiel(
   akte: GruendungsAkte
 ): { href: string; cta: string; icon: IconName; testKey: string; hint?: string } | null {
   // Offene Rückfrage mit Frist
-  // Hilfstext: Fristlabel + kurze Konsequenz (Steuernummer/Erfassung)
+  // Hilfstext: Fristlabel + kurze Konsequenz (Steuernummer/Erfassung) — wie Primär-CTA
   if (
     signal.typ === 'UG_RUECKFRAGE_OFFEN_FRIST_RELEVANT' ||
     signal.id.startsWith('UG-RQ-')
@@ -145,23 +170,12 @@ function fairnessSignalZiel(
     if (!rqId) return null;
     const rq = akte.rueckfragen.find(r => r.id === rqId && !r.beantwortet);
     if (!rq) return null;
-    const fristTage = berechneFristTage(rq.fristDatum, FIKTIVES_HEUTE_GRUENDUNG);
-    const fristLabel =
-      fristTage < 0
-        ? `${Math.abs(fristTage)} Tage überschritten`
-        : fristTage === 0
-          ? 'heute fällig'
-          : `noch ${fristTage} Tag${fristTage === 1 ? '' : 'e'}`;
-    const hint =
-      `Antwortfrist ${rq.frist} (${fristLabel}). ` +
-      'Ohne Antwort kann das Finanzamt die steuerliche Erfassung und die Steuernummer-Vergabe nicht abschließen. ' +
-      'Frage, Begründung und Formular finden Sie unter Rückfragen.';
     return {
       href: `/gruendung/rueckfragen#rq-${rqId}`,
       cta: 'Frage beantworten',
       icon: 'chat',
       testKey: `rq-${rqId}`,
-      hint,
+      hint: rqCtaHilfstext(rq),
     };
   }
 
@@ -386,16 +400,31 @@ export default function GruendungPage() {
               </div>
               <p style={{ margin: 0, fontSize: '0.9rem', lineHeight: 1.5 }}>{akte.naechsterSchritt}</p>
               {schrittZiel && (
-                <Link
-                  href={schrittZiel.href}
-                  className="btn btn-primary"
-                  data-testid="uebersicht-naechster-schritt-cta"
-                  style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', marginTop: '0.75rem' }}
-                  aria-label={schrittZiel.cta}
-                >
-                  <Icon name={schrittZiel.icon} size={15} />
-                  {schrittZiel.cta}
-                </Link>
+                <div style={{ marginTop: '0.75rem' }}>
+                  {schrittZiel.hint && (
+                    <p
+                      style={{
+                        margin: '0 0 0.65rem',
+                        fontSize: '0.8rem',
+                        lineHeight: 1.45,
+                        color: 'var(--color-text-muted)',
+                      }}
+                      data-testid="uebersicht-naechster-schritt-cta-hint"
+                    >
+                      {schrittZiel.hint}
+                    </p>
+                  )}
+                  <Link
+                    href={schrittZiel.href}
+                    className="btn btn-primary"
+                    data-testid="uebersicht-naechster-schritt-cta"
+                    style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}
+                    aria-label={schrittZiel.cta}
+                  >
+                    <Icon name={schrittZiel.icon} size={15} />
+                    {schrittZiel.cta}
+                  </Link>
+                </div>
               )}
             </div>
           )}
