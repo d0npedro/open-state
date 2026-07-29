@@ -351,6 +351,47 @@ test.describe('UG – Behörden & Verfahrensschritte', () => {
     await expect(page.getByTestId('behoerde-rueckfrage-cta-BEH-04')).toHaveCount(0);
   });
 
+  test('Verfahrensschritt VS-04 hat Link zur offenen Rückfrage', async ({ page }) => {
+    const schritt = page.getByTestId('behoerde-schritt-VS-04');
+    await expect(schritt).toBeVisible();
+    await expect(schritt).toContainText(/Kleinunternehmerregelung/i);
+    const link = page.getByTestId('behoerde-schritt-rq-link-VS-04');
+    await expect(link).toBeVisible();
+    await expect(link).toHaveAttribute('href', '/gruendung/rueckfragen#rq-RQ-01');
+    await expect(link).toContainText(/Zur Rückfrage/i);
+  });
+
+  test('VS-04-Link führt zur Rückfragen-Karte', async ({ page }) => {
+    await page.getByTestId('behoerde-schritt-rq-link-VS-04').click();
+    await expect(page).toHaveURL(/\/gruendung\/rueckfragen#rq-RQ-01/);
+    await expect(page.locator('#rq-RQ-01')).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Rückfragen der Behörden' })).toBeVisible();
+  });
+
+  test('Keine Schritt-Rückfrage-Links bei erledigten oder unbezogenen Schritten', async ({ page }) => {
+    await expect(page.getByTestId('behoerde-schritt-rq-link-VS-01')).toHaveCount(0);
+    await expect(page.getByTestId('behoerde-schritt-rq-link-VS-02')).toHaveCount(0);
+    await expect(page.getByTestId('behoerde-schritt-rq-link-VS-03')).toHaveCount(0);
+    await expect(page.getByTestId('behoerde-schritt-rq-link-VS-05')).toHaveCount(0);
+    await expect(page.getByTestId('behoerde-schritt-rq-link-VS-06')).toHaveCount(0);
+    await expect(page.getByTestId('behoerde-schritt-rq-link-VS-07')).toHaveCount(0);
+  });
+
+  test('Nach Beantworten entfällt VS-04-Link und Behörden-CTA', async ({ page }) => {
+    const { goUgTab } = await import('./helpers/sessionNav');
+    await expect(page.getByTestId('behoerde-schritt-rq-link-VS-04')).toBeVisible();
+    await expect(page.getByTestId('behoerde-rueckfrage-cta-BEH-02')).toBeVisible();
+
+    await goUgTab(page, 'Fragen', /\/gruendung\/rueckfragen/);
+    await page.getByRole('button', { name: /Rückfrage beantworten/i }).click();
+    await expect(page.getByText(/die Behörde wurde informiert|beantwortet/i).first()).toBeVisible();
+    await goUgTab(page, 'Behörden', /\/gruendung\/behoerden/);
+
+    await expect(page.getByTestId('behoerde-schritt-rq-link-VS-04')).toHaveCount(0);
+    await expect(page.getByTestId('behoerde-rueckfrage-cta-BEH-02')).toHaveCount(0);
+    await expect(page.getByTestId('behoerde-schritt-VS-04')).toBeVisible();
+  });
+
 });
 
 // ─── Unterlagen ───────────────────────────────────────────────────────────────
