@@ -2,14 +2,15 @@
 
 | Feld | Wert |
 |------|------|
-| last_checked | 2026-07-29T07:25:16Z |
-| last_run_id | 30431410850 |
+| last_checked | 2026-07-29T07:32:00Z |
+| last_run_id | 30431649961 |
 | last_status | success |
-| last_sha | 7de80f1 |
+| last_sha | 8e52cba |
 | fix_attempts | 0 |
 
 ## Log
 
+- E2E `30431649961` **success** (SHA 8e52cba docs ci-watcher HEAD). E2E `30431592630` **success** (SHA 82012a0). E2E `30431410850` **success** (SHA 7de80f1). Build latest `30430744932` **success** (SHA fc6ae7d; HEAD docs-only path-skip). Catch-up this tick: origin/main..main was 6 (kita bedarfsplanung hub + vorlage print + UG Betriebsdatum fairness CTA + merges) → lint+build grün (`NEXT_DIST_DIR=.next-ci-watcher`) + local `test:e2e:ci` **237 passed** → push. No fix. fix_attempts=0.
 - E2E `30431410850` **success** (SHA 7de80f1 docs ci-watcher HEAD). E2E `30431263867` **success** (SHA 3207d2c). E2E `30431075626` **success** (SHA 1eaff11). Build latest `30430744932` **success** (SHA fc6ae7d; HEAD docs-only path-skip). Catch-up: origin/main..main = 0. No fix. fix_attempts=0.
 - E2E `30431410850` **success** (SHA 7de80f1 docs ci-watcher HEAD). E2E `30431263867` **success** (SHA 3207d2c). E2E `30431075626` **success** (SHA 1eaff11). Build latest code path still Merge loop/kita (SHA 77526a3; HEAD docs-only path-skip). Catch-up: origin/main..main = 0. No fix. fix_attempts=0.
 - E2E `30431263867` **success** (SHA 3207d2c docs ci-watcher HEAD). E2E `30431075626` **success** (SHA 1eaff11). E2E `30431025129` **success** (SHA 4263434). Build latest code path still Merge loop/kita (SHA 77526a3; HEAD docs-only path-skip). Catch-up: origin/main..main = 0. No fix. fix_attempts=0.
