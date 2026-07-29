@@ -23,12 +23,18 @@ interface DemoStateContextValue {
   answerRueckfrage: (id: string) => void;
   /** Demo: markiert ein angefordertes/abgelehntes Dokument als hochgeladen. */
   uploadDokument: (id: string) => void;
+  /** Demo: setzt Session auf den Ausgangs-Mock zurück. */
+  resetSession: () => void;
+  /** True, sobald in dieser Session gehandelt wurde. */
+  hasSessionChanges: boolean;
 }
 
 const DemoStateContext = createContext<DemoStateContextValue>({
   fall: demoFall,
   answerRueckfrage: () => {},
   uploadDokument: () => {},
+  resetSession: () => {},
+  hasSessionChanges: false,
 });
 
 export function DemoStateProvider({ children }: { children: React.ReactNode }) {
@@ -42,6 +48,13 @@ export function DemoStateProvider({ children }: { children: React.ReactNode }) {
   const uploadDokument = useCallback((id: string) => {
     setUploadedIds(prev => (prev.includes(id) ? prev : [...prev, id]));
   }, []);
+
+  const resetSession = useCallback(() => {
+    setAnsweredIds([]);
+    setUploadedIds([]);
+  }, []);
+
+  const hasSessionChanges = answeredIds.length > 0 || uploadedIds.length > 0;
 
   const fall = useMemo((): Fall => {
     const updatedRueckfragen = demoFall.rueckfragen.map(rq =>
@@ -186,7 +199,9 @@ export function DemoStateProvider({ children }: { children: React.ReactNode }) {
   }, [answeredIds, uploadedIds]);
 
   return (
-    <DemoStateContext.Provider value={{ fall, answerRueckfrage, uploadDokument }}>
+    <DemoStateContext.Provider
+      value={{ fall, answerRueckfrage, uploadDokument, resetSession, hasSessionChanges }}
+    >
       {children}
     </DemoStateContext.Provider>
   );

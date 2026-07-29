@@ -1,6 +1,6 @@
 # BUILD_STATE.md – Aktueller Projektstand
 
-Zuletzt aktualisiert: nach Q-074 (Planungsraum-Filter auf /kita)
+Zuletzt aktualisiert: nach Q-075 (Demo-Session zurücksetzen AV/UG)
 
 Dieser Stand beschreibt, was tatsächlich existiert und funktioniert.
 Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
@@ -49,8 +49,9 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | Fairness-Regelwerk | `demo/lib/fairness/rules.ts` | ✓ 5 Regeln, berechnete Fristtagezahl (ISO-Datum + FIKTIVES_HEUTE) |
 | FairnessPanel-Komponente | `demo/components/fairness/FairnessPanel.tsx` | ✓ |
 | BuildInfo-Komponente | `demo/components/BuildInfo.tsx` | ✓ |
-| Demo-State-Kontext | `demo/context/DemoStateContext.tsx` | ✓ Rückfrage/Upload + Timeline-Events; alle AV-Routen angebunden |
-| Gründung-State-Kontext | `demo/context/GruendungStateContext.tsx` | ✓ Rückfrage/Upload + Verlaufsereignisse; Fairness live |
+| Demo-State-Kontext | `demo/context/DemoStateContext.tsx` | ✓ Rückfrage/Upload/Reset + Timeline; alle AV-Routen angebunden |
+| Gründung-State-Kontext | `demo/context/GruendungStateContext.tsx` | ✓ Rückfrage/Upload/Reset + Verlauf; Fairness live |
+| DemoSessionBar | `demo/components/DemoSessionBar.tsx` | ✓ Leiste „Demo zurücksetzen“ nach Interaktion |
 
 ---
 
@@ -92,6 +93,7 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 **Q-072 erledigt:** `/fall/bescheide`, `/termine`, `/verlauf` nutzen DemoState; Interaktionen erzeugen Timeline-Ereignisse.
 **Q-073 erledigt:** UG `uploadDokument`, Signal `UG_UNTERLAGE_FEHLT`, Verlauf bei Upload/Rückfrage.
 **Q-074 erledigt:** `KitaPlanungsraumExplorer` — Filter-Chips, Detailkarte, gefilterte Maßnahmen auf `/kita`.
+**Q-075 erledigt:** `resetSession` + Session-Leiste in AV- und UG-Layout nach Demo-Interaktionen.
 
 ---
 
@@ -136,6 +138,7 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | ~~AV-Unterseiten mit statischem mockFall~~ | ~~Fairness/Verlauf nicht session-konsistent~~ | Q-072 ✓ |
 | ~~UG-Upload ohne State~~ | ~~Kein Fairness-/Verlaufseffekt bei UG-Unterlagen~~ | Q-073 ✓ |
 | ~~Kita-Bericht ohne interaktiven Raumfilter~~ | ~~Gesamttabelle nur, keine Raum-Fokussierung~~ | Q-074 ✓ |
+| ~~Kein Session-Reset nach Demo-Aktionen~~ | ~~Ausgangsfall nur per Reload wiederherstellbar~~ | Q-075 ✓ |
 | DSFA für Kita-Domäne noch ausstehend | Konzeptlücke — extern abhängig | — |
 | Queue ohne weitere OFFEN-Einträge | Nächste Iteration braucht Queue-Nachfüllung | — |
 

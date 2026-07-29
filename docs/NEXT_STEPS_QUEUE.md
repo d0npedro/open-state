@@ -50,6 +50,7 @@ React State-Einführung ist der größte Demo-Qualitätssprung ohne neue Routen.
 | Q-032 | `/fall/hinweise` nach State-Wechsel: Fairness-Signale reduzieren sich live — Demonstration des Regelwerks in Aktion | DEMO | S | Q-031 | DONE `8db3c74` |
 | Q-071 | Dokument-Upload interaktiv: `uploadDokument` im DemoStateContext; `/fall/dokumente` ändert Status live; Fairness-Signal UNTERLAGE_FEHLT entfällt | DEMO | S | Q-031 | DONE |
 | Q-072 | Alle AV-Unterseiten an DemoState; Timeline-Ereignisse bei Rückfrage/Upload; Fairness auf Bescheid/Verlauf konsistent | DEMO | S | Q-071 | DONE |
+| Q-075 | Demo-Session zurücksetzen (AV + UG): `resetSession`, Session-Leiste nach Interaktion | DEMO | S | Q-073 | DONE |
 
 ---
 
@@ -180,4 +181,5 @@ Diese Punkte wurden in früheren Iterationen abgeschlossen und sind produktionsr
 | Q-071 Dokument-Upload | Interaktiver Upload AV + Fairness live | `9a5f89a` |
 | Q-072 AV-State/Timeline | Alle AV-Seiten + Timeline-Events | `91567b3` |
 | Q-073 UG Upload/Fairness | Interaktiver UG-Upload + UG_UNTERLAGE_FEHLT | `7b18166` |
-| Q-074 Kita-Planungsfilter | Filter/Detail auf Transparenzbericht | (diese Iteration) |
+| Q-074 Kita-Planungsfilter | Filter/Detail auf Transparenzbericht | `27803ca` |
+| Q-075 Demo-Reset | Session-Leiste + resetSession AV/UG | (diese Iteration) |

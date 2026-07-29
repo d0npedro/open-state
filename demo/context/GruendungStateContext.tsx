@@ -19,12 +19,18 @@ interface GruendungStateContextValue {
   answerRueckfrage: (id: string) => void;
   /** Demo: markiert angefordertes/abgelehntes Dokument als hochgeladen. */
   uploadDokument: (id: string) => void;
+  /** Demo: setzt Session auf den Ausgangs-Mock zurück. */
+  resetSession: () => void;
+  /** True, sobald in dieser Session gehandelt wurde. */
+  hasSessionChanges: boolean;
 }
 
 const GruendungStateContext = createContext<GruendungStateContextValue>({
   akte: demoGruendungsAkte,
   answerRueckfrage: () => {},
   uploadDokument: () => {},
+  resetSession: () => {},
+  hasSessionChanges: false,
 });
 
 export function GruendungStateProvider({ children }: { children: React.ReactNode }) {
@@ -38,6 +44,13 @@ export function GruendungStateProvider({ children }: { children: React.ReactNode
   const uploadDokument = useCallback((id: string) => {
     setUploadedIds(prev => (prev.includes(id) ? prev : [...prev, id]));
   }, []);
+
+  const resetSession = useCallback(() => {
+    setAnsweredIds([]);
+    setUploadedIds([]);
+  }, []);
+
+  const hasSessionChanges = answeredIds.length > 0 || uploadedIds.length > 0;
 
   const akte = useMemo((): GruendungsAkte => {
     const updatedRueckfragen = demoGruendungsAkte.rueckfragen.map(rq =>
@@ -162,7 +175,9 @@ export function GruendungStateProvider({ children }: { children: React.ReactNode
   }, [answeredIds, uploadedIds]);
 
   return (
-    <GruendungStateContext.Provider value={{ akte, answerRueckfrage, uploadDokument }}>
+    <GruendungStateContext.Provider
+      value={{ akte, answerRueckfrage, uploadDokument, resetSession, hasSessionChanges }}
+    >
       {children}
     </GruendungStateContext.Provider>
   );
