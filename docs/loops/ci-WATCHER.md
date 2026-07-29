@@ -2,14 +2,15 @@
 
 | Feld | Wert |
 |------|------|
-| last_checked | 2026-07-29T07:15:45Z |
-| last_run_id | 30430814843 |
+| last_checked | 2026-07-29T07:19:42Z |
+| last_run_id | 30431075626 |
 | last_status | success |
-| last_sha | 692a96d |
+| last_sha | 1eaff11 |
 | fix_attempts | 0 |
 
 ## Log
 
+- E2E `30431075626` **success** (SHA 1eaff11 docs ci-watcher HEAD). E2E `30431025129` **success** (SHA 4263434). E2E `30430962463` **success** (SHA fc6ae7d). E2E `30430814843` **success** (SHA 692a96d supervisor Q-132..Q-135). Build latest code path still Merge loop/kita (SHA 77526a3; HEAD docs-only path-skip). Catch-up: origin/main..main = 0. No fix. fix_attempts=0.
 - E2E `30430814843` **success** (SHA 692a96d docs supervisor Q-132..Q-135). E2E `30430744424` + Build `30430744932` **success** (SHA fc6ae7d). E2E `30430649458` **success** (SHA a456e59). Build latest code path still Merge loop/kita (SHA 77526a3; HEAD docs-only path-skip). Catch-up: origin/main..main = 0. Newer HEAD `59c59e4` docs ci-watcher: E2E `30430962463` in_progress next tick. No fix. fix_attempts=0.
 - E2E `30430744424` **success** (SHA fc6ae7d docs ci-watcher HEAD). E2E `30430649458` **success** (SHA a456e59 supervisor Q-132/Q-133). E2E `30430517106` + Build `30430517207` **success** (SHA 77526a3/777f932 Merge loop/kita - latest code path). Build `30430744932` **success** (SHA fc6ae7d). Catch-up: origin/main..main = 0 (prior concurrent catch-up already pushed). Newer HEAD `692a96d` docs supervisor Q-132..Q-135: E2E `30430814843` later **success**. No fix. fix_attempts=0.
 - E2E `30430536099` **success** (SHA 4194e3f docs ci-watcher HEAD). E2E `30430517106` + Build `30430517207` **success** (SHA 77526a3 Merge loop/kita — latest code path before concurrent). Prior E2E `30430418198` **success** (SHA 774d525 supervisor E2E 237). Catch-up this tick: origin/main..main was 5 (Kita Meldung Prozesskette US-KJ-004 + UG Hinweise Steuernummer-CTA VS-05 + supervisor Q-132/Q-133 + merges) → lint+build grün (`NEXT_DIST_DIR=.next-ci-watcher`) → push `4194e3f..777f932` → origin/main..main = 0. No fix. fix_attempts=0.
