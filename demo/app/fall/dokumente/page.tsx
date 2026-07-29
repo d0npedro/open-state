@@ -2,10 +2,13 @@
 'use client';
 // Status-Visualisierung: Farbe + Icon + Text (triple redundancy).
 // Upload-Zone: groß, fingerfreundlich, mit Kamera-Hinweis für Handy-Nutzer.
+// Interaktion (Q-071): Upload ändert Demo-State — Fairness-Signale reagieren live.
 
-import { demoFall } from '@/data/mockFall';
+import { useDemoState } from '@/context/DemoStateContext';
 import { DokumentStatus } from '@/types';
 import { Icon } from '@/components/Icon';
+import { berechneFairnessSignale } from '@/lib/fairness/rules';
+import Link from 'next/link';
 
 const statusInfo: Record<DokumentStatus, { label: string; cssClass: string; icon: Parameters<typeof Icon>[0]['name'] }> = {
   ANGEFORDERT: { label: 'Wird noch benötigt',   cssClass: 'status-chip-warning', icon: 'alert' },
@@ -16,9 +19,11 @@ const statusInfo: Record<DokumentStatus, { label: string; cssClass: string; icon
 };
 
 export default function DokumentePage() {
-  const { dokumente } = demoFall;
-  const ausstehend = dokumente.filter(d => d.status === 'ANGEFORDERT').length;
-  const erledigt   = dokumente.filter(d => d.status === 'AKZEPTIERT').length;
+  const { fall, uploadDokument } = useDemoState();
+  const { dokumente } = fall;
+  const ausstehend = dokumente.filter(d => d.status === 'ANGEFORDERT' || d.status === 'ABGELEHNT').length;
+  const eingereicht = dokumente.filter(d => d.status !== 'ANGEFORDERT' && d.status !== 'ABGELEHNT').length;
+  const unterlagenSignal = berechneFairnessSignale(fall).find(s => s.typ === 'UNTERLAGE_FEHLT_BLOCKIERT');
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
@@ -27,7 +32,7 @@ export default function DokumentePage() {
       <div>
         <h1 style={{ marginBottom: '0.375rem' }}>Ihre Unterlagen</h1>
         <p style={{ color: 'var(--color-neutral)' }}>
-          {erledigt} von {dokumente.length} Unterlagen eingereicht
+          {eingereicht} von {dokumente.length} Unterlagen eingereicht
           {ausstehend > 0 && (
             <span style={{ fontWeight: 700, color: 'var(--color-warning)', marginLeft: '0.5rem' }}>
               · {ausstehend} fehlen noch
@@ -38,10 +43,39 @@ export default function DokumentePage() {
         <div className="progress-bar-wrap" style={{ marginTop: '0.875rem' }}>
           <div
             className="progress-bar-fill"
-            style={{ width: `${Math.round((erledigt / dokumente.length) * 100)}%` }}
+            style={{ width: `${Math.round((eingereicht / dokumente.length) * 100)}%` }}
           />
         </div>
       </div>
+
+      {/* Live-Hinweis: Fairness-Signal zu fehlenden Unterlagen */}
+      {unterlagenSignal && (
+        <div className="notice-box notice-box-warn" role="status">
+          <Icon name="alert" size={16} style={{ flexShrink: 0, marginTop: '2px' }} />
+          <div>
+            <strong style={{ fontSize: '0.875rem', display: 'block', marginBottom: '0.25rem' }}>
+              {unterlagenSignal.titel}
+            </strong>
+            <p style={{ fontSize: '0.875rem', margin: 0 }}>{unterlagenSignal.erklaerung}</p>
+            <p style={{ fontSize: '0.8rem', margin: '0.5rem 0 0', color: 'var(--color-text-muted)' }}>
+              Demo: Nach dem Hochladen verschwindet dieses Signal auch unter{' '}
+              <Link href="/fall/hinweise" style={{ color: 'var(--color-primary)' }}>Verfahrenslage</Link>.
+            </p>
+          </div>
+        </div>
+      )}
+
+      {ausstehend === 0 && (
+        <div className="notice-box notice-box-success" role="status">
+          <Icon name="check-circle" size={16} style={{ flexShrink: 0 }} />
+          <div>
+            <strong style={{ fontSize: '0.875rem' }}>Alle angeforderten Unterlagen liegen vor</strong>
+            <p style={{ fontSize: '0.875rem', margin: '0.25rem 0 0' }}>
+              Das Fairness-Signal „Unterlage fehlt“ entfällt. Die Prüfung kann fortgesetzt werden.
+            </p>
+          </div>
+        </div>
+      )}
 
       {/* ─── Ausstehende Dokumente zuerst ───────────────────────────
           UX-Grund: Progressive Disclosure + Priorität — was noch
@@ -62,7 +96,7 @@ export default function DokumentePage() {
             key={dok.id}
             className="card"
             style={{
-              borderLeft: brauchtUpload ? '5px solid var(--color-warning)' : dok.status === 'AKZEPTIERT' ? '5px solid var(--color-success)' : '1px solid var(--color-border)',
+              borderLeft: brauchtUpload ? '5px solid var(--color-warning)' : dok.status === 'AKZEPTIERT' ? '5px solid var(--color-success)' : dok.status === 'HOCHGELADEN' ? '5px solid var(--color-primary)' : '1px solid var(--color-border)',
             }}
           >
             {/* Dokumentenheader: Titel + Status */}
@@ -95,7 +129,7 @@ export default function DokumentePage() {
             </div>
 
             {/* Frist und Upload-Datum */}
-            {dok.frist && (
+            {dok.frist && brauchtUpload && (
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.875rem', color: 'var(--color-warning)', fontWeight: 600, fontSize: '0.875rem' }}>
                 <Icon name="calendar" size={15} />
                 Einreichen bis: {dok.frist}
@@ -108,9 +142,7 @@ export default function DokumentePage() {
               </div>
             )}
 
-            {/* Upload-Bereich */}
-            {/* UX-Grund: Vollbreite Zone, min 140px Höhe, Kamera-Hinweis.
-                Auch auf kleinstem Smartphone mit Daumen erreichbar.  */}
+            {/* Upload-Bereich — Demo speichert keine Datei, ändert nur den Fallzustand */}
             {brauchtUpload && (
               <div>
                 <label
@@ -118,7 +150,12 @@ export default function DokumentePage() {
                   htmlFor={`upload-${dok.id}`}
                   aria-label={`${dok.bezeichnung} hochladen`}
                   tabIndex={0}
-                  onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') (document.getElementById(`upload-${dok.id}`) as HTMLInputElement)?.click(); }}
+                  onKeyDown={e => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      (document.getElementById(`upload-${dok.id}`) as HTMLInputElement)?.click();
+                    }
+                  }}
                 >
                   <div style={{ color: 'var(--color-primary)' }}>
                     <Icon name="upload" size={40} />
@@ -130,15 +167,26 @@ export default function DokumentePage() {
                   <span className="upload-zone-hint" style={{ color: 'var(--color-primary)', fontWeight: 500 }}>
                     📷 Auch per Handykamera möglich
                   </span>
+                  <span className="upload-zone-hint" style={{ fontSize: '0.75rem', marginTop: '0.25rem' }}>
+                    Demo: Es wird keine Datei gespeichert — nur der Antragsstatus ändert sich.
+                  </span>
                   <input
                     id={`upload-${dok.id}`}
                     type="file"
                     accept=".pdf,.jpg,.jpeg,.png"
                     style={{ display: 'none' }}
                     aria-hidden="true"
-                    onChange={() => alert('Demo: In der echten Anwendung würde die Datei hier hochgeladen.')}
+                    onChange={() => uploadDokument(dok.id)}
                   />
                 </label>
+                <button
+                  type="button"
+                  className="btn btn-primary"
+                  style={{ marginTop: '0.75rem', width: '100%' }}
+                  onClick={() => uploadDokument(dok.id)}
+                >
+                  Demo: Als hochgeladen markieren
+                </button>
               </div>
             )}
           </div>

@@ -1,6 +1,6 @@
 # BUILD_STATE.md – Aktueller Projektstand
 
-Zuletzt aktualisiert: nach Q-070 (UG-Stories in demo storyRegistry.ts)
+Zuletzt aktualisiert: nach Q-071 (interaktiver Dokument-Upload im AV-Demo-State)
 
 Dieser Stand beschreibt, was tatsächlich existiert und funktioniert.
 Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
@@ -33,8 +33,9 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | `/fall/hinweise` | Vollständige Fairness-Hinweisseite | US-AV-008 | ✓ |
 | `/stories` | Story Coverage Dashboard | – | ✓ |
 | `/feedback` | Feedback → GitHub Issues | – | ✓ |
-
-Weitere Domänen (Kita, Unternehmensgründung): nur Dokumentation, keine UI-Routen.
+| `/gruendung` … | Unternehmensgründung (Übersicht, Dokumente, Behörden, …) | US-UG-001–006 | ✓ |
+| `/kita` | Öffentlicher Transparenzbericht | US-KJ-009, US-KJ-010 | ✓ |
+| `/kita/lagebild` | Jugendamt-Steuerungsansicht | US-KJ-005, US-KJ-006 | ✓ |
 
 ---
 
@@ -43,12 +44,13 @@ Weitere Domänen (Kita, Unternehmensgründung): nur Dokumentation, keine UI-Rout
 | Modul | Pfad | Status |
 |-------|------|--------|
 | Mock-Falldaten (ALG I) | `demo/data/mockFall.ts` | ✓ Vollständig |
-| Story Registry | `demo/data/storyRegistry.ts` | ✓ 8 Stories (US-AV-001–008) |
+| Story Registry | `demo/data/storyRegistry.ts` | ✓ AV + KJ + UG registriert |
 | Fairness-Typen | `demo/types/fairness.ts` | ✓ |
 | Fairness-Regelwerk | `demo/lib/fairness/rules.ts` | ✓ 5 Regeln, berechnete Fristtagezahl (ISO-Datum + FIKTIVES_HEUTE) |
 | FairnessPanel-Komponente | `demo/components/fairness/FairnessPanel.tsx` | ✓ |
 | BuildInfo-Komponente | `demo/components/BuildInfo.tsx` | ✓ |
-| Demo-State-Kontext | `demo/context/DemoStateContext.tsx` | ✓ React Context, Rückfrage-Antwort-State |
+| Demo-State-Kontext | `demo/context/DemoStateContext.tsx` | ✓ Rückfrage beantworten + Dokument hochladen (live Fairness) |
+| Gründung-State-Kontext | `demo/context/GruendungStateContext.tsx` | ✓ Rückfrage-Antwort-State |
 
 ---
 
@@ -84,8 +86,9 @@ Weitere Domänen (Kita, Unternehmensgründung): nur Dokumentation, keine UI-Rout
 
 **Q-001 erledigt:** Story-Datei `US-AV-008_Verfahrenslage_verstehen.md` angelegt.
 
-**Q-010 erledigt:** `docs/stories/unternehmensgruendung/` mit 6 Stories, Story-Map, README;
-Einträge in `story_registry.json` und TRACEABILITY_MATRIX. Demo-`storyRegistry.ts` enthält UG noch nicht.
+**Q-010 erledigt:** `docs/stories/unternehmensgruendung/` mit 6 Stories, Story-Map, README.
+**Q-070 erledigt:** UG-Stories in `demo/data/storyRegistry.ts`.
+**Q-071 erledigt:** Interaktiver Dokument-Upload im AV-Demo (`uploadDokument`); Fairness-Signal entfällt live.
 
 ---
 
@@ -126,6 +129,7 @@ Einträge in `story_registry.json` und TRACEABILITY_MATRIX. Demo-`storyRegistry.
 |-------|----------------|----------|
 | ~~Fairness-Fristen sind statische Zahlen~~ | ~~Glaubwürdigkeitsproblem~~ | Q-004 ✓ |
 | ~~Demo vollständig statisch~~ | ~~Demo wirkt wie Slideshow~~ | Q-031 ✓ |
+| ~~Dokument-Upload ohne State~~ | ~~Upload-Alert nur, kein Fairness-Effekt~~ | Q-071 ✓ |
 | DSFA für Kita-Domäne noch ausstehend | Konzeptlücke — extern abhängig | — |
 | Queue ohne weitere OFFEN-Einträge | Nächste Iteration braucht Queue-Nachfüllung | — |
 
@@ -137,7 +141,5 @@ Einträge in `story_registry.json` und TRACEABILITY_MATRIX. Demo-`storyRegistry.
 - Authentifizierung (kein eID, kein FIDO2)
 - Datenbankanbindung
 - Echte Behördenschnittstellen (ALLEGRO, XMeld, ELSTER etc.)
-- Kita-Betrieb & Jugendamt-Demo (nur Dokumentation)
-- Öffentlicher Transparenzbericht (nur Konzept)
-- Unternehmensgründungs-Demo (nur Dokumentation)
-- Chart-/Visualisierungsbibliothek
+- Chart-/Visualisierungsbibliothek (Zeitreihe aktuell als HTML-Tabelle)
+- Persistenter Backend-State / echte Uploads
