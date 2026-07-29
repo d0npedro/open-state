@@ -2,7 +2,7 @@
 
 | Feld | Wert |
 |------|------|
-| last_checked | 2026-07-29T06:37:00Z |
+| last_checked | 2026-07-29T06:37:30Z |
 | last_run_id | 30428581161 |
 | last_status | success |
 | last_fix_sha | 124aee2 |
@@ -10,7 +10,7 @@
 
 ## Log
 
-- Build `30428580945` + E2E `30428581161` **success** (SHA 124aee2 supervisor Q-123 Kita Open-Data-Lizenz CSV). Prior Build `30428469325` + E2E `30428469313` **success** (SHA 929a28c Q-122 VS-05 + Kita Vergleich/CSV). Catch-up: origin/main..main = 0. No fix. fix_attempts=0.
+- Build `30428580945` + E2E `30428581161` **success** (SHA 124aee2 docs supervisor Q-123 Kita Open-Data-Lizenz CSV). Prior Build `30428469325` + E2E `30428469313` **success** (SHA 929a28c); prior E2E `30428443824` **success** (SHA a2bddcc). Catch-up this tick: origin/main..main was 7 → lint+build grün (local `.next` ENOENT race, clean rebuild) → push `a0df000..a2bddcc`; concurrent supervisor then pushed remaining (kita Open-Data-Lizenz + merges + Q-122/Q-123) → origin/main..main = 0. No fix. fix_attempts=0.
 - E2E `30428080184` **success** (SHA 7434203 docs ci-watcher). Prior E2E `30427934277` **success** (SHA 55f09af). Build latest `30427581501` success (SHA c3432c9; newer HEAD docs-only path-skip). Catch-up: origin/main..main = 0. No fix. fix_attempts=0.
 - E2E `30427934277` **success** (SHA 55f09af docs ci-watcher). Prior E2E `30427802521` **success** (SHA b1fce53). Build latest `30427581501` success (SHA c3432c9; newer HEAD docs-only path-skip). Catch-up: origin/main..main = 0. No fix. fix_attempts=0.
 - E2E `30427802521` **success** (SHA b1fce53 docs ci-watcher). Prior E2E `30427760881` **success** (SHA 394422b). Build latest `30427581501` success (SHA c3432c9; newer HEAD docs-only path-skip). Catch-up: origin/main..main = 0. No fix. fix_attempts=0.
