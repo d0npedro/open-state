@@ -83,7 +83,9 @@ export function KitaHandlungsfelder({
         Optional Schnellfilter „Meldelücke“ (wie Engpass-Rangliste / politische Vorlage).
       </p>
 
+      {/* Schnellfilter: interaktiv / nicht drucken */}
       <div
+        className="no-print"
         role="group"
         aria-label="Schnellfilter Handlungsfelder Meldelücke"
         style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '0.85rem' }}
@@ -115,6 +117,21 @@ export function KitaHandlungsfelder({
           </span>
         </button>
       </div>
+
+      {filter === 'MELDELUECKE' && (
+        <p
+          className="print-only"
+          style={{
+            fontSize: '0.8rem',
+            color: 'var(--color-text-muted)',
+            margin: '0 0 0.65rem',
+            lineHeight: 1.5,
+          }}
+        >
+          Gefiltert: nur Handlungsfelder mit Meldelücke (Stand Ausdruck · Session-sensitiv).
+          Reihenfolge nach Wartelistendruck unverändert.
+        </p>
+      )}
 
       {rows.length === 0 ? (
         <p

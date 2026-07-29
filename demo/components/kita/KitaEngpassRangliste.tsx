@@ -98,7 +98,9 @@ export function KitaEngpassRangliste({
         Optional Schnellfilter „Meldelücke“ (wie politische Vorlage / Planungsraum-Explorer).
       </p>
 
+      {/* Schnellfilter: interaktiv / nicht drucken */}
       <div
+        className="no-print"
         role="group"
         aria-label="Schnellfilter Engpass-Rangliste Meldelücke"
         style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '0.85rem' }}
@@ -130,6 +132,21 @@ export function KitaEngpassRangliste({
           </span>
         </button>
       </div>
+
+      {filter === 'MELDELUECKE' && (
+        <p
+          className="print-only"
+          style={{
+            fontSize: '0.8rem',
+            color: 'var(--color-text-muted)',
+            margin: '0 0 0.65rem',
+            lineHeight: 1.5,
+          }}
+        >
+          Gefiltert: nur Planungsräume mit Meldelücke (Stand Ausdruck · Session-sensitiv).
+          Original-Rang nach Wartelistendruck unverändert.
+        </p>
+      )}
 
       {rows.length === 0 ? (
         <p

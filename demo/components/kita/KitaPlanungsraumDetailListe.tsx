@@ -340,7 +340,9 @@ export function KitaPlanungsraumDetailListe({
         bleibt nach Wartelistendruck.
       </p>
 
+      {/* Schnellfilter: interaktiv / nicht drucken */}
       <div
+        className="no-print"
         role="group"
         aria-label="Schnellfilter Planungsraum-Detail Meldelücke"
         style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '0.85rem' }}
@@ -372,6 +374,22 @@ export function KitaPlanungsraumDetailListe({
           </span>
         </button>
       </div>
+
+      {filter === 'MELDELUECKE' && (
+        <p
+          className="print-only"
+          style={{
+            fontSize: '0.8rem',
+            color: 'var(--color-text-muted)',
+            margin: '0 0 0.65rem',
+            lineHeight: 1.5,
+          }}
+        >
+          Gefiltert: nur Planungsräume mit Meldelücke in der Detailansicht (Stand Ausdruck ·
+          Session-sensitiv). Original-Rang nach Wartelistendruck unverändert. Residual-Summenhinweis
+          bezieht sich weiterhin auf alle Räume.
+        </p>
+      )}
 
       {/* Summenhinweis: immer über alle Räume (Methodik), unabhängig vom Sichtfilter */}
       <KitaLagebildResidualSummenHinweis residualByRaumId={residualByRaumId} />

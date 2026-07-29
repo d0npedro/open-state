@@ -3,6 +3,7 @@ import { KitaMeldeeingangPanel } from '@/components/kita/KitaMeldeeingangPanel';
 import { KitaEngpassRangliste } from '@/components/kita/KitaEngpassRangliste';
 import { KitaHandlungsfelder } from '@/components/kita/KitaHandlungsfelder';
 import { KitaPlanungsraumDetailListe } from '@/components/kita/KitaPlanungsraumDetailListe';
+import { KitaLagebildDruck } from '@/components/kita/KitaLagebildDruck';
 
 // ─── Hauptseite ──────────────────────────────────────────────────────────────
 
@@ -34,8 +35,9 @@ export default function KitaLagebildPage() {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-      {/* Demo-Zugangs-Banner */}
+      {/* Demo-Zugangs-Banner – nicht drucken */}
       <div
+        className="no-print"
         style={{
           padding: '0.875rem 1.25rem',
           background: '#1a1a2e',
@@ -62,6 +64,7 @@ export default function KitaLagebildPage() {
       {/* Story-Badges + Titel */}
       <div>
         <div
+          className="no-print"
           style={{
             fontSize: '0.8rem',
             color: 'var(--color-text-muted)',
@@ -75,7 +78,7 @@ export default function KitaLagebildPage() {
           <span className="badge badge-primary">US-KJ-006</span>
           <span>
             Versorgungslagebild · Engpass · Handlungsfelder · Detail Meldelücke-Filter ·
-            Jugendamt-intern
+            Druckansicht · Jugendamt-intern
           </span>
         </div>
         <h1 style={{ marginBottom: '0.4rem' }}>Steuerungslagebild Kindertagesbetreuung</h1>
@@ -83,6 +86,9 @@ export default function KitaLagebildPage() {
           {lb.kommuneBezeichnung} · Datenstand: {lb.stand} · {lb.berichtszeitraum}
         </p>
       </div>
+
+      {/* Druckleiste + Print-CSS (Filter-Hinweise in Engpass/Handlungsfelder/Detail) */}
+      <KitaLagebildDruck />
 
       {/* Gesamtkennzahlen (intern, mehr Detail als öffentlich) */}
       <section>
@@ -190,13 +196,15 @@ export default function KitaLagebildPage() {
         }}
       >
         Definitionen aller Kennzahlen und Berechnungsformeln finden Sie im{' '}
-        <a href="/kita" style={{ color: 'var(--color-primary)' }}>
+        <a href="/kita" className="no-print" style={{ color: 'var(--color-primary)' }}>
           öffentlichen Transparenzbericht (Methodik-Abschnitt)
         </a>
+        <span className="print-only">öffentlichen Transparenzbericht (Methodik-Abschnitt)</span>
         . Dieses Lagebild verwendet dieselben Berechnungsgrundlagen — intern mit höherer regionaler
         Granularität. Residuale Planungslücke und Meldebasis sind methodische Hinweise (wie
         Bedarfsplanung und Transparenzbericht), keine automatische Handlungsempfehlung. Schnellfilter
-        „Meldelücke“ in Engpass, Handlungsfeldern und Detailkarten ändern nur die Sichtbarkeit.
+        „Meldelücke“ in Engpass, Handlungsfeldern und Detailkarten ändern nur die Sichtbarkeit; bei
+        aktivem Filter dokumentiert der Ausdruck den Filterstand (print-only-Hinweis je Abschnitt).
       </div>
     </div>
   );

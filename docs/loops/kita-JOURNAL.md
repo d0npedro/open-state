@@ -2,6 +2,33 @@
 
 Branch: `loop/kita` · Worktree: `D:\Projects\open-state-loop-kita`
 
+## Iteration 2026-07-29 – US-KJ-005/006 Lagebild Druckansicht Meldelücke-Filter
+
+### Was
+Steuerungslagebild: Druckansicht mit dokumentiertem Meldelücke-Filter (Spiegel zu Vorlage US-KJ-008). Neue Druckleiste `KitaLagebildDruck` (Button „Drucken / als PDF speichern“, Print-CSS `no-print`/`print-only`). Filter-Chips in Engpass-Rangliste, Handlungsfeldern und Planungsraum-Detail sind `no-print`; bei aktivem Filter „Meldelücke“ erscheint je Abschnitt ein print-only-Hinweis (Session-Stand, Rang nach Wartelistendruck unverändert). Demo-Banner und Story-Badges nicht im Ausdruck. Nur Aggregate, keine Kind- oder Personennamen. Merge `origin/main` (ci-watcher docs) vor dem Feature.
+
+### Dateien
+- `demo/components/kita/KitaLagebildDruck.tsx` (neu: Druckleiste + Print-CSS)
+- `demo/components/kita/KitaEngpassRangliste.tsx` (no-print Chips, print-only Filterhinweis)
+- `demo/components/kita/KitaHandlungsfelder.tsx` (no-print Chips, print-only Filterhinweis)
+- `demo/components/kita/KitaPlanungsraumDetailListe.tsx` (no-print Chips, print-only Filterhinweis)
+- `demo/app/kita/lagebild/page.tsx` (Druckleiste, no-print Banner/Badges, Methodik-Hinweis)
+- `docs/loops/kita-JOURNAL.md` (dieses Journal)
+
+### Story
+US-KJ-005 / US-KJ-006 – Versorgungslagebild Druckansicht (Meldelücke-Filter dokumentiert)
+
+### Build
+`npm run lint` + `npm run build` im `demo/`-Verzeichnis (siehe Commit dieses Laufs)
+
+### Nicht angefasst (Supervisor / verboten)
+Queue, BUILD_STATE, storyRegistry, DECISION_LOG, andere Domänen, package.json, CI, push
+
+### Nächster sinnvoller Schritt (Hinweis Supervisor)
+Monatsbericht/Einrichtung-Verlinkung schärfen, oder Druckansicht politische Vorlage um Handlungsfeld-/Detail-Meldelücke spiegeln falls künftig dort Filter hinzukommen.
+
+---
+
 ## Iteration 2026-07-29 – US-KJ-005/006 Planungsraum-Detail Meldelücke-Filter
 
 ### Was
