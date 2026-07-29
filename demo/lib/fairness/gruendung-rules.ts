@@ -230,10 +230,20 @@ export function berechneFairnessSignaleGruendung(akte: GruendungsAkte): Fairness
   // ─── Signal 5: Mehrere Behörden parallel aktiv – Koordinationsüberblick ────
   // Regel: Wenn mehr als eine Behörde gleichzeitig aktiv ist (IN_BEARBEITUNG
   //        oder RUECKFRAGE_OFFEN), ist ein koordinierter Gesamtüberblick hilfreich.
+  // naechsterSchritt: session-sensitiv – bei offener RQ zuerst klären;
+  // nach Antwort Fokus auf parallele Stände (FA/IHK), keine RQ-Priorität.
   const aktiveBehörden = akte.beteiligteBehörden.filter(
     b => b.status === 'IN_BEARBEITUNG' || b.status === 'RUECKFRAGE_OFFEN'
   );
   if (aktiveBehörden.length > 1) {
+    const hatOffeneRueckfrageParallel = akte.rueckfragen.some(r => !r.beantwortet);
+    const naechsterSchrittParallel = hatOffeneRueckfrageParallel
+      ? 'Prüfen Sie alle aktiven Behördenverfahren unter „Behörden & Schritte". ' +
+        'Offene Rückfragen zuerst beantworten, da diese die meisten Folgeschritte blockieren.'
+      : 'Keine offene Rückfrage mehr – prüfen Sie den parallelen Stand der aktiven Behörden ' +
+        '(z. B. Steuernummer-Vergabe und IHK) unter „Behörden & Schritte". ' +
+        'Optional: ausstehende Unterlagen und BG-Anmeldung im Blick behalten.';
+
     signale.push({
       id: 'UG-PARALLELE-BEHOERDEN',
       typ: 'UG_PARALLELE_BEHOERDEN_AKTIV',
@@ -245,9 +255,7 @@ export function berechneFairnessSignaleGruendung(akte: GruendungsAkte): Fairness
       auswirkung:
         'Versäumnisse in einem Verfahren können andere blockieren. ' +
         'Zum Beispiel: ohne Steuernummer (Finanzamt) ist die IHK-Mitgliedschaft zwar aktiv, aber Rechnungsstellung bleibt eingeschränkt.',
-      naechsterSchritt:
-        'Prüfen Sie alle aktiven Behördenverfahren unter „Behörden & Schritte". ' +
-        'Offene Rückfragen zuerst beantworten, da diese die meisten Folgeschritte blockieren.',
+      naechsterSchritt: naechsterSchrittParallel,
       bezug: `Aktive Behörden: ${aktiveBehörden.map(b => b.id).join(', ')}`,
       prioritaet: 'INFO',
     });

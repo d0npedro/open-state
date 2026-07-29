@@ -862,6 +862,14 @@ test.describe('UG – Hinweise zur Verfahrenslage', () => {
     await expect(cta).toBeVisible();
     await expect(cta).toContainText(/Zu den Behörden/i);
     await expect(cta).toHaveAttribute('href', '/gruendung/behoerden');
+    // Initial: Hilfstext priorisiert offene Rückfrage (session-sensitiv)
+    const hint = page.getByTestId('hinweise-parallele-behoerden-cta-hint');
+    await expect(hint).toBeVisible();
+    await expect(hint).toContainText(/Offene Rückfragen zuerst klären/i);
+    await expect(hint).toContainText(/Behörden & Verfahrensschritte/i);
+    // Signal-Text: nächster Schritt mit RQ-Priorität
+    const panel = page.getByTestId('hinweise-info-UG-PARALLELE-BEHOERDEN');
+    await expect(panel).toContainText(/Offene Rückfragen zuerst beantworten/i);
   });
 
   test('CTA aus parallelen Behörden führt zur Behörden-Übersicht', async ({ page }) => {
@@ -869,6 +877,30 @@ test.describe('UG – Hinweise zur Verfahrenslage', () => {
     await expect(page).toHaveURL(/\/gruendung\/behoerden/);
     await expect(page.getByRole('heading', { name: 'Behörden & Verfahrensschritte' })).toBeVisible();
     await expect(page.getByTestId('behoerde-karte-BEH-02')).toBeVisible();
+  });
+
+  test('Nach Antwort: parallele Behörden ohne RQ-Priorität, CTA bleibt', async ({ page }) => {
+    // Session: Rückfrage beantworten, dann Hinweise (kein page.goto nach State – DEC-012)
+    const { goUgTab } = await import('./helpers/sessionNav');
+    await goUgTab(page, 'Fragen', /\/gruendung\/rueckfragen/);
+    await page.getByRole('button', { name: /Rückfrage beantworten/i }).click();
+    await expect(page.getByText(/die Behörde wurde informiert|beantwortet/i).first()).toBeVisible();
+    await goUgTab(page, 'Hinweise', /\/gruendung\/hinweise/);
+
+    // Signal bleibt (FA + IHK weiter parallel aktiv), aber keine RQ-Priorität mehr
+    const panel = page.getByTestId('hinweise-info-UG-PARALLELE-BEHOERDEN');
+    await expect(panel).toBeVisible();
+    await expect(panel).toContainText(/Behördenverfahren laufen parallel/i);
+    await expect(panel).toContainText(/Keine offene Rückfrage mehr/i);
+    await expect(panel).not.toContainText(/Offene Rückfragen zuerst beantworten/i);
+
+    // CTA bleibt sichtbar (mehrere Behörden aktiv); Hilfstext session-sensitiv
+    await expect(page.getByTestId('hinweise-parallele-behoerden-cta')).toBeVisible();
+    const hint = page.getByTestId('hinweise-parallele-behoerden-cta-hint');
+    await expect(hint).toBeVisible();
+    await expect(hint).toContainText(/Keine offene Rückfrage/i);
+    await expect(hint).toContainText(/parallele Verfahren/i);
+    await expect(hint).not.toContainText(/Offene Rückfragen zuerst klären/i);
   });
 
 });
