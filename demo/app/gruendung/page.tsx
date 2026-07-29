@@ -124,11 +124,12 @@ function naechsterSchrittZiel(
  * Kurz-CTA für Fairness-Signale auf der Übersicht
  * (Rückfrage / Unterlagen / BG / Steuernummer / Betriebsdatum).
  * Nur solange der auslösende Aktenzustand noch greift.
+ * Optionaler Hilfstext (`hint`) erklärt den CTA-Kontext session-sensitiv.
  */
 function fairnessSignalZiel(
   signal: FairnessSignal,
   akte: GruendungsAkte
-): { href: string; cta: string; icon: IconName; testKey: string } | null {
+): { href: string; cta: string; icon: IconName; testKey: string; hint?: string } | null {
   // Offene Rückfrage mit Frist
   if (
     signal.typ === 'UG_RUECKFRAGE_OFFEN_FRIST_RELEVANT' ||
@@ -196,6 +197,7 @@ function fairnessSignalZiel(
   }
 
   // Geplantes Betriebsdatum überschritten – Verfahren noch offen
+  // Hilfstext: bei offener RQ zuerst klären; nach Antwort Fokus offene Punkte/Steuernummer
   if (
     signal.typ === 'UG_BETRIEBSDATUM_UEBERSCHRITTEN' ||
     signal.id === 'UG-BETRIEBSDATUM'
@@ -204,11 +206,20 @@ function fairnessSignalZiel(
       akte.status
     );
     if (abgeschlossen) return null;
+    const hatOffeneRueckfrage = akte.rueckfragen.some(r => !r.beantwortet);
+    const vs05 = akte.verfahrensSchritte.find(vs => vs.id === 'VS-05');
+    const steuernummerInBearbeitung = vs05?.status === 'IN_BEARBEITUNG';
+    const hint = hatOffeneRueckfrage
+      ? 'Zuerst die offene Rückfrage des Finanzamts klären; Fortschritt und nächste Schritte im Statusblock.'
+      : steuernummerInBearbeitung
+        ? 'Rückfrage beantwortet – Steuernummer-Vergabe und weitere offene Punkte im Statusblock prüfen.'
+        : 'Offene Punkte und aktuellen Fortschritt im Statusblock prüfen.';
     return {
       href: '/gruendung#verfahrensstatus',
       cta: 'Zum Verfahrensstatus',
       icon: 'refresh',
       testKey: 'betriebsdatum',
+      hint,
     };
   }
 
@@ -541,24 +552,38 @@ export default function GruendungPage() {
                       </div>
                     )}
                     {ziel && (
-                      <Link
-                        href={ziel.href}
-                        data-testid={`uebersicht-fairness-cta-${ziel.testKey}`}
-                        style={{
-                          display: 'inline-flex',
-                          alignItems: 'center',
-                          gap: '0.3rem',
-                          marginTop: '0.65rem',
-                          fontSize: '0.8rem',
-                          fontWeight: 600,
-                          color: 'var(--color-primary)',
-                          textDecoration: 'none',
-                        }}
-                        aria-label={`${ziel.cta}: ${sig.titel}`}
-                      >
-                        <Icon name={ziel.icon} size={13} />
-                        {ziel.cta} →
-                      </Link>
+                      <div style={{ marginTop: '0.65rem' }}>
+                        <Link
+                          href={ziel.href}
+                          data-testid={`uebersicht-fairness-cta-${ziel.testKey}`}
+                          style={{
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '0.3rem',
+                            fontSize: '0.8rem',
+                            fontWeight: 600,
+                            color: 'var(--color-primary)',
+                            textDecoration: 'none',
+                          }}
+                          aria-label={`${ziel.cta}: ${sig.titel}`}
+                        >
+                          <Icon name={ziel.icon} size={13} />
+                          {ziel.cta} →
+                        </Link>
+                        {ziel.hint && (
+                          <p
+                            data-testid={`uebersicht-fairness-cta-hint-${ziel.testKey}`}
+                            style={{
+                              margin: '0.35rem 0 0',
+                              fontSize: '0.75rem',
+                              lineHeight: 1.45,
+                              color: 'var(--color-text-muted)',
+                            }}
+                          >
+                            {ziel.hint}
+                          </p>
+                        )}
+                      </div>
                     )}
                   </div>
                 </div>

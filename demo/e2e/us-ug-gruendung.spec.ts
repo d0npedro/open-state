@@ -206,6 +206,10 @@ test.describe('UG – Übersicht', () => {
     await expect(betriebsdatumCta).toBeVisible();
     await expect(betriebsdatumCta).toHaveAttribute('href', '/gruendung#verfahrensstatus');
     await expect(betriebsdatumCta).toContainText(/Zum Verfahrensstatus/i);
+    // Hilfstext bei offener RQ: zuerst Finanzamt-Rückfrage klären
+    const betriebsHint = page.getByTestId('uebersicht-fairness-cta-hint-betriebsdatum');
+    await expect(betriebsHint).toBeVisible();
+    await expect(betriebsHint).toContainText(/offene Rückfrage des Finanzamts klären/i);
   });
 
   test('Fairness-CTA Rückfrage führt zur Rückfragen-Karte', async ({ page }) => {
@@ -263,6 +267,12 @@ test.describe('UG – Übersicht', () => {
     const betriebsSignal = page.getByTestId('uebersicht-fairness-UG-BETRIEBSDATUM');
     await expect(betriebsSignal).toContainText(/Rückfrage des Finanzamts ist beantwortet/i);
     await expect(betriebsSignal).not.toContainText(/zuerst Rückfrage Finanzamt beantworten/i);
+    // CTA-Hilfstext nach RQ-Antwort: Fokus Steuernummer/offene Punkte, nicht RQ-Priorität
+    const betriebsHint = page.getByTestId('uebersicht-fairness-cta-hint-betriebsdatum');
+    await expect(betriebsHint).toBeVisible();
+    await expect(betriebsHint).toContainText(/Rückfrage beantwortet/i);
+    await expect(betriebsHint).toContainText(/Steuernummer-Vergabe|offene Punkte/i);
+    await expect(betriebsHint).not.toContainText(/offene Rückfrage des Finanzamts klären/i);
   });
 
   test('INFO-Signal parallele Behörden erscheint auf Hinweise-Seite', async ({ page }) => {
