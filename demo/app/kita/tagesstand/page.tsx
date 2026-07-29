@@ -9,7 +9,9 @@
  * Prozesskette: Belegung (US-KJ-002) → Monatsbericht (US-KJ-003) → Meldung (US-KJ-004).
  * Druck freigabeunabhängig: Status, Datenbasis (Belegung-Vorbelegung, Gruppen,
  * Schlüssel-Hinweis) und Freigabenachweis im Ausdruck (Spiegel Monatsbericht/Meldung).
- * Interaktive Phasen, Eingabefelder und Prozess-Hub no-print.
+ * CSV-Export freigabeunabhängig: aktuelle Session-Aggregate je Gruppe + Summenzeile
+ * (Spiegel Belegung/Monatsbericht; DEC-004, keine Kind-/Personennamen).
+ * Interaktive Phasen, Eingabefelder, CSV und Prozess-Hub no-print.
  * Keine Kind- oder Personennamen.
  */
 
@@ -21,6 +23,7 @@ import {
   personalschluesselUnterschritten,
 } from '@/data/mockKitaTagesstand';
 import type {
+  KitaTagesstand,
   TagesstandFreigabe,
   TagesstandGruppe,
   TagesstandStatus,
@@ -54,6 +57,135 @@ function fmtStunden(n: number) {
     minimumFractionDigits: n % 1 === 0 ? 0 : 1,
     maximumFractionDigits: 1,
   });
+}
+
+/** Dezimal für CSV: Komma als Trennzeichen (de-DE, Spiegel Belegung/Monatsbericht). */
+function csvNum(n: number): string {
+  return String(n).replace('.', ',');
+}
+
+/**
+ * CSV-Export der aktuellen Session-Aggregate (US-KJ-001).
+ * Freigabeunabhängig: Vorbelegung, Entwurf und freigegebene Fassung.
+ * Nur Zählwerte und Stunden – keine Kind- oder Personennamen (DEC-004).
+ */
+function downloadCsv(args: {
+  base: KitaTagesstand;
+  status: TagesstandStatus;
+  statusLabel: string;
+  phaseLabel: string;
+  gruppen: TagesstandGruppe[];
+  freigabe: TagesstandFreigabe | null;
+}) {
+  const { base, status, statusLabel, phaseLabel, gruppen, freigabe } = args;
+
+  const header = [
+    'Gruppe',
+    'Gruppe-ID',
+    'Altersgruppe',
+    'Geschlossen',
+    'Belegte Plätze (Vorbelegung)',
+    'Anwesend',
+    'Krank',
+    'Urlaub',
+    'Sonstiges',
+    'Statussumme',
+    'Personal geplant (h)',
+    'Personal Ist (h)',
+    'Personalschluessel-Hinweis',
+    'Schwelle Kinder je Ist-h',
+  ].join(';');
+
+  const rows = gruppen.map(g => {
+    const sum = kinderSumme(g.kinder);
+    const schluessel =
+      g.geschlossen
+        ? 'nicht relevant'
+        : personalschluesselUnterschritten(g)
+          ? 'ja'
+          : 'nein';
+    return [
+      g.bezeichnung.replace(/;/g, ','),
+      g.gruppeId,
+      g.altersgruppe,
+      g.geschlossen ? 'ja' : 'nein',
+      g.belegtePlaetze,
+      g.kinder.anwesend,
+      g.kinder.krank,
+      g.kinder.urlaub,
+      g.kinder.sonstiges,
+      sum,
+      csvNum(g.personal.geplantStunden),
+      csvNum(g.personal.istStunden),
+      schluessel,
+      csvNum(g.maxKinderProFachkraftStunde),
+    ].join(';');
+  });
+
+  const offen = gruppen.filter(g => !g.geschlossen);
+  let anwesend = 0;
+  let krank = 0;
+  let urlaub = 0;
+  let sonstiges = 0;
+  let belegt = 0;
+  let geplant = 0;
+  let ist = 0;
+  let unterschritten = 0;
+  for (const g of offen) {
+    anwesend += g.kinder.anwesend;
+    krank += g.kinder.krank;
+    urlaub += g.kinder.urlaub;
+    sonstiges += g.kinder.sonstiges;
+    belegt += g.belegtePlaetze;
+    geplant += g.personal.geplantStunden;
+    ist += g.personal.istStunden;
+    if (personalschluesselUnterschritten(g)) unterschritten += 1;
+  }
+  const summeStatus = anwesend + krank + urlaub + sonstiges;
+  const summeRow = [
+    'SUMME (geöffnete Gruppen)',
+    '',
+    '',
+    '',
+    belegt,
+    anwesend,
+    krank,
+    urlaub,
+    sonstiges,
+    summeStatus,
+    csvNum(geplant),
+    csvNum(ist),
+    `${unterschritten} Gruppe(n)`,
+    '',
+  ].join(';');
+
+  const freigabeMeta = freigabe
+    ? `Freigegeben: ${freigabe.freigegebenAm} | Rolle: ${freigabe.freigegebenDurchRolle}`
+    : 'Freigabe: noch nicht freigegeben';
+
+  const csv = [
+    `# Tagesstand ${base.einrichtungBezeichnung}`,
+    `# Stichtag: ${base.datumLabel} (${base.datumIso}) | ID: ${base.id}`,
+    `# Einrichtung: ${base.einrichtungId} | Planungsraum: ${base.planungsraumBezeichnung}`,
+    `# Status: ${statusLabel} (${status}) | UI-Phase: ${phaseLabel}`,
+    `# ${freigabeMeta}`,
+    `# Gruppen geöffnet: ${offen.length} von ${gruppen.length} | Schlüssel-Hinweis: ${unterschritten}`,
+    `# Vorbelegung aus Belegungsstand (US-KJ-002); Session-Stand, kein Backend`,
+    `# Keine personenbezogenen Daten · Keine Kind- oder Personennamen (DEC-004)`,
+    `# Trennzeichen: Semikolon · Dezimaltrennzeichen: Komma · Encoding: UTF-8 BOM`,
+    '',
+    header,
+    ...rows,
+    summeRow,
+  ].join('\n');
+
+  const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `tagesstand-${base.einrichtungId}-${base.datumIso}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
 }
 
 export default function KitaTagesstandPage() {
@@ -253,7 +385,7 @@ export default function KitaTagesstandPage() {
         </p>
       </div>
 
-      {/* Druck freigabeunabhängig – Spiegel Monatsbericht/Meldung/Bedarfsplanung */}
+      {/* Druck + CSV freigabeunabhängig – Spiegel Monatsbericht/Belegung */}
       <div
         className="no-print card"
         style={{
@@ -266,7 +398,7 @@ export default function KitaTagesstandPage() {
       >
         <div style={{ maxWidth: '40rem' }}>
           <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>Export</div>
-          <strong style={{ fontSize: '0.95rem' }}>Druckansicht Tagesstand</strong>
+          <strong style={{ fontSize: '0.95rem' }}>Druck und CSV Tagesstand</strong>
           <p
             style={{
               fontSize: '0.8rem',
@@ -275,21 +407,42 @@ export default function KitaTagesstandPage() {
               lineHeight: 1.5,
             }}
           >
-            Druck ist freigabeunabhängig (Aufforderung, Erfassung, Zusammenfassung und
+            Druck und CSV sind freigabeunabhängig (Aufforderung, Erfassung, Zusammenfassung und
             freigegebene Fassung). Status, Datenbasis (Vorbelegung Belegung, Gruppenaggregate,
-            Schlüssel-Hinweis) und Freigabenachweis erscheinen im Ausdruck. Aktionsbuttons,
-            Eingabefelder, Bestätigungsdialog und Prozess-Hub sind no-print. Keine Kind- oder
-            Personennamen.
+            Schlüssel-Hinweis) und Freigabenachweis erscheinen im Ausdruck. CSV lädt die
+            aktuellen Session-Aggregate je Gruppe inkl. Summenzeile (Semikolon, UTF-8 BOM).
+            Aktionsbuttons, Eingabefelder, Bestätigungsdialog und Prozess-Hub sind no-print.
+            Keine Kind- oder Personennamen (DEC-004).
           </p>
         </div>
-        <button
-          type="button"
-          className="btn btn-secondary"
-          onClick={() => window.print()}
-          style={{ fontSize: '0.875rem', flexShrink: 0 }}
-        >
-          Drucken / als PDF speichern
-        </button>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', flexShrink: 0 }}>
+          <button
+            type="button"
+            className="btn btn-secondary"
+            onClick={() =>
+              downloadCsv({
+                base,
+                status,
+                statusLabel: st.label,
+                phaseLabel,
+                gruppen,
+                freigabe,
+              })
+            }
+            style={{ fontSize: '0.875rem' }}
+            aria-label="Tagesstand-Aggregate als CSV herunterladen (keine Kind- oder Personennamen)"
+          >
+            CSV exportieren
+          </button>
+          <button
+            type="button"
+            className="btn btn-secondary"
+            onClick={() => window.print()}
+            style={{ fontSize: '0.875rem' }}
+          >
+            Drucken / als PDF speichern
+          </button>
+        </div>
       </div>
 
       {/* print-only Kopf + Status + Datenbasis + Freigabe */}
@@ -868,12 +1021,20 @@ export default function KitaTagesstandPage() {
         <h2 style={{ marginTop: 0, fontSize: '1rem', color: 'var(--color-text)' }}>Methodik</h2>
         <p style={{ marginTop: 0 }}>{base.methodikKurz}</p>
         <p style={{ marginBottom: '0.65rem' }}>{base.rechtsgrundlageHinweis}</p>
-        <p style={{ marginBottom: 0 }}>
+        <p style={{ marginBottom: '0.65rem' }}>
           <strong style={{ color: 'var(--color-text)' }}>Druckansicht:</strong> freigabeunabhängig
           (Aufforderung, Erfassung, Zusammenfassung, freigegebene Fassung). Status, Datenbasis
           (Vorbelegung aus Belegung US-KJ-002, Gruppenaggregate, Schlüssel-Hinweis) und
           Freigabenachweis erscheinen im Ausdruck; Eingabefelder, Bestätigungsdialog,
           Aktionsbuttons und Prozess-Hub sind no-print (Spiegel Monatsbericht/Meldung).
+        </p>
+        <p style={{ marginBottom: 0 }}>
+          <strong style={{ color: 'var(--color-text)' }}>CSV-Export:</strong> freigabeunabhängig,
+          aktueller Session-Stand je Gruppe (Anwesenheit, Personalstunden, Personalschlüssel-Hinweis)
+          inkl. Summenzeile geöffneter Gruppen und Metakopf mit Status/Freigabe. Semikolon,
+          UTF-8 BOM, Dezimaltrennzeichen Komma – Spiegel Belegung (US-KJ-002) und Monatsbericht
+          (US-KJ-003). Nur Aggregate, keine Kind- oder Personennamen (DEC-004). Kein Open-Data-Export
+          der öffentlichen Berichtsschicht.
         </p>
       </section>
 

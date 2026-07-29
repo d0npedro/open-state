@@ -2,6 +2,29 @@
 
 Branch: `loop/kita` · Worktree: `D:\Projects\open-state-loop-kita`
 
+## Iteration 2026-07-29 – US-KJ-001 Tagesstand CSV Aggregate-Export
+
+### Was
+Tagesstand (`/kita/tagesstand`, US-KJ-001): CSV-Export freigabeunabhängig analog Belegung/Monatsbericht. Aktueller Session-Stand je Gruppe (Anwesend/Krank/Urlaub/Sonstiges, Personal geplant/Ist, Personalschlüssel-Hinweis, Vorbelegung belegt) inkl. Summenzeile geöffneter Gruppen. Metakopf: Stichtag, Status, UI-Phase, Freigabe, DEC-004-Hinweis. Semikolon, UTF-8 BOM, Dezimaltrennzeichen Komma. Button im Export-Block neben Druck; Methodik-Hinweis. Nur Aggregate, keine Kind- oder Personennamen. `origin/main` bereits im Branch (kein Merge nötig).
+
+### Dateien
+- `demo/app/kita/tagesstand/page.tsx` (downloadCsv, Export-Button, Methodik)
+- `docs/loops/kita-JOURNAL.md` (dieses Journal)
+
+### Story
+US-KJ-001 – Tagesstand erfassen (CSV Aggregate-Export, freigabeunabhängig)
+
+### Build
+`npm run lint` + `npm run build` im `demo/`-Verzeichnis (siehe Commit dieses Laufs)
+
+### Nicht angefasst (Supervisor / verboten)
+Queue, BUILD_STATE, storyRegistry, DECISION_LOG, andere Domänen, package.json, CI, push
+
+### Nächster sinnvoller Schritt (Hinweis Supervisor)
+Monatsbericht CSV um Vorschau-Modus-Metadaten schärfen, oder Meldung-CSV Aggregate nach Freigabe (DEC-004).
+
+---
+
 ## Iteration 2026-07-29 – US-KJ-002 Einrichtung Belegungsstand-Druck Status/Datenbasis
 
 ### Was
