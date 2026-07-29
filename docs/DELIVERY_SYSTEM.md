@@ -150,6 +150,9 @@ git push
 Ein Push erfolgt ausschließlich nach erfolgreichem Commit **und** grünem `lint` + `build`.
 Kein Push bei fehlgeschlagenem Lint/Build, uncommitteten push-relevanten Änderungen oder ohne Nutzeranweisung.
 
+**Dauerbetrieb:** Nach `git push origin main` überwacht der **CI-Watcher** (alle 5 min) GitHub Actions Build Check.
+Bei Failure: Logs, lokal reproduzieren, fixen, committen, erneut pushen (kein force). Siehe `docs/loops/MULTI_LOOP_BETRIEB.md`.
+
 Erkannte Push-Trigger: „pushe", „push", „committe und pushe", „auf GitHub hochladen",
 „online bringen", „Entwickle weiter und pushe", „Committe und pushe am Ende."
 
