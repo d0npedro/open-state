@@ -3,7 +3,8 @@
 /**
  * GruendungStateContext – Demo-Session für Unternehmensgründung
  *
- * Interaktionen: Rückfrage beantworten, Dokument hochladen (ohne Backend).
+ * Interaktionen: Rückfrage beantworten, Dokument hochladen,
+ * BG-Anmeldung als erledigt markieren (ohne Backend).
  * Erzeugt Ereignis-Einträge für den Verlauf.
  */
 
@@ -14,18 +15,29 @@ import type { GruendungsAkte, GruendungsEreignis } from '@/types/gruendung';
 const DEMO_AKTION_DATUM = '07.12.2024';
 const DEMO_AKTION_ZEIT = '07.12.2024, 11:15';
 
+/** Behörde, deren Anmeldung in der Demo als erledigt markiert werden kann (BG). */
+const BG_BEHOERDE_ID = 'BEH-04';
+const BG_SCHRITT_ID = 'VS-07';
+
 interface GruendungStateContextValue {
   akte: GruendungsAkte;
   /** Demo: beantwortet Rückfrage, optional mit Freitext. */
   answerRueckfrage: (id: string, antwortText?: string) => void;
   /** Demo: markiert angefordertes/abgelehntes Dokument als hochgeladen. */
   uploadDokument: (id: string) => void;
+  /**
+   * Demo: markiert die BG-Anmeldung (außerhalb Open State) als erledigt.
+   * Ermöglicht Fairness-Fallthrough auf Steuernummer/Betriebsdatum.
+   */
+  markBgAnmeldungErledigt: () => void;
   /** Demo: setzt Session auf den Ausgangs-Mock zurück. */
   resetSession: () => void;
   /** True, sobald in dieser Session gehandelt wurde. */
   hasSessionChanges: boolean;
   /** Dokument-IDs, die in dieser Demo-Session als hochgeladen markiert wurden. */
   sessionUploadedIds: string[];
+  /** True, wenn die BG-Anmeldung in dieser Session als erledigt markiert wurde. */
+  sessionBgErledigt: boolean;
 }
 
 const DEMO_ANTWORT_FALLBACK =
@@ -35,14 +47,17 @@ const GruendungStateContext = createContext<GruendungStateContextValue>({
   akte: demoGruendungsAkte,
   answerRueckfrage: () => {},
   uploadDokument: () => {},
+  markBgAnmeldungErledigt: () => {},
   resetSession: () => {},
   hasSessionChanges: false,
   sessionUploadedIds: [],
+  sessionBgErledigt: false,
 });
 
 export function GruendungStateProvider({ children }: { children: React.ReactNode }) {
   const [answeredById, setAnsweredById] = useState<Record<string, string>>({});
   const [uploadedIds, setUploadedIds] = useState<string[]>([]);
+  const [bgAnmeldungErledigt, setBgAnmeldungErledigt] = useState(false);
 
   const answerRueckfrage = useCallback((id: string, antwortText?: string) => {
     const text = (antwortText ?? '').trim() || DEMO_ANTWORT_FALLBACK;
@@ -53,12 +68,18 @@ export function GruendungStateProvider({ children }: { children: React.ReactNode
     setUploadedIds(prev => (prev.includes(id) ? prev : [...prev, id]));
   }, []);
 
+  const markBgAnmeldungErledigt = useCallback(() => {
+    setBgAnmeldungErledigt(true);
+  }, []);
+
   const resetSession = useCallback(() => {
     setAnsweredById({});
     setUploadedIds([]);
+    setBgAnmeldungErledigt(false);
   }, []);
 
-  const hasSessionChanges = Object.keys(answeredById).length > 0 || uploadedIds.length > 0;
+  const hasSessionChanges =
+    Object.keys(answeredById).length > 0 || uploadedIds.length > 0 || bgAnmeldungErledigt;
 
   const akte = useMemo((): GruendungsAkte => {
     const answeredIds = Object.keys(answeredById);
@@ -86,13 +107,20 @@ export function GruendungStateProvider({ children }: { children: React.ReactNode
       d => d.status === 'ANGEFORDERT' || d.status === 'ABGELEHNT'
     );
 
-    // Behörden: Finanzamt-Rückfrage schließen, wenn beantwortet
-    const updatedBehörden = demoGruendungsAkte.beteiligteBehörden.map(b => {
+    // Behörden: Finanzamt-Rückfrage schließen, wenn beantwortet;
+    // BG-Anmeldung: Demo-Markierung NICHT_GESTARTET → ABGESCHLOSSEN
+    let updatedBehörden = demoGruendungsAkte.beteiligteBehörden.map(b => {
       if (b.typ === 'FINANZAMT' && !hatOffeneRueckfragen && b.status === 'RUECKFRAGE_OFFEN') {
         return { ...b, status: 'IN_BEARBEITUNG' as const };
       }
       return b;
     });
+    if (bgAnmeldungErledigt) {
+      updatedBehörden = updatedBehörden.map(b => {
+        if (b.id !== BG_BEHOERDE_ID || b.status !== 'NICHT_GESTARTET') return b;
+        return { ...b, status: 'ABGESCHLOSSEN' as const };
+      });
+    }
 
     // Verfahrensschritte: „Rückfrage …“-Schritte abschließen, sobald die
     // zugehörige Behörde keine offenen Rückfragen mehr hat (z. B. VS-04).
@@ -129,6 +157,27 @@ export function GruendungStateProvider({ children }: { children: React.ReactNode
       return { ...vs, status: 'IN_BEARBEITUNG' as const };
     });
 
+    // BG VS-07: Demo-Anmeldung als erledigt (außerhalb Open State)
+    if (bgAnmeldungErledigt) {
+      updatedSchritte = updatedSchritte.map(vs => {
+        if (vs.id !== BG_SCHRITT_ID) return vs;
+        if (vs.status === 'ABGESCHLOSSEN') return vs;
+        return {
+          ...vs,
+          status: 'ABGESCHLOSSEN' as const,
+          erledigtAm: DEMO_AKTION_DATUM,
+          ergebnis:
+            'Anmeldung bei der Berufsgenossenschaft als erledigt markiert (Demo, außerhalb Open State).',
+        };
+      });
+    }
+
+    const hatOffeneBg =
+      !bgAnmeldungErledigt &&
+      demoGruendungsAkte.beteiligteBehörden.some(
+        b => b.typ === 'BERUFSGENOSSENSCHAFT' && b.status === 'NICHT_GESTARTET'
+      );
+
     let status = demoGruendungsAkte.status;
     let statusBeschreibung = demoGruendungsAkte.statusBeschreibung;
     let naechsterSchritt = demoGruendungsAkte.naechsterSchritt;
@@ -143,12 +192,18 @@ export function GruendungStateProvider({ children }: { children: React.ReactNode
         'Alle Rückfragen sind beantwortet. Es liegen noch empfohlene oder angefordete Unterlagen aus.';
       naechsterSchritt =
         'Optional: fehlende Unterlagen im Bereich „Unterlagen“ hochladen. Das Finanzamt bearbeitet die steuerliche Erfassung.';
-    } else {
+    } else if (hatOffeneBg) {
       status = 'IN_BEARBEITUNG';
       statusBeschreibung =
         'Alle Rückfragen sind beantwortet und die angeforderten Unterlagen liegen vor. Die Behörden setzen die Bearbeitung fort.';
       naechsterSchritt =
         'Keine Handlung von Ihnen erforderlich. Prüfen Sie parallel die BG-Anmeldung (außerhalb von Open State).';
+    } else {
+      status = 'IN_BEARBEITUNG';
+      statusBeschreibung =
+        'Rückfragen, Unterlagen und BG-Anmeldung sind erledigt. Das Finanzamt bearbeitet die Steuernummer-Vergabe; die IHK läuft parallel.';
+      naechsterSchritt =
+        'Keine eigene Handlung mehr nötig für die BG. Prüfen Sie den Stand der Steuernummer-Vergabe beim Finanzamt und den Verfahrensstatus.';
     }
 
     let offeneAufgaben = [...demoGruendungsAkte.offeneAufgaben];
@@ -163,6 +218,16 @@ export function GruendungStateProvider({ children }: { children: React.ReactNode
           a => !aLower(a).includes('qualifikation') && !aLower(a).includes('nachweis beruflicher')
         );
       }
+    }
+    if (bgAnmeldungErledigt) {
+      offeneAufgaben = offeneAufgaben.filter(a => {
+        const t = a.toLowerCase();
+        return (
+          !t.includes('berufsgenossenschaft') &&
+          !t.includes('bg etem') &&
+          !(t.includes('bg ') && t.includes('anmeldung'))
+        );
+      });
     }
 
     const extraEvents: GruendungsEreignis[] = [];
@@ -252,6 +317,31 @@ export function GruendungStateProvider({ children }: { children: React.ReactNode
       });
     }
 
+    if (bgAnmeldungErledigt) {
+      const bg = demoGruendungsAkte.beteiligteBehörden.find(b => b.id === BG_BEHOERDE_ID);
+      extraEvents.push({
+        id: 'UG-DEMO-BG-ANMELDUNG',
+        typ: 'status_aktualisiert',
+        zeitstempel: DEMO_AKTION_ZEIT,
+        handelndeStelle: 'GRUENDER',
+        behördeId: BG_BEHOERDE_ID,
+        beschreibung: 'BG-Anmeldung als erledigt markiert (Demo)',
+        details: bg
+          ? `Anmeldung bei ${bg.bezeichnung} als erledigt markiert. Erfolgt außerhalb von Open State; Demo speichert keine echte Meldung.`
+          : 'BG-Anmeldung als erledigt markiert (Demo-Interaktion).',
+      });
+      extraEvents.push({
+        id: `UG-DEMO-VS-${BG_SCHRITT_ID}`,
+        typ: 'status_aktualisiert',
+        zeitstempel: DEMO_AKTION_ZEIT,
+        handelndeStelle: 'SYSTEM',
+        behördeId: BG_BEHOERDE_ID,
+        beschreibung: 'Verfahrensschritt erledigt: Anmeldung Berufsgenossenschaft',
+        details:
+          'VS-07 nach Demo-Markierung der BG-Anmeldung als erledigt gesetzt.',
+      });
+    }
+
     return {
       ...demoGruendungsAkte,
       rueckfragen: updatedRueckfragen,
@@ -264,11 +354,11 @@ export function GruendungStateProvider({ children }: { children: React.ReactNode
       offeneAufgaben,
       ereignisse: [...demoGruendungsAkte.ereignisse, ...extraEvents],
       letzteAktualisierung:
-        uploadedIds.length > 0 || answeredIds.length > 0
+        uploadedIds.length > 0 || answeredIds.length > 0 || bgAnmeldungErledigt
           ? DEMO_AKTION_DATUM
           : demoGruendungsAkte.letzteAktualisierung,
     };
-  }, [answeredById, uploadedIds]);
+  }, [answeredById, uploadedIds, bgAnmeldungErledigt]);
 
   return (
     <GruendungStateContext.Provider
@@ -276,9 +366,11 @@ export function GruendungStateProvider({ children }: { children: React.ReactNode
         akte,
         answerRueckfrage,
         uploadDokument,
+        markBgAnmeldungErledigt,
         resetSession,
         hasSessionChanges,
         sessionUploadedIds: uploadedIds,
+        sessionBgErledigt: bgAnmeldungErledigt,
       }}
     >
       {children}

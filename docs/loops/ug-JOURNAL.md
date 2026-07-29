@@ -8,6 +8,39 @@ Erlaubte Pfade nur: `demo/app/gruendung/**`, `demo/context/GruendungStateContext
 
 ---
 
+## 2026-07-29 – Iteration 40: BG-Demo-Markierung + Fairness-Fallthrough Steuernummer
+
+### Was
+Bürger-Handlungsreihe RQ → Unterlagen → BG ist in der Session vollständig
+schließbar; danach greift `naechsterSchrittZiel`-Fallthrough auf Fairness
+(Steuernummer/Betriebsdatum):
+
+1. **`markBgAnmeldungErledigt`** in `GruendungStateContext`: BEH-04
+   ABGESCHLOSSEN, VS-07 erledigt, Aufgabe entfernt, Verlaufs-Events.
+2. **Behörden-Karte BG**: Demo-Button „Anmeldung als erledigt markieren“ +
+   Quittung (außerhalb Open State, keine echte Meldung).
+3. **Primär-CTA** nach RQ + Upload + BG → „Steuernummer-Stand ansehen“
+   (fairnessSignalZiel, VS-05 IN_BEARBEITUNG).
+4. E2E: Behörden-Demo-Aktion, Übersicht-Fallthrough, Hinweise ohne BG-Signal
+   (DEC-012, `goUgTab` nach State).
+
+### Dateien
+- `demo/context/GruendungStateContext.tsx` – BG-Session-Flag, Ableitung, Events
+- `demo/app/gruendung/behoerden/page.tsx` – Demo-Aktion + Quittung BEH-04
+- `demo/e2e/us-ug-gruendung.spec.ts` – 3 neue Tests (Fallthrough + Hinweise + BG)
+- `docs/loops/ug-JOURNAL.md` – dieses Journal
+
+### Build
+`npm run lint` + `npm run build` im Ordner `demo/` grün.
+`npm run test:e2e:ug` Exit 0 (128 passed).
+
+### Nächster sinnvoller UG-Schritt (Vorschlag)
+- Primär-CTA-Labels optional an Fairness-Kurz-CTAs angleichen (optional)
+- Verlauf: Session-Antwort-Ereignis nach RQ-Antwort hervorheben (optional)
+- Fairness-Verlauf-Tiefenlink für BG/Steuernummer-Session-Events (optional)
+
+---
+
 ## 2026-07-29 – Iteration 39: Fairness → Verlauf-Tiefenlink (US-UG-005)
 
 ### Was
