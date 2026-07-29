@@ -125,7 +125,7 @@ Story-Dokumentation ist kein Pflicht-Vorläufer für Mock-Daten und Typen.
 | Q-098 | UG Hinweise: CTA „Zu den Unterlagen“ aus HINWEIS-Unterlagen-Signal (`#dok-…`) | DEMO | S | Q-096 | DONE |
 | Q-100 | UG Hinweise: CTA Steuernummer → Finanzamt-Behördenkarte (`#beh-…`) | DEMO | S | Q-098 | DONE |
 | Q-101 | UG Verlauf: Filter nach Ereignistyp (Vorgang/Dokumente/Rückfragen/Bescheide) | DEMO | S | Q-082 | DONE |
-| Q-106 | UG Übersicht: Fairness-Kurzblock auf RELEVANT+HINWEIS begrenzen (kein INFO-Lärm) | DEMO | S | Q-090 | OFFEN |
+| Q-106 | UG Übersicht: Fairness-Kurzblock auf RELEVANT+HINWEIS begrenzen (kein INFO-Lärm) | DEMO | S | Q-090 | DONE `4b53be4` |
 | Q-107 | UG Übersicht: nächster Schritt mit direktem Link zur betroffenen Stelle/Seite | DEMO | S | Q-106 | OFFEN |
 | Q-111 | UG Hinweise: CTA „Zum Verfahrensstatus“ aus HINWEIS-Betriebsdatum (`#verfahrensstatus`) | DEMO | S | Q-100 | DONE `18e395e` |
 
@@ -145,6 +145,7 @@ Story-Dokumentation ist kein Pflicht-Vorläufer für Mock-Daten und Typen.
 | Q-108 | Kita Lagebild/Planungsraum: Residual↔Meldelücke-Hinweis spiegeln (wie Bedarfsplanung) | DEMO | S | Q-103 | DONE `007975c` |
 | Q-109 | Kita Vorlage: Meldebasis-Kurzhinweis aus Meldeeingang (methodisch, Aggregate only) | DEMO | S | Q-094 | DONE `5ec2ed8` |
 | Q-110 | Kita Planungsraum-Explorer: Filter-Chip „Engpass“ um Meldelücke ergänzen | DEMO | S | Q-108 | DONE `8868849` |
+| Q-112 | Kita Lagebild Engpass-Rangliste: Meldebasis-Kurzmarkierung je Planungsraum (Session-sensitiv, Hinweis-only) | DEMO | S | Q-108 | DONE `eda28fd` |
 
 ---
 
@@ -258,4 +259,4 @@ Diese Punkte wurden in früheren Iterationen abgeschlossen und sind produktionsr
 | Q-109 Kita Vorlage Meldebasis | Residual/Meldebasis auf `/kita/vorlage` | `5ec2ed8` → main |
 | Q-110 Kita Engpass/Meldelücke-Filter | Planungsraum-Explorer Schnellfilter | `8868849` → main |
 | Q-111 UG Betriebsdatum-CTA | Hinweise → `#verfahrensstatus` | `18e395e` → main |
-| Q-106 UG Fairness-Filter | Kurzblock nur RELEVANT+HINWEIS | `4b53be4` ? main |
+| Q-106 UG Fairness-Filter | Kurzblock nur RELEVANT+HINWEIS | `4b53be4` → main |
