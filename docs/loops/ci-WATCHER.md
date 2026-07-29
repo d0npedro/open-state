@@ -2,14 +2,15 @@
 
 | Feld | Wert |
 |------|------|
-| last_checked | 2026-07-29T07:05:00Z |
-| last_run_id | 30430170093 |
+| last_checked | 2026-07-29T07:07:30Z |
+| last_run_id | 30430333527 |
 | last_status | success |
-| last_fix_sha | e14e39d |
+| last_fix_sha | 95e0d84 |
 | fix_attempts | 0 |
 
 ## Log
 
+- E2E `30430333527` **success** (SHA 95e0d84 docs ci-watcher HEAD). Prior E2E `30430170093` **success** (SHA e14e39d). Build latest code path `30430084296` **success** (SHA dcb22ee; newer HEAD docs/merges). Catch-up this tick: origin/main..main was 5 → lint+build grün (`NEXT_DIST_DIR=.next-ci-watcher`) → push `774d525..77526a3` (kita Tagesstand Prozesskette + UG Steuernummer-CTA VS-05 + merges) → origin/main..main = 0. New CI for `77526a3` next tick. No fix. fix_attempts=0.
 - E2E `30430170093` **success** (SHA e14e39d docs supervisor HEAD Q-105/Q-129/Q-130/Q-131). E2E `30430137147` **success** (SHA 2650554 docs ci-watcher catch-up). Build `30430084296` + E2E `30430084336` **success** (SHA dcb22ee Merge loop/kita — latest code path). Catch-up: origin/main..main = 0 (prior concurrent catch-up). Local lint+build grün (isolated `.next-ci-watcher`); local `test:e2e:ci` mid-suite `ERR_CONNECTION_REFUSED` multi-loop flake (234 passed, not app). No fix. fix_attempts=0.
 - Catch-up this tick: origin/main..main was 2+ (multi-loop merges AV/UG/Kita landed concurrent) → lint+build grün → push `36039a0..dcb22ee` (incl. `ab6b920` AV Q-105, `ba2c4aa` Kita Prozesskette, `7a28bed` UG Fairness-Text, merges) → origin/main..main = 0. Prior E2E `30429843267` **success** (SHA e88f135 docs). Build `30430084296` + E2E `30430084336` later **success**. No fix. fix_attempts=0.
 - E2E `30429678187` **success** (SHA e88f135 docs ci-watcher HEAD). Prior E2E `30429524604` **success** (SHA 03a0d80); E2E `30429497016` **success** (SHA 6e3614f). Build `30429302810` **success** (SHA 99e736b Merge loop/kita — latest code path; HEAD docs-only path-skip). Catch-up: origin/main..main = 0. No fix. fix_attempts=0.
