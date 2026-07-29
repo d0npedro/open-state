@@ -256,7 +256,8 @@ export default function KitaLagebildPage() {
             Interne Steuerungsansicht desselben Zwei-Räume-Vergleichs wie im öffentlichen
             Transparenzbericht (Stichtag + 12-Monats-Verlauf). Δ (A − B) ist rein rechnerisch —
             keine automatische Bewertung. Meldebasis je Raum session-sensitiv. CSV Stichtag und
-            Verlauf an der Komponente; Gesamt-Steuerungs-CSV bleibt in der Export-Karte oben.
+            Verlauf an der Komponente; Gesamt-Steuerungs-CSV (Export-Karte) enthält zusätzlich
+            Blatt 7 mit allen Stichtag-Paaren der exportierten Planungsräume.
           </p>
         </div>
         <KitaRegionenVergleich
@@ -299,12 +300,14 @@ export default function KitaLagebildPage() {
         Peak, Monate — Filter-Chips/CSV no-print). Steuerungs-CSV Blatt 6 enthält Gesamtkommune und
         alle Planungsräume. Regionenvergleich (US-KJ-005 / US-KJ-010): Zwei Planungsräume
         Stichtag + Verlauf im UI (Spiegel öffentlicher Bericht); Δ rein rechnerisch; CSV
-        Stichtag/Verlauf an der Komponente; im Ausdruck Auswahl A/B und Kennzahl-Chips no-print,
-        print-only Filterstand (Region A/B, Meldebasis-Session, Verlaufskennzahl, Stichprobenmonat).
-        CSV-Export (US-KJ-005): freigabeunabhängig mit Lagebild-Status, Meldebasis-Session und
-        optionalem Export-Filter „Meldelücke“ (Blätter Versorgung, Engpass-Rangliste,
-        Handlungsfelder, Maßnahmen, Meldebasis-Stichprobe, Zeitreihe; Semikolon, UTF-8 BOM). Keine
-        Interpolation, keine Trendbewertung. Keine Kind- oder Personennamen (DEC-004).
+        Stichtag/Verlauf an der Komponente; Steuerungs-CSV Blatt 7 Stichtag-Paare aller
+        exportierten Räume (i &lt; j, Meldebasis Session-sensitiv, optional Meldelücke-Filter);
+        im Ausdruck Auswahl A/B und Kennzahl-Chips no-print, print-only Filterstand (Region A/B,
+        Meldebasis-Session, Verlaufskennzahl, Stichprobenmonat). CSV-Export (US-KJ-005):
+        freigabeunabhängig mit Lagebild-Status, Meldebasis-Session und optionalem Export-Filter
+        „Meldelücke“ (Blätter Versorgung, Engpass-Rangliste, Handlungsfelder, Maßnahmen,
+        Meldebasis-Stichprobe, Zeitreihe, Regionenvergleich Stichtag; Semikolon, UTF-8 BOM).
+        Keine Interpolation, keine Trendbewertung. Keine Kind- oder Personennamen (DEC-004).
       </div>
 
       {/* Steuerungskette JA: Lagebild → Bedarfsplanung → Vorlage (+ Meldebasis) */}
@@ -397,8 +400,9 @@ export default function KitaLagebildPage() {
         inkl. Meldebasis-Session. Zeitreihe 12 Monate im UI (Filter + CSV aktiver Ansicht; Druck:
         print-only Filterstand Region/Meldebasis) und im Steuerungs-CSV (Blatt 6). Regionenvergleich
         A/B im UI (Stichtag + Verlauf, CSV an Komponente; Druck: print-only Filterstand
-        A/B/Meldebasis/Kennzahl — Spiegel öffentlicher Bericht). Druck und CSV: Status/Meldebasis und
-        optionaler Meldelücke-Filter im Export. Öffentliche Aggregation ohne Einrichtungsdetail im{' '}
+        A/B/Meldebasis/Kennzahl — Spiegel öffentlicher Bericht) und im Steuerungs-CSV (Blatt 7
+        Stichtag-Paare). Druck und CSV: Status/Meldebasis und optionaler Meldelücke-Filter im Export.
+        Öffentliche Aggregation ohne Einrichtungsdetail im{' '}
         <Link href="/kita" style={{ color: 'var(--color-primary)' }}>
           öffentlichen Bericht
         </Link>{' '}
