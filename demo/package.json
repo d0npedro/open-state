@@ -8,6 +8,9 @@
     "start": "next start",
     "lint": "next lint",
     "test:e2e": "playwright test",
+    "test:e2e:ci": "playwright test --project=chromium",
+    "test:e2e:av": "playwright test --project=chromium e2e/us-av-*.spec.ts e2e/navigation-und-landing.spec.ts",
+    "test:e2e:ug": "playwright test --project=chromium e2e/us-ug-*.spec.ts",
     "test:e2e:ui": "playwright test --ui",
     "test:e2e:report": "playwright show-report"
   },

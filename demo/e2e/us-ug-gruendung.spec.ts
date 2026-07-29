@@ -405,12 +405,12 @@ test.describe('UG – Hinweise zur Verfahrenslage', () => {
   });
 
   test('Nach Beantworten entfällt RELEVANT-CTA auf Hinweise', async ({ page }) => {
-    // Client-Navigation: GruendungStateProvider im Layout verliert State bei page.goto()
-    await page.locator('.tab-nav-item').filter({ hasText: 'Fragen' }).click();
-    await expect(page).toHaveURL(/\/gruendung\/rueckfragen/);
+    // Session-State: NIE page.goto nach Antwort — Layout-Provider remountet sonst
+    const { goUgTab } = await import('./helpers/sessionNav');
+    await goUgTab(page, 'Fragen', /\/gruendung\/rueckfragen/);
     await page.getByRole('button', { name: /Rückfrage beantworten/i }).click();
-    await page.locator('.tab-nav-item').filter({ hasText: 'Hinweise' }).click();
-    await expect(page).toHaveURL(/\/gruendung\/hinweise/);
+    await expect(page.getByText(/die Behörde wurde informiert|beantwortet/i).first()).toBeVisible();
+    await goUgTab(page, 'Hinweise', /\/gruendung\/hinweise/);
     await expect(page.getByTestId('hinweise-rq-cta-RQ-01')).toHaveCount(0);
   });
 

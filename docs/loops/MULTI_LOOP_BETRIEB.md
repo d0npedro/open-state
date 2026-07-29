@@ -23,10 +23,13 @@ Parallele Entwicklungs-Streams mit getrennten Worktrees und einem Supervisor, de
 
 1. `git fetch origin` und Status prüfen
 2. Merge der Reihe nach: `loop/av` → `loop/ug` → `loop/kita`
-3. Nach allen Merges (oder wenn bereits alles gemerged): `cd demo && npm run lint && npm run build`
-4. Queue/BUILD_STATE aus Journals aktualisieren; storyRegistry bei neuen Routen
-5. Docs-Commit falls nötig: `docs: supervisor merge sync`
-6. **Push (HARTE PFLICHT – ohne Push gilt der Supervisor-Lauf als fehlgeschlagen):**
+3. Nach allen Merges: `cd demo && npm run lint && npm run build`
+4. **E2E-Pflicht (verhindert CI-Rot):**  
+   `cd demo && npm run test:e2e:ci`  
+   Exit 0 erforderlich. Bei Fail: **fixen vor Push**, nicht erst CI-Watcher.
+5. Queue/BUILD_STATE aus Journals aktualisieren; storyRegistry bei neuen Routen
+6. Docs-Commit falls nötig: `docs: supervisor merge sync`
+7. **Push (HARTE PFLICHT – ohne Push gilt der Supervisor-Lauf als fehlgeschlagen):**
    ```
    git status -sb   # muss main...origin/main ahead zeigen ODER equal
    git rev-list --count origin/main..main
@@ -35,10 +38,20 @@ Parallele Entwicklungs-Streams mit getrennten Worktrees und einem Supervisor, de
    git push origin loop/av loop/ug loop/kita   # kein force
    git rev-list --count origin/main..main     # MUSS 0 sein
    ```
-   Nach Merge/Docs-Commit **immer** pushen, sobald lint+build grün.  
+   Nach Merge/Docs-Commit **immer** pushen, sobald lint+build+**e2e:ci** grün.  
    „Merges erledigt, Push später“ ist **nicht** erlaubt.
-7. Domain-Worktrees mit main synchronisieren (`merge main` in jedem Worktree, kein force).
-8. Nach Push: optional Run-ID notieren; **CI-Watcher** übernimmt Überwachung und Auto-Fix.
+8. Domain-Worktrees mit main synchronisieren (`merge main` in jedem Worktree, kein force).
+9. Nach Push: **CI-Watcher** überwacht GitHub; sollte grün sein, weil lokal E2E schon lief.
+
+## E2E-Lernen (wiederkehrende Fail-Ursachen)
+
+| Symptom | Ursache | Regel |
+|---------|---------|--------|
+| Nach Antwort fehlt Timeline/CTA-Update | `page.goto()` remountet Layout-Provider | Nach Interaktion nur Tab-Nav (`e2e/helpers/sessionNav.ts`) |
+| strict mode: n elements | gleiche Link-/Button-Texte mehrfach | Locators einschränken (getByRole + name exact / getByTestId / .filter) |
+| Accessible name mismatch | sichtbarer Text ≠ aria-label | `getByRole('button', { name: /…/i })` oder testid |
+
+Domain-Loops: vor Commit **`npm run test:e2e:av`** bzw. **`test:e2e:ug`** laufen lassen.
 
 ## CI-Watcher (nach Push)
 

@@ -173,6 +173,16 @@ sind in `AGENTS.md` (Push-Regel) und `docs/DELIVERY_SYSTEM.md` (Steuerbefehle) d
 
 ---
 
+## DEC-012: Demo-Session-State und E2E-Navigation
+
+**Entscheidung:** DemoStateProvider und GruendungStateProvider leben im Domain-Layout. E2E-Tests dürfen nach Interaktionen (Antwort, Upload) **nicht** `page.goto()` innerhalb derselben Domäne nutzen, sondern nur Client-Tab-Navigation (`e2e/helpers/sessionNav.ts`). Supervisor und Domain-Loops müssen **lokal E2E** grün haben, bevor nach `origin` gepusht wird (`npm run test:e2e:ci` bzw. domain-spezifisch).
+
+**Begründung:** `page.goto()` remountet das Layout und löscht Session-State. Das erzeugte wiederkehrende CI-E2E-Rots, obwohl `npm run build` grün war. Whack-a-Mole-Locator-Fixes ohne Prozess-Regel reichten nicht.
+
+**Status:** Gilt für Multi-Loop-Dauerbetrieb und manuelle Iterationen.
+
+---
+
 ## Offene Entscheidungen (noch nicht getroffen)
 
 | Thema | Frage | Bezug |
