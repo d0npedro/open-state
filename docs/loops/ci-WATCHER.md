@@ -2,14 +2,16 @@
 
 | Feld | Wert |
 |------|------|
-| last_checked | 2026-07-29T06:52:00Z |
-| last_run_id | 30429377427 |
+| last_checked | 2026-07-29T06:56:00Z |
+| last_run_id | 30429678187 |
 | last_status | success |
-| last_fix_sha | b9764ec |
+| last_fix_sha | e88f135 |
 | fix_attempts | 0 |
 
 ## Log
 
+- E2E `30429678187` **success** (SHA e88f135 docs ci-watcher HEAD). Prior E2E `30429524604` **success** (SHA 03a0d80); E2E `30429497016` **success** (SHA 6e3614f). Build `30429302810` **success** (SHA 99e736b Merge loop/kita — latest code path; HEAD docs-only path-skip). Catch-up: origin/main..main = 0. No fix. fix_attempts=0.
+- E2E `30429524604` **success** (SHA 03a0d80 docs ci-watcher HEAD). Prior E2E `30429497016` **success** (SHA 6e3614f supervisor); E2E `30429486494` **success** (SHA f0c4fcc); E2E `30429377427` **success** (SHA b9764ec). Build `30429302810` + E2E `30429302795` **success** (SHA 99e736b Merge loop/kita — latest code path; HEAD docs-only path-skip). Catch-up: origin/main..main = 0 (prior tick pushed merges). Local `test:e2e:ci` re-confirm **233 passed**. No fix. fix_attempts=0.
 - E2E `30429377427` **success** (SHA b9764ec docs supervisor Q-104/Q-127/Q-128). Build `30429302810` + E2E `30429302795` **success** (SHA 99e736b Merge loop/kita). Build latest code path still 99e736b (newer HEAD docs-only path-skip). Catch-up: origin/main..main may include concurrent supervisor docs; lint+build then push if ahead. No fix. fix_attempts=0.
 - Build `30429302810` + E2E `30429302795` **success** (SHA 99e736b Merge loop/kita + concurrent AV merge). Catch-up this tick: origin/main..main was 9->17 -> lint+build gruen via isolated `NEXT_DIST_DIR=.next-ci-watcher` (shared `.next` ENOENT multi-loop race) -> push `34c6bc3..99e736b` -> origin/main..main = 0. Newer HEAD `b9764ec` docs supervisor: E2E `30429377427` in_progress next tick. No fix. fix_attempts=0.
 - E2E `30428831585` **success** (SHA 93f853d docs ci-watcher HEAD). Prior E2E `30428801062` **success** (SHA eaa3e3c); prior E2E `30428581161` + Build `30428580945` **success** (SHA 124aee2). Build latest code path still 124aee2 (HEAD docs-only path-skip). Catch-up: origin/main..main = 0. No fix. fix_attempts=0.
