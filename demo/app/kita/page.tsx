@@ -254,7 +254,7 @@ export default function KitaTransparenzberichtPage() {
           <li>Einwohnerdaten (Grundlage Versorgungsquote) stammen aus der amtlichen Statistik mit Stichtag 31.12.2023 — unterjährige Bevölkerungsveränderungen sind nicht abgebildet.</li>
           <li>Wartelistenzahlen können Mehrfachanmeldungen enthalten. Der tatsächliche Platzbedarf kann geringer sein.</li>
           <li>Alle Angaben zu freien Plätzen beziehen sich auf den Meldestichtag (31.10.2024), nicht auf den aktuellen Tag.</li>
-          <li>Einrichtungen mit fehlendem Meldedatum sind im Planungsraum als „Datenlücke" vermerkt. Im vorliegenden Bericht sind alle 5 Planungsräume vollständig gemeldet.</li>
+          <li>Einrichtungen mit fehlendem Meldedatum sind im Planungsraum als «Datenlücke» vermerkt. Im vorliegenden Bericht sind alle 5 Planungsräume vollständig gemeldet.</li>
         </ul>
       </div>
 

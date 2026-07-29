@@ -60,14 +60,18 @@ Wenn der Nutzer eine der folgenden Formulierungen verwendet, wird nach erfolgrei
 git status --short
 git log --oneline -1
 
-# 2. Pushen
+# 2. Pflicht: CI-äquivalente Prüfung (nie pushen ohne grünen Check)
+cd demo && npm run lint && npm run build
+
+# 3. Nur bei Exit-Code 0 pushen
 git push
 
-# 3. Ergebnis ausgeben: Branch, Commit-Hash, Push-Bestätigung
+# 4. Ergebnis ausgeben: Branch, Commit-Hash, Push-Bestätigung, Build-Status
 ```
 
-Ein Push erfolgt **ausschließlich nach erfolgreichem Commit**.
-Kein Push bei fehlgeschlagenem Build oder nicht committeten Änderungen.
+Ein Push erfolgt **ausschließlich nach erfolgreichem Commit und grünem `lint` + `build`**.
+Kein Push bei fehlgeschlagenem Lint/Build oder nicht committeten, push-relevanten Änderungen.
+Lokaler Build ist die Vorbedingung für GitHub Actions „Build Check“ – Agenten dürfen CI-Rot nicht als Überraschung erzeugen.
 
 ---
 

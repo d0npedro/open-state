@@ -66,11 +66,12 @@ Nicht: Mehrere unabhängige Schritte parallel abarbeiten.
 ### Schritt 6 – Build prüfen (wenn Codepfad betroffen)
 
 ```bash
-cd demo && npm run build
+cd demo && npm run lint && npm run build
 ```
 
-Build muss erfolgreich sein, bevor committet wird.
-Kein Commit mit fehlschlagendem Build.
+Lint und Build müssen erfolgreich sein, bevor committet wird.
+Kein Commit mit fehlschlagendem Lint/Build.
+Bei reinen Docs ohne Demo-Änderung: vor **Push** trotzdem lint+build ausführen (Push-Pflicht, siehe Schritt 12).
 
 ---
 
@@ -139,12 +140,15 @@ Commit-Typen: `feat` / `fix` / `docs` / `chore` / `refactor`
 git status --short
 git log --oneline -1
 
-# Pushen
+# Pflicht: CI-äquivalent (Build Check auf GitHub)
+cd demo && npm run lint && npm run build
+
+# Nur bei Exit-Code 0 pushen
 git push
 ```
 
-Ein Push erfolgt ausschließlich nach erfolgreichem Commit.
-Kein Push bei fehlgeschlagenem Build, uncommitteten Änderungen oder ohne Nutzeranweisung.
+Ein Push erfolgt ausschließlich nach erfolgreichem Commit **und** grünem `lint` + `build`.
+Kein Push bei fehlgeschlagenem Lint/Build, uncommitteten push-relevanten Änderungen oder ohne Nutzeranweisung.
 
 Erkannte Push-Trigger: „pushe", „push", „committe und pushe", „auf GitHub hochladen",
 „online bringen", „Entwickle weiter und pushe", „Committe und pushe am Ende."

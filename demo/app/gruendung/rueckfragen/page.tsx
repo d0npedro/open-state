@@ -22,7 +22,7 @@ export default function RueckfragenPage() {
       <div className="notice-box notice-box-info">
         <Icon name="info" size={16} style={{ flexShrink: 0, marginTop: '1px' }} />
         <span>
-          <strong>Demo:</strong> Klicken Sie auf „Rückfrage beantworten" — der Status ändert sich in der gesamten App.
+          <strong>Demo:</strong> Klicken Sie auf «Rückfrage beantworten» — der Status ändert sich in der gesamten App.
         </span>
       </div>
 
