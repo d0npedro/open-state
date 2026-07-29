@@ -71,6 +71,7 @@ Die Kita-Domäne ist mit 7 Dokumenten und 10 Stories am stärksten vorbereitete 
 | Q-074 | Planungsraum-Filter auf `/kita`: Chip-Filter + Detailkarte + gefilterte Maßnahmen (US-KJ-009, interaktiv) | DEMO | S | Q-022 | DONE |
 | Q-076 | Demo-Route `/kita/bedarfsplanung`: Bedarfsplanungsentwurf aus Lagebild-Daten, Planungslücke, Kommentar/Freigabe (US-KJ-007) | DEMO | M | Q-023 | DONE |
 | Q-077 | Demo-Route `/kita/vorlage`: politische Gremienvorlage aus Lagebild, JA-Freigabe, Druck/PDF (US-KJ-008) | DEMO | M | Q-076 | DONE |
+| Q-078 | Demo-Route `/kita/einrichtung`: Belegungsstand je Gruppe, aggregiert, CSV (US-KJ-002) | DEMO | M | – | DONE |
 
 ---
 
@@ -186,4 +187,5 @@ Diese Punkte wurden in früheren Iterationen abgeschlossen und sind produktionsr
 | Q-074 Kita-Planungsfilter | Filter/Detail auf Transparenzbericht | `27803ca` |
 | Q-075 Demo-Reset | Session-Leiste + resetSession AV/UG | `9f55a89` |
 | Q-076 Bedarfsplanung | `/kita/bedarfsplanung` US-KJ-007 | `bd935e8` |
-| Q-077 Gremienvorlage | `/kita/vorlage` US-KJ-008 Freigabe | (diese Iteration) |
+| Q-077 Gremienvorlage | `/kita/vorlage` US-KJ-008 Freigabe | `c7a1599` |
+| Q-078 Kita-Belegung | `/kita/einrichtung` US-KJ-002 | (diese Iteration) |

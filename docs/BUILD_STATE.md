@@ -1,6 +1,6 @@
 # BUILD_STATE.md – Aktueller Projektstand
 
-Zuletzt aktualisiert: nach Q-077 (Gremienvorlage /kita/vorlage, US-KJ-008)
+Zuletzt aktualisiert: nach Q-078 (Belegungsstand Einrichtung /kita/einrichtung, US-KJ-002)
 
 Dieser Stand beschreibt, was tatsächlich existiert und funktioniert.
 Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
@@ -12,10 +12,10 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | Eigenschaft | Wert |
 |-------------|------|
 | Framework | Next.js 14.2.5, React 18, TypeScript 5 strict |
-| Build-Status | ✓ Erfolgreich (23 statische Seiten) |
+| Build-Status | ✓ Erfolgreich (24 statische Seiten) |
 | Deployment | Vercel, aus `demo/`-Verzeichnis |
 | Lokaler Start | `cd demo && npm install && npm run dev` |
-| Letzte Build-Prüfung | nach Q-077 — grün |
+| Letzte Build-Prüfung | nach Q-078 — grün |
 
 ---
 
@@ -38,6 +38,7 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | `/kita/lagebild` | Jugendamt-Steuerungsansicht | US-KJ-005, US-KJ-006 | ✓ |
 | `/kita/bedarfsplanung` | Bedarfsplanungsentwurf (§ 80 SGB VIII) | US-KJ-007 | ✓ |
 | `/kita/vorlage` | Politische Gremienvorlage + Freigabe | US-KJ-008 | ✓ |
+| `/kita/einrichtung` | Belegungsstand Einrichtung (aggregiert) | US-KJ-002 | ✓ |
 
 ---
 
@@ -98,6 +99,7 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 **Q-075 erledigt:** `resetSession` + Session-Leiste in AV- und UG-Layout nach Demo-Interaktionen.
 **Q-076 erledigt:** `/kita/bedarfsplanung` — Planungslücke je Raum, Versionierung, Kommentar/Freigabe-Demo (US-KJ-007).
 **Q-077 erledigt:** `/kita/vorlage` — Gremienvorlage aus Lagebild, JA-Freigabe-Stempel, Druck/PDF (US-KJ-008).
+**Q-078 erledigt:** `/kita/einrichtung` — Belegung je Gruppe, Einschränkungen, CSV, keine Kinddaten (US-KJ-002).
 
 ---
 
@@ -145,6 +147,7 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | ~~Kein Session-Reset nach Demo-Aktionen~~ | ~~Ausgangsfall nur per Reload wiederherstellbar~~ | Q-075 ✓ |
 | ~~US-KJ-007 ohne Demo-Screen~~ | ~~Bedarfsplanung nur als Story dokumentiert~~ | Q-076 ✓ |
 | ~~US-KJ-008 ohne Demo-Screen~~ | ~~Gremienvorlage nur als Story dokumentiert~~ | Q-077 ✓ |
+| ~~US-KJ-002 ohne Demo-Screen~~ | ~~Belegung nur als Story dokumentiert~~ | Q-078 ✓ |
 | DSFA für Kita-Domäne noch ausstehend | Konzeptlücke — extern abhängig | — |
 | Queue ohne weitere OFFEN-Einträge | Nächste Iteration braucht Queue-Nachfüllung | — |
 

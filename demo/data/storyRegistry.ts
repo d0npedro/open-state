@@ -133,12 +133,13 @@ export const storyRegistry: StoryRegistryEntry[] = [
     domain: 'Kita-Betrieb & Jugendamt-Steuerung',
     title: 'Belegungsstand einsehen',
     role: 'Kita-Leitung',
-    status: 'BEREIT',
+    status: 'DEMONSTRIERBAR',
     problem: 'Belegungssituation ist nicht tagesgenau abrufbar – Leitungen müssen manuell zählen',
-    screen: 'Belegungsübersicht (nicht implementiert)',
+    screen: 'Belegungsübersicht Einrichtung',
     transparency_focus: 'Tagesgenaue Übersicht belegte / freie / reservierte Plätze je Gruppe',
-    acceptance_criteria_count: 4,
-    implemented_criteria: 0,
+    acceptance_criteria_count: 5,
+    implemented_criteria: 5,
+    route: '/kita/einrichtung',
     source_file: 'docs/stories/kita_betrieb_und_jugendamt_steuerung/US-KJ-002_Belegungsstand_einsehen.md'
   },
   {

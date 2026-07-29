@@ -12,6 +12,7 @@ const nav = [
   { href: '/kita/lagebild',       label: 'Steuerungslagebild', hint: 'Demo: JA-intern' },
   { href: '/kita/bedarfsplanung', label: 'Bedarfsplanung',     hint: 'Demo: Entwurf § 80' },
   { href: '/kita/vorlage',        label: 'Gremienvorlage',     hint: 'Demo: Freigabe' },
+  { href: '/kita/einrichtung',    label: 'Einrichtung',        hint: 'Demo: Belegung' },
 ];
 
 export default function KitaLayout({ children }: { children: React.ReactNode }) {
