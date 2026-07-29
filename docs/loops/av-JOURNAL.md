@@ -6,6 +6,37 @@ Scope: nur `demo/app/fall/**`, DemoStateContext, fairness/rules, mockFall, e2e u
 
 ---
 
+## 2026-07-29 – Iteration 12: Dokumente lokale Upload-Quittung pro Karte
+
+### Was
+Nach Session-Markierung zeigt jede Dokumentenkarte eine lokale Upload-Quittung (US-AV-003):
+
+1. **`sessionUploadedIds`** steuert Quittung pro Karte (`data-testid="dok-upload-quittung-{id}"`).
+2. **Quittung**: Titel „Upload bestätigt“, Bezeichnung + Einreichungsdatum, Demo-Hinweis (keine Datei).
+3. **`dok-karte-{id}`** für stabile E2E-Verankerung; Mock-Einreichungszeile nur ohne Session-Upload.
+4. Bei Vollständigkeit: `dok-alle-vorliegend` + optionaler Session-Zähler.
+5. E2E: Teil- und Voll-Upload per session-nav (kein `page.goto` nach Interaktion, DEC-012).
+
+### Dateien
+- `demo/app/fall/dokumente/page.tsx`
+- `demo/e2e/us-av-003-dokumente.spec.ts`
+- `docs/loops/av-JOURNAL.md`
+
+### Story-IDs
+- US-AV-003 (Unterlagen nachreichen / Upload-Quittung)
+
+### Build
+`npm run lint` + `npm run build` + `npm run test:e2e:av` (PW_E2E_CI=1) → **132 passed**, Exit 0
+
+### Vorschlag Queue-ID
+- Q-161 (AV Dokumente: lokale Upload-Quittung pro Karte nach Session-Markierung)
+
+### Nächster sinnvoller AV-Schritt (Vorschlag)
+- Hinweise-Seite: Fristhinweis im UNTERLAGE-Signal explizit nach Session-Upload testen
+- Hinweise: Session-Upload löst UNTERLAGE-Signal live (Text/Count)
+
+---
+
 ## 2026-07-29 – Iteration 11: Übersicht Upload-Quittung + nächste offene Unterlage
 
 ### Was

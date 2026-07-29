@@ -25,11 +25,12 @@ const statusInfo: Record<DokumentStatus, { label: string; cssClass: string; icon
 };
 
 export default function DokumentePage() {
-  const { fall, uploadDokument } = useDemoState();
+  const { fall, uploadDokument, sessionUploadedIds } = useDemoState();
   const { dokumente } = fall;
   const ausstehend = dokumente.filter(d => d.status === 'ANGEFORDERT' || d.status === 'ABGELEHNT').length;
   const eingereicht = dokumente.filter(d => d.status !== 'ANGEFORDERT' && d.status !== 'ABGELEHNT').length;
   const unterlagenSignal = berechneFairnessSignale(fall).find(s => s.typ === 'UNTERLAGE_FEHLT_BLOCKIERT');
+  const sessionUploadCount = sessionUploadedIds.length;
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
@@ -84,12 +85,22 @@ export default function DokumentePage() {
       )}
 
       {ausstehend === 0 && (
-        <div className="notice-box notice-box-success" role="status">
+        <div
+          className="notice-box notice-box-success"
+          role="status"
+          data-testid="dok-alle-vorliegend"
+        >
           <Icon name="check-circle" size={16} style={{ flexShrink: 0 }} />
           <div>
             <strong style={{ fontSize: '0.875rem' }}>Alle angeforderten Unterlagen liegen vor</strong>
             <p style={{ fontSize: '0.875rem', margin: '0.25rem 0 0' }}>
               Das Fairness-Signal „Unterlage fehlt“ entfällt. Die Prüfung kann fortgesetzt werden.
+              {sessionUploadCount > 0 && (
+                <span data-testid="dok-alle-vorliegend-session">
+                  {' '}
+                  In dieser Demo-Session {sessionUploadCount === 1 ? 'wurde 1 Unterlage' : `wurden ${sessionUploadCount} Unterlagen`} markiert.
+                </span>
+              )}
             </p>
           </div>
         </div>
@@ -108,11 +119,14 @@ export default function DokumentePage() {
         const istAusstehend  = dok.status === 'ANGEFORDERT';
         const istAbgelehnt   = dok.status === 'ABGELEHNT';
         const brauchtUpload  = istAusstehend || istAbgelehnt;
+        /** Session-Upload: lokale Quittung auf der Karte (US-AV-003). */
+        const istSessionUpload = sessionUploadedIds.includes(dok.id);
 
         return (
           <div
             key={dok.id}
             className="card"
+            data-testid={`dok-karte-${dok.id}`}
             style={{
               borderLeft: brauchtUpload ? '5px solid var(--color-warning)' : dok.status === 'AKZEPTIERT' ? '5px solid var(--color-success)' : dok.status === 'HOCHGELADEN' ? '5px solid var(--color-primary)' : '1px solid var(--color-border)',
             }}
@@ -184,10 +198,44 @@ export default function DokumentePage() {
                 </div>
               );
             })()}
-            {dok.hochgeladenAm && (
+            {dok.hochgeladenAm && !istSessionUpload && (
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.875rem', color: 'var(--color-text-muted)', fontSize: '0.875rem' }}>
                 <Icon name="check-circle" size={15} />
                 Eingereicht am {dok.hochgeladenAm}
+              </div>
+            )}
+
+            {/* Lokale Upload-Quittung: sofort nach Session-Markierung auf der Karte (US-AV-003) */}
+            {istSessionUpload && (
+              <div
+                className="notice-box notice-box-success"
+                role="status"
+                aria-live="polite"
+                data-testid={`dok-upload-quittung-${dok.id}`}
+                style={{ marginBottom: '0.875rem' }}
+              >
+                <Icon name="check-circle" size={16} style={{ flexShrink: 0, marginTop: '2px' }} />
+                <div>
+                  <strong
+                    style={{ fontSize: '0.875rem', display: 'block', marginBottom: '0.25rem' }}
+                    data-testid={`dok-upload-quittung-titel-${dok.id}`}
+                  >
+                    Upload bestätigt
+                  </strong>
+                  <p style={{ fontSize: '0.875rem', margin: 0 }} data-testid={`dok-upload-quittung-text-${dok.id}`}>
+                    {dok.bezeichnung}
+                    {dok.hochgeladenAm ? (
+                      <span style={{ color: 'var(--color-text-muted)' }}>
+                        {' '}
+                        · eingereicht am {dok.hochgeladenAm}
+                      </span>
+                    ) : null}
+                  </p>
+                  <p style={{ fontSize: '0.8rem', margin: '0.35rem 0 0', color: 'var(--color-text-muted)' }}>
+                    Demo: Es wurde keine Datei gespeichert — der Status steht auf „Hochgeladen“.
+                    Die Quittung gilt für diese Browser-Session.
+                  </p>
+                </div>
               </div>
             )}
 

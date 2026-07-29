@@ -120,4 +120,64 @@ test.describe('US-AV-003 – Unterlagen nachreichen', () => {
     await expect(activeTab).toContainText('Unterlagen');
   });
 
+  test('Nach Session-Upload: lokale Quittung auf der Dokumentenkarte', async ({ page }) => {
+    // US-AV-003: sofortige Quittung pro Karte nach Markieren (kein page.goto, DEC-012)
+    const { goFallTab } = await import('./helpers/sessionNav');
+
+    // Offene Unterlagen freischalten: zuerst Rückfrage beantworten
+    await goFallTab(page, 'Fragen', /\/fall\/rueckfragen/);
+    await page.getByRole('button', { name: /Jetzt beantworten|Rückfrage beantworten/i }).click();
+    await page.getByTestId('rq-antwort-absenden').click();
+
+    await goFallTab(page, 'Unterlagen', /\/fall\/dokumente/);
+    // Noch keine Session-Quittung vor dem Upload
+    await expect(page.getByTestId('dok-upload-quittung-DOK-003')).toHaveCount(0);
+
+    // Erstes ausstehendes Dokument (Einkommensteuerbescheid DOK-003)
+    await page.getByRole('button', { name: /Als hochgeladen markieren/i }).first().click();
+
+    const quittung = page.getByTestId('dok-upload-quittung-DOK-003');
+    await expect(quittung).toBeVisible();
+    await expect(page.getByTestId('dok-upload-quittung-titel-DOK-003')).toHaveText('Upload bestätigt');
+    await expect(page.getByTestId('dok-upload-quittung-text-DOK-003')).toContainText(
+      'Einkommensteuerbescheid letztes Jahr'
+    );
+    await expect(page.getByTestId('dok-upload-quittung-text-DOK-003')).toContainText(
+      /eingereicht am 24\.\s*November 2024/i
+    );
+    // Status-Chip der Karte
+    await expect(page.getByTestId('dok-karte-DOK-003')).toContainText('Hochgeladen');
+    // Upload-Zone für dieses Dokument entfällt
+    await expect(page.locator('.upload-zone')).toHaveCount(1);
+    // Fairness-Signal bleibt, solange Formular SG1 fehlt
+    await expect(page.getByTestId('fairness-signal-unterlagen')).toBeVisible();
+    await expect(page.getByTestId('fairness-signal-unterlagen-titel')).toContainText(
+      /1 Unterlage\(n\) offen/i
+    );
+  });
+
+  test('Nach allen Session-Uploads: Vollständigkeits-Hinweis mit Session-Zähler', async ({ page }) => {
+    const { goFallTab } = await import('./helpers/sessionNav');
+
+    await goFallTab(page, 'Fragen', /\/fall\/rueckfragen/);
+    await page.getByRole('button', { name: /Jetzt beantworten|Rückfrage beantworten/i }).click();
+    await page.getByTestId('rq-antwort-absenden').click();
+
+    await goFallTab(page, 'Unterlagen', /\/fall\/dokumente/);
+    const uploadButtons = page.getByRole('button', { name: /Als hochgeladen markieren/i });
+    const count = await uploadButtons.count();
+    for (let i = 0; i < count; i++) {
+      await uploadButtons.nth(0).click();
+    }
+
+    await expect(page.getByTestId('dok-upload-quittung-DOK-003')).toBeVisible();
+    await expect(page.getByTestId('dok-upload-quittung-DOK-004')).toBeVisible();
+    await expect(page.getByTestId('dok-alle-vorliegend')).toBeVisible();
+    await expect(page.getByTestId('dok-alle-vorliegend-session')).toContainText(
+      /2 Unterlagen.*markiert/i
+    );
+    await expect(page.getByTestId('fairness-signal-unterlagen')).toHaveCount(0);
+    await expect(page.locator('.upload-zone')).toHaveCount(0);
+  });
+
 });
