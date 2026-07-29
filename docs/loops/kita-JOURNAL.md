@@ -2,6 +2,29 @@
 
 Branch: `loop/kita` · Worktree: `D:\Projects\open-state-loop-kita`
 
+## Iteration 2026-07-29 – US-KJ-004 Meldung-Druck freigabeunabhängig Status/Korrekturen/Freigabe
+
+### Was
+Monatsmeldung (`/kita/meldung`, US-KJ-004): Druckansicht freigabeunabhängig (Prüfung / Korrektur / Bestätigung / freigegeben) mit Druckleiste analog Monatsbericht/Bedarfsplanung/Vorlage. Print-only: Status inkl. UI-Phase und Meldefrist, dokumentierte Korrekturen (Feld vorher→nachher) bzw. „keine Korrekturen“, Freigabenachweis (ID/Rolle/Zeitstempel) bzw. „nicht freigegeben“ (DEC-004). Korrekturmaske, Bestätigungsdialog, Statusaktionen und Prozess-Hub no-print; Meldeinhalt und Korrekturprotokoll im Ausdruck. Methodik- und Footer-Hinweis. Nur Aggregate, keine Kind- oder Personennamen. Fast-forward `origin/main` (ci-watcher docs) vor dem Feature.
+
+### Dateien
+- `demo/app/kita/meldung/page.tsx` (Druckleiste, print-only Status/Korrekturen/Freigabe, Print-CSS, Methodik)
+- `docs/loops/kita-JOURNAL.md` (dieses Journal)
+
+### Story
+US-KJ-004 – Meldung prüfen und freigeben (Druck freigabeunabhängig, Status/Korrekturen/Freigabe dokumentiert)
+
+### Build
+`npm run lint` + `npm run build` im `demo/`-Verzeichnis (siehe Commit dieses Laufs)
+
+### Nicht angefasst (Supervisor / verboten)
+Queue, BUILD_STATE, storyRegistry, DECISION_LOG, andere Domänen, package.json, CI, push
+
+### Nächster sinnvoller Schritt (Hinweis Supervisor)
+Tagesstand-Druckansicht Datenbasis, oder Einrichtung Belegungsstand-Druckansicht spiegeln.
+
+---
+
 ## Iteration 2026-07-29 – US-KJ-009 Öffentlicher Bericht Hub Steuerungskette
 
 ### Was
