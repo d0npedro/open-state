@@ -61,6 +61,30 @@ export function berechneFairnessSignaleGruendung(akte: GruendungsAkte): Fairness
     }
   }
 
+  // ─── Signal 1b: Angeforderte Unterlagen noch nicht eingereicht ────────────
+  // Regel: Dokumente mit Status ANGEFORDERT (oder ABGELEHNT) blockieren bzw.
+  //        verzögern die vollständige Aktenführung, auch wenn optional empfohlen.
+  const fehlendeDokumente = akte.dokumente.filter(
+    d => d.status === 'ANGEFORDERT' || d.status === 'ABGELEHNT'
+  );
+  if (fehlendeDokumente.length > 0) {
+    const names = fehlendeDokumente.map(d => d.bezeichnung).join('; ');
+    signale.push({
+      id: 'UG-UNTERLAGEN-FEHLEND',
+      typ: 'UG_UNTERLAGE_FEHLT',
+      titel: `${fehlendeDokumente.length} Unterlage(n) noch nicht eingereicht`,
+      erklaerung:
+        `Folgende Unterlagen sind noch ausstehend: ${names}. ` +
+        `Details und Begründungen stehen im Bereich „Unterlagen“.`,
+      auswirkung: fehlendeDokumente.map(d => d.konsequenz).join(' '),
+      naechsterSchritt:
+        'Unterlagen im Bereich „Unterlagen“ hochladen. ' +
+        'Demo: Der Upload speichert keine Datei, ändert aber den Aktenstatus und dieses Signal.',
+      bezug: `Dokumente: ${fehlendeDokumente.map(d => d.id).join(', ')}`,
+      prioritaet: 'HINWEIS',
+    });
+  }
+
   // ─── Signal 2: BG-Anmeldung steht aus – gesetzliche Frist läuft ───────────
   // Regel: Berufsgenossenschaft muss binnen 7 Tagen nach Betriebsaufnahme
   //        angemeldet werden (§ 192 SGB VII). Wenn Betriebsdatum + 7 Tage

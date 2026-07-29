@@ -1,6 +1,6 @@
 # BUILD_STATE.md – Aktueller Projektstand
 
-Zuletzt aktualisiert: nach Q-072 (AV-Seiten an DemoState + Timeline-Ereignisse)
+Zuletzt aktualisiert: nach Q-073 (UG Dokument-Upload + Fairness UG_UNTERLAGE_FEHLT)
 
 Dieser Stand beschreibt, was tatsächlich existiert und funktioniert.
 Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
@@ -50,7 +50,7 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | FairnessPanel-Komponente | `demo/components/fairness/FairnessPanel.tsx` | ✓ |
 | BuildInfo-Komponente | `demo/components/BuildInfo.tsx` | ✓ |
 | Demo-State-Kontext | `demo/context/DemoStateContext.tsx` | ✓ Rückfrage/Upload + Timeline-Events; alle AV-Routen angebunden |
-| Gründung-State-Kontext | `demo/context/GruendungStateContext.tsx` | ✓ Rückfrage-Antwort-State |
+| Gründung-State-Kontext | `demo/context/GruendungStateContext.tsx` | ✓ Rückfrage/Upload + Verlaufsereignisse; Fairness live |
 
 ---
 
@@ -90,6 +90,7 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 **Q-070 erledigt:** UG-Stories in `demo/data/storyRegistry.ts`.
 **Q-071 erledigt:** Interaktiver Dokument-Upload im AV-Demo (`uploadDokument`); Fairness-Signal entfällt live.
 **Q-072 erledigt:** `/fall/bescheide`, `/termine`, `/verlauf` nutzen DemoState; Interaktionen erzeugen Timeline-Ereignisse.
+**Q-073 erledigt:** UG `uploadDokument`, Signal `UG_UNTERLAGE_FEHLT`, Verlauf bei Upload/Rückfrage.
 
 ---
 
@@ -132,6 +133,7 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | ~~Demo vollständig statisch~~ | ~~Demo wirkt wie Slideshow~~ | Q-031 ✓ |
 | ~~Dokument-Upload ohne State~~ | ~~Upload-Alert nur, kein Fairness-Effekt~~ | Q-071 ✓ |
 | ~~AV-Unterseiten mit statischem mockFall~~ | ~~Fairness/Verlauf nicht session-konsistent~~ | Q-072 ✓ |
+| ~~UG-Upload ohne State~~ | ~~Kein Fairness-/Verlaufseffekt bei UG-Unterlagen~~ | Q-073 ✓ |
 | DSFA für Kita-Domäne noch ausstehend | Konzeptlücke — extern abhängig | — |
 | Queue ohne weitere OFFEN-Einträge | Nächste Iteration braucht Queue-Nachfüllung | — |
 

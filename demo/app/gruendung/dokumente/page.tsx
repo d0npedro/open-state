@@ -1,12 +1,14 @@
 'use client';
 
+import Link from 'next/link';
 import { useGruendungState } from '@/context/GruendungStateContext';
+import { berechneFairnessSignaleGruendung } from '@/lib/fairness/gruendung-rules';
 import { Icon } from '@/components/Icon';
 import type { DokumentStatusUG } from '@/types/gruendung';
 
-const statusChip: Record<DokumentStatusUG, { label: string; css: string; icon: 'alert' | 'refresh' | 'check-circle' | 'x-circle' }> = {
+const statusChip: Record<DokumentStatusUG, { label: string; css: string; icon: 'alert' | 'refresh' | 'check-circle' | 'x-circle' | 'upload' }> = {
   ANGEFORDERT: { label: 'Wird noch benötigt', css: 'status-chip-warning', icon: 'alert'        },
-  HOCHGELADEN: { label: 'Hochgeladen',         css: 'status-chip-primary', icon: 'refresh'      },
+  HOCHGELADEN: { label: 'Hochgeladen',         css: 'status-chip-primary', icon: 'upload'       },
   IN_PRUEFUNG: { label: 'Wird geprüft',        css: 'status-chip-primary', icon: 'refresh'      },
   AKZEPTIERT:  { label: 'Akzeptiert',          css: 'status-chip-success', icon: 'check-circle' },
   ABGELEHNT:   { label: 'Abgelehnt',           css: 'status-chip-danger',  icon: 'x-circle'     },
@@ -17,10 +19,13 @@ const sortOrder: Record<DokumentStatusUG, number> = {
 };
 
 export default function DokumentePage() {
-  const { akte } = useGruendungState();
+  const { akte, uploadDokument } = useGruendungState();
   const sorted = [...akte.dokumente].sort((a, b) => sortOrder[a.status] - sortOrder[b.status]);
-  const ausstehend = sorted.filter(d => d.status === 'ANGEFORDERT').length;
-  const eingereicht = sorted.filter(d => d.status !== 'ANGEFORDERT').length;
+  const ausstehend = sorted.filter(d => d.status === 'ANGEFORDERT' || d.status === 'ABGELEHNT').length;
+  const eingereicht = sorted.filter(d => d.status !== 'ANGEFORDERT' && d.status !== 'ABGELEHNT').length;
+  const unterlagenSignal = berechneFairnessSignaleGruendung(akte).find(
+    s => s.typ === 'UG_UNTERLAGE_FEHLT'
+  );
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
@@ -45,9 +50,38 @@ export default function DokumentePage() {
         </div>
       </div>
 
+      {unterlagenSignal && (
+        <div className="notice-box notice-box-warn" role="status">
+          <Icon name="alert" size={16} style={{ flexShrink: 0, marginTop: '2px' }} />
+          <div>
+            <strong style={{ fontSize: '0.875rem', display: 'block', marginBottom: '0.25rem' }}>
+              {unterlagenSignal.titel}
+            </strong>
+            <p style={{ fontSize: '0.875rem', margin: 0 }}>{unterlagenSignal.erklaerung}</p>
+            <p style={{ fontSize: '0.8rem', margin: '0.5rem 0 0', color: 'var(--color-text-muted)' }}>
+              Nach dem Hochladen entfällt dieses Signal auch unter{' '}
+              <Link href="/gruendung/hinweise" style={{ color: 'var(--color-primary)' }}>Hinweise</Link>
+              {' '}und im Verlauf erscheint ein Ereignis.
+            </p>
+          </div>
+        </div>
+      )}
+
+      {ausstehend === 0 && (
+        <div className="notice-box notice-box-success" role="status">
+          <Icon name="check-circle" size={16} style={{ flexShrink: 0 }} />
+          <div>
+            <strong style={{ fontSize: '0.875rem' }}>Alle angeforderten Unterlagen liegen vor</strong>
+            <p style={{ fontSize: '0.875rem', margin: '0.25rem 0 0' }}>
+              Das Fairness-Signal zu fehlenden Unterlagen entfällt. Die Behördenbearbeitung kann fortgesetzt werden.
+            </p>
+          </div>
+        </div>
+      )}
+
       {sorted.map(dok => {
         const chip = statusChip[dok.status];
-        const isAusstehend = dok.status === 'ANGEFORDERT';
+        const isAusstehend = dok.status === 'ANGEFORDERT' || dok.status === 'ABGELEHNT';
         const behörde = akte.beteiligteBehörden.find(b => b.id === dok.anforderndeBehördeId);
 
         return (
@@ -86,7 +120,7 @@ export default function DokumentePage() {
             )}
 
             <div style={{ display: 'flex', gap: '1.5rem', fontSize: '0.875rem', flexWrap: 'wrap', marginBottom: isAusstehend ? '1rem' : 0 }}>
-              {dok.frist && (
+              {dok.frist && isAusstehend && (
                 <span style={{ color: 'var(--color-warning)', fontWeight: 600 }}>
                   <Icon name="calendar" size={13} style={{ verticalAlign: 'middle', marginRight: '0.25rem' }} />
                   Frist: {dok.frist}
@@ -101,14 +135,45 @@ export default function DokumentePage() {
             </div>
 
             {isAusstehend && (
-              <label className="upload-zone" aria-label={`${dok.bezeichnung} hochladen`}>
-                <div className="upload-zone-icon">
-                  <Icon name="upload" size={28} />
-                </div>
-                <div className="upload-zone-label">Dokument hochladen</div>
-                <div className="upload-zone-hint">PDF, JPG oder PNG · 📷 Auch per Handykamera möglich</div>
-                <input type="file" accept=".pdf,.jpg,.jpeg,.png" style={{ display: 'none' }} />
-              </label>
+              <div>
+                <label
+                  className="upload-zone"
+                  htmlFor={`ug-upload-${dok.id}`}
+                  aria-label={`${dok.bezeichnung} hochladen`}
+                  tabIndex={0}
+                  onKeyDown={e => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      (document.getElementById(`ug-upload-${dok.id}`) as HTMLInputElement)?.click();
+                    }
+                  }}
+                >
+                  <div className="upload-zone-icon">
+                    <Icon name="upload" size={28} />
+                  </div>
+                  <div className="upload-zone-label">Dokument hochladen</div>
+                  <div className="upload-zone-hint">PDF, JPG oder PNG · 📷 Auch per Handykamera möglich</div>
+                  <div className="upload-zone-hint" style={{ fontSize: '0.75rem', marginTop: '0.25rem' }}>
+                    Demo: Es wird keine Datei gespeichert — nur der Aktenstatus ändert sich.
+                  </div>
+                  <input
+                    id={`ug-upload-${dok.id}`}
+                    type="file"
+                    accept=".pdf,.jpg,.jpeg,.png"
+                    style={{ display: 'none' }}
+                    aria-hidden="true"
+                    onChange={() => uploadDokument(dok.id)}
+                  />
+                </label>
+                <button
+                  type="button"
+                  className="btn btn-primary"
+                  style={{ marginTop: '0.75rem', width: '100%' }}
+                  onClick={() => uploadDokument(dok.id)}
+                >
+                  Demo: Als hochgeladen markieren
+                </button>
+              </div>
             )}
           </div>
         );

@@ -85,6 +85,7 @@ Story-Dokumentation ist kein Pflicht-Vorläufer für Mock-Daten und Typen.
 | Q-014 | Navigation und Landing Page um zweite Demo-Domäne erweitern | DEMO | S | Q-013 | DONE `2fafb78` |
 | Q-015 | Fairness-Regeln für Unternehmensgründung anlegen (fehlende Genehmigung, blockierter Folgeschritt, Fristlage) | DEMO | M | Q-013 | DONE `48e62e1` |
 | Q-030 | Navigationsstruktur für mehrere Domänen: Landing Page zeigt alle klickbaren Demo-Domänen mit kurzem Kontext | DEMO | M | Q-014 | DONE `d11873a` |
+| Q-073 | UG Dokument-Upload interaktiv + Fairness UG_UNTERLAGE_FEHLT + Verlaufsereignisse bei Rückfrage/Upload | DEMO | S | Q-015 | DONE |
 
 ---
 
@@ -176,4 +177,5 @@ Diese Punkte wurden in früheren Iterationen abgeschlossen und sind produktionsr
 | Q-060–061 Contrib | CONTRIBUTING.md + Issue-Templates | (Folge) |
 | Q-070 UG Registry | US-UG-001–006 in demo storyRegistry | `70937e8` |
 | Q-071 Dokument-Upload | Interaktiver Upload AV + Fairness live | `9a5f89a` |
-| Q-072 AV-State/Timeline | Alle AV-Seiten + Timeline-Events | (diese Iteration) |
+| Q-072 AV-State/Timeline | Alle AV-Seiten + Timeline-Events | `91567b3` |
+| Q-073 UG Upload/Fairness | Interaktiver UG-Upload + UG_UNTERLAGE_FEHLT | (diese Iteration) |
