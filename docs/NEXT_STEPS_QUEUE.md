@@ -141,7 +141,7 @@ Story-Dokumentation ist kein Pflicht-Vorläufer für Mock-Daten und Typen.
 | Q-099 | Kita Lagebild: Meldeeingang mit Monatsbericht-Vorschau koppeln (Sonnenwinkel) | DEMO | S | Q-097 | DONE |
 | Q-102 | Kita Monatsbericht: Rücklink Vorschau → Lagebild (`#kita-monatsbericht-vorschau`) | DEMO | S | Q-099 | DONE |
 | Q-103 | Kita Bedarfsplanung: Residual ↔ Meldelücke Hinweis-only (Südost) | DEMO | S | Q-094 | DONE |
-| Q-108 | Kita Lagebild/Planungsraum: Residual↔Meldelücke-Hinweis spiegeln (wie Bedarfsplanung) | DEMO | S | Q-103 | OFFEN |
+| Q-108 | Kita Lagebild/Planungsraum: Residual↔Meldelücke-Hinweis spiegeln (wie Bedarfsplanung) | DEMO | S | Q-103 | DONE `007975c` |
 | Q-109 | Kita Vorlage: Meldebasis-Kurzhinweis aus Meldeeingang (methodisch, Aggregate only) | DEMO | S | Q-094 | OFFEN |
 
 ---
