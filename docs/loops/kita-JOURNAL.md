@@ -2,6 +2,30 @@
 
 Branch: `loop/kita` · Worktree: `D:\Projects\open-state-loop-kita`
 
+## Iteration 2026-07-29 – US-KJ-005 Lagebild Steuerungs-CSV Zeitreihen-Blatt
+
+### Was
+Steuerungslagebild (`/kita/lagebild`, US-KJ-005): CSV-Export um Blatt 6 „Zeitreihe“ erweitert. 12-Monats-Aggregate Gesamtkommune plus Planungsräume (bei Export-Filter „Meldelücke“ nur Räume mit Lücke). Spalten wie öffentlicher Zeitreihen-Export (Region, Kennzahlen, Peak/Aktuell, Meldebasis nur im Stichprobenmonat Session-sensitiv). Metakopf-Hinweis Zeitreihe/US-KJ-010-kompatibel; Methodik/Badge/Footer auf der Seite. Keine Interpolation, keine Trendbewertung. Nur Aggregate, keine Kind- oder Personennamen. `origin/main` bereits auf Branch (kein Merge nötig).
+
+### Dateien
+- `demo/components/kita/KitaLagebildDruck.tsx` (Blatt 6 Zeitreihe, Meta, Export-Text)
+- `demo/app/kita/lagebild/page.tsx` (Badge, Methodik, Footer)
+- `docs/loops/kita-JOURNAL.md` (dieses Journal)
+
+### Story
+US-KJ-005 – Steuerungslagebild (CSV Zeitreihen-Blatt Gesamt + Planungsräume)
+
+### Build
+`npm run lint` + `npm run build` im `demo/`-Verzeichnis (siehe Commit dieses Laufs)
+
+### Nicht angefasst (Supervisor / verboten)
+Queue, BUILD_STATE, storyRegistry, DECISION_LOG, andere Domänen, package.json, CI, push
+
+### Nächster sinnvoller Schritt (Hinweis Supervisor)
+Druck-Meta Status/Meldebasis print-only auf `/kita` schärfen, oder Zeitreihe optional im Lagebild-UI (nicht nur CSV) falls fachlich gewünscht.
+
+---
+
 ## Iteration 2026-07-29 – US-KJ-009 Transparenzbericht CSV Multi-Blatt Status/Meldebasis
 
 ### Was

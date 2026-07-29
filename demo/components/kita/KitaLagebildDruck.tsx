@@ -49,7 +49,8 @@ function meldeSchluessel(basis: PlanungsraumMeldebasis | undefined): string {
 /**
  * CSV Aggregate-Export Steuerungslagebild (US-KJ-005).
  * Metakopf: Status (Lagebild freigegeben), Meldebasis-Session, optional Meldelücke-Filter.
- * Blätter: Versorgung, Engpass-Rangliste, Handlungsfelder, Maßnahmen, Meldebasis-Stichprobe.
+ * Blätter: Versorgung, Engpass-Rangliste, Handlungsfelder, Maßnahmen, Meldebasis-Stichprobe,
+ * Zeitreihe (Gesamtkommune + Planungsräume, US-KJ-010-kompatibel).
  * Nur Aggregate, keine Kind- oder Personennamen (DEC-004).
  */
 function downloadCsv(args: {
@@ -57,6 +58,7 @@ function downloadCsv(args: {
   byRaumId: Map<string, PlanungsraumMeldebasis>;
   basen: PlanungsraumMeldebasis[];
   meldeMonatsLabel: string;
+  meldeMonatsIso: string;
   sessionFreigabeId: string | null;
   hydrated: boolean;
 }) {
@@ -65,6 +67,7 @@ function downloadCsv(args: {
     byRaumId,
     basen,
     meldeMonatsLabel,
+    meldeMonatsIso,
     sessionFreigabeId,
     hydrated,
   } = args;
@@ -128,7 +131,8 @@ function downloadCsv(args: {
     `# Versorgung Gesamt: genehmigt ${g.genehmmigtePlaetze} · real nutzbar ${g.realNutzbarePlaetze} · belegt ${g.belegtePlaetze} · frei ${g.freiePlaetze} · Auslastung ${csvNum(g.auslastungsgradProzent, 1)} % · Warteliste ${g.wartelisteBestand} · Personalausfall ${csvNum(g.personalAusfallquoteProzent, 1)} %`,
     `# Inklusion: belegt ${g.inklusionsplaetzeBelegt}/${g.inklusionsplaetzeGenehmigt} · Versorgung U3 ${csvNum(g.versorgungsquote.u3, 1)} % · Ue3 ${csvNum(g.versorgungsquote.ue3, 1)} %`,
     `# Methodik: Wartelistendruck = Anfragen / freie Plätze · Handlungsfelder: Druckfaktor > 5 · keine Interpolation fehlender Meldungen`,
-    `# Steuerungskette: Lagebild (US-KJ-005/006) → Bedarfsplanung (US-KJ-007) → Vorlage (US-KJ-008) · Meldebasis US-KJ-004`,
+    `# Zeitreihe: 12-Monats-Aggregate Gesamtkommune und Planungsräume (Demo-Verteilung nach Strukturanteilen) · Meldebasis nur im Stichprobenmonat ${csvSafe(meldeMonatsLabel)} (${meldeMonatsIso}) · keine Trendbewertung`,
+    `# Steuerungskette: Lagebild (US-KJ-005/006) → Bedarfsplanung (US-KJ-007) → Vorlage (US-KJ-008) · Meldebasis US-KJ-004 · Zeitreihe US-KJ-010-kompatibel`,
     `# Jugendamt-intern · Session-Stand, kein Backend · keine automatischen Handlungsempfehlungen`,
     `# Keine personenbezogenen Daten · Keine Kind- oder Personennamen · Keine Einrichtungs-PII (DEC-004)`,
     `# Trennzeichen: Semikolon · Dezimaltrennzeichen: Komma · Encoding: UTF-8 BOM`,
@@ -313,6 +317,110 @@ function downloadCsv(args: {
     );
   }
 
+  // Blatt 6: Zeitreihe Gesamtkommune + Planungsräume (US-KJ-005 / US-KJ-010-kompatibel)
+  const freigegebenGesamt = basen.reduce((s, b) => s + b.freigegeben, 0);
+  const erwartetGesamt = basen.reduce((s, b) => s + b.erwartet, 0);
+  const hatGesamtLuecke = basen.some(b => b.hatDatenluecke);
+
+  const zeitHeader = [
+    'Monat',
+    'Monat_ISO',
+    'Region',
+    'Region_ID',
+    'Belegte_Plaetze',
+    'Freie_Plaetze',
+    'Genehmigte_Plaetze',
+    'Real_nutzbare_Plaetze',
+    'Auslastung_Prozent',
+    'Warteliste_Bestand',
+    'Warteliste_Delta_Vormonat',
+    'Personal_Ausfallquote_Prozent',
+    'Meldebasis',
+    'Ist_Peak',
+    'Ist_Aktuell',
+    'Filter',
+  ].join(';');
+
+  type ZeitSerie = {
+    region: string;
+    regionId: string;
+    series: typeof lb.zeitreihe;
+    basis: PlanungsraumMeldebasis | undefined;
+  };
+
+  const zeitSerien: ZeitSerie[] = [
+    {
+      region: 'Gesamtkommune',
+      regionId: 'GESAMT',
+      series: lb.zeitreihe,
+      basis: undefined,
+    },
+    ...raumExport.map(pr => ({
+      region: pr.bezeichnung,
+      regionId: pr.id,
+      series: lb.zeitreihePlanungsraeume[pr.id] ?? [],
+      basis: byRaumId.get(pr.id),
+    })),
+  ];
+
+  const zeitRows: string[] = [];
+  for (const ser of zeitSerien) {
+    if (ser.series.length === 0) continue;
+    const maxWarteliste = Math.max(...ser.series.map(m => m.wartelisteBestand), 0);
+    ser.series.forEach((m, i) => {
+      const isPeak = m.wartelisteBestand === maxWarteliste && maxWarteliste > 0;
+      const isLatest = i === ser.series.length - 1;
+      const isMeldeMonat = m.monat === meldeMonatsIso;
+      let meldebasis = '–';
+      if (isMeldeMonat && !hydrated) {
+        meldebasis = 'Session nicht geladen';
+      } else if (isMeldeMonat && ser.regionId === 'GESAMT') {
+        meldebasis =
+          basen.length === 0
+            ? 'k. A. (keine Stichprobe)'
+            : hatGesamtLuecke
+              ? `Lücke (${freigegebenGesamt}/${erwartetGesamt})`
+              : `vollständig (${freigegebenGesamt}/${erwartetGesamt})`;
+      } else if (isMeldeMonat) {
+        meldebasis = meldebasisLabel(ser.basis);
+      }
+      zeitRows.push(
+        [
+          csvSafe(m.monatLabel),
+          m.monat,
+          csvSafe(ser.region),
+          ser.regionId,
+          m.belegtePlaetze,
+          m.freiePlaetze,
+          m.genehmmigtePlaetze,
+          m.realNutzbarePlaetze,
+          csvNum(m.auslastungsgradProzent, 1),
+          m.wartelisteBestand,
+          m.wartelisteDeltaVormonat === null ? '' : m.wartelisteDeltaVormonat,
+          csvNum(m.personalAusfallquoteProzent, 1),
+          csvSafe(meldebasis),
+          isPeak ? 'ja' : 'nein',
+          isLatest ? 'ja' : 'nein',
+          exportFilter === 'MELDELUECKE' ? 'MELDELUECKE' : 'ALLE',
+        ].join(';')
+      );
+    });
+  }
+
+  const zeitFilterLabel =
+    exportFilter === 'MELDELUECKE'
+      ? `Filter Meldelücke: Gesamtkommune + ${raumExport.length} Planungsräume mit Lücke`
+      : `Gesamtkommune + alle ${raumExport.length} Planungsräume`;
+
+  parts.push(
+    '',
+    `# Blatt 6: Zeitreihe 12 Monate (${zeitFilterLabel}; Meldebasis nur ${csvSafe(meldeMonatsLabel)}; keine Interpolation/Trendbewertung)`,
+    zeitHeader,
+    ...(zeitRows.length > 0
+      ? zeitRows
+      : ['# (keine Zeitreihendaten im aktuellen Export-Filter)'])
+  );
+
   const csv = parts.join('\n');
   const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
   const url = URL.createObjectURL(blob);
@@ -338,6 +446,7 @@ export function KitaLagebildDruck() {
   );
 
   const meldeMonatsLabel = base.monatsLabel || 'Demo-Stichprobe';
+  const meldeMonatsIso = base.monatsIso || '2024-10';
 
   return (
     <>
@@ -364,8 +473,9 @@ export function KitaLagebildDruck() {
           >
             Druck: Filter-Chips werden nicht gedruckt; aktiver Meldelücke-Filter in Engpass,
             Handlungsfeldern oder Detail erscheint als print-only-Hinweis. CSV: Aggregate mit
-            Lagebild-Status, Meldebasis-Session und optionalem Export-Filter „Meldelücke“
-            (Semikolon, UTF-8 BOM). Nur Aggregate, keine Kind- oder Personennamen (DEC-004).
+            Lagebild-Status, Meldebasis-Session, Zeitreihe (12 Monate Gesamt + Planungsräume) und
+            optionalem Export-Filter „Meldelücke“ (Semikolon, UTF-8 BOM). Nur Aggregate, keine
+            Kind- oder Personennamen (DEC-004).
           </p>
           <div
             style={{
@@ -427,6 +537,7 @@ export function KitaLagebildDruck() {
                 byRaumId,
                 basen,
                 meldeMonatsLabel,
+                meldeMonatsIso,
                 sessionFreigabeId: session?.freigabeId ?? null,
                 hydrated,
               })
