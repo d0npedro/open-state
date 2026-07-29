@@ -8,6 +8,54 @@ Erlaubte Pfade nur: `demo/app/gruendung/**`, `demo/context/GruendungStateContext
 
 ---
 
+## 2026-07-29 – Iteration 10: Verlauf-Filter nach Ereignistyp
+
+### Was
+Verlauf erhält eine zweite Filterzeile nach Ereignistyp (Alle / Vorgang /
+Dokumente / Rückfragen / Bescheide) mit Anzahlen und `aria-pressed`.
+Stelle- und Typ-Filter wirken kombiniert (UND). Zähler der jeweils anderen
+Zeile passen sich an. Leerzustand erklärt die aktive Filterkombination.
+E2E: Chip-Sichtbarkeit, Einzelkategorien, Kombination Stelle+Typ.
+
+### Dateien
+- `demo/app/gruendung/verlauf/page.tsx` – Typ-Filter, kombinierte Filterlogik
+- `demo/e2e/us-ug-gruendung.spec.ts` – fünf Typ-Filter-Tests
+- `docs/loops/ug-JOURNAL.md` – dieses Journal
+
+### Build
+`npm run lint` + `npm run build` im Ordner `demo/` grün.
+`npm run test:e2e:ug` Exit 0.
+
+### Nächster sinnvoller UG-Schritt (Vorschlag)
+- Übersicht: Fairness-Signale auf RELEVANT+HINWEIS begrenzen, wenn Liste wächst
+- Hinweise: CTA für Betriebsdatum-HINWEIS zur Übersicht/Schritte
+- Übersicht: nächster Schritt mit direktem Link zur betroffenen Stelle
+
+---
+
+## 2026-07-29 – Iteration 9: Hinweise-CTA für Steuernummer → Finanzamt
+
+### Was
+Hinweise-Seite: HINWEIS-Signale zur fehlenden Steuernummer (`UG-STEUERNUMMER-FEHLT`)
+erhalten einen CTA „Zum Finanzamt“ mit Anker `/gruendung/behoerden#beh-{id}`
+(Finanzamt-Behördenkarte). CTA nur solange Verfahrensschritt VS-05
+`AUSSTEHEND` ist. E2E: Linkziel und Navigation zur Finanzamt-Karte.
+
+### Dateien
+- `demo/app/gruendung/hinweise/page.tsx` – CTA für UG-STEUERNUMMER-FEHLT
+- `demo/e2e/us-ug-gruendung.spec.ts` – zwei Steuernummer-CTA-Tests
+- `docs/loops/ug-JOURNAL.md` – dieses Journal
+
+### Build
+`npm run lint` + `npm run build` im Ordner `demo/` grün.
+
+### Nächster sinnvoller UG-Schritt (Vorschlag)
+- Verlauf: Filter nach Ereignistyp (optional)
+- Übersicht: Fairness-Signale auf RELEVANT+HINWEIS begrenzen, wenn Liste wächst
+- Hinweise: CTA für Betriebsdatum-HINWEIS zur Übersicht/Schritte
+
+---
+
 ## 2026-07-29 – Iteration 8: Hinweise-CTA für fehlende Unterlagen → Dokumente
 
 ### Was

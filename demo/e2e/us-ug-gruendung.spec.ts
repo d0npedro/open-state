@@ -452,6 +452,20 @@ test.describe('UG – Hinweise zur Verfahrenslage', () => {
     await expect(page.getByTestId('hinweise-unterlagen-cta')).toHaveCount(0);
   });
 
+  test('HINWEIS-Steuernummer-Signal hat CTA „Zum Finanzamt“ mit Anker', async ({ page }) => {
+    const cta = page.getByTestId('hinweise-steuernummer-cta-BEH-02');
+    await expect(cta).toBeVisible();
+    await expect(cta).toContainText(/Zum Finanzamt/i);
+    await expect(cta).toHaveAttribute('href', '/gruendung/behoerden#beh-BEH-02');
+  });
+
+  test('CTA aus Steuernummer-Signal führt zur Finanzamt-Karte', async ({ page }) => {
+    await page.getByTestId('hinweise-steuernummer-cta-BEH-02').click();
+    await expect(page).toHaveURL(/\/gruendung\/behoerden#beh-BEH-02/);
+    await expect(page.locator('#beh-BEH-02')).toBeVisible();
+    await expect(page.getByTestId('behoerde-karte-BEH-02')).toContainText(/Finanzamt/i);
+  });
+
 });
 
 // ─── Verlauf ──────────────────────────────────────────────────────────────────
@@ -514,6 +528,52 @@ test.describe('UG – Verlauf', () => {
     const group = page.getByRole('group', { name: /Verlauf filtern nach handelnder Stelle/i });
     await group.getByRole('button', { name: /System/i }).click();
     await expect(page.getByRole('status')).toContainText(/Keine System-Einträge|Noch keine System/i);
+  });
+
+  test('Filter nach Ereignistyp sichtbar', async ({ page }) => {
+    const group = page.getByRole('group', { name: /Verlauf filtern nach Ereignistyp/i });
+    await expect(group).toBeVisible();
+    await expect(group.getByRole('button', { name: /Alle/i })).toBeVisible();
+    await expect(group.getByRole('button', { name: /Vorgang/i })).toBeVisible();
+    await expect(group.getByRole('button', { name: /Dokumente/i })).toBeVisible();
+    await expect(group.getByRole('button', { name: /Rückfragen/i })).toBeVisible();
+    await expect(group.getByRole('button', { name: /Bescheide/i })).toBeVisible();
+  });
+
+  test('Filter „Rückfragen“ zeigt nur Rückfrage-Ereignisse', async ({ page }) => {
+    const group = page.getByRole('group', { name: /Verlauf filtern nach Ereignistyp/i });
+    await group.getByRole('button', { name: /Rückfragen/i }).click();
+    await expect(group.getByRole('button', { name: /Rückfragen/i })).toHaveAttribute('aria-pressed', 'true');
+    await expect(page.getByText('Rückfrage gestellt').first()).toBeVisible();
+    await expect(page.getByText('Vorgang erstellt')).not.toBeVisible();
+    await expect(page.getByText('Bescheid erteilt')).not.toBeVisible();
+    await expect(page.getByText(/von \d+ Einträgen · Filter: Rückfragen/)).toBeVisible();
+  });
+
+  test('Filter „Dokumente“ zeigt nur Dokument-Ereignisse', async ({ page }) => {
+    const group = page.getByRole('group', { name: /Verlauf filtern nach Ereignistyp/i });
+    await group.getByRole('button', { name: /Dokumente/i }).click();
+    await expect(page.getByText('Dokument übermittelt').first()).toBeVisible();
+    await expect(page.getByText('Rückfrage gestellt')).not.toBeVisible();
+    await expect(page.getByText('Vorgang erstellt')).not.toBeVisible();
+  });
+
+  test('Filter „Bescheide“ zeigt nur Bescheid-Ereignisse', async ({ page }) => {
+    const group = page.getByRole('group', { name: /Verlauf filtern nach Ereignistyp/i });
+    await group.getByRole('button', { name: /Bescheide/i }).click();
+    await expect(page.getByText('Bescheid erteilt').first()).toBeVisible();
+    await expect(page.getByText('Rückfrage gestellt')).not.toBeVisible();
+    await expect(page.getByText('Dokument übermittelt')).not.toBeVisible();
+  });
+
+  test('Stelle- und Typ-Filter kombinierbar', async ({ page }) => {
+    const stelle = page.getByRole('group', { name: /Verlauf filtern nach handelnder Stelle/i });
+    const typ = page.getByRole('group', { name: /Verlauf filtern nach Ereignistyp/i });
+    await stelle.getByRole('button', { name: /Sie/i }).click();
+    await typ.getByRole('button', { name: /Dokumente/i }).click();
+    await expect(page.getByText('Dokument übermittelt').first()).toBeVisible();
+    await expect(page.getByText('Vorgang erstellt')).not.toBeVisible();
+    await expect(page.getByText(/von \d+ Einträgen · Filter: Sie · Dokumente/)).toBeVisible();
   });
 
   test('Kein interner Ereignis-Code sichtbar', async ({ page }) => {
