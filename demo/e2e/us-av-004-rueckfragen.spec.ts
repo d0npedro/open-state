@@ -82,6 +82,10 @@ test.describe('US-AV-004 – Rückfrage verstehen (Anzeige)', () => {
     await expect(activeTab).toContainText('Fragen');
   });
 
+  test('Tab-Badge zeigt 1 offene Frage', async ({ page }) => {
+    await expect(page.getByTestId('tab-badge-fragen')).toHaveText('1');
+  });
+
 });
 
 test.describe('US-AV-004 – Rückfrage beantworten (Interaktion)', () => {

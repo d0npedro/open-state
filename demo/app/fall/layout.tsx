@@ -1,12 +1,13 @@
 // UX-Grund: Navigation mit Icons + Klarsprache.
 // "Rückfragen" → "Fragen", "Bescheide" → "Bescheid", "Hinweise" integriert.
 // Aktiver Tab visuell unverkennbar (border + color change).
+// Tab-Badges: offene Handlungsmengen ohne Extra-Klick sichtbar (US-AV-001/003/004).
 
 'use client';
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { DemoStateProvider } from '@/context/DemoStateContext';
+import { DemoStateProvider, useDemoState } from '@/context/DemoStateContext';
 import { DomainNav } from '@/components/DomainNav';
 import { AvDemoSessionBar } from '@/components/DemoSessionBar';
 import { Icon } from '@/components/Icon';
@@ -14,23 +15,100 @@ import { Icon } from '@/components/Icon';
 // UX-Grund: 6 Tabs statt 7 — Hinweise wird kontextuell eingebettet
 // damit Nutzer nicht aktiv navigieren müssen, um Warnungen zu sehen.
 const nav = [
-  { href: '/fall',            label: 'Übersicht',  icon: 'home'     as const },
-  { href: '/fall/dokumente',  label: 'Unterlagen', icon: 'file'     as const },
-  { href: '/fall/rueckfragen',label: 'Fragen',     icon: 'chat'     as const },
-  { href: '/fall/termine',    label: 'Termine',    icon: 'calendar' as const },
-  { href: '/fall/bescheide',  label: 'Bescheid',   icon: 'scroll'   as const },
-  { href: '/fall/verlauf',    label: 'Verlauf',    icon: 'clock'    as const },
+  { href: '/fall',            label: 'Übersicht',  icon: 'home'     as const, badgeKey: null },
+  { href: '/fall/dokumente',  label: 'Unterlagen', icon: 'file'     as const, badgeKey: 'unterlagen' as const },
+  { href: '/fall/rueckfragen',label: 'Fragen',     icon: 'chat'     as const, badgeKey: 'fragen' as const },
+  { href: '/fall/termine',    label: 'Termine',    icon: 'calendar' as const, badgeKey: null },
+  { href: '/fall/bescheide',  label: 'Bescheid',   icon: 'scroll'   as const, badgeKey: null },
+  { href: '/fall/verlauf',    label: 'Verlauf',    icon: 'clock'    as const, badgeKey: null },
 ];
 
-export default function FallLayout({ children }: { children: React.ReactNode }) {
-  const pathname = usePathname();
+/** Kleines Zähler-Badge auf Tabs mit Handlungsbedarf (inline, kein Design-Token-Eingriff). */
+function TabCountBadge({ count, label }: { count: number; label: string }) {
+  if (count <= 0) return null;
+  return (
+    <span
+      data-testid={`tab-badge-${label}`}
+      aria-label={`${count} offen`}
+      style={{
+        position: 'absolute',
+        top: '0.35rem',
+        right: '0.35rem',
+        minWidth: '1.25rem',
+        height: '1.25rem',
+        padding: '0 0.3rem',
+        borderRadius: '999px',
+        background: 'var(--color-danger)',
+        color: '#fff',
+        fontSize: '0.7rem',
+        fontWeight: 700,
+        lineHeight: '1.25rem',
+        textAlign: 'center',
+        boxShadow: '0 0 0 2px #fff',
+      }}
+    >
+      {count > 9 ? '9+' : count}
+    </span>
+  );
+}
 
-  // UX-Grund: Exact match für /fall, prefix match für Unterseiten
+/** Tab-Nav mit Live-Zählern aus DemoState (muss innerhalb Provider liegen). */
+function FallTabNav() {
+  const pathname = usePathname();
+  const { fall } = useDemoState();
+
+  const offeneFragen = fall.rueckfragen.filter(r => !r.beantwortet).length;
+  const offeneUnterlagen = fall.dokumente.filter(
+    d => d.status === 'ANGEFORDERT' || d.status === 'ABGELEHNT'
+  ).length;
+
+  const counts: Record<'fragen' | 'unterlagen', number> = {
+    fragen: offeneFragen,
+    unterlagen: offeneUnterlagen,
+  };
+
   function isActive(href: string) {
     if (href === '/fall') return pathname === '/fall';
     return pathname.startsWith(href);
   }
 
+  return (
+    <nav
+      style={{ background: 'white', borderBottom: '1px solid var(--color-border)', position: 'sticky', top: 0, zIndex: 50 }}
+      aria-label="Bereichsnavigation"
+    >
+      <div className="container" style={{ padding: '0' }}>
+        <div className="tab-nav" role="tablist">
+          {nav.map(n => {
+            const count = n.badgeKey ? counts[n.badgeKey] : 0;
+            const active = isActive(n.href);
+            const ariaLabel =
+              count > 0
+                ? `${n.label}, ${count} offen`
+                : n.label;
+            return (
+              <Link
+                key={n.href}
+                href={n.href}
+                role="tab"
+                aria-selected={active}
+                aria-label={ariaLabel}
+                className={`tab-nav-item${active ? ' active' : ''}`}
+                style={{ position: 'relative' }}
+              >
+                <Icon name={n.icon} size={22} />
+                <span>{n.label}</span>
+                {n.badgeKey && <TabCountBadge count={count} label={n.badgeKey} />}
+              </Link>
+            );
+          })}
+        </div>
+      </div>
+    </nav>
+  );
+}
+
+export default function FallLayout({ children }: { children: React.ReactNode }) {
   return (
     <DemoStateProvider>
       <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
@@ -52,29 +130,8 @@ export default function FallLayout({ children }: { children: React.ReactNode }) 
           </div>
         </header>
 
-        {/* Tab-Navigation: Icons + Labels */}
-        {/* UX-Grund: Immer sichtbar, nicht im Scroll-Bereich — Nutzer muss nie suchen */}
-        <nav
-          style={{ background: 'white', borderBottom: '1px solid var(--color-border)', position: 'sticky', top: 0, zIndex: 50 }}
-          aria-label="Bereichsnavigation"
-        >
-          <div className="container" style={{ padding: '0' }}>
-            <div className="tab-nav" role="tablist">
-              {nav.map(n => (
-                <Link
-                  key={n.href}
-                  href={n.href}
-                  role="tab"
-                  aria-selected={isActive(n.href)}
-                  className={`tab-nav-item${isActive(n.href) ? ' active' : ''}`}
-                >
-                  <Icon name={n.icon} size={22} />
-                  <span>{n.label}</span>
-                </Link>
-              ))}
-            </div>
-          </div>
-        </nav>
+        {/* Tab-Navigation: Icons + Labels + Badges bei Handlungsbedarf */}
+        <FallTabNav />
 
         {/* Q-075: Session-Leiste nach Demo-Interaktionen */}
         <AvDemoSessionBar />
