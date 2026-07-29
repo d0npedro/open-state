@@ -126,7 +126,7 @@ Story-Dokumentation ist kein Pflicht-Vorläufer für Mock-Daten und Typen.
 | Q-100 | UG Hinweise: CTA Steuernummer → Finanzamt-Behördenkarte (`#beh-…`) | DEMO | S | Q-098 | DONE |
 | Q-101 | UG Verlauf: Filter nach Ereignistyp (Vorgang/Dokumente/Rückfragen/Bescheide) | DEMO | S | Q-082 | DONE |
 | Q-106 | UG Übersicht: Fairness-Kurzblock auf RELEVANT+HINWEIS begrenzen (kein INFO-Lärm) | DEMO | S | Q-090 | DONE `4b53be4` |
-| Q-107 | UG Übersicht: nächster Schritt mit direktem Link zur betroffenen Stelle/Seite | DEMO | S | Q-106 | OFFEN |
+| Q-107 | UG Übersicht: nächster Schritt mit direktem Link zur betroffenen Stelle/Seite | DEMO | S | Q-106 | DONE `ba026f5` |
 | Q-111 | UG Hinweise: CTA „Zum Verfahrensstatus“ aus HINWEIS-Betriebsdatum (`#verfahrensstatus`) | DEMO | S | Q-100 | DONE `18e395e` |
 
 ---
@@ -260,3 +260,4 @@ Diese Punkte wurden in früheren Iterationen abgeschlossen und sind produktionsr
 | Q-110 Kita Engpass/Meldelücke-Filter | Planungsraum-Explorer Schnellfilter | `8868849` → main |
 | Q-111 UG Betriebsdatum-CTA | Hinweise → `#verfahrensstatus` | `18e395e` → main |
 | Q-106 UG Fairness-Filter | Kurzblock nur RELEVANT+HINWEIS | `4b53be4` → main |
+| Q-107 UG nächster Schritt Deep-Links | Übersicht Schritt + offene Aufgaben verlinkt | `ba026f5` → main |

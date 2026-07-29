@@ -1,6 +1,6 @@
 # BUILD_STATE.md – Aktueller Projektstand
 
-Zuletzt aktualisiert: nach Supervisor-Pflicht-Push 2026-07-29 (Q-112 Engpass-Rangliste Meldebasis auf main; lint+build grün; Push origin/main + loop/*)
+Zuletzt aktualisiert: nach Supervisor-Pflicht-Push 2026-07-29 (Merge UG Q-107 Deep-Links + Kita Q-112; lint+build+E2E chromium Port 3010; Queue Q-106/Q-107 DONE)
 
 Dieser Stand beschreibt, was tatsächlich existiert und funktioniert.
 Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
@@ -15,7 +15,7 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | Build-Status | ✓ Erfolgreich (27 statische Seiten) |
 | Deployment | Vercel, aus `demo/`-Verzeichnis |
 | Lokaler Start | `cd demo && npm install && npm run dev` |
-| Letzte Build-Prüfung | lint+build grün; `test:e2e:ci` chromium Port 3010 (siehe Supervisor-Lauf) |
+| Letzte Build-Prüfung | lint+build grün; `test:e2e:ci` 210+ chromium Port 3010 (Supervisor-Pflichtlauf) |
 
 ---
 
