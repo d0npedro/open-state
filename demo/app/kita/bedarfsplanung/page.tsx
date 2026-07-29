@@ -7,6 +7,7 @@
  * Datenlücken je Planungsraum werden aus dem Meldeeingang abgeleitet (US-KJ-004→007):
  * z. B. Südost / Kita Sonnenwinkel überfällig, bis Session-Freigabe in /kita/meldung.
  * Steuerungskette: Lagebild (US-KJ-005) → Bedarfsplanung → politische Vorlage (US-KJ-008).
+ * Druckansicht freigabeunabhängig mit dokumentiertem Meldebasis-Stand (Spiegel Lagebild/Vorlage).
  * Keine automatischen Handlungsempfehlungen (Story-Nicht-Ziel).
  * Kommentar und „Zur Freigabe“ sind session-lokal, ohne Backend.
  */
@@ -67,10 +68,16 @@ export default function BedarfsplanungPage() {
     for (const z of zeilen) m.set(z.pr.id, z.luecke.residual);
     return m;
   }, [zeilen]);
+  const meldeLueckenRaeume = useMemo(
+    () => basen.filter(b => b.hatDatenluecke),
+    [basen]
+  );
+  const statusLabel =
+    status === 'ENTWURF' ? 'In Bearbeitung' : 'Zur Freigabe an JA-Leitung';
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1.75rem' }}>
-      <div>
+      <div className="no-print">
         <div style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginBottom: '0.75rem' }}>
           <span className="badge badge-primary">US-KJ-007</span>
           <span>Bedarfsplanung · Demo: Jugendamt intern · § 80 SGB VIII</span>
@@ -80,6 +87,113 @@ export default function BedarfsplanungPage() {
           Strukturierte Übersicht je Planungsraum auf Basis aktueller Versorgungsdaten.
           Dieser Entwurf ersetzt keinen politischen Beschluss und enthält keine automatischen Handlungsempfehlungen.
         </p>
+      </div>
+
+      {/* Druck freigabeunabhängig – Spiegel Lagebild/Vorlage (Meldebasis im Ausdruck) */}
+      <div
+        className="no-print card"
+        style={{
+          display: 'flex',
+          flexWrap: 'wrap',
+          gap: '1rem',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+        }}
+      >
+        <div style={{ maxWidth: '38rem' }}>
+          <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>Export</div>
+          <strong style={{ fontSize: '0.95rem' }}>Druckansicht Bedarfsplanung</strong>
+          <p
+            style={{
+              fontSize: '0.8rem',
+              color: 'var(--color-text-muted)',
+              margin: '0.25rem 0 0',
+              lineHeight: 1.5,
+            }}
+          >
+            Druck ist freigabeunabhängig (Entwurf und „Zur Freigabe“). Status, Meldebasis-Stand
+            (Session-sensitiv aus Meldeeingang) und Planungskommentar erscheinen im Ausdruck.
+            Steuerungskette-Hub und Aktionsbuttons sind no-print. Keine Kind- oder Personennamen.
+          </p>
+        </div>
+        <button
+          type="button"
+          className="btn btn-secondary"
+          onClick={() => window.print()}
+          style={{ fontSize: '0.875rem', flexShrink: 0 }}
+        >
+          Drucken / als PDF speichern
+        </button>
+      </div>
+
+      {/* print-only Kopf + Status + Meldebasis-Dokumentation */}
+      <div className="print-only print-block" style={{ margin: 0 }}>
+        <p style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', margin: '0 0 0.35rem' }}>
+          US-KJ-007 · Bedarfsplanung · Demo Jugendamt intern · § 80 SGB VIII
+        </p>
+        <h1 style={{ margin: '0 0 0.5rem', fontSize: '1.35rem' }}>Bedarfsplanungsentwurf</h1>
+        <div
+          style={{
+            marginBottom: '0.75rem',
+            padding: '0.75rem 1rem',
+            border: '1px solid var(--color-border)',
+            borderRadius: 'var(--radius)',
+            fontSize: '0.875rem',
+            background: 'var(--color-neutral-light)',
+          }}
+          role="status"
+        >
+          <strong>Status im Ausdruck: {statusLabel}</strong>
+          <div style={{ marginTop: '0.25rem', color: 'var(--color-text-muted)', fontSize: '0.8rem' }}>
+            Version {ENTWURF_VERSION} · {PLANUNGSZEITRAUM} · Datenstand {lb.stand} · Demo-Session ·
+            kein politischer Beschluss
+          </div>
+        </div>
+        <div
+          style={{
+            marginBottom: '0.5rem',
+            padding: '0.75rem 1rem',
+            border: '1px solid var(--color-border)',
+            borderRadius: 'var(--radius)',
+            fontSize: '0.875rem',
+          }}
+          role="note"
+        >
+          <strong style={{ display: 'block', marginBottom: '0.35rem' }}>
+            Meldebasis im Ausdruck (Session-Stand)
+          </strong>
+          {!hydrated ? (
+            <p style={{ margin: 0, fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>
+              Meldebasis wird clientseitig aus dem Meldeeingang geladen.
+            </p>
+          ) : meldeLueckenRaeume.length === 0 ? (
+            <p style={{ margin: 0, fontSize: '0.8rem', lineHeight: 1.5 }}>
+              Stichprobe Meldeeingang ({meldeBase.monatsLabel}): in den erfassten Planungsräumen
+              vollständig freigegeben. Residuale Planungslücken basieren auf freigegebenen
+              Aggregaten; keine Interpolation.
+            </p>
+          ) : (
+            <p style={{ margin: 0, fontSize: '0.8rem', lineHeight: 1.5 }}>
+              Unvollständige Meldebasis in{' '}
+              {meldeLueckenRaeume
+                .map(b => {
+                  const residual = residualByRaumId.get(b.planungsraumId) ?? 0;
+                  const schwere =
+                    b.schwere === 'UEBERFAELLIG'
+                      ? 'überfällig'
+                      : b.schwere === 'AUSSTEHEND'
+                        ? 'ausstehend'
+                        : b.schwere;
+                  return `${b.planungsraumBezeichnung} (${b.freigegeben}/${b.erwartet}, ${schwere}${
+                    residual > 0 ? `, Residual ${residual}` : ''
+                  })`;
+                })
+                .join('; ')}
+              . Planungslücken unverändert ausgewiesen, fehlende Aggregate nicht geschätzt
+              (Hinweis-only, Fokus Demo: Südost / PR-03).
+            </p>
+          )}
+        </div>
       </div>
 
       {/* Metadaten / Versionierung (AK 3, 4) */}
@@ -133,6 +247,8 @@ export default function BedarfsplanungPage() {
             Die Warteliste kann Mehrfachanmeldungen enthalten; die Lücke ist eine Planungshilfe, keine Prognose.
             Fehlende freigegebene Einrichtungsmeldungen (Meldeeingang) werden je Planungsraum als Datenlücke
             ausgewiesen und nicht interpoliert. Keine automatische Empfehlung für Neubau oder Standortwahl.
+            Druckansicht freigabeunabhängig: Status und Meldebasis-Stand (Session) werden im Ausdruck
+            dokumentiert (Spiegel Lagebild/Vorlage).
           </p>
         </div>
       </div>
@@ -272,7 +388,7 @@ export default function BedarfsplanungPage() {
       {/* Kommentar + Freigabe-Workflow (AK 6) */}
       <section className="card">
         <h2 style={{ marginBottom: '0.75rem', fontSize: '1.05rem' }}>Planungskommentar</h2>
-        <p style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)', marginBottom: '0.75rem' }}>
+        <p className="no-print" style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)', marginBottom: '0.75rem' }}>
           Fachliche Einschätzung der Planung — keine System-Empfehlung. Demo speichert den Text nur in der Browser-Session.
         </p>
         <label htmlFor="bp-kommentar" className="sr-only" style={{ position: 'absolute', width: 1, height: 1, overflow: 'hidden', clip: 'rect(0,0,0,0)' }}>
@@ -280,6 +396,7 @@ export default function BedarfsplanungPage() {
         </label>
         <textarea
           id="bp-kommentar"
+          className="no-print"
           value={kommentar}
           onChange={e => setKommentar(e.target.value)}
           disabled={status === 'ZUR_FREIGABE'}
@@ -296,8 +413,22 @@ export default function BedarfsplanungPage() {
             background: status === 'ZUR_FREIGABE' ? 'var(--color-neutral-light)' : 'white',
           }}
         />
+        <p
+          className="print-only print-block"
+          style={{
+            margin: 0,
+            fontSize: '0.9rem',
+            lineHeight: 1.55,
+            whiteSpace: 'pre-wrap',
+          }}
+        >
+          {kommentar.trim() || '— (kein Kommentar)'}
+        </p>
 
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem', marginTop: '1rem', alignItems: 'center' }}>
+        <div
+          className="no-print"
+          style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem', marginTop: '1rem', alignItems: 'center' }}
+        >
           {status === 'ENTWURF' ? (
             <button
               type="button"
@@ -410,14 +541,39 @@ export default function BedarfsplanungPage() {
         </div>
       </section>
 
-      <div style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)' }}>
+      <div className="no-print" style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)' }}>
         Steuerungskette Kommune {lb.kommuneBezeichnung}: Lagebild → Bedarfsplanung → Vorlage
         (Planungslücken und Meldebasis). Öffentliche Aggregation ohne Einrichtungsdetail im{' '}
         <Link href="/kita" style={{ color: 'var(--color-primary)' }}>
           öffentlichen Bericht
         </Link>{' '}
-        (DEC-004).
+        (DEC-004). Druck: freigabeunabhängig mit dokumentiertem Meldebasis-Stand.
       </div>
+
+      <p
+        className="print-only print-block"
+        style={{ margin: 0, fontSize: '0.8rem', color: 'var(--color-text-muted)', lineHeight: 1.5 }}
+      >
+        Steuerungskette Kommune {lb.kommuneBezeichnung}: Lagebild → Bedarfsplanung → Vorlage.
+        Druckansicht freigabeunabhängig; Meldebasis aus Demo-Stichprobe Meldeeingang (Session).
+        Keine Kind- oder Personennamen. Keine automatischen Handlungsempfehlungen.
+      </p>
+
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
+            .print-only { display: none; }
+            @media print {
+              .no-print { display: none !important; }
+              .print-only { display: inline !important; }
+              .print-only.print-block { display: block !important; }
+              body > div > header,
+              body nav { display: none !important; }
+              main { padding: 0 !important; }
+            }
+          `,
+        }}
+      />
     </div>
   );
 }
