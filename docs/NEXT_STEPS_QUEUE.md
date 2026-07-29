@@ -153,7 +153,8 @@ Story-Dokumentation ist kein Pflicht-Vorläufer für Mock-Daten und Typen.
 | Q-115 | Kita Zeitreihe: Meldebasis-Datenlücken am Berichtsmonat markieren (Session-sensitiv, Hinweis-only, keine Interpolation) | DEMO | S | Q-112 | DONE `4486fe5` |
 | Q-117 | Kita Zeitreihe: Regionenfilter Planungsraum (Gesamtkommune + 5 Räume, raumbezogene Meldebasis, US-KJ-010 AK2) | DEMO | S | Q-115 | DONE `28d5cae` |
 | Q-118 | Kita Regionenvergleich: zwei Planungsräume nebeneinander mit Δ und Meldebasis (US-KJ-010 AK3) | DEMO | S | Q-115 | DONE `c4289dd` |
-| Q-119 | Kita Zeitreihe/Vergleich: CSV-Export gefilterter Daten (US-KJ-010 AK4) | DEMO | S | Q-117 | OFFEN |
+| Q-119 | Kita Zeitreihe/Vergleich: CSV-Export gefilterter Daten (US-KJ-010 AK4) | DEMO | S | Q-117 | DONE `b0c070f`/`d63e54c` |
+| Q-121 | UG Behörden: VS-04 nach Beantworten der Rückfrage session-lokal auf ABGESCHLOSSEN; Verlauf-Ereignis | DEMO | S | Q-120 | DONE `5dce475` |
 
 ---
 
@@ -276,3 +277,5 @@ Diese Punkte wurden in früheren Iterationen abgeschlossen und sind produktionsr
 | Q-117 Kita Zeitreihe Regionenfilter | Planungsraum-Chips in `KitaZeitreiheTabelle` (US-KJ-010 AK2) | `28d5cae` → main |
 | Q-118 Kita Regionenvergleich | Zwei-Räume-Vergleich `KitaRegionenVergleich` (US-KJ-010 AK3) | `c4289dd` → main |
 | Q-120 UG Behörden VS-04-Link | Verfahrensschritt → offene Rückfrage `#rq-…` | `67ad664` → main |
+| Q-119 Kita CSV-Export Zeitreihe/Vergleich | US-KJ-010 AK4 gefilterte Ansicht | `b0c070f`/`d63e54c` → main |
+| Q-121 UG VS-04 nach RQ-Antwort | Verfahrensschritt ABGESCHLOSSEN + Verlauf | `5dce475` → main |
