@@ -2,6 +2,7 @@ import { demoKitaLagebild } from '@/data/mockKitaLagebild';
 import type { PlanungsraumKennzahlen, Kapazitaetsmassnahme } from '@/types/kita';
 import { KitaMeldeeingangPanel } from '@/components/kita/KitaMeldeeingangPanel';
 import { KitaEngpassRangliste } from '@/components/kita/KitaEngpassRangliste';
+import { KitaHandlungsfelder } from '@/components/kita/KitaHandlungsfelder';
 import {
   KitaLagebildResidualSummenHinweis,
   KitaPlanungsraumMeldebeitrag,
@@ -246,43 +247,8 @@ export default function KitaLagebildPage() {
       {/* Engpass-Rangliste (AK 1+2 US-KJ-006) + Meldebasis-Kurzmarkierung (US-KJ-004→006) */}
       <KitaEngpassRangliste sorted={sorted} maxDruck={maxDruck} />
 
-      {/* Handlungsfelder (aus Daten abgeleitet — keine Empfehlungen) */}
-      <section>
-        <h2 style={{ marginBottom: '0.5rem' }}>Handlungsfelder</h2>
-        <p style={{ fontSize: '0.875rem', color: 'var(--color-text-muted)', marginBottom: '1rem' }}>
-          Aus den Falldaten abgeleitet — keine automatischen Empfehlungen. Die Entscheidung über Maßnahmen liegt bei der Jugendamtsleitung und den politischen Gremien.
-        </p>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-          {handlungsfelder.map(pr => {
-            const m = massnahmenByPR[pr.id] ?? [];
-            const neuePlaetze = m.reduce((s, x) => s + x.erwarteteNeuePlaetze, 0);
-            const deckung = deckungsgrad(pr.wartelisteBestand, neuePlaetze);
-            return (
-              <div key={pr.id} style={{
-                padding: '0.875rem 1rem',
-                border: `1px solid ${druckColor(pr.wartelisteDruckFaktor)}`,
-                borderRadius: 'var(--radius)',
-                background: 'white',
-                fontSize: '0.875rem',
-              }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '0.4rem' }}>
-                  <strong>{pr.bezeichnung}</strong>
-                  <span style={{ color: druckColor(pr.wartelisteDruckFaktor), fontWeight: 600, fontSize: '0.8rem' }}>
-                    Druck: {pr.wartelisteDruckFaktor.toFixed(1)}x · {druckLabel(pr.wartelisteDruckFaktor)}
-                  </span>
-                </div>
-                <p style={{ margin: 0, color: 'var(--color-text)', lineHeight: 1.5 }}>
-                  {pr.wartelisteBestand} Anfragen ohne Platzzusage bei {pr.freiePlaetzeU3 + pr.freiePlaetzeUe3} freien Plätzen.
-                  {neuePlaetze > 0
-                    ? ` Laufende Maßnahmen schaffen +${neuePlaetze} Plätze (Deckungsgrad ${deckung} % der Warteliste).`
-                    : ' Keine laufenden Kapazitätserweiterungen für diesen Planungsraum.'}
-                  {deckung < 100 && pr.wartelisteDruckFaktor > 5 && ` Verbleibende Lücke: ${pr.wartelisteBestand - neuePlaetze > 0 ? pr.wartelisteBestand - neuePlaetze : 0} Plätze.`}
-                </p>
-              </div>
-            );
-          })}
-        </div>
-      </section>
+      {/* Handlungsfelder + Meldebasis-Kurzmarkierung (US-KJ-005/006, aus Daten abgeleitet) */}
+      <KitaHandlungsfelder handlungsfelder={handlungsfelder} massnahmenByPR={massnahmenByPR} />
 
       {/* Planungsraum-Detailkarten (AK 4 US-KJ-006: Detailsicht) */}
       <section>
