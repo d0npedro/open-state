@@ -2,7 +2,7 @@
 
 | Feld | Wert |
 |------|------|
-| last_checked | 2026-07-29T08:07:05Z |
+| last_checked | 2026-07-29T08:08:08Z |
 | last_run_id | 30434060034 |
 | last_status | success |
 | last_sha | 81494a1 |
