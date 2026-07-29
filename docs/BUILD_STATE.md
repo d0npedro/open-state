@@ -1,6 +1,6 @@
 # BUILD_STATE.md – Aktueller Projektstand
 
-Zuletzt aktualisiert: nach Supervisor-Pflicht-Push 2026-07-29 (Merge loop/kita → Q-160 Vorlage CSV; lint+build 27 Seiten grün; E2E 241; origin/main sync 0)
+Zuletzt aktualisiert: nach Supervisor-Pflicht-Push 2026-07-29 (Merge AV Q-161 + UG Q-162 + Kita Q-163; lint+build 27 Seiten grün; E2E 242; origin/main sync 0)
 
 Dieser Stand beschreibt, was tatsächlich existiert und funktioniert.
 Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
@@ -15,7 +15,7 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | Build-Status | ✓ Erfolgreich (27 statische Seiten) |
 | Deployment | Vercel, aus `demo/`-Verzeichnis |
 | Lokaler Start | `cd demo && npm install && npm run dev` |
-| Letzte Build-Prüfung | lint+build **27 Seiten** + `test:e2e:ci` **241 passed** (Supervisor Merge Q-160 Vorlage CSV) |
+| Letzte Build-Prüfung | lint+build **27 Seiten** + `test:e2e:ci` **242 passed** (Supervisor Merge Q-161/Q-162/Q-163) |
 
 ---
 
@@ -24,7 +24,7 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | Route | Inhalt | Story-IDs | Status |
 |-------|--------|-----------|--------|
 | `/` | Landing Page | – | ✓ |
-| `/fall` | Fallübersicht, Status, Fairness-Summary, Fristen-Countdown offener Unterlagen, Termin-Kachel Status live | US-AV-001, US-AV-002, US-AV-005 | ✓ |
+| `/fall` | Fallübersicht, Status, Fairness-Summary, Fristen-Countdown offener Unterlagen, Upload-Quittung + nächste offene Unterlage nach Session-Upload, Termin-Kachel Status live | US-AV-001, US-AV-002, US-AV-003, US-AV-005 | ✓ |
 | `/fall/dokumente` | Dokumentenanforderungen + Frist-Resttage | US-AV-003 | ✓ |
 | `/fall/rueckfragen` | Rückfragen mit Fairness-Hinweis | US-AV-004 | ✓ |
 | `/fall/termine` | Termine; session-lokale Bestätigung; Nav-Badge nur unbestätigt/bald fällig | US-AV-005 | ✓ |
@@ -33,9 +33,9 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | `/fall/hinweise` | Vollständige Fairness-Hinweisseite | US-AV-008 | ✓ |
 | `/stories` | Story Coverage Dashboard | – | ✓ |
 | `/feedback` | Feedback → GitHub Issues | – | ✓ |
-| `/gruendung` … | Unternehmensgründung (Übersicht Fairness-Kurzblock+Kurz-CTAs inkl. Steuernummer/Betriebsdatum/BG-Hilfstext session-sensitiv, Behörden VS-04→Rückfrage, Hinweise-CTAs RQ/BG/Unterlagen/Steuernummer/Betriebsdatum/parallele Behörden, Verlauf Stelle+Ereignistyp-Filter, …) | US-UG-001–006 | ✓ |
+| `/gruendung` … | Unternehmensgründung (Übersicht Fairness-Kurzblock+Kurz-CTAs inkl. Steuernummer/Betriebsdatum/BG-Hilfstext session-sensitiv; CTA-Hilfstexte zentral in `gruendung-rules`, Behörden VS-04→Rückfrage, Hinweise-CTAs RQ/BG/Unterlagen/Steuernummer/Betriebsdatum/parallele Behörden, Verlauf Stelle+Ereignistyp-Filter, …) | US-UG-001–006 | ✓ |
 | `/kita` | Öffentlicher Transparenzbericht + Planungsraum-Filter + Residual↔Meldelücke + Engpass/Meldelücke-Schnellfilter + Zeitreihe Meldebasis + Regionenfilter + Regionenvergleich Zwei-Räume inkl. 12-Monats-Verlauf A/B + CSV-Export + Open-Data-Lizenz + Hub-Karten JA-Steuerungskette (Lagebild/Bedarfsplanung/Vorlage) | US-KJ-009, US-KJ-010 | ✓ |
-| `/kita/lagebild` | Jugendamt-Steuerungsansicht + Meldeeingang + Meldebeitrag + Engpass/Handlungsfelder/Planungsraum-Detail Meldelücke-Schnellfilter + Druck Meldelücke + Monatsbericht-Vorschau + Steuerungskette Hub-Karten | US-KJ-005, US-KJ-006 | ✓ |
+| `/kita/lagebild` | Jugendamt-Steuerungsansicht + Meldeeingang + Meldebeitrag + Engpass/Handlungsfelder/Planungsraum-Detail Meldelücke-Schnellfilter + Druck Meldelücke + CSV Aggregate Status/Meldebasis/Meldelücke freigabeunabhängig + Monatsbericht-Vorschau + Steuerungskette Hub-Karten | US-KJ-005, US-KJ-006 | ✓ |
 | `/kita/bedarfsplanung` | Bedarfsplanungsentwurf (§ 80 SGB VIII) + Meldebasis + Residual↔Meldelücke (Hinweis-only) + Steuerungskette Hub-Karten + Druck freigabeunabhängig mit Meldebasis-Session-Hinweis + CSV Aggregate freigabeunabhängig | US-KJ-007 | ✓ |
 | `/kita/vorlage` | Politische Gremienvorlage + Freigabe + Meldebasis/Residual↔Meldelücke + Engpass Meldelücke-Filter + Druck freigabeunabhängig + CSV Aggregate Status/Meldebasis freigabeunabhängig + Steuerungskette Hub-Karten | US-KJ-008 | ✓ |
 | `/kita/einrichtung` | Belegungsstand Einrichtung (aggregiert) + Prozesskette Tagesstand→Monatsbericht→Meldung + Druck Status/Datenbasis + CSV Status/Datenbasis-Metakopf | US-KJ-002 | ✓ |
@@ -116,6 +116,9 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | UG Primär-CTA Nächster Schritt RQ-Frist-Hilfstext | `/gruendung` | ✓ Primär-CTA mit Antwortfrist/Konsequenz; nach Antwort Unterlagen-Hinweis (Q-158) |
 | Kita Bedarfsplanung CSV Aggregate freigabeunabhängig | `/kita/bedarfsplanung` | ✓ Status/Meldebasis-Metakopf, Planungsraum-/Meldebasis-Blatt; Export-Karte Druck+CSV; DEC-004 (Q-159, US-KJ-007) |
 | Kita Vorlage CSV Aggregate freigabeunabhängig | `/kita/vorlage` | ✓ Status/Meldebasis/Engpass-Filter-Metakopf, Blätter Versorgung/Räume/Engpass/Meldebasis; Export-Karte Druck+CSV; DEC-004 (Q-160, US-KJ-008) |
+| AV Übersicht Upload-Quittung | `/fall` + `DemoStateContext.sessionUploadedIds` | ✓ Session-Upload-Quittung + nächste offene Unterlage inkl. Frist-Countdown (Q-161, US-AV-002/003) |
+| UG Fairness CTA-Hilfstexte zentral | `demo/lib/fairness/gruendung-rules.ts` | ✓ Gemeinsame session-sensitive Helper für Übersicht + Hinweise (Q-162) |
+| Kita Lagebild CSV Aggregate freigabeunabhängig | `KitaLagebildDruck` + `/kita/lagebild` | ✓ Status/Meldebasis/Meldelücke-Filter-Metakopf, Blätter Versorgung/Engpass/Handlungsfelder/Maßnahmen/Meldebasis; DEC-004 (Q-163, US-KJ-005) |
 
 ---
 
@@ -241,6 +244,9 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 **Q-158 erledigt:** UG Primär-CTA Nächster Schritt mit RQ-Frist-/Konsequenz-Hilfstext (Übersicht).
 **Q-159 erledigt:** Kita Bedarfsplanung CSV Aggregate freigabeunabhängig (US-KJ-007, DEC-004).
 **Q-160 erledigt:** Kita Vorlage CSV Aggregate Status/Meldebasis freigabeunabhängig (US-KJ-008, DEC-004).
+**Q-161 erledigt:** AV Übersicht Upload-Quittung + nächste offene Unterlage nach Session-Upload (US-AV-002/003).
+**Q-162 erledigt:** UG Fairness-CTA-Hilfstexte in `gruendung-rules` zentralisiert (Übersicht + Hinweise).
+**Q-163 erledigt:** Kita Lagebild CSV Aggregate Status/Meldebasis/Meldelücke freigabeunabhängig (US-KJ-005, DEC-004).
 
 ---
 

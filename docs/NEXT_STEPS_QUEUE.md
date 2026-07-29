@@ -195,6 +195,9 @@ Story-Dokumentation ist kein Pflicht-Vorläufer für Mock-Daten und Typen.
 | Q-158 | UG Primär-CTA Nächster Schritt: RQ-Frist-/Konsequenz-Hilfstext (Übersicht, session-sensitiv) | DEMO | S | Q-154 | DONE `636815e` |
 | Q-159 | Kita Bedarfsplanung: CSV Aggregate freigabeunabhängig (Status/Meldebasis-Metakopf, US-KJ-007, DEC-004) | DEMO | S | Q-140 | DONE `1a69b2e` |
 | Q-160 | Kita Vorlage: CSV Aggregate Status/Meldebasis freigabeunabhängig (US-KJ-008, DEC-004) | DEMO | S | Q-136 | DONE `c3be039` |
+| Q-161 | AV Übersicht: Upload-Quittung + nächste offene Unterlage nach Session-Upload (US-AV-002/003) | DEMO | S | Q-071 | DONE `839e74b` |
+| Q-162 | UG Fairness: CTA-Hilfstexte in `gruendung-rules` zentralisieren (Übersicht + Hinweise) | DEMO | S | Q-158 | DONE `759f40c` |
+| Q-163 | Kita Lagebild: CSV Aggregate Status/Meldebasis/Meldelücke freigabeunabhängig (US-KJ-005, DEC-004) | DEMO | S | Q-130 | DONE `0fa6eaf` |
 
 ---
 
@@ -360,3 +363,6 @@ Diese Punkte wurden in früheren Iterationen abgeschlossen und sind produktionsr
 | Q-158 UG Primär-CTA Nächster Schritt RQ-Frist-Hilfstext | Übersicht session-sensitiv (RQ/Unterlagen) | `636815e` → main |
 | Q-159 Kita Bedarfsplanung CSV Aggregate freigabeunabhängig | Status/Meldebasis-Metakopf, DEC-004 (US-KJ-007) | `1a69b2e` → main |
 | Q-160 Kita Vorlage CSV Aggregate freigabeunabhängig | Status/Meldebasis/Engpass-Filter, DEC-004 (US-KJ-008) | `c3be039` → main |
+| Q-161 AV Übersicht Upload-Quittung | Session-Upload Quittung + nächste offene Unterlage | `839e74b` → main |
+| Q-162 UG Fairness CTA-Hilfstexte zentral | `gruendung-rules` Helper Übersicht+Hinweise | `759f40c` → main |
+| Q-163 Kita Lagebild CSV Aggregate | Status/Meldebasis/Meldelücke, DEC-004 (US-KJ-005) | `0fa6eaf` → main |
