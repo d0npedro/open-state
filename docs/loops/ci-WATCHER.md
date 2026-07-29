@@ -2,14 +2,16 @@
 
 | Feld | Wert |
 |------|------|
-| last_checked | 2026-07-29T08:04:03Z |
-| last_run_id | 30433868099 |
+| last_checked | 2026-07-29T08:10:22Z |
+| last_run_id | 30434304458 |
 | last_status | success |
-| last_sha | bf8bf5b |
+| last_sha | 1f4c507 |
 | fix_attempts | 0 |
 
 ## Log
 
+- E2E `30434304458` + `30434246968` **success** (SHA 1f4c507 / 81494a1 docs ci-watcher HEAD). E2E `30434060034` **success** (SHA 81494a1 / bf8bf5b). Build latest `30433868191` **success** (SHA bf8bf5b supervisor Q-148–Q-149 UG BG-CTA + Kita Meldung-Druck — latest code path; HEAD docs-only path-skip). Catch-up: origin/main..main = 0. No fix. fix_attempts=0.
+- E2E `30434060034` **success** (SHA 81494a1 docs ci-watcher HEAD). E2E `30433924515` **success** (SHA eaeb450 / 178c94f supervisor Q-148–Q-150). E2E `30433868099` + Build `30433868191` **success** (SHA bf8bf5b supervisor Q-148–Q-149 UG BG-CTA + Kita Meldung-Druck — latest code path; HEAD docs-only path-skip). Catch-up: origin/main..main = 0. No fix. fix_attempts=0.
 - E2E `30433868099` + Build `30433868191` **success** (SHA bf8bf5b supervisor Q-148–Q-149 UG BG-CTA + Kita Meldung-Druck — latest code path). Prior E2E `30433583586` **success** (SHA 54f209e). Catch-up this tick: origin/main..main was 5 (UG BG-CTA + Kita Meldung-Druck + merges) → lint+build grün (`NEXT_DIST_DIR=.next-ci-watcher`) + local `test:e2e:ci` **240 passed** → concurrent supervisor pushed first (incl. Q-148–Q-150 docs `eaeb450`) → origin/main..main = 0. HEAD docs `eaeb450` E2E may still be in_progress (docs-only). No fix. fix_attempts=0.
 - E2E `30433411933` **success** (SHA 78eee25 / c86f040 docs ci-watcher HEAD). E2E `30433328901` **success** (SHA 2c2f4ba / db76913). E2E `30433237714` **success** (SHA c86f040). Build latest `30433052345` **success** (SHA 1f03ff4 supervisor Q-141–Q-147 AV/UG/Kita — latest code path; HEAD docs-only path-skip). Catch-up: origin/main..main = 0. No fix. fix_attempts=0.
 - E2E `30433237714` **success** (SHA c86f040 docs ci-watcher HEAD). E2E `30433118264` **success** (SHA db76913). E2E `30433052352` + Build `30433052345` **success** (SHA 1f03ff4 supervisor Q-141–Q-147 AV/UG/Kita — latest code path). Prior E2E `30432844365` + Build `30432844364` **success** (SHA 2296820 Merge loop/kita). This tick: catch-up origin/main..main was 8 then 4 (Kita Steuerungskette/Monatsbericht-Druck + AV UNTERLAGE-Frist + UG parallele Behörden + merges) → lint+build grün (`NEXT_DIST_DIR=.next-ci-watcher`) + local `test:e2e:ci` **239 passed** → concurrent supervisor/ci-watcher pushed first → origin/main..main = 0. No fix. fix_attempts=0.
