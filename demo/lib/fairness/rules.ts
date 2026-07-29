@@ -118,6 +118,8 @@ export function berechneFairnessSignale(fall: Fall): FairnessSignal[] {
   // ─── Signal 2: Fehlende Unterlagen blockieren Fallfortschritt ─────────────
   // Regel: Dokumente mit Status ANGEFORDERT oder ABGELEHNT (erneute Einreichung nötig)
   //        halten den nächsten Bearbeitungsschritt an.
+  // Frist: analog Signal 1 (Rückfrage) – berechnete Resttage gegen FIKTIVES_HEUTE,
+  //        nächste Einreichungsfrist im Titel/Erklärung, Priorität bei ≤3 Tagen.
   const fehlendeDokumente = fall.dokumente.filter(
     d => d.status === 'ANGEFORDERT' || d.status === 'ABGELEHNT'
   );
@@ -128,23 +130,59 @@ export function berechneFairnessSignale(fall: Fall): FairnessSignal[] {
       abgelehnt.length > 0
         ? ` Davon abgelehnt und erneut einzureichen: ${abgelehnt.map(d => d.bezeichnung).join(', ')}.`
         : '';
+
+    const dokMitFrist = fehlendeDokumente
+      .filter(d => d.fristDatum && d.frist)
+      .map(d => ({
+        bezeichnung: d.bezeichnung,
+        frist: d.frist as string,
+        resttage: berechneFristTage(d.fristDatum as string, FIKTIVES_HEUTE),
+      }))
+      .sort((a, b) => a.resttage - b.resttage);
+    const naechsteFrist = dokMitFrist[0];
+    let fristLabel = '';
+    let fristHinweis = '';
+    if (naechsteFrist) {
+      const t = naechsteFrist.resttage;
+      fristLabel =
+        t < 0
+          ? `${Math.abs(t)} Tage überschritten`
+          : t === 0
+            ? 'heute'
+            : `noch ${t} Tag${t === 1 ? '' : 'e'}`;
+      const gleicheFrist =
+        dokMitFrist.length > 1 && dokMitFrist.every(d => d.frist === naechsteFrist.frist);
+      fristHinweis =
+        ` Nächste Einreichungsfrist: ${naechsteFrist.frist} (${fristLabel}` +
+        (gleicheFrist
+          ? ' für die ausstehenden Unterlagen'
+          : ` für „${naechsteFrist.bezeichnung}"`) +
+        ').';
+    }
+    const fristDringend = naechsteFrist != null && naechsteFrist.resttage <= 3;
+
     signale.push({
       id: 'FH-UNTERLAGEN-FEHLEND',
       typ: 'UNTERLAGE_FEHLT_BLOCKIERT',
-      titel: `${fehlendeDokumente.length} Unterlage(n) noch nicht vollständig`,
+      titel: naechsteFrist
+        ? `${fehlendeDokumente.length} Unterlage(n) offen – Frist ${fristLabel}`
+        : `${fehlendeDokumente.length} Unterlage(n) noch nicht vollständig`,
       erklaerung:
         `Folgende Unterlagen fehlen oder müssen erneut eingereicht werden: ${names}.` +
         abgelehntHinweis +
+        fristHinweis +
         ` Ohne diese Unterlagen kann die Fallbearbeitung nicht vollständig abgeschlossen werden.`,
       auswirkung:
         'Die Sachbearbeitung kann erst mit der Entscheidungsvorbereitung fortfahren, ' +
         'wenn alle angeforderten Unterlagen vollständig und fristgerecht eingereicht wurden.',
-      naechsterSchritt:
-        'Unterlagen im Bereich „Dokumente" hochladen. ' +
-        'Dort ist für jede Anforderung erläutert, warum das Dokument benötigt wird.',
+      naechsterSchritt: naechsteFrist
+        ? `Unterlagen im Bereich „Dokumente" bis ${naechsteFrist.frist} (${fristLabel}) hochladen. ` +
+          'Dort ist für jede Anforderung erläutert, warum das Dokument benötigt wird.'
+        : 'Unterlagen im Bereich „Dokumente" hochladen. ' +
+          'Dort ist für jede Anforderung erläutert, warum das Dokument benötigt wird.',
       bezug: `Dokumente: ${fehlendeDokumente.map(d => d.id).join(', ')}`,
-      // Abgelehnte Unterlagen sind dringlicher als reine Anforderung
-      prioritaet: abgelehnt.length > 0 ? 'RELEVANT' : 'HINWEIS',
+      // Abgelehnte Unterlagen oder knappe Frist (≤3 Tage) sind dringlicher
+      prioritaet: abgelehnt.length > 0 || fristDringend ? 'RELEVANT' : 'HINWEIS',
     });
   }
 
