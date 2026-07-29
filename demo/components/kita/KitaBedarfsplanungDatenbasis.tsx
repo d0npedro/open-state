@@ -186,6 +186,112 @@ export function MeldebasisBadge({ basis }: { basis: PlanungsraumMeldebasis | und
   );
 }
 
+/**
+ * Hinweis-only: residuale Planungslücke methodisch an fehlende Meldung knüpfen.
+ * Keine Änderung der Residualzahl, keine Interpolation – nur methodische Einschränkung.
+ */
+export function ResidualMeldeHinweis({
+  basis,
+  residual,
+  compact = false,
+}: {
+  basis: PlanungsraumMeldebasis | undefined;
+  residual: number;
+  compact?: boolean;
+}) {
+  if (!basis?.hatDatenluecke || residual <= 0) return null;
+
+  const einrKurz = basis.luecken.map(e => e.einrichtungBezeichnung).join(', ');
+  const statusLabel =
+    basis.schwere === 'UEBERFAELLIG' ? 'überfällige Freigabe' : 'ausstehende Freigabe';
+
+  if (compact) {
+    return (
+      <div
+        style={{
+          fontSize: '0.7rem',
+          fontWeight: 500,
+          color: 'var(--color-text-muted)',
+          lineHeight: 1.35,
+          marginTop: '0.25rem',
+          maxWidth: '11rem',
+        }}
+        title={
+          `Residuale Lücke ${residual} basiert auf dem Lagebild-Stand. ` +
+          `Fehlende freigegebene Meldung (${einrKurz}, ${statusLabel}) mindert die Aussagekraft – ` +
+          `keine Schätzung der fehlenden Aggregate.`
+        }
+      >
+        Aussagekraft gemindert · {statusLabel}
+      </div>
+    );
+  }
+
+  return (
+    <p style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', margin: 0, lineHeight: 1.5 }}>
+      Residuale Planungslücke <strong>{residual}</strong> für{' '}
+      <strong>{basis.planungsraumBezeichnung}</strong> stützt sich auf den freigegebenen
+      Lagebild-Stand. Fehlende freigegebene Einrichtungsmeldung ({einrKurz}, {statusLabel})
+      fließt nicht ein und wird nicht interpoliert – die Lückenzahl bleibt eine Planungshilfe mit
+      eingeschränkter Datenbasis.
+    </p>
+  );
+}
+
+/** Kurzbox unter Kennzahlensumme: residuale Lücken mit Meldebasis-Lücken verknüpfen */
+export function ResidualMeldeSummenHinweis({
+  basen,
+  residualByRaumId,
+  highlightRaumId = 'PR-03',
+}: {
+  basen: PlanungsraumMeldebasis[];
+  residualByRaumId: Map<string, number>;
+  highlightRaumId?: string;
+}) {
+  const betroffen = basen.filter(
+    b => b.hatDatenluecke && (residualByRaumId.get(b.planungsraumId) ?? 0) > 0
+  );
+  if (betroffen.length === 0) return null;
+
+  const highlight = betroffen.find(b => b.planungsraumId === highlightRaumId) ?? betroffen[0];
+  const residual = residualByRaumId.get(highlight.planungsraumId) ?? 0;
+
+  return (
+    <div className="notice-box notice-box-warn" role="note" style={{ margin: 0 }}>
+      <div style={{ fontSize: '0.875rem' }}>
+        <strong style={{ display: 'block', marginBottom: '0.35rem' }}>
+          Residuale Planungslücke und Meldelücke (methodisch)
+        </strong>
+        <ResidualMeldeHinweis basis={highlight} residual={residual} />
+        {betroffen.length > 1 && (
+          <p style={{ margin: '0.5rem 0 0', fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>
+            Weitere Räume mit unvollständiger Meldebasis und residualer Lücke:{' '}
+            {betroffen
+              .filter(b => b.planungsraumId !== highlight.planungsraumId)
+              .map(b => {
+                const r = residualByRaumId.get(b.planungsraumId) ?? 0;
+                return `${b.planungsraumBezeichnung} (Residual ${r}, Meldungen ${b.freigegeben}/${b.erwartet})`;
+              })
+              .join('; ')}
+            .
+          </p>
+        )}
+        <p style={{ margin: '0.5rem 0 0', fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>
+          Hinweis only – Zahlen unverändert. Verwandt:{' '}
+          <Link href="/kita/meldung" style={{ color: 'var(--color-primary)' }}>
+            Monatsmeldung freigeben
+          </Link>
+          {' · '}
+          <Link href="/kita/lagebild" style={{ color: 'var(--color-primary)' }}>
+            Meldeeingang im Lagebild
+          </Link>
+          .
+        </p>
+      </div>
+    </div>
+  );
+}
+
 interface PanelProps {
   basen: PlanungsraumMeldebasis[];
   session: MeldeeingangSessionFreigabe | null;

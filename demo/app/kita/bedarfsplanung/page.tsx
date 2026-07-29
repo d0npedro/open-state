@@ -17,6 +17,8 @@ import type { Kapazitaetsmassnahme, PlanungsraumKennzahlen } from '@/types/kita'
 import {
   KitaBedarfsplanungDatenbasisPanel,
   MeldebasisBadge,
+  ResidualMeldeHinweis,
+  ResidualMeldeSummenHinweis,
   useMeldeeingangFuerBedarfsplanung,
 } from '@/components/kita/KitaBedarfsplanungDatenbasis';
 
@@ -59,6 +61,11 @@ export default function BedarfsplanungPage() {
   const summeResidual = zeilen.reduce((s, z) => s + z.luecke.residual, 0);
   const summeGeplant = zeilen.reduce((s, z) => s + z.luecke.geplant, 0);
   const suedostLuecke = byRaumId.get('PR-03')?.hatDatenluecke ?? false;
+  const residualByRaumId = useMemo(() => {
+    const m = new Map<string, number>();
+    for (const z of zeilen) m.set(z.pr.id, z.luecke.residual);
+    return m;
+  }, [zeilen]);
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1.75rem' }}>
@@ -151,12 +158,24 @@ export default function BedarfsplanungPage() {
           <div style={{ fontSize: '1.5rem', fontWeight: 700, color: summeResidual > 50 ? 'var(--color-danger)' : 'var(--color-text)' }}>
             {summeResidual}
           </div>
+          {suedostLuecke && (
+            <div style={{ fontSize: '0.72rem', color: 'var(--color-text-muted)', marginTop: '0.35rem', lineHeight: 1.35 }}>
+              Südost: Residual methodisch an Meldelücke gekoppelt (Hinweis)
+            </div>
+          )}
         </div>
         <div className="card" style={{ borderTop: '3px solid var(--color-neutral)' }}>
           <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>Planungsräume</div>
           <div style={{ fontSize: '1.5rem', fontWeight: 700 }}>{lb.planungsraeume.length}</div>
         </div>
       </div>
+
+      {/* Residuale Lücke ↔ fehlende Meldung (Hinweis-only, Fokus Südost) */}
+      <ResidualMeldeSummenHinweis
+        basen={basen}
+        residualByRaumId={residualByRaumId}
+        highlightRaumId="PR-03"
+      />
 
       {/* Tabelle je Planungsraum (AK 1, 2) */}
       <section>
@@ -227,6 +246,11 @@ export default function BedarfsplanungPage() {
                     }}
                   >
                     {luecke.residual}
+                    <ResidualMeldeHinweis
+                      basis={byRaumId.get(pr.id)}
+                      residual={luecke.residual}
+                      compact
+                    />
                   </td>
                   <td style={{ padding: '0.75rem', fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>
                     {massnahmen.length === 0
