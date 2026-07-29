@@ -8,6 +8,35 @@ Erlaubte Pfade nur: `demo/app/gruendung/**`, `demo/context/GruendungStateContext
 
 ---
 
+## 2026-07-29 – Iteration 36: Übersicht Upload-Quittung nach Session-Upload
+
+### Was
+Nach Session-Upload zeigt die Gründungs-Übersicht eine Upload-Quittung
+(US-UG-001/003, Parität zu AV Q-161):
+
+1. **`sessionUploadedIds`** steuert Quittung (`data-testid="upload-quittung"`).
+2. Liste der eingegangenen Unterlagen inkl. Einreichungsdatum.
+3. **Nächste offene Unterlage** (ANGEFORDERT/ABGELEHNT) mit Frist-Countdown
+   und CTA `#dok-…`, oder **Vollständigkeitshinweis** wenn nichts mehr offen.
+4. E2E: Initial ohne Quittung; nach Markierung Quittung + Vollständigkeit
+   (Mock: nur DOK-03 offen); Session bleibt nach Tab-Nav (DEC-012).
+
+### Dateien
+- `demo/app/gruendung/page.tsx` – Upload-Quittung auf Übersicht
+- `demo/e2e/us-ug-gruendung.spec.ts` – 3 Übersicht-Quittungs-Tests
+- `docs/loops/ug-JOURNAL.md` – dieses Journal
+
+### Build
+`npm run lint` + `npm run build` im Ordner `demo/` grün.
+`npm run test:e2e:ug` Exit 0 (118 passed).
+
+### Nächster sinnvoller UG-Schritt (Vorschlag)
+- Hinweise: UNTERLAGE-Signal live nach Session-Upload inkl. Frist + CTA (AV Q-167-Parität)
+- `naechsterSchrittZiel` / `aufgabeZiel` ggf. in gruendung-rules (optional)
+- Verlauf: Tiefenlink von Fairness-CTA zu passendem Ereignis (optional)
+
+---
+
 ## 2026-07-29 – Iteration 35: Dokumente lokale Upload-Quittung pro Karte
 
 ### Was
