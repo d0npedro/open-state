@@ -175,7 +175,10 @@ test.describe('US-AV-002 – Status einsehen', () => {
     expect(after).toMatch(/width:\s*5[0-9]%/);
     await expect(page.getByText('Unterlagen fehlen noch')).toBeVisible();
     await expect(page.getByText('Sie sind hier')).toBeVisible();
-    await expect(page.getByRole('link', { name: /Unterlagen hochladen/i })).toBeVisible();
+    // Primärer CTA im Action-Banner (Fristen-Karte hat denselben Linktext)
+    await expect(
+      page.locator('.action-banner').getByRole('link', { name: /Unterlagen hochladen/i })
+    ).toBeVisible();
   });
 
   test('Nach allen Bürger-Aktionen: Ruhezustand-Banner sichtbar', async ({ page }) => {
