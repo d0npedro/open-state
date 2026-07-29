@@ -54,15 +54,27 @@ export default function DokumentePage() {
         </div>
       </div>
 
-      {/* Live-Hinweis: Fairness-Signal zu fehlenden Unterlagen */}
+      {/* Live-Hinweis: Fairness-Signal zu fehlenden Unterlagen (inkl. berechneter Frist) */}
       {unterlagenSignal && (
-        <div className="notice-box notice-box-warn" role="status">
+        <div
+          className="notice-box notice-box-warn"
+          role="status"
+          data-testid="fairness-signal-unterlagen"
+        >
           <Icon name="alert" size={16} style={{ flexShrink: 0, marginTop: '2px' }} />
           <div>
-            <strong style={{ fontSize: '0.875rem', display: 'block', marginBottom: '0.25rem' }}>
+            <strong
+              style={{ fontSize: '0.875rem', display: 'block', marginBottom: '0.25rem' }}
+              data-testid="fairness-signal-unterlagen-titel"
+            >
               {unterlagenSignal.titel}
             </strong>
-            <p style={{ fontSize: '0.875rem', margin: 0 }}>{unterlagenSignal.erklaerung}</p>
+            <p
+              style={{ fontSize: '0.875rem', margin: 0 }}
+              data-testid="fairness-signal-unterlagen-erklaerung"
+            >
+              {unterlagenSignal.erklaerung}
+            </p>
             <p style={{ fontSize: '0.8rem', margin: '0.5rem 0 0', color: 'var(--color-text-muted)' }}>
               Demo: Nach dem Hochladen verschwindet dieses Signal auch unter{' '}
               <Link href="/fall/hinweise" style={{ color: 'var(--color-primary)' }}>Verfahrenslage</Link>.

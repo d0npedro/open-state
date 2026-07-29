@@ -6,6 +6,39 @@ Scope: nur `demo/app/fall/**`, DemoStateContext, fairness/rules, mockFall, e2e u
 
 ---
 
+## 2026-07-29 – Iteration 10: Fairness-Signal UNTERLAGE mit Dokumenten-Frist
+
+### Was
+Fairness-Signal `UNTERLAGE_FEHLT_BLOCKIERT` enthält berechnete Einreichungsfrist (Parität zu Rückfrage-Signal, US-AV-003/008):
+
+1. **Resttage** gegen `FIKTIVES_HEUTE` aus `fristDatum` der offenen Unterlagen (nächste Frist zuerst).
+2. **Titel** z. B. „2 Unterlage(n) offen – Frist noch 9 Tage“; **Erklärung** mit „Nächste Einreichungsfrist: …“.
+3. **Priorität** RELEVANT bei abgelehnt ODER Resttage ≤ 3, sonst HINWEIS (Mock bleibt HINWEIS bei 9 Tagen).
+4. **naechsterSchritt** nennt Fristdatum + Countdown; Dokumente-Seite: `data-testid` für Signal-Block.
+5. E2E: Titel + Erklärung mit Frist auf `/fall/dokumente`.
+
+### Dateien
+- `demo/lib/fairness/rules.ts`
+- `demo/app/fall/dokumente/page.tsx`
+- `demo/e2e/us-av-003-dokumente.spec.ts`
+- `docs/loops/av-JOURNAL.md`
+
+### Story-IDs
+- US-AV-003 (Unterlagen nachreichen)
+- US-AV-008 (Verfahrenslage / Fairness-Signale)
+
+### Build
+`npm run lint` + `npm run build` + `npm run test:e2e:av` (PW_E2E_CI=1) → **129 passed**, Exit 0
+
+### Vorschlag Queue-ID
+- Q-141 (AV Fairness UNTERLAGE: berechnete Dokumenten-Frist analog RQ)
+
+### Nächster sinnvoller AV-Schritt (Vorschlag)
+- Übersicht: Upload-Quittung / nächste offene Unterlage nach Session-Upload
+- Hinweise-Seite: Fristhinweis im UNTERLAGE-Signal explizit testen (session-nav nach Upload)
+
+---
+
 ## 2026-07-29 – Iteration 9: Verlauf Upload-Dokumentbezeichnung (Q-105)
 
 ### Was

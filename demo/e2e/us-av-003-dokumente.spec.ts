@@ -49,6 +49,21 @@ test.describe('US-AV-003 – Unterlagen nachreichen', () => {
     await expect(page.getByTestId('dok-seite-countdown-DOK-004')).toContainText(/noch 9 Tage/i);
   });
 
+  test('Fairness-Signal UNTERLAGE enthält berechnete Dokumenten-Frist', async ({ page }) => {
+    // Parität zu Rückfrage-Signal: Resttage gegen FIKTIVES_HEUTE im Signal-Text
+    const signal = page.getByTestId('fairness-signal-unterlagen');
+    await expect(signal).toBeVisible();
+    await expect(page.getByTestId('fairness-signal-unterlagen-titel')).toContainText(
+      /Unterlage\(n\) offen – Frist noch 9 Tage/i
+    );
+    await expect(page.getByTestId('fairness-signal-unterlagen-erklaerung')).toContainText(
+      /Nächste Einreichungsfrist:\s*3\.\s*Dezember 2024\s*\(noch 9 Tage/i
+    );
+    await expect(page.getByTestId('fairness-signal-unterlagen-erklaerung')).toContainText(
+      /Einkommensteuerbescheid|Formular SG1/
+    );
+  });
+
   test('AC1: Begründung für Arbeitgeberbescheinigung enthält Paragrafenreferenz', async ({ page }) => {
     await expect(page.getByText(/§ 312 SGB III/)).toBeVisible();
   });
