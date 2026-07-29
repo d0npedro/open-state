@@ -6,6 +6,44 @@ Scope: nur `demo/app/fall/**`, DemoStateContext, fairness/rules, mockFall, e2e u
 
 ---
 
+## 2026-07-29 – Iteration 4: Fristen-Countdown offener Unterlagen (Übersicht)
+
+### Was
+Offene Dokumente zeigen berechnete Resttage analog zur Rückfrage-Frist (US-AV-002/003):
+
+1. `Dokument.fristDatum` (ISO) in Mock + Typ; Anzeige-Frist bleibt deutsch.
+2. **Übersicht `/fall`:** Abschnitt „Fristen offener Unterlagen“ mit Countdown-Chip je Dokument; Dringlichkeit ≤ 5 Tage.
+3. Schnellzugriff-Kachel „Unterlagen“ zeigt nächste Frist (`noch X Tage`).
+4. **`/fall/dokumente`:** Countdown neben „Einreichen bis“.
+5. Berechnung über `berechneFristTage` + `FIKTIVES_HEUTE` (2024-11-24 → 9 Tage bis 03.12.).
+6. E2E: Übersicht + Dokumente.
+
+### Dateien
+- `demo/types/index.ts`
+- `demo/data/mockFall.ts`
+- `demo/app/fall/page.tsx`
+- `demo/app/fall/dokumente/page.tsx`
+- `demo/e2e/us-av-001-002-fall-uebersicht.spec.ts`
+- `demo/e2e/us-av-003-dokumente.spec.ts`
+- `docs/loops/av-JOURNAL.md`
+
+### Story-IDs
+- US-AV-002 (Status / Orientierung)
+- US-AV-003 (Unterlagen nachreichen – Frist)
+
+### Build
+`npm run lint` + `npm run build` → Exit 0
+
+### Vorschlag Queue-ID
+- Q-086 (AV Fristen-Countdown offene Dokumente)
+
+### Nächster sinnvoller AV-Schritt (Vorschlag)
+- Tab-Badge „Termine“ nur wenn unbestätigt / morgen fällig
+- Verlauf: Antworttext in Timeline-Detail lesbarer formatieren
+- Fairness-Signal UNTERLAGE mit berechneter Dokumenten-Frist
+
+---
+
 ## 2026-07-29 – Iteration 3: Rückfrage-Bestätigungsdialog + Antwortquittung
 
 ### Was

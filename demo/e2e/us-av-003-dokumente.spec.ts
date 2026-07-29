@@ -43,6 +43,12 @@ test.describe('US-AV-003 – Unterlagen nachreichen', () => {
     await expect(page.getByText('3. Dezember 2024').first()).toBeVisible();
   });
 
+  test('Frist-Countdown für ausstehende Unterlagen (analog RQ)', async ({ page }) => {
+    // FIKTIVES_HEUTE 2024-11-24 → 2024-12-03 = noch 9 Tage
+    await expect(page.getByTestId('dok-seite-countdown-DOK-003')).toContainText(/noch 9 Tage/i);
+    await expect(page.getByTestId('dok-seite-countdown-DOK-004')).toContainText(/noch 9 Tage/i);
+  });
+
   test('AC1: Begründung für Arbeitgeberbescheinigung enthält Paragrafenreferenz', async ({ page }) => {
     await expect(page.getByText(/§ 312 SGB III/)).toBeVisible();
   });

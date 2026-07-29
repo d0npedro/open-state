@@ -32,14 +32,16 @@ export const demoFall: Fall = {
       bezeichnung: 'Einkommensteuerbescheid letztes Jahr',
       status: 'ANGEFORDERT',
       begründung: 'Für die korrekte Berechnung der Bemessungsgrundlage Ihres ALG I nach § 132 SGB III.',
-      frist: '3. Dezember 2024'
+      frist: '3. Dezember 2024',
+      fristDatum: '2024-12-03',
     },
     {
       id: 'DOK-004',
       bezeichnung: 'Formular SG1 (Selbstauskunft)',
       status: 'ANGEFORDERT',
       begründung: 'Standardformular der Bundesagentur für Arbeit zur Erfassung von Qualifikationen und Vermittlungspräferenzen.',
-      frist: '3. Dezember 2024'
+      frist: '3. Dezember 2024',
+      fristDatum: '2024-12-03',
     }
   ],
   rueckfragen: [

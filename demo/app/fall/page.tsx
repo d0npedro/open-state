@@ -6,8 +6,15 @@
 
 import Link from 'next/link';
 import { useDemoState } from '@/context/DemoStateContext';
-import { berechneFairnessSignale } from '@/lib/fairness/rules';
+import { berechneFairnessSignale, berechneFristTage, FIKTIVES_HEUTE } from '@/lib/fairness/rules';
 import { Icon } from '@/components/Icon';
+
+/** Klarsprache für Resttage (analog Rückfrage-Frist). */
+function fristRestLabel(tage: number): string {
+  if (tage < 0) return `${Math.abs(tage)} Tage überschritten`;
+  if (tage === 0) return 'heute fällig';
+  return `noch ${tage} Tag${tage === 1 ? '' : 'e'}`;
+}
 
 /**
  * Lineare Fortschrittsschritte (US-AV-002).
@@ -69,9 +76,21 @@ export default function FallPage() {
   const hatOffeneAufgaben = fall.offeneAufgaben.length > 0;
   const offeneRueckfragen = fall.rueckfragen.filter(r => !r.beantwortet).length;
   // ANGEFORDERT + ABGELEHNT blockieren den Fortschritt (parität zu /fall/dokumente)
-  const ausstehendeUnterlagen = fall.dokumente.filter(
+  const ausstehendeDokumente = fall.dokumente.filter(
     d => d.status === 'ANGEFORDERT' || d.status === 'ABGELEHNT'
-  ).length;
+  );
+  const ausstehendeUnterlagen = ausstehendeDokumente.length;
+  /** Offene Dokumente mit ISO-Frist, sortiert nach Dringlichkeit (nächste Frist zuerst). */
+  const dokFristen = ausstehendeDokumente
+    .filter(d => d.fristDatum && d.frist)
+    .map(d => ({
+      id: d.id,
+      bezeichnung: d.bezeichnung,
+      frist: d.frist as string,
+      resttage: berechneFristTage(d.fristDatum as string, FIKTIVES_HEUTE),
+    }))
+    .sort((a, b) => a.resttage - b.resttage);
+  const naechsteDokFrist = dokFristen[0];
   const naechsterTermin = fall.termine.find(t => t.status === 'BESTAETIGT');
   const wartetAufBehoerde = !hatOffeneAufgaben && fall.status === 'IN_PRUEFUNG';
 
@@ -211,7 +230,12 @@ export default function FallPage() {
           {
             label: 'Unterlagen',
             icon: 'file' as const,
-            val: ausstehendeUnterlagen > 0 ? `${ausstehendeUnterlagen} ausstehend` : 'Alles eingereicht',
+            val:
+              ausstehendeUnterlagen > 0
+                ? naechsteDokFrist
+                  ? `${ausstehendeUnterlagen} ausstehend · ${fristRestLabel(naechsteDokFrist.resttage)}`
+                  : `${ausstehendeUnterlagen} ausstehend`
+                : 'Alles eingereicht',
             urgent: ausstehendeUnterlagen > 0,
             href: '/fall/dokumente',
           },
@@ -270,6 +294,84 @@ export default function FallPage() {
           </Link>
         ))}
       </div>
+
+      {/* ─── 4b. FRISTEN OFFENER UNTERLAGEN (Countdown, analog RQ) ─
+          UX-Grund: Bürger sollen auf der Übersicht sehen, *wann*
+          Unterlagen fällig sind — nicht erst auf der Dokumenteseite. */}
+      {dokFristen.length > 0 && (
+        <div className="card" data-testid="dok-fristen-uebersicht">
+          <h2 style={{ fontSize: '1rem', marginBottom: '0.75rem' }}>
+            Fristen offener Unterlagen
+          </h2>
+          <p style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)', margin: '0 0 1rem' }}>
+            Berechnet gegen Demo-Stichtag {FIKTIVES_HEUTE.split('-').reverse().join('.')}. Keine automatische Mahnung.
+          </p>
+          <ul style={{ listStyle: 'none', margin: 0, padding: 0, display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+            {dokFristen.map(dok => {
+              const kritisch = dok.resttage <= 5;
+              return (
+                <li
+                  key={dok.id}
+                  data-testid={`dok-frist-${dok.id}`}
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'flex-start',
+                    gap: '1rem',
+                    flexWrap: 'wrap',
+                    padding: '0.875rem 1rem',
+                    borderRadius: 'var(--radius)',
+                    background: kritisch ? 'var(--color-danger-light)' : 'var(--color-warning-light)',
+                    borderLeft: `4px solid ${kritisch ? 'var(--color-danger)' : 'var(--color-warning)'}`,
+                  }}
+                >
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ fontWeight: 700, fontSize: '0.95rem', color: 'var(--color-text)' }}>
+                      {dok.bezeichnung}
+                    </div>
+                    <div
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '0.375rem',
+                        marginTop: '0.35rem',
+                        fontSize: '0.875rem',
+                        fontWeight: 600,
+                        color: kritisch ? 'var(--color-danger)' : 'var(--color-warning)',
+                      }}
+                    >
+                      <Icon name="calendar" size={15} />
+                      Einreichen bis {dok.frist}
+                    </div>
+                  </div>
+                  <span
+                    className={`status-chip ${kritisch ? 'status-chip-danger' : 'status-chip-warning'}`}
+                    data-testid={`dok-frist-countdown-${dok.id}`}
+                    style={{ fontSize: '0.8rem', flexShrink: 0 }}
+                  >
+                    <Icon name="clock" size={14} />
+                    {fristRestLabel(dok.resttage)}
+                  </span>
+                </li>
+              );
+            })}
+          </ul>
+          <Link
+            href="/fall/dokumente"
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.375rem',
+              marginTop: '1rem',
+              fontSize: '0.875rem',
+              color: 'var(--color-primary)',
+              fontWeight: 600,
+            }}
+          >
+            Unterlagen hochladen <Icon name="arrow-right" size={14} />
+          </Link>
+        </div>
+      )}
 
       {/* ─── 5. FAIRNESS-HINWEISE (inline, kein separater Klick nötig) */}
       {fairnessSignale.length > 0 && (

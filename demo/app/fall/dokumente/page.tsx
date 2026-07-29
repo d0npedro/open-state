@@ -7,8 +7,14 @@
 import { useDemoState } from '@/context/DemoStateContext';
 import { DokumentStatus } from '@/types';
 import { Icon } from '@/components/Icon';
-import { berechneFairnessSignale } from '@/lib/fairness/rules';
+import { berechneFairnessSignale, berechneFristTage, FIKTIVES_HEUTE } from '@/lib/fairness/rules';
 import Link from 'next/link';
+
+function fristRestLabel(tage: number): string {
+  if (tage < 0) return `${Math.abs(tage)} Tage überschritten`;
+  if (tage === 0) return 'heute fällig';
+  return `noch ${tage} Tag${tage === 1 ? '' : 'e'}`;
+}
 
 const statusInfo: Record<DokumentStatus, { label: string; cssClass: string; icon: Parameters<typeof Icon>[0]['name'] }> = {
   ANGEFORDERT: { label: 'Wird noch benötigt',   cssClass: 'status-chip-warning', icon: 'alert' },
@@ -128,13 +134,44 @@ export default function DokumentePage() {
               </div>
             </div>
 
-            {/* Frist und Upload-Datum */}
-            {dok.frist && brauchtUpload && (
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.875rem', color: 'var(--color-warning)', fontWeight: 600, fontSize: '0.875rem' }}>
-                <Icon name="calendar" size={15} />
-                Einreichen bis: {dok.frist}
-              </div>
-            )}
+            {/* Frist + Countdown (analog Rückfrage, Demo-Stichtag FIKTIVES_HEUTE) */}
+            {dok.frist && brauchtUpload && (() => {
+              const resttage = dok.fristDatum
+                ? berechneFristTage(dok.fristDatum, FIKTIVES_HEUTE)
+                : null;
+              const kritisch = resttage !== null && resttage <= 5;
+              const farbe = kritisch ? 'var(--color-danger)' : 'var(--color-warning)';
+              return (
+                <div
+                  style={{
+                    display: 'flex',
+                    flexWrap: 'wrap',
+                    alignItems: 'center',
+                    gap: '0.5rem 1rem',
+                    marginBottom: '0.875rem',
+                    color: farbe,
+                    fontWeight: 600,
+                    fontSize: '0.875rem',
+                  }}
+                  data-testid={`dok-seite-frist-${dok.id}`}
+                >
+                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}>
+                    <Icon name="calendar" size={15} />
+                    Einreichen bis: {dok.frist}
+                  </span>
+                  {resttage !== null && (
+                    <span
+                      className={`status-chip ${kritisch ? 'status-chip-danger' : 'status-chip-warning'}`}
+                      style={{ fontSize: '0.75rem' }}
+                      data-testid={`dok-seite-countdown-${dok.id}`}
+                    >
+                      <Icon name="clock" size={13} />
+                      {fristRestLabel(resttage)}
+                    </span>
+                  )}
+                </div>
+              );
+            })()}
             {dok.hochgeladenAm && (
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.875rem', color: 'var(--color-text-muted)', fontSize: '0.875rem' }}>
                 <Icon name="check-circle" size={15} />
