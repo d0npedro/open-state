@@ -1,6 +1,6 @@
 # BUILD_STATE.md – Aktueller Projektstand
 
-Zuletzt aktualisiert: nach Supervisor-Pflicht-Push 2026-07-29 (Merge UG Q-124 Steuernummer-Signal + Kita Q-125/Q-126 Meldelücke-Filter Lagebild; lint+build+e2e grün)
+Zuletzt aktualisiert: nach Supervisor-Pflicht-Push 2026-07-29 (Merge AV Q-104 Termin-Kachel + UG Q-127 Übersicht-CTAs Steuernummer/Betriebsdatum + Kita Q-128 Planungsraum-Detail-Filter; lint+build grün)
 
 Dieser Stand beschreibt, was tatsächlich existiert und funktioniert.
 Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
@@ -15,7 +15,7 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | Build-Status | ✓ Erfolgreich (27 statische Seiten) |
 | Deployment | Vercel, aus `demo/`-Verzeichnis |
 | Lokaler Start | `cd demo && npm install && npm run dev` |
-| Letzte Build-Prüfung | lint+build grün; `test:e2e:ci` 229 chromium passed (Supervisor) |
+| Letzte Build-Prüfung | lint+build grün (Supervisor); E2E CI-Watcher nach Push |
 
 ---
 
@@ -24,7 +24,7 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | Route | Inhalt | Story-IDs | Status |
 |-------|--------|-----------|--------|
 | `/` | Landing Page | – | ✓ |
-| `/fall` | Fallübersicht, Status, Fairness-Summary, Fristen-Countdown offener Unterlagen | US-AV-001, US-AV-002 | ✓ |
+| `/fall` | Fallübersicht, Status, Fairness-Summary, Fristen-Countdown offener Unterlagen, Termin-Kachel Status live | US-AV-001, US-AV-002, US-AV-005 | ✓ |
 | `/fall/dokumente` | Dokumentenanforderungen + Frist-Resttage | US-AV-003 | ✓ |
 | `/fall/rueckfragen` | Rückfragen mit Fairness-Hinweis | US-AV-004 | ✓ |
 | `/fall/termine` | Termine; session-lokale Bestätigung; Nav-Badge nur unbestätigt/bald fällig | US-AV-005 | ✓ |
@@ -33,9 +33,9 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | `/fall/hinweise` | Vollständige Fairness-Hinweisseite | US-AV-008 | ✓ |
 | `/stories` | Story Coverage Dashboard | – | ✓ |
 | `/feedback` | Feedback → GitHub Issues | – | ✓ |
-| `/gruendung` … | Unternehmensgründung (Übersicht Fairness-Kurzblock+Kurz-CTAs, Behörden VS-04→Rückfrage, Hinweise-CTAs RQ/BG/Unterlagen/Steuernummer/Betriebsdatum/parallele Behörden, Verlauf Stelle+Ereignistyp-Filter, …) | US-UG-001–006 | ✓ |
+| `/gruendung` … | Unternehmensgründung (Übersicht Fairness-Kurzblock+Kurz-CTAs inkl. Steuernummer/Betriebsdatum, Behörden VS-04→Rückfrage, Hinweise-CTAs RQ/BG/Unterlagen/Steuernummer/Betriebsdatum/parallele Behörden, Verlauf Stelle+Ereignistyp-Filter, …) | US-UG-001–006 | ✓ |
 | `/kita` | Öffentlicher Transparenzbericht + Planungsraum-Filter + Residual↔Meldelücke + Engpass/Meldelücke-Schnellfilter + Zeitreihe Meldebasis + Regionenfilter + Regionenvergleich Zwei-Räume inkl. 12-Monats-Verlauf A/B + CSV-Export Zeitreihe/Vergleich/Verlauf inkl. Open-Data-Lizenzhinweis | US-KJ-009, US-KJ-010 | ✓ |
-| `/kita/lagebild` | Jugendamt-Steuerungsansicht + Meldeeingang + Meldebeitrag + Engpass-Rangliste/Handlungsfelder Meldelücke-Schnellfilter + Monatsbericht-Vorschau-Kopplung | US-KJ-005, US-KJ-006 | ✓ |
+| `/kita/lagebild` | Jugendamt-Steuerungsansicht + Meldeeingang + Meldebeitrag + Engpass/Handlungsfelder/Planungsraum-Detail Meldelücke-Schnellfilter + Monatsbericht-Vorschau-Kopplung | US-KJ-005, US-KJ-006 | ✓ |
 | `/kita/bedarfsplanung` | Bedarfsplanungsentwurf (§ 80 SGB VIII) + Meldebasis + Residual↔Meldelücke (Hinweis-only) | US-KJ-007 | ✓ |
 | `/kita/vorlage` | Politische Gremienvorlage + Freigabe + Meldebasis/Residual↔Meldelücke + Engpass-Liste Meldelücke-Filter | US-KJ-008 | ✓ |
 | `/kita/einrichtung` | Belegungsstand Einrichtung (aggregiert) | US-KJ-002 | ✓ |
@@ -71,7 +71,9 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | Kita Zeitreihe Meldebasis | `demo/components/kita/KitaZeitreiheTabelle.tsx` | ✓ Berichtsmonat an Meldeeingang-Stichprobe; Spalte Meldebasis, Badge/Rahmen bei Lücke, keine Interpolation (Q-115) |
 | Kita Zeitreihe Regionenfilter | `demo/components/kita/KitaZeitreiheTabelle.tsx` | ✓ Chips Gesamtkommune + 5 Planungsräume; raumbezogene Reihen/Meldebasis, Session-sensitiv (Q-117, US-KJ-010 AK2) |
 | Kita Regionenvergleich | `demo/components/kita/KitaRegionenVergleich.tsx` | ✓ Zwei Planungsräume A/B, Kernkennzahlen + Δ, Meldebasis-Badge (Q-118, US-KJ-010 AK3) |
-| UG Übersicht Fairness-Kurz-CTAs | `/gruendung` Fairness-Block | ✓ RELEVANT/HINWEIS → RQ/Unterlagen/BG-Anker; CTA entfällt nach State-Wechsel (Q-116) |
+| UG Übersicht Fairness-Kurz-CTAs | `/gruendung` Fairness-Block | ✓ RELEVANT/HINWEIS → RQ/Unterlagen/BG/Steuernummer/Betriebsdatum-Anker; CTA entfällt nach State-Wechsel (Q-116, Q-127) |
+| AV Termin-Kachel live | `/fall` Schnellzugriff | ✓ Chip Ausstehend/Bestätigt nach session-lokaler Bestätigung (Q-104, US-AV-005) |
+| Kita Planungsraum-Detail Meldelücke-Filter | `KitaPlanungsraumDetailListe.tsx` | ✓ Schnellfilter Alle/Meldelücke auf Detailkarten, Rang-Erhalt, Session-sensitiv (Q-128, US-KJ-005/006) |
 | UG Behörden VS-04 → Rückfrage | `/gruendung/behoerden` | ✓ Verfahrensschritt mit offener RQ: CTA „Zur Rückfrage“ `#rq-…`; entfällt nach Beantworten (Q-120) |
 | UG VS-04 Abschluss nach RQ | `GruendungStateContext` + Behörden/Verlauf | ✓ Nach Beantworten: VS-04 → ABGESCHLOSSEN, System-Verlaufsereignis (Q-121) |
 | UG VS-05 Start nach RQ | `GruendungStateContext` + Behörden/Verlauf | ✓ Nach Beantworten: nächster AUSSTEHEND-Schritt derselben Behörde → IN_BEARBEITUNG (VS-05 Steuernummer) + Verlauf (Q-122) |
@@ -167,6 +169,12 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 **Q-121 erledigt:** UG VS-04 nach Rückfrage-Antwort session-lokal ABGESCHLOSSEN inkl. Verlaufsereignis.
 **Q-122 erledigt:** UG nach RQ-Antwort nächster AUSSTEHEND-Schritt derselben Behörde → IN_BEARBEITUNG (VS-05) + Verlauf.
 **Q-123 erledigt:** Kita Open-Data-Lizenzhinweis in öffentlichen CSV-Exporten (Meta + UI, `kitaCsvLizenz`, US-KJ-010).
+**Q-124 erledigt:** UG Steuernummer-Signal auch bei VS-05 IN_BEARBEITUNG (Text/CTA session-sensitiv).
+**Q-125 erledigt:** Kita Lagebild Engpass-Rangliste Meldelücke-Schnellfilter.
+**Q-126 erledigt:** Kita Lagebild Handlungsfelder Meldelücke-Schnellfilter.
+**Q-104 erledigt:** AV Übersicht Termin-Kachel Status „Bestätigt“ live nach Session-Aktion.
+**Q-127 erledigt:** UG Übersicht Fairness-Kurz-CTAs Steuernummer (Finanzamt) und Betriebsdatum (Verfahrensstatus).
+**Q-128 erledigt:** Kita Lagebild Planungsraum-Detail Meldelücke-Schnellfilter (`KitaPlanungsraumDetailListe`).
 
 ---
 

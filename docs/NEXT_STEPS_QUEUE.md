@@ -109,7 +109,7 @@ Story-Dokumentation ist kein Pflicht-Vorläufer für Mock-Daten und Typen.
 | Q-089 | AV Tab-Badge „Termine“ nur bei unbestätigt / bald fällig | DEMO | S | Q-081 | DONE |
 | Q-095 | AV Verlauf: Antworttext als lesbarer Quittungsblock (kein 80-Zeichen-Kürzel) | DEMO | S | Q-085 | DONE |
 | Q-092 | AV Termin-Bestätigung session-lokal (Badge entfällt live) | DEMO | S | Q-089 | DONE |
-| Q-104 | AV Übersicht: Termin-Kachel zeigt Status „Bestätigt“ live nach Session-Aktion | DEMO | S | Q-092 | OFFEN |
+| Q-104 | AV Übersicht: Termin-Kachel zeigt Status „Bestätigt“ live nach Session-Aktion | DEMO | S | Q-092 | DONE `a2ae873` |
 | Q-105 | AV Verlauf: Upload-Ereignisse mit Dokumentbezeichnung hervorheben | DEMO | S | Q-095 | OFFEN |
 
 ---
@@ -131,6 +131,7 @@ Story-Dokumentation ist kein Pflicht-Vorläufer für Mock-Daten und Typen.
 | Q-113 | UG Hinweise: CTA „Zu den Behörden“ aus INFO parallele Behörden (`/gruendung/behoerden`) | DEMO | S | Q-111 | DONE `b603c71` |
 | Q-116 | UG Übersicht: Fairness-Signale RELEVANT/HINWEIS mit Kurz-CTAs (RQ/Unterlagen/BG) | DEMO | S | Q-107 | DONE `54700cb` |
 | Q-120 | UG Behörden: Verfahrensschritt mit offener Rückfrage (VS-04) verlinkt zur RQ-Karte (`#rq-…`) | DEMO | S | Q-084 | DONE `67ad664` |
+| Q-127 | UG Übersicht: Fairness-Kurz-CTAs für Steuernummer (Finanzamt) und Betriebsdatum (Verfahrensstatus) | DEMO | S | Q-116 | DONE `9e7ae4a` |
 
 ---
 
@@ -160,6 +161,7 @@ Story-Dokumentation ist kein Pflicht-Vorläufer für Mock-Daten und Typen.
 | Q-124 | UG Fairness: Steuernummer-Signal auch bei VS-05 IN_BEARBEITUNG (Text/CTA session-sensitiv) | DEMO | S | Q-122 | DONE `dc05794` |
 | Q-125 | Kita Lagebild Engpass-Rangliste: Schnellfilter Meldelücke (Session-sensitiv, analog Vorlage Q-114) | DEMO | S | Q-112 | DONE `549b998` |
 | Q-126 | Kita Lagebild Handlungsfelder: Schnellfilter Meldelücke (Session-sensitiv, analog Engpass Q-125) | DEMO | S | Q-125 | DONE `e8d51f1` |
+| Q-128 | Kita Lagebild Planungsraum-Detail: Schnellfilter Meldelücke (Session-sensitiv, analog Engpass/Handlungsfelder) | DEMO | S | Q-126 | DONE `ef924c9` |
 
 ---
 
@@ -289,3 +291,6 @@ Diese Punkte wurden in früheren Iterationen abgeschlossen und sind produktionsr
 | Q-124 UG Steuernummer VS-05 Signal | Fairness auch bei IN_BEARBEITUNG | `dc05794` → main |
 | Q-125 Kita Lagebild Engpass-Filter | Engpass-Rangliste Meldelücke-Schnellfilter | `549b998` → main |
 | Q-126 Kita Lagebild Handlungsfelder-Filter | Handlungsfelder Meldelücke-Schnellfilter | `e8d51f1` → main |
+| Q-104 AV Termin-Kachel live | Übersicht Schnellzugriff Status Bestätigt | `a2ae873` → main |
+| Q-127 UG Übersicht Steuernummer/Betriebsdatum-CTA | Fairness-Kurzblock Finanzamt + Verfahrensstatus | `9e7ae4a` → main |
+| Q-128 Kita Lagebild Planungsraum-Detail-Filter | Detailkarten Meldelücke-Schnellfilter | `ef924c9` → main |
