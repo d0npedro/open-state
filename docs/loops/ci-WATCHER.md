@@ -2,14 +2,15 @@
 
 | Feld | Wert |
 |------|------|
-| last_checked | 2026-07-29T06:05:00Z |
-| last_run_id | 30426767139 |
+| last_checked | 2026-07-29T06:07:30Z |
+| last_run_id | 30426924360 |
 | last_status | success |
-| last_fix_sha | 11b9890 |
+| last_fix_sha | 3ae692f |
 | fix_attempts | 0 |
 
 ## Log
 
+- E2E `30426924360` **success** (SHA 3ae692f supervisor Q-117/Q-118/Q-120). Prior E2E `30426905806` + `30426885328` **success** (SHA 4e900e4 / 4f40f4e). Build latest `30426767115` success (SHA 11b9890; newer HEAD docs-only path-skip). Catch-up: origin/main..main = 0. No fix. fix_attempts=0.
 - Build `30426767115` + `30426746767` **success** (SHA 11b9890 / 9a319be). E2E `30426767139` + `30426746745` **success**. Catch-up: origin/main..main already 0 (prior tick pushed `3704fe8..9a319be` + docs). Local lint+build grün (`.next` cache clean nach PageNotFoundError/_document). No fix. fix_attempts=0.
 - Catch-up push `3704fe8..9a319be` (5 commits: kita Q Regionenvergleich + merge main→kita + UG VS-04-Link + supervisor merges). Local lint+build grün; `test:e2e:ci` **224 passed**. E2E remote prior `30426607681` **success** (SHA 3704fe8 docs). Build latest `30426184498` success (docs-only path-skip on HEAD docs). origin/main..main = 0 after push. New CI for 9a319be pending next tick. fix_attempts=0.
 - E2E `30426607681` **success** (SHA 3704fe8 docs ci-watcher). Prior E2E `30426464903` success (SHA 6315cd2). Build latest `30426184498` success (SHA a6ae4be; HEAD docs-only path-skip). Catch-up: origin/main..main was 5 → pushed. fix_attempts=0.
