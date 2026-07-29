@@ -2,6 +2,29 @@
 
 Branch: `loop/kita` · Worktree: `D:\Projects\open-state-loop-kita`
 
+## Iteration 2026-07-29 – US-KJ-002 Einrichtung CSV Status/Datenbasis-Metakopf
+
+### Was
+Belegungsstand (`/kita/einrichtung`, US-KJ-002): CSV-Metakopf an Tagesstand/Monatsbericht/Meldung gespiegelt. Status (aktuell / veraltet, 3-Tage-Schwelle, Status-Hinweis), Datenbasis (Gruppenzähler, Einschränkungen, Summen genehmigt/belegt/reserviert/frei), Prozessbezug US-KJ-001/003/004, DEC-004. Gruppenblatt mit Gruppe-ID, Einschränkungs-Schlüssel und -bis; Summenzeile. Dateiname mit `-veraltet` bei überschrittener Schwelle. Export-Karte Druck+CSV; Footer/Druck-Hinweis. Nur Aggregate, keine Kind- oder Personennamen. Merge `origin/main` (ci-watcher docs) vor dem Feature.
+
+### Dateien
+- `demo/app/kita/einrichtung/page.tsx` (downloadCsv Meta/Summen, Export-Karte, Footer)
+- `docs/loops/kita-JOURNAL.md` (dieses Journal)
+
+### Story
+US-KJ-002 – Belegungsstand einsehen (CSV Status/Datenbasis-Metakopf, Aggregate)
+
+### Build
+`npm run lint` + `npm run build` im `demo/`-Verzeichnis (siehe Commit dieses Laufs)
+
+### Nicht angefasst (Supervisor / verboten)
+Queue, BUILD_STATE, storyRegistry, DECISION_LOG, andere Domänen, package.json, CI, push
+
+### Nächster sinnvoller Schritt (Hinweis Supervisor)
+Bedarfsplanung CSV Aggregate-Metakopf schärfen falls Lücken, oder Vorlage/Lagebild CSV Spiegel Status/Datenbasis.
+
+---
+
 ## Iteration 2026-07-29 – US-KJ-004 Meldung CSV Aggregate freigabeunabhängig
 
 ### Was

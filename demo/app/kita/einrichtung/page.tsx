@@ -7,6 +7,7 @@
  * Prozesskette: Tagesstand (US-KJ-001) → Monatsbericht (US-KJ-003) → Meldung (US-KJ-004).
  * Druck: Status (aktuell / veraltet), Datenbasis (Stichtag, Aggregate, Einschränkungen)
  * und Gruppenübersicht im Ausdruck dokumentiert (Spiegel Tagesstand/Monatsbericht).
+ * CSV-Metakopf: Status/Datenbasis analog Tagesstand/Monatsbericht/Meldung (DEC-004).
  * CSV-Export, Prozess-Hub und Aktionsbuttons no-print.
  */
 
@@ -40,43 +41,101 @@ function einschraenkungLabel(e: GruppeEinschraenkung): string {
   }
 }
 
+/**
+ * CSV Aggregate-Export freigabeunabhängig.
+ * Metakopf dokumentiert Status (aktuell / veraltet inkl. 3-Tage-Schwelle) und
+ * Datenbasis (Stichtag, Einschränkungszähler, Summen) – Spiegel Druckansicht
+ * und Tagesstand/Monatsbericht/Meldung. Nur Aggregate (DEC-004).
+ */
 function downloadCsv() {
   const e = demoKitaEinrichtung;
+  const alter = tageSeit(e.letzteErfassung, e.fiktivesHeute);
+  const datenVeraltet = alter > 3;
+  const statusLabel = datenVeraltet ? 'Veraltet' : 'Aktuell';
+  const statusHint = datenVeraltet
+    ? `Letzte Erfassung liegt mehr als 3 Tage zurück (vor ${alter} Tagen). Tagesstand (US-KJ-001) sollte aktualisiert werden.`
+    : alter === 0
+      ? 'Letzte Erfassung entspricht dem Demo-Heute – Stand gilt als aktuell.'
+      : `Letzte Erfassung vor ${alter} Tag${alter === 1 ? '' : 'en'} – innerhalb der 3-Tage-Schwelle.`;
+
+  const genehmigt = summe(e.gruppen, 'genehmigtePlaetze');
+  const belegt = summe(e.gruppen, 'belegtePlaetze');
+  const reserviert = summe(e.gruppen, 'reserviertePlaetze');
+  const frei = summe(e.gruppen, 'freiePlaetze');
+  const gruppenGesamt = e.gruppen.length;
+  const gruppenGeschlossen = e.gruppen.filter(g => g.einschraenkung === 'TEMPORAER_GESCHLOSSEN').length;
+  const gruppenReduziert = e.gruppen.filter(g => g.einschraenkung === 'REDUZIERT').length;
+  const gruppenPersonal = e.gruppen.filter(g => g.einschraenkung === 'PERSONALMANGEL').length;
+  const gruppenOhne = e.gruppen.filter(g => g.einschraenkung === 'KEINE').length;
+  const gruppenEng = e.gruppen.filter(
+    g => g.freiePlaetze === 0 && g.einschraenkung !== 'TEMPORAER_GESCHLOSSEN'
+  ).length;
+
   const header = [
     'Gruppe',
+    'Gruppe-ID',
     'Altersgruppe',
     'Genehmigt',
     'Belegt',
     'Reserviert',
     'Frei',
     'Einschraenkung',
+    'Einschraenkung_Schluessel',
+    'Einschraenkung_bis',
     'Hinweis',
   ].join(';');
+
   const rows = e.gruppen.map(g =>
     [
-      g.bezeichnung,
+      g.bezeichnung.replace(/;/g, ','),
+      g.id,
       g.altersgruppe,
       g.genehmigtePlaetze,
       g.belegtePlaetze,
       g.reserviertePlaetze,
       g.freiePlaetze,
-      einschraenkungLabel(g.einschraenkung),
-      (g.einschraenkungHinweis ?? '').replace(/;/g, ','),
+      einschraenkungLabel(g.einschraenkung).replace(/;/g, ','),
+      g.einschraenkung,
+      g.einschraenkungBis ?? '',
+      (g.einschraenkungHinweis ?? '').replace(/;/g, ',').replace(/\r?\n/g, ' '),
     ].join(';')
   );
-  const csv = [
-    `# Belegungsstand ${e.bezeichnung}`,
-    `# Stand: ${e.standLabel} | Letzte Erfassung: ${e.letzteErfassung}`,
-    `# Planungsraum: ${e.planungsraumBezeichnung} | Keine personenbezogenen Daten`,
+
+  const summeRow = [
+    'SUMME (Einrichtung)',
     '',
-    header,
-    ...rows,
-  ].join('\n');
+    '',
+    genehmigt,
+    belegt,
+    reserviert,
+    frei,
+    '',
+    '',
+    '',
+    '',
+  ].join(';');
+
+  const meta = [
+    `# Belegungsstand ${e.bezeichnung.replace(/;/g, ',')}`,
+    `# ID: ${e.id} | Träger: ${e.traeger.replace(/;/g, ',')}`,
+    `# Planungsraum: ${e.planungsraumBezeichnung} (${e.planungsraumId})`,
+    `# Zeitlicher Stand: ${e.standLabel.replace(/;/g, ',')} | Letzte Erfassung: ${e.letzteErfassung} | Demo-Bezug: ${e.fiktivesHeute}`,
+    `# Status: ${statusLabel} | Alter der Erfassung: ${alter} Tag(e) | Schwelle veraltet: > 3 Tage`,
+    `# Status-Hinweis: ${statusHint.replace(/;/g, ',')}`,
+    `# Datenbasis Gruppen: ${gruppenGesamt} gesamt · ohne Einschränkung ${gruppenOhne} · reduziert ${gruppenReduziert} · personalbedingt ${gruppenPersonal} · temporär geschlossen ${gruppenGeschlossen} · voll belegt (ohne Geschlossene) ${gruppenEng}`,
+    `# Summen: genehmigt ${genehmigt} · belegt ${belegt} · reserviert ${reserviert} · frei ${frei}`,
+    `# Prozessbezug: speist Tagesstand (US-KJ-001), Monatsbericht (US-KJ-003), Meldung (US-KJ-004) · Demo-Mock, kein Backend`,
+    `# Keine personenbezogenen Daten · Keine Kind- oder Personennamen · Keine Vertrags-/Adressdaten (DEC-004)`,
+    `# Trennzeichen: Semikolon · Encoding: UTF-8 BOM`,
+  ];
+
+  const csv = [...meta, '', header, ...rows, summeRow].join('\n');
   const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = `belegung-${e.id}-${e.letzteErfassung}.csv`;
+  const statusSuffix = datenVeraltet ? '-veraltet' : '';
+  a.download = `belegung-${e.id}-${e.letzteErfassung}${statusSuffix}.csv`;
   a.click();
   URL.revokeObjectURL(url);
 }
@@ -122,7 +181,7 @@ export default function KitaEinrichtungBelegungPage() {
         </p>
       </div>
 
-      {/* Druck: Status + Datenbasis im Ausdruck – Spiegel Tagesstand/Monatsbericht */}
+      {/* Export: Druck + CSV – Status/Datenbasis Metakopf Spiegel Tagesstand/Monatsbericht/Meldung */}
       <div
         className="no-print card"
         style={{
@@ -135,7 +194,7 @@ export default function KitaEinrichtungBelegungPage() {
       >
         <div style={{ maxWidth: '40rem' }}>
           <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>Export</div>
-          <strong style={{ fontSize: '0.95rem' }}>Druckansicht Belegungsstand</strong>
+          <strong style={{ fontSize: '0.95rem' }}>Druck und CSV Belegungsstand</strong>
           <p
             style={{
               fontSize: '0.8rem',
@@ -144,20 +203,31 @@ export default function KitaEinrichtungBelegungPage() {
               lineHeight: 1.5,
             }}
           >
-            Druck dokumentiert den Datenstand (aktuell / veraltet), die Datenbasis
-            (Stichtag, Aggregate je Gruppe, Einschränkungen) und die
-            Gesamtsummen. CSV-Export, Prozess-Hub und Aktionsbuttons sind no-print.
-            Nur Aggregate, keine Kind- oder Personennamen (DEC-004).
+            Druck und CSV dokumentieren Status (aktuell / veraltet, 3-Tage-Schwelle) und
+            Datenbasis (Stichtag, Einschränkungszähler, Summen je Gruppe). CSV-Metakopf
+            analog Tagesstand/Monatsbericht/Meldung; Semikolon, UTF-8 BOM. Prozess-Hub
+            und Aktionshinweise sind no-print. Nur Aggregate, keine Kind- oder
+            Personennamen (DEC-004).
           </p>
         </div>
-        <button
-          type="button"
-          className="btn btn-secondary"
-          onClick={() => window.print()}
-          style={{ fontSize: '0.875rem', flexShrink: 0 }}
-        >
-          Drucken / als PDF speichern
-        </button>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', flexShrink: 0 }}>
+          <button
+            type="button"
+            className="btn btn-secondary"
+            onClick={() => window.print()}
+            style={{ fontSize: '0.875rem' }}
+          >
+            Drucken / als PDF speichern
+          </button>
+          <button
+            type="button"
+            className="btn btn-secondary"
+            onClick={downloadCsv}
+            style={{ fontSize: '0.875rem' }}
+          >
+            CSV exportieren
+          </button>
+        </div>
       </div>
 
       {/* print-only Kopf + Status + Datenbasis */}
@@ -278,14 +348,6 @@ export default function KitaEinrichtungBelegungPage() {
       <section>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', flexWrap: 'wrap', gap: '0.75rem', marginBottom: '1rem' }}>
           <h2 style={{ margin: 0 }}>Gesamtübersicht Einrichtung</h2>
-          <button
-            type="button"
-            className="btn btn-secondary no-print"
-            onClick={downloadCsv}
-            style={{ fontSize: '0.875rem' }}
-          >
-            CSV exportieren
-          </button>
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '1rem' }}>
           {[
@@ -479,8 +541,9 @@ export default function KitaEinrichtungBelegungPage() {
         {' '}und den{' '}
         <Link href="/kita" style={{ color: 'var(--color-primary)' }}>öffentlichen Bericht</Link>
         {' '}ein — ohne Einrichtungsdetail in der Öffentlichkeit (DEC-004). Prozesskette oben:
-        Tagesstand → Monatsbericht → Meldung (gleiche Einrichtung). Druck: Status (aktuell /
-        veraltet) und Datenbasis-Aggregate im Ausdruck dokumentiert.
+        Tagesstand → Monatsbericht → Meldung (gleiche Einrichtung). Druck und CSV: Status
+        (aktuell / veraltet) und Datenbasis-Aggregate dokumentiert; CSV-Metakopf analog
+        Tagesstand/Monatsbericht/Meldung.
       </div>
 
       <div
@@ -495,7 +558,8 @@ export default function KitaEinrichtungBelegungPage() {
         Druckansicht US-KJ-002: Status {statusLabel}; Stand {e.standLabel}, letzte Erfassung{' '}
         {e.letzteErfassung}; Summen genehmigt {genehmigt} / belegt {belegt} / reserviert{' '}
         {reserviert} / frei {frei}; Gruppen {gruppenGesamt} (geschlossen {gruppenGeschlossen},
-        reduziert {gruppenReduziert}). Nur Aggregate, keine Kind- oder Personennamen. Einrichtung-ID{' '}
+        reduziert {gruppenReduziert}). CSV-Metakopf spiegelt denselben Status und dieselbe
+        Datenbasis. Nur Aggregate, keine Kind- oder Personennamen. Einrichtung-ID{' '}
         <span style={{ fontFamily: 'monospace' }}>{e.id}</span>.
       </div>
 
