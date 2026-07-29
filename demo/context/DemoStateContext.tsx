@@ -20,7 +20,8 @@ const DEMO_AKTION_ZEIT = '24.11.2024, 10:30';
 
 interface DemoStateContextValue {
   fall: Fall;
-  answerRueckfrage: (id: string) => void;
+  /** Demo: markiert Rückfrage als beantwortet; optionaler Antworttext für Quittung/Verlauf. */
+  answerRueckfrage: (id: string, antwortText?: string) => void;
   /** Demo: markiert ein angefordertes/abgelehntes Dokument als hochgeladen. */
   uploadDokument: (id: string) => void;
   /** Demo: setzt Session auf den Ausgangs-Mock zurück. */
@@ -39,10 +40,15 @@ const DemoStateContext = createContext<DemoStateContextValue>({
 
 export function DemoStateProvider({ children }: { children: React.ReactNode }) {
   const [answeredIds, setAnsweredIds] = useState<string[]>([]);
+  /** Antworttexte je Rückfrage-ID (Session, ohne Backend). */
+  const [antwortTexte, setAntwortTexte] = useState<Record<string, string>>({});
   const [uploadedIds, setUploadedIds] = useState<string[]>([]);
 
-  const answerRueckfrage = useCallback((id: string) => {
+  const answerRueckfrage = useCallback((id: string, antwortText?: string) => {
     setAnsweredIds(prev => (prev.includes(id) ? prev : [...prev, id]));
+    if (antwortText && antwortText.trim()) {
+      setAntwortTexte(prev => (prev[id] ? prev : { ...prev, [id]: antwortText.trim() }));
+    }
   }, []);
 
   const uploadDokument = useCallback((id: string) => {
@@ -51,15 +57,24 @@ export function DemoStateProvider({ children }: { children: React.ReactNode }) {
 
   const resetSession = useCallback(() => {
     setAnsweredIds([]);
+    setAntwortTexte({});
     setUploadedIds([]);
   }, []);
 
   const hasSessionChanges = answeredIds.length > 0 || uploadedIds.length > 0;
 
   const fall = useMemo((): Fall => {
-    const updatedRueckfragen = demoFall.rueckfragen.map(rq =>
-      answeredIds.includes(rq.id) ? { ...rq, beantwortet: true } : rq
-    );
+    const updatedRueckfragen = demoFall.rueckfragen.map(rq => {
+      if (!answeredIds.includes(rq.id)) return rq;
+      const antwortText = antwortTexte[rq.id];
+      return {
+        ...rq,
+        beantwortet: true,
+        ...(antwortText
+          ? { antwortText, beantwortetAm: DEMO_AKTION_DATUM }
+          : { beantwortetAm: DEMO_AKTION_DATUM }),
+      };
+    });
     const hasOffeneRueckfragen = updatedRueckfragen.some(rq => !rq.beantwortet);
 
     const updatedDokumente = demoFall.dokumente.map(dok => {
@@ -125,6 +140,9 @@ export function DemoStateProvider({ children }: { children: React.ReactNode }) {
 
     for (const id of answeredIds) {
       const rq = demoFall.rueckfragen.find(r => r.id === id);
+      const antwort = antwortTexte[id];
+      const antwortKurz =
+        antwort && antwort.length > 80 ? `${antwort.slice(0, 80)}…` : antwort;
       extraEvents.push({
         id: `E-DEMO-RQ-${id}`,
         typ: 'RUECKFRAGE_BEANTWORTET',
@@ -132,7 +150,9 @@ export function DemoStateProvider({ children }: { children: React.ReactNode }) {
         handelndeStelle: 'BUERGER',
         beschreibung: 'Rückfrage beantwortet',
         details: rq
-          ? `Antwort zu ${rq.id} eingereicht (Demo-Interaktion).`
+          ? antwortKurz
+            ? `Antwort zu Rückfrage eingereicht: „${antwortKurz}“ (Demo).`
+            : `Antwort zu ${rq.id} eingereicht (Demo-Interaktion).`
           : `Rückfrage ${id} beantwortet (Demo-Interaktion).`,
       });
       seq += 1;
@@ -196,7 +216,7 @@ export function DemoStateProvider({ children }: { children: React.ReactNode }) {
           ? DEMO_AKTION_DATUM
           : demoFall.letzteAktivitaet,
     };
-  }, [answeredIds, uploadedIds]);
+  }, [answeredIds, antwortTexte, uploadedIds]);
 
   return (
     <DemoStateContext.Provider

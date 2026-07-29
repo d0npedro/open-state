@@ -134,6 +134,7 @@ test.describe('US-AV-002 – Status einsehen', () => {
     await page.locator('.tab-nav-item').filter({ hasText: 'Fragen' }).click();
     await expect(page).toHaveURL(/\/fall\/rueckfragen/);
     await page.getByRole('button', { name: /Jetzt beantworten/i }).click();
+    await page.getByTestId('rq-antwort-absenden').click();
     // Badge-Fragen muss live verschwinden; Unterlagen bleibt
     await expect(page.getByTestId('tab-badge-fragen')).toHaveCount(0);
     await expect(page.getByTestId('tab-badge-unterlagen')).toHaveText('2');
@@ -145,9 +146,10 @@ test.describe('US-AV-002 – Status einsehen', () => {
     const before = await page.locator('.progress-bar-fill').getAttribute('style');
     expect(before).toMatch(/width:\s*5[0-9]%/);
 
-    // Demo: Rückfrage beantworten → Status UNTERLAGEN_FEHLEN
+    // Demo: Rückfrage beantworten (Bestätigung) → Status UNTERLAGEN_FEHLEN
     await page.goto('/fall/rueckfragen');
     await page.getByRole('button', { name: /Jetzt beantworten/i }).click();
+    await page.getByTestId('rq-antwort-absenden').click();
     await page.goto('/fall');
 
     // Fortschritt darf nicht auf 0 % kollabieren (Bug: Status nicht in statusFlow)
@@ -161,6 +163,7 @@ test.describe('US-AV-002 – Status einsehen', () => {
   test('Nach allen Bürger-Aktionen: Ruhezustand-Banner sichtbar', async ({ page }) => {
     await page.goto('/fall/rueckfragen');
     await page.getByRole('button', { name: /Jetzt beantworten/i }).click();
+    await page.getByTestId('rq-antwort-absenden').click();
     await page.goto('/fall/dokumente');
     // Beide ausstehenden Unterlagen als hochgeladen markieren
     const uploadButtons = page.getByRole('button', { name: /Als hochgeladen markieren/i });

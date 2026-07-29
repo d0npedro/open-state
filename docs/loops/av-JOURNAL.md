@@ -6,6 +6,42 @@ Scope: nur `demo/app/fall/**`, DemoStateContext, fairness/rules, mockFall, e2e u
 
 ---
 
+## 2026-07-29 – Iteration 3: Rückfrage-Bestätigungsdialog + Antwortquittung
+
+### Was
+Kein 1-Klick-Absenden mehr (US-AV-004): Bürger sieht explizit, *was* übermittelt wird.
+
+1. **«Jetzt beantworten»** öffnet Inline-Bestätigung (`role="region"`) mit Fragekurzfassung.
+2. Optionales Freitextfeld; leer → Demo-Beispielantwort.
+3. **«Antwort absenden»** / **«Abbrechen»**; Absenden speichert `antwortText` + `beantwortetAm` in der Session.
+4. Quittung nach Absenden zeigt den übermittelten Text.
+5. Timeline-Detail enthält Antwortkürzel.
+6. E2E: Dialog, Abbrechen, Freitext, Zwei-Schritt in Übersicht-Tests.
+
+### Dateien
+- `demo/app/fall/rueckfragen/page.tsx`
+- `demo/context/DemoStateContext.tsx`
+- `demo/e2e/us-av-004-rueckfragen.spec.ts`
+- `demo/e2e/us-av-001-002-fall-uebersicht.spec.ts`
+- `docs/loops/av-JOURNAL.md`
+
+### Story-IDs
+- US-AV-004 (Rückfrage verstehen / beantworten)
+- US-AV-001 (Handlungsorientierung nach Antwort)
+
+### Build
+`npm run lint` + `npm run build` → Exit 0
+
+### Vorschlag Queue-ID
+- Q-085 (AV Rückfrage-Bestätigungsdialog)
+
+### Nächster sinnvoller AV-Schritt (Vorschlag)
+- Fristen-Countdown auf Übersicht für offene Dokumente (analog RQ-Frist)
+- Tab-Badge „Termine“ nur wenn unbestätigt / morgen fällig (optional)
+- Verlauf: Antworttext in Timeline-Detail lesbarer formatieren
+
+---
+
 ## 2026-07-29 – Iteration 2: Tab-Badges für offene Fragen/Unterlagen
 
 ### Was
