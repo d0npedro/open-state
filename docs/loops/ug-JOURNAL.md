@@ -8,6 +8,38 @@ Erlaubte Pfade nur: `demo/app/gruendung/**`, `demo/context/GruendungStateContext
 
 ---
 
+## 2026-07-29 – Iteration 35: Dokumente lokale Upload-Quittung pro Karte
+
+### Was
+Nach Session-Markierung zeigt jede Dokumentenkarte eine lokale Upload-Quittung
+(US-UG-003, Parität zu AV):
+
+1. **`sessionUploadedIds`** im GruendungStateContext steuert Quittung pro Karte
+   (`data-testid="dok-upload-quittung-{id}"`).
+2. **Quittung**: Titel „Upload bestätigt“, Bezeichnung + Einreichungsdatum,
+   Demo-Hinweis (keine Datei).
+3. Mock-Einreichungszeile nur ohne Session-Upload; bei Vollständigkeit
+   `dok-alle-vorliegend` + Session-Zähler.
+4. E2E: Initial ohne Quittung; nach Markierung Quittung + Vollständigkeit;
+   Session bleibt nach Tab-Nav (kein `page.goto`, DEC-012).
+
+### Dateien
+- `demo/context/GruendungStateContext.tsx` – export `sessionUploadedIds`
+- `demo/app/gruendung/dokumente/page.tsx` – lokale Quittung + Vollständigkeitsbanner
+- `demo/e2e/us-ug-gruendung.spec.ts` – 3 neue Unterlagen-Tests
+- `docs/loops/ug-JOURNAL.md` – dieses Journal
+
+### Build
+`npm run lint` + `npm run build` im Ordner `demo/` grün.
+`npm run test:e2e:ug` Exit 0 (115 passed).
+
+### Nächster sinnvoller UG-Schritt (Vorschlag)
+- Übersicht: Upload-Quittung + nächste offene Unterlage nach Session-Upload
+- `naechsterSchrittZiel` / `aufgabeZiel` ggf. in gruendung-rules (optional)
+- Verlauf: Tiefenlink von Fairness-CTA zu passendem Ereignis (optional)
+
+---
+
 ## 2026-07-29 – Iteration 34: Fairness-CTA-Ziel-Routing in gruendung-rules
 
 ### Was

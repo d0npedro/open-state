@@ -604,6 +604,52 @@ test.describe('UG – Unterlagen', () => {
     await expect(page.locator('.tab-nav-item.active')).toContainText('Unterlagen');
   });
 
+  test('Ohne Session-Upload keine lokale Upload-Quittung', async ({ page }) => {
+    await expect(page.getByTestId('dok-upload-quittung-DOK-03')).toHaveCount(0);
+    await expect(page.getByTestId('dokument-karte-DOK-03')).toBeVisible();
+    await expect(page.locator('.upload-zone')).toHaveCount(1);
+  });
+
+  test('Nach Session-Upload: lokale Quittung auf der Dokumentenkarte', async ({ page }) => {
+    await expect(page.getByTestId('dok-upload-quittung-DOK-03')).toHaveCount(0);
+
+    await page.getByRole('button', { name: /Als hochgeladen markieren/i }).click();
+
+    const quittung = page.getByTestId('dok-upload-quittung-DOK-03');
+    await expect(quittung).toBeVisible();
+    await expect(page.getByTestId('dok-upload-quittung-titel-DOK-03')).toHaveText('Upload bestätigt');
+    await expect(page.getByTestId('dok-upload-quittung-text-DOK-03')).toContainText(
+      /Nachweis beruflicher Qualifikation/i
+    );
+    await expect(page.getByTestId('dok-upload-quittung-text-DOK-03')).toContainText(
+      /07\.12\.2024/
+    );
+    await expect(quittung).toContainText(/keine Datei gespeichert/i);
+
+    // Upload-Zone entfällt; Status „Hochgeladen“
+    await expect(page.locator('.upload-zone')).toHaveCount(0);
+    await expect(page.getByTestId('dokument-karte-DOK-03')).toContainText(/Hochgeladen/i);
+
+    // Vollständigkeit + Session-Hinweis (Mock: nur DOK-03 war ausstehend)
+    await expect(page.getByTestId('dok-alle-vorliegend')).toBeVisible();
+    await expect(page.getByTestId('dok-alle-vorliegend-session')).toContainText(
+      /1 Unterlage.*markiert/i
+    );
+  });
+
+  test('Session-Upload bleibt nach Tab-Wechsel erhalten (kein page.goto)', async ({ page }) => {
+    await page.getByRole('button', { name: /Als hochgeladen markieren/i }).click();
+    await expect(page.getByTestId('dok-upload-quittung-DOK-03')).toBeVisible();
+
+    // DEC-012: Tab-Nav erhält Session; page.goto() würde Provider remounten
+    const { goUgTab } = await import('./helpers/sessionNav');
+    await goUgTab(page, 'Hinweise', /\/gruendung\/hinweise/);
+    await goUgTab(page, 'Unterlagen', /\/gruendung\/dokumente/);
+
+    await expect(page.getByTestId('dok-upload-quittung-DOK-03')).toBeVisible();
+    await expect(page.getByTestId('dok-alle-vorliegend')).toBeVisible();
+  });
+
 });
 
 // ─── Rückfragen ───────────────────────────────────────────────────────────────
