@@ -26,20 +26,29 @@ Parallele Entwicklungs-Streams mit getrennten Worktrees und einem Supervisor, de
 3. Nach allen Merges (oder wenn bereits alles gemerged): `cd demo && npm run lint && npm run build`
 4. Queue/BUILD_STATE aus Journals aktualisieren; storyRegistry bei neuen Routen
 5. Docs-Commit falls nötig: `docs: supervisor merge sync`
-6. **Push (Pflicht, Dauerbetrieb):**  
-   `git push origin main`  
-   nur nach grünem lint+build und sauberem main.  
-   Domain-Branches optional: `git push origin loop/av loop/ug loop/kita` (kein force).
+6. **Push (HARTE PFLICHT – ohne Push gilt der Supervisor-Lauf als fehlgeschlagen):**
+   ```
+   git status -sb   # muss main...origin/main ahead zeigen ODER equal
+   git rev-list --count origin/main..main
+   # wenn > 0:
+   git push origin main
+   git push origin loop/av loop/ug loop/kita   # kein force
+   git rev-list --count origin/main..main     # MUSS 0 sein
+   ```
+   Nach Merge/Docs-Commit **immer** pushen, sobald lint+build grün.  
+   „Merges erledigt, Push später“ ist **nicht** erlaubt.
 7. Domain-Worktrees mit main synchronisieren (`merge main` in jedem Worktree, kein force).
 8. Nach Push: optional Run-ID notieren; **CI-Watcher** übernimmt Überwachung und Auto-Fix.
 
 ## CI-Watcher (nach Push)
 
-1. `gh run list --workflow=build.yml --branch main --limit 5` (Status der letzten Runs)
-2. Optional: `gh run list --workflow=e2e.yml --branch main --limit 3`
-3. **success** → Journal `docs/loops/ci-WATCHER.md` aktualisieren, Ende
-4. **in_progress** → `gh run watch <id> --exit-status` (max. ~8 min) oder im nächsten Tick erneut prüfen
-5. **failure** →
+1. `git fetch origin` · wenn `origin/main..main` > 0 Commits und lokal lint+build grün:  
+   **`git push origin main`** (Catch-up, falls Supervisor den Push verpasst hat — kein force)
+2. `gh run list --workflow=build.yml --branch main --limit 5`
+3. Optional: `gh run list --workflow=e2e.yml --branch main --limit 3`
+4. **success** → Journal `docs/loops/ci-WATCHER.md` aktualisieren, Ende
+5. **in_progress** → `gh run watch <id> --exit-status` (max. ~8 min) oder im nächsten Tick erneut prüfen
+6. **failure** →
    - `gh run view <id> --log-failed`
    - `git pull --ff-only origin main`
    - lokal reproduzieren: `cd demo && npm ci` (bzw. lockfile fixen) && `npm run lint && npm run build`
@@ -47,7 +56,7 @@ Parallele Entwicklungs-Streams mit getrennten Worktrees und einem Supervisor, de
    - Commit: `fix(ci): …` · erneut lint+build grün
    - **`git push origin main`** (kein force)
    - bei gleichem Run/Commit max. **2 Fix-Versuche**; dann Blockade in Journal + DECISION_LOG
-6. State in `docs/loops/ci-WATCHER.md`: last_run_id, last_status, last_fix_sha
+7. State in `docs/loops/ci-WATCHER.md`: last_run_id, last_status, last_fix_sha
 
 ## Intervalle
 

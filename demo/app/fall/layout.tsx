@@ -1,7 +1,7 @@
 // UX-Grund: Navigation mit Icons + Klarsprache.
 // "Rückfragen" → "Fragen", "Bescheide" → "Bescheid", "Hinweise" integriert.
 // Aktiver Tab visuell unverkennbar (border + color change).
-// Tab-Badges: offene Handlungsmengen ohne Extra-Klick sichtbar (US-AV-001/003/004).
+// Tab-Badges: offene Handlungsmengen ohne Extra-Klick sichtbar (US-AV-001/003/004/005).
 
 'use client';
 
@@ -11,6 +11,7 @@ import { DemoStateProvider, useDemoState } from '@/context/DemoStateContext';
 import { DomainNav } from '@/components/DomainNav';
 import { AvDemoSessionBar } from '@/components/DemoSessionBar';
 import { Icon } from '@/components/Icon';
+import { terminHatHandlungsbedarf } from '@/lib/fairness/rules';
 
 // UX-Grund: 6 Tabs statt 7 — Hinweise wird kontextuell eingebettet
 // damit Nutzer nicht aktiv navigieren müssen, um Warnungen zu sehen.
@@ -18,7 +19,7 @@ const nav = [
   { href: '/fall',            label: 'Übersicht',  icon: 'home'     as const, badgeKey: null },
   { href: '/fall/dokumente',  label: 'Unterlagen', icon: 'file'     as const, badgeKey: 'unterlagen' as const },
   { href: '/fall/rueckfragen',label: 'Fragen',     icon: 'chat'     as const, badgeKey: 'fragen' as const },
-  { href: '/fall/termine',    label: 'Termine',    icon: 'calendar' as const, badgeKey: null },
+  { href: '/fall/termine',    label: 'Termine',    icon: 'calendar' as const, badgeKey: 'termine' as const },
   { href: '/fall/bescheide',  label: 'Bescheid',   icon: 'scroll'   as const, badgeKey: null },
   { href: '/fall/verlauf',    label: 'Verlauf',    icon: 'clock'    as const, badgeKey: null },
 ];
@@ -61,10 +62,13 @@ function FallTabNav() {
   const offeneUnterlagen = fall.dokumente.filter(
     d => d.status === 'ANGEFORDERT' || d.status === 'ABGELEHNT'
   ).length;
+  // Q-089: Badge nur bei unbestätigt oder heute/morgen fällig — nicht bei ruhig bestätigten Terminen
+  const termineHandlung = fall.termine.filter(t => terminHatHandlungsbedarf(t)).length;
 
-  const counts: Record<'fragen' | 'unterlagen', number> = {
+  const counts: Record<'fragen' | 'unterlagen' | 'termine', number> = {
     fragen: offeneFragen,
     unterlagen: offeneUnterlagen,
+    termine: termineHandlung,
   };
 
   function isActive(href: string) {

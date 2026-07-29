@@ -6,6 +6,43 @@ Scope: nur `demo/app/fall/**`, DemoStateContext, fairness/rules, mockFall, e2e u
 
 ---
 
+## 2026-07-29 – Iteration 5: Tab-Badge Termine (unbestätigt / bald fällig)
+
+### Was
+Tab „Termine“ zeigt Zähler-Badge nur bei Handlungsbedarf (Q-089 / US-AV-005):
+
+1. `terminHatHandlungsbedarf`: Status `AUSSTEHEND` **oder** nicht abgesagt und Resttage 0–1 (`FIKTIVES_HEUTE`).
+2. Hilfen in `rules.ts`: `parseDeutschesDatumZuIso`, `terminHatHandlungsbedarf`.
+3. Mock-Termin T-001 → `AUSSTEHEND` (Badge in der Demo sichtbar).
+4. Übersicht „Nächster Termin“: erster nicht abgesagter Termin (nicht nur BESTAETIGT).
+5. E2E: Badge auf Übersicht + Termine-Seite; Status „Ausstehend“.
+
+### Dateien
+- `demo/lib/fairness/rules.ts`
+- `demo/data/mockFall.ts`
+- `demo/app/fall/layout.tsx`
+- `demo/app/fall/page.tsx`
+- `demo/e2e/us-av-001-002-fall-uebersicht.spec.ts`
+- `demo/e2e/us-av-005-termine.spec.ts`
+- `docs/loops/av-JOURNAL.md`
+
+### Story-IDs
+- US-AV-005 (Termin einsehen)
+- US-AV-001 (Handlungsorientierung Navigation)
+
+### Build
+`npm run lint` + `npm run build` → Exit 0
+
+### Vorschlag Queue-ID
+- Q-089 (AV Tab-Badge Termine)
+
+### Nächster sinnvoller AV-Schritt (Vorschlag)
+- Verlauf: Antworttext in Timeline-Detail lesbarer formatieren
+- Fairness-Signal UNTERLAGE mit berechneter Dokumenten-Frist
+- Termin-Bestätigung session-lokal (Badge entfällt live)
+
+---
+
 ## 2026-07-29 – Iteration 4: Fristen-Countdown offener Unterlagen (Übersicht)
 
 ### Was

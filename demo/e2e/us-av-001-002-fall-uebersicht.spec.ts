@@ -118,17 +118,21 @@ test.describe('US-AV-002 – Status einsehen', () => {
     await expect(activeTab).toContainText('Übersicht');
   });
 
-  test('Tab-Badges: offene Fragen und Unterlagen als Zähler sichtbar', async ({ page }) => {
-    // Mock: 1 offene Rückfrage, 2 angeforderte Unterlagen
+  test('Tab-Badges: offene Fragen, Unterlagen und Termine als Zähler sichtbar', async ({ page }) => {
+    // Mock: 1 offene Rückfrage, 2 angeforderte Unterlagen, 1 unbestätigter Termin
     const fragenBadge = page.getByTestId('tab-badge-fragen');
     const unterlagenBadge = page.getByTestId('tab-badge-unterlagen');
+    const termineBadge = page.getByTestId('tab-badge-termine');
     await expect(fragenBadge).toBeVisible();
     await expect(fragenBadge).toHaveText('1');
     await expect(unterlagenBadge).toBeVisible();
     await expect(unterlagenBadge).toHaveText('2');
+    await expect(termineBadge).toBeVisible();
+    await expect(termineBadge).toHaveText('1');
     // Tabs mit Handlungsbedarf tragen Zähler im accessible name
     await expect(page.getByRole('tab', { name: /Fragen,\s*1 offen/i })).toBeVisible();
     await expect(page.getByRole('tab', { name: /Unterlagen,\s*2 offen/i })).toBeVisible();
+    await expect(page.getByRole('tab', { name: /Termine,\s*1 offen/i })).toBeVisible();
   });
 
   test('Fristen-Countdown offener Unterlagen auf Übersicht (Q-086)', async ({ page }) => {

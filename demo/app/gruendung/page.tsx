@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useGruendungState } from '@/context/GruendungStateContext';
+import { berechneFairnessSignaleGruendung } from '@/lib/fairness/gruendung-rules';
 import { Icon } from '@/components/Icon';
 import type { IconName } from '@/components/Icon';
 
@@ -29,6 +30,7 @@ export default function GruendungPage() {
   const isRueckfrage = akte.status === 'RUECKFRAGE_AUSSTEHEND';
   const offeneRueckfragen = akte.rueckfragen.filter(r => !r.beantwortet).length;
   const ausstehendeDoks = akte.dokumente.filter(d => d.status === 'ANGEFORDERT').length;
+  const fairnessSignale = berechneFairnessSignaleGruendung(akte);
 
   const flowKey = isRueckfrage ? 'IN_BEARBEITUNG' : akte.status;
   const currentIndex = statusFlow.findIndex(s => s.key === flowKey);
@@ -205,6 +207,45 @@ export default function GruendungPage() {
           Alle Behörden und Schritte <Icon name="arrow-right" size={14} />
         </Link>
       </div>
+
+      {/* ─── Fairness-Kurzblock (parität AV-Übersicht) ─────────────── */}
+      {fairnessSignale.length > 0 && (
+        <div className="card" data-testid="uebersicht-fairness-kurzblock">
+          <h2 style={{ fontSize: '1rem', marginBottom: '0.35rem' }}>
+            Hinweise zu Ihrem Verfahren
+          </h2>
+          <p style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', margin: '0 0 1rem' }}>
+            Regelbasierte Orientierung aus dem Aktenzustand — keine Entscheidung der Behörden.
+          </p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+            {fairnessSignale.map(sig => (
+              <div
+                key={sig.id}
+                data-testid={`uebersicht-fairness-${sig.id}`}
+                className={`notice-box ${sig.prioritaet === 'RELEVANT' ? 'notice-box-warn' : sig.prioritaet === 'HINWEIS' ? 'notice-box-info' : 'notice-box-neutral'}`}
+              >
+                <Icon name="info" size={16} style={{ flexShrink: 0, marginTop: '2px' }} />
+                <div>
+                  <strong style={{ display: 'block', marginBottom: '0.25rem' }}>{sig.titel}</strong>
+                  <span style={{ fontSize: '0.875rem' }}>{sig.erklaerung}</span>
+                  {sig.naechsterSchritt && (
+                    <div style={{ marginTop: '0.5rem', fontWeight: 600, fontSize: '0.875rem' }}>
+                      → {sig.naechsterSchritt}
+                    </div>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+          <Link
+            href="/gruendung/hinweise"
+            data-testid="uebersicht-fairness-hinweise-link"
+            style={{ display: 'inline-flex', alignItems: 'center', gap: '0.375rem', marginTop: '0.875rem', fontSize: '0.875rem', color: 'var(--color-primary)' }}
+          >
+            Alle Details ansehen <Icon name="arrow-right" size={14} />
+          </Link>
+        </div>
+      )}
 
       {/* ─── Demo-Hinweis ────────────────────────────────────────── */}
       <div className="notice-box notice-box-info" style={{ fontSize: '0.8rem' }}>

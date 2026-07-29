@@ -1,6 +1,6 @@
 # BUILD_STATE.md – Aktueller Projektstand
 
-Zuletzt aktualisiert: nach Supervisor-Merge 2026-07-29 (AV Q-086 Fristen-Countdown, UG Q-087 Hinweise-Tab, Kita Q-088 Meldeeingang Lagebild)
+Zuletzt aktualisiert: nach Supervisor-Merge 2026-07-29 (AV Q-089 Termine-Badge, UG Q-090 Fairness-Kurzblock, Kita Q-091 Meldebeitrag Planungsraum)
 
 Dieser Stand beschreibt, was tatsächlich existiert und funktioniert.
 Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
@@ -27,15 +27,15 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | `/fall` | Fallübersicht, Status, Fairness-Summary, Fristen-Countdown offener Unterlagen | US-AV-001, US-AV-002 | ✓ |
 | `/fall/dokumente` | Dokumentenanforderungen + Frist-Resttage | US-AV-003 | ✓ |
 | `/fall/rueckfragen` | Rückfragen mit Fairness-Hinweis | US-AV-004 | ✓ |
-| `/fall/termine` | Termine | US-AV-005 | ✓ |
+| `/fall/termine` | Termine; Nav-Badge nur unbestätigt/bald fällig | US-AV-005 | ✓ |
 | `/fall/bescheide` | Bescheide mit Fairness-Hinweisen | US-AV-006 | ✓ |
 | `/fall/verlauf` | Timeline mit Fairness-Hinweis | US-AV-007 | ✓ |
 | `/fall/hinweise` | Vollständige Fairness-Hinweisseite | US-AV-008 | ✓ |
 | `/stories` | Story Coverage Dashboard | – | ✓ |
 | `/feedback` | Feedback → GitHub Issues | – | ✓ |
-| `/gruendung` … | Unternehmensgründung (Übersicht, Dokumente, Behörden, Hinweise, …) | US-UG-001–006 | ✓ |
+| `/gruendung` … | Unternehmensgründung (Übersicht mit Fairness-Kurzblock, Dokumente, Behörden, Hinweise, …) | US-UG-001–006 | ✓ |
 | `/kita` | Öffentlicher Transparenzbericht + Planungsraum-Filter | US-KJ-009, US-KJ-010 | ✓ |
-| `/kita/lagebild` | Jugendamt-Steuerungsansicht + Meldeeingang Monatsmeldungen | US-KJ-005, US-KJ-006 | ✓ |
+| `/kita/lagebild` | Jugendamt-Steuerungsansicht + Meldeeingang + Meldebeitrag je Planungsraum | US-KJ-005, US-KJ-006 | ✓ |
 | `/kita/bedarfsplanung` | Bedarfsplanungsentwurf (§ 80 SGB VIII) | US-KJ-007 | ✓ |
 | `/kita/vorlage` | Politische Gremienvorlage + Freigabe | US-KJ-008 | ✓ |
 | `/kita/einrichtung` | Belegungsstand Einrichtung (aggregiert) | US-KJ-002 | ✓ |
@@ -59,6 +59,7 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | Gründung-State-Kontext | `demo/context/GruendungStateContext.tsx` | ✓ Rückfrage/Upload/Reset + Verlauf; Fairness live |
 | DemoSessionBar | `demo/components/DemoSessionBar.tsx` | ✓ Leiste „Demo zurücksetzen“ nach Interaktion |
 | Kita Meldeeingang | `demo/components/kita/KitaMeldeeingangPanel.tsx` + `mockKitaMeldeeingang.ts` | ✓ freigegebene Monatsmeldungen im Lagebild, Session von `/kita/meldung` |
+| Kita Meldebeitrag Planungsraum | `demo/components/kita/KitaPlanungsraumMeldebeitrag.tsx` | ✓ Beitrag freigegebener Meldungen auf Planungsraum-Karten; Südost/Sonnenwinkel nach Session-Freigabe hervorgehoben |
 
 ---
 
@@ -114,6 +115,9 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 **Q-086 erledigt:** AV Fristen-Countdown offener Unterlagen auf Übersicht und Dokumente (`fristDatum` + `berechneFristTage`).
 **Q-087 erledigt:** UG Tab „Hinweise“ in Navigation; Übersicht-Behördenzeile mit Link zur offenen Rückfrage.
 **Q-088 erledigt:** Kita Lagebild Meldeeingang freigegebener Monatsmeldungen inkl. Session-Link von Meldungsfreigabe.
+**Q-089 erledigt:** AV Tab-Badge „Termine“ nur bei unbestätigt / bald fällig (`terminHatHandlungsbedarf`).
+**Q-090 erledigt:** UG Übersicht Fairness-Kurzblock mit Link zu `/gruendung/hinweise`.
+**Q-091 erledigt:** Kita Planungsraum-Karten Meldebeitrag; Südost/Sonnenwinkel nach Freigabe hervorgehoben.
 
 ---
 
@@ -168,6 +172,9 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | ~~AV Dokument-Fristen ohne Countdown~~ | ~~Frist nur als Datumstext~~ | Q-086 ✓ |
 | ~~UG Hinweise nicht in Navigation~~ | ~~Fairness-Seite schwer erreichbar~~ | Q-087 ✓ |
 | ~~Lagebild ohne Meldeeingang~~ | ~~Datenlücken der Monatsmeldung unsichtbar~~ | Q-088 ✓ |
+| ~~Termine-Badge immer sichtbar~~ | ~~Kein Handlungsfokus in Navigation~~ | Q-089 ✓ |
+| ~~UG-Übersicht ohne Fairness-Kurzblock~~ | ~~Verfahrenslage nur über Hinweise-Tab~~ | Q-090 ✓ |
+| ~~Planungsraum ohne Meldebeitrag-Hervorhebung~~ | ~~Freigabe-Effekt im Lagebild unsichtbar~~ | Q-091 ✓ |
 | DSFA für Kita-Domäne noch ausstehend | Konzeptlücke — extern abhängig | — |
 
 ---
