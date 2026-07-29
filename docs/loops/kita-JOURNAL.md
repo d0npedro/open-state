@@ -2,6 +2,32 @@
 
 Branch: `loop/kita` · Worktree: `D:\Projects\open-state-loop-kita`
 
+## Iteration 2026-07-29 – US-KJ-010 Zeitreihe Regionenfilter (AK 2)
+
+### Was
+Öffentlicher Transparenzbericht: Zeitreihe nach Planungsraum filterbar (`KitaZeitreiheTabelle`, US-KJ-010 AK 2). Chips Gesamtkommune + fünf Planungsräume; Raumreihen als Demo-Verteilung der kommunalen Monatsreihe nach Strukturanteilen. Peak/Delta und Meldebasis raumbezogen (Session-sensitiv). Keine Interpolation, keine Trendbewertung, keine Kind- oder Personennamen.
+
+### Dateien
+- `demo/types/kita.ts` (`zeitreihePlanungsraeume` am Lagebild)
+- `demo/data/mockKitaLagebild.ts` (`buildZeitreihePlanungsraeume`)
+- `demo/components/kita/KitaZeitreiheTabelle.tsx` (Filter-UI, raumbezogene Meldebasis)
+- `demo/app/kita/page.tsx` (Props + Datenlage-Hinweis)
+- `docs/loops/kita-JOURNAL.md` (dieses Journal)
+
+### Story
+US-KJ-010 – Zeitreihen und Regionenvergleich (AK 2: Regionenfilter)
+
+### Build
+`npm run lint` + `npm run build` im `demo/`-Verzeichnis (siehe Commit dieses Laufs)
+
+### Nicht angefasst (Supervisor / verboten)
+Queue, BUILD_STATE, storyRegistry, andere Domänen, package.json, CI, push
+
+### Nächster sinnvoller Schritt (Hinweis Supervisor)
+CSV-Export der gefilterten Zeitreihe (US-KJ-010 AK 4), oder Zeitreihe optional in den Regionenvergleich einbinden.
+
+---
+
 ## Iteration 2026-07-29 – US-KJ-010 Regionenvergleich Zwei-Räume (AK 3)
 
 ### Was
