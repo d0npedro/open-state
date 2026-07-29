@@ -8,6 +8,33 @@ Erlaubte Pfade nur: `demo/app/gruendung/**`, `demo/context/GruendungStateContext
 
 ---
 
+## 2026-07-29 – Iteration 34: Fairness-CTA-Ziel-Routing in gruendung-rules
+
+### Was
+`fairnessSignalZiel` lebt in `gruendung-rules.ts` als gemeinsame Quelle für
+href, CTA-Label, Hilfstext, testKey und ariaLabel (RQ, Unterlagen, BG,
+Steuernummer, Betriebsdatum, parallele Behörden). Übersicht nutzt den Export
+statt lokaler Duplikate; Hinweise rendert CTAs über denselben Helper
+(E2E-testids unverändert gemappt). UI-only: Prioritäts-Rahmen und
+Unterlagen-Mehrfach-Hinweis.
+
+### Dateien
+- `demo/lib/fairness/gruendung-rules.ts` – `FairnessSignalZiel`, `fairnessSignalZiel`
+- `demo/app/gruendung/page.tsx` – Import statt lokaler Routing-Funktion
+- `demo/app/gruendung/hinweise/page.tsx` – gemeinsames CTA-Rendering
+- `docs/loops/ug-JOURNAL.md` – dieses Journal
+
+### Build
+`npm run lint` + `npm run build` im Ordner `demo/` grün.
+`npm run test:e2e:ug` Exit 0 (112 passed).
+
+### Nächster sinnvoller UG-Schritt (Vorschlag)
+- Primär-CTA „Nächster Schritt“ weiter an Fairness-Priorität koppeln (optional)
+- Verlauf: Tiefenlink von Fairness-CTA zu passendem Ereignis (optional)
+- `naechsterSchrittZiel` / `aufgabeZiel` ggf. ebenfalls in gruendung-rules (optional)
+
+---
+
 ## 2026-07-29 – Iteration 33: Fairness-CTA-Hilfstexte in gruendung-rules
 
 ### Was
