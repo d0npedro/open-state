@@ -2,6 +2,55 @@
 
 Branch: `loop/kita` · Worktree: `D:\Projects\open-state-loop-kita`
 
+## Iteration 2026-07-29 – US-KJ-003 Monatsbericht ↔ Lagebild-Vorschau (Rücklink)
+
+### Was
+Monatsbericht-Seite (Modus VORSCHAU / laufender Monat) verlinkt zurück zum Steuerungslagebild: Hinweis „Im Lagebild als Vorschau sichtbar“, Aktionsbutton und Footer-Link auf `/kita/lagebild#kita-monatsbericht-vorschau`. Anker-IDs am Meldeeingang und an der Monatsbericht-Vorschau-Karte. Methodische Trennung Meldeeingang vs. Vorschau bleibt. Nur Aggregate, keine Kind- oder Personennamen.
+
+### Dateien
+- `demo/app/kita/monatsbericht/page.tsx` (Vorschau-Hinweis, Button, Footer-Rücklink)
+- `demo/components/kita/KitaMeldeeingangMonatsberichtVorschau.tsx` (`id="kita-monatsbericht-vorschau"`)
+- `demo/components/kita/KitaMeldeeingangPanel.tsx` (`id="meldeeingang"`)
+- `docs/loops/kita-JOURNAL.md` (dieses Journal)
+
+### Story
+US-KJ-003 / US-KJ-005 – Monatsbericht-Vorschau im Lagebild-Kontext (Rückrichtung)
+
+### Build
+`npm run lint` + `npm run build` im `demo/`-Verzeichnis (siehe Commit dieses Laufs)
+
+### Nicht angefasst (Supervisor / verboten)
+Queue, BUILD_STATE, storyRegistry, andere Domänen, package.json, CI, push
+
+### Nächster sinnvoller Schritt (Hinweis Supervisor)
+Planungsraum-Explorer Residual-Hinweis spiegeln (Bedarfsplanung ↔ Meldelücke), oder Vorlage/Transparenzbericht: Meldebasis-Kurzhinweis.
+
+---
+
+## Iteration 2026-07-29 – US-KJ-007 Residual ↔ Meldelücke (Hinweis-only)
+
+### Was
+Bedarfsplanungsentwurf knüpft residuale Planungslücken methodisch an fehlende freigegebene Einrichtungsmeldungen (Fokus Südost / Kita Sonnenwinkel). Hinweis-only: Residualzahl unverändert, keine Interpolation. Tabellenzelle „Planungslücke“ mit Kompakt-Hinweis bei Meldelücke; Summenhinweis-Box unter Kennzahlen; Kurztext an Residual-Summe. Nach Session-Freigabe in `/kita/meldung` entfallen die Hinweise. Nur Aggregate, keine Kind- oder Personennamen.
+
+### Dateien
+- `demo/components/kita/KitaBedarfsplanungDatenbasis.tsx` (`ResidualMeldeHinweis`, `ResidualMeldeSummenHinweis`)
+- `demo/app/kita/bedarfsplanung/page.tsx` (Einbindung Residual↔Melde-Hinweise)
+- `docs/loops/kita-JOURNAL.md` (dieses Journal)
+
+### Story
+US-KJ-007 – Bedarfsplanungsentwurf (Residual methodisch an Meldelücke)
+
+### Build
+`npm run lint` + `npm run build` im `demo/`-Verzeichnis (siehe Commit dieses Laufs)
+
+### Nicht angefasst (Supervisor / verboten)
+Queue, BUILD_STATE, storyRegistry, andere Domänen, package.json, CI, push
+
+### Nächster sinnvoller Schritt (Hinweis Supervisor)
+Monatsbericht-Seite Rücklink „im Lagebild als Vorschau sichtbar“, oder Planungsraum-Explorer Residual-Hinweis spiegeln.
+
+---
+
 ## Iteration 2026-07-29 – US-KJ-003/005 Meldeeingang ↔ Monatsbericht-Vorschau
 
 ### Was

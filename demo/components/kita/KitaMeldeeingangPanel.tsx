@@ -128,7 +128,11 @@ export function KitaMeldeeingangPanel() {
       : 'var(--color-warning)';
 
   return (
-    <section aria-labelledby="meldeeingang-titel" style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+    <section
+      id="meldeeingang"
+      aria-labelledby="meldeeingang-titel"
+      style={{ display: 'flex', flexDirection: 'column', gap: '1rem', scrollMarginTop: '1.25rem' }}
+    >
       <div>
         <h2 id="meldeeingang-titel" style={{ marginBottom: '0.35rem' }}>
           Meldeeingang &amp; Datenbasis
