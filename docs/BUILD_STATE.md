@@ -1,6 +1,6 @@
 # BUILD_STATE.md – Aktueller Projektstand
 
-Zuletzt aktualisiert: nach Supervisor-Merge 2026-07-29 (AV Q-092 Termin-Bestätigung session-lokal; Docs-Sync Q-100–Q-103)
+Zuletzt aktualisiert: nach Supervisor-Merge 2026-07-29 (UG Q-100/Q-101, Kita Q-102/Q-103, AV Q-092; E2E 206 chromium grün; Queue Q-104–Q-109 OFFEN)
 
 Dieser Stand beschreibt, was tatsächlich existiert und funktioniert.
 Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
@@ -15,7 +15,7 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | Build-Status | ✓ Erfolgreich (27 statische Seiten) |
 | Deployment | Vercel, aus `demo/`-Verzeichnis |
 | Lokaler Start | `cd demo && npm install && npm run dev` |
-| Letzte Build-Prüfung | nach Merge loop/av (Q-092) — lint+build grün |
+| Letzte Build-Prüfung | lint+build grün; `test:e2e:ci` 206 passed (chromium, workers=1) |
 
 ---
 
@@ -61,7 +61,10 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | Kita Meldeeingang | `demo/components/kita/KitaMeldeeingangPanel.tsx` + `mockKitaMeldeeingang.ts` | ✓ freigegebene Monatsmeldungen im Lagebild, Session von `/kita/meldung` |
 | Kita Meldeeingang ↔ Monatsbericht-Vorschau | `demo/components/kita/KitaMeldeeingangMonatsberichtVorschau.tsx` | ✓ Kopplung Abschluss-Meldeeingang und laufende Monatsvorschau (Sonnenwinkel) |
 | Kita Meldebeitrag Planungsraum | `demo/components/kita/KitaPlanungsraumMeldebeitrag.tsx` | ✓ Beitrag freigegebener Meldungen auf Planungsraum-Karten; Südost/Sonnenwinkel nach Session-Freigabe hervorgehoben |
-| Kita Bedarfsplanung Meldebasis | `demo/components/kita/KitaBedarfsplanungDatenbasis.tsx` | ✓ Datenlücke je Planungsraum aus Meldeeingang; schließt sich nach Session-Freigabe |
+| Kita Bedarfsplanung Meldebasis | `demo/components/kita/KitaBedarfsplanungDatenbasis.tsx` | ✓ Datenlücke je Planungsraum aus Meldeeingang; Residual↔Meldelücke Hinweis-only; schließt sich nach Session-Freigabe |
+| AV Termin-Bestätigung | `DemoStateContext.confirmTermin` + `/fall/termine` | ✓ session-lokal AUSSTEHEND→BESTAETIGT; Tab-Badge live |
+| UG Verlauf Typ-Filter | `/gruendung/verlauf` | ✓ Stelle + Ereignistyp (Vorgang/Dokumente/Rückfragen/Bescheide), UND-Kombination |
+| UG Hinweise Steuernummer-CTA | `/gruendung/hinweise` | ✓ CTA „Zum Finanzamt“ → `#beh-BEH-02` solange VS-05 ausstehend |
 
 ---
 
