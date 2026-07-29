@@ -62,9 +62,24 @@ test.describe('UG – Übersicht', () => {
     await expect(page.getByText('IHK Musterregion').first()).toBeVisible();
   });
 
-  test('5 Tabs in der Navigation vorhanden', async ({ page }) => {
+  test('6 Tabs in der Navigation vorhanden', async ({ page }) => {
     const tabs = page.locator('.tab-nav-item');
-    await expect(tabs).toHaveCount(5);
+    await expect(tabs).toHaveCount(6);
+    await expect(page.locator('.tab-nav-item').filter({ hasText: 'Hinweise' })).toBeVisible();
+  });
+
+  test('Behörden-Zeile mit offener Rückfrage verlinkt zur Frage', async ({ page }) => {
+    const link = page.getByTestId('uebersicht-rq-link-BEH-02');
+    await expect(link).toBeVisible();
+    await expect(link).toContainText(/Offene Frage beantworten/i);
+    await expect(link).toHaveAttribute('href', /\/gruendung\/rueckfragen#rq-/);
+    await link.click();
+    await expect(page).toHaveURL(/\/gruendung\/rueckfragen/);
+  });
+
+  test('Behörden ohne offene Rückfrage haben keinen Frage-Link', async ({ page }) => {
+    await expect(page.getByTestId('uebersicht-rq-link-BEH-01')).toHaveCount(0);
+    await expect(page.getByTestId('uebersicht-behoerde-BEH-01')).toBeVisible();
   });
 
   test('Tab "Übersicht" ist aktiv hervorgehoben', async ({ page }) => {
@@ -105,6 +120,14 @@ test.describe('UG – Tab-Navigation', () => {
     await page.goto('/gruendung');
     await page.locator('.tab-nav-item').filter({ hasText: 'Fragen' }).click();
     await expect(page).toHaveURL('/gruendung/rueckfragen');
+  });
+
+  test('Navigation zu Hinweise', async ({ page }) => {
+    await page.goto('/gruendung');
+    await page.locator('.tab-nav-item').filter({ hasText: 'Hinweise' }).click();
+    await expect(page).toHaveURL('/gruendung/hinweise');
+    await expect(page.locator('.tab-nav-item.active')).toContainText('Hinweise');
+    await expect(page.getByRole('heading', { name: 'Hinweise zur Verfahrenslage' })).toBeVisible();
   });
 
   test('Navigation zu Verlauf', async ({ page }) => {
@@ -324,6 +347,35 @@ test.describe('UG – Rückfragen (Interaktion)', () => {
     await page.locator('.tab-nav-item').filter({ hasText: 'Übersicht' }).click();
     await expect(page.getByText('Ihre Antwort wird erwartet')).not.toBeVisible();
     await expect(page.getByText('Wird bearbeitet').first()).toBeVisible();
+  });
+
+});
+
+// ─── Hinweise ─────────────────────────────────────────────────────────────────
+
+test.describe('UG – Hinweise zur Verfahrenslage', () => {
+
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/gruendung/hinweise');
+  });
+
+  test('Seitenüberschrift und Fairness-Erklärung sichtbar', async ({ page }) => {
+    await expect(page.getByRole('heading', { name: 'Hinweise zur Verfahrenslage' })).toBeVisible();
+    await expect(page.getByText(/ersetzen keine Entscheidung/i)).toBeVisible();
+  });
+
+  test('Aktiver Tab „Hinweise“ ist hervorgehoben', async ({ page }) => {
+    await expect(page.locator('.tab-nav-item.active')).toContainText('Hinweise');
+  });
+
+  test('Mindestens ein Relevanter Hinweis bei offener Rückfrage', async ({ page }) => {
+    await expect(page.getByRole('heading', { name: /Relevant/i })).toBeVisible();
+    await expect(page.getByText(/Rückfrage offen/i).first()).toBeVisible();
+  });
+
+  test('Kein interner Signal-Code sichtbar', async ({ page }) => {
+    await expect(page.getByText('UG_RUECKFRAGE_OFFEN_FRIST_RELEVANT')).not.toBeVisible();
+    await expect(page.getByText('US-UG-007')).not.toBeVisible();
   });
 
 });
