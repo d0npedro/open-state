@@ -2,6 +2,30 @@
 
 Branch: `loop/kita` · Worktree: `D:\Projects\open-state-loop-kita`
 
+## Iteration 2026-07-29 – US-KJ-010 Regionenvergleich Druck Filterstand A/B + Kennzahl
+
+### Was
+Regionenvergleich (`KitaRegionenVergleich`, US-KJ-010 AK 3/4 auf `/kita`): Druckansicht an Zeitreihe/Explorer-Muster. Auswahl A/B, Kennzahl-Chips und CSV-Buttons (Stichtag/Verlauf) `no-print`; print-only Filterstand mit Region A/B, Meldebasis-Session je Raum (Stichprobe/Lücken), Verlaufskennzahl + Monatsanzahl, Stichprobenmonat; ergänzender print-only Block am Verlauf. Methodik/Badge/Footer auf `/kita`. Keine Interpolation, keine Trendbewertung. Nur Aggregate, keine Kind- oder Personennamen. Merge `origin/main` (ci-watcher) vor dem Feature.
+
+### Dateien
+- `demo/components/kita/KitaRegionenVergleich.tsx` (print-only Filterstand A/B/Kennzahl/Meldebasis, no-print Auswahl/CSV/Chips)
+- `demo/app/kita/page.tsx` (Badge, Datenlage, Footer/print-Footer)
+- `docs/loops/kita-JOURNAL.md` (dieses Journal)
+
+### Story
+US-KJ-010 / US-KJ-009 – Regionenvergleich Druck-Meta Filterstand A/B und Verlaufskennzahl
+
+### Build
+`npm run lint` + `npm run build` im `demo/`-Verzeichnis (siehe Commit dieses Laufs)
+
+### Nicht angefasst (Supervisor / verboten)
+Queue, BUILD_STATE, storyRegistry, DECISION_LOG, andere Domänen, package.json, CI, push
+
+### Nächster sinnvoller Schritt (Hinweis Supervisor)
+Explorer/Meldebasis-Druckhinweis weiter schärfen, oder Bedarfsplanung/Vorlage Feinschliff falls Lücken, oder Lagebild-Regionenvergleich falls fachlich gewünscht.
+
+---
+
 ## Iteration 2026-07-29 – US-KJ-005/009/010 Zeitreihe Druck Filterstand/Meta
 
 ### Was
