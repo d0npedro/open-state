@@ -173,6 +173,8 @@ Story-Dokumentation ist kein Pflicht-Vorläufer für Mock-Daten und Typen.
 | Q-136 | Kita Vorlage: Druck freigabeunabhängig + Meldelücke-Filter-Hinweis im Ausdruck (US-KJ-008) | DEMO | S | Q-114 | DONE `1a22863` |
 | Q-137 | Kita Bedarfsplanung: Steuerungskette Hub-Karten Lagebild/Meldung/Vorlage (US-KJ-007) | DEMO | S | Q-135 | DONE `fc01b90` |
 | Q-138 | UG Übersicht: Betriebsdatum-Fairness-CTA Hilfstext session-sensitiv nach RQ-Antwort | DEMO | S | Q-127 | DONE `5005038` |
+| Q-139 | UG Hinweise: Betriebsdatum-CTA Hilfstext session-sensitiv nach RQ-Antwort (Spiegel Übersicht) | DEMO | S | Q-138 | DONE `3f6e78c` |
+| Q-140 | Kita Bedarfsplanung: Druckansicht freigabeunabhängig + Meldebasis-Session-Hinweis (US-KJ-007) | DEMO | S | Q-137 | DONE `20f5501` |
 
 ---
 
@@ -316,3 +318,5 @@ Diese Punkte wurden in früheren Iterationen abgeschlossen und sind produktionsr
 | Q-136 Kita Vorlage Druck freigabeunabhängig | Druckleiste + Meldelücke-Filter print-only | `1a22863` → main |
 | Q-137 Kita Bedarfsplanung Steuerungskette | Hub-Karten Lagebild/Meldung/Vorlage | `fc01b90` → main |
 | Q-138 UG Übersicht Betriebsdatum-CTA-Hilfstext | Session-Text nach RQ-Antwort | `5005038` → main |
+| Q-139 UG Hinweise Betriebsdatum-CTA-Hilfstext | Session-Text nach RQ (Spiegel) | `3f6e78c` → main |
+| Q-140 Kita Bedarfsplanung Druck Meldebasis | Druck freigabeunabhängig + Meldebasis | `20f5501` → main |
