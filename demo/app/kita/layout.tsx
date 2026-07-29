@@ -14,6 +14,7 @@ const nav = [
   { href: '/kita/vorlage',        label: 'Gremienvorlage',     hint: 'Demo: Freigabe' },
   { href: '/kita/einrichtung',    label: 'Einrichtung',        hint: 'Demo: Belegung' },
   { href: '/kita/monatsbericht',  label: 'Monatsbericht',      hint: 'Demo: Leitung' },
+  { href: '/kita/meldung',        label: 'Meldung freigeben',  hint: 'Demo: US-KJ-004' },
 ];
 
 export default function KitaLayout({ children }: { children: React.ReactNode }) {

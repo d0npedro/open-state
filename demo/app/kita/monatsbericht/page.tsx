@@ -454,9 +454,11 @@ export default function KitaMonatsberichtPage() {
           /kita/einrichtung
         </Link>
         {' · '}
-        Übermittlung an das Jugendamt erfordert aktive Freigabe (
-        <span style={{ fontStyle: 'italic' }}>US-KJ-004, Demo folgt</span>
-        ).
+        Übermittlung an das Jugendamt erfordert aktive Freigabe:{' '}
+        <Link href="/kita/meldung" style={{ color: 'var(--color-primary)' }}>
+          Meldung freigeben (US-KJ-004)
+        </Link>
+        .
       </div>
 
       <style
