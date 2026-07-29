@@ -150,6 +150,65 @@ test.describe('US-AV-007 – Antworttext in Timeline lesbar', () => {
 });
 
 /**
+ * US-AV-007 / US-AV-004 / Q-192 – Session-Antwort im Verlauf + Tiefenlink von Rückfragen
+ * Parität UG Q-185: Badge „Ihre Antwort“, data-session-antwort, #ere-E-DEMO-RQ-…
+ */
+test.describe('US-AV-007/004 – Session-Antwort Verlauf-Tiefenlink (Q-192)', () => {
+
+  test('Nach Beantworten: Verlauf-Tiefenlink zur Session-Antwort', async ({ page }) => {
+    // Quittung verlinkt auf Session-Ereignis; Hash-Hervorhebung + Badge im Verlauf
+    // Kein page.goto nach State (DEC-012) – Link navigiert innerhalb des Layouts
+    await page.goto('/fall/rueckfragen');
+    await page.getByRole('button', { name: /Jetzt beantworten|Rückfrage beantworten/i }).click();
+    await expect(page.getByTestId('rq-bestaetigung')).toBeVisible();
+    await page.getByTestId('rq-antwort-absenden').click();
+
+    await expect(page.getByTestId('rq-antwort-quittung-RQ-001')).toBeVisible();
+    await expect(page.getByText(/die Sachbearbeitung wurde informiert/i)).toBeVisible();
+
+    const verlaufLink = page.getByTestId('rq-verlauf-link-RQ-001');
+    await expect(verlaufLink).toBeVisible();
+    await expect(verlaufLink).toHaveAttribute(
+      'href',
+      '/fall/verlauf#ere-E-DEMO-RQ-RQ-001'
+    );
+    await expect(verlaufLink).toContainText(/Im Verlauf ansehen/i);
+
+    await verlaufLink.click();
+    await expect(page).toHaveURL(/\/fall\/verlauf#ere-E-DEMO-RQ-RQ-001/);
+
+    const card = page.getByTestId('verlauf-ereignis-E-DEMO-RQ-RQ-001');
+    await expect(card).toBeVisible();
+    await expect(card).toHaveAttribute('aria-current', 'location');
+    await expect(card).toHaveAttribute('data-session-antwort', 'true');
+    await expect(card).toContainText(/Rückfrage beantwortet/i);
+    await expect(page.getByTestId('verlauf-session-antwort-badge-E-DEMO-RQ-RQ-001')).toBeVisible();
+    await expect(page.getByTestId('verlauf-session-antwort-badge-E-DEMO-RQ-RQ-001')).toContainText(
+      /Ihre Antwort/i
+    );
+  });
+
+  test('Session-Antwort bleibt im Verlauf nach Tab-Nav (kein page.goto)', async ({ page }) => {
+    const { goFallTab } = await import('./helpers/sessionNav');
+    await page.goto('/fall/rueckfragen');
+    await page.getByRole('button', { name: /Jetzt beantworten|Rückfrage beantworten/i }).click();
+    await expect(page.getByTestId('rq-bestaetigung')).toBeVisible();
+    await page.getByTestId('rq-antwort-absenden').click();
+    await expect(page.getByTestId('rq-antwort-quittung-RQ-001')).toBeVisible();
+
+    await goFallTab(page, 'Verlauf', /\/fall\/verlauf/);
+    const card = page.getByTestId('verlauf-ereignis-E-DEMO-RQ-RQ-001');
+    await expect(card).toBeVisible();
+    await expect(card).toHaveAttribute('data-session-antwort', 'true');
+    await expect(page.getByTestId('verlauf-session-antwort-badge-E-DEMO-RQ-RQ-001')).toContainText(
+      /Ihre Antwort/i
+    );
+    await expect(page.getByTestId('timeline-antwort-block')).toBeVisible();
+  });
+
+});
+
+/**
  * US-AV-007 / US-AV-008 / Q-191 – Fairness-Tiefenlink zum Verlauf-Ereignis
  * Parität UG Q-181: Sekundär-CTA „Im Verlauf ansehen“ → #ere-…
  */

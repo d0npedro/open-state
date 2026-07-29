@@ -153,11 +153,12 @@ export default function RueckfragenPage() {
               </div>
             </div>
 
-            {/* Frist + Button / Bestätigung / Quittung */}
+            {/* Frist + Button / Bestätigung / Quittung + Verlauf-Tiefenlink (Q-192, Parität UG Q-185) */}
             {rq.beantwortet ? (
               <div
                 role="status"
                 aria-live="polite"
+                data-testid={`rq-antwort-quittung-${rq.id}`}
                 style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}
               >
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem', color: 'var(--color-success)', fontWeight: 700, fontSize: '0.95rem', flexWrap: 'wrap' }}>
@@ -187,6 +188,23 @@ export default function RueckfragenPage() {
                     </p>
                   </div>
                 )}
+                {/* Session-Antwort im Verlauf nachvollziehbar (Hash-Hervorhebung, E-DEMO-RQ-{id}) */}
+                <Link
+                  href={`/fall/verlauf#ere-E-DEMO-RQ-${rq.id}`}
+                  className="btn btn-secondary btn-inline"
+                  style={{
+                    alignSelf: 'flex-start',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '0.4rem',
+                    minHeight: 44,
+                  }}
+                  data-testid={`rq-verlauf-link-${rq.id}`}
+                  aria-label="Ihre Antwort auf die Rückfrage im Verlauf ansehen"
+                >
+                  <Icon name="clock" size={16} />
+                  Im Verlauf ansehen
+                </Link>
               </div>
             ) : (
               <div style={{

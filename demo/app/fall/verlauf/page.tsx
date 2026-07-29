@@ -169,6 +169,11 @@ export default function VerlaufPage() {
           const dotColor = stelleColor[e.handelndeStelle] ?? 'var(--color-border)';
           const iconName = ereignisIcon[e.typ] ?? 'info';
           const isHashTarget = hashEreignisId === e.id;
+          /** Session-Demo-Ereignisse (Antwort, Upload) – optisch von Mock-Historie abheben (Q-192, Parität UG Q-185). */
+          const isSessionEvent = e.id.startsWith('E-DEMO-');
+          const isSessionAntwort = e.typ === 'RUECKFRAGE_BEANTWORTET' && isSessionEvent;
+          const isSessionUpload = e.typ === 'DOKUMENT_EINGEREICHT' && e.id.startsWith('E-DEMO-DOK-');
+          const isSessionBuergerAktion = isSessionAntwort || isSessionUpload;
 
           return (
             <div
@@ -192,11 +197,14 @@ export default function VerlaufPage() {
                 justifyContent: 'center',
               }} />
 
-              {/* Karte – Anker #ere-{id} für Fairness-Tiefenlink (Q-191) */}
+              {/* Karte – Anker #ere-{id} für Fairness-Tiefenlink (Q-191) + Session-Hervorhebung (Q-192) */}
               <div
                 id={`ere-${e.id}`}
                 data-testid={`verlauf-ereignis-${e.id}`}
                 className="card"
+                data-session-event={isSessionEvent ? 'true' : undefined}
+                data-session-antwort={isSessionAntwort ? 'true' : undefined}
+                data-session-upload={isSessionUpload ? 'true' : undefined}
                 style={{
                   padding: '1rem 1.125rem',
                   scrollMarginTop: '5rem',
@@ -206,7 +214,11 @@ export default function VerlaufPage() {
                         outlineOffset: '2px',
                         boxShadow: '0 0 0 4px color-mix(in srgb, var(--color-primary) 18%, transparent)',
                       }
-                    : {}),
+                    : isSessionBuergerAktion
+                      ? {
+                          borderLeft: '4px solid var(--color-success)',
+                        }
+                      : {}),
                 }}
                 aria-current={isHashTarget ? 'location' : undefined}
               >
@@ -222,6 +234,24 @@ export default function VerlaufPage() {
                       <Icon name={iconName as IconName} size={12} />
                       {ereignisLabels[e.typ]}
                     </span>
+                    {isSessionAntwort && (
+                      <span
+                        className="status-chip status-chip-success"
+                        style={{ fontSize: '0.7rem', padding: '0.1rem 0.45rem' }}
+                        data-testid={`verlauf-session-antwort-badge-${e.id}`}
+                      >
+                        Ihre Antwort
+                      </span>
+                    )}
+                    {isSessionUpload && (
+                      <span
+                        className="status-chip status-chip-success"
+                        style={{ fontSize: '0.7rem', padding: '0.1rem 0.45rem' }}
+                        data-testid={`verlauf-session-upload-badge-${e.id}`}
+                      >
+                        Ihr Upload
+                      </span>
+                    )}
                     {/* Wer hat gehandelt */}
                     <span style={{ fontSize: '0.8rem', color: dotColor, fontWeight: 600 }}>
                       {stelleLabel[e.handelndeStelle]}
