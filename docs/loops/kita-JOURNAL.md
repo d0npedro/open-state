@@ -2,6 +2,30 @@
 
 Branch: `loop/kita` · Worktree: `D:\Projects\open-state-loop-kita`
 
+## Iteration 2026-07-29 – US-KJ-005/007/008 Steuerungskette Rücklink-Hub Bedarfsplanung
+
+### Was
+Steuerungslagebild (`/kita/lagebild`, US-KJ-005/006) und politische Vorlage (`/kita/vorlage`, US-KJ-008): Steuerungskette Jugendamt als Hub-Karten gespiegelt (analog Bedarfsplanung). Beide Seiten mit Karten Bedarfsplanung (US-KJ-007), jeweils Lagebild↔Vorlage und Monatsmeldung/Meldebasis (US-KJ-004); Footer mit DEC-004-Hinweis zum öffentlichen Bericht. Schließt die Rückverlinkung zur Bedarfsplanung in der JA-Steuerungskette. Nur Aggregate, keine Kind- oder Personennamen. Branch bereits auf `main` (kein Merge nötig).
+
+### Dateien
+- `demo/app/kita/lagebild/page.tsx` (Steuerungskette Hub-Karten + Footer)
+- `demo/app/kita/vorlage/page.tsx` (Steuerungskette Hub-Karten + Footer)
+- `docs/loops/kita-JOURNAL.md` (dieses Journal)
+
+### Story
+US-KJ-005 / US-KJ-007 / US-KJ-008 – Steuerungskette Lagebild ↔ Bedarfsplanung ↔ Vorlage
+
+### Build
+`npm run lint` + `npm run build` im `demo/`-Verzeichnis (siehe Commit dieses Laufs)
+
+### Nicht angefasst (Supervisor / verboten)
+Queue, BUILD_STATE, storyRegistry, DECISION_LOG, andere Domänen, package.json, CI, push
+
+### Nächster sinnvoller Schritt (Hinweis Supervisor)
+Monatsbericht-Druckansicht Meldebasis/Vorschau-Status spiegeln, oder öffentlicher Bericht Hub zur Steuerungskette.
+
+---
+
 ## Iteration 2026-07-29 – US-KJ-007 Bedarfsplanung-Druckansicht Meldebasis
 
 ### Was

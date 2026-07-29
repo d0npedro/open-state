@@ -682,13 +682,94 @@ export default function PolitischeVorlagePage() {
         </p>
       </article>
 
+      {/* Steuerungskette JA: Lagebild → Bedarfsplanung → Vorlage (+ Meldebasis) */}
+      <section aria-labelledby="prozesskette-heading" className="no-print">
+        <h2 id="prozesskette-heading" style={{ marginBottom: '0.5rem' }}>
+          Steuerungskette Jugendamt
+        </h2>
+        <p
+          style={{
+            margin: '0 0 1rem',
+            fontSize: '0.875rem',
+            color: 'var(--color-text-muted)',
+            maxWidth: '44rem',
+          }}
+        >
+          Kommune <strong>{lb.kommuneBezeichnung}</strong>, Lagebild{' '}
+          <span style={{ fontFamily: 'monospace' }}>{lb.version}</span> ({lb.stand}
+          ). Diese Gremienvorlage stützt sich auf freigegebene Aggregate des Steuerungslagebilds und
+          den Bedarfsplanungsentwurf (Planungslücken, Meldebasis). Freigabe nur aktiv durch
+          JA-Leitung — keine automatische Beschlussempfehlung. Keine Kind- oder Personennamen.
+        </p>
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+            gap: '0.75rem',
+          }}
+        >
+          {(
+            [
+              {
+                href: '/kita/lagebild',
+                story: 'US-KJ-005',
+                title: 'Steuerungslagebild',
+                text: 'Versorgungslage, Engpässe und Meldeeingang — Datenbasis dieser Vorlage.',
+                border: 'var(--color-primary)',
+              },
+              {
+                href: '/kita/bedarfsplanung',
+                story: 'US-KJ-007',
+                title: 'Bedarfsplanungsentwurf',
+                text: 'Planungslücken und Meldebasis je Planungsraum; Entwurf ohne automatische Entscheidung.',
+                border: 'var(--color-primary)',
+              },
+              {
+                href: '/kita/meldung',
+                story: 'US-KJ-004',
+                title: 'Monatsmeldung freigeben',
+                text: 'Einrichtungs-Aggregate freigeben; schließt Demo-Meldelücken (z. B. Südost / Sonnenwinkel).',
+                border: 'var(--color-warning)',
+              },
+            ] as const
+          ).map(card => (
+            <Link
+              key={card.href}
+              href={card.href}
+              className="card"
+              style={{
+                textDecoration: 'none',
+                color: 'inherit',
+                borderTop: `3px solid ${card.border}`,
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '0.35rem',
+              }}
+            >
+              <span
+                className="badge badge-primary"
+                style={{ alignSelf: 'flex-start', fontSize: '0.68rem' }}
+              >
+                {card.story}
+              </span>
+              <strong style={{ fontSize: '0.95rem', color: 'var(--color-primary)' }}>
+                {card.title}
+              </strong>
+              <span style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', lineHeight: 1.45 }}>
+                {card.text}
+              </span>
+            </Link>
+          ))}
+        </div>
+      </section>
+
       <div className="no-print" style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)' }}>
-        Verwandt:{' '}
-        <Link href="/kita/lagebild" style={{ color: 'var(--color-primary)' }}>Steuerungslagebild</Link>
-        {' · '}
-        <Link href="/kita/bedarfsplanung" style={{ color: 'var(--color-primary)' }}>Bedarfsplanung</Link>
-        {' · '}
-        <Link href="/kita" style={{ color: 'var(--color-primary)' }}>Öffentlicher Bericht</Link>
+        Steuerungskette Kommune {lb.kommuneBezeichnung}: Lagebild → Bedarfsplanung → Vorlage
+        (Planungslücken und Meldebasis). Öffentliche Aggregation ohne Einrichtungsdetail im{' '}
+        <Link href="/kita" style={{ color: 'var(--color-primary)' }}>
+          öffentlichen Bericht
+        </Link>{' '}
+        (DEC-004). Druck: freigabeunabhängig mit dokumentiertem Meldelücke-Filter.
       </div>
 
       <style
