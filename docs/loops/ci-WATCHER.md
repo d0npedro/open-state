@@ -2,8 +2,8 @@
 
 | Feld | Wert |
 |------|------|
-| last_checked | 2026-07-29T04:57:00Z |
-| last_run_id | 30423494011 |
+| last_checked | 2026-07-29T05:06:30Z |
+| last_run_id | 30423943722 |
 | last_status | success |
 | last_fix_sha | 5c373bc |
 | fix_attempts | 0 |
@@ -21,3 +21,6 @@
 - E2E `30423201871` success (SHA b819f71 supervisor merge sync docs). Build latest `30423134890` success (SHA 102e6f4 merge/kita; HEAD docs-only path-skip). Catch-up push: origin/main..main = 0. fix_attempts=0.
 - E2E `30423336090` success (SHA f59bd33 docs status). Build latest `30423134890` success (code SHA 102e6f4; docs-only path-skip). Catch-up push: origin/main..main = 0. fix_attempts=0.
 - E2E `30423494011` success (SHA 5c373bc docs status). Build latest `30423134890` success (code SHA 102e6f4; docs-only path-skip). Catch-up push: origin/main..main = 0. fix_attempts=0.
+- E2E `30423733878` + Build `30423733874` success (SHA d6f94d4 fix(ci) e2e scripts). Catch-up push: origin/main..main = 0. fix_attempts=0.
+- E2E `30423831646` + Build `30423831637` success (SHA 46b176a merge/av Q-092). Catch-up push: origin/main..main = 0. fix_attempts=0.
+- E2E `30423943722` success (SHA bb82357 supervisor docs sync). Build latest code SHA 46b176a green; docs-only path-skip likely. Catch-up push: origin/main..main = 0. fix_attempts=0.

@@ -109,6 +109,8 @@ Story-Dokumentation ist kein Pflicht-Vorläufer für Mock-Daten und Typen.
 | Q-089 | AV Tab-Badge „Termine“ nur bei unbestätigt / bald fällig | DEMO | S | Q-081 | DONE |
 | Q-095 | AV Verlauf: Antworttext als lesbarer Quittungsblock (kein 80-Zeichen-Kürzel) | DEMO | S | Q-085 | DONE |
 | Q-092 | AV Termin-Bestätigung session-lokal (Badge entfällt live) | DEMO | S | Q-089 | DONE |
+| Q-104 | AV Übersicht: Termin-Kachel zeigt Status „Bestätigt“ live nach Session-Aktion | DEMO | S | Q-092 | OFFEN |
+| Q-105 | AV Verlauf: Upload-Ereignisse mit Dokumentbezeichnung hervorheben | DEMO | S | Q-095 | OFFEN |
 
 ---
 
@@ -123,6 +125,8 @@ Story-Dokumentation ist kein Pflicht-Vorläufer für Mock-Daten und Typen.
 | Q-098 | UG Hinweise: CTA „Zu den Unterlagen“ aus HINWEIS-Unterlagen-Signal (`#dok-…`) | DEMO | S | Q-096 | DONE |
 | Q-100 | UG Hinweise: CTA Steuernummer → Finanzamt-Behördenkarte (`#beh-…`) | DEMO | S | Q-098 | DONE |
 | Q-101 | UG Verlauf: Filter nach Ereignistyp (Vorgang/Dokumente/Rückfragen/Bescheide) | DEMO | S | Q-082 | DONE |
+| Q-106 | UG Übersicht: Fairness-Kurzblock auf RELEVANT+HINWEIS begrenzen (kein INFO-Lärm) | DEMO | S | Q-090 | OFFEN |
+| Q-107 | UG Übersicht: nächster Schritt mit direktem Link zur betroffenen Stelle/Seite | DEMO | S | Q-106 | OFFEN |
 
 ---
 
@@ -137,6 +141,8 @@ Story-Dokumentation ist kein Pflicht-Vorläufer für Mock-Daten und Typen.
 | Q-099 | Kita Lagebild: Meldeeingang mit Monatsbericht-Vorschau koppeln (Sonnenwinkel) | DEMO | S | Q-097 | DONE |
 | Q-102 | Kita Monatsbericht: Rücklink Vorschau → Lagebild (`#kita-monatsbericht-vorschau`) | DEMO | S | Q-099 | DONE |
 | Q-103 | Kita Bedarfsplanung: Residual ↔ Meldelücke Hinweis-only (Südost) | DEMO | S | Q-094 | DONE |
+| Q-108 | Kita Lagebild/Planungsraum: Residual↔Meldelücke-Hinweis spiegeln (wie Bedarfsplanung) | DEMO | S | Q-103 | OFFEN |
+| Q-109 | Kita Vorlage: Meldebasis-Kurzhinweis aus Meldeeingang (methodisch, Aggregate only) | DEMO | S | Q-094 | OFFEN |
 
 ---
 
@@ -241,3 +247,8 @@ Diese Punkte wurden in früheren Iterationen abgeschlossen und sind produktionsr
 | Q-081 AV Tab-Badges | Offene Fragen/Unterlagen in Fall-Nav | `9c45c2e` → main |
 | Q-082 UG Verlauf-Filter | Filter nach handelnder Stelle | `ccba7da` → main |
 | Q-080 Kita Meldefreigabe | `/kita/meldung` US-KJ-004 | `4b3fd8c` → main |
+| Q-092 AV Termin-Bestätigung | session-lokal confirmTermin + E2E | `bc85d34` → main |
+| Q-100 UG Steuernummer-CTA | Hinweise → Finanzamt-Anker | `b58c3fb` → main |
+| Q-101 UG Verlauf Typ-Filter | Ereignistyp-Chips + UND | `fc70b85` → main |
+| Q-102 Kita Monatsbericht-Rücklink | Vorschau → Lagebild-Anker | `d22f1b7` → main |
+| Q-103 Kita Residual↔Melde | Bedarfsplanung Hinweis-only | `40ccc42` → main |
