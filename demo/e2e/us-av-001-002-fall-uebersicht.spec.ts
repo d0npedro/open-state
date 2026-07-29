@@ -134,8 +134,9 @@ test.describe('US-AV-002 – Status einsehen', () => {
   test('Tab-Badge Fragen entfällt nach Beantworten (Client-Navigation)', async ({ page }) => {
     await page.locator('.tab-nav-item').filter({ hasText: 'Fragen' }).click();
     await expect(page).toHaveURL(/\/fall\/rueckfragen/);
-    // Accessible name kommt aus aria-label „Rückfrage beantworten: …“
-    await page.getByRole('button', { name: /Rückfrage beantworten/i }).click();
+    // Accessible name: aria-label „Rückfrage beantworten: …“; sichtbarer Text „Jetzt beantworten“
+    await page.getByRole('button', { name: /Jetzt beantworten|Rückfrage beantworten/i }).click();
+    await page.getByTestId('rq-antwort-absenden').click();
     // Badge-Fragen muss live verschwinden; Unterlagen bleibt
     await expect(page.getByTestId('tab-badge-fragen')).toHaveCount(0);
     await expect(page.getByTestId('tab-badge-unterlagen')).toHaveText('2');
@@ -147,12 +148,12 @@ test.describe('US-AV-002 – Status einsehen', () => {
     const before = await page.locator('.progress-bar-fill').getAttribute('style');
     expect(before).toMatch(/width:\s*5[0-9]%/);
 
-    // Demo: Rückfrage beantworten → Status UNTERLAGEN_FEHLEN
+    // Demo: Rückfrage beantworten (Bestätigung) → Status UNTERLAGEN_FEHLEN
     // Client-Navigation (Tab), damit DemoStateProvider den Session-State behält
     await page.locator('.tab-nav-item').filter({ hasText: 'Fragen' }).click();
     await expect(page).toHaveURL(/\/fall\/rueckfragen/);
-    // Accessible name kommt aus aria-label „Rückfrage beantworten: …“
-    await page.getByRole('button', { name: /Rückfrage beantworten/i }).click();
+    await page.getByRole('button', { name: /Jetzt beantworten|Rückfrage beantworten/i }).click();
+    await page.getByTestId('rq-antwort-absenden').click();
     await page.locator('.tab-nav-item').filter({ hasText: 'Übersicht' }).click();
     await expect(page).toHaveURL('/fall');
 
@@ -168,8 +169,8 @@ test.describe('US-AV-002 – Status einsehen', () => {
     // Client-Navigation: DemoState liegt im Fall-Layout und geht bei page.goto() verloren
     await page.locator('.tab-nav-item').filter({ hasText: 'Fragen' }).click();
     await expect(page).toHaveURL(/\/fall\/rueckfragen/);
-    // Accessible name kommt aus aria-label „Rückfrage beantworten: …“
-    await page.getByRole('button', { name: /Rückfrage beantworten/i }).click();
+    await page.getByRole('button', { name: /Jetzt beantworten|Rückfrage beantworten/i }).click();
+    await page.getByTestId('rq-antwort-absenden').click();
     await page.locator('.tab-nav-item').filter({ hasText: 'Unterlagen' }).click();
     await expect(page).toHaveURL(/\/fall\/dokumente/);
     // Beide ausstehenden Unterlagen als hochgeladen markieren

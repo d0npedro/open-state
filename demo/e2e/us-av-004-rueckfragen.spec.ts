@@ -88,46 +88,78 @@ test.describe('US-AV-004 – Rückfrage verstehen (Anzeige)', () => {
 
 });
 
+/** Zwei-Schritt: öffnen → absenden (Bestätigungsdialog). */
+async function rueckfrageBeantworten(page: import('@playwright/test').Page, freitext?: string) {
+  await page.getByRole('button', { name: /Jetzt beantworten|Rückfrage beantworten/i }).click();
+  await expect(page.getByTestId('rq-bestaetigung')).toBeVisible();
+  if (freitext) {
+    await page.getByTestId('rq-antwort-textarea').fill(freitext);
+  }
+  await page.getByTestId('rq-antwort-absenden').click();
+}
+
 test.describe('US-AV-004 – Rückfrage beantworten (Interaktion)', () => {
 
-  test('Klick auf "Jetzt beantworten" → Rückfrage wird als beantwortet markiert', async ({ page }) => {
+  test('Bestätigungsdialog: öffnen, Frage zeigen, absenden → beantwortet', async ({ page }) => {
     await page.goto('/fall/rueckfragen');
 
-    // Vorher: Antwort-Button sichtbar
-    const button = page.getByRole('button', { name: /Rückfrage beantworten/i });
-    await expect(button).toBeVisible();
+    const openBtn = page.getByRole('button', { name: /Rückfrage beantworten/i });
+    await expect(openBtn).toBeVisible();
+    await openBtn.click();
 
-    // Klicken
-    await button.click();
+    // Bestätigung zeigt die Frage (was wird übermittelt?)
+    const dialog = page.getByTestId('rq-bestaetigung');
+    await expect(dialog).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Antwort bestätigen' })).toBeVisible();
+    await expect(page.getByTestId('rq-bestaetigung-frage')).toContainText(
+      'Arbeitgeberbescheinigung enthält kein Datum'
+    );
 
-    // Nachher: Status "Beantwortet" erscheint
+    await page.getByTestId('rq-antwort-absenden').click();
+
     await expect(
       page.getByText('Beantwortet — die Sachbearbeitung wurde informiert')
     ).toBeVisible();
+    await expect(openBtn).not.toBeVisible();
+    // Beispielantwort erscheint als Quittung
+    await expect(page.getByTestId('rq-antwort-quittung')).toBeVisible();
+    await expect(page.getByTestId('rq-antwort-quittung')).toContainText(
+      'Beschäftigungsaufnahme'
+    );
+  });
 
-    // Nachher: Antwort-Button verschwindet
-    await expect(button).not.toBeVisible();
+  test('Bestätigung abbrechen lässt Rückfrage offen', async ({ page }) => {
+    await page.goto('/fall/rueckfragen');
+    await page.getByRole('button', { name: /Jetzt beantworten/i }).click();
+    await expect(page.getByTestId('rq-bestaetigung')).toBeVisible();
+    await page.getByTestId('rq-bestaetigung-abbrechen').click();
+    await expect(page.getByTestId('rq-bestaetigung')).toHaveCount(0);
+    await expect(page.getByText(/1 Frage braucht Ihre Antwort/)).toBeVisible();
+    await expect(page.getByRole('button', { name: /Jetzt beantworten/i })).toBeVisible();
+  });
+
+  test('Freitext-Antwort wird in der Quittung angezeigt', async ({ page }) => {
+    await page.goto('/fall/rueckfragen');
+    await rueckfrageBeantworten(page, 'Beschäftigungsaufnahme war der 15.01.2021.');
+    await expect(page.getByTestId('rq-antwort-quittung')).toContainText(
+      '15.01.2021'
+    );
   });
 
   test('Nach Beantworten: Anzahl offener Fragen sinkt auf 0', async ({ page }) => {
     await page.goto('/fall/rueckfragen');
-
-    await page.getByRole('button', { name: /Rückfrage beantworten/i }).click();
-
+    await rueckfrageBeantworten(page);
     await expect(page.getByText('Alle Fragen sind beantwortet')).toBeVisible();
   });
 
   test('Nach Beantworten: Fallübersicht zeigt keinen Rückfrage-Banner mehr', async ({ page }) => {
-    // Rückfrage beantworten
     await page.goto('/fall/rueckfragen');
-    await page.getByRole('button', { name: /Rückfrage beantworten/i }).click();
+    await rueckfrageBeantworten(page);
     await expect(page.getByText('Alle Fragen sind beantwortet')).toBeVisible();
 
-    // Client-seitige Navigation zur Fallübersicht (erhält React Context)
     await page.locator('.tab-nav-item').filter({ hasText: 'Übersicht' }).click();
     await expect(page).toHaveURL('/fall');
 
-    // Action-Banner sollte nicht mehr auf Rückfrage hinweisen
     await expect(
       page.getByRole('link', { name: /Frage jetzt beantworten/i })
     ).not.toBeVisible();
@@ -135,15 +167,12 @@ test.describe('US-AV-004 – Rückfrage beantworten (Interaktion)', () => {
 
   test('Statusänderung: Nach Beantworten wechselt Status auf "Wird geprüft"', async ({ page }) => {
     await page.goto('/fall/rueckfragen');
-    await page.getByRole('button', { name: /Rückfrage beantworten/i }).click();
+    await rueckfrageBeantworten(page);
 
-    // Client-seitige Navigation (erhält React Context)
     await page.locator('.tab-nav-item').filter({ hasText: 'Übersicht' }).click();
     await expect(page).toHaveURL('/fall');
 
-    // Status "Ihre Antwort wird erwartet" sollte nicht mehr erscheinen
     await expect(page.getByText('Ihre Antwort wird erwartet')).not.toBeVisible();
-    // Status sollte nun "Wird geprüft" o.ä. sein
     await expect(page.getByText('Wird geprüft').first()).toBeVisible();
   });
 
