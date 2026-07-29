@@ -265,6 +265,89 @@ export function fairnessSignalZiel(
   return null;
 }
 
+// ─── Fairness → Verlauf (Audit-Tiefenlink, US-UG-005 Transparenz) ─────────────
+// Sekundärer Link zum auslösenden Timeline-Ereignis, wo der Mock/Session eines hat.
+// Primär-CTA bleibt handlungsbezogen (Rückfrage/Unterlagen/Behörde).
+
+/** Ziel „Im Verlauf ansehen“ für ein Fairness-Signal. */
+export interface FairnessVerlaufZiel {
+  href: string;
+  cta: string;
+  /** Stabiler Schlüssel für data-testid (ohne Seiten-Präfix). */
+  testKey: string;
+  ereignisId: string;
+  ariaLabel?: string;
+}
+
+/**
+ * Letztes Ereignis eines Typs (optional Behörde), chronologisch am Ende der Liste.
+ * Mock speichert ereignisse älter→neuer; Session hängt neuere an.
+ */
+function letztesEreignis(
+  akte: GruendungsAkte,
+  typ: GruendungsAkte['ereignisse'][number]['typ'],
+  behördeId?: string
+): GruendungsAkte['ereignisse'][number] | undefined {
+  const matches = akte.ereignisse.filter(
+    e => e.typ === typ && (behördeId == null || e.behördeId === behördeId)
+  );
+  return matches[matches.length - 1];
+}
+
+/**
+ * Tiefenlink vom Fairness-Signal zum passenden Audit-Ereignis (Verlauf).
+ * null, wenn kein belastbares Ereignis im Aktenzustand existiert.
+ */
+export function fairnessSignalVerlaufZiel(
+  signal: FairnessSignal,
+  akte: GruendungsAkte
+): FairnessVerlaufZiel | null {
+  // Offene Rückfrage → Ereignis „Rückfrage gestellt“ der anfordernden Behörde
+  if (
+    signal.typ === 'UG_RUECKFRAGE_OFFEN_FRIST_RELEVANT' ||
+    signal.id.startsWith('UG-RQ-')
+  ) {
+    const match = signal.id.match(/^UG-RQ-(.+)-FRIST$/);
+    const rqId = match?.[1];
+    if (!rqId) return null;
+    const rq = akte.rueckfragen.find(r => r.id === rqId && !r.beantwortet);
+    if (!rq) return null;
+    const e =
+      letztesEreignis(akte, 'rueckfrage_gestellt', rq.anforderndeBehördeId) ??
+      letztesEreignis(akte, 'rueckfrage_gestellt');
+    if (!e) return null;
+    return {
+      href: `/gruendung/verlauf#ere-${e.id}`,
+      cta: 'Im Verlauf ansehen',
+      testKey: `verlauf-${e.id}`,
+      ereignisId: e.id,
+      ariaLabel: `Rückfrage ${rqId} im Verlauf ansehen`,
+    };
+  }
+
+  // Fehlende Unterlage → Ablehnung im Verlauf, falls vorhanden (kein generisches Upload-Event)
+  if (signal.typ === 'UG_UNTERLAGE_FEHLT' || signal.id === 'UG-UNTERLAGEN-FEHLEND') {
+    const abgelehnt = akte.dokumente.find(d => d.status === 'ABGELEHNT');
+    if (!abgelehnt) return null;
+    const e =
+      letztesEreignis(akte, 'dokument_abgelehnt', abgelehnt.anforderndeBehördeId) ??
+      letztesEreignis(akte, 'dokument_abgelehnt');
+    if (!e) return null;
+    return {
+      href: `/gruendung/verlauf#ere-${e.id}`,
+      cta: 'Im Verlauf ansehen',
+      testKey: `verlauf-${e.id}`,
+      ereignisId: e.id,
+      ariaLabel: 'Dokumentablehnung im Verlauf ansehen',
+    };
+  }
+
+  // Nach Session-Antwort: Signal entfällt – beantwortetes Ereignis nicht hier gemappt
+  // (kein RELEVANT-RQ mehr). BG/Steuernummer/Betriebsdatum: kein spezifisches Mock-Ereignis.
+
+  return null;
+}
+
 // ─── Übersicht: Aufgaben- und Primär-Schritt-Ziele ───────────────────────────
 // Gleiche Quelle wie Fairness-CTAs; UI mappt nur Icons/testids.
 // Primär-CTA: Bürger-Handlungsreihenfolge RQ → Unterlagen → BG, danach

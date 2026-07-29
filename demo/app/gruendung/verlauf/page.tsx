@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useGruendungState } from '@/context/GruendungStateContext';
 import { Icon } from '@/components/Icon';
 import type { GruendungsEreignisTyp } from '@/types/gruendung';
@@ -97,6 +97,43 @@ export default function VerlaufPage() {
   const { akte } = useGruendungState();
   const [stelleFilter, setStelleFilter] = useState<StelleFilter>('ALLE');
   const [typFilter, setTypFilter] = useState<TypFilter>('ALLE');
+  /** Hash-Tiefenlink aus Fairness-CTA (`#ere-{id}`) – Ziel-Karte hervorheben. */
+  const [hashEreignisId, setHashEreignisId] = useState<string | null>(null);
+
+  // Fairness → Verlauf: Filter zurücksetzen und zu #ere-… scrollen (US-UG-005).
+  // Auch hashchange: gleiche Route mit neuem Hash remountet die Page nicht immer.
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    let scrollTimer: number | undefined;
+
+    const applyHash = () => {
+      const raw = window.location.hash;
+      if (!raw.startsWith('#ere-')) {
+        setHashEreignisId(null);
+        return;
+      }
+      const id = raw.slice('#ere-'.length);
+      if (!id || !akte.ereignisse.some(e => e.id === id)) {
+        setHashEreignisId(null);
+        return;
+      }
+      setStelleFilter('ALLE');
+      setTypFilter('ALLE');
+      setHashEreignisId(id);
+      if (scrollTimer !== undefined) window.clearTimeout(scrollTimer);
+      scrollTimer = window.setTimeout(() => {
+        document.getElementById(`ere-${id}`)?.scrollIntoView({ block: 'center', behavior: 'smooth' });
+      }, 50);
+    };
+
+    applyHash();
+    window.addEventListener('hashchange', applyHash);
+    return () => {
+      window.removeEventListener('hashchange', applyHash);
+      if (scrollTimer !== undefined) window.clearTimeout(scrollTimer);
+    };
+  }, [akte.ereignisse]);
 
   const stelleCounts = useMemo(() => {
     const base = { ALLE: 0, GRUENDER: 0, BEHOERDE: 0, SYSTEM: 0 };
@@ -280,6 +317,7 @@ export default function VerlaufPage() {
           <div style={{ position: 'absolute', left: '0.7rem', top: 0, bottom: 0, width: '2px', background: 'var(--color-border)' }} />
           {chronologisch.map((e, i) => {
             const behörde = e.behördeId ? akte.beteiligteBehörden.find(b => b.id === e.behördeId) : undefined;
+            const isHashTarget = hashEreignisId === e.id;
             return (
               <div key={e.id} style={{ position: 'relative', marginBottom: i < chronologisch.length - 1 ? '1.25rem' : 0 }}>
                 <div style={{
@@ -288,7 +326,23 @@ export default function VerlaufPage() {
                   zIndex: 1, flexShrink: 0,
                   ...stelleDotStyle[e.handelndeStelle],
                 }} />
-                <div className="card" style={{ padding: '0.875rem 1rem' }}>
+                <div
+                  id={`ere-${e.id}`}
+                  data-testid={`verlauf-ereignis-${e.id}`}
+                  className="card"
+                  style={{
+                    padding: '0.875rem 1rem',
+                    scrollMarginTop: '5rem',
+                    ...(isHashTarget
+                      ? {
+                          outline: '2px solid var(--color-primary)',
+                          outlineOffset: '2px',
+                          boxShadow: '0 0 0 4px color-mix(in srgb, var(--color-primary) 18%, transparent)',
+                        }
+                      : {}),
+                  }}
+                  aria-current={isHashTarget ? 'location' : undefined}
+                >
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '0.5rem', flexWrap: 'wrap', marginBottom: '0.5rem' }}>
                     <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', flexWrap: 'wrap' }}>
                       <span style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--color-text)' }}>
