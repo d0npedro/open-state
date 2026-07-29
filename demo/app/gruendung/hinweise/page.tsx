@@ -175,20 +175,188 @@ function FairnessSignalCta({
   );
 }
 
+/**
+ * UNTERLAGE: eigene Karte mit stabilen Frist-/Live-Testids (US-UG-003 / AV Q-167-Parität).
+ * FairnessPanel allein liefert keine festen testids für Titel/Erklärung.
+ */
+function UnterlagenSignalKarte({ signal }: { signal: FairnessSignal }) {
+  return (
+    <div
+      data-testid="hinweise-signal-unterlagen"
+      style={{
+        borderLeft: '3px solid var(--color-primary)',
+        background: 'var(--color-primary-light)',
+        borderRadius: 'var(--radius)',
+        padding: '1rem 1.25rem',
+      }}
+    >
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'flex-start',
+          gap: '0.75rem',
+          marginBottom: '0.5rem',
+          flexWrap: 'wrap',
+        }}
+      >
+        <span
+          style={{
+            fontSize: '0.68rem',
+            fontWeight: 700,
+            textTransform: 'uppercase',
+            letterSpacing: '0.06em',
+            color: 'var(--color-primary)',
+            paddingTop: '0.1rem',
+            whiteSpace: 'nowrap',
+          }}
+        >
+          Hinweis
+        </span>
+        <strong
+          style={{ fontSize: '0.9rem', color: 'var(--color-text)', lineHeight: 1.3 }}
+          data-testid="hinweise-signal-unterlagen-titel"
+        >
+          {signal.titel}
+        </strong>
+      </div>
+      <p
+        style={{
+          fontSize: '0.875rem',
+          color: 'var(--color-text)',
+          marginBottom: '0.75rem',
+          lineHeight: 1.5,
+        }}
+        data-testid="hinweise-signal-unterlagen-erklaerung"
+      >
+        {signal.erklaerung}
+      </p>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+        <div
+          style={{
+            background: 'rgba(255,255,255,0.55)',
+            borderRadius: '4px',
+            padding: '0.6rem 0.875rem',
+          }}
+        >
+          <span
+            style={{
+              fontSize: '0.75rem',
+              fontWeight: 600,
+              color: 'var(--color-text-muted)',
+              display: 'block',
+              marginBottom: '0.2rem',
+            }}
+          >
+            Auswirkung
+          </span>
+          <p style={{ fontSize: '0.84rem', color: 'var(--color-text)', margin: 0, lineHeight: 1.45 }}>
+            {signal.auswirkung}
+          </p>
+        </div>
+        <div
+          style={{
+            background: 'rgba(255,255,255,0.55)',
+            borderRadius: '4px',
+            padding: '0.6rem 0.875rem',
+          }}
+        >
+          <span
+            style={{
+              fontSize: '0.75rem',
+              fontWeight: 600,
+              color: 'var(--color-text-muted)',
+              display: 'block',
+              marginBottom: '0.2rem',
+            }}
+          >
+            Möglicher nächster Schritt
+          </span>
+          <p style={{ fontSize: '0.84rem', color: 'var(--color-text)', margin: 0, lineHeight: 1.45 }}>
+            {signal.naechsterSchritt}
+          </p>
+        </div>
+        <p style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', marginTop: '0.25rem' }}>
+          Bezug: {signal.bezug}
+        </p>
+      </div>
+    </div>
+  );
+}
+
+function SignalBlock({
+  signal,
+  akte,
+}: {
+  signal: FairnessSignal;
+  akte: GruendungsAkte;
+}) {
+  const isUnterlagen = signal.typ === 'UG_UNTERLAGE_FEHLT' || signal.id === 'UG-UNTERLAGEN-FEHLEND';
+  const sectionPrefix =
+    signal.prioritaet === 'RELEVANT'
+      ? 'relevant'
+      : signal.prioritaet === 'INFO'
+        ? 'info'
+        : 'hinweis';
+
+  return (
+    <div
+      key={signal.id}
+      data-testid={`hinweise-${sectionPrefix}-${signal.id}`}
+      data-signal-typ={signal.typ}
+      data-signal-id={signal.id}
+    >
+      {isUnterlagen ? (
+        <UnterlagenSignalKarte signal={signal} />
+      ) : (
+        <FairnessPanel signale={[signal]} />
+      )}
+      <FairnessSignalCta signal={signal} akte={akte} />
+    </div>
+  );
+}
+
 export default function GruendungHinweisePage() {
-  const { akte } = useGruendungState();
+  const { akte, sessionUploadedIds } = useGruendungState();
   const signale = berechneFairnessSignaleGruendung(akte);
 
   const relevant = signale.filter(s => s.prioritaet === 'RELEVANT');
-  const hinweis  = signale.filter(s => s.prioritaet === 'HINWEIS');
-  const info     = signale.filter(s => s.prioritaet === 'INFO');
+  const hinweis = signale.filter(s => s.prioritaet === 'HINWEIS');
+  const info = signale.filter(s => s.prioritaet === 'INFO');
 
   const geloestCount = INITIAL_SIGNALE.length - signale.length;
-  const hatReaktion  = geloestCount > 0;
+  const hatReaktion = geloestCount > 0;
+
+  const unterlagenSignal = signale.find(
+    s => s.typ === 'UG_UNTERLAGE_FEHLT' || s.id === 'UG-UNTERLAGEN-FEHLEND'
+  );
+  const initialUnterlagen = INITIAL_SIGNALE.find(
+    s => s.typ === 'UG_UNTERLAGE_FEHLT' || s.id === 'UG-UNTERLAGEN-FEHLEND'
+  );
+  const unterlagenEntfallen = Boolean(initialUnterlagen) && !unterlagenSignal;
+  const hatUploadInSession = sessionUploadedIds.length > 0;
+
+  // Banner-Text: Rückfrage und/oder Upload (nicht nur RQ)
+  let aktionsText = 'Ihre Aktion';
+  if (hatUploadInSession && unterlagenEntfallen) {
+    aktionsText = 'Ihre Aktion (Unterlagen eingereicht)';
+  } else if (hatUploadInSession) {
+    aktionsText =
+      'Ihre Aktion (Unterlagen teilweise eingereicht oder Rückfrage beantwortet)';
+  } else {
+    aktionsText = 'Ihre Aktion (Rückfrage beantwortet)';
+  }
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-      <div style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+      <div
+        style={{
+          fontSize: '0.8rem',
+          color: 'var(--color-text-muted)',
+          display: 'flex',
+          gap: '0.5rem',
+          flexWrap: 'wrap',
+        }}
+      >
         <span className="badge badge-neutral">Verfahrensfairness</span>
         <span>Regelbasierte Hinweise aus dem Aktenzustand — keine Entscheidung</span>
       </div>
@@ -197,47 +365,78 @@ export default function GruendungHinweisePage() {
       <div>
         <h1 style={{ marginBottom: '0.5rem' }}>Hinweise zur Verfahrenslage</h1>
         <p>
-          Diese Hinweise beschreiben den aktuellen Zustand Ihrer Gründungsakte sachlich und nachvollziehbar.
-          Sie basieren auf den vorliegenden Falldaten und ersetzen keine Entscheidung der Behörden.
+          Diese Hinweise beschreiben den aktuellen Zustand Ihrer Gründungsakte sachlich und
+          nachvollziehbar. Sie basieren auf den vorliegenden Falldaten und ersetzen keine
+          Entscheidung der Behörden.
+        </p>
+        <p
+          style={{ margin: '0.5rem 0 0', fontSize: '0.875rem', color: 'var(--color-text-muted)' }}
+          data-testid="hinweise-signal-count"
+        >
+          Aktuell {signale.length} {signale.length === 1 ? 'Hinweis' : 'Hinweise'}
+          {geloestCount > 0 && (
+            <span data-testid="hinweise-signal-geloest">
+              {' '}
+              · {geloestCount} seit Sitzungsbeginn entfallen
+            </span>
+          )}
         </p>
       </div>
 
       {/* Reaktions-Banner (erscheint nach State-Wechsel) */}
       {hatReaktion && (
-        <div style={{
-          background: 'var(--color-success-light)',
-          border: '1px solid var(--color-success)',
-          borderLeft: '4px solid var(--color-success)',
-          borderRadius: 'var(--radius)',
-          padding: '1rem 1.25rem',
-          fontSize: '0.875rem',
-        }}>
+        <div
+          style={{
+            background: 'var(--color-success-light)',
+            border: '1px solid var(--color-success)',
+            borderLeft: '4px solid var(--color-success)',
+            borderRadius: 'var(--radius)',
+            padding: '1rem 1.25rem',
+            fontSize: '0.875rem',
+          }}
+          data-testid="hinweise-regelwerk-reaktion"
+          role="status"
+        >
           <strong style={{ display: 'block', marginBottom: '0.4rem', color: 'var(--color-success)' }}>
             Regelwerk hat reagiert
           </strong>
           <p style={{ margin: 0, lineHeight: 1.55 }}>
-            Durch Ihre Aktion (Rückfrage beantwortet) {geloestCount === 1 ? 'ist 1 Hinweis' : `sind ${geloestCount} Hinweise`} entfallen.
-            Das Fairness-Regelwerk hat den geänderten Aktenzustand erkannt und die Liste aktualisiert.
+            Durch {aktionsText}{' '}
+            {geloestCount === 1 ? 'ist 1 Hinweis' : `sind ${geloestCount} Hinweise`} entfallen.
+            Das Fairness-Regelwerk hat den geänderten Aktenzustand erkannt und die Liste
+            aktualisiert.
           </p>
         </div>
       )}
 
       {/* Erklärungshinweis */}
-      <div style={{ background: 'var(--color-primary-light)', border: '1px solid var(--color-border)', borderRadius: 'var(--radius)', padding: '1rem 1.25rem', fontSize: '0.875rem' }}>
+      <div
+        style={{
+          background: 'var(--color-primary-light)',
+          border: '1px solid var(--color-border)',
+          borderRadius: 'var(--radius)',
+          padding: '1rem 1.25rem',
+          fontSize: '0.875rem',
+        }}
+      >
         <strong style={{ display: 'block', marginBottom: '0.4rem', color: 'var(--color-primary)' }}>
           Was zeigt diese Seite?
         </strong>
         <p style={{ margin: 0, lineHeight: 1.55 }}>
-          Jeder Hinweis erklärt, was im Gründungsverfahren gerade zutrifft, welche Auswirkung das hat
-          und welcher nächste Schritt sinnvoll wäre. Die Hinweise werden aus dem Aktenzustand abgeleitet —
-          aus offenen Rückfragen, Behördenstatus, ausstehenden Pflichtanmeldungen und Fristlage.
-          Sie bewerten kein Vorhaben und treffen keine Entscheidung.
+          Jeder Hinweis erklärt, was im Gründungsverfahren gerade zutrifft, welche Auswirkung das
+          hat und welcher nächste Schritt sinnvoll wäre. Die Hinweise werden aus dem Aktenzustand
+          abgeleitet — aus offenen Rückfragen, Behördenstatus, ausstehenden Pflichtanmeldungen und
+          Fristlage. Sie bewerten kein Vorhaben und treffen keine Entscheidung.
         </p>
       </div>
 
       {/* Signale */}
       {signale.length === 0 ? (
-        <div className="card" style={{ borderLeft: '3px solid var(--color-success)' }}>
+        <div
+          className="card"
+          style={{ borderLeft: '3px solid var(--color-success)' }}
+          data-testid="hinweise-keine-signale"
+        >
           <strong>Keine Hinweise</strong>
           <p style={{ marginTop: '0.25rem', fontSize: '0.875rem' }}>
             Der Aktenzustand zeigt derzeit keine Auffälligkeiten.
@@ -246,54 +445,81 @@ export default function GruendungHinweisePage() {
       ) : (
         <>
           {relevant.length > 0 && (
-            <section>
-              <h2 style={{ fontSize: '0.875rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--color-warning)', marginBottom: '0.75rem' }}>
+            <section data-testid="hinweise-section-relevant">
+              <h2
+                style={{
+                  fontSize: '0.875rem',
+                  fontWeight: 700,
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.06em',
+                  color: 'var(--color-warning)',
+                  marginBottom: '0.75rem',
+                }}
+              >
                 Relevant ({relevant.length})
               </h2>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                 {relevant.map(sig => (
-                  <div key={sig.id} data-testid={`hinweise-relevant-${sig.id}`}>
-                    <FairnessPanel signale={[sig]} />
-                    <FairnessSignalCta signal={sig} akte={akte} />
-                  </div>
+                  <SignalBlock key={sig.id} signal={sig} akte={akte} />
                 ))}
               </div>
             </section>
           )}
           {hinweis.length > 0 && (
-            <section>
-              <h2 style={{ fontSize: '0.875rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--color-primary)', marginBottom: '0.75rem' }}>
+            <section data-testid="hinweise-section-hinweis">
+              <h2
+                style={{
+                  fontSize: '0.875rem',
+                  fontWeight: 700,
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.06em',
+                  color: 'var(--color-primary)',
+                  marginBottom: '0.75rem',
+                }}
+              >
                 Hinweise ({hinweis.length})
               </h2>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                 {hinweis.map(sig => (
-                  <div key={sig.id} data-testid={`hinweise-hinweis-${sig.id}`}>
-                    <FairnessPanel signale={[sig]} />
-                    <FairnessSignalCta signal={sig} akte={akte} />
-                  </div>
+                  <SignalBlock key={sig.id} signal={sig} akte={akte} />
                 ))}
               </div>
             </section>
           )}
           {info.length > 0 && (
-            <section>
-              <h2 style={{ fontSize: '0.875rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--color-neutral)', marginBottom: '0.75rem' }}>
+            <section data-testid="hinweise-section-info">
+              <h2
+                style={{
+                  fontSize: '0.875rem',
+                  fontWeight: 700,
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.06em',
+                  color: 'var(--color-neutral)',
+                  marginBottom: '0.75rem',
+                }}
+              >
                 Informationen ({info.length})
               </h2>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                 {info.map(sig => (
-                  <div key={sig.id} data-testid={`hinweise-info-${sig.id}`}>
-                    <FairnessPanel signale={[sig]} />
-                    <FairnessSignalCta signal={sig} akte={akte} />
-                  </div>
+                  <SignalBlock key={sig.id} signal={sig} akte={akte} />
                 ))}
               </div>
             </section>
           )}
-          <div style={{ padding: '0.875rem 1rem', background: 'var(--color-neutral-light)', borderRadius: 'var(--radius)', fontSize: '0.8rem', color: 'var(--color-text-muted)', lineHeight: 1.5 }}>
-            Die Hinweise werden automatisch aus den vorliegenden Aktendaten abgeleitet.
-            Sie sind Orientierung — keine Rechtsauskunft und keine Entscheidung.
-            Verantwortlich für die Verfahrensentscheidungen sind die beteiligten Behörden.
+          <div
+            style={{
+              padding: '0.875rem 1rem',
+              background: 'var(--color-neutral-light)',
+              borderRadius: 'var(--radius)',
+              fontSize: '0.8rem',
+              color: 'var(--color-text-muted)',
+              lineHeight: 1.5,
+            }}
+          >
+            Die Hinweise werden automatisch aus den vorliegenden Aktendaten abgeleitet. Sie sind
+            Orientierung — keine Rechtsauskunft und keine Entscheidung. Verantwortlich für die
+            Verfahrensentscheidungen sind die beteiligten Behörden.
           </div>
         </>
       )}
