@@ -178,6 +178,51 @@ test.describe('UG – Übersicht', () => {
     await expect(link).toContainText(/weitere Hinweis/i);
   });
 
+  test('Fairness-Einträge haben Kurz-CTAs für Rückfrage, Unterlagen und BG', async ({ page }) => {
+    const block = page.getByTestId('uebersicht-fairness-kurzblock');
+    await expect(block).toBeVisible();
+
+    const rqCta = page.getByTestId('uebersicht-fairness-cta-rq-RQ-01');
+    await expect(rqCta).toBeVisible();
+    await expect(rqCta).toHaveAttribute('href', '/gruendung/rueckfragen#rq-RQ-01');
+    await expect(rqCta).toContainText(/Frage beantworten/i);
+
+    const dokCta = page.getByTestId('uebersicht-fairness-cta-dok-DOK-03');
+    await expect(dokCta).toBeVisible();
+    await expect(dokCta).toHaveAttribute('href', '/gruendung/dokumente#dok-DOK-03');
+    await expect(dokCta).toContainText(/Zu den Unterlagen/i);
+
+    const bgCta = page.getByTestId('uebersicht-fairness-cta-beh-BEH-04');
+    await expect(bgCta).toBeVisible();
+    await expect(bgCta).toHaveAttribute('href', '/gruendung/behoerden#beh-BEH-04');
+    await expect(bgCta).toContainText(/Zur Behördenkarte/i);
+  });
+
+  test('Fairness-CTA Rückfrage führt zur Rückfragen-Karte', async ({ page }) => {
+    await page.getByTestId('uebersicht-fairness-cta-rq-RQ-01').click();
+    await expect(page).toHaveURL(/\/gruendung\/rueckfragen#rq-RQ-01/);
+    await expect(page.locator('#rq-RQ-01')).toBeVisible();
+  });
+
+  test('Fairness-CTA Unterlagen führt zur Dokumentenkarte', async ({ page }) => {
+    await page.getByTestId('uebersicht-fairness-cta-dok-DOK-03').click();
+    await expect(page).toHaveURL(/\/gruendung\/dokumente#dok-DOK-03/);
+    await expect(page.locator('#dok-DOK-03')).toBeVisible();
+  });
+
+  test('Nach Beantworten entfällt Fairness-CTA Rückfrage', async ({ page }) => {
+    const { goUgTab } = await import('./helpers/sessionNav');
+    await goUgTab(page, 'Fragen', /\/gruendung\/rueckfragen/);
+    await page.getByRole('button', { name: /Rückfrage beantworten/i }).click();
+    await expect(page.getByText(/die Behörde wurde informiert|beantwortet/i).first()).toBeVisible();
+    await goUgTab(page, 'Übersicht', /\/gruendung$/);
+
+    await expect(page.getByTestId('uebersicht-fairness-cta-rq-RQ-01')).toHaveCount(0);
+    // Unterlagen- und BG-CTAs bleiben
+    await expect(page.getByTestId('uebersicht-fairness-cta-dok-DOK-03')).toBeVisible();
+    await expect(page.getByTestId('uebersicht-fairness-cta-beh-BEH-04')).toBeVisible();
+  });
+
   test('INFO-Signal parallele Behörden erscheint auf Hinweise-Seite', async ({ page }) => {
     await page.goto('/gruendung/hinweise');
     await expect(page.getByText(/Behördenverfahren laufen parallel/i).first()).toBeVisible();
