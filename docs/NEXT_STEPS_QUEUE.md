@@ -120,6 +120,7 @@ Story-Dokumentation ist kein Pflicht-Vorläufer für Mock-Daten und Typen.
 | Q-090 | UG Übersicht: Fairness-Kurzblock mit Link zu `/gruendung/hinweise` (analog AV) | DEMO | S | Q-087 | DONE |
 | Q-093 | UG Hinweise: CTA „Frage beantworten“ aus RELEVANT-Signal (Anker `#rq-…`) | DEMO | S | Q-090 | DONE |
 | Q-096 | UG Hinweise: CTA „Zur Behördenkarte“ aus RELEVANT-BG-Anmeldung (`#beh-…`) | DEMO | S | Q-093 | DONE |
+| Q-098 | UG Hinweise: CTA „Zu den Unterlagen“ aus HINWEIS-Unterlagen-Signal (`#dok-…`) | DEMO | S | Q-096 | DONE |
 
 ---
 
@@ -130,7 +131,8 @@ Story-Dokumentation ist kein Pflicht-Vorläufer für Mock-Daten und Typen.
 | Q-088 | Kita Lagebild: Meldeeingang freigegebener Monatsmeldungen (Session-Link von `/kita/meldung`) | DEMO | M | Q-080 | DONE |
 | Q-091 | Kita Lagebild: Planungsraum Südost nach Session-Freigabe Sonnenwinkel hervorheben | DEMO | S | Q-088 | DONE |
 | Q-097 | Kita Monatsbericht: Vorschau laufender Monat mit gemischten Tagesstand-Quellen | DEMO | S | Q-079 | DONE |
-| Q-094 | Kita Bedarfsplanung: Datenlücke Südost aus Meldeeingang ableiten | DEMO | S | Q-091 | OFFEN |
+| Q-094 | Kita Bedarfsplanung: Datenlücke Südost aus Meldeeingang ableiten | DEMO | S | Q-091 | DONE |
+| Q-099 | Kita Lagebild: Meldeeingang mit Monatsbericht-Vorschau koppeln (Sonnenwinkel) | DEMO | S | Q-097 | DONE |
 
 ---
 

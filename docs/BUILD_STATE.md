@@ -1,6 +1,6 @@
 # BUILD_STATE.md – Aktueller Projektstand
 
-Zuletzt aktualisiert: nach Supervisor-Merge 2026-07-29 (AV Q-095 Verlauf-Antwortquittung, UG Q-093/Q-096 Hinweise-CTAs, Kita Q-097 Monatsbericht-Vorschau)
+Zuletzt aktualisiert: nach Supervisor-Merge 2026-07-29 (UG Q-098 Unterlagen-CTA, Kita Q-094 Bedarfsplanung-Meldebasis, Q-099 Meldeeingang↔Monatsbericht-Vorschau)
 
 Dieser Stand beschreibt, was tatsächlich existiert und funktioniert.
 Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
@@ -15,7 +15,7 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | Build-Status | ✓ Erfolgreich (27 statische Seiten) |
 | Deployment | Vercel, aus `demo/`-Verzeichnis |
 | Lokaler Start | `cd demo && npm install && npm run dev` |
-| Letzte Build-Prüfung | nach Merge loop/av + loop/ug + loop/kita — lint+build grün |
+| Letzte Build-Prüfung | nach Merge loop/ug + loop/kita — lint+build grün |
 
 ---
 
@@ -33,10 +33,10 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | `/fall/hinweise` | Vollständige Fairness-Hinweisseite | US-AV-008 | ✓ |
 | `/stories` | Story Coverage Dashboard | – | ✓ |
 | `/feedback` | Feedback → GitHub Issues | – | ✓ |
-| `/gruendung` … | Unternehmensgründung (Übersicht Fairness-Kurzblock, Hinweise-CTAs RQ/BG, Behörden-Anker, …) | US-UG-001–006 | ✓ |
+| `/gruendung` … | Unternehmensgründung (Übersicht Fairness-Kurzblock, Hinweise-CTAs RQ/BG/Unterlagen, Behörden-/Dokument-Anker, …) | US-UG-001–006 | ✓ |
 | `/kita` | Öffentlicher Transparenzbericht + Planungsraum-Filter | US-KJ-009, US-KJ-010 | ✓ |
-| `/kita/lagebild` | Jugendamt-Steuerungsansicht + Meldeeingang + Meldebeitrag je Planungsraum | US-KJ-005, US-KJ-006 | ✓ |
-| `/kita/bedarfsplanung` | Bedarfsplanungsentwurf (§ 80 SGB VIII) | US-KJ-007 | ✓ |
+| `/kita/lagebild` | Jugendamt-Steuerungsansicht + Meldeeingang + Meldebeitrag + Monatsbericht-Vorschau-Kopplung | US-KJ-005, US-KJ-006 | ✓ |
+| `/kita/bedarfsplanung` | Bedarfsplanungsentwurf (§ 80 SGB VIII) + Meldebasis aus Meldeeingang | US-KJ-007 | ✓ |
 | `/kita/vorlage` | Politische Gremienvorlage + Freigabe | US-KJ-008 | ✓ |
 | `/kita/einrichtung` | Belegungsstand Einrichtung (aggregiert) | US-KJ-002 | ✓ |
 | `/kita/tagesstand` | Tagesstand erfassen (Aggregate, Freigabe) | US-KJ-001 | ✓ |
@@ -59,7 +59,9 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | Gründung-State-Kontext | `demo/context/GruendungStateContext.tsx` | ✓ Rückfrage/Upload/Reset + Verlauf; Fairness live |
 | DemoSessionBar | `demo/components/DemoSessionBar.tsx` | ✓ Leiste „Demo zurücksetzen“ nach Interaktion |
 | Kita Meldeeingang | `demo/components/kita/KitaMeldeeingangPanel.tsx` + `mockKitaMeldeeingang.ts` | ✓ freigegebene Monatsmeldungen im Lagebild, Session von `/kita/meldung` |
+| Kita Meldeeingang ↔ Monatsbericht-Vorschau | `demo/components/kita/KitaMeldeeingangMonatsberichtVorschau.tsx` | ✓ Kopplung Abschluss-Meldeeingang und laufende Monatsvorschau (Sonnenwinkel) |
 | Kita Meldebeitrag Planungsraum | `demo/components/kita/KitaPlanungsraumMeldebeitrag.tsx` | ✓ Beitrag freigegebener Meldungen auf Planungsraum-Karten; Südost/Sonnenwinkel nach Session-Freigabe hervorgehoben |
+| Kita Bedarfsplanung Meldebasis | `demo/components/kita/KitaBedarfsplanungDatenbasis.tsx` | ✓ Datenlücke je Planungsraum aus Meldeeingang; schließt sich nach Session-Freigabe |
 
 ---
 
@@ -122,6 +124,9 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 **Q-095 erledigt:** AV Verlauf Antworttext ungekürzt als Quittungsblock (`timeline-antwort-block`).
 **Q-096 erledigt:** UG Hinweise CTA „Zur Behördenkarte“ für BG-Anmeldung (`#beh-…`).
 **Q-097 erledigt:** Kita Monatsbericht Vorschau Nov 2024 mit gemischten Tagesstand-Quellen.
+**Q-094 erledigt:** Kita Bedarfsplanung Meldebasis/Datenlücke Südost aus Meldeeingang (Session-Freigabe schließt Lücke).
+**Q-098 erledigt:** UG Hinweise CTA „Zu den Unterlagen“ aus HINWEIS-Unterlagen-Signal (`#dok-…`).
+**Q-099 erledigt:** Kita Lagebild Meldeeingang mit Monatsbericht-Vorschau gekoppelt (methodische Trennung).
 
 ---
 
@@ -179,6 +184,9 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | ~~Termine-Badge immer sichtbar~~ | ~~Kein Handlungsfokus in Navigation~~ | Q-089 ✓ |
 | ~~UG-Übersicht ohne Fairness-Kurzblock~~ | ~~Verfahrenslage nur über Hinweise-Tab~~ | Q-090 ✓ |
 | ~~Planungsraum ohne Meldebeitrag-Hervorhebung~~ | ~~Freigabe-Effekt im Lagebild unsichtbar~~ | Q-091 ✓ |
+| ~~Bedarfsplanung ohne Meldebasis-Lücke~~ | ~~Südost-Datenlücke nicht aus Meldeeingang abgeleitet~~ | Q-094 ✓ |
+| ~~UG Hinweise ohne Unterlagen-CTA~~ | ~~Fehlende Unterlagen nur Text, kein Sprung zu Dokumenten~~ | Q-098 ✓ |
+| ~~Meldeeingang ohne Vorschau-Kopplung~~ | ~~Laufender Monat und Abschlussmeldung getrennt unklar~~ | Q-099 ✓ |
 | DSFA für Kita-Domäne noch ausstehend | Konzeptlücke — extern abhängig | — |
 
 ---
