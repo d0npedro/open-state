@@ -318,6 +318,9 @@ export default function VerlaufPage() {
           {chronologisch.map((e, i) => {
             const behörde = e.behördeId ? akte.beteiligteBehörden.find(b => b.id === e.behördeId) : undefined;
             const isHashTarget = hashEreignisId === e.id;
+            /** Session-Demo-Ereignisse (Antwort, Upload, BG) – optisch von Mock-Historie abheben. */
+            const isSessionEvent = e.id.startsWith('UG-DEMO-');
+            const isSessionAntwort = e.typ === 'rueckfrage_beantwortet' && isSessionEvent;
             return (
               <div key={e.id} style={{ position: 'relative', marginBottom: i < chronologisch.length - 1 ? '1.25rem' : 0 }}>
                 <div style={{
@@ -330,6 +333,8 @@ export default function VerlaufPage() {
                   id={`ere-${e.id}`}
                   data-testid={`verlauf-ereignis-${e.id}`}
                   className="card"
+                  data-session-event={isSessionEvent ? 'true' : undefined}
+                  data-session-antwort={isSessionAntwort ? 'true' : undefined}
                   style={{
                     padding: '0.875rem 1rem',
                     scrollMarginTop: '5rem',
@@ -339,7 +344,11 @@ export default function VerlaufPage() {
                           outlineOffset: '2px',
                           boxShadow: '0 0 0 4px color-mix(in srgb, var(--color-primary) 18%, transparent)',
                         }
-                      : {}),
+                      : isSessionAntwort
+                        ? {
+                            borderLeft: '4px solid var(--color-success)',
+                          }
+                        : {}),
                   }}
                   aria-current={isHashTarget ? 'location' : undefined}
                 >
@@ -348,6 +357,15 @@ export default function VerlaufPage() {
                       <span style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--color-text)' }}>
                         {ereignisLabels[e.typ]}
                       </span>
+                      {isSessionAntwort && (
+                        <span
+                          className="status-chip status-chip-success"
+                          style={{ fontSize: '0.7rem', padding: '0.1rem 0.45rem' }}
+                          data-testid={`verlauf-session-antwort-badge-${e.id}`}
+                        >
+                          Ihre Antwort
+                        </span>
+                      )}
                       <span style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>
                         {stelleLabel[e.handelndeStelle]}
                         {behörde && ` · ${behörde.bezeichnung}`}

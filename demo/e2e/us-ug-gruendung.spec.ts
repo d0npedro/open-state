@@ -916,6 +916,58 @@ test.describe('UG – Rückfragen (Interaktion)', () => {
     await expect(page.getByText('Wird bearbeitet').first()).toBeVisible();
   });
 
+  test('Nach Beantworten: Verlauf-Tiefenlink zur Session-Antwort (US-UG-005)', async ({ page }) => {
+    // Quittung verlinkt auf Session-Ereignis; Hash-Hervorhebung + Badge im Verlauf
+    // Kein page.goto nach State (DEC-012) – Link navigiert innerhalb des Layouts
+    await page.goto('/gruendung/rueckfragen');
+    await page.getByRole('button', { name: /Rückfrage beantworten/i }).click();
+    await expect(page.getByTestId('rq-antwort-quittung-RQ-01')).toBeVisible();
+    await expect(page.getByText(/die Behörde wurde informiert/i)).toBeVisible();
+
+    const verlaufLink = page.getByTestId('rq-verlauf-link-RQ-01');
+    await expect(verlaufLink).toBeVisible();
+    await expect(verlaufLink).toHaveAttribute(
+      'href',
+      '/gruendung/verlauf#ere-UG-DEMO-RQ-RQ-01'
+    );
+    await expect(verlaufLink).toContainText(/Im Verlauf ansehen/i);
+
+    await verlaufLink.click();
+    await expect(page).toHaveURL(/\/gruendung\/verlauf#ere-UG-DEMO-RQ-RQ-01/);
+
+    const card = page.getByTestId('verlauf-ereignis-UG-DEMO-RQ-RQ-01');
+    await expect(card).toBeVisible();
+    await expect(card).toHaveAttribute('aria-current', 'location');
+    await expect(card).toHaveAttribute('data-session-antwort', 'true');
+    await expect(card).toContainText(/Rückfrage beantwortet/i);
+    await expect(page.getByTestId('verlauf-session-antwort-badge-UG-DEMO-RQ-RQ-01')).toBeVisible();
+    await expect(page.getByTestId('verlauf-session-antwort-badge-UG-DEMO-RQ-RQ-01')).toContainText(
+      /Ihre Antwort/i
+    );
+  });
+
+  test('Session-Antwort bleibt im Verlauf nach Tab-Nav (kein page.goto)', async ({ page }) => {
+    const { goUgTab } = await import('./helpers/sessionNav');
+    await page.goto('/gruendung/rueckfragen');
+    await page.getByRole('button', { name: /Rückfrage beantworten/i }).click();
+    await expect(page.getByTestId('rq-antwort-quittung-RQ-01')).toBeVisible();
+
+    await goUgTab(page, 'Verlauf', /\/gruendung\/verlauf/);
+    const card = page.getByTestId('verlauf-ereignis-UG-DEMO-RQ-RQ-01');
+    await expect(card).toBeVisible();
+    await expect(card).toHaveAttribute('data-session-antwort', 'true');
+    await expect(page.getByTestId('verlauf-session-antwort-badge-UG-DEMO-RQ-RQ-01')).toContainText(
+      /Ihre Antwort/i
+    );
+
+    // Filter „Rückfragen“ zeigt gestellte + beantwortete
+    const typGroup = page.getByRole('group', { name: /Verlauf filtern nach Ereignistyp/i });
+    await typGroup.getByRole('button', { name: /Rückfragen/i }).click();
+    await expect(card).toBeVisible();
+    await expect(page.getByText('Rückfrage gestellt').first()).toBeVisible();
+    await expect(page.getByText('Rückfrage beantwortet').first()).toBeVisible();
+  });
+
 });
 
 // ─── Hinweise ─────────────────────────────────────────────────────────────────
