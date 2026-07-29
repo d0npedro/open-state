@@ -29,5 +29,12 @@ Parallele Entwicklungs-Streams mit getrennten Worktrees und einem Supervisor, de
 
 ## Intervalle
 
-- Domain-Loops: 12 min
-- Supervisor: 15 min
+- Domain-Loops: 12 min (AV, UG, Kita parallel, fire immediately)
+- Supervisor: 15 min (erster Lauf nach 15 min, dann periodisch)
+
+## Betriebshinweise
+
+- Alter Einzel-Loop auf `main` wurde gestoppt (vermeidet Race Conditions).
+- Domain-Streams committen nur auf `loop/*`; Supervisor merget nach `main`.
+- Push bleibt manuell („pushe“).
+- Bei wiederholten Merge-Konflikten: Intervall erhöhen oder einen Stream pausieren.
