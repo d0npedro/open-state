@@ -2,15 +2,15 @@
 
 | Feld | Wert |
 |------|------|
-| last_checked | 2026-07-29T04:03:00Z |
-| last_run_id | 30421009131 |
-| last_status | failure → fixing |
-| last_fix_sha | afac036 |
-| fix_attempts | 1 |
+| last_checked | 2026-07-29T04:08:00Z |
+| last_run_id | 30421253347 |
+| last_status | success |
+| last_fix_sha | 8a0def8 |
+| fix_attempts | 0 |
 
 ## Log
 
 - E2E `30420651428` success (SHA c8b6508).
-- Domain merges: Build green; E2E `30421009131` failure — 2 tests (185 passed).
-- Ursache: strict mode — `Unterlagen` / `Unterlagen hochladen` jetzt 2× (Tab/Kachel + Fristen-CTA + Action-Banner).
-- Fix attempt 1: navigation tab-nav-item; action-banner scope in us-av-001-002.
+- Domain merges: E2E `30421009131` failure — Unterlagen link strict mode (2 tests).
+- Fix attempt 1 (`8a0def8`): tab-nav + action-banner scoped locators.
+- **E2E `30421253347` + Build `30421253331` success** (SHA 8a0def8). fix_attempts reset.
