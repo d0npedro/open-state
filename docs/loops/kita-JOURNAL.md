@@ -2,6 +2,29 @@
 
 Branch: `loop/kita` · Worktree: `D:\Projects\open-state-loop-kita`
 
+## Iteration 2026-07-29 – US-KJ-009 Filter Engpass + Meldelücke
+
+### Was
+Planungsraum-Explorer: Schnellfilter-Chips „Engpass“ und „Meldelücke“ (mit Zählern) ergänzen die Raum-Auswahl. Raum-Chips zeigen „· Meldelücke“ zusätzlich zu „· Engpass“; Rahmenfarbe bei Meldelücke. Tabelle und Maßnahmen folgen dem Schnellfilter in der Mehrfachansicht. Leerer Filterzustand mit Hinweis (z. B. nach Session-Freigabe keine Meldelücke mehr). Nur Aggregate, keine Kind- oder Personennamen.
+
+### Dateien
+- `demo/components/kita/KitaPlanungsraumExplorer.tsx` (Schnellfilter, Chip-Labels Meldelücke, Leerzustand)
+- `docs/loops/kita-JOURNAL.md` (dieses Journal)
+
+### Story
+US-KJ-009 / US-KJ-007 – Transparenzbericht Planungsraum-Explorer (Filter Engpass ↔ Meldelücke)
+
+### Build
+`npm run lint` + `npm run build` im `demo/`-Verzeichnis (siehe Commit dieses Laufs)
+
+### Nicht angefasst (Supervisor / verboten)
+Queue, BUILD_STATE, storyRegistry, andere Domänen, package.json, CI, push
+
+### Nächster sinnvoller Schritt (Hinweis Supervisor)
+Lagebild-Planungsraum-Karten Residual↔Melde-Kurzhinweis, oder Vorlage-Engpass-Liste mit Meldelücke-Filter spiegeln.
+
+---
+
 ## Iteration 2026-07-29 – US-KJ-008 Vorlage Residual ↔ Meldelücke
 
 ### Was
