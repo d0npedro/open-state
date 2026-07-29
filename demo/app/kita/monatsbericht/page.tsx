@@ -5,17 +5,25 @@
  *
  * Aggregierte Monatsauswertung je Gruppe + Vorjahresvergleich.
  * Datenlücken sichtbar. CSV-Export und druckoptimierte Ansicht (PDF via Browser).
+ * Demo-Umschalter: Monatsabschluss (lückenhaft) vs. laufender Monat (VORSCHAU)
+ * mit gemischten Tagesstand-Quellen (FREIGEGEBEN / FEHLT / IN_ERFASSUNG).
  * Keine Kind- oder Personennamen.
  */
 
+import { useState } from 'react';
 import Link from 'next/link';
-import { demoKitaMonatsbericht } from '@/data/mockKitaMonatsbericht';
+import {
+  demoKitaMonatsbericht,
+  demoKitaMonatsberichtVorschau,
+} from '@/data/mockKitaMonatsbericht';
 import type {
   KitaMonatsbericht,
   MonatsberichtStatus,
   MonatsberichtTagesstandQuelle,
   MonatsberichtTagesstandQuellenStatus,
 } from '@/types/kitaMonatsbericht';
+
+type BerichtsModus = 'ABSCHLUSS' | 'VORSCHAU';
 
 function fmtPct(n: number) {
   return `${n.toFixed(1).replace('.', ',')} %`;
@@ -50,7 +58,7 @@ function statusMeta(s: MonatsberichtStatus): { label: string; color: string; hin
       return {
         label: 'Vorschau',
         color: 'var(--color-primary)',
-        hint: 'Monat noch nicht abgeschlossen.',
+        hint: 'Monat noch nicht abgeschlossen. Kennzahlen nur aus freigegebenen Tagesständen bis Stichtag; Entwürfe und Lücken sind ausgewiesen.',
       };
   }
 }
@@ -165,14 +173,18 @@ function downloadCsv(b: KitaMonatsbericht) {
 }
 
 export default function KitaMonatsberichtPage() {
-  const b = demoKitaMonatsbericht;
+  const [modus, setModus] = useState<BerichtsModus>('ABSCHLUSS');
+  const b: KitaMonatsbericht =
+    modus === 'VORSCHAU' ? demoKitaMonatsberichtVorschau : demoKitaMonatsbericht;
   const st = statusMeta(b.status);
   const luecke = b.fehlendeTage.length > 0;
   const freigegebenCount = b.tagesstandQuellen.filter(q => q.status === 'FREIGEGEBEN').length;
   const fehltCount = b.tagesstandQuellen.filter(q => q.status === 'FEHLT').length;
+  const inErfassungCount = b.tagesstandQuellen.filter(q => q.status === 'IN_ERFASSUNG').length;
   const schluesselTage = b.tagesstandQuellen.filter(
     q => q.status === 'FREIGEGEBEN' && q.personalschluesselUnterschritten
   ).length;
+  const istVorschau = b.status === 'VORSCHAU';
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1.75rem' }}>
@@ -196,6 +208,41 @@ export default function KitaMonatsberichtPage() {
         </p>
       </div>
 
+      {/* Demo: Abschluss vs. laufender Monat (VORSCHAU) */}
+      <div
+        className="no-print"
+        role="group"
+        aria-label="Berichtsmodus wählen"
+        style={{
+          display: 'flex',
+          flexWrap: 'wrap',
+          gap: '0.5rem',
+          alignItems: 'center',
+        }}
+      >
+        <span style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', marginRight: '0.25rem' }}>
+          Demo-Ansicht:
+        </span>
+        <button
+          type="button"
+          className={modus === 'ABSCHLUSS' ? 'btn btn-primary' : 'btn btn-secondary'}
+          style={{ fontSize: '0.85rem' }}
+          onClick={() => setModus('ABSCHLUSS')}
+          aria-pressed={modus === 'ABSCHLUSS'}
+        >
+          Abschluss Okt 2024 (lückenhaft)
+        </button>
+        <button
+          type="button"
+          className={modus === 'VORSCHAU' ? 'btn btn-primary' : 'btn btn-secondary'}
+          style={{ fontSize: '0.85rem' }}
+          onClick={() => setModus('VORSCHAU')}
+          aria-pressed={modus === 'VORSCHAU'}
+        >
+          Laufender Monat Nov 2024 (Vorschau)
+        </button>
+      </div>
+
       {/* Metadaten */}
       <div
         style={{
@@ -212,6 +259,11 @@ export default function KitaMonatsberichtPage() {
         <div>
           <span style={{ color: 'var(--color-text-muted)' }}>Status:</span>{' '}
           <strong style={{ color: st.color }}>{st.label}</strong>
+        </div>
+        <div style={{ color: 'var(--color-border)' }}>|</div>
+        <div>
+          <span style={{ color: 'var(--color-text-muted)' }}>Stand:</span>{' '}
+          <strong>{b.standLabel}</strong>
         </div>
         <div style={{ color: 'var(--color-border)' }}>|</div>
         <div>
@@ -234,14 +286,29 @@ export default function KitaMonatsberichtPage() {
 
       <p style={{ margin: 0, fontSize: '0.875rem', color: 'var(--color-text-muted)' }}>{st.hint}</p>
 
+      {istVorschau && (
+        <div className="notice-box notice-box-neutral" role="status">
+          <div>
+            <strong style={{ fontSize: '0.875rem' }}>Vorschau – Monat noch nicht abgeschlossen</strong>
+            <p style={{ fontSize: '0.875rem', margin: '0.25rem 0 0' }}>
+              Kennzahlen basieren nur auf freigegebenen Tagesständen bis zum Demo-Stichtag (
+              {b.standLabel}). Entwürfe ({inErfassungCount}× „In Erfassung“) und fehlende Tage (
+              {fehltCount}×) fließen nicht ein und werden nicht interpoliert. Noch ausstehende
+              Betriebstage des Monats erscheinen erst nach dem jeweiligen Tag.
+            </p>
+          </div>
+        </div>
+      )}
+
       {luecke && (
         <div className="notice-box notice-box-warn" role="status">
           <div>
             <strong style={{ fontSize: '0.875rem' }}>Datenlücke ausgewiesen</strong>
             <p style={{ fontSize: '0.875rem', margin: '0.25rem 0 0' }}>
               Fehlende Tagesstände (nicht interpoliert):{' '}
-              <strong>{b.fehlendeTage.join(', ')}</strong>. Kennzahlen beziehen sich nur auf erfasste
-              Betriebstage ({b.erfassteTagesstaende} von {b.betriebstageImMonat}).
+              <strong>{b.fehlendeTage.join(', ')}</strong>. Kennzahlen beziehen sich nur auf
+              freigegebene Betriebstage ({freigegebenCount} von {b.betriebstageImMonat}
+              {istVorschau ? ' bis Stichtag' : ''}).
             </p>
           </div>
         </div>
@@ -287,8 +354,11 @@ export default function KitaMonatsberichtPage() {
         </h2>
         <p style={{ margin: '0 0 1rem', fontSize: '0.875rem', color: 'var(--color-text-muted)' }}>
           Kennzahlen dieses Monatsberichts basieren ausschließlich auf freigegebenen Tagesständen
-          (US-KJ-001). Entwürfe und nicht freigegebene Erfassungen fließen nicht ein. Fehlende Tage
-          werden als Lücke ausgewiesen und nicht interpoliert.
+          (US-KJ-001). Entwürfe (Status „In Erfassung“) fließen nicht ein. Fehlende Tage werden als
+          Lücke ausgewiesen und nicht interpoliert
+          {istVorschau
+            ? '. In der Vorschau sind gemischte Quellen bis zum Stichtag sichtbar; der Monat ist noch nicht abgeschlossen.'
+            : '.'}
         </p>
         <div
           style={{
@@ -303,6 +373,9 @@ export default function KitaMonatsberichtPage() {
               Freigegeben
             </div>
             <div style={{ fontSize: '1.35rem', fontWeight: 700 }}>{freigegebenCount}</div>
+            <div style={{ fontSize: '0.7rem', color: 'var(--color-text-muted)', marginTop: '0.25rem' }}>
+              fließen in Kennzahlen ein
+            </div>
           </div>
           <div
             className="card"
@@ -320,6 +393,33 @@ export default function KitaMonatsberichtPage() {
             >
               {fehltCount}
             </div>
+            <div style={{ fontSize: '0.7rem', color: 'var(--color-text-muted)', marginTop: '0.25rem' }}>
+              Lücke, nicht interpoliert
+            </div>
+          </div>
+          <div
+            className="card"
+            style={{
+              borderTop: `3px solid ${
+                inErfassungCount > 0 ? 'var(--color-warning)' : 'var(--color-border)'
+              }`,
+            }}
+          >
+            <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>
+              In Erfassung
+            </div>
+            <div
+              style={{
+                fontSize: '1.35rem',
+                fontWeight: 700,
+                color: inErfassungCount > 0 ? 'var(--color-warning)' : 'var(--color-text)',
+              }}
+            >
+              {inErfassungCount}
+            </div>
+            <div style={{ fontSize: '0.7rem', color: 'var(--color-text-muted)', marginTop: '0.25rem' }}>
+              Entwurf – nicht einbezogen
+            </div>
           </div>
           <div className="card" style={{ borderTop: '3px solid var(--color-warning)' }}>
             <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>
@@ -332,7 +432,7 @@ export default function KitaMonatsberichtPage() {
           </div>
           <div className="card" style={{ borderTop: '3px solid var(--color-primary)' }}>
             <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>
-              Betriebstage
+              {istVorschau ? 'Betriebstage bis Stichtag' : 'Betriebstage'}
             </div>
             <div style={{ fontSize: '1.35rem', fontWeight: 700 }}>{b.betriebstageImMonat}</div>
           </div>
@@ -360,12 +460,18 @@ export default function KitaMonatsberichtPage() {
               {b.tagesstandQuellen.map(q => {
                 const qs = quellenStatusMeta(q.status);
                 const fehlt = q.status === 'FEHLT';
+                const inErfassung = q.status === 'IN_ERFASSUNG';
+                const rowBg = fehlt
+                  ? 'rgba(185, 28, 28, 0.04)'
+                  : inErfassung
+                    ? 'rgba(180, 120, 20, 0.06)'
+                    : undefined;
                 return (
                   <tr
                     key={q.datumIso}
                     style={{
                       borderBottom: '1px solid var(--color-border)',
-                      background: fehlt ? 'rgba(185, 28, 28, 0.04)' : undefined,
+                      background: rowBg,
                     }}
                   >
                     <td style={{ padding: '0.55rem 0.45rem' }}>
@@ -409,6 +515,10 @@ export default function KitaMonatsberichtPage() {
                         <span style={{ color: 'var(--color-danger)' }}>
                           Kein freigegebener Stand – fließt nicht ein
                         </span>
+                      ) : inErfassung ? (
+                        <span style={{ color: 'var(--color-warning)' }}>
+                          Entwurf / nicht freigegeben – fließt nicht in Kennzahlen ein
+                        </span>
                       ) : (
                         <>
                           <div>{q.freigegebenAm}</div>
@@ -429,7 +539,8 @@ export default function KitaMonatsberichtPage() {
           <Link href="/kita/tagesstand" style={{ color: 'var(--color-primary)' }}>
             /kita/tagesstand
           </Link>{' '}
-          (Demo-Stichtag; Monatsreihe hier fiktiv für Oktober 2024).
+          (Demo-Stichtag; Monatsreihen fiktiv für {b.monatsLabel}
+          {istVorschau ? ', gemischte Quellen bis Stichtag' : ''}).
         </p>
       </section>
 
