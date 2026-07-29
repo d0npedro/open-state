@@ -16,7 +16,8 @@ const DEMO_AKTION_ZEIT = '07.12.2024, 11:15';
 
 interface GruendungStateContextValue {
   akte: GruendungsAkte;
-  answerRueckfrage: (id: string) => void;
+  /** Demo: beantwortet Rückfrage, optional mit Freitext. */
+  answerRueckfrage: (id: string, antwortText?: string) => void;
   /** Demo: markiert angefordertes/abgelehntes Dokument als hochgeladen. */
   uploadDokument: (id: string) => void;
   /** Demo: setzt Session auf den Ausgangs-Mock zurück. */
@@ -24,6 +25,9 @@ interface GruendungStateContextValue {
   /** True, sobald in dieser Session gehandelt wurde. */
   hasSessionChanges: boolean;
 }
+
+const DEMO_ANTWORT_FALLBACK =
+  'Ja, ich nehme die Kleinunternehmerregelung nach § 19 UStG in Anspruch. Voraussichtlicher Jahresumsatz laufendes Jahr unter 22.000 €, kommendes Jahr unter 50.000 €. (Demo-Antwort)';
 
 const GruendungStateContext = createContext<GruendungStateContextValue>({
   akte: demoGruendungsAkte,
@@ -34,11 +38,12 @@ const GruendungStateContext = createContext<GruendungStateContextValue>({
 });
 
 export function GruendungStateProvider({ children }: { children: React.ReactNode }) {
-  const [answeredIds, setAnsweredIds] = useState<string[]>([]);
+  const [answeredById, setAnsweredById] = useState<Record<string, string>>({});
   const [uploadedIds, setUploadedIds] = useState<string[]>([]);
 
-  const answerRueckfrage = useCallback((id: string) => {
-    setAnsweredIds(prev => (prev.includes(id) ? prev : [...prev, id]));
+  const answerRueckfrage = useCallback((id: string, antwortText?: string) => {
+    const text = (antwortText ?? '').trim() || DEMO_ANTWORT_FALLBACK;
+    setAnsweredById(prev => (prev[id] !== undefined ? prev : { ...prev, [id]: text }));
   }, []);
 
   const uploadDokument = useCallback((id: string) => {
@@ -46,16 +51,23 @@ export function GruendungStateProvider({ children }: { children: React.ReactNode
   }, []);
 
   const resetSession = useCallback(() => {
-    setAnsweredIds([]);
+    setAnsweredById({});
     setUploadedIds([]);
   }, []);
 
-  const hasSessionChanges = answeredIds.length > 0 || uploadedIds.length > 0;
+  const hasSessionChanges = Object.keys(answeredById).length > 0 || uploadedIds.length > 0;
 
   const akte = useMemo((): GruendungsAkte => {
-    const updatedRueckfragen = demoGruendungsAkte.rueckfragen.map(rq =>
-      answeredIds.includes(rq.id) ? { ...rq, beantwortet: true } : rq
-    );
+    const answeredIds = Object.keys(answeredById);
+    const updatedRueckfragen = demoGruendungsAkte.rueckfragen.map(rq => {
+      if (answeredById[rq.id] === undefined) return rq;
+      return {
+        ...rq,
+        beantwortet: true,
+        antwortText: answeredById[rq.id],
+        beantwortetAm: DEMO_AKTION_DATUM,
+      };
+    });
     const hatOffeneRueckfragen = updatedRueckfragen.some(rq => !rq.beantwortet);
 
     const updatedDokumente = demoGruendungsAkte.dokumente.map(dok => {
@@ -119,6 +131,9 @@ export function GruendungStateProvider({ children }: { children: React.ReactNode
 
     for (const id of answeredIds) {
       const rq = demoGruendungsAkte.rueckfragen.find(r => r.id === id);
+      const antwort = answeredById[id];
+      const antwortKurz =
+        antwort.length > 120 ? `${antwort.slice(0, 117)}…` : antwort;
       extraEvents.push({
         id: `UG-DEMO-RQ-${id}`,
         typ: 'rueckfrage_beantwortet',
@@ -126,8 +141,8 @@ export function GruendungStateProvider({ children }: { children: React.ReactNode
         handelndeStelle: 'GRUENDER',
         behördeId: rq?.anforderndeBehördeId,
         beschreibung: 'Rückfrage beantwortet',
-        details: rq
-          ? `Antwort zu ${rq.id} eingereicht (Demo-Interaktion).`
+        details: antwort
+          ? `Antwort eingereicht (Demo): „${antwortKurz}"`
           : `Rückfrage ${id} beantwortet (Demo-Interaktion).`,
       });
       extraEvents.push({
@@ -172,7 +187,7 @@ export function GruendungStateProvider({ children }: { children: React.ReactNode
           ? DEMO_AKTION_DATUM
           : demoGruendungsAkte.letzteAktualisierung,
     };
-  }, [answeredIds, uploadedIds]);
+  }, [answeredById, uploadedIds]);
 
   return (
     <GruendungStateContext.Provider
