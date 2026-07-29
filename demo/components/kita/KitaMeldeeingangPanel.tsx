@@ -5,7 +5,11 @@
  *
  * Zeigt freigegebene Monatsmeldungen als Datenbasis und markiert Lücken.
  * Session-Kopplung: Freigabe in /kita/meldung aktualisiert Kita Sonnenwinkel.
- * Nur Aggregate – keine Kind- oder Personennamen.
+ *
+ * Druck (US-KJ-004→005): print-only Status/Datenbasis/Session-Freigabe
+ * (Vollständigkeit, Lückenliste, Freigabe-ID, Stichprobenmonat) — Spiegel
+ * Engpass/Explorer/Zeitreihe. Aktionslinks no-print. Nur Aggregate – keine
+ * Kind- oder Personennamen.
  */
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
@@ -127,6 +131,41 @@ export function KitaMeldeeingangPanel() {
       ? 'var(--color-danger)'
       : 'var(--color-warning)';
 
+  const ueberfaellig = luecken.filter(e => e.status === 'UEBERFAELLIG').length;
+  const ausstehend = luecken.filter(e => e.status === 'AUSSTEHEND' || e.status === 'ENTWURF').length;
+
+  /** print-only: Status/Datenbasis/Session (Spiegel Engpass/Explorer Druck-Meta). */
+  const druckStatusText = useMemo(() => {
+    if (!hydrated) {
+      return 'Meldeeingang: Session-Stand noch nicht geladen (clientseitig).';
+    }
+    const vollText = vollstaendig
+      ? `Datenvollständigkeit: alle ${eintraege.length} Einrichtungen der Demo-Stichprobe freigegeben`
+      : `Datenlücken: ${freigegeben.length} von ${eintraege.length} freigegeben · ${luecken.length} fehlen (keine Interpolation)`;
+    const lueckenText =
+      luecken.length === 0
+        ? 'Keine offenen Meldungen in der Stichprobe'
+        : `Offen: ${luecken
+            .map(e => `${e.einrichtungBezeichnung} (${e.planungsraumBezeichnung}, ${statusMeta(e.status).label})`)
+            .join('; ')}`;
+    const sessionText = sessionNeu
+      ? `Session-Freigabe: Kita Sonnenwinkel · ID ${session?.freigabeId ?? '–'}${
+          session?.freigegebenAm ? ` · ${session.freigegebenAm}` : ''
+        }${session?.freigegebenDurchRolle ? ` · ${session.freigegebenDurchRolle}` : ''}`
+      : 'Session-Freigabe: keine (Demo-Ausgangsstand Meldeeingang)';
+    return `${vollText}. ${lueckenText}. ${sessionText}.`;
+  }, [
+    hydrated,
+    vollstaendig,
+    eintraege.length,
+    freigegeben.length,
+    luecken,
+    sessionNeu,
+    session?.freigabeId,
+    session?.freigegebenAm,
+    session?.freigegebenDurchRolle,
+  ]);
+
   return (
     <section
       id="meldeeingang"
@@ -140,6 +179,38 @@ export function KitaMeldeeingangPanel() {
         <p style={{ fontSize: '0.875rem', color: 'var(--color-text-muted)', margin: 0, maxWidth: '46rem' }}>
           {base.standLabel} · Berichtsmonat {base.monatsLabel} · Demo-Stichtag {base.fiktivesHeute}
         </p>
+        <p
+          className="no-print"
+          style={{
+            fontSize: '0.8rem',
+            color: 'var(--color-text-muted)',
+            margin: '0.35rem 0 0',
+            maxWidth: '46rem',
+          }}
+        >
+          Im Ausdruck: print-only Status, Datenbasis und Session-Freigabe (DEC-004).
+        </p>
+      </div>
+
+      {/* print-only: Status / Datenbasis / Session-Freigabe (immer) */}
+      <div
+        className="print-only print-block"
+        style={{
+          padding: '0.65rem 0.9rem',
+          border: '1px solid var(--color-border)',
+          borderRadius: 'var(--radius)',
+          fontSize: '0.8rem',
+          background: 'var(--color-neutral-light)',
+          lineHeight: 1.5,
+        }}
+        role="note"
+      >
+        <strong>Druck Meldeeingang (US-KJ-004 → US-KJ-005): </strong>
+        Berichtsmonat {base.monatsLabel} ({base.monatsIso}) · Demo-Stichtag {base.fiktivesHeute} ·{' '}
+        {base.standLabel}. {druckStatusText} Kennzahlen unfreigegebener Einrichtungen fließen nicht
+        in die Aggregation ein. Zähler: freigegeben {freigegeben.length}
+        {hydrated ? ` · überfällig ${ueberfaellig} · ausstehend/Entwurf ${ausstehend}` : ''}. Nur
+        Aggregate, keine Kind- oder Personennamen (DEC-004).
       </div>
 
       <div
@@ -186,9 +257,14 @@ export function KitaMeldeeingangPanel() {
                   {e.einrichtungId === 'EINR-DEMO-01' && (
                     <>
                       {' · '}
-                      <Link href="/kita/meldung" style={{ color: 'var(--color-primary)' }}>
+                      <Link
+                        href="/kita/meldung"
+                        className="no-print"
+                        style={{ color: 'var(--color-primary)' }}
+                      >
                         Freigabe in US-KJ-004
                       </Link>
+                      <span className="print-only">Freigabe über Monatsmeldung (US-KJ-004)</span>
                     </>
                   )}
                 </li>
@@ -313,15 +389,21 @@ export function KitaMeldeeingangPanel() {
         {!hydrated && (
           <span aria-hidden="true"> Session-Stand wird geladen…</span>
         )}{' '}
-        Quelle Freigabe:{' '}
-        <Link href="/kita/meldung" style={{ color: 'var(--color-primary)' }}>
-          Monatsmeldung freigeben (US-KJ-004)
-        </Link>
-        . Laufende Betriebsdaten:{' '}
-        <Link href="/kita/monatsbericht" style={{ color: 'var(--color-primary)' }}>
-          Monatsbericht-Vorschau (US-KJ-003)
-        </Link>
-        .
+        <span className="no-print">
+          Quelle Freigabe:{' '}
+          <Link href="/kita/meldung" style={{ color: 'var(--color-primary)' }}>
+            Monatsmeldung freigeben (US-KJ-004)
+          </Link>
+          . Laufende Betriebsdaten:{' '}
+          <Link href="/kita/monatsbericht" style={{ color: 'var(--color-primary)' }}>
+            Monatsbericht-Vorschau (US-KJ-003)
+          </Link>
+          .
+        </span>
+        <span className="print-only">
+          Quelle Freigabe: Monatsmeldung (US-KJ-004). Laufende Betriebsdaten: Monatsbericht-Vorschau
+          (US-KJ-003). Druckdokumentation: Status, Datenbasis und Session-Freigabe oben.
+        </span>
       </p>
     </section>
   );

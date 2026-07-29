@@ -81,7 +81,7 @@ export default function KitaLagebildPage() {
           <span className="badge badge-primary">US-KJ-006</span>
           <span className="badge badge-primary">US-KJ-010</span>
           <span>
-            Versorgungslagebild · Engpass · Handlungsfelder · Detail Druck-Meta ·
+            Versorgungslagebild · Meldeeingang Druck-Meta · Engpass · Handlungsfelder · Detail ·
             Zeitreihe 12 Monate · Regionenvergleich A/B · Druck und CSV (Status/Meldebasis) ·
             Jugendamt-intern
           </span>
@@ -283,10 +283,13 @@ export default function KitaLagebildPage() {
         <span className="print-only">öffentlichen Transparenzbericht (Methodik-Abschnitt)</span>
         . Dieses Lagebild verwendet dieselben Berechnungsgrundlagen — intern mit höherer regionaler
         Granularität. Residuale Planungslücke und Meldebasis sind methodische Hinweise (wie
-        Bedarfsplanung und Transparenzbericht), keine automatische Handlungsempfehlung. Schnellfilter
-        „Meldelücke“ in Engpass, Handlungsfeldern und Detailkarten ändern nur die Sichtbarkeit.
-        Engpass, Handlungsfelder und Detailkarten: Filter-Chips no-print; Ausdruck immer print-only
-        Filterstand (Schnellfilter, Anzahl sichtbarer Ränge/Felder/Karten, Meldebasis-Session,
+        Bedarfsplanung und Transparenzbericht), keine automatische Handlungsempfehlung. Meldeeingang
+        (US-KJ-004→005): im Ausdruck print-only Status, Datenbasis und Session-Freigabe
+        (Vollständigkeit, Lückenliste, Freigabe-ID, Stichprobenmonat); Monatsbericht-Vorschau
+        print-only Status und Tagesstand-Quellen (US-KJ-003). Schnellfilter „Meldelücke“ in Engpass,
+        Handlungsfeldern und Detailkarten ändern nur die Sichtbarkeit. Engpass, Handlungsfelder und
+        Detailkarten: Filter-Chips no-print; Ausdruck immer print-only Filterstand (Schnellfilter,
+        Anzahl sichtbarer Ränge/Felder/Karten, Meldebasis-Session,
         Stichprobenmonat — Spiegel Explorer/Zeitreihe). Zeitreihe (US-KJ-005 / US-KJ-010):
         12-Monats-Tabelle mit Regionenfilter und Meldebasis-Hinweis im UI; CSV der aktiven
         Filteransicht an der Tabelle; im Ausdruck print-only Filterstand (Region, Meldebasis-Session,
@@ -384,13 +387,13 @@ export default function KitaLagebildPage() {
 
       <div className="no-print" style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)' }}>
         Steuerungskette Kommune {lb.kommuneBezeichnung}: Lagebild → Bedarfsplanung → Vorlage
-        (Planungslücken und Meldebasis). Engpass/Handlungsfelder/Detail: Druck print-only
-        Filterstand inkl. Meldebasis-Session. Zeitreihe 12 Monate im UI (Filter + CSV aktiver
-        Ansicht; Druck: print-only Filterstand Region/Meldebasis) und im Steuerungs-CSV (Blatt 6).
-        Regionenvergleich A/B im UI (Stichtag + Verlauf, CSV an Komponente; Druck: print-only
-        Filterstand A/B/Meldebasis/Kennzahl — Spiegel öffentlicher Bericht). Druck und CSV:
-        Status/Meldebasis und optionaler Meldelücke-Filter im Export. Öffentliche Aggregation ohne
-        Einrichtungsdetail im{' '}
+        (Planungslücken und Meldebasis). Meldeeingang: Druck print-only Status/Datenbasis/Session;
+        Vorschau print-only Quellen. Engpass/Handlungsfelder/Detail: Druck print-only Filterstand
+        inkl. Meldebasis-Session. Zeitreihe 12 Monate im UI (Filter + CSV aktiver Ansicht; Druck:
+        print-only Filterstand Region/Meldebasis) und im Steuerungs-CSV (Blatt 6). Regionenvergleich
+        A/B im UI (Stichtag + Verlauf, CSV an Komponente; Druck: print-only Filterstand
+        A/B/Meldebasis/Kennzahl — Spiegel öffentlicher Bericht). Druck und CSV: Status/Meldebasis und
+        optionaler Meldelücke-Filter im Export. Öffentliche Aggregation ohne Einrichtungsdetail im{' '}
         <Link href="/kita" style={{ color: 'var(--color-primary)' }}>
           öffentlichen Bericht
         </Link>{' '}
