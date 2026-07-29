@@ -61,6 +61,9 @@ export default function KitaTransparenzberichtPage() {
         <div><span style={{ color: 'var(--color-text-muted)' }}>Version:</span> {lb.version}</div>
       </div>
 
+      {/* Druck + CSV: Status/Meldebasis print-only + Multi-Blatt Aggregate (US-KJ-009 AK 6) */}
+      <KitaCsvDownload lagebild={lb} />
+
       {/* Gesamtkennzahlen (AK 1: gesamt) */}
       <section>
         <h2 style={{ marginBottom: '1rem' }}>Gesamtübersicht {lb.kommuneBezeichnung}</h2>
@@ -112,11 +115,10 @@ export default function KitaTransparenzberichtPage() {
         </div>
       </section>
 
-      {/* Planungsraum-Filter + Maßnahmen (Q-074, US-KJ-009) */}
+      {/* Planungsraum-Filter + Maßnahmen (Q-074, US-KJ-009); CSV/Druck oben */}
       <KitaPlanungsraumExplorer
         planungsraeume={lb.planungsraeume}
         massnahmen={lb.massnahmen}
-        csvSlot={<KitaCsvDownload lagebild={lb} />}
       />
 
       {/* Monatsvergleich / Trenddarstellung (Q-024, US-KJ-010) */}
@@ -166,7 +168,7 @@ export default function KitaTransparenzberichtPage() {
           <li>Einrichtungen mit fehlender freigegebener Monatsmeldung mindern die Aussagekraft residualer Planungslücken (Hinweis only, keine Interpolation). Demo: Planungsraum Südost kann initial eine Meldelücke zeigen – nach Freigabe in der Monatsmeldung geschlossen.</li>
           <li>Zeitreihe (US-KJ-010 AK&nbsp;2 / AK&nbsp;4): Regionenfilter auf Gesamtkommune oder einzelnen Planungsraum. CSV-Export lädt die aktuell gefilterte Zeitreihentabelle (Semikolon, UTF-8 BOM) inkl. Region und Meldebasis-Hinweis — keine Kind- oder Personennamen. Raumreihen sind Demo-Verteilungen der kommunalen Monatsreihe nach Strukturanteilen. Der Berichtsmonat Oktober 2024 ist methodisch an die Meldebasis-Stichprobe gekoppelt (raumbezogen im Filter). Meldelücken werden markiert, ohne Kennzahlen zu verändern oder zu interpolieren.</li>
           <li>Regionenvergleich (US-KJ-010 AK&nbsp;3 / AK&nbsp;4 + Verlauf): Zwei Planungsräume mit denselben Stichtags-Kennzahlen; Δ (A − B) ist rechnerisch und keine automatische Bewertung. Zusätzlich 12-Monats-Verlauf derselben Auswahl A/B (Kennzahl wählbar: Warteliste, Auslastung, freie Plätze, Personalausfall) mit monatsweiser Δ und Meldebasis-Hinweis am Berichtsmonat. CSV-Export (AK&nbsp;4): (1) Stichtags-Auswahl A/B inkl. Δ und Meldebasis; (2) aktiver Verlauf der gewählten Kennzahl (12 Monate · Wert A/B · Δ · Meldebasis). Semikolon, UTF-8 BOM — keine Kind- oder Personennamen. Raumreihen wie Zeitreihenfilter (Demo-Verteilung). Meldebasis je Raum session-sensitiv.</li>
-          <li>CSV Transparenzbericht (US-KJ-009 AK&nbsp;6): Multi-Blatt freigegebene Aggregate mit Status/Freigabe im Metakopf, Meldebasis-Session (raumaggregiert, analog Explorer) und optionalem Export-Filter „Meldelücke“. Blätter: Versorgung Gesamt, Planungsräume (Meldebasis-Spalten), Kapazitätsmaßnahmen, Meldebasis-Stichprobe. Keine Einrichtungs-PII (DEC-004). Semikolon, UTF-8 BOM.</li>
+          <li>Druck und CSV Transparenzbericht (US-KJ-009 AK&nbsp;6): Druck dokumentiert Status (freigegeben, Version, Freigabe Rolle+Datum) und Meldebasis-Session print-only — Spiegel Bedarfsplanung/Vorlage. CSV: Multi-Blatt freigegebene Aggregate mit Status/Freigabe im Metakopf, Meldebasis-Session (raumaggregiert) und optionalem Export-Filter „Meldelücke“. Blätter: Versorgung Gesamt, Planungsräume (Meldebasis-Spalten), Kapazitätsmaßnahmen, Meldebasis-Stichprobe. Keine Einrichtungs-PII (DEC-004). Semikolon, UTF-8 BOM.</li>
           <li>CSV-Datenlizenz (US-KJ-010, offene fachliche Frage): Alle öffentlichen Kita-CSV-Exporte (Planungsraumdaten/Transparenzbericht, Zeitreihe, Regionenvergleich Stichtag/Verlauf) tragen im Metakommentarkopf einen Demo-Lizenzhinweis. Open-Data-Status ist vorläufig — finale Lizenz je Bundesland zu klären. Vorschlag Demo-Nachnutzung: CC-BY 4.0-ähnlich mit Quellenangabe „Open State Demo – Kita Transparenzbericht“. Keine amtliche Statistik, nur Aggregate.</li>
         </ul>
       </div>
@@ -204,12 +206,13 @@ export default function KitaTransparenzberichtPage() {
         Dieser Bericht ist ein sachlicher Lagebericht der Verwaltung — kein Kommunikationsinstrument und keine politische Bewertung.
         Er enthält keine Empfehlungen und keine Werbung für Verwaltungsleistungen.
         Die Entscheidung über Maßnahmen liegt bei den zuständigen politischen Gremien.
-        Freigabe: {lb.freigegebenVon}, {lb.freigegebenAm}. CSV-Export (US-KJ-009 AK&nbsp;6): freigegebene Aggregate mit
-        Status, Meldebasis und optionalem Meldelücke-Filter im Metakopf; keine Kind- oder Personennamen (DEC-004).
+        Freigabe: {lb.freigegebenVon}, {lb.freigegebenAm}. Druck und CSV (US-KJ-009 AK&nbsp;6): Status und
+        Meldebasis im Ausdruck (print-only) bzw. CSV-Metakopf; optionales Meldelücke-Filter nur im CSV;
+        keine Kind- oder Personennamen (DEC-004).
       </div>
 
       {/* Steuerungskette JA (Demo): öffentlicher Bericht speist sich aus freigegebenen Aggregaten */}
-      <section aria-labelledby="steuerungskette-heading">
+      <section aria-labelledby="steuerungskette-heading" className="no-print">
         <h2 id="steuerungskette-heading" style={{ marginBottom: '0.5rem' }}>
           Steuerungskette Jugendamt (Demo)
         </h2>
@@ -290,10 +293,20 @@ export default function KitaTransparenzberichtPage() {
         </div>
       </section>
 
-      <div style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)' }}>
+      <div className="no-print" style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)' }}>
         Steuerungskette Kommune {lb.kommuneBezeichnung}: Lagebild → Bedarfsplanung → Vorlage
         (interne Demo-Routen). Öffentliche Aggregation hier ohne Einrichtungsdetail (DEC-004,
         US-KJ-009). Betriebliche Meldebasis über freigegebene Monatsmeldungen (US-KJ-004).
+        Druck: Status und Meldebasis-Session print-only; CSV Multi-Blatt Aggregate.
+      </div>
+
+      <div
+        className="print-only print-block"
+        style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', marginTop: '1rem' }}
+      >
+        Druckansicht US-KJ-009 · Status freigegeben · Version {lb.version} · Datenstand {lb.stand} ·
+        Meldebasis raumaggregiert (Session, Demo-Stichprobe Meldeeingang) · keine Kind- oder
+        Personennamen (DEC-004).
       </div>
 
     </div>

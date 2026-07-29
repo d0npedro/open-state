@@ -161,8 +161,9 @@ export function KitaPlanungsraumExplorer({ planungsraeume, massnahmen, csvSlot }
           {csvSlot}
         </div>
 
-        {/* Schnellfilter: Engpass / Meldelücke */}
+        {/* Schnellfilter: Engpass / Meldelücke (interaktiv, no-print) */}
         <div
+          className="no-print"
           role="group"
           aria-label="Schnellfilter Engpass und Meldelücke"
           style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '0.65rem' }}
@@ -227,8 +228,9 @@ export function KitaPlanungsraumExplorer({ planungsraeume, massnahmen, csvSlot }
           </button>
         </div>
 
-        {/* Planungsraum-Chips */}
+        {/* Planungsraum-Chips (interaktiv, no-print) */}
         <div
+          className="no-print"
           role="group"
           aria-label="Planungsraum filtern"
           style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '1rem' }}
@@ -290,6 +292,7 @@ export function KitaPlanungsraumExplorer({ planungsraeume, massnahmen, csvSlot }
         </div>
 
         <p
+          className="no-print"
           role="status"
           aria-live="polite"
           style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', marginBottom: '0.75rem' }}
@@ -302,6 +305,30 @@ export function KitaPlanungsraumExplorer({ planungsraeume, massnahmen, csvSlot }
                 ? `${filteredRaeume.length} Planungsraum${filteredRaeume.length === 1 ? '' : 'e'} mit Meldelücke`
                 : `${filteredRaeume.length} Planungsräume angezeigt`}
         </p>
+
+        {/* print-only: aktiver Filterstand (Status/Meldebasis-Spiegel, US-KJ-009) */}
+        {(selectedId !== 'ALL' || schnellfilter !== 'ALL') && (
+          <div
+            className="print-only print-block"
+            style={{
+              marginBottom: '0.75rem',
+              padding: '0.65rem 0.9rem',
+              border: '1px solid var(--color-border)',
+              borderRadius: 'var(--radius)',
+              fontSize: '0.8rem',
+              background: 'var(--color-neutral-light)',
+            }}
+            role="note"
+          >
+            <strong>Druckfilter Planungsräume: </strong>
+            {selectedId !== 'ALL'
+              ? `Einzelraum ${selectedRaum?.bezeichnung ?? selectedId}`
+              : schnellfilter === 'ENGPASS'
+                ? `Engpass aktiv (${filteredRaeume.length} Raum${filteredRaeume.length === 1 ? '' : 'e'}; Wartelistendruck > 10 oder Auslastung ≥ 98 %)`
+                : `Meldelücke aktiv (${filteredRaeume.length} Raum${filteredRaeume.length === 1 ? '' : 'e'} mit unvollständiger Meldebasis in der Demo-Stichprobe)`}
+            . Rangfolge und Kennzahlen unverändert; Filter ändert nur Sichtbarkeit.
+          </div>
+        )}
 
         {/* Detailkarte bei Einzelauswahl */}
         {selectedRaum && (

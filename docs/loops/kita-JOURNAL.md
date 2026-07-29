@@ -2,6 +2,31 @@
 
 Branch: `loop/kita` · Worktree: `D:\Projects\open-state-loop-kita`
 
+## Iteration 2026-07-29 – US-KJ-009 Transparenzbericht Druck-Meta Status/Meldebasis
+
+### Was
+Öffentlicher Transparenzbericht (`/kita`, US-KJ-009): Druckansicht an Steuerungs-/Vorlage-Muster angeglichen. Export-Karte Druck+CSV in `KitaCsvDownload` (vorher nur CSV im Explorer-Slot). print-only: Status freigegeben (Version, Rolle+Datum, Datenstand) und Meldebasis-Session (raumaggregiert, Lückenliste, Session-Meldefreigabe). Print-CSS; Steuerungskette no-print. Explorer: Filter-Chips no-print, aktiver Filterstand print-only. Methodik/Footer. Nur freigegebene Aggregate, keine Kind- oder Personennamen. Merge `origin/main` (ci-watcher) vor dem Feature.
+
+### Dateien
+- `demo/components/kita/KitaCsvDownload.tsx` (Druck+CSV-Karte, print-only Status/Meldebasis, Print-CSS)
+- `demo/components/kita/KitaPlanungsraumExplorer.tsx` (Filter no-print, print-only Filterstand)
+- `demo/app/kita/page.tsx` (Export oben, Methodik/Footer, Steuerungskette no-print)
+- `docs/loops/kita-JOURNAL.md` (dieses Journal)
+
+### Story
+US-KJ-009 – Öffentlichen Transparenzbericht einsehen (Druck-Meta Status/Meldebasis)
+
+### Build
+`npm run lint` + `npm run build` im `demo/`-Verzeichnis (siehe Commit dieses Laufs)
+
+### Nicht angefasst (Supervisor / verboten)
+Queue, BUILD_STATE, storyRegistry, DECISION_LOG, andere Domänen, package.json, CI, push
+
+### Nächster sinnvoller Schritt (Hinweis Supervisor)
+Zeitreihe optional im Lagebild-UI (nicht nur CSV) falls fachlich gewünscht, oder Explorer/Meldebasis-Druckhinweis weiter schärfen, oder öffentliche Zeitreihe print-only Meta.
+
+---
+
 ## Iteration 2026-07-29 – US-KJ-005 Lagebild Steuerungs-CSV Zeitreihen-Blatt
 
 ### Was
