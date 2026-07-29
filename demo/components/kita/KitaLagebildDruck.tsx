@@ -3,8 +3,8 @@
 /**
  * Export-Karte Druck + CSV für das Steuerungslagebild (US-KJ-005/006).
  *
- * Druck: Filter-Chips no-print; aktiver Meldelücke-Filter → print-only-Hinweis
- * (Spiegel Vorlage US-KJ-008).
+ * Druck: Filter-Chips no-print; Engpass/Handlungsfelder/Detail immer print-only
+ * Filterstand inkl. Meldebasis-Session (Spiegel Explorer/Zeitreihe).
  * CSV: freigabeunabhängig Aggregate mit Status (Lagebild-Freigabe), Meldebasis-Session
  * und optionalem Export-Filter „Meldelücke“ (Spiegel Engpass/Vorlage). DEC-004.
  * Keine Kind- oder Personennamen.
@@ -471,11 +471,11 @@ export function KitaLagebildDruck() {
               lineHeight: 1.5,
             }}
           >
-            Druck: Filter-Chips no-print. Engpass und Handlungsfelder: immer print-only Filterstand
-            inkl. Meldebasis-Session (Schnellfilter, Stichprobenmonat). Detail: print-only bei
-            aktivem Meldelücke-Filter. CSV: Aggregate mit Lagebild-Status, Meldebasis-Session,
-            Zeitreihe (12 Monate Gesamt + Planungsräume) und optionalem Export-Filter „Meldelücke“
-            (Semikolon, UTF-8 BOM). Nur Aggregate, keine Kind- oder Personennamen (DEC-004).
+            Druck: Filter-Chips no-print. Engpass, Handlungsfelder und Detailkarten: immer
+            print-only Filterstand inkl. Meldebasis-Session (Schnellfilter, Stichprobenmonat).
+            CSV: Aggregate mit Lagebild-Status, Meldebasis-Session, Zeitreihe (12 Monate Gesamt +
+            Planungsräume) und optionalem Export-Filter „Meldelücke“ (Semikolon, UTF-8 BOM). Nur
+            Aggregate, keine Kind- oder Personennamen (DEC-004).
           </p>
           <div
             style={{
