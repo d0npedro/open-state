@@ -2,14 +2,15 @@
 
 | Feld | Wert |
 |------|------|
-| last_checked | 2026-07-29T05:54:14Z |
-| last_run_id | 30426336844 |
+| last_checked | 2026-07-29T05:56:40Z |
+| last_run_id | 30426464903 |
 | last_status | success |
-| last_fix_sha | 41f49b9 |
+| last_fix_sha | 6315cd2 |
 | fix_attempts | 0 |
 
 ## Log
 
+- E2E `30426464903` **success** (SHA 6315cd2 docs ci-watcher). Prior E2E `30426336844` success (SHA 41f49b9). Build latest `30426184498` success (SHA a6ae4be; HEAD docs-only path-skip). Catch-up: origin/main..main = 0. fix_attempts=0.
 - E2E `30426336844` **success** (SHA 41f49b9 docs ci-watcher). Prior E2E `30426207660` success (SHA 01f9f61). Build latest `30426184498` success (SHA a6ae4be; HEAD docs-only path-skip). Catch-up: origin/main..main = 0. fix_attempts=0.
 - Build `30426184498` success (SHA a6ae4be docs Q-115 dedupe). E2E `30426184503` + `30426207660` **success** (SHA a6ae4be / 01f9f61 HEAD Q-116). Catch-up: origin/main..main = 0. fix_attempts=0.
 - Local supervisor: Multi-Loop race wiped `.next` mid-suite (`_error.js` / `BUILD_ID` missing). Fix: `distDir` via `NEXT_DIST_DIR=.next-e2e` in playwright webServer + next.config; `.next-e2e/` gitignored. lint+build+`test:e2e:ci` 216 passed. fix_attempts=0.
