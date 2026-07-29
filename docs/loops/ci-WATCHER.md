@@ -2,10 +2,10 @@
 
 | Feld | Wert |
 |------|------|
-| last_checked | 2026-07-29T05:34:30Z |
-| last_run_id | 30425346240 |
+| last_checked | 2026-07-29T05:40:00Z |
+| last_run_id | 30425526927 |
 | last_status | success |
-| last_fix_sha | 3d7c00f |
+| last_fix_sha | 4f47003 |
 | fix_attempts | 0 |
 
 ## Log
@@ -30,3 +30,6 @@
 - Build `30425008491` + E2E `30425008507` success (SHA a18556a Merge loop/kita). Catch-up: origin/main..main = 0.
 - E2E `30425071047` + `30425090019` **failure** (SHA b787f34 / bbd4565): `next start` without production build — `Could not find a production build in the '.next' directory`. Root: playwright isE2eCi (CI=true) uses `next start`, GHA still ran plain `test:e2e` without build. Fix attempt 1/2 → `3d7c00f`.
 - Build `30425290659` + E2E `30425290682` **success** (SHA 3d7c00f fix(ci): webServer `npm run build && next start`, workflow `test:e2e:ci`). E2E `30425346240` success (SHA ddc9052 docs Q-112). Catch-up: origin/main..main = 0. fix_attempts=0.
+- E2E `30425424585` + `30425450390` + `30425526927` success (SHA 28f3e4d docs / bc2a598 Merge loop/kita / 4f47003 Merge loop/ug). Build `30425450404` success. HEAD `4f47003`. Catch-up: origin/main..main = 0. fix_attempts=0.
+- Supervisor-Pflicht 2026-07-29 Q-107: merge loop/ug `ba026f5`; local E2E chromium Port 3010 grün; Queue Q-106/Q-107 DONE; push origin/main + loops. fix_attempts=0.
+- Catch-up push `bc2a598..4f47003` (3 commits: UG Q-107 + docs + merge loop/ug). Local lint+build grün. Build `30425526900` + E2E `30425526927` **success** (SHA 4f47003). origin/main..main = 0. fix_attempts=0.
