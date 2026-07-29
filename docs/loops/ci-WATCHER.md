@@ -2,14 +2,15 @@
 
 | Feld | Wert |
 |------|------|
-| last_checked | 2026-07-29T10:25:21Z |
-| last_run_id | 30443397092 |
+| last_checked | 2026-07-29T10:30:04Z |
+| last_run_id | 30443648452 |
 | last_status | success |
 | last_sha | 8b329ca |
 | fix_attempts | 0 |
 
 ## Log
 
+- E2E `30443648452` **success** (SHA 8b329ca docs; watched to green). E2E `30443397092` **success** (SHA 8b329ca/11c2845). Build `30442777657` **success** (SHA 5772335 / Merge loop/kita+ug tree — latest **remote** code path). **Vercel commit status failure** on origin HEAD `27f2f7a`: „Deployment rate limited — retry in 24 hours.“ (nicht App-Build). Catch-up: origin/main..main = 5 (local `752f5d8` Merge loop/kita Blatt 7–8 + Merge loop/ug Upload-Quittung) → lint+build grün (`NEXT_DIST_DIR=.next-ci-watcher`) — **Push unterlassen** per `docs/loops/PIPELINE_STOP.md` R1/R2/R5 (kein Docs-Spam, kein Catch-up-Push solange Vercel Rate-Limit). No GHA fix. fix_attempts=0.
 - E2E `30443397092` **success** (SHA 8b329ca docs ci-watcher HEAD). E2E `30443213202` **success** (SHA 11c2845 docs). E2E `30443008439` **success** (SHA ce52959 docs supervisor Q-185–Q-187). Build `30442777657` **success** (SHA 5772335; tree includes `814603f` Merge loop/kita + `3d0f954` Merge loop/ug — latest code path: Kita Meldeeingang/Monatsbericht CSV + UG Session-Antwort Verlauf/RQ). Catch-up: origin/main..main = 0. No fix. fix_attempts=0.
 - E2E `30443213202` **success** (SHA 11c2845 docs ci-watcher HEAD). E2E `30443008439` **success** (SHA ce52959 docs supervisor Q-185–Q-187). Build `30442777657` + E2E `30442777719` **success** (SHA 5772335; tree includes `814603f` Merge loop/kita + `3d0f954` Merge loop/ug — latest code path: Kita Meldeeingang/Monatsbericht CSV + UG Session-Antwort Verlauf/RQ). Catch-up: origin/main..main = 0. Watched tip E2E to green. No fix. fix_attempts=0.
 - E2E `30443008439` **success** (SHA ce52959 docs supervisor Q-185–Q-187 HEAD). E2E `30442977284` **success** (SHA 41976d4 docs ci-watcher). Build `30442777657` + E2E `30442777719` **success** (SHA 5772335; tree includes `814603f` Merge loop/kita + `3d0f954` Merge loop/ug — latest code path: Kita Meldeeingang/Monatsbericht CSV + UG Session-Antwort Verlauf/RQ). Catch-up: origin/main..main was 1 (docs only) → lint+build grün (`NEXT_DIST_DIR=.next-ci-watcher`); concurrent push already synced → origin/main..main = 0. Watched tip E2E to green. No fix. fix_attempts=0.
