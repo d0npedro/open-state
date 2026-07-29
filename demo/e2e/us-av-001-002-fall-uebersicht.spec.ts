@@ -117,6 +117,28 @@ test.describe('US-AV-002 – Status einsehen', () => {
     await expect(activeTab).toContainText('Übersicht');
   });
 
+  test('Tab-Badges: offene Fragen und Unterlagen als Zähler sichtbar', async ({ page }) => {
+    // Mock: 1 offene Rückfrage, 2 angeforderte Unterlagen
+    const fragenBadge = page.getByTestId('tab-badge-fragen');
+    const unterlagenBadge = page.getByTestId('tab-badge-unterlagen');
+    await expect(fragenBadge).toBeVisible();
+    await expect(fragenBadge).toHaveText('1');
+    await expect(unterlagenBadge).toBeVisible();
+    await expect(unterlagenBadge).toHaveText('2');
+    // Tabs mit Handlungsbedarf tragen Zähler im accessible name
+    await expect(page.getByRole('tab', { name: /Fragen,\s*1 offen/i })).toBeVisible();
+    await expect(page.getByRole('tab', { name: /Unterlagen,\s*2 offen/i })).toBeVisible();
+  });
+
+  test('Tab-Badge Fragen entfällt nach Beantworten (Client-Navigation)', async ({ page }) => {
+    await page.locator('.tab-nav-item').filter({ hasText: 'Fragen' }).click();
+    await expect(page).toHaveURL(/\/fall\/rueckfragen/);
+    await page.getByRole('button', { name: /Jetzt beantworten/i }).click();
+    // Badge-Fragen muss live verschwinden; Unterlagen bleibt
+    await expect(page.getByTestId('tab-badge-fragen')).toHaveCount(0);
+    await expect(page.getByTestId('tab-badge-unterlagen')).toHaveText('2');
+  });
+
   test('Nach Rückfrage-Antwort: Fortschritt bleibt stabil und zeigt Unterlagen-Phase', async ({ page }) => {
     // Initial: RUECKFRAGE_OFFEN → Fortschritt ~57 % (Schritt 4/7), nie 0 %
     await expect(page.getByText(/57\s*%|%/).first()).toBeVisible();

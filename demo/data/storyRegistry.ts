@@ -161,12 +161,13 @@ export const storyRegistry: StoryRegistryEntry[] = [
     domain: 'Kita-Betrieb & Jugendamt-Steuerung',
     title: 'Meldung prüfen und freigeben',
     role: 'Kita-Leitung',
-    status: 'BEREIT',
+    status: 'DEMONSTRIERBAR',
     problem: 'Meldungen an das Jugendamt werden manuell erstellt – vollautomatische Übermittlung ohne Kontrolle ist keine akzeptable Alternative',
-    screen: 'Meldefreigabe (nicht implementiert)',
+    screen: 'Meldefreigabe Monatsmeldung',
     transparency_focus: 'Aktive Freigabe durch Leitung – keine Datenübermittlung ohne Kenntnis und Bestätigung',
     acceptance_criteria_count: 4,
-    implemented_criteria: 0,
+    implemented_criteria: 4,
+    route: '/kita/meldung',
     source_file: 'docs/stories/kita_betrieb_und_jugendamt_steuerung/US-KJ-004_Meldung_freigeben.md'
   },
   {

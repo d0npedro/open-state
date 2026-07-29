@@ -79,6 +79,7 @@ Wenn der Nutzer **regelmäßiges Pushen** oder **Dauerbetrieb mit Remote-Sync** 
 
 - Domain-Loops pushen weiterhin **nicht**.
 - Der **Supervisor** pusht nach erfolgreichem Merge + `lint` + `build` auf `origin main` (kein force).
+- Der **CI-Watcher** prüft nach Pushes GitHub Actions (Build Check, ggf. E2E). Bei Failure: Logs lesen, lokal reproduzieren, fixen, committen, erneut pushen (kein force). Max. 2 Auto-Fix-Versuche pro defektem Commit, sonst Blockade dokumentieren.
 - Details: `docs/loops/MULTI_LOOP_BETRIEB.md`.
 
 ---

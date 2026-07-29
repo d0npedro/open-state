@@ -72,6 +72,9 @@ Die Kita-Domäne ist mit 7 Dokumenten und 10 Stories am stärksten vorbereitete 
 | Q-076 | Demo-Route `/kita/bedarfsplanung`: Bedarfsplanungsentwurf aus Lagebild-Daten, Planungslücke, Kommentar/Freigabe (US-KJ-007) | DEMO | M | Q-023 | DONE |
 | Q-077 | Demo-Route `/kita/vorlage`: politische Gremienvorlage aus Lagebild, JA-Freigabe, Druck/PDF (US-KJ-008) | DEMO | M | Q-076 | DONE |
 | Q-078 | Demo-Route `/kita/einrichtung`: Belegungsstand je Gruppe, aggregiert, CSV (US-KJ-002) | DEMO | M | – | DONE |
+| Q-079 | Demo-Route `/kita/monatsbericht`: Monatsbericht je Gruppe, Vorjahresvergleich, CSV/Druck (US-KJ-003) | DEMO | M | Q-078 | DONE |
+| Q-080 | Demo-Route `/kita/meldung`: Monatsmeldung prüfen, korrigieren, freigeben (US-KJ-004) | DEMO | M | Q-079 | DONE |
+| Q-083 | Demo-Route `/kita/tagesstand` oder Erweiterung Einrichtung: aggregierte Tagesstand-Erfassung session-lokal (US-KJ-001) | DEMO | M | Q-078 | OFFEN |
 
 ---
 
@@ -91,6 +94,18 @@ Story-Dokumentation ist kein Pflicht-Vorläufer für Mock-Daten und Typen.
 | Q-015 | Fairness-Regeln für Unternehmensgründung anlegen (fehlende Genehmigung, blockierter Folgeschritt, Fristlage) | DEMO | M | Q-013 | DONE `48e62e1` |
 | Q-030 | Navigationsstruktur für mehrere Domänen: Landing Page zeigt alle klickbaren Demo-Domänen mit kurzem Kontext | DEMO | M | Q-014 | DONE `d11873a` |
 | Q-073 | UG Dokument-Upload interaktiv + Fairness UG_UNTERLAGE_FEHLT + Verlaufsereignisse bei Rückfrage/Upload | DEMO | S | Q-015 | DONE |
+| Q-082 | UG Verlauf-Filter nach handelnder Stelle (Alle / Sie / Behörde / System) mit Anzahlen und Leerzustand | DEMO | S | Q-073 | DONE |
+| Q-084 | UG Behörden-Karte: CTA zu offener Rückfrage der jeweiligen Behörde | DEMO | S | Q-082 | OFFEN |
+
+---
+
+### Priorität 4b – AV Demo-Verfeinerung (Domain-Loop)
+
+| ID | Schritt | Typ | Aufwand | Abhängigkeit | Status |
+|----|---------|-----|---------|--------------|--------|
+| Q-081 | AV Tab-Badges: Zähler offener Fragen/Unterlagen in Fall-Navigation, live mit DemoState | DEMO | S | Q-072 | DONE |
+| Q-085 | AV Rückfrage-Antwort: kurzer Bestätigungsdialog (was wurde beantwortet) | DEMO | S | Q-081 | OFFEN |
+| Q-086 | AV Fristen-Countdown auf Übersicht für offene Dokumente (analog RQ-Frist) | DEMO | S | Q-072 | OFFEN |
 
 ---
 
@@ -192,3 +207,6 @@ Diese Punkte wurden in früheren Iterationen abgeschlossen und sind produktionsr
 | Multi-Loop AV | Progress UNTERLAGEN_FEHLEN + Ruhezustand | `a42cf4c` → main |
 | Multi-Loop UG | Strukturierte Rückfrage + Fristcountdown | `0571ef6` → main |
 | Multi-Loop Kita | Monatsbericht US-KJ-003 | `259b361` → main |
+| Q-081 AV Tab-Badges | Offene Fragen/Unterlagen in Fall-Nav | `9c45c2e` → main |
+| Q-082 UG Verlauf-Filter | Filter nach handelnder Stelle | `ccba7da` → main |
+| Q-080 Kita Meldefreigabe | `/kita/meldung` US-KJ-004 | `4b3fd8c` → main |
