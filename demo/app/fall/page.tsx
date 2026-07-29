@@ -91,7 +91,8 @@ export default function FallPage() {
     }))
     .sort((a, b) => a.resttage - b.resttage);
   const naechsteDokFrist = dokFristen[0];
-  const naechsterTermin = fall.termine.find(t => t.status === 'BESTAETIGT');
+  // Nächster Termin: bestätigt oder ausstehend (nicht abgesagt) — Badge/Status bleiben tab-seitig
+  const naechsterTermin = fall.termine.find(t => t.status !== 'ABGESAGT');
   const wartetAufBehoerde = !hatOffeneAufgaben && fall.status === 'IN_PRUEFUNG';
 
   return (

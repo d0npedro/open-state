@@ -1,6 +1,7 @@
 import { demoKitaLagebild } from '@/data/mockKitaLagebild';
 import type { PlanungsraumKennzahlen, Kapazitaetsmassnahme } from '@/types/kita';
 import { KitaMeldeeingangPanel } from '@/components/kita/KitaMeldeeingangPanel';
+import { KitaPlanungsraumMeldebeitrag } from '@/components/kita/KitaPlanungsraumMeldebeitrag';
 
 // ─── Hilfsfunktionen ────────────────────────────────────────────────────────
 
@@ -139,6 +140,12 @@ function PlanungsraumKarte({
       ) : (
         <p style={{ fontSize: '0.875rem', color: 'var(--color-text-muted)', margin: 0 }}>Keine laufenden Maßnahmen für diesen Planungsraum.</p>
       )}
+
+      {/* Meldebeitrag freigegebener Einrichtungsmeldungen (US-KJ-004 → Südost/Sonnenwinkel) */}
+      <KitaPlanungsraumMeldebeitrag
+        planungsraumId={pr.id}
+        planungsraumBezeichnung={pr.bezeichnung}
+      />
     </div>
   );
 }

@@ -26,8 +26,16 @@ test.describe('US-AV-005 – Termin einsehen und verstehen', () => {
     ).toBeVisible();
   });
 
-  test('Termin-Status "Bestätigt" ist sichtbar', async ({ page }) => {
-    await expect(page.getByText('Bestätigt')).toBeVisible();
+  test('Termin-Status "Ausstehend" ist sichtbar (unbestätigt → Tab-Badge)', async ({ page }) => {
+    await expect(page.getByText('Ausstehend')).toBeVisible();
+    await expect(page.getByText('BESTAETIGT')).not.toBeVisible();
+  });
+
+  test('Tab-Badge Termine bei unbestätigtem Termin (Q-089)', async ({ page }) => {
+    const badge = page.getByTestId('tab-badge-termine');
+    await expect(badge).toBeVisible();
+    await expect(badge).toHaveText('1');
+    await expect(page.getByRole('tab', { name: /Termine,\s*1 offen/i })).toBeVisible();
   });
 
   test('Datum des Termins klar sichtbar', async ({ page }) => {

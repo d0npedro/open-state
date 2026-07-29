@@ -36,6 +36,53 @@ export function berechneFristTage(fristDatum: string, heute: string): number {
   return Math.ceil(diffMs / (1000 * 60 * 60 * 24));
 }
 
+/** Deutsche Monatsnamen → 1–12 (Demo-Daten in mockFall, Anzeigeform). */
+const DE_MONAT: Record<string, number> = {
+  januar: 1,
+  februar: 2,
+  märz: 3,
+  maerz: 3,
+  april: 4,
+  mai: 5,
+  juni: 6,
+  juli: 7,
+  august: 8,
+  september: 9,
+  oktober: 10,
+  november: 11,
+  dezember: 12,
+};
+
+/**
+ * Parst Anzeige-Datum aus dem Demo-Mock (z. B. „3. Dezember 2024“) nach ISO yyyy-mm-dd.
+ * Rückgabe null bei unbekanntem Format — dann greift nur der Status-Fallback.
+ */
+export function parseDeutschesDatumZuIso(datum: string): string | null {
+  const m = datum.trim().match(/^(\d{1,2})\.\s*(\S+)\s+(\d{4})$/);
+  if (!m) return null;
+  const tag = parseInt(m[1], 10);
+  const monat = DE_MONAT[m[2].toLowerCase()];
+  if (!monat || tag < 1 || tag > 31) return null;
+  return `${m[3]}-${String(monat).padStart(2, '0')}-${String(tag).padStart(2, '0')}`;
+}
+
+/**
+ * Termin mit Handlungsbedarf für Tab-Badge (Q-089 / US-AV-005):
+ * - unbestätigt (AUSSTEHEND), oder
+ * - nicht abgesagt und heute/morgen fällig (Resttage 0 oder 1 ggü. FIKTIVES_HEUTE)
+ */
+export function terminHatHandlungsbedarf(
+  termin: { status: string; datum: string },
+  heute: string = FIKTIVES_HEUTE
+): boolean {
+  if (termin.status === 'ABGESAGT') return false;
+  if (termin.status === 'AUSSTEHEND') return true;
+  const iso = parseDeutschesDatumZuIso(termin.datum);
+  if (!iso) return false;
+  const rest = berechneFristTage(iso, heute);
+  return rest >= 0 && rest <= 1;
+}
+
 export function berechneFairnessSignale(fall: Fall): FairnessSignal[] {
   const signale: FairnessSignal[] = [];
 
