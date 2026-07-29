@@ -2,6 +2,29 @@
 
 Branch: `loop/kita` · Worktree: `D:\Projects\open-state-loop-kita`
 
+## Iteration 2026-07-29 – US-KJ-008 Vorlage Engpass Meldelücke-Filter
+
+### Was
+Politische Vorlage (`/kita/vorlage`): Engpass-Liste (Top 3 nach Wartelistendruck) mit Schnellfilter „Meldelücke“ gespiegelt (wie Planungsraum-Explorer). Chips mit Zähler, Badge/Rahmen bei Lücke, Leerzustand nach Session-Freigabe, Summenhinweis und Methodik-Punkt. Rangfolge bleibt nach Druck; keine Umbewertung. Nur Aggregate, keine Kind- oder Personennamen.
+
+### Dateien
+- `demo/app/kita/vorlage/page.tsx` (Engpass-Schnellfilter Meldelücke, UI, Methodik)
+- `docs/loops/kita-JOURNAL.md` (dieses Journal)
+
+### Story
+US-KJ-008 / US-KJ-009 – Politische Vorlage Engpass-Liste (Meldelücke-Filter, Session-sensitiv)
+
+### Build
+`npm run lint` + `npm run build` im `demo/`-Verzeichnis (siehe Commit dieses Laufs)
+
+### Nicht angefasst (Supervisor / verboten)
+Queue, BUILD_STATE, storyRegistry, andere Domänen, package.json, CI, push
+
+### Nächster sinnvoller Schritt (Hinweis Supervisor)
+Zeitreihen-Regionenvergleich (US-KJ-010) methodisch an Meldebasis knüpfen, oder Lagebild/Vorlage Druckansicht Engpass-Filter dokumentieren.
+
+---
+
 ## Iteration 2026-07-29 – US-KJ-005/006 Handlungsfelder Meldebasis
 
 ### Was

@@ -6,6 +6,7 @@
  * Entwurf aus Steuerungslagebild + Bedarfsplanung-Kennzahlen.
  * Residuale Planungslücke methodisch an Meldelücken aus dem Meldeeingang gekoppelt
  * (Hinweis only, wie Bedarfsplanung / Transparenzbericht).
+ * Engpass-Liste: Schnellfilter „Meldelücke“ (Session-sensitiv, wie Planungsraum-Explorer).
  * Freigabe nur aktiv durch JA-Leitung (simuliert). Keine automatischen Beschlüsse.
  * Export: druckoptimierte Ansicht (Browser-Druck → PDF).
  */
@@ -22,9 +23,14 @@ import {
 
 type VorlageStatus = 'ENTWURF' | 'ZUR_FREIGABE' | 'FREIGEGEBEN' | 'ZURUECKGEGEBEN';
 
+/** Schnellfilter für Engpass-Liste (Spiegel zu Planungsraum-Explorer US-KJ-009). */
+type EngpassSchnellfilter = 'ALL' | 'MELDELUECKE';
+
 const VORLAGE_ID = 'JHA-2025-KITA-01';
 const GREMIUM = 'Jugendhilfeausschuss Musterstadt';
 const SITZUNG = 'Geplante Sitzung: 18. März 2025 (Demo)';
+/** Standard: Top-N nach Wartelistendruck (unverändert). */
+const ENGPASS_TOP_N = 3;
 
 function planungslueckeResidual(
   warteliste: number,
@@ -51,6 +57,7 @@ export default function PolitischeVorlagePage() {
   );
   const [freigabeHinweis, setFreigabeHinweis] = useState('');
   const [freigabeStamp, setFreigabeStamp] = useState<{ am: string; rolle: string } | null>(null);
+  const [engpassFilter, setEngpassFilter] = useState<EngpassSchnellfilter>('ALL');
 
   const raumZeilen = useMemo(() => {
     return lb.planungsraeume.map(pr => {
@@ -73,7 +80,26 @@ export default function PolitischeVorlagePage() {
 
   const summeGeplant = raumZeilen.reduce((s, r) => s + r.geplant, 0);
   const summeResidual = raumZeilen.reduce((s, r) => s + r.residual, 0);
-  const engpass = [...raumZeilen].sort((a, b) => b.druck - a.druck).slice(0, 3);
+
+  /** Alle Räume nach Wartelistendruck (Rangfolge unverändert bei Meldelücke). */
+  const engpassRanked = useMemo(
+    () => [...raumZeilen].sort((a, b) => b.druck - a.druck),
+    [raumZeilen]
+  );
+
+  const meldelueckeCount = useMemo(
+    () => engpassRanked.filter(r => byRaumId.get(r.id)?.hatDatenluecke).length,
+    [engpassRanked, byRaumId]
+  );
+
+  /** Top-N Engpass, optional nur Räume mit Meldelücke (Session-sensitiv). */
+  const engpass = useMemo(() => {
+    if (engpassFilter === 'MELDELUECKE') {
+      return engpassRanked.filter(r => byRaumId.get(r.id)?.hatDatenluecke);
+    }
+    return engpassRanked.slice(0, ENGPASS_TOP_N);
+  }, [engpassRanked, engpassFilter, byRaumId]);
+
   const suedostLuecke = byRaumId.get('PR-03')?.hatDatenluecke ?? false;
   const residualByRaumId = useMemo(() => {
     const m = new Map<string, number>();
@@ -273,28 +299,140 @@ export default function PolitischeVorlagePage() {
 
         <section style={{ marginBottom: '1.5rem' }}>
           <h3 style={{ fontSize: '1rem', marginBottom: '0.75rem' }}>2. Engpass-Räume (nach Wartelistendruck)</h3>
-          <ol style={{ margin: 0, paddingLeft: '1.25rem', lineHeight: 1.7, fontSize: '0.9rem' }}>
-            {engpass.map(r => {
-              const meldebasis = byRaumId.get(r.id);
-              const meldeHinweis =
-                meldebasis?.hatDatenluecke && r.residual > 0
-                  ? meldebasis.schwere === 'UEBERFAELLIG'
-                    ? ' · Meldebasis unvollständig (überfällig)'
-                    : ' · Meldebasis unvollständig (ausstehend)'
-                  : '';
-              return (
-                <li key={r.id}>
-                  <strong>{r.name}</strong> — Druck {r.druck.toFixed(1)}×, Warteliste {r.warteliste},
-                  residuale Planungslücke {r.residual}
-                  {meldeHinweis}
-                </li>
-              );
-            })}
-          </ol>
-          {suedostLuecke && (
+          <p style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', margin: '0 0 0.65rem', lineHeight: 1.5 }}>
+            Standard: Top {ENGPASS_TOP_N} nach Wartelistendruck. Optional Schnellfilter „Meldelücke“
+            (Demo-Stichprobe Meldeeingang, Session-sensitiv — wie öffentlicher Planungsraum-Explorer).
+            Rangfolge bleibt nach Druck; keine Umbewertung.
+          </p>
+
+          {/* Schnellfilter: nur interaktiv / nicht drucken */}
+          <div
+            className="no-print"
+            role="group"
+            aria-label="Schnellfilter Engpass-Liste Meldelücke"
+            style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '0.75rem' }}
+          >
+            <button
+              type="button"
+              className={engpassFilter === 'ALL' ? 'btn btn-primary' : 'btn btn-secondary'}
+              aria-pressed={engpassFilter === 'ALL'}
+              onClick={() => setEngpassFilter('ALL')}
+              style={{ fontSize: '0.8rem', padding: '0.35rem 0.75rem' }}
+            >
+              Top {ENGPASS_TOP_N} Engpass
+            </button>
+            <button
+              type="button"
+              className={engpassFilter === 'MELDELUECKE' ? 'btn btn-primary' : 'btn btn-secondary'}
+              aria-pressed={engpassFilter === 'MELDELUECKE'}
+              onClick={() =>
+                setEngpassFilter(prev => (prev === 'MELDELUECKE' ? 'ALL' : 'MELDELUECKE'))
+              }
+              style={{
+                fontSize: '0.8rem',
+                padding: '0.35rem 0.75rem',
+                borderColor: engpassFilter === 'MELDELUECKE' ? undefined : 'var(--color-danger)',
+              }}
+              title="Planungsräume mit fehlender freigegebener Monatsmeldung (Demo-Stichprobe)"
+            >
+              Meldelücke
+              <span style={{ marginLeft: '0.35rem', fontSize: '0.72rem', opacity: 0.9 }}>
+                ({meldelueckeCount})
+              </span>
+            </button>
+          </div>
+
+          {engpassFilter === 'MELDELUECKE' && (
+            <p
+              className="print-only"
+              style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', margin: '0 0 0.5rem' }}
+            >
+              Gefiltert: nur Planungsräume mit Meldelücke (Stand Entwurf).
+            </p>
+          )}
+
+          {engpass.length === 0 ? (
+            <p
+              role="status"
+              style={{
+                fontSize: '0.875rem',
+                color: 'var(--color-text-muted)',
+                margin: 0,
+                padding: '0.75rem 1rem',
+                background: 'var(--color-neutral-light)',
+                borderRadius: 'var(--radius)',
+                borderLeft: '3px solid var(--color-border)',
+                lineHeight: 1.5,
+              }}
+            >
+              {engpassFilter === 'MELDELUECKE'
+                ? 'Keine Planungsräume mit Meldelücke in der aktuellen Demo-Stichprobe (ggf. nach Freigabe in /kita/meldung geschlossen).'
+                : 'Keine Engpass-Räume nach Wartelistendruck.'}
+            </p>
+          ) : (
+            <ol style={{ margin: 0, paddingLeft: '1.25rem', lineHeight: 1.7, fontSize: '0.9rem' }}>
+              {engpass.map(r => {
+                const meldebasis = byRaumId.get(r.id);
+                const hatLuecke = Boolean(meldebasis?.hatDatenluecke);
+                const meldeHinweis =
+                  hatLuecke && r.residual > 0
+                    ? meldebasis?.schwere === 'UEBERFAELLIG'
+                      ? ' · Meldebasis unvollständig (überfällig)'
+                      : ' · Meldebasis unvollständig (ausstehend)'
+                    : hatLuecke
+                      ? meldebasis?.schwere === 'UEBERFAELLIG'
+                        ? ' · Meldelücke (überfällig)'
+                        : ' · Meldelücke (ausstehend)'
+                      : '';
+                return (
+                  <li
+                    key={r.id}
+                    style={
+                      hatLuecke
+                        ? {
+                            borderLeft: '3px solid var(--color-warning)',
+                            paddingLeft: '0.5rem',
+                            marginBottom: '0.25rem',
+                          }
+                        : undefined
+                    }
+                  >
+                    <strong>{r.name}</strong>
+                    {hatLuecke && (
+                      <span
+                        className="badge"
+                        style={{
+                          marginLeft: '0.4rem',
+                          fontSize: '0.68rem',
+                          verticalAlign: 'middle',
+                          background: 'var(--color-warning-light, #fff8e8)',
+                          color: 'var(--color-warning)',
+                          border: '1px solid var(--color-warning)',
+                        }}
+                      >
+                        Meldelücke
+                      </span>
+                    )}
+                    {' '}— Druck {r.druck.toFixed(1)}×, Warteliste {r.warteliste},
+                    residuale Planungslücke {r.residual}
+                    {meldeHinweis}
+                  </li>
+                );
+              })}
+            </ol>
+          )}
+
+          {engpassFilter === 'MELDELUECKE' && engpass.length > 0 && (
+            <p style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', margin: '0.65rem 0 0', lineHeight: 1.5 }}>
+              {engpass.length} Planungsraum{engpass.length === 1 ? '' : 'e'} mit Meldelücke,
+              sortiert nach Wartelistendruck (nicht nach Meldeschwere).
+            </p>
+          )}
+          {suedostLuecke && engpassFilter === 'ALL' && (
             <p style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', margin: '0.65rem 0 0', lineHeight: 1.5 }}>
               Fokus Südost: residuale Planungslücke methodisch an fehlende freigegebene Einrichtungsmeldung
               gekoppelt (Hinweis only, keine Interpolation). Nach Session-Freigabe in der Monatsmeldung entfällt der Hinweis.
+              Filter „Meldelücke“ listet alle betroffenen Räume der Stichprobe.
             </p>
           )}
         </section>
@@ -430,6 +568,10 @@ export default function PolitischeVorlagePage() {
             <li>
               Residuale Planungslücken mit Meldelücke (fehlende freigegebene Einrichtungsmeldungen) werden methodisch
               ausgewiesen und nicht interpoliert — gleiche Methodik wie Bedarfsplanung und öffentlicher Transparenzbericht.
+            </li>
+            <li>
+              Engpass-Liste: Top {ENGPASS_TOP_N} nach Wartelistendruck; optionaler Schnellfilter „Meldelücke“
+              (Session-sensitiv aus Meldeeingang-Stichprobe, analog Planungsraum-Explorer). Keine Umbewertung der Rangfolge.
             </li>
             <li>Keine personen- oder kindbezogenen Einzeldaten in dieser Vorlage; Einrichtungsaggregate nur als Meldebasis-Hinweis.</li>
             {lb.methodik.slice(0, 3).map(m => (
