@@ -129,6 +129,7 @@ Story-Dokumentation ist kein Pflicht-Vorläufer für Mock-Daten und Typen.
 | Q-107 | UG Übersicht: nächster Schritt mit direktem Link zur betroffenen Stelle/Seite | DEMO | S | Q-106 | DONE `ba026f5` |
 | Q-111 | UG Hinweise: CTA „Zum Verfahrensstatus“ aus HINWEIS-Betriebsdatum (`#verfahrensstatus`) | DEMO | S | Q-100 | DONE `18e395e` |
 | Q-113 | UG Hinweise: CTA „Zu den Behörden“ aus INFO parallele Behörden (`/gruendung/behoerden`) | DEMO | S | Q-111 | DONE `b603c71` |
+| Q-116 | UG Übersicht: Fairness-Signale RELEVANT/HINWEIS mit Kurz-CTAs (RQ/Unterlagen/BG) | DEMO | S | Q-107 | DONE `54700cb` |
 
 ---
 
@@ -267,3 +268,4 @@ Diese Punkte wurden in früheren Iterationen abgeschlossen und sind produktionsr
 | Q-113 UG parallele-Behörden-CTA | Hinweise INFO → `/gruendung/behoerden` | `b603c71` → main |
 | Q-114 Kita Vorlage Engpass-Filter | Engpass-Liste Meldelücke-Schnellfilter | `fe2f684` → main |
 | Q-115 Kita Zeitreihe Meldebasis | Berichtsmonat Meldelücke in `KitaZeitreiheTabelle` | `4486fe5` → main |
+| Q-116 UG Fairness Kurz-CTAs | Übersicht RELEVANT/HINWEIS → RQ/Unterlagen/BG | `54700cb` → main |
