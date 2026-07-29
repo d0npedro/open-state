@@ -13,6 +13,7 @@ const nav = [
   { href: '/kita/bedarfsplanung', label: 'Bedarfsplanung',     hint: 'Demo: Entwurf § 80' },
   { href: '/kita/vorlage',        label: 'Gremienvorlage',     hint: 'Demo: Freigabe' },
   { href: '/kita/einrichtung',    label: 'Einrichtung',        hint: 'Demo: Belegung' },
+  { href: '/kita/monatsbericht',  label: 'Monatsbericht',      hint: 'Demo: Leitung' },
 ];
 
 export default function KitaLayout({ children }: { children: React.ReactNode }) {
