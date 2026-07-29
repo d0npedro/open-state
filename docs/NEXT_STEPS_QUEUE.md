@@ -157,6 +157,9 @@ Story-Dokumentation ist kein Pflicht-Vorläufer für Mock-Daten und Typen.
 | Q-121 | UG Behörden: VS-04 nach Beantworten der Rückfrage session-lokal auf ABGESCHLOSSEN; Verlauf-Ereignis | DEMO | S | Q-120 | DONE `5dce475` |
 | Q-122 | UG Behörden: nach RQ-Antwort nächster AUSSTEHEND-Schritt derselben Behörde (VS-05 Steuernummer) → IN_BEARBEITUNG + Verlauf | DEMO | S | Q-121 | DONE `84ff4fa` |
 | Q-123 | Kita CSV: Open-Data-Lizenzhinweis in Meta-Kopf + UI (US-KJ-010 offene Frage Datenlizenz) | DEMO | S | Q-119 | DONE `5cde4c6` |
+| Q-124 | UG Fairness: Steuernummer-Signal auch bei VS-05 IN_BEARBEITUNG (Text/CTA session-sensitiv) | DEMO | S | Q-122 | DONE `dc05794` |
+| Q-125 | Kita Lagebild Engpass-Rangliste: Schnellfilter Meldelücke (Session-sensitiv, analog Vorlage Q-114) | DEMO | S | Q-112 | DONE `549b998` |
+| Q-126 | Kita Lagebild Handlungsfelder: Schnellfilter Meldelücke (Session-sensitiv, analog Engpass Q-125) | DEMO | S | Q-125 | DONE `e8d51f1` |
 
 ---
 
@@ -283,3 +286,6 @@ Diese Punkte wurden in früheren Iterationen abgeschlossen und sind produktionsr
 | Q-121 UG VS-04 nach RQ-Antwort | Verfahrensschritt ABGESCHLOSSEN + Verlauf | `5dce475` → main |
 | Q-122 UG VS-05 nach RQ-Antwort | Steuernummer IN_BEARBEITUNG + Verlauf | `84ff4fa` → main |
 | Q-123 Kita CSV Open-Data-Lizenz | Meta-Kopf + UI `kitaCsvLizenz` (US-KJ-010) | `5cde4c6` → main |
+| Q-124 UG Steuernummer VS-05 Signal | Fairness auch bei IN_BEARBEITUNG | `dc05794` → main |
+| Q-125 Kita Lagebild Engpass-Filter | Engpass-Rangliste Meldelücke-Schnellfilter | `549b998` → main |
+| Q-126 Kita Lagebild Handlungsfelder-Filter | Handlungsfelder Meldelücke-Schnellfilter | `e8d51f1` → main |

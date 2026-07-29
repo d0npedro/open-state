@@ -1,6 +1,6 @@
 # BUILD_STATE.md – Aktueller Projektstand
 
-Zuletzt aktualisiert: nach Supervisor-Pflicht-Push 2026-07-29 (Merge Kita Q-123 Open-Data-Lizenzhinweis CSV; lint+build grün)
+Zuletzt aktualisiert: nach Supervisor-Pflicht-Push 2026-07-29 (Merge UG Q-124 Steuernummer-Signal + Kita Q-125/Q-126 Meldelücke-Filter Lagebild; lint+build+e2e grün)
 
 Dieser Stand beschreibt, was tatsächlich existiert und funktioniert.
 Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
@@ -15,7 +15,7 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | Build-Status | ✓ Erfolgreich (27 statische Seiten) |
 | Deployment | Vercel, aus `demo/`-Verzeichnis |
 | Lokaler Start | `cd demo && npm install && npm run dev` |
-| Letzte Build-Prüfung | lint+build grün; `test:e2e:ci` 227 chromium passed (Supervisor) |
+| Letzte Build-Prüfung | lint+build grün; `test:e2e:ci` 229 chromium passed (Supervisor) |
 
 ---
 
@@ -35,7 +35,7 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | `/feedback` | Feedback → GitHub Issues | – | ✓ |
 | `/gruendung` … | Unternehmensgründung (Übersicht Fairness-Kurzblock+Kurz-CTAs, Behörden VS-04→Rückfrage, Hinweise-CTAs RQ/BG/Unterlagen/Steuernummer/Betriebsdatum/parallele Behörden, Verlauf Stelle+Ereignistyp-Filter, …) | US-UG-001–006 | ✓ |
 | `/kita` | Öffentlicher Transparenzbericht + Planungsraum-Filter + Residual↔Meldelücke + Engpass/Meldelücke-Schnellfilter + Zeitreihe Meldebasis + Regionenfilter + Regionenvergleich Zwei-Räume inkl. 12-Monats-Verlauf A/B + CSV-Export Zeitreihe/Vergleich/Verlauf inkl. Open-Data-Lizenzhinweis | US-KJ-009, US-KJ-010 | ✓ |
-| `/kita/lagebild` | Jugendamt-Steuerungsansicht + Meldeeingang + Meldebeitrag + Engpass-Rangliste Meldebasis + Monatsbericht-Vorschau-Kopplung | US-KJ-005, US-KJ-006 | ✓ |
+| `/kita/lagebild` | Jugendamt-Steuerungsansicht + Meldeeingang + Meldebeitrag + Engpass-Rangliste/Handlungsfelder Meldelücke-Schnellfilter + Monatsbericht-Vorschau-Kopplung | US-KJ-005, US-KJ-006 | ✓ |
 | `/kita/bedarfsplanung` | Bedarfsplanungsentwurf (§ 80 SGB VIII) + Meldebasis + Residual↔Meldelücke (Hinweis-only) | US-KJ-007 | ✓ |
 | `/kita/vorlage` | Politische Gremienvorlage + Freigabe + Meldebasis/Residual↔Meldelücke + Engpass-Liste Meldelücke-Filter | US-KJ-008 | ✓ |
 | `/kita/einrichtung` | Belegungsstand Einrichtung (aggregiert) | US-KJ-002 | ✓ |
@@ -64,7 +64,7 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | Kita Bedarfsplanung Meldebasis | `demo/components/kita/KitaBedarfsplanungDatenbasis.tsx` | ✓ Datenlücke je Planungsraum aus Meldeeingang; Residual↔Meldelücke Hinweis-only; schließt sich nach Session-Freigabe |
 | AV Termin-Bestätigung | `DemoStateContext.confirmTermin` + `/fall/termine` | ✓ session-lokal AUSSTEHEND→BESTAETIGT; Tab-Badge live |
 | UG Verlauf Typ-Filter | `/gruendung/verlauf` | ✓ Stelle + Ereignistyp (Vorgang/Dokumente/Rückfragen/Bescheide), UND-Kombination |
-| UG Hinweise Steuernummer-CTA | `/gruendung/hinweise` | ✓ CTA „Zum Finanzamt“ → `#beh-BEH-02` solange VS-05 ausstehend |
+| UG Hinweise Steuernummer-CTA | `/gruendung/hinweise` | ✓ CTA „Zum Finanzamt“ → `#beh-BEH-02` bei VS-05 AUSSTEHEND oder IN_BEARBEITUNG; Signal-Text session-sensitiv (Q-124) |
 | UG Hinweise Betriebsdatum-CTA | `/gruendung/hinweise` + Übersicht `#verfahrensstatus` | ✓ CTA „Zum Verfahrensstatus“ aus HINWEIS-Betriebsdatum |
 | UG Hinweise parallele-Behörden-CTA | `/gruendung/hinweise` → `/gruendung/behoerden` | ✓ CTA „Zu den Behörden“ aus INFO parallele Behörden (Q-113) |
 | Kita Vorlage Engpass Meldelücke-Filter | `/kita/vorlage` Engpass-Liste | ✓ Schnellfilter Top-3 vs. Meldelücke, Session-sensitiv (Q-114) |
@@ -78,6 +78,9 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | Kita Zeitreihe/Vergleich CSV | `KitaZeitreiheTabelle` + `KitaRegionenVergleich` | ✓ CSV-Export gefilterter Ansicht inkl. Meldebasis/Δ und Verlauf A vs. B; Semikolon, UTF-8 BOM (Q-119, US-KJ-010 AK4) |
 | Kita Regionenvergleich Verlauf | `KitaRegionenVergleich` | ✓ 12-Monats-Verlauf A vs. B neben Kernkennzahlen (US-KJ-010, Q-118-Erweiterung) |
 | Kita CSV Open-Data-Lizenz | `kitaCsvLizenz.ts` + CSV-Komponenten | ✓ Demo-Lizenzhinweis Meta-Kopf + UI (vorläufig CC-BY-ähnlich; finale Lizenz BL-offen) (Q-123, US-KJ-010) |
+| UG Steuernummer-Signal VS-05 | `gruendung-rules.ts` + Hinweise | ✓ Signal auch bei IN_BEARBEITUNG; Text blockiert/in Bearbeitung je Session (Q-124) |
+| Kita Lagebild Engpass Meldelücke-Filter | `KitaEngpassRangliste.tsx` | ✓ Schnellfilter Alle/Meldelücke, Rang-Erhalt, Session-sensitiv (Q-125, US-KJ-006) |
+| Kita Lagebild Handlungsfelder Meldelücke-Filter | `KitaHandlungsfelder.tsx` | ✓ Schnellfilter Alle/Meldelücke, Leerzustand nach Freigabe (Q-126, US-KJ-005/006) |
 
 ---
 
