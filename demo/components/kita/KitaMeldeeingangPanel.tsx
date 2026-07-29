@@ -673,13 +673,15 @@ export function KitaMeldeeingangPanel() {
           <Link href="/kita/monatsbericht" style={{ color: 'var(--color-primary)' }}>
             Monatsbericht-Vorschau (US-KJ-003)
           </Link>
-          . CSV: Statusblatt, freigegebene Aggregate und Lückenliste des aktuellen Session-Stands
-          (DEC-004).
+          . CSV Meldeeingang: Statusblatt, freigegebene Aggregate und Lückenliste des aktuellen
+          Session-Stands. CSV Monatsbericht-Vorschau an der Vorschau-Karte (Gruppen/Quellenblatt,
+          DEC-004).
         </span>
         <span className="print-only">
           Quelle Freigabe: Monatsmeldung (US-KJ-004). Laufende Betriebsdaten: Monatsbericht-Vorschau
           (US-KJ-003). Druckdokumentation: Status, Datenbasis und Session-Freigabe oben. CSV
-          exportiert denselben Session-Stand (Status/Aggregate/Lücken).
+          Meldeeingang exportiert denselben Session-Stand (Status/Aggregate/Lücken); Vorschau-CSV an
+          der Vorschau-Karte.
         </span>
       </p>
     </section>

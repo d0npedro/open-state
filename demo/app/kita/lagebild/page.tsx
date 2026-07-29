@@ -81,8 +81,8 @@ export default function KitaLagebildPage() {
           <span className="badge badge-primary">US-KJ-006</span>
           <span className="badge badge-primary">US-KJ-010</span>
           <span>
-            Versorgungslagebild · Meldeeingang Druck+CSV · Engpass · Handlungsfelder · Detail ·
-            Zeitreihe 12 Monate · Regionenvergleich A/B · Druck und CSV (Status/Meldebasis) ·
+            Versorgungslagebild · Meldeeingang Druck+CSV · Vorschau-CSV · Engpass · Handlungsfelder ·
+            Detail · Zeitreihe 12 Monate · Regionenvergleich A/B · Druck und CSV (Status/Meldebasis) ·
             Jugendamt-intern
           </span>
         </div>
@@ -288,7 +288,8 @@ export default function KitaLagebildPage() {
         (Vollständigkeit, Lückenliste, Freigabe-ID, Stichprobenmonat); CSV an der Sektion
         (Statusblatt, freigegebene Aggregate, Lückenliste, Session-sensitiv, freigabeunabhängig;
         unfreigegebene ohne Kennzahlen); Monatsbericht-Vorschau print-only Status und
-        Tagesstand-Quellen (US-KJ-003). Schnellfilter „Meldelücke“ in Engpass,
+        Tagesstand-Quellen sowie CSV an der Sektion (Gruppenaggregate, Quellenblatt, Meldeeingang-
+        Kopplung im Metakopf, freigabeunabhängig; US-KJ-003 ↔ US-KJ-005). Schnellfilter „Meldelücke“ in Engpass,
         Handlungsfeldern und Detailkarten ändern nur die Sichtbarkeit. Engpass, Handlungsfelder und
         Detailkarten: Filter-Chips no-print; Ausdruck immer print-only Filterstand (Schnellfilter,
         Anzahl sichtbarer Ränge/Felder/Karten, Meldebasis-Session,
@@ -390,7 +391,8 @@ export default function KitaLagebildPage() {
       <div className="no-print" style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)' }}>
         Steuerungskette Kommune {lb.kommuneBezeichnung}: Lagebild → Bedarfsplanung → Vorlage
         (Planungslücken und Meldebasis). Meldeeingang: Druck print-only Status/Datenbasis/Session
-        und CSV Status/Aggregate/Lücken (Session-Stand); Vorschau print-only Quellen.
+        und CSV Status/Aggregate/Lücken (Session-Stand); Vorschau print-only Quellen und CSV
+        Gruppen/Quellenblatt inkl. Meldeeingang-Kopplung.
         Engpass/Handlungsfelder/Detail: Druck print-only Filterstand
         inkl. Meldebasis-Session. Zeitreihe 12 Monate im UI (Filter + CSV aktiver Ansicht; Druck:
         print-only Filterstand Region/Meldebasis) und im Steuerungs-CSV (Blatt 6). Regionenvergleich
