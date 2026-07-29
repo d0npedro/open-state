@@ -331,11 +331,38 @@ test.describe('UG – Verlauf', () => {
     await expect(page.getByText('Behörde').first()).toBeVisible();
   });
 
-  test('Akteur-Legende sichtbar', async ({ page }) => {
-    const legende = page.locator('.card').first();
-    await expect(legende).toContainText('Sie');
-    await expect(legende).toContainText('Behörde');
-    await expect(legende).toContainText('System');
+  test('Filter nach handelnder Stelle sichtbar', async ({ page }) => {
+    const group = page.getByRole('group', { name: /Verlauf filtern nach handelnder Stelle/i });
+    await expect(group).toBeVisible();
+    await expect(group.getByRole('button', { name: /Alle/i })).toBeVisible();
+    await expect(group.getByRole('button', { name: /Sie/i })).toBeVisible();
+    await expect(group.getByRole('button', { name: /Behörde/i })).toBeVisible();
+    await expect(group.getByRole('button', { name: /System/i })).toBeVisible();
+  });
+
+  test('Filter „Sie“ zeigt nur Gründer-Ereignisse', async ({ page }) => {
+    const group = page.getByRole('group', { name: /Verlauf filtern nach handelnder Stelle/i });
+    await group.getByRole('button', { name: /Sie/i }).click();
+    await expect(group.getByRole('button', { name: /Sie/i })).toHaveAttribute('aria-pressed', 'true');
+    await expect(page.getByText('Vorgang erstellt').first()).toBeVisible();
+    await expect(page.getByText('Vorgang eingereicht').first()).toBeVisible();
+    // Behörden-Ereignis muss ausgeblendet sein
+    await expect(page.getByText('Rückfrage gestellt')).not.toBeVisible();
+    await expect(page.getByText(/von \d+ Einträgen · Filter: Sie/)).toBeVisible();
+  });
+
+  test('Filter „Behörde“ blendet Gründer-Ereignisse aus', async ({ page }) => {
+    const group = page.getByRole('group', { name: /Verlauf filtern nach handelnder Stelle/i });
+    await group.getByRole('button', { name: /Behörde/i }).click();
+    await expect(page.getByText('Rückfrage gestellt').first()).toBeVisible();
+    await expect(page.getByText('Eingang bestätigt').first()).toBeVisible();
+    await expect(page.getByText('Vorgang erstellt')).not.toBeVisible();
+  });
+
+  test('Filter „System“ zeigt Leerzustand ohne System-Events', async ({ page }) => {
+    const group = page.getByRole('group', { name: /Verlauf filtern nach handelnder Stelle/i });
+    await group.getByRole('button', { name: /System/i }).click();
+    await expect(page.getByRole('status')).toContainText(/Keine System-Einträge|Noch keine System/i);
   });
 
   test('Kein interner Ereignis-Code sichtbar', async ({ page }) => {
