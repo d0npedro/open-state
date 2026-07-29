@@ -6,6 +6,38 @@ Scope: nur `demo/app/fall/**`, DemoStateContext, fairness/rules, mockFall, e2e u
 
 ---
 
+## 2026-07-29 – Iteration 8: Übersicht Termin-Kachel Status live (Q-104)
+
+### Was
+Schnellzugriff-Kachel „Nächster Termin“ auf `/fall` zeigt Teilnahme-Status live (US-AV-005 / Q-104):
+
+1. **Status-Chip** `Ausstehend` / `Bestätigt` (`data-testid="kachel-termin-status"`).
+2. **Wertzeile** `Datum · Status`; unbestätigt = warning (analog Tab-Badge).
+3. Nach `confirmTermin` + Tab-Nav zur Übersicht: Kachel zeigt **Bestätigt** ohne `page.goto` (DEC-012).
+4. E2E: initial + Live-Wechsel nach Session-Bestätigung.
+
+### Dateien
+- `demo/app/fall/page.tsx`
+- `demo/e2e/us-av-001-002-fall-uebersicht.spec.ts`
+- `demo/e2e/us-av-005-termine.spec.ts`
+- `docs/loops/av-JOURNAL.md`
+
+### Story-IDs
+- US-AV-005 (Termin / Teilnahme)
+- US-AV-002 (Status auf Übersicht)
+
+### Build
+`npm run lint` + `npm run build` + `npm run test:e2e:av` → **126 passed**, Exit 0
+
+### Vorschlag Queue-ID
+- Q-104 (AV Übersicht: Termin-Kachel Status „Bestätigt“ live)
+
+### Nächster sinnvoller AV-Schritt (Vorschlag)
+- Q-105: Verlauf Upload-Ereignisse mit Dokumentbezeichnung hervorheben
+- Fairness-Signal UNTERLAGE mit berechneter Dokumenten-Frist (falls noch Lücken)
+
+---
+
 ## 2026-07-29 – Iteration 7: Termin-Bestätigung session-lokal (Q-092)
 
 ### Was

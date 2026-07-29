@@ -103,6 +103,13 @@ test.describe('US-AV-002 – Status einsehen', () => {
     await expect(page.getByRole('link', { name: /Letzte Aktivität/i })).toBeVisible();
   });
 
+  test('Termin-Kachel zeigt Status Ausstehend (Q-104 initial)', async ({ page }) => {
+    const kachel = page.getByTestId('kachel-naechster-termin');
+    await expect(kachel).toBeVisible();
+    await expect(kachel).toContainText('3. Dezember 2024');
+    await expect(page.getByTestId('kachel-termin-status')).toHaveText('Ausstehend');
+  });
+
   test('Navigation enthält alle Bereiche mit Icons', async ({ page }) => {
     await expect(page.locator('.tab-nav-item').filter({ hasText: 'Übersicht' })).toBeVisible();
     await expect(page.locator('.tab-nav-item').filter({ hasText: 'Unterlagen' })).toBeVisible();
