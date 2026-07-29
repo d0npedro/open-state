@@ -2,6 +2,30 @@
 
 Branch: `loop/kita` · Worktree: `D:\Projects\open-state-loop-kita`
 
+## Iteration 2026-07-29 – US-KJ-005/006 Lagebild Residual ↔ Meldelücke
+
+### Was
+Steuerungslagebild-Planungsraum-Karten zeigen residuale Planungslücke (Demo-Näherung wie Bedarfsplanung) und koppeln sie methodisch an Meldelücken aus dem Meldebeitrag: Residualzahl + Meldebasis-Badge + ResidualMeldeHinweis je Karte; Summenhinweis über der Detailansicht (Fokus Südost / PR-03). Hinweis-only, keine Interpolation; nach Session-Freigabe entfällt der Melde-Hinweis. Nur Aggregate, keine Kind- oder Personennamen.
+
+### Dateien
+- `demo/components/kita/KitaPlanungsraumMeldebeitrag.tsx` (Residual-Block, Meldebasis, Summenhinweis-Export)
+- `demo/app/kita/lagebild/page.tsx` (Residual-Berechnung, Prop, Summenhinweis, Methodik)
+- `docs/loops/kita-JOURNAL.md` (dieses Journal)
+
+### Story
+US-KJ-005 / US-KJ-006 ↔ US-KJ-007 – Versorgungslagebild (Residual methodisch an Meldelücke)
+
+### Build
+`npm run lint` + `npm run build` im `demo/`-Verzeichnis (siehe Commit dieses Laufs)
+
+### Nicht angefasst (Supervisor / verboten)
+Queue, BUILD_STATE, storyRegistry, andere Domänen, package.json, CI, push
+
+### Nächster sinnvoller Schritt (Hinweis Supervisor)
+Vorlage-Engpass-Liste mit Meldelücke-Filter spiegeln, oder Engpass-Rangliste im Lagebild um Meldebasis-Kurzmarkierung ergänzen.
+
+---
+
 ## Iteration 2026-07-29 – US-KJ-009 Filter Engpass + Meldelücke
 
 ### Was
