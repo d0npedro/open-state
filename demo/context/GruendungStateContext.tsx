@@ -54,6 +54,8 @@ interface GruendungStateContextValue {
   sessionUploadedIds: string[];
   /** True, wenn die BG-Anmeldung in dieser Session als erledigt markiert wurde. */
   sessionBgErledigt: boolean;
+  /** Rückfrage-IDs, die in dieser Session beantwortet wurden (Quittung + Verlauf-Tiefenlink). */
+  sessionAnsweredRqIds: string[];
 }
 
 const DEMO_ANTWORT_FALLBACK =
@@ -68,6 +70,7 @@ const GruendungStateContext = createContext<GruendungStateContextValue>({
   hasSessionChanges: false,
   sessionUploadedIds: [],
   sessionBgErledigt: false,
+  sessionAnsweredRqIds: [],
 });
 
 export function GruendungStateProvider({ children }: { children: React.ReactNode }) {
@@ -387,6 +390,7 @@ export function GruendungStateProvider({ children }: { children: React.ReactNode
         hasSessionChanges,
         sessionUploadedIds: uploadedIds,
         sessionBgErledigt: bgAnmeldungErledigt,
+        sessionAnsweredRqIds: Object.keys(answeredById),
       }}
     >
       {children}

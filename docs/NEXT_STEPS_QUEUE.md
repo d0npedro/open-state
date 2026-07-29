@@ -233,6 +233,7 @@ Story-Dokumentation ist kein Pflicht-Vorläufer für Mock-Daten und Typen.
 | Q-196 | AV Termine: Session-Bestätigung Quittung + Verlauf-Tiefenlink + Session-Badge (US-AV-005/007) | DEMO | S | Q-192 | DONE |
 | Q-197 | AV Übersicht: Termin-Bestätigung Quittung + Verlauf-Tiefenlink (US-AV-005/007, Parität Upload Q-194) | DEMO | S | Q-196 | DONE |
 | Q-198 | AV Übersicht: RQ-Antwort-Quittung + Verlauf-Tiefenlink (US-AV-004/007, Parität Termin Q-197) | DEMO | S | Q-197 | DONE |
+| Q-199 | UG Übersicht: RQ-Antwort-Quittung + Verlauf-Tiefenlink (US-UG-004/005, Parität AV Q-198) | DEMO | S | Q-198 | DONE |
 
 ---
 
@@ -436,3 +437,4 @@ Diese Punkte wurden in früheren Iterationen abgeschlossen und sind produktionsr
 | Q-196 AV Termin-Bestätigung Verlauf-Tiefenlink | Termine → `#ere-E-DEMO-TERM-…` + Badge „Ihre Bestätigung“ (US-AV-005/007) | local |
 | Q-197 AV Übersicht Termin-Quittung Verlauf | Übersicht → `#ere-E-DEMO-TERM-…` + CTA Termine (US-AV-005/007) | local |
 | Q-198 AV Übersicht RQ-Quittung Verlauf | Übersicht → `#ere-E-DEMO-RQ-…` + CTA Fragen/Unterlagen (US-AV-004/007) | local |
+| Q-199 UG Übersicht RQ-Quittung Verlauf | Übersicht → `#ere-UG-DEMO-RQ-…` + CTA Fragen/Unterlagen (US-UG-004/005) | local |

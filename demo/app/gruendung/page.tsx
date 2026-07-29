@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import {
   demoDokUploadEreignisId,
+  demoRqAntwortEreignisId,
   useGruendungState,
 } from '@/context/GruendungStateContext';
 import {
@@ -43,7 +44,7 @@ const statusToChip: Record<string, { label: string; css: string; icon: IconName 
 };
 
 export default function GruendungPage() {
-  const { akte, sessionUploadedIds } = useGruendungState();
+  const { akte, sessionUploadedIds, sessionAnsweredRqIds } = useGruendungState();
   const chip = statusToChip[akte.status] ?? { label: akte.status, css: 'status-chip-neutral', icon: 'info' as IconName };
   const isRueckfrage = akte.status === 'RUECKFRAGE_AUSSTEHEND';
   const offeneRueckfragen = akte.rueckfragen.filter(r => !r.beantwortet).length;
@@ -57,6 +58,10 @@ export default function GruendungPage() {
     .map(id => akte.dokumente.find(d => d.id === id))
     .filter((d): d is NonNullable<typeof d> => Boolean(d));
   const naechsteOffeneUnterlage = ausstehendeDokumente[0] ?? null;
+  /** Session-Antworten auf Rückfragen für Quittung auf der Übersicht (Q-199, US-UG-004/005). */
+  const sessionAntworten = sessionAnsweredRqIds
+    .map(id => akte.rueckfragen.find(r => r.id === id))
+    .filter((r): r is NonNullable<typeof r> => Boolean(r));
   const alleFairnessSignale = berechneFairnessSignaleGruendung(akte);
   // Übersicht: nur handlungsrelevante Stufen — INFO bleibt auf /gruendung/hinweise
   const fairnessSignale = alleFairnessSignale.filter(
@@ -92,6 +97,119 @@ export default function GruendungPage() {
               Frage jetzt beantworten
               <Icon name="arrow-right" size={16} />
             </Link>
+          </div>
+        </div>
+      )}
+
+      {/* ─── RQ-Quittung: Session-Antwort auf der Übersicht ─────
+          UX: Nach dem Beantworten muss klar sein, *welche* Frage erledigt ist
+          und wo die Antwort im Verlauf nachvollziehbar ist (US-UG-004/005, Parität AV Q-198). */}
+      {sessionAntworten.length > 0 && (
+        <div
+          className="notice-box notice-box-success"
+          role="status"
+          aria-live="polite"
+          data-testid="rq-quittung"
+        >
+          <Icon name="check-circle" size={20} style={{ flexShrink: 0, marginTop: '2px' }} />
+          <div style={{ flex: 1 }}>
+            <strong
+              style={{ display: 'block', marginBottom: '0.35rem', fontSize: '1rem' }}
+              data-testid="rq-quittung-titel"
+            >
+              {sessionAntworten.length === 1
+                ? 'Antwort übermittelt'
+                : `${sessionAntworten.length} Antworten übermittelt`}
+            </strong>
+            <ul
+              style={{ margin: '0 0 0.5rem', paddingLeft: '1.15rem', fontSize: '0.9rem' }}
+              data-testid="rq-quittung-liste"
+            >
+              {sessionAntworten.map(rq => {
+                const kurz =
+                  rq.text.length > 90 ? `${rq.text.slice(0, 87).trim()}…` : rq.text;
+                return (
+                  <li
+                    key={rq.id}
+                    data-testid={`rq-quittung-item-${rq.id}`}
+                    style={{ marginBottom: '0.35rem' }}
+                  >
+                    {kurz}
+                    {rq.beantwortetAm ? (
+                      <span style={{ color: 'var(--color-text-muted)' }}>
+                        {' '}
+                        · beantwortet am {rq.beantwortetAm}
+                      </span>
+                    ) : null}
+                    {' '}
+                    <Link
+                      href={`/gruendung/verlauf#ere-${demoRqAntwortEreignisId(rq.id)}`}
+                      className="btn btn-secondary btn-inline"
+                      style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '0.3rem',
+                        minHeight: 36,
+                        fontSize: '0.8rem',
+                        marginLeft: '0.25rem',
+                        verticalAlign: 'middle',
+                      }}
+                      data-testid={`rq-quittung-verlauf-${rq.id}`}
+                      aria-label="Ihre Antwort auf die Rückfrage im Verlauf ansehen"
+                    >
+                      <Icon name="clock" size={14} />
+                      Im Verlauf ansehen
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+            <p style={{ margin: '0.25rem 0 0.5rem', fontSize: '0.875rem', color: 'var(--color-text-muted)' }}>
+              Die Behörde wurde informiert.
+              {ausstehendeDoks > 0
+                ? ' Als Nächstes fehlen noch Unterlagen.'
+                : ' Keine offene Rückfrage mehr.'}
+              {' '}
+              Demo: Die Antwort gilt für diese Browser-Session.
+            </p>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+              <Link
+                href="/gruendung/rueckfragen"
+                className="btn btn-secondary btn-inline"
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.4rem',
+                  minHeight: 44,
+                }}
+                data-testid="rq-quittung-fragen-cta"
+              >
+                Zu den Fragen
+                <Icon name="arrow-right" size={16} />
+              </Link>
+              {ausstehendeDoks > 0 && (
+                <Link
+                  href={
+                    naechsteOffeneUnterlage
+                      ? `/gruendung/dokumente#dok-${naechsteOffeneUnterlage.id}`
+                      : '/gruendung/dokumente'
+                  }
+                  className="btn btn-primary btn-inline"
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '0.4rem',
+                    minHeight: 44,
+                    background: '#B45309',
+                    borderColor: '#B45309',
+                  }}
+                  data-testid="rq-quittung-unterlagen-cta"
+                >
+                  Unterlagen hochladen
+                  <Icon name="arrow-right" size={16} />
+                </Link>
+              )}
+            </div>
           </div>
         </div>
       )}

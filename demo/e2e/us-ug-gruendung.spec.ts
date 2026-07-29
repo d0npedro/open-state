@@ -233,6 +233,55 @@ test.describe('UG – Übersicht', () => {
     await expect(schrittHint).not.toContainText(/Antwortfrist/i);
   });
 
+  test('Q-199: Übersicht RQ-Quittung mit Verlauf-Tiefenlink', async ({ page }) => {
+    // US-UG-004/005: nach Session-Antwort Quittung auf Übersicht + #ere-UG-DEMO-RQ-…
+    // Parität AV Q-198 — kein page.goto nach State (DEC-012)
+    const { goUgTab } = await import('./helpers/sessionNav');
+
+    await goUgTab(page, 'Fragen', /\/gruendung\/rueckfragen/);
+    await page.getByRole('button', { name: /Rückfrage beantworten/i }).click();
+    await expect(page.getByTestId('rq-antwort-quittung-RQ-01')).toBeVisible();
+
+    await goUgTab(page, 'Übersicht', /\/gruendung$/);
+
+    const quittung = page.getByTestId('rq-quittung');
+    await expect(quittung).toBeVisible();
+    await expect(page.getByTestId('rq-quittung-titel')).toHaveText('Antwort übermittelt');
+    await expect(page.getByTestId('rq-quittung-item-RQ-01')).toContainText(
+      /Kleinunternehmerregelung|§ 19 UStG/i
+    );
+    await expect(page.getByTestId('rq-quittung-item-RQ-01')).toContainText(
+      /beantwortet am 07\.\s*12\.2024|beantwortet am 07\.12\.2024/i
+    );
+
+    const verlaufLink = page.getByTestId('rq-quittung-verlauf-RQ-01');
+    await expect(verlaufLink).toBeVisible();
+    await expect(verlaufLink).toHaveAttribute(
+      'href',
+      '/gruendung/verlauf#ere-UG-DEMO-RQ-RQ-01'
+    );
+    await expect(verlaufLink).toContainText(/Im Verlauf ansehen/i);
+
+    await expect(page.getByTestId('rq-quittung-fragen-cta')).toHaveAttribute(
+      'href',
+      '/gruendung/rueckfragen'
+    );
+    await expect(page.getByTestId('rq-quittung-unterlagen-cta')).toHaveAttribute(
+      'href',
+      '/gruendung/dokumente#dok-DOK-03'
+    );
+
+    await verlaufLink.click();
+    await expect(page).toHaveURL(/\/gruendung\/verlauf#ere-UG-DEMO-RQ-RQ-01/);
+    const card = page.getByTestId('verlauf-ereignis-UG-DEMO-RQ-RQ-01');
+    await expect(card).toBeVisible();
+    await expect(card).toHaveAttribute('aria-current', 'location');
+    await expect(card).toHaveAttribute('data-session-antwort', 'true');
+    await expect(page.getByTestId('verlauf-session-antwort-badge-UG-DEMO-RQ-RQ-01')).toContainText(
+      /Ihre Antwort/i
+    );
+  });
+
   test('Nach RQ + Upload: Primär-CTA wechselt zu BG-Hinweis (gruendung-rules)', async ({ page }) => {
     // Bürger-Reihenfolge in naechsterSchrittZiel: RQ → Unterlagen → BG
     // Kein page.goto nach State (DEC-012)
