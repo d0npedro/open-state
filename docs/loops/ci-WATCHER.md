@@ -2,14 +2,16 @@
 
 | Feld | Wert |
 |------|------|
-| last_checked | 2026-07-29T05:56:40Z |
-| last_run_id | 30426464903 |
+| last_checked | 2026-07-29T06:02:00Z |
+| last_run_id | 30426607681 |
 | last_status | success |
-| last_fix_sha | 6315cd2 |
+| last_fix_sha | 3704fe8 |
 | fix_attempts | 0 |
 
 ## Log
 
+- Catch-up push `3704fe8..9a319be` (5 commits: kita Q Regionenvergleich + merge main→kita + UG VS-04-Link + supervisor merges). Local lint+build grün; `test:e2e:ci` **224 passed**. E2E remote prior `30426607681` **success** (SHA 3704fe8 docs). Build latest `30426184498` success (docs-only path-skip on HEAD docs). origin/main..main = 0 after push. New CI for 9a319be pending next tick. fix_attempts=0.
+- E2E `30426607681` **success** (SHA 3704fe8 docs ci-watcher). Prior E2E `30426464903` success (SHA 6315cd2). Build latest `30426184498` success (SHA a6ae4be; HEAD docs-only path-skip). Catch-up: origin/main..main was 5 → pushed. fix_attempts=0.
 - E2E `30426464903` **success** (SHA 6315cd2 docs ci-watcher). Prior E2E `30426336844` success (SHA 41f49b9). Build latest `30426184498` success (SHA a6ae4be; HEAD docs-only path-skip). Catch-up: origin/main..main = 0. fix_attempts=0.
 - E2E `30426336844` **success** (SHA 41f49b9 docs ci-watcher). Prior E2E `30426207660` success (SHA 01f9f61). Build latest `30426184498` success (SHA a6ae4be; HEAD docs-only path-skip). Catch-up: origin/main..main = 0. fix_attempts=0.
 - Build `30426184498` success (SHA a6ae4be docs Q-115 dedupe). E2E `30426184503` + `30426207660` **success** (SHA a6ae4be / 01f9f61 HEAD Q-116). Catch-up: origin/main..main = 0. fix_attempts=0.
