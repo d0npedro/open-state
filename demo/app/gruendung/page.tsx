@@ -149,16 +149,22 @@ function fairnessSignalZiel(
   }
 
   // Fehlende Unterlagen
+  // Hilfstext: session-sensitiv (offene RQ → zuerst klären; danach Nachreichung)
   if (signal.typ === 'UG_UNTERLAGE_FEHLT' || signal.id === 'UG-UNTERLAGEN-FEHLEND') {
     const dok = akte.dokumente.find(
       d => d.status === 'ANGEFORDERT' || d.status === 'ABGELEHNT'
     );
     if (!dok) return null;
+    const hatOffeneRueckfrage = akte.rueckfragen.some(r => !r.beantwortet);
+    const hint = hatOffeneRueckfrage
+      ? 'Zuerst die offene Rückfrage des Finanzamts klären. Begründung und Upload-Möglichkeit finden Sie im Bereich Unterlagen.'
+      : 'Keine offene Rückfrage mehr – ausstehende Unterlage nachreichen. Begründung und Upload-Möglichkeit finden Sie im Bereich Unterlagen.';
     return {
       href: `/gruendung/dokumente#dok-${dok.id}`,
       cta: 'Zu den Unterlagen',
       icon: 'file',
       testKey: `dok-${dok.id}`,
+      hint,
     };
   }
 

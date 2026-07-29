@@ -8,6 +8,34 @@ Erlaubte Pfade nur: `demo/app/gruendung/**`, `demo/context/GruendungStateContext
 
 ---
 
+## 2026-07-29 – Iteration 30: Unterlagen-CTA-Hilfstext session-sensitiv (Übersicht + Hinweise)
+
+### Was
+CTA-Hilfstext für `UG-UNTERLAGEN-FEHLEND` wird session-sensitiv angeglichen
+(wie BG/Steuernummer/Betriebsdatum/parallele Behörden): bei offener RQ
+„Zuerst die offene Rückfrage des Finanzamts klären … Bereich Unterlagen“;
+nach Antwort „Keine offene Rückfrage mehr – ausstehende Unterlage
+nachreichen …“. CTA-Label und Anker unverändert. Übersicht und Hinweise
+nutzen denselben Text; Hinweise mit `data-testid`
+`hinweise-unterlagen-cta-hint`. E2E: Initial- + Session-Assertion.
+
+### Dateien
+- `demo/app/gruendung/page.tsx` – `fairnessSignalZiel` Unterlagen `hint`
+- `demo/app/gruendung/hinweise/page.tsx` – Unterlagen-CTA-Hint + testid
+- `demo/e2e/us-ug-gruendung.spec.ts` – Initial- + Session-Hilfstext Unterlagen
+- `docs/loops/ug-JOURNAL.md` – dieses Journal
+
+### Build
+`npm run lint` + `npm run build` im Ordner `demo/` grün.
+`npm run test:e2e:ug` Exit 0 (112 passed).
+
+### Nächster sinnvoller UG-Schritt (Vorschlag)
+- Fairness-CTA-Hilfstexte ggf. in gemeinsame Helper extrahieren (optional)
+- Übersicht/Hinweise: Hilfstext-Konsistenz Steuernummer vs. Betriebsdatum prüfen
+- RQ-CTA optional kurzen Hilfstext (Frist/Konsequenz) auf Übersicht ergänzen
+
+---
+
 ## 2026-07-29 – Iteration 29: BG-CTA-Hilfstext session-sensitiv (Übersicht + Hinweise)
 
 ### Was

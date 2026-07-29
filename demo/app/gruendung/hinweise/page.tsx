@@ -261,8 +261,14 @@ export default function GruendungHinweisePage() {
                           }}
                           data-testid="hinweise-unterlagen-cta-wrap"
                         >
-                          <p style={{ margin: 0, fontSize: '0.875rem', lineHeight: 1.45 }}>
-                            Begründung und Upload-Möglichkeit finden Sie im Bereich Unterlagen.
+                          {/* Hilfstext: session-sensitiv wie Übersicht-Fairness-CTA Unterlagen */}
+                          <p
+                            style={{ margin: 0, fontSize: '0.875rem', lineHeight: 1.45 }}
+                            data-testid="hinweise-unterlagen-cta-hint"
+                          >
+                            {hatOffeneRueckfrage
+                              ? 'Zuerst die offene Rückfrage des Finanzamts klären. Begründung und Upload-Möglichkeit finden Sie im Bereich Unterlagen.'
+                              : 'Keine offene Rückfrage mehr – ausstehende Unterlage nachreichen. Begründung und Upload-Möglichkeit finden Sie im Bereich Unterlagen.'}
                             {fehlendeDocs.length > 1
                               ? ` ${fehlendeDocs.length} Dokumente stehen aus.`
                               : ''}

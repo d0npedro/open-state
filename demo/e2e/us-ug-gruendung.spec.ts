@@ -191,6 +191,11 @@ test.describe('UG – Übersicht', () => {
     await expect(dokCta).toBeVisible();
     await expect(dokCta).toHaveAttribute('href', '/gruendung/dokumente#dok-DOK-03');
     await expect(dokCta).toContainText(/Zu den Unterlagen/i);
+    // Hilfstext bei offener RQ: zuerst Finanzamt-Rückfrage klären
+    const dokHint = page.getByTestId('uebersicht-fairness-cta-hint-dok-DOK-03');
+    await expect(dokHint).toBeVisible();
+    await expect(dokHint).toContainText(/offene Rückfrage des Finanzamts klären/i);
+    await expect(dokHint).toContainText(/Unterlagen/i);
 
     const bgCta = page.getByTestId('uebersicht-fairness-cta-beh-BEH-04');
     await expect(bgCta).toBeVisible();
@@ -294,6 +299,12 @@ test.describe('UG – Übersicht', () => {
     await expect(bgHint).toBeVisible();
     await expect(bgHint).toContainText(/Keine offene Rückfrage mehr|BG-Anmeldung/i);
     await expect(bgHint).not.toContainText(/offene Rückfrage des Finanzamts klären/i);
+    // Unterlagen-CTA-Hilfstext nach RQ-Antwort: Nachreichung, kein RQ-Vorrang
+    const dokHint = page.getByTestId('uebersicht-fairness-cta-hint-dok-DOK-03');
+    await expect(dokHint).toBeVisible();
+    await expect(dokHint).toContainText(/Keine offene Rückfrage mehr|nachreichen/i);
+    await expect(dokHint).toContainText(/Unterlagen/i);
+    await expect(dokHint).not.toContainText(/offene Rückfrage des Finanzamts klären/i);
   });
 
   test('INFO-Signal parallele Behörden erscheint auf Hinweise-Seite', async ({ page }) => {
@@ -758,6 +769,11 @@ test.describe('UG – Hinweise zur Verfahrenslage', () => {
     await expect(cta).toBeVisible();
     await expect(cta).toContainText(/Zu den Unterlagen/i);
     await expect(cta).toHaveAttribute('href', '/gruendung/dokumente#dok-DOK-03');
+    // Hilfstext bei offener RQ: zuerst Finanzamt-Rückfrage klären
+    const hint = page.getByTestId('hinweise-unterlagen-cta-hint');
+    await expect(hint).toBeVisible();
+    await expect(hint).toContainText(/offene Rückfrage des Finanzamts klären/i);
+    await expect(hint).toContainText(/Unterlagen/i);
   });
 
   test('CTA aus Unterlagen-Signal führt zur Dokumentenkarte', async ({ page }) => {
@@ -775,6 +791,22 @@ test.describe('UG – Hinweise zur Verfahrenslage', () => {
     await page.locator('.tab-nav-item').filter({ hasText: 'Hinweise' }).click();
     await expect(page).toHaveURL(/\/gruendung\/hinweise/);
     await expect(page.getByTestId('hinweise-unterlagen-cta')).toHaveCount(0);
+  });
+
+  test('Nach Beantworten: Unterlagen-CTA-Hilfstext ohne RQ-Vorrang', async ({ page }) => {
+    const { goUgTab } = await import('./helpers/sessionNav');
+    await goUgTab(page, 'Fragen', /\/gruendung\/rueckfragen/);
+    await page.getByRole('button', { name: /Rückfrage beantworten/i }).click();
+    await expect(page.getByText(/die Behörde wurde informiert|beantwortet/i).first()).toBeVisible();
+    await goUgTab(page, 'Hinweise', /\/gruendung\/hinweise/);
+
+    // CTA bleibt (Unterlage noch ANGEFORDERT); Hilfstext session-sensitiv
+    await expect(page.getByTestId('hinweise-unterlagen-cta')).toBeVisible();
+    const hint = page.getByTestId('hinweise-unterlagen-cta-hint');
+    await expect(hint).toBeVisible();
+    await expect(hint).toContainText(/Keine offene Rückfrage mehr|nachreichen/i);
+    await expect(hint).toContainText(/Unterlagen/i);
+    await expect(hint).not.toContainText(/offene Rückfrage des Finanzamts klären/i);
   });
 
   test('HINWEIS-Steuernummer-Signal hat CTA „Zum Finanzamt“ mit Anker', async ({ page }) => {
