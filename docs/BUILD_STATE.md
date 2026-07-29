@@ -1,6 +1,6 @@
 # BUILD_STATE.md – Aktueller Projektstand
 
-Zuletzt aktualisiert: nach Q-192 AV Session-Antwort Verlauf-Tiefenlink (US-AV-007/004, Parität UG Q-185)
+Zuletzt aktualisiert: nach Q-193 AV Dokumente Upload-Quittung Verlauf-Tiefenlink (US-AV-003/007, Parität UG Q-188)
 
 Dieser Stand beschreibt, was tatsächlich existiert und funktioniert.
 Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
@@ -25,7 +25,7 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 |-------|--------|-----------|--------|
 | `/` | Landing Page | – | ✓ |
 | `/fall` | Fallübersicht, Status, Fairness-Summary + Verlauf-Sekundärlink, Fristen-Countdown offener Unterlagen, Upload-Quittung + nächste offene Unterlage nach Session-Upload, Termin-Kachel Status live | US-AV-001, US-AV-002, US-AV-003, US-AV-005 | ✓ |
-| `/fall/dokumente` | Dokumentenanforderungen + Frist-Resttage + lokale Upload-Quittung pro Karte nach Session-Markierung | US-AV-003 | ✓ |
+| `/fall/dokumente` | Dokumentenanforderungen + Frist-Resttage + lokale Upload-Quittung pro Karte nach Session-Markierung + Verlauf-Tiefenlink `#ere-E-DEMO-DOK-…` | US-AV-003, US-AV-007 | ✓ |
 | `/fall/rueckfragen` | Rückfragen mit Fairness-Hinweis; Antwort-Quittung + Verlauf-Tiefenlink Session-Antwort | US-AV-004 | ✓ |
 | `/fall/termine` | Termine; session-lokale Bestätigung; Nav-Badge nur unbestätigt/bald fällig | US-AV-005 | ✓ |
 | `/fall/bescheide` | Bescheide mit Fairness-Hinweisen | US-AV-006 | ✓ |
@@ -148,6 +148,7 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | Kita Lagebild-CSV Regionenvergleich Verlauf | `KitaLagebildDruck` Blatt 8 | ✓ Paare × 12 Monate × 4 Kennzahlen, Δ je Monat; freigabeunabhängig (Q-190, US-KJ-005/010) |
 | AV Fairness Verlauf-Tiefenlink | `fairness/rules.fairnessSignalVerlaufZiel` + Hinweise/Übersicht/Verlauf | ✓ Sekundär-CTA „Im Verlauf ansehen“ → `#ere-…` (Q-191, US-AV-007/008) |
 | AV Session-Antwort Verlauf | `/fall/rueckfragen` + `/fall/verlauf` | ✓ RQ-Quittung Tiefenlink `#ere-E-DEMO-RQ-…` + Badge „Ihre Antwort“ / Session-Upload-Badge (Q-192, US-AV-007/004) |
+| AV Dokumente Upload-Quittung Verlauf | `/fall/dokumente` + `demoDokUploadEreignisId` + Verlauf | ✓ Sekundär-CTA „Im Verlauf ansehen“ → `#ere-E-DEMO-DOK-…`; Session-Upload-Badge (Q-193, US-AV-003/007) |
 
 ---
 
@@ -305,6 +306,7 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 **Q-190 erledigt:** Kita Lagebild-CSV Regionenvergleich Verlauf-Paare Blatt 8 (US-KJ-005/010).
 **Q-191 erledigt:** AV Fairness-Tiefenlink zum auslösenden Verlauf-Ereignis (US-AV-007/008).
 **Q-192 erledigt:** AV Verlauf Session-Antwort hervorheben + RQ-Quittung Tiefenlink (US-AV-007/004, Parität UG Q-185).
+**Q-193 erledigt:** AV Dokumente Upload-Quittung mit Verlauf-Tiefenlink + Session-Upload-Badge (US-AV-003/007, Parität UG Q-188).
 
 ---
 

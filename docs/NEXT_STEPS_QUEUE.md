@@ -227,6 +227,7 @@ Story-Dokumentation ist kein Pflicht-Vorläufer für Mock-Daten und Typen.
 | Q-190 | Kita Lagebild-CSV: Regionenvergleich Verlauf-Paare 12 Monate (Blatt 8, US-KJ-005/010) | DEMO | S | Q-189 | DONE `3c46f00` |
 | Q-191 | AV Fairness: Tiefenlink zum auslösenden Verlauf-Ereignis (US-AV-007/008, Parität UG Q-181) | DEMO | S | Q-180 | DONE |
 | Q-192 | AV Verlauf: Session-Antwort hervorheben + RQ-Quittung Tiefenlink (US-AV-007/004, Parität UG Q-185) | DEMO | S | Q-191 | DONE |
+| Q-193 | AV Dokumente: Upload-Quittung mit Verlauf-Tiefenlink + Session-Upload-Badge (US-AV-003/007, Parität UG Q-188) | DEMO | S | Q-192 | DONE |
 
 ---
 
@@ -424,3 +425,4 @@ Diese Punkte wurden in früheren Iterationen abgeschlossen und sind produktionsr
 | Q-190 Kita Lagebild-CSV Regionenvergleich Verlauf | Blatt 8 Paare × 12 Monate, 4 Kennzahlen (US-KJ-005/010) | `3c46f00` → main |
 | Q-191 AV Fairness Verlauf-Tiefenlink | Sekundär-CTA zum Audit-Ereignis (US-AV-007/008) | local |
 | Q-192 AV Session-Antwort Verlauf | RQ-Quittung Tiefenlink + Badge im Verlauf (US-AV-007/004) | local |
+| Q-193 AV Upload-Quittung Verlauf-Tiefenlink | Dokumente → `#ere-E-DEMO-DOK-…` + Session-Upload-Badge (US-AV-003/007) | local |

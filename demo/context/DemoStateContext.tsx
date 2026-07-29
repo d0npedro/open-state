@@ -18,6 +18,23 @@ import type { Fall, TimelineEreignis } from '@/types';
 const DEMO_AKTION_DATUM = '24. November 2024';
 const DEMO_AKTION_ZEIT = '24.11.2024, 10:30';
 
+/**
+ * Verlauf-Anker-ID für den Demo-Upload einer Unterlage.
+ * Beispiel: DOK-003 → `E-DEMO-DOK-DOK-003` (Hash `#ere-E-DEMO-DOK-DOK-003`).
+ * Parität UG `demoDokUploadEreignisId` (Q-188 / Q-193).
+ */
+export function demoDokUploadEreignisId(dokId: string): string {
+  return `E-DEMO-DOK-${dokId}`;
+}
+
+/**
+ * Verlauf-Anker-ID für die Demo-Antwort auf eine Rückfrage.
+ * Beispiel: RQ-001 → `E-DEMO-RQ-RQ-001` (Hash `#ere-E-DEMO-RQ-RQ-001`).
+ */
+export function demoRqAntwortEreignisId(rqId: string): string {
+  return `E-DEMO-RQ-${rqId}`;
+}
+
 interface DemoStateContextValue {
   fall: Fall;
   /** Demo: markiert Rückfrage als beantwortet; optionaler Antworttext für Quittung/Verlauf. */
@@ -170,7 +187,7 @@ export function DemoStateProvider({ children }: { children: React.ReactNode }) {
           : rq.text
         : null;
       extraEvents.push({
-        id: `E-DEMO-RQ-${id}`,
+        id: demoRqAntwortEreignisId(id),
         typ: 'RUECKFRAGE_BEANTWORTET',
         zeitstempel: DEMO_AKTION_ZEIT,
         handelndeStelle: 'BUERGER',
@@ -202,7 +219,7 @@ export function DemoStateProvider({ children }: { children: React.ReactNode }) {
       const dok = demoFall.dokumente.find(d => d.id === id);
       // beschreibung endet auf „ hochgeladen“ → Verlauf hebt Bezeichnung hervor (Q-105)
       extraEvents.push({
-        id: `E-DEMO-DOK-${id}`,
+        id: demoDokUploadEreignisId(id),
         typ: 'DOKUMENT_EINGEREICHT',
         zeitstempel: DEMO_AKTION_ZEIT,
         handelndeStelle: 'BUERGER',

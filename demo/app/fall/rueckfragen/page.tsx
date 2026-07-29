@@ -8,7 +8,10 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { useDemoState } from '@/context/DemoStateContext';
+import {
+  demoRqAntwortEreignisId,
+  useDemoState,
+} from '@/context/DemoStateContext';
 import { berechneFairnessSignale, berechneFristTage, FIKTIVES_HEUTE } from '@/lib/fairness/rules';
 import { Icon } from '@/components/Icon';
 import type { Rueckfrage } from '@/types';
@@ -190,7 +193,7 @@ export default function RueckfragenPage() {
                 )}
                 {/* Session-Antwort im Verlauf nachvollziehbar (Hash-Hervorhebung, E-DEMO-RQ-{id}) */}
                 <Link
-                  href={`/fall/verlauf#ere-E-DEMO-RQ-${rq.id}`}
+                  href={`/fall/verlauf#ere-${demoRqAntwortEreignisId(rq.id)}`}
                   className="btn btn-secondary btn-inline"
                   style={{
                     alignSelf: 'flex-start',

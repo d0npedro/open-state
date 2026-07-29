@@ -156,6 +156,50 @@ test.describe('US-AV-003 – Unterlagen nachreichen', () => {
     );
   });
 
+  test('Nach Upload: Verlauf-Tiefenlink zum Session-Upload (US-AV-003/007, Q-193)', async ({ page }) => {
+    // Quittung verlinkt auf Session-Ereignis; Hash-Hervorhebung + Badge im Verlauf
+    // Parität UG Q-188 — kein page.goto nach State (DEC-012)
+    await page.goto('/fall/dokumente');
+    await page.getByRole('button', { name: /Als hochgeladen markieren/i }).first().click();
+    await expect(page.getByTestId('dok-upload-quittung-DOK-003')).toBeVisible();
+
+    const verlaufLink = page.getByTestId('dok-verlauf-link-DOK-003');
+    await expect(verlaufLink).toBeVisible();
+    await expect(verlaufLink).toHaveAttribute(
+      'href',
+      '/fall/verlauf#ere-E-DEMO-DOK-DOK-003'
+    );
+    await expect(verlaufLink).toContainText(/Im Verlauf ansehen/i);
+
+    await verlaufLink.click();
+    await expect(page).toHaveURL(/\/fall\/verlauf#ere-E-DEMO-DOK-DOK-003/);
+
+    const card = page.getByTestId('verlauf-ereignis-E-DEMO-DOK-DOK-003');
+    await expect(card).toBeVisible();
+    await expect(card).toHaveAttribute('aria-current', 'location');
+    await expect(card).toHaveAttribute('data-session-upload', 'true');
+    await expect(card).toContainText(/hochgeladen/i);
+    await expect(page.getByTestId('verlauf-session-upload-badge-E-DEMO-DOK-DOK-003')).toBeVisible();
+    await expect(page.getByTestId('verlauf-session-upload-badge-E-DEMO-DOK-DOK-003')).toContainText(
+      /Ihr Upload/i
+    );
+  });
+
+  test('Session-Upload bleibt im Verlauf nach Tab-Nav (kein page.goto)', async ({ page }) => {
+    const { goFallTab } = await import('./helpers/sessionNav');
+    await page.goto('/fall/dokumente');
+    await page.getByRole('button', { name: /Als hochgeladen markieren/i }).first().click();
+    await expect(page.getByTestId('dok-upload-quittung-DOK-003')).toBeVisible();
+
+    await goFallTab(page, 'Verlauf', /\/fall\/verlauf/);
+    const card = page.getByTestId('verlauf-ereignis-E-DEMO-DOK-DOK-003');
+    await expect(card).toBeVisible();
+    await expect(card).toHaveAttribute('data-session-upload', 'true');
+    await expect(page.getByTestId('verlauf-session-upload-badge-E-DEMO-DOK-DOK-003')).toContainText(
+      /Ihr Upload/i
+    );
+  });
+
   test('Nach allen Session-Uploads: Vollständigkeits-Hinweis mit Session-Zähler', async ({ page }) => {
     const { goFallTab } = await import('./helpers/sessionNav');
 
