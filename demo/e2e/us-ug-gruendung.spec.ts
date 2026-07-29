@@ -95,6 +95,13 @@ test.describe('UG – Übersicht', () => {
     await expect(cta).toBeVisible();
     await expect(cta).toHaveAttribute('href', /\/gruendung\/rueckfragen#rq-/);
     await expect(cta).toContainText(/Rückfrage beantworten/i);
+    // Hilfstext Primär-CTA: gleicher RQ-Frist/Konsequenz-Wortlaut wie Fairness-CTA
+    const schrittHint = page.getByTestId('uebersicht-naechster-schritt-cta-hint');
+    await expect(schrittHint).toBeVisible();
+    await expect(schrittHint).toContainText(/Antwortfrist/i);
+    await expect(schrittHint).toContainText(/10\.12\.2024|noch 3 Tage/i);
+    await expect(schrittHint).toContainText(/Steuernummer|steuerliche Erfassung/i);
+    await expect(schrittHint).toContainText(/Rückfragen/i);
 
     const aufgaben = page.getByTestId('uebersicht-offene-aufgaben');
     await expect(aufgaben).toBeVisible();
@@ -137,9 +144,14 @@ test.describe('UG – Übersicht', () => {
     // Unterlagen und BG bleiben als offene Aufgaben
     await expect(page.getByTestId('uebersicht-aufgabe-link-dok-DOK-03')).toBeVisible();
     await expect(page.getByTestId('uebersicht-aufgabe-link-beh-BEH-04')).toBeVisible();
-    // Nächster Schritt wechselt von Rückfrage zu Unterlagen
+    // Nächster Schritt wechselt von Rückfrage zu Unterlagen; Hilfstext session-sensitiv
     const cta = page.getByTestId('uebersicht-naechster-schritt-cta');
     await expect(cta).toHaveAttribute('href', /\/gruendung\/dokumente#dok-/);
+    const schrittHint = page.getByTestId('uebersicht-naechster-schritt-cta-hint');
+    await expect(schrittHint).toBeVisible();
+    await expect(schrittHint).toContainText(/Keine offene Rückfrage mehr/i);
+    await expect(schrittHint).toContainText(/Unterlage/i);
+    await expect(schrittHint).not.toContainText(/Antwortfrist/i);
   });
 
   test('Fairness-Kurzblock mit Link zu Hinweise', async ({ page }) => {

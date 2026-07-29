@@ -8,6 +8,31 @@ Erlaubte Pfade nur: `demo/app/gruendung/**`, `demo/context/GruendungStateContext
 
 ---
 
+## 2026-07-29 – Iteration 32: Primär-CTA Nächster Schritt mit RQ-Frist-Hilfstext
+
+### Was
+Primär-CTA „Nächster Schritt“ auf der Übersicht erhält denselben
+RQ-Frist/Konsequenz-Hilfstext wie die Fairness-CTAs (`rqCtaHilfstext`).
+Nach Beantwortung der Rückfrage wechselt der Hilfstext session-sensitiv
+auf den Unterlagen-Hinweis („Keine offene Rückfrage mehr …“). Fairness-
+RQ-CTA nutzt denselben Helper. testid: `uebersicht-naechster-schritt-cta-hint`.
+
+### Dateien
+- `demo/app/gruendung/page.tsx` – `rqCtaHilfstext`, `naechsterSchrittZiel.hint`, UI
+- `demo/e2e/us-ug-gruendung.spec.ts` – Initial- + Session-Assertion Primär-CTA
+- `docs/loops/ug-JOURNAL.md` – dieses Journal
+
+### Build
+`npm run lint` + `npm run build` im Ordner `demo/` grün.
+`npm run test:e2e:ug` Exit 0 (112 passed).
+
+### Nächster sinnvoller UG-Schritt (Vorschlag)
+- Fairness-CTA-Hilfstexte ggf. in gemeinsame Helper (gruendung-rules) extrahieren
+- Hinweise-Seite: `rqCtaHilfstext` teilen statt lokalen Duplikats
+- Übersicht/Hinweise: Hilfstext-Konsistenz Steuernummer vs. Betriebsdatum prüfen
+
+---
+
 ## 2026-07-29 – Iteration 31: RQ-CTA-Hilfstext mit Frist und Konsequenz
 
 ### Was
