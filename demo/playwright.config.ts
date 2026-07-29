@@ -5,13 +5,20 @@ import { defineConfig, devices } from '@playwright/test';
  * - 1 worker, 2 retries
  * - Production-Server auf Port 3010 (kein Konflikt mit Dev auf 3000)
  * - webServer: single `next build` + `next start`
- * - Build-Artefakte in `.next-e2e` (NEXT_DIST_DIR) — schützt vor Multi-Loop-Races auf `.next`
+ * - Build-Artefakte in NEXT_DIST_DIR — schützt vor Multi-Loop-Races auf `.next`
+ * - lokal: PID-Suffix (`.next-e2e-<pid>`), damit parallele Loops sich nicht die DistDir löschen
+ * - auf GitHub Actions: stabil `.next-e2e` (ein Runner)
  * - kein reuseExistingServer
  */
 const isE2eCi =
   process.env.npm_lifecycle_event === 'test:e2e:ci' ||
   process.env.PW_E2E_CI === '1' ||
   !!process.env.CI;
+
+/** GHA sets CI=true with a single runner; local multi-loop needs unique distDirs. */
+const e2eDistDir =
+  process.env.E2E_DIST_DIR ||
+  (process.env.GITHUB_ACTIONS ? '.next-e2e' : `.next-e2e-${process.pid}`);
 
 const port = isE2eCi ? 3010 : 3000;
 const baseURL = `http://localhost:${port}`;
@@ -51,7 +58,7 @@ export default defineConfig({
     timeout: 180_000,
     env: {
       ...process.env,
-      ...(isE2eCi ? { NEXT_DIST_DIR: '.next-e2e' } : {}),
+      ...(isE2eCi ? { NEXT_DIST_DIR: e2eDistDir } : {}),
     },
   },
 });
