@@ -2,6 +2,30 @@
 
 Branch: `loop/kita` · Worktree: `D:\Projects\open-state-loop-kita`
 
+## Iteration 2026-07-29 – US-KJ-007 Bedarfsplanung Datenlücke aus Meldeeingang
+
+### Was
+Bedarfsplanungsentwurf leitet je Planungsraum die Meldebasis aus dem Meldeeingang ab (US-KJ-004→007). Fokus Südost (PR-03): Kita Sonnenwinkel initial überfällig → Warnhinweis und Spalte „Meldebasis“ (Lücke 0/1). Nach Session-Freigabe in `/kita/meldung` schließt sich die Datenlücke (Freigabe-ID, Aggregate nutzbar). Hafenviertel ausstehend ebenfalls ausgewiesen. Keine Interpolation; nur Aggregate, keine Kind- oder Personennamen.
+
+### Dateien
+- `demo/components/kita/KitaBedarfsplanungDatenbasis.tsx` (neu: Hook, Panel, Badge, Ableitung)
+- `demo/app/kita/bedarfsplanung/page.tsx` (Einbindung Meldebasis + Spalte)
+- `docs/loops/kita-JOURNAL.md` (dieses Journal)
+
+### Story
+US-KJ-007 – Bedarfsplanungsentwurf (Datenbasis / Meldeeingang-Kopplung)
+
+### Build
+`npm run lint` + `npm run build` im `demo/`-Verzeichnis (siehe Commit dieses Laufs)
+
+### Nicht angefasst (Supervisor / verboten)
+Queue, BUILD_STATE, storyRegistry, andere Domänen, package.json, CI, push
+
+### Nächster sinnvoller Schritt (Hinweis Supervisor)
+Lagebild-Meldeeingang mit Monatsbericht-Vorschau-Status koppeln, oder Bedarfsplanung: residuale Lücke Südost methodisch an fehlende Meldung knüpfen (Hinweis-only).
+
+---
+
 ## Iteration 2026-07-29 – US-KJ-003 Monatsbericht-Vorschau gemischte Quellen
 
 ### Was
