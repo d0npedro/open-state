@@ -177,26 +177,50 @@ export function berechneFairnessSignaleGruendung(akte: GruendungsAkte): Fairness
   // Regel: Wenn das geplante Betriebsdatum in der Vergangenheit liegt und
   //        der Status noch nicht GENEHMIGT oder AKTIVER_BETRIEB ist,
   //        weist das auf einen Planungsverzug hin.
+  // Text: Solange eine Finanzamt-Rückfrage offen ist → zuerst beantworten.
+  //        Nach Antwort: Steuernummer/BG/Unterlagen priorisieren (keine RQ-Anweisung).
   const abgeschlosseneStatus = ['GENEHMIGT', 'AKTIVER_BETRIEB', 'BETRIEB_EINGESTELLT'];
   if (akte.geplantesBetriebsdatum && !abgeschlosseneStatus.includes(akte.status)) {
     const betriebISO = akte.geplantesBetriebsdatum.split('.').reverse().join('-');
     const verzugTage = Math.abs(berechneFristTage(betriebISO, heute));
     const verzug = berechneFristTage(betriebISO, heute);
     if (verzug < 0) {
+      const hatOffeneRueckfrage = akte.rueckfragen.some(r => !r.beantwortet);
+      const steuernummerInBearbeitung =
+        steuernummerSchritt?.status === 'IN_BEARBEITUNG';
+
+      const erklaerung = hatOffeneRueckfrage
+        ? `Das geplante Betriebsdatum (${akte.geplantesBetriebsdatum}) wurde bereits erreicht, ` +
+          `das Gründungsverfahren ist jedoch noch nicht vollständig abgeschlossen. ` +
+          `Hauptursache: Die steuerliche Erfassung durch das Finanzamt steht noch aus.`
+        : steuernummerInBearbeitung
+          ? `Das geplante Betriebsdatum (${akte.geplantesBetriebsdatum}) wurde bereits erreicht, ` +
+            `das Gründungsverfahren ist jedoch noch nicht vollständig abgeschlossen. ` +
+            `Die Rückfrage des Finanzamts ist beantwortet; die Steuernummer-Vergabe läuft. ` +
+            `Parallel kann die BG-Anmeldung oder weitere Unterlagen ausstehen.`
+          : `Das geplante Betriebsdatum (${akte.geplantesBetriebsdatum}) wurde bereits erreicht, ` +
+            `das Gründungsverfahren ist jedoch noch nicht vollständig abgeschlossen. ` +
+            `Offene Punkte (Steuernummer, BG-Anmeldung, Unterlagen) verzögern den vollständigen Abschluss.`;
+
+      const naechsterSchritt = hatOffeneRueckfrage
+        ? 'Offene Punkte priorisieren: zuerst Rückfrage Finanzamt beantworten, dann BG-Anmeldung vornehmen. ' +
+          'Das geplante Betriebsdatum kann in der Akte angepasst werden.'
+        : steuernummerInBearbeitung
+          ? 'Die Steuernummer wird vom Finanzamt bearbeitet — keine Antwort-Rückfrage mehr nötig. ' +
+            'Prüfen Sie parallel die BG-Anmeldung und ausstehende Unterlagen. ' +
+            'Das geplante Betriebsdatum kann in der Akte angepasst werden.'
+          : 'Offene Punkte priorisieren: Steuernummer und BG-Anmeldung prüfen. ' +
+            'Das geplante Betriebsdatum kann in der Akte angepasst werden.';
+
       signale.push({
         id: 'UG-BETRIEBSDATUM',
         typ: 'UG_BETRIEBSDATUM_UEBERSCHRITTEN',
         titel: `Geplanter Betriebsstart liegt ${verzugTage} ${verzugTage === 1 ? 'Tag' : 'Tage'} zurück`,
-        erklaerung:
-          `Das geplante Betriebsdatum (${akte.geplantesBetriebsdatum}) wurde bereits erreicht, ` +
-          `das Gründungsverfahren ist jedoch noch nicht vollständig abgeschlossen. ` +
-          `Hauptursache: Die steuerliche Erfassung durch das Finanzamt steht noch aus.`,
+        erklaerung,
         auswirkung:
           'Ohne abgeschlossene Steuernummer und BG-Anmeldung ist der Betrieb rechtlich nicht vollständig abgesichert. ' +
           'Das geplante Datum war eine Schätzung ohne verbindliche Wirkung.',
-        naechsterSchritt:
-          'Offene Punkte priorisieren: zuerst Rückfrage Finanzamt beantworten, dann BG-Anmeldung vornehmen. ' +
-          'Das geplante Betriebsdatum kann in der Akte angepasst werden.',
+        naechsterSchritt,
         bezug: `geplantesBetriebsdatum: ${akte.geplantesBetriebsdatum} · Aktueller Status: ${akte.status}`,
         prioritaet: 'HINWEIS',
       });

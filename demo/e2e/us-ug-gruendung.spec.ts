@@ -253,6 +253,10 @@ test.describe('UG – Übersicht', () => {
     await expect(page.getByTestId('uebersicht-fairness-UG-STEUERNUMMER-FEHLT')).toContainText(
       /Steuernummer in Bearbeitung/i
     );
+    // Betriebsdatum-Signal: keine „zuerst Rückfrage beantworten“-Anweisung mehr
+    const betriebsSignal = page.getByTestId('uebersicht-fairness-UG-BETRIEBSDATUM');
+    await expect(betriebsSignal).toContainText(/Rückfrage des Finanzamts ist beantwortet/i);
+    await expect(betriebsSignal).not.toContainText(/zuerst Rückfrage Finanzamt beantworten/i);
   });
 
   test('INFO-Signal parallele Behörden erscheint auf Hinweise-Seite', async ({ page }) => {
@@ -770,11 +774,40 @@ test.describe('UG – Hinweise zur Verfahrenslage', () => {
     await expect(cta).toHaveAttribute('href', '/gruendung#verfahrensstatus');
   });
 
+  test('Betriebsdatum-Signal bei offener Rückfrage: zuerst Rückfrage beantworten', async ({ page }) => {
+    const panel = page.getByTestId('hinweise-hinweis-UG-BETRIEBSDATUM');
+    await expect(panel).toBeVisible();
+    await expect(panel).toContainText(/steuerliche Erfassung durch das Finanzamt steht noch aus/i);
+    await expect(panel).toContainText(/zuerst Rückfrage Finanzamt beantworten/i);
+  });
+
   test('CTA aus Betriebsdatum-Signal führt zum Statusblock der Übersicht', async ({ page }) => {
     await page.getByTestId('hinweise-betriebsdatum-cta').click();
     await expect(page).toHaveURL(/\/gruendung#verfahrensstatus/);
     await expect(page.locator('#verfahrensstatus')).toBeVisible();
     await expect(page.getByTestId('uebersicht-verfahrensstatus')).toContainText(/IT-Beratung|Verfahrensfortschritt|Sie sind hier/i);
+  });
+
+  test('Nach Antwort: Betriebsdatum-Signal ohne „zuerst Rückfrage beantworten“', async ({ page }) => {
+    // Session: NIE page.goto nach State-Interaktion (DEC-012)
+    const { goUgTab } = await import('./helpers/sessionNav');
+    await goUgTab(page, 'Fragen', /\/gruendung\/rueckfragen/);
+    await page.getByRole('button', { name: /Rückfrage beantworten/i }).click();
+    await expect(page.getByText(/die Behörde wurde informiert|beantwortet/i).first()).toBeVisible();
+    await goUgTab(page, 'Hinweise', /\/gruendung\/hinweise/);
+
+    const panel = page.getByTestId('hinweise-hinweis-UG-BETRIEBSDATUM');
+    await expect(panel).toBeVisible();
+    await expect(panel).toContainText(/Rückfrage des Finanzamts ist beantwortet/i);
+    await expect(panel).toContainText(/Steuernummer-Vergabe läuft|BG-Anmeldung/i);
+    await expect(panel).not.toContainText(/zuerst Rückfrage Finanzamt beantworten/i);
+    await expect(panel).toContainText(/keine Antwort-Rückfrage mehr nötig/i);
+    // CTA zum Verfahrensstatus bleibt
+    await expect(page.getByTestId('hinweise-betriebsdatum-cta')).toBeVisible();
+    await expect(page.getByTestId('hinweise-betriebsdatum-cta')).toHaveAttribute(
+      'href',
+      '/gruendung#verfahrensstatus'
+    );
   });
 
   test('INFO-Parallele-Behörden-Signal hat CTA „Zu den Behörden“', async ({ page }) => {

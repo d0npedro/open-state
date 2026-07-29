@@ -8,6 +8,32 @@ Erlaubte Pfade nur: `demo/app/gruendung/**`, `demo/context/GruendungStateContext
 
 ---
 
+## 2026-07-29 – Iteration 21: Betriebsdatum-Signal-Text nach RQ-Antwort
+
+### Was
+Fairness-Signal `UG-BETRIEBSDATUM`: Text und nächster Schritt hängen
+session-sensitiv vom Aktenzustand ab. Bei offener Rückfrage: „zuerst
+Rückfrage Finanzamt beantworten“. Nach Antwort: „Rückfrage beantwortet /
+Steuernummer-Vergabe läuft“, keine RQ-Anweisung mehr; Fokus auf
+BG-Anmeldung und Unterlagen. CTA „Zum Verfahrensstatus“ unverändert.
+E2E: Initialtext, Session-Hinweise, Session-Übersicht.
+
+### Dateien
+- `demo/lib/fairness/gruendung-rules.ts` – Signal 4 status-abhängiger Text
+- `demo/e2e/us-ug-gruendung.spec.ts` – zwei Tests + Übersicht-Assertion
+- `docs/loops/ug-JOURNAL.md` – dieses Journal
+
+### Build
+`npm run lint` + `npm run build` im Ordner `demo/` grün.
+`npm run test:e2e:ug` Exit 0 (109 passed).
+
+### Nächster sinnvoller UG-Schritt (Vorschlag)
+- Übersicht: Fairness-CTA-Text bei Steuernummer IN_BEARBEITUNG differenzieren (optional)
+- Hinweise: nach Session-Wechsel CTA-Verschwinden für parallele Behörden (optional)
+- Übersicht: Fairness-CTA-Hilfstext bei Betriebsdatum nach RQ-Antwort (optional)
+
+---
+
 ## 2026-07-29 – Iteration 20: Übersicht Fairness-CTA Steuernummer/Betriebsdatum
 
 ### Was
