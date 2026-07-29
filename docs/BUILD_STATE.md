@@ -1,6 +1,6 @@
 # BUILD_STATE.md – Aktueller Projektstand
 
-Zuletzt aktualisiert: nach Supervisor-Pflicht-Push 2026-07-29 (Merge UG Q-175/Q-178 + Kita Q-176–Q-179; lint+build 27 Seiten grün; E2E 257; origin/main sync 0)
+Zuletzt aktualisiert: nach Supervisor-Pflicht-Push 2026-07-29 (Merge AV Q-180 + UG Q-181/Q-183 + Kita Q-182/Q-184; lint+build 27 Seiten grün; origin/main sync 0)
 
 Dieser Stand beschreibt, was tatsächlich existiert und funktioniert.
 Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
@@ -15,7 +15,7 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | Build-Status | ✓ Erfolgreich (27 statische Seiten) |
 | Deployment | Vercel, aus `demo/`-Verzeichnis |
 | Lokaler Start | `cd demo && npm install && npm run dev` |
-| Letzte Build-Prüfung | lint+build **27 Seiten** + `test:e2e:ci` **257 passed** (Supervisor Merge Q-175–Q-179) |
+| Letzte Build-Prüfung | lint+build **27 Seiten** (Supervisor Merge Q-180–Q-184) |
 
 ---
 
@@ -30,12 +30,12 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | `/fall/termine` | Termine; session-lokale Bestätigung; Nav-Badge nur unbestätigt/bald fällig | US-AV-005 | ✓ |
 | `/fall/bescheide` | Bescheide mit Fairness-Hinweisen | US-AV-006 | ✓ |
 | `/fall/verlauf` | Timeline mit Fairness-Hinweis; Antwort-Quittungsblock; Upload-Blöcke mit Dokumentbezeichnung | US-AV-007 | ✓ |
-| `/fall/hinweise` | Vollständige Fairness-Hinweisseite; UNTERLAGE-Signal live nach Session-Upload inkl. Frist + CTA Unterlagen | US-AV-008 | ✓ |
+| `/fall/hinweise` | Vollständige Fairness-Hinweisseite; UNTERLAGE- und RQ-Signal live inkl. Fristhinweis + CTA; Session-Antwort entfallen Signale | US-AV-008 | ✓ |
 | `/stories` | Story Coverage Dashboard | – | ✓ |
 | `/feedback` | Feedback → GitHub Issues | – | ✓ |
-| `/gruendung` … | Unternehmensgründung (Übersicht Fairness-Kurzblock+Kurz-CTAs inkl. Steuernummer/Betriebsdatum/BG-Hilfstext session-sensitiv; Upload-Quittung + nächste offene Unterlage; Primär-/Aufgaben-CTA und Fairness-Ziel-Routing zentral in `gruendung-rules` (`naechsterSchrittZiel`, `aufgabeZiel`, `fairnessSignalZiel`); Dokumente lokale Upload-Quittung pro Karte; Behörden VS-04→Rückfrage; Hinweise UNTERLAGE live + CTAs RQ/BG/Unterlagen/Steuernummer/Betriebsdatum/parallele Behörden; Verlauf Stelle+Ereignistyp-Filter, …) | US-UG-001–006 | ✓ |
+| `/gruendung` … | Unternehmensgründung (Übersicht Fairness-Kurzblock+Kurz-CTAs inkl. Steuernummer/Betriebsdatum/BG-Hilfstext session-sensitiv; Upload-Quittung + nächste offene Unterlage; Primär-/Aufgaben-CTA und Fairness-Ziel-Routing zentral in `gruendung-rules` (`naechsterSchrittZiel`, `aufgabeZiel`, `fairnessSignalZiel`); BG-Demo-Markierung session-lokal + Fallthrough Steuernummer; Fairness-Tiefenlink Verlauf; Dokumente lokale Upload-Quittung pro Karte; Behörden VS-04→Rückfrage + BG Demo-Aktion; Hinweise UNTERLAGE live + CTAs RQ/BG/Unterlagen/Steuernummer/Betriebsdatum/parallele Behörden + Verlauf-Sekundärlink; Verlauf Stelle+Ereignistyp-Filter + Anker `#ere-…`, …) | US-UG-001–006 | ✓ |
 | `/kita` | Öffentlicher Transparenzbericht + Planungsraum-Filter + Residual↔Meldelücke + Engpass/Meldelücke-Schnellfilter + Zeitreihe Meldebasis + Regionenfilter + Regionenvergleich Zwei-Räume inkl. 12-Monats-Verlauf A/B + Explorer print-only Filterstand/Meldebasis + Regionenvergleich print-only A/B/Kennzahl/Meldebasis + CSV Multi-Blatt Status/Meldebasis + Druck-Meta Status/Meldebasis print-only + Open-Data-Lizenz + Hub-Karten JA-Steuerungskette (Lagebild/Bedarfsplanung/Vorlage) | US-KJ-009, US-KJ-010 | ✓ |
-| `/kita/lagebild` | Jugendamt-Steuerungsansicht + Meldeeingang + Meldebeitrag + Engpass/Handlungsfelder/Planungsraum-Detail Meldelücke-Schnellfilter + print-only Filterstand/Meldebasis-Session (Engpass, Handlungsfelder, Detailkarten) + Druck Meldelücke + CSV Aggregate Status/Meldebasis/Meldelücke + 12-Monats-Zeitreihe UI + Zeitreihe-Blatt freigabeunabhängig + Zeitreihe print-only Filterstand/Meldebasis + Monatsbericht-Vorschau + Steuerungskette Hub-Karten | US-KJ-005, US-KJ-006 | ✓ |
+| `/kita/lagebild` | Jugendamt-Steuerungsansicht + Meldeeingang Druck-Meta Status/Datenbasis/Session + Meldebeitrag + Engpass/Handlungsfelder/Planungsraum-Detail Meldelücke-Schnellfilter + print-only Filterstand/Meldebasis-Session + Regionenvergleich Zwei-Räume UI + Druck Meldelücke + CSV Aggregate Status/Meldebasis/Meldelücke + 12-Monats-Zeitreihe UI + Zeitreihe-Blatt freigabeunabhängig + Zeitreihe print-only Filterstand/Meldebasis + Monatsbericht-Vorschau print-only Meta + Steuerungskette Hub-Karten | US-KJ-005, US-KJ-006, US-KJ-010 | ✓ |
 | `/kita/bedarfsplanung` | Bedarfsplanungsentwurf (§ 80 SGB VIII) + Meldebasis + Residual↔Meldelücke (Hinweis-only) + Steuerungskette Hub-Karten + Druck freigabeunabhängig mit Meldebasis-Session-Hinweis + CSV Aggregate freigabeunabhängig | US-KJ-007 | ✓ |
 | `/kita/vorlage` | Politische Gremienvorlage + Freigabe + Meldebasis/Residual↔Meldelücke + Engpass Meldelücke-Filter + Druck freigabeunabhängig + CSV Aggregate Status/Meldebasis freigabeunabhängig + Steuerungskette Hub-Karten | US-KJ-008 | ✓ |
 | `/kita/einrichtung` | Belegungsstand Einrichtung (aggregiert) + Prozesskette Tagesstand→Monatsbericht→Meldung + Druck Status/Datenbasis + CSV Status/Datenbasis-Metakopf | US-KJ-002 | ✓ |
@@ -135,6 +135,11 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | Kita Engpass/Handlungsfelder print-only | `KitaEngpassRangliste` + `KitaHandlungsfelder` | ✓ print-only Filterstand immer + Meldebasis-Session (Q-177, US-KJ-005/006) |
 | UG Primär-/Aufgaben-CTA-Routing zentral | `gruendung-rules.naechsterSchrittZiel` / `aufgabeZiel` | ✓ Übersicht importiert Exports; Bürger-Reihenfolge RQ→Unterlagen→BG + Fairness-Fallthrough (Q-178, US-UG-001) |
 | Kita Detailkarten print-only | `KitaPlanungsraumDetailListe` + `/kita/lagebild` | ✓ print-only Filterstand immer + Meldebasis-Session (Q-179, US-KJ-005/006) |
+| AV Hinweise RQ-Signal live | `/fall/hinweise` + `fairness/rules` + `/fall/rueckfragen` | ✓ RQ-Titel mit Resttagen; Session-Antwort entfernt Signal; E2E (Q-180, US-AV-008/004) |
+| UG Fairness Verlauf-Tiefenlink | `gruendung-rules.fairnessSignalVerlaufZiel` + Hinweise/Übersicht/Verlauf | ✓ Sekundär-CTA „Im Verlauf ansehen“ → `#ere-…` (Q-181, US-UG-005) |
+| Kita Lagebild Regionenvergleich UI | `KitaRegionenVergleich` + `/kita/lagebild` | ✓ Zwei-Räume A/B, Verlauf, Meldebasis, CSV/print im Steuerungslagebild (Q-182, US-KJ-005/010) |
+| UG BG-Demo + Fallthrough | `markBgAnmeldungErledigt` + Behörden BEH-04 + Primär-CTA | ✓ Session-BG erledigt; nach RQ+Upload+BG Fallthrough Steuernummer (Q-183, US-UG-001) |
+| Kita Meldeeingang Druck-Meta | `KitaMeldeeingangPanel` + Monatsbericht-Vorschau + LagebildDruck | ✓ print-only Status/Datenbasis/Session; Vorschau-Meta; Aktionslinks no-print (Q-184, US-KJ-004/005) |
 
 ---
 
@@ -279,6 +284,11 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 **Q-177 erledigt:** Kita Engpass/Handlungsfelder print-only Filterstand und Meldebasis-Session (US-KJ-005/006).
 **Q-178 erledigt:** UG `naechsterSchrittZiel` / `aufgabeZiel` in `gruendung-rules` zentralisiert (US-UG-001).
 **Q-179 erledigt:** Kita Lagebild Detailkarten print-only Filterstand und Meldebasis-Session (US-KJ-005/006).
+**Q-180 erledigt:** AV Hinweise RQ-Signal live mit Fristhinweis + Session-Antwort E2E (US-AV-008/004).
+**Q-181 erledigt:** UG Fairness-Tiefenlink zum auslösenden Verlauf-Ereignis (US-UG-005).
+**Q-182 erledigt:** Kita Lagebild Regionenvergleich Zwei-Räume UI (US-KJ-005/010).
+**Q-183 erledigt:** UG BG-Demo-Markierung session-lokal + Fairness-Fallthrough Steuernummer (US-UG-001).
+**Q-184 erledigt:** Kita Meldeeingang Druck-Meta Status/Datenbasis/Session + Monatsbericht-Vorschau-Meta (US-KJ-004/005).
 
 ---
 

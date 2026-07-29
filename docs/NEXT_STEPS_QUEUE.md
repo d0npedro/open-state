@@ -214,6 +214,11 @@ Story-Dokumentation ist kein Pflicht-Vorläufer für Mock-Daten und Typen.
 | Q-177 | Kita Engpass/Handlungsfelder: print-only Filterstand/Meldebasis-Session immer (US-KJ-005/006) | DEMO | S | Q-173 | DONE `49e6958` |
 | Q-178 | UG Übersicht: `naechsterSchrittZiel` / `aufgabeZiel` in `gruendung-rules` zentralisieren (US-UG-001) | DEMO | S | Q-165 | DONE `36a5723` |
 | Q-179 | Kita Lagebild Detailkarten: print-only Filterstand/Meldebasis-Session immer (US-KJ-005/006) | DEMO | S | Q-177 | DONE `26429b8` |
+| Q-180 | AV Hinweise: RQ-Signal live mit Fristhinweis + Session-Antwort E2E (US-AV-008/004) | DEMO | S | Q-167 | DONE `037cdb7` |
+| Q-181 | UG Fairness: Tiefenlink zum auslösenden Verlauf-Ereignis (US-UG-005) | DEMO | S | Q-178 | DONE `c115716` |
+| Q-182 | Kita Lagebild: Regionenvergleich Zwei-Räume UI (Spiegel öffentlicher Bericht, US-KJ-005/010) | DEMO | S | Q-118 | DONE `05a7f76` |
+| Q-183 | UG BG-Demo-Markierung + Fairness-Fallthrough zu Steuernummer (US-UG-001) | DEMO | S | Q-178 | DONE `c6b77a8` |
+| Q-184 | Kita Meldeeingang: Druck-Meta Status/Datenbasis/Session + Monatsbericht-Vorschau (US-KJ-004/005) | DEMO | S | Q-179 | DONE `18bb244` |
 
 ---
 
@@ -398,3 +403,8 @@ Diese Punkte wurden in früheren Iterationen abgeschlossen und sind produktionsr
 | Q-177 Kita Engpass/Handlungsfelder print-only | Filterstand/Meldebasis-Session print-only (US-KJ-005/006) | `49e6958` → main |
 | Q-178 UG naechsterSchrittZiel/aufgabeZiel | Primär- und Aufgaben-CTA-Routing in `gruendung-rules` (US-UG-001) | `36a5723` → main |
 | Q-179 Kita Detailkarten print-only | Planungsraum-Detail Filterstand/Meldebasis print-only (US-KJ-005/006) | `26429b8` → main |
+| Q-180 AV Hinweise RQ-Signal live | Fristhinweis + Session-Antwort E2E (US-AV-008/004) | `037cdb7` → main |
+| Q-181 UG Fairness Verlauf-Tiefenlink | Sekundär-CTA zum Audit-Ereignis (US-UG-005) | `c115716` → main |
+| Q-182 Kita Lagebild Regionenvergleich | Zwei-Räume UI Spiegel öffentlicher Bericht (US-KJ-010) | `05a7f76` → main |
+| Q-183 UG BG-Demo + Fallthrough Steuernummer | Session-BG erledigt, Primär-CTA Fairness (US-UG-001) | `c6b77a8` → main |
+| Q-184 Kita Meldeeingang Druck-Meta | Status/Datenbasis/Session print-only (US-KJ-004/005) | `18bb244` → main |
