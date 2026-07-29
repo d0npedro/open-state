@@ -2,6 +2,52 @@
 
 Branch: `loop/kita` · Worktree: `D:\Projects\open-state-loop-kita`
 
+## Iteration 2026-07-29 – US-KJ-007 Bedarfsplanung Steuerungskette Hub-Karten
+
+### Was
+Bedarfsplanung (US-KJ-007): JA-Steuerungskette als Hub-Karten gespiegelt (analog betriebliche Prozesskette). Karten Steuerungslagebild (US-KJ-005), Monatsmeldung/Meldebasis (US-KJ-004), politische Vorlage (US-KJ-008); nach „Zur Freigabe“ CTA zur Vorlage; Footer mit DEC-004-Hinweis zum öffentlichen Bericht. Nur Aggregate, keine Kind- oder Personennamen. `origin/main` bereits im Branch (kein Merge nötig).
+
+### Dateien
+- `demo/app/kita/bedarfsplanung/page.tsx` (Steuerungskette Hub-Karten + Footer + Freigabe-CTA Vorlage)
+- `docs/loops/kita-JOURNAL.md` (dieses Journal)
+
+### Story
+US-KJ-007 – Bedarfsplanungsentwurf (Steuerungskette Lagebild → Planung → Vorlage)
+
+### Build
+`npm run lint` + `npm run build` im `demo/`-Verzeichnis (siehe Commit dieses Laufs)
+
+### Nicht angefasst (Supervisor / verboten)
+Queue, BUILD_STATE, storyRegistry, DECISION_LOG, andere Domänen, package.json, CI, push
+
+### Nächster sinnvoller Schritt (Hinweis Supervisor)
+Bedarfsplanung-Druckansicht mit Meldebasis-Hinweis spiegeln, oder Vorlage/Lagebild Rücklink-Hub zur Bedarfsplanung.
+
+---
+
+## Iteration 2026-07-29 – US-KJ-008 Vorlage-Druck freigabeunabhängig + Meldelücke-Filter
+
+### Was
+Politische Vorlage (`/kita/vorlage`, US-KJ-008): Druckansicht freigabeunabhängig (Entwurf / Warteschlange / freigegeben) mit eigener Druckleiste analog Lagebild. Status-Hinweis im Ausdruck wenn nicht freigegeben; Titel/Sachtext im Druck als statischer Text (Inputs no-print). Engpass-Abschnitt: print-only-Dokumentation des aktiven Meldelücke-Filters bzw. Standard Top-N; Methodik-Punkt zur freigabeunabhängigen Druckansicht. Nur Aggregate, keine Kind- oder Personennamen. Fast-forward `origin/main` (ci-watcher docs) vor dem Feature.
+
+### Dateien
+- `demo/app/kita/vorlage/page.tsx` (Druckleiste freigabeunabhängig, print-only Status/Filter, Methodik)
+- `docs/loops/kita-JOURNAL.md` (dieses Journal)
+
+### Story
+US-KJ-008 – Politische Vorlage (Druck freigabeunabhängig, Engpass-Meldelücke-Filter dokumentiert)
+
+### Build
+`npm run lint` + `npm run build` im `demo/`-Verzeichnis (siehe Commit dieses Laufs)
+
+### Nicht angefasst (Supervisor / verboten)
+Queue, BUILD_STATE, storyRegistry, DECISION_LOG, andere Domänen, package.json, CI, push
+
+### Nächster sinnvoller Schritt (Hinweis Supervisor)
+Bedarfsplanung Prozesskette/Hub zu Lagebild und Vorlage, oder Bedarfsplanung-Druckansicht mit Meldebasis-Hinweis spiegeln.
+
+---
+
 ## Iteration 2026-07-29 – US-KJ-004 Meldung Prozesskette Hub-Karten
 
 ### Was
