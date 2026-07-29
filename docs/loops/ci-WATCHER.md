@@ -2,14 +2,15 @@
 
 | Feld | Wert |
 |------|------|
-| last_checked | 2026-07-29T11:55:37Z |
-| last_run_id | 30441424346 |
+| last_checked | 2026-07-29T10:05:30Z |
+| last_run_id | 30441945078 |
 | last_status | success |
-| last_sha | e40be83 |
+| last_sha | 2190a70 |
 | fix_attempts | 0 |
 
 ## Log
 
+- Build `30441945089` + E2E `30441945078` **success** (SHA 2190a70 Merge loop/kita — latest code path: AV RQ-Signal live + UG Fairness-Tiefenlink/BG-Demo + Kita Regionenvergleich + Meldeeingang Druck-Meta). Prior E2E `30441631208` **success** (SHA c1755cd docs). Catch-up this tick: origin/main..main was 8 → lint+build grün → push `c1755cd..2190a70` → origin/main..main = 0. Watched Build/E2E to green. Concurrent supervisor docs HEAD `d0da64a` (Q-180–Q-184 path-skip); E2E `30442086406` may still be in_progress (docs-only). No fix. fix_attempts=0.
 - E2E `30441424346` **success** (SHA e40be83 docs ci-watcher HEAD). E2E `30441228404` **success** (SHA e3d1c36 docs supervisor E2E 257 after Q-175–Q-179). Build latest code path still `30440899115` **success** (SHA bd018cd Merge loop/kita Explorer print-only Filterstand/Meldebasis — HEAD docs-only path-skip). Catch-up: origin/main..main = 0. Watched E2E to green. No fix. fix_attempts=0.
 - E2E `30441228404` **success** (SHA e3d1c36 docs supervisor E2E 257 after Q-175–Q-179 HEAD). E2E `30441126571` + Build `30441126614` **success** (SHA 11432ac docs ci-watcher). Build `30440899115` **success** (SHA bd018cd Merge loop/kita Explorer print-only Filterstand/Meldebasis — latest code path; HEAD docs-only path-skip). Catch-up this tick: origin/main..main was 1 → lint+build grün → concurrent/already synced to e3d1c36 → origin/main..main = 0. Watched E2E to green. No fix. fix_attempts=0.
 - Build `30440932295` + E2E `30440931876` **success** (SHA ff87328 docs ci-watcher HEAD). Build `30440899115` + E2E `30440899082` **success** (SHA bd018cd Merge loop/kita Explorer print-only Filterstand/Meldebasis + loop/ug Hinweise UNTERLAGE live — latest code path). Catch-up this tick: origin/main..main was 7 at start → lint+build grün; concurrent watcher already pushed `bd018cd` + docs `ff87328` (push race: remote ref lock) → origin/main..main = 0. Watched Build/E2E to green. No fix. fix_attempts=0.
