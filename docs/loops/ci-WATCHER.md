@@ -2,14 +2,15 @@
 
 | Feld | Wert |
 |------|------|
-| last_checked | 2026-07-29T09:12:00Z |
-| last_run_id | 30438123084 |
+| last_checked | 2026-07-29T09:10:36Z |
+| last_run_id | 30438383166 |
 | last_status | success |
-| last_sha | 6f175f1 |
+| last_sha | 1b187a0 |
 | fix_attempts | 0 |
 
 ## Log
 
+- E2E `30438383166` **success** (SHA 1b187a0 docs ci-watcher HEAD). E2E `30438312783` **success** (SHA 6f175f1 docs). E2E `30438181068` **success** (SHA 091c6bf). Build `30437820507` + E2E `30437820369` **success** (SHA af481fa Merge loop/kita — latest code path). Catch-up: origin/main..main = 0. No fix. fix_attempts=0.
 - E2E `30438123084` **success** (SHA 6f175f1 docs supervisor E2E 244 confirm). E2E `30438053432` **success** (SHA f79a397 docs ci-watcher). E2E `30437957278` **success** (SHA 091c6bf Q-164–Q-166). Build `30437820507` + E2E `30437820369` **success** (SHA af481fa Merge loop/kita — latest code path). Catch-up: origin/main..main = 0. HEAD `df12ba9` docs ci-watcher path-skip; E2E `30438312783` / `30438181068` may still be in_progress (docs-only). No fix. fix_attempts=0.
 - E2E `30438123084` **success** (SHA 6f175f1 docs supervisor E2E 244 confirm HEAD). E2E `30438053432` **success** (SHA f79a397 docs ci-watcher). E2E `30437957278` **success** (SHA 091c6bf Q-164–Q-166). Build `30437820507` + E2E `30437820369` **success** (SHA af481fa Merge loop/kita — latest code path). Catch-up: origin/main..main = 0. HEAD `019a764` prior ci-watcher docs path-skip; E2E `30438181068` may still be in_progress (docs-only). No fix. fix_attempts=0.
 - E2E `30437957278` **success** (SHA 091c6bf docs supervisor Q-164–Q-166). E2E `30437899063` **success** (SHA de5a6a6 Q-161–Q-163). Build `30437820507` + E2E `30437820369` **success** (SHA af481fa Merge loop/kita — latest code path). Catch-up: origin/main..main = 0. HEAD `6f175f1` supervisor E2E 244 confirm docs path-skip; E2E `30438123084` / `30438053432` may still be in_progress (docs-only). No fix. fix_attempts=0.
