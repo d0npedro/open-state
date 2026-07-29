@@ -24,10 +24,11 @@ test.describe('US-AV-003 – Unterlagen nachreichen', () => {
   });
 
   test('AC1: Alle vier Dokumente sind aufgeführt', async ({ page }) => {
-    await expect(page.getByText('Arbeitgeberbescheinigung')).toBeVisible();
-    await expect(page.getByText(/Personalausweis/)).toBeVisible();
-    await expect(page.getByText('Einkommensteuerbescheid letztes Jahr')).toBeVisible();
-    await expect(page.getByText('Formular SG1')).toBeVisible();
+    // Headings: Fairness-Hinweis listet dieselben Namen nochmals im Fließtext
+    await expect(page.getByRole('heading', { name: 'Arbeitgeberbescheinigung' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: /Personalausweis/ })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Einkommensteuerbescheid letztes Jahr' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Formular SG1' })).toBeVisible();
   });
 
   test('AC1: Jedes Dokument hat eine Begründung (Warum wird das benötigt?)', async ({ page }) => {
