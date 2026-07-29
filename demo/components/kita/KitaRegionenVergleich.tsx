@@ -4,7 +4,7 @@
  * Regionenvergleich: zwei Planungsräume nebeneinander (US-KJ-010 AK 3).
  * Dieselben Kernkennzahlen, Differenzspalte, Meldebasis-Kurzmarkierung.
  * CSV-Export der aktiven Vergleichsansicht (US-KJ-010 AK 4).
- * Zeitlicher Verlauf A vs. B über Monate (US-KJ-010: Zeitreihe im Vergleich).
+ * Zeitlicher Verlauf A vs. B über Monate + CSV des aktiven Verlaufs (US-KJ-010 AK 4).
  * Keine Chart-Bibliothek — HTML-Tabelle. Keine Bewertung, keine Kind-/Personennamen.
  */
 
@@ -376,19 +376,20 @@ export function KitaRegionenVergleich({
         <div style={{ flex: '1 1 16rem', minWidth: 0 }}>
           Zwei Planungsräume mit denselben Kennzahlen nebeneinander (US-KJ-010 AK&nbsp;3).
           Die Spalte <strong>Δ (A − B)</strong> zeigt die rechnerische Differenz — keine automatische
-          Bewertung und keine Empfehlung. Darunter: zeitlicher Verlauf derselben Auswahl über 12 Monate.
+          Bewertung und keine Empfehlung. Darunter: zeitlicher Verlauf derselben Auswahl über 12 Monate
+          inkl. eigener CSV-Export der aktiven Kennzahl.
           Meldebasis je Raum aus der Demo-Stichprobe (Session-sensitiv).
-          CSV-Export (AK&nbsp;4) lädt genau die aktive Auswahl A/B inkl. Δ und Meldebasis (Stichtags-Kennzahlen).
+          Stichtags-CSV (AK&nbsp;4) lädt die aktive Auswahl A/B inkl. Δ und Meldebasis.
         </div>
         <button
           type="button"
           className="btn btn-secondary"
           onClick={handleCsvDownload}
           style={{ fontSize: '0.8rem', flexShrink: 0, whiteSpace: 'nowrap' }}
-          title={`CSV der aktuellen Vergleichsansicht: ${csvButtonLabel}`}
-          aria-label={`Regionenvergleich als CSV herunterladen (${csvButtonLabel})`}
+          title={`CSV der aktuellen Stichtags-Vergleichsansicht: ${csvButtonLabel}`}
+          aria-label={`Regionenvergleich Stichtag als CSV herunterladen (${csvButtonLabel})`}
         >
-          CSV herunterladen (Vergleich)
+          CSV herunterladen (Stichtag)
         </button>
       </div>
 
@@ -598,9 +599,10 @@ export function KitaRegionenVergleich({
         Methodik (US-KJ-010 AK&nbsp;3 / AK&nbsp;4 + Verlauf): Gegenüberstellung aggregierter Planungsraum-Kennzahlen
         am Berichtsstand und im 12-Monats-Verlauf — keine Einrichtungsindividualdaten, keine Personenbezüge.
         Farbliche Differenzmarkierung ist Orientierung, keine automatische Bewertung und keine Trendprognose.
-        Raumreihen sind Demo-Verteilungen der kommunalen Monatsreihe nach Strukturanteilen. CSV-Export (AK&nbsp;4)
-        enthält die Stichtags-Kennzahlen inkl. Δ und Meldebasis (aktive Auswahl A/B). Meldemonat Oktober 2024 ist
-        methodisch an die Meldebasis-Stichprobe gekoppelt. Freigabe-Demo unter{' '}
+        Raumreihen sind Demo-Verteilungen der kommunalen Monatsreihe nach Strukturanteilen. CSV-Export (AK&nbsp;4):
+        (1) Stichtags-Kennzahlen inkl. Δ und Meldebasis; (2) aktiver 12-Monats-Verlauf der gewählten Kennzahl
+        (Monate · Wert A/B · Δ · Meldebasis). Meldemonat Oktober 2024 ist methodisch an die Meldebasis-Stichprobe
+        gekoppelt. Freigabe-Demo unter{' '}
         <a href="/kita/meldung" style={{ color: 'var(--color-primary)' }}>
           /kita/meldung
         </a>
@@ -667,6 +669,120 @@ function VerlaufAvsB({
   const lueckeB = hydrated && basisB?.hatDatenluecke;
   const hatMeldeLuecke = Boolean(lueckeA || lueckeB);
 
+  function meldebasisCsvLabel(basis: PlanungsraumMeldebasis | undefined): string {
+    if (!hydrated) return '…';
+    if (!basis) return 'keine_Stichprobe';
+    return basis.hatDatenluecke
+      ? `Luecke (${basis.freigegeben}/${basis.erwartet})`
+      : `vollstaendig (${basis.freigegeben}/${basis.erwartet})`;
+  }
+
+  function meldebasisMonatCsv(
+    isMeldeMonat: boolean,
+    basisALocal: PlanungsraumMeldebasis | undefined,
+    basisBLocal: PlanungsraumMeldebasis | undefined
+  ): string {
+    if (!isMeldeMonat) return '–';
+    if (!hydrated) return '…';
+    const aL = basisALocal?.hatDatenluecke ?? false;
+    const bL = basisBLocal?.hatDatenluecke ?? false;
+    if (aL || bL) {
+      const parts: string[] = [];
+      if (aL) parts.push(`A:${meldebasisCsvLabel(basisALocal)}`);
+      if (bL) parts.push(`B:${meldebasisCsvLabel(basisBLocal)}`);
+      return `Meldeluecke (${parts.join('; ')})`;
+    }
+    return 'Stichprobe_ok';
+  }
+
+  /** CSV-Export des aktiven 12-Monats-Verlaufs A vs. B — US-KJ-010 AK 4 */
+  function handleVerlaufCsvDownload() {
+    if (!hatSerie) return;
+
+    const de = (n: number) => n.toFixed(1).replace('.', ',');
+    const header = [
+      'Monat',
+      'Monat_ISO',
+      'Kennzahl',
+      'Kennzahl_Key',
+      'Region_A',
+      'Region_A_ID',
+      'Wert_A',
+      'Region_B',
+      'Region_B_ID',
+      'Wert_B',
+      'Delta_A_minus_B',
+      'Einheit',
+      'Meldebasis',
+      'Ist_Berichtsmonat',
+    ].join(';');
+
+    const csvRows = rows.map(row => {
+      let wertA: string;
+      let wertB: string;
+      let delta: string;
+      let einheit: string;
+
+      if (metric.unit === 'pct') {
+        wertA = de(row.va);
+        wertB = row.vb === null ? '' : de(row.vb);
+        delta = sameRoom || row.vb === null ? '' : de(row.va - row.vb);
+        einheit = 'Prozent';
+      } else {
+        wertA = String(Math.round(row.va));
+        wertB = row.vb === null ? '' : String(Math.round(row.vb));
+        delta = sameRoom || row.vb === null ? '' : String(Math.round(row.va - row.vb));
+        einheit = 'Zahl';
+      }
+
+      return [
+        row.monatLabel,
+        row.monat,
+        metric.label,
+        metric.key,
+        raumA.bezeichnung,
+        raumA.id,
+        wertA,
+        raumB.bezeichnung,
+        raumB.id,
+        wertB,
+        delta,
+        einheit,
+        meldebasisMonatCsv(row.isMeldeMonat, basisA, basisB),
+        row.isMeldeMonat ? 'ja' : 'nein',
+      ].join(';');
+    });
+
+    const meta = [
+      '# Open State – Kita Regionenvergleich Verlauf A vs. B (US-KJ-010 AK 4)',
+      `# Region_A: ${raumA.bezeichnung} (${raumA.id})`,
+      `# Region_B: ${raumB.bezeichnung} (${raumB.id})`,
+      `# Kennzahl: ${metric.label} (${metric.key})`,
+      `# Monate: ${rows.length}`,
+      sameRoom
+        ? '# Hinweis: Region A und B sind identisch — Delta leer'
+        : '# Delta = Wert Region A minus Wert Region B je Monat (rechnerisch, keine Bewertung)',
+      `# Meldebasis_A (Stichprobe): ${meldebasisCsvLabel(basisA)}`,
+      `# Meldebasis_B (Stichprobe): ${meldebasisCsvLabel(basisB)}`,
+      `# Berichtsmonat_Meldebasis: ${demoKitaMeldeeingang.monatsLabel} (${meldeMonatsIso})`,
+      '# Keine Kind- oder Personennamen. Keine Einrichtungsindividualdaten. Keine Trendbewertung. Keine Interpolation.',
+      '# Trennzeichen: Semikolon · Dezimaltrennzeichen: Komma · Encoding: UTF-8 BOM',
+      '',
+    ];
+
+    const csv = [...meta, header, ...csvRows].join('\n');
+    const slug = `${raumA.id}-vs-${raumB.id}-${metric.key}`
+      .toLowerCase()
+      .replace(/[^a-z0-9_-]+/g, '-');
+    const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `kita-regionenvergleich-verlauf-${slug}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
   if (!hatSerie) {
     return (
       <div style={{ marginTop: '1.5rem' }}>
@@ -698,6 +814,8 @@ function VerlaufAvsB({
     fontWeight: 600,
   };
 
+  const verlaufCsvLabel = `${raumA.bezeichnung} vs. ${raumB.bezeichnung} · ${metric.label}`;
+
   return (
     <div style={{ marginTop: '1.75rem' }}>
       <div
@@ -705,21 +823,34 @@ function VerlaufAvsB({
           display: 'flex',
           flexWrap: 'wrap',
           gap: '0.75rem',
-          alignItems: 'baseline',
+          alignItems: 'center',
           justifyContent: 'space-between',
           marginBottom: '0.75rem',
         }}
       >
-        <h3 style={{ fontSize: '1rem', margin: 0 }}>
-          Verlauf der letzten 12 Monate (A vs. B)
-        </h3>
-        <span style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>
-          {raumA.bezeichnung} · {raumB.bezeichnung}
-        </span>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', alignItems: 'baseline' }}>
+          <h3 style={{ fontSize: '1rem', margin: 0 }}>
+            Verlauf der letzten 12 Monate (A vs. B)
+          </h3>
+          <span style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>
+            {raumA.bezeichnung} · {raumB.bezeichnung}
+          </span>
+        </div>
+        <button
+          type="button"
+          className="btn btn-secondary"
+          onClick={handleVerlaufCsvDownload}
+          style={{ fontSize: '0.8rem', flexShrink: 0, whiteSpace: 'nowrap' }}
+          title={`CSV des aktiven Monatsverlaufs: ${verlaufCsvLabel}`}
+          aria-label={`Verlauf A vs. B als CSV herunterladen (${verlaufCsvLabel})`}
+        >
+          CSV herunterladen (Verlauf)
+        </button>
       </div>
 
       <p style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)', margin: '0 0 0.75rem', lineHeight: 1.5 }}>
-        Dieselbe Raumauswahl im Monatsverlauf (US-KJ-010). Eine Kennzahl wählen — Werte A/B und Δ je Monat.
+        Dieselbe Raumauswahl im Monatsverlauf (US-KJ-010 AK&nbsp;4). Eine Kennzahl wählen — Werte A/B und Δ je Monat.
+        CSV-Export lädt genau die aktive Kennzahl und Raumauswahl (12 Monate, Semikolon, UTF-8 BOM).
         Keine Interpolation, keine Trendbewertung. Meldemonat ({demoKitaMeldeeingang.monatsLabel}) mit
         Meldebasis-Hinweis, falls Lücke in A oder B.
       </p>
@@ -871,7 +1002,8 @@ function VerlaufAvsB({
 
       <p style={{ margin: '0.65rem 0 0', fontSize: '0.75rem', color: 'var(--color-text-muted)', lineHeight: 1.45 }}>
         Verlauf nutzt die raumbezogenen Demo-Zeitreihen (gleiche Anteile wie im Zeitreihenfilter).
-        Δ je Monat = Wert A − Wert B zur gewählten Kennzahl. Keine Kind- oder Personennamen.
+        Δ je Monat = Wert A − Wert B zur gewählten Kennzahl. CSV enthält nur die aktive Kennzahl
+        und Auswahl A/B inkl. Meldebasis-Spalte am Berichtsmonat. Keine Kind- oder Personennamen.
       </p>
     </div>
   );
