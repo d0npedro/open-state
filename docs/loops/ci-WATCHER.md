@@ -2,14 +2,15 @@
 
 | Feld | Wert |
 |------|------|
-| last_checked | 2026-07-29T06:41:00Z |
-| last_run_id | 30428831585 |
+| last_checked | 2026-07-29T06:50:00Z |
+| last_run_id | 30429302795 |
 | last_status | success |
-| last_fix_sha | 93f853d |
+| last_fix_sha | 99e736b |
 | fix_attempts | 0 |
 
 ## Log
 
+- Build `30429302810` + E2E `30429302795` **success** (SHA 99e736b Merge loop/kita + concurrent AV merge). Catch-up this tick: origin/main..main was 9->17 -> lint+build gruen via isolated `NEXT_DIST_DIR=.next-ci-watcher` (shared `.next` ENOENT multi-loop race) -> push `34c6bc3..99e736b` -> origin/main..main = 0. Newer HEAD `b9764ec` docs supervisor: E2E `30429377427` in_progress next tick. No fix. fix_attempts=0.
 - E2E `30428831585` **success** (SHA 93f853d docs ci-watcher HEAD). Prior E2E `30428801062` **success** (SHA eaa3e3c); prior E2E `30428581161` + Build `30428580945` **success** (SHA 124aee2). Build latest code path still 124aee2 (HEAD docs-only path-skip). Catch-up: origin/main..main = 0. No fix. fix_attempts=0.
 - Build `30428580945` + E2E `30428581161` **success** (SHA 124aee2 docs supervisor Q-123 Kita Open-Data-Lizenz CSV). Prior Build `30428469325` + E2E `30428469313` **success** (SHA 929a28c); prior E2E `30428443824` **success** (SHA a2bddcc). Catch-up this tick: origin/main..main was 7 → lint+build grün (local `.next` ENOENT race, clean rebuild) → push `a0df000..a2bddcc`; concurrent supervisor then pushed remaining (kita Open-Data-Lizenz + merges + Q-122/Q-123) → origin/main..main = 0. No fix. fix_attempts=0.
 - E2E `30428080184` **success** (SHA 7434203 docs ci-watcher). Prior E2E `30427934277` **success** (SHA 55f09af). Build latest `30427581501` success (SHA c3432c9; newer HEAD docs-only path-skip). Catch-up: origin/main..main = 0. No fix. fix_attempts=0.
