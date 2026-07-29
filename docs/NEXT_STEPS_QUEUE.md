@@ -258,3 +258,4 @@ Diese Punkte wurden in früheren Iterationen abgeschlossen und sind produktionsr
 | Q-109 Kita Vorlage Meldebasis | Residual/Meldebasis auf `/kita/vorlage` | `5ec2ed8` → main |
 | Q-110 Kita Engpass/Meldelücke-Filter | Planungsraum-Explorer Schnellfilter | `8868849` → main |
 | Q-111 UG Betriebsdatum-CTA | Hinweise → `#verfahrensstatus` | `18e395e` → main |
+| Q-106 UG Fairness-Filter | Kurzblock nur RELEVANT+HINWEIS | `4b53be4` ? main |
