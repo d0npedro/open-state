@@ -321,6 +321,8 @@ export default function VerlaufPage() {
             /** Session-Demo-Ereignisse (Antwort, Upload, BG) – optisch von Mock-Historie abheben. */
             const isSessionEvent = e.id.startsWith('UG-DEMO-');
             const isSessionAntwort = e.typ === 'rueckfrage_beantwortet' && isSessionEvent;
+            const isSessionUpload = e.typ === 'dokument_hochgeladen' && isSessionEvent;
+            const isSessionBuergerAktion = isSessionAntwort || isSessionUpload;
             return (
               <div key={e.id} style={{ position: 'relative', marginBottom: i < chronologisch.length - 1 ? '1.25rem' : 0 }}>
                 <div style={{
@@ -335,6 +337,7 @@ export default function VerlaufPage() {
                   className="card"
                   data-session-event={isSessionEvent ? 'true' : undefined}
                   data-session-antwort={isSessionAntwort ? 'true' : undefined}
+                  data-session-upload={isSessionUpload ? 'true' : undefined}
                   style={{
                     padding: '0.875rem 1rem',
                     scrollMarginTop: '5rem',
@@ -344,7 +347,7 @@ export default function VerlaufPage() {
                           outlineOffset: '2px',
                           boxShadow: '0 0 0 4px color-mix(in srgb, var(--color-primary) 18%, transparent)',
                         }
-                      : isSessionAntwort
+                      : isSessionBuergerAktion
                         ? {
                             borderLeft: '4px solid var(--color-success)',
                           }
@@ -364,6 +367,15 @@ export default function VerlaufPage() {
                           data-testid={`verlauf-session-antwort-badge-${e.id}`}
                         >
                           Ihre Antwort
+                        </span>
+                      )}
+                      {isSessionUpload && (
+                        <span
+                          className="status-chip status-chip-success"
+                          style={{ fontSize: '0.7rem', padding: '0.1rem 0.45rem' }}
+                          data-testid={`verlauf-session-upload-badge-${e.id}`}
+                        >
+                          Ihr Upload
                         </span>
                       )}
                       <span style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>

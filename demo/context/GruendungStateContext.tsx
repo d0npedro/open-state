@@ -27,6 +27,14 @@ export function demoRqAntwortEreignisId(rqId: string): string {
   return `UG-DEMO-RQ-${rqId}`;
 }
 
+/**
+ * Verlauf-Anker-ID für den Demo-Upload einer Unterlage.
+ * Beispiel: DOK-03 → `UG-DEMO-DOK-DOK-03` (Hash `#ere-UG-DEMO-DOK-DOK-03`).
+ */
+export function demoDokUploadEreignisId(dokId: string): string {
+  return `UG-DEMO-DOK-${dokId}`;
+}
+
 interface GruendungStateContextValue {
   akte: GruendungsAkte;
   /** Demo: beantwortet Rückfrage, optional mit Freitext. */
@@ -311,7 +319,7 @@ export function GruendungStateProvider({ children }: { children: React.ReactNode
     for (const id of uploadedIds) {
       const dok = demoGruendungsAkte.dokumente.find(d => d.id === id);
       extraEvents.push({
-        id: `UG-DEMO-DOK-${id}`,
+        id: demoDokUploadEreignisId(id),
         typ: 'dokument_hochgeladen',
         zeitstempel: DEMO_AKTION_ZEIT,
         handelndeStelle: 'GRUENDER',

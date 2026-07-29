@@ -968,6 +968,56 @@ test.describe('UG – Rückfragen (Interaktion)', () => {
     await expect(page.getByText('Rückfrage beantwortet').first()).toBeVisible();
   });
 
+  test('Nach Upload: Verlauf-Tiefenlink zum Session-Upload (US-UG-003/005)', async ({ page }) => {
+    // Quittung verlinkt auf Session-Ereignis; Hash-Hervorhebung + Badge im Verlauf
+    // Kein page.goto nach State (DEC-012) – Link navigiert innerhalb des Layouts
+    await page.goto('/gruendung/dokumente');
+    await page.getByRole('button', { name: /Als hochgeladen markieren/i }).click();
+    await expect(page.getByTestId('dok-upload-quittung-DOK-03')).toBeVisible();
+
+    const verlaufLink = page.getByTestId('dok-verlauf-link-DOK-03');
+    await expect(verlaufLink).toBeVisible();
+    await expect(verlaufLink).toHaveAttribute(
+      'href',
+      '/gruendung/verlauf#ere-UG-DEMO-DOK-DOK-03'
+    );
+    await expect(verlaufLink).toContainText(/Im Verlauf ansehen/i);
+
+    await verlaufLink.click();
+    await expect(page).toHaveURL(/\/gruendung\/verlauf#ere-UG-DEMO-DOK-DOK-03/);
+
+    const card = page.getByTestId('verlauf-ereignis-UG-DEMO-DOK-DOK-03');
+    await expect(card).toBeVisible();
+    await expect(card).toHaveAttribute('aria-current', 'location');
+    await expect(card).toHaveAttribute('data-session-upload', 'true');
+    await expect(card).toContainText(/hochgeladen/i);
+    await expect(page.getByTestId('verlauf-session-upload-badge-UG-DEMO-DOK-DOK-03')).toBeVisible();
+    await expect(page.getByTestId('verlauf-session-upload-badge-UG-DEMO-DOK-DOK-03')).toContainText(
+      /Ihr Upload/i
+    );
+  });
+
+  test('Session-Upload bleibt im Verlauf nach Tab-Nav (kein page.goto)', async ({ page }) => {
+    const { goUgTab } = await import('./helpers/sessionNav');
+    await page.goto('/gruendung/dokumente');
+    await page.getByRole('button', { name: /Als hochgeladen markieren/i }).click();
+    await expect(page.getByTestId('dok-upload-quittung-DOK-03')).toBeVisible();
+
+    await goUgTab(page, 'Verlauf', /\/gruendung\/verlauf/);
+    const card = page.getByTestId('verlauf-ereignis-UG-DEMO-DOK-DOK-03');
+    await expect(card).toBeVisible();
+    await expect(card).toHaveAttribute('data-session-upload', 'true');
+    await expect(page.getByTestId('verlauf-session-upload-badge-UG-DEMO-DOK-DOK-03')).toContainText(
+      /Ihr Upload/i
+    );
+
+    // Filter „Dokumente“ zeigt Session-Upload
+    const typGroup = page.getByRole('group', { name: /Verlauf filtern nach Ereignistyp/i });
+    await typGroup.getByRole('button', { name: /Dokumente/i }).click();
+    await expect(card).toBeVisible();
+    await expect(page.getByText(/Dokument übermittelt/i).first()).toBeVisible();
+  });
+
 });
 
 // ─── Hinweise ─────────────────────────────────────────────────────────────────

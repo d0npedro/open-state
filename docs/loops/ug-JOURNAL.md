@@ -8,6 +8,38 @@ Erlaubte Pfade nur: `demo/app/gruendung/**`, `demo/context/GruendungStateContext
 
 ---
 
+## 2026-07-29 – Iteration 42: Upload-Quittung → Verlauf-Tiefenlink (US-UG-003/005)
+
+### Was
+Nach Demo-Upload einer Unterlage ist das Session-Ereignis im Verlauf
+auffindbar und per Tiefenlink hervorgehoben (Parität zu RQ-Antwort It. 41):
+
+1. **`demoDokUploadEreignisId`** in `GruendungStateContext` – stabile ID
+   `UG-DEMO-DOK-{dokId}` für Ereignis und Verlauf-Anker.
+2. **Upload-Quittung** (Dokumente): Sekundär-CTA „Im Verlauf ansehen“ →
+   `/gruendung/verlauf#ere-UG-DEMO-DOK-DOK-03` (testid `dok-verlauf-link-*`).
+3. **Verlauf**: Session-Upload-Badge „Ihr Upload“, grüner Rand,
+   `data-session-upload`; Hash-Hervorhebung (`aria-current`) wie Antwort.
+4. E2E: Tiefenlink + Badge; Tab-Nav behält Session (DEC-012); Filter „Dokumente“.
+
+### Dateien
+- `demo/context/GruendungStateContext.tsx` – Export `demoDokUploadEreignisId`
+- `demo/app/gruendung/dokumente/page.tsx` – Quittung + Verlauf-Link
+- `demo/app/gruendung/verlauf/page.tsx` – Session-Upload-Markierung
+- `demo/e2e/us-ug-gruendung.spec.ts` – 2 neue Tests
+- `docs/loops/ug-JOURNAL.md` – dieses Journal
+
+### Build
+`npm run lint` + `npm run build` im Ordner `demo/` grün.
+`npm run test:e2e:ug` Exit 0 (132 passed).
+
+### Nächster sinnvoller UG-Schritt (Vorschlag)
+- Primär-CTA-Labels optional an Fairness-Kurz-CTAs angleichen (optional)
+- Fairness-Verlauf-Tiefenlink für BG/Steuernummer-Session-Events (optional)
+- Übersicht Upload-Quittung: optionaler Verlauf-Link pro Session-Upload
+
+---
+
 ## 2026-07-29 – Iteration 41: Session-Antwort im Verlauf hervorheben (US-UG-005)
 
 ### Was

@@ -1,7 +1,10 @@
 'use client';
 
 import Link from 'next/link';
-import { useGruendungState } from '@/context/GruendungStateContext';
+import {
+  demoDokUploadEreignisId,
+  useGruendungState,
+} from '@/context/GruendungStateContext';
 import { berechneFairnessSignaleGruendung } from '@/lib/fairness/gruendung-rules';
 import { Icon } from '@/components/Icon';
 import type { DokumentStatusUG } from '@/types/gruendung';
@@ -172,7 +175,7 @@ export default function DokumentePage() {
               )}
             </div>
 
-            {/* Lokale Upload-Quittung: sofort nach Session-Markierung auf der Karte (US-UG-003) */}
+            {/* Lokale Upload-Quittung + Verlauf-Tiefenlink (US-UG-003/005) */}
             {istSessionUpload && (
               <div
                 className="notice-box notice-box-success"
@@ -182,26 +185,44 @@ export default function DokumentePage() {
                 style={{ marginBottom: '0.875rem' }}
               >
                 <Icon name="check-circle" size={16} style={{ flexShrink: 0, marginTop: '2px' }} />
-                <div>
-                  <strong
-                    style={{ fontSize: '0.875rem', display: 'block', marginBottom: '0.25rem' }}
-                    data-testid={`dok-upload-quittung-titel-${dok.id}`}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                  <div>
+                    <strong
+                      style={{ fontSize: '0.875rem', display: 'block', marginBottom: '0.25rem' }}
+                      data-testid={`dok-upload-quittung-titel-${dok.id}`}
+                    >
+                      Upload bestätigt
+                    </strong>
+                    <p style={{ fontSize: '0.875rem', margin: 0 }} data-testid={`dok-upload-quittung-text-${dok.id}`}>
+                      {dok.bezeichnung}
+                      {dok.hochgeladenAm ? (
+                        <span style={{ color: 'var(--color-text-muted)' }}>
+                          {' '}
+                          · eingereicht am {dok.hochgeladenAm}
+                        </span>
+                      ) : null}
+                    </p>
+                    <p style={{ fontSize: '0.8rem', margin: '0.35rem 0 0', color: 'var(--color-text-muted)' }}>
+                      Demo: Es wurde keine Datei gespeichert — der Status steht auf „Hochgeladen“.
+                      Die Quittung gilt für diese Browser-Session.
+                    </p>
+                  </div>
+                  <Link
+                    href={`/gruendung/verlauf#ere-${demoDokUploadEreignisId(dok.id)}`}
+                    className="btn btn-secondary btn-inline"
+                    style={{
+                      alignSelf: 'flex-start',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '0.4rem',
+                      minHeight: 44,
+                    }}
+                    data-testid={`dok-verlauf-link-${dok.id}`}
+                    aria-label={`${dok.bezeichnung} im Verlauf ansehen`}
                   >
-                    Upload bestätigt
-                  </strong>
-                  <p style={{ fontSize: '0.875rem', margin: 0 }} data-testid={`dok-upload-quittung-text-${dok.id}`}>
-                    {dok.bezeichnung}
-                    {dok.hochgeladenAm ? (
-                      <span style={{ color: 'var(--color-text-muted)' }}>
-                        {' '}
-                        · eingereicht am {dok.hochgeladenAm}
-                      </span>
-                    ) : null}
-                  </p>
-                  <p style={{ fontSize: '0.8rem', margin: '0.35rem 0 0', color: 'var(--color-text-muted)' }}>
-                    Demo: Es wurde keine Datei gespeichert — der Status steht auf „Hochgeladen“.
-                    Die Quittung gilt für diese Browser-Session.
-                  </p>
+                    <Icon name="clock" size={16} />
+                    Im Verlauf ansehen
+                  </Link>
                 </div>
               </div>
             )}
