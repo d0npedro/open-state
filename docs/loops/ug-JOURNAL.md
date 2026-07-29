@@ -8,6 +8,32 @@ Erlaubte Pfade nur: `demo/app/gruendung/**`, `demo/context/GruendungStateContext
 
 ---
 
+## 2026-07-29 – Iteration 33: Fairness-CTA-Hilfstexte in gruendung-rules
+
+### Was
+Session-sensitive CTA-Hilfstexte (RQ, Unterlagen, BG, Steuernummer,
+Betriebsdatum, parallele Behörden) und `hatOffeneRueckfrage` leben in
+`gruendung-rules.ts` als gemeinsame Quelle. Übersicht und Hinweise nutzen
+dieselben Helper – identischer Wortlaut, kein UI-Duplikat mehr.
+E2E unverändert (String-Assertions bleiben grün).
+
+### Dateien
+- `demo/lib/fairness/gruendung-rules.ts` – exportierte CTA-Hilfstext-Helper
+- `demo/app/gruendung/page.tsx` – Import statt lokaler Duplikate
+- `demo/app/gruendung/hinweise/page.tsx` – Import statt lokaler Duplikate
+- `docs/loops/ug-JOURNAL.md` – dieses Journal
+
+### Build
+`npm run lint` + `npm run build` im Ordner `demo/` grün.
+`npm run test:e2e:ug` Exit 0 (112 passed).
+
+### Nächster sinnvoller UG-Schritt (Vorschlag)
+- Übersicht/Hinweise: Fairness-CTA-Ziel-Routing ggf. ebenfalls zentralisieren
+- Primär-CTA „Nächster Schritt“ weiter an Fairness-Priorität koppeln (optional)
+- Verlauf: Tiefenlink von Fairness-CTA zu passendem Ereignis (optional)
+
+---
+
 ## 2026-07-29 – Iteration 32: Primär-CTA Nächster Schritt mit RQ-Frist-Hilfstext
 
 ### Was

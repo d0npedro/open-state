@@ -4,9 +4,13 @@ import Link from 'next/link';
 import { useGruendungState } from '@/context/GruendungStateContext';
 import {
   berechneFairnessSignaleGruendung,
-  FIKTIVES_HEUTE_GRUENDUNG,
+  bgCtaHilfstext,
+  betriebsdatumCtaHilfstext,
+  hatOffeneRueckfrage,
+  rqCtaHilfstext,
+  steuernummerCtaHilfstext,
+  unterlagenCtaHilfstext,
 } from '@/lib/fairness/gruendung-rules';
-import { berechneFristTage } from '@/lib/fairness/rules';
 import { Icon } from '@/components/Icon';
 import type { IconName } from '@/components/Icon';
 import type { FairnessSignal } from '@/types/fairness';
@@ -89,25 +93,6 @@ function aufgabeZiel(
   };
 }
 
-/**
- * Hilfstext für Primär- und Fairness-CTA bei offener Rückfrage:
- * Antwortfrist (Datum + Resttage) und Konsequenz (Erfassung/Steuernummer).
- */
-function rqCtaHilfstext(rq: GruendungsAkte['rueckfragen'][number]): string {
-  const fristTage = berechneFristTage(rq.fristDatum, FIKTIVES_HEUTE_GRUENDUNG);
-  const fristLabel =
-    fristTage < 0
-      ? `${Math.abs(fristTage)} Tage überschritten`
-      : fristTage === 0
-        ? 'heute fällig'
-        : `noch ${fristTage} Tag${fristTage === 1 ? '' : 'e'}`;
-  return (
-    `Antwortfrist ${rq.frist} (${fristLabel}). ` +
-    'Ohne Antwort kann das Finanzamt die steuerliche Erfassung und die Steuernummer-Vergabe nicht abschließen. ' +
-    'Frage, Begründung und Formular finden Sie unter Rückfragen.'
-  );
-}
-
 /** Primärer CTA zum naechsterSchritt-Text (gleiche Heuristik wie Aufgaben). */
 function naechsterSchrittZiel(
   akte: GruendungsAkte
@@ -130,8 +115,7 @@ function naechsterSchrittZiel(
       cta: 'Unterlage hochladen',
       icon: 'file',
       // Session: keine offene RQ mehr (sonst wäre RQ-Zweig oben greifend)
-      hint:
-        'Keine offene Rückfrage mehr – ausstehende Unterlage nachreichen. Begründung und Upload-Möglichkeit finden Sie im Bereich Unterlagen.',
+      hint: unterlagenCtaHilfstext(false),
     };
   }
   const bg = akte.beteiligteBehörden.find(
@@ -142,8 +126,7 @@ function naechsterSchrittZiel(
       href: `/gruendung/behoerden#beh-${bg.id}`,
       cta: 'BG-Hinweis ansehen',
       icon: 'building',
-      hint:
-        'Keine offene Rückfrage mehr – BG-Anmeldung außerhalb von Open State vornehmen. Kontakt und Rolle finden Sie auf der Behördenkarte.',
+      hint: bgCtaHilfstext(false),
     };
   }
   return null;
@@ -186,16 +169,12 @@ function fairnessSignalZiel(
       d => d.status === 'ANGEFORDERT' || d.status === 'ABGELEHNT'
     );
     if (!dok) return null;
-    const hatOffeneRueckfrage = akte.rueckfragen.some(r => !r.beantwortet);
-    const hint = hatOffeneRueckfrage
-      ? 'Zuerst die offene Rückfrage des Finanzamts klären. Begründung und Upload-Möglichkeit finden Sie im Bereich Unterlagen.'
-      : 'Keine offene Rückfrage mehr – ausstehende Unterlage nachreichen. Begründung und Upload-Möglichkeit finden Sie im Bereich Unterlagen.';
     return {
       href: `/gruendung/dokumente#dok-${dok.id}`,
       cta: 'Zu den Unterlagen',
       icon: 'file',
       testKey: `dok-${dok.id}`,
-      hint,
+      hint: unterlagenCtaHilfstext(hatOffeneRueckfrage(akte)),
     };
   }
 
@@ -206,16 +185,12 @@ function fairnessSignalZiel(
       b => b.typ === 'BERUFSGENOSSENSCHAFT' && b.status === 'NICHT_GESTARTET'
     );
     if (!bg) return null;
-    const hatOffeneRueckfrage = akte.rueckfragen.some(r => !r.beantwortet);
-    const hint = hatOffeneRueckfrage
-      ? 'Zuerst die offene Rückfrage des Finanzamts klären. Die BG-Anmeldung erfolgt außerhalb von Open State — Kontakt und Rolle auf der Behördenkarte.'
-      : 'Keine offene Rückfrage mehr – BG-Anmeldung außerhalb von Open State vornehmen. Kontakt und Rolle finden Sie auf der Behördenkarte.';
     return {
       href: `/gruendung/behoerden#beh-${bg.id}`,
       cta: 'Zur Behördenkarte',
       icon: 'building',
       testKey: `beh-${bg.id}`,
-      hint,
+      hint: bgCtaHilfstext(hatOffeneRueckfrage(akte)),
     };
   }
 
@@ -232,18 +207,15 @@ function fairnessSignalZiel(
     const finanzamt = akte.beteiligteBehörden.find(b => b.typ === 'FINANZAMT');
     if (!finanzamt) return null;
     const inBearbeitung = vs05.status === 'IN_BEARBEITUNG';
-    const hatOffeneRueckfrage = akte.rueckfragen.some(r => !r.beantwortet);
-    const hint = inBearbeitung
-      ? 'Die Vergabe der Steuernummer ist beim Finanzamt in Bearbeitung. Status und Kontakt finden Sie auf der Behördenkarte.'
-      : hatOffeneRueckfrage
-        ? 'Zuerst die offene Rückfrage des Finanzamts klären. Rolle, Kontakt und offene Schritte finden Sie auf der Behördenkarte.'
-        : 'Die Steuernummer vergibt das Finanzamt nach Abschluss der steuerlichen Erfassung. Rolle, Kontakt und offene Schritte finden Sie auf der Behördenkarte.';
     return {
       href: `/gruendung/behoerden#beh-${finanzamt.id}`,
       cta: inBearbeitung ? 'Steuernummer-Stand ansehen' : 'Zum Finanzamt',
       icon: 'building',
       testKey: `steuernummer-${finanzamt.id}`,
-      hint,
+      hint: steuernummerCtaHilfstext({
+        inBearbeitung,
+        hatOffeneRq: hatOffeneRueckfrage(akte),
+      }),
     };
   }
 
@@ -257,20 +229,16 @@ function fairnessSignalZiel(
       akte.status
     );
     if (abgeschlossen) return null;
-    const hatOffeneRueckfrage = akte.rueckfragen.some(r => !r.beantwortet);
     const vs05 = akte.verfahrensSchritte.find(vs => vs.id === 'VS-05');
-    const steuernummerInBearbeitung = vs05?.status === 'IN_BEARBEITUNG';
-    const hint = hatOffeneRueckfrage
-      ? 'Zuerst die offene Rückfrage des Finanzamts klären; Fortschritt und nächste Schritte im Statusblock.'
-      : steuernummerInBearbeitung
-        ? 'Rückfrage beantwortet – Steuernummer-Vergabe und weitere offene Punkte im Statusblock prüfen.'
-        : 'Offene Punkte und aktuellen Fortschritt im Statusblock prüfen.';
     return {
       href: '/gruendung#verfahrensstatus',
       cta: 'Zum Verfahrensstatus',
       icon: 'refresh',
       testKey: 'betriebsdatum',
-      hint,
+      hint: betriebsdatumCtaHilfstext({
+        hatOffeneRq: hatOffeneRueckfrage(akte),
+        steuernummerInBearbeitung: vs05?.status === 'IN_BEARBEITUNG',
+      }),
     };
   }
 
