@@ -6,6 +6,11 @@
  * CSV-Export der aktiven Vergleichsansicht (US-KJ-010 AK 4).
  * Zeitlicher Verlauf A vs. B über Monate + CSV des aktiven Verlaufs (US-KJ-010 AK 4).
  * Open-Data-Lizenzhinweis im CSV-Metakopf (Demo vorläufig, siehe kitaCsvLizenz).
+ *
+ * Druck (US-KJ-009 / US-KJ-010): Auswahl A/B, Kennzahl-Chips und CSV-Buttons no-print;
+ * print-only Filterstand/Meta (Region A/B, Meldebasis-Session, Verlaufskennzahl, Monate).
+ * Spiegel Zeitreihe / Planungsraum-Explorer.
+ *
  * Keine Chart-Bibliothek — HTML-Tabelle. Keine Bewertung, keine Kind-/Personennamen.
  */
 
@@ -361,6 +366,23 @@ export function KitaRegionenVergleich({
 
   const csvButtonLabel = `${raumA.bezeichnung} vs. ${raumB.bezeichnung}`;
 
+  const verlaufMetricDef =
+    VERLAUF_METRICS.find(m => m.key === verlaufMetric) ?? VERLAUF_METRICS[0];
+  const verlaufMonate =
+    (zeitreihePlanungsraeume[raumA.id] ?? []).length ||
+    (zeitreihePlanungsraeume[raumB.id] ?? []).length;
+
+  function meldebasisDruckKurz(basis: PlanungsraumMeldebasis | undefined): string {
+    if (!hydrated) return 'Session noch nicht geladen';
+    if (!basis) return 'keine Stichprobe';
+    return basis.hatDatenluecke
+      ? `Lücke (${basis.freigegeben}/${basis.erwartet} freigegeben)`
+      : `ohne Lücke (${basis.freigegeben}/${basis.erwartet} freigegeben)`;
+  }
+
+  const meldebasisDruckA = meldebasisDruckKurz(basisA);
+  const meldebasisDruckB = meldebasisDruckKurz(basisB);
+
   return (
     <div>
       <div
@@ -387,9 +409,13 @@ export function KitaRegionenVergleich({
           inkl. eigener CSV-Export der aktiven Kennzahl.
           Meldebasis je Raum aus der Demo-Stichprobe (Session-sensitiv).
           Stichtags-CSV (AK&nbsp;4) lädt die aktive Auswahl A/B inkl. Δ und Meldebasis.
-          Lizenzhinweis im CSV-Metakopf (Open-Data vorläufig).
+          Lizenzhinweis im CSV-Metakopf (Open-Data vorläufig). Im Ausdruck: Auswahl und CSV no-print;
+          print-only Filterstand (A/B, Meldebasis, Verlaufskennzahl).
         </div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem', alignItems: 'flex-end', flex: '0 1 auto' }}>
+        <div
+          className="no-print"
+          style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem', alignItems: 'flex-end', flex: '0 1 auto' }}
+        >
           <button
             type="button"
             className="btn btn-secondary"
@@ -406,8 +432,9 @@ export function KitaRegionenVergleich({
         </div>
       </div>
 
-      {/* Auswahl */}
+      {/* Auswahl A/B — interaktiv, no-print */}
       <div
+        className="no-print"
         style={{
           display: 'flex',
           flexWrap: 'wrap',
@@ -459,6 +486,33 @@ export function KitaRegionenVergleich({
             Bitte zwei unterschiedliche Räume wählen.
           </span>
         )}
+      </div>
+
+      {/* print-only: Filterstand A/B + Meldebasis + Verlaufskennzahl */}
+      <div
+        className="print-only print-block"
+        style={{
+          marginBottom: '0.75rem',
+          padding: '0.65rem 0.9rem',
+          border: '1px solid var(--color-border)',
+          borderRadius: 'var(--radius)',
+          fontSize: '0.8rem',
+          background: 'var(--color-neutral-light)',
+          lineHeight: 1.5,
+        }}
+        role="note"
+      >
+        <strong>Druckfilter Regionenvergleich: </strong>
+        Region A: {raumA.bezeichnung} ({raumA.id}) · Meldebasis: {meldebasisDruckA}
+        {' · '}
+        Region B: {raumB.bezeichnung} ({raumB.id}) · Meldebasis: {meldebasisDruckB}
+        {sameRoom ? ' · Hinweis: Region A und B sind identisch — Δ leer' : ''}
+        . Verlaufskennzahl: {verlaufMetricDef.label}
+        {verlaufMonate > 0 ? ` (${verlaufMonate} Monate)` : ''}
+        . Stichprobenmonat: {demoKitaMeldeeingang.monatsLabel} ({demoKitaMeldeeingang.monatsIso}).
+        Δ = Wert A − Wert B (rechnerisch, keine Bewertung); Auswahl ändert nur die sichtbare
+        Gegenüberstellung — keine Interpolation, keine Trendbewertung. Session-sensitiv
+        (Demo-Stichprobe Meldeeingang).
       </div>
 
       {/* Kopfkarten */}
@@ -609,17 +663,19 @@ export function KitaRegionenVergleich({
       />
 
       <p style={{ margin: '0.75rem 0 0', fontSize: '0.8rem', color: 'var(--color-text-muted)', lineHeight: 1.5 }}>
-        Methodik (US-KJ-010 AK&nbsp;3 / AK&nbsp;4 + Verlauf): Gegenüberstellung aggregierter Planungsraum-Kennzahlen
+        Methodik (US-KJ-010 AK&nbsp;3 / AK&nbsp;4 + Verlauf, Druck): Gegenüberstellung aggregierter Planungsraum-Kennzahlen
         am Berichtsstand und im 12-Monats-Verlauf — keine Einrichtungsindividualdaten, keine Personenbezüge.
         Farbliche Differenzmarkierung ist Orientierung, keine automatische Bewertung und keine Trendprognose.
         Raumreihen sind Demo-Verteilungen der kommunalen Monatsreihe nach Strukturanteilen. CSV-Export (AK&nbsp;4):
         (1) Stichtags-Kennzahlen inkl. Δ und Meldebasis; (2) aktiver 12-Monats-Verlauf der gewählten Kennzahl
         (Monate · Wert A/B · Δ · Meldebasis). Lizenzhinweis im CSV-Metakopf (Open-Data vorläufig, finale
-        Lizenz je Bundesland zu klären). Meldemonat Oktober 2024 ist methodisch an die Meldebasis-Stichprobe
-        gekoppelt. Freigabe-Demo unter{' '}
-        <a href="/kita/meldung" style={{ color: 'var(--color-primary)' }}>
+        Lizenz je Bundesland zu klären). Im Ausdruck: Auswahl A/B, Kennzahl-Chips und CSV no-print; print-only
+        Filterstand (A/B, Meldebasis-Session, Verlaufskennzahl, Stichprobenmonat). Meldemonat Oktober 2024 ist
+        methodisch an die Meldebasis-Stichprobe gekoppelt. Freigabe-Demo unter{' '}
+        <a href="/kita/meldung" className="no-print" style={{ color: 'var(--color-primary)' }}>
           /kita/meldung
         </a>
+        <span className="print-only">/kita/meldung</span>
         .
       </p>
     </div>
@@ -851,7 +907,10 @@ function VerlaufAvsB({
             {raumA.bezeichnung} · {raumB.bezeichnung}
           </span>
         </div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem', alignItems: 'flex-end', flex: '0 1 auto' }}>
+        <div
+          className="no-print"
+          style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem', alignItems: 'flex-end', flex: '0 1 auto' }}
+        >
           <button
             type="button"
             className="btn btn-secondary"
@@ -871,12 +930,14 @@ function VerlaufAvsB({
       <p style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)', margin: '0 0 0.75rem', lineHeight: 1.5 }}>
         Dieselbe Raumauswahl im Monatsverlauf (US-KJ-010 AK&nbsp;4). Eine Kennzahl wählen — Werte A/B und Δ je Monat.
         CSV-Export lädt genau die aktive Kennzahl und Raumauswahl (12 Monate, Semikolon, UTF-8 BOM)
-        inkl. Lizenzhinweis im Metakopf.
+        inkl. Lizenzhinweis im Metakopf. Im Ausdruck: Kennzahl-Chips und CSV no-print; aktive Kennzahl
+        steht im print-only Filterstand oben.
         Keine Interpolation, keine Trendbewertung. Meldemonat ({demoKitaMeldeeingang.monatsLabel}) mit
         Meldebasis-Hinweis, falls Lücke in A oder B.
       </p>
 
       <div
+        className="no-print"
         role="group"
         aria-label="Kennzahl für Monatsverlauf A vs. B"
         style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '0.85rem' }}
@@ -892,6 +953,25 @@ function VerlaufAvsB({
             {m.label}
           </button>
         ))}
+      </div>
+
+      {/* print-only: aktive Verlaufskennzahl (ergänzt den Filterstand oben) */}
+      <div
+        className="print-only print-block"
+        style={{
+          marginBottom: '0.75rem',
+          padding: '0.5rem 0.85rem',
+          border: '1px solid var(--color-border)',
+          borderRadius: 'var(--radius)',
+          fontSize: '0.8rem',
+          background: 'var(--color-neutral-light)',
+          lineHeight: 1.45,
+        }}
+        role="note"
+      >
+        <strong>Druckfilter Verlauf A vs. B: </strong>
+        Kennzahl {metric.label} · {raumA.bezeichnung} ({raumA.id}) vs. {raumB.bezeichnung} ({raumB.id})
+        · {rows.length} Monate · keine Interpolation, keine Trendbewertung.
       </div>
 
       {hatMeldeLuecke && (
