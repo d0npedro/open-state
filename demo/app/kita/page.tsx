@@ -143,6 +143,7 @@ export default function KitaTransparenzberichtPage() {
           <li>Wartelistenzahlen können Mehrfachanmeldungen enthalten. Der tatsächliche Platzbedarf kann geringer sein.</li>
           <li>Alle Angaben zu freien Plätzen beziehen sich auf den Meldestichtag (31.10.2024), nicht auf den aktuellen Tag.</li>
           <li>Einrichtungen mit fehlender freigegebener Monatsmeldung mindern die Aussagekraft residualer Planungslücken (Hinweis only, keine Interpolation). Demo: Planungsraum Südost kann initial eine Meldelücke zeigen – nach Freigabe in der Monatsmeldung geschlossen.</li>
+          <li>Zeitreihe (US-KJ-010): Der Berichtsmonat Oktober 2024 ist methodisch an die Meldebasis-Stichprobe gekoppelt. Meldelücken werden in der Zeitreihentabelle markiert, ohne Kennzahlen zu verändern oder zu interpolieren.</li>
         </ul>
       </div>
 

@@ -2,6 +2,30 @@
 
 Branch: `loop/kita` · Worktree: `D:\Projects\open-state-loop-kita`
 
+## Iteration 2026-07-29 – US-KJ-010 Zeitreihe Meldebasis (Datenlücken)
+
+### Was
+Öffentlicher Transparenzbericht Zeitreihe (`KitaZeitreiheTabelle`, US-KJ-010): Berichtsmonat Oktober 2024 methodisch an Meldebasis-Stichprobe (Meldeeingang) gekoppelt. Spalte „Meldebasis“, Summenhinweis, Badge „Meldelücke“ und Rahmen am Meldemonat bei unvollständiger Stichprobe (Session-sensitiv). Historische Monate ohne Stichprobe: „–“. Kennzahlen unverändert, keine Interpolation/Trendkorrektur. Datenlage-Hinweis auf `/kita` ergänzt. Nur Aggregate, keine Kind- oder Personennamen.
+
+### Dateien
+- `demo/components/kita/KitaZeitreiheTabelle.tsx` (Client, Meldebasis-Spalte, Lückenmarkierung, Methodik AK6)
+- `demo/app/kita/page.tsx` (Datenlage-Hinweis Zeitreihe ↔ Meldebasis)
+- `docs/loops/kita-JOURNAL.md` (dieses Journal)
+
+### Story
+US-KJ-010 / US-KJ-004 – Zeitreihen Regionenvergleich (Datenlücken im Zeitverlauf sichtbar)
+
+### Build
+`npm run lint` + `npm run build` im `demo/`-Verzeichnis (siehe Commit dieses Laufs)
+
+### Nicht angefasst (Supervisor / verboten)
+Queue, BUILD_STATE, storyRegistry, andere Domänen, package.json, CI, push
+
+### Nächster sinnvoller Schritt (Hinweis Supervisor)
+Regionenvergleich Zwei-Räume nebeneinander (US-KJ-010 AK3), oder Druckansicht Lagebild/Vorlage Engpass-Filter dokumentieren.
+
+---
+
 ## Iteration 2026-07-29 – US-KJ-008 Vorlage Engpass Meldelücke-Filter
 
 ### Was
