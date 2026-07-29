@@ -372,6 +372,3 @@ Diese Punkte wurden in früheren Iterationen abgeschlossen und sind produktionsr
 | Q-164 AV Dokumente lokale Upload-Quittung | Session-Quittung pro Dokumentenkarte | `dc9ca84` → main |
 | Q-165 UG Fairness CTA-Ziel-Routing zentral | `fairnessSignalZiel` Übersicht+Hinweise | `bfe39e3` → main |
 | Q-166 Kita Transparenzbericht CSV Multi-Blatt | Status/Meldebasis/Maßnahmen, DEC-004 (US-KJ-009) | `e5955e2` → main |
-| Q-164 AV Dokumente lokale Upload-Quittung | Quittung pro Dokumentenkarte nach Session-Markierung | `dc9ca84` → main |
-| Q-165 UG Fairness CTA-Ziel-Routing zentral | `fairnessSignalZiel` in gruendung-rules | `bfe39e3` → main |
-| Q-166 Kita Transparenzbericht CSV Multi-Blatt | Status/Meldebasis Aggregate, DEC-004 (US-KJ-009) | `e5955e2` → main |
