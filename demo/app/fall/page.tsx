@@ -91,8 +91,14 @@ export default function FallPage() {
     }))
     .sort((a, b) => a.resttage - b.resttage);
   const naechsteDokFrist = dokFristen[0];
-  // Nächster Termin: bestätigt oder ausstehend (nicht abgesagt) — Badge/Status bleiben tab-seitig
+  // Nächster Termin: bestätigt oder ausstehend (nicht abgesagt) — Status live auf Kachel (Q-104)
   const naechsterTermin = fall.termine.find(t => t.status !== 'ABGESAGT');
+  const terminStatusLabel =
+    naechsterTermin?.status === 'BESTAETIGT'
+      ? 'Bestätigt'
+      : naechsterTermin?.status === 'AUSSTEHEND'
+        ? 'Ausstehend'
+        : null;
   const wartetAufBehoerde = !hatOffeneAufgaben && fall.status === 'IN_PRUEFUNG';
 
   return (
@@ -227,7 +233,7 @@ export default function FallPage() {
         Bereiche Ihres Antrags
       </h2>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(170px, 1fr))', gap: '1rem' }}>
-        {[
+        {([
           {
             label: 'Unterlagen',
             icon: 'file' as const,
@@ -239,6 +245,9 @@ export default function FallPage() {
                 : 'Alles eingereicht',
             urgent: ausstehendeUnterlagen > 0,
             href: '/fall/dokumente',
+            testId: undefined as string | undefined,
+            statusTestId: undefined as string | undefined,
+            statusLabel: null as string | null,
           },
           {
             label: 'Fragen',
@@ -246,13 +255,24 @@ export default function FallPage() {
             val: offeneRueckfragen > 0 ? `${offeneRueckfragen} offen` : 'Keine offenen Fragen',
             urgent: offeneRueckfragen > 0,
             href: '/fall/rueckfragen',
+            testId: undefined as string | undefined,
+            statusTestId: undefined as string | undefined,
+            statusLabel: null as string | null,
           },
           {
             label: 'Nächster Termin',
             icon: 'calendar' as const,
-            val: naechsterTermin?.datum ?? 'Keiner geplant',
-            urgent: false,
+            val: naechsterTermin
+              ? terminStatusLabel
+                ? `${naechsterTermin.datum} · ${terminStatusLabel}`
+                : naechsterTermin.datum
+              : 'Keiner geplant',
+            // Unbestätigt = Handlungsbedarf (analog Tab-Badge Q-089); bestätigt = ruhig
+            urgent: naechsterTermin?.status === 'AUSSTEHEND',
             href: '/fall/termine',
+            testId: 'kachel-naechster-termin' as string | undefined,
+            statusTestId: 'kachel-termin-status' as string | undefined,
+            statusLabel: terminStatusLabel,
           },
           {
             label: 'Letzte Aktivität',
@@ -260,12 +280,16 @@ export default function FallPage() {
             val: fall.letzteAktivitaet,
             urgent: false,
             href: '/fall/verlauf',
+            testId: undefined as string | undefined,
+            statusTestId: undefined as string | undefined,
+            statusLabel: null as string | null,
           },
-        ].map(k => (
+        ] as const).map(k => (
           <Link
             key={k.label}
             href={k.href}
             className="card"
+            data-testid={k.testId}
             style={{
               display: 'flex',
               flexDirection: 'column',
@@ -289,6 +313,15 @@ export default function FallPage() {
             <div style={{ fontWeight: 700, fontSize: '0.975rem', color: k.urgent ? 'var(--color-warning)' : 'var(--color-text)' }}>
               {k.val}
             </div>
+            {k.statusLabel && (
+              <span
+                data-testid={k.statusTestId}
+                className={k.urgent ? 'status-chip status-chip-warning' : 'status-chip status-chip-success'}
+                style={{ alignSelf: 'flex-start', fontSize: '0.75rem' }}
+              >
+                {k.statusLabel}
+              </span>
+            )}
             <div style={{ fontSize: '0.8rem', color: 'var(--color-primary)', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
               Ansehen <Icon name="arrow-right" size={14} />
             </div>

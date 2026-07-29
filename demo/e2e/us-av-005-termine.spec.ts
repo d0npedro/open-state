@@ -61,6 +61,26 @@ test.describe('US-AV-005 – Termin einsehen und verstehen', () => {
     await expect(page.getByTestId('tab-badge-termine')).toHaveCount(0);
   });
 
+  test('Q-104: Übersicht-Kachel zeigt Termin-Status live nach Bestätigung', async ({ page }) => {
+    // Initial: unbestätigt → Kachel auf Übersicht „Ausstehend“
+    await goFallTab(page, /^Übersicht/, /\/fall\/?$/);
+    const kachel = page.getByTestId('kachel-naechster-termin');
+    await expect(kachel).toBeVisible();
+    await expect(kachel).toContainText('3. Dezember 2024');
+    await expect(page.getByTestId('kachel-termin-status')).toHaveText('Ausstehend');
+
+    // Bestätigen auf Termine-Tab (Session bleibt)
+    await goFallTab(page, /Termine/, /\/fall\/termine/);
+    await page.getByTestId('termin-bestaetigen-T-001').click();
+    await expect(page.getByTestId('termin-status-T-001')).toContainText('Bestätigt');
+
+    // Zurück Übersicht: Kachel live „Bestätigt“ (kein page.goto)
+    await goFallTab(page, /^Übersicht/, /\/fall\/?$/);
+    await expect(page.getByTestId('kachel-naechster-termin')).toContainText('Bestätigt');
+    await expect(page.getByTestId('kachel-termin-status')).toHaveText('Bestätigt');
+    await expect(page.getByTestId('tab-badge-termine')).toHaveCount(0);
+  });
+
   test('Datum des Termins klar sichtbar', async ({ page }) => {
     await expect(page.getByText('3. Dezember 2024')).toBeVisible();
   });
