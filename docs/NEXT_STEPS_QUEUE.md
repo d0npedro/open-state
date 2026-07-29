@@ -198,6 +198,9 @@ Story-Dokumentation ist kein Pflicht-Vorläufer für Mock-Daten und Typen.
 | Q-161 | AV Übersicht: Upload-Quittung + nächste offene Unterlage nach Session-Upload (US-AV-002/003) | DEMO | S | Q-071 | DONE `839e74b` |
 | Q-162 | UG Fairness: CTA-Hilfstexte in `gruendung-rules` zentralisieren (Übersicht + Hinweise) | DEMO | S | Q-158 | DONE `759f40c` |
 | Q-163 | Kita Lagebild: CSV Aggregate Status/Meldebasis/Meldelücke freigabeunabhängig (US-KJ-005, DEC-004) | DEMO | S | Q-130 | DONE `0fa6eaf` |
+| Q-164 | AV Dokumente: lokale Upload-Quittung pro Dokumentenkarte nach Session-Markierung (US-AV-003) | DEMO | S | Q-161 | DONE `dc9ca84` |
+| Q-165 | UG Fairness: CTA-Ziel-Routing (`fairnessSignalZiel`) in `gruendung-rules` zentralisieren | DEMO | S | Q-162 | DONE `bfe39e3` |
+| Q-166 | Kita Transparenzbericht: CSV Multi-Blatt Status/Meldebasis freigabeunabhängig (US-KJ-009, DEC-004) | DEMO | S | Q-145 | DONE `e5955e2` |
 
 ---
 
@@ -366,3 +369,9 @@ Diese Punkte wurden in früheren Iterationen abgeschlossen und sind produktionsr
 | Q-161 AV Übersicht Upload-Quittung | Session-Upload Quittung + nächste offene Unterlage | `839e74b` → main |
 | Q-162 UG Fairness CTA-Hilfstexte zentral | `gruendung-rules` Helper Übersicht+Hinweise | `759f40c` → main |
 | Q-163 Kita Lagebild CSV Aggregate | Status/Meldebasis/Meldelücke, DEC-004 (US-KJ-005) | `0fa6eaf` → main |
+| Q-164 AV Dokumente lokale Upload-Quittung | Session-Quittung pro Dokumentenkarte | `dc9ca84` → main |
+| Q-165 UG Fairness CTA-Ziel-Routing zentral | `fairnessSignalZiel` Übersicht+Hinweise | `bfe39e3` → main |
+| Q-166 Kita Transparenzbericht CSV Multi-Blatt | Status/Meldebasis/Maßnahmen, DEC-004 (US-KJ-009) | `e5955e2` → main |
+| Q-164 AV Dokumente lokale Upload-Quittung | Quittung pro Dokumentenkarte nach Session-Markierung | `dc9ca84` → main |
+| Q-165 UG Fairness CTA-Ziel-Routing zentral | `fairnessSignalZiel` in gruendung-rules | `bfe39e3` → main |
+| Q-166 Kita Transparenzbericht CSV Multi-Blatt | Status/Meldebasis Aggregate, DEC-004 (US-KJ-009) | `e5955e2` → main |
