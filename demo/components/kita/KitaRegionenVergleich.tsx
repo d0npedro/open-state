@@ -4,11 +4,13 @@
  * Regionenvergleich: zwei Planungsräume nebeneinander (US-KJ-010 AK 3).
  * Dieselben Kernkennzahlen, Differenzspalte, Meldebasis-Kurzmarkierung.
  * CSV-Export der aktiven Vergleichsansicht (US-KJ-010 AK 4).
+ * Zeitlicher Verlauf A vs. B über Monate (US-KJ-010: Zeitreihe im Vergleich).
  * Keine Chart-Bibliothek — HTML-Tabelle. Keine Bewertung, keine Kind-/Personennamen.
  */
 
 import { useMemo, useState } from 'react';
-import type { PlanungsraumKennzahlen } from '@/types/kita';
+import type { MonatsKennzahl, PlanungsraumKennzahlen } from '@/types/kita';
+import { demoKitaMeldeeingang } from '@/data/mockKitaMeldeeingang';
 import {
   MeldebasisBadge,
   useMeldeeingangFuerBedarfsplanung,
@@ -149,8 +151,50 @@ function deltaDisplay(
   return { text, color };
 }
 
+/** Kennzahl für den Monatsverlauf A vs. B */
+type VerlaufMetric = 'warteliste' | 'auslastung' | 'freiePlaetze' | 'personal';
+
+const VERLAUF_METRICS: {
+  key: VerlaufMetric;
+  label: string;
+  unit: 'zahl' | 'pct';
+  higherIsWorse?: boolean;
+  get: (m: MonatsKennzahl) => number;
+}[] = [
+  {
+    key: 'warteliste',
+    label: 'Wartelistenbestand',
+    unit: 'zahl',
+    higherIsWorse: true,
+    get: m => m.wartelisteBestand,
+  },
+  {
+    key: 'auslastung',
+    label: 'Auslastungsgrad',
+    unit: 'pct',
+    higherIsWorse: true,
+    get: m => m.auslastungsgradProzent,
+  },
+  {
+    key: 'freiePlaetze',
+    label: 'Freie Plätze',
+    unit: 'zahl',
+    higherIsWorse: false,
+    get: m => m.freiePlaetze,
+  },
+  {
+    key: 'personal',
+    label: 'Personalausfallquote',
+    unit: 'pct',
+    higherIsWorse: true,
+    get: m => m.personalAusfallquoteProzent,
+  },
+];
+
 interface Props {
   planungsraeume: PlanungsraumKennzahlen[];
+  /** Zeitreihe je Planungsraum (US-KJ-010) — Verlauf A vs. B */
+  zeitreihePlanungsraeume?: Record<string, MonatsKennzahl[]>;
   /** Default links (z. B. Engpass-Raum) */
   defaultA?: string;
   /** Default rechts (Vergleichsraum) */
@@ -159,6 +203,7 @@ interface Props {
 
 export function KitaRegionenVergleich({
   planungsraeume,
+  zeitreihePlanungsraeume = {},
   defaultA = 'PR-03',
   defaultB = 'PR-02',
 }: Props) {
@@ -170,8 +215,10 @@ export function KitaRegionenVergleich({
 
   const [idA, setIdA] = useState(initialA);
   const [idB, setIdB] = useState(initialB);
+  const [verlaufMetric, setVerlaufMetric] = useState<VerlaufMetric>('warteliste');
 
   const { byRaumId, hydrated } = useMeldeeingangFuerBedarfsplanung();
+  const meldeMonatsIso = demoKitaMeldeeingang.monatsIso;
 
   const raumA = useMemo(
     () => planungsraeume.find(p => p.id === idA) ?? planungsraeume[0],
@@ -329,8 +376,9 @@ export function KitaRegionenVergleich({
         <div style={{ flex: '1 1 16rem', minWidth: 0 }}>
           Zwei Planungsräume mit denselben Kennzahlen nebeneinander (US-KJ-010 AK&nbsp;3).
           Die Spalte <strong>Δ (A − B)</strong> zeigt die rechnerische Differenz — keine automatische
-          Bewertung und keine Empfehlung. Meldebasis je Raum aus der Demo-Stichprobe (Session-sensitiv).
-          CSV-Export (AK&nbsp;4) lädt genau die aktive Auswahl A/B inkl. Δ und Meldebasis.
+          Bewertung und keine Empfehlung. Darunter: zeitlicher Verlauf derselben Auswahl über 12 Monate.
+          Meldebasis je Raum aus der Demo-Stichprobe (Session-sensitiv).
+          CSV-Export (AK&nbsp;4) lädt genau die aktive Auswahl A/B inkl. Δ und Meldebasis (Stichtags-Kennzahlen).
         </div>
         <button
           type="button"
@@ -531,16 +579,299 @@ export function KitaRegionenVergleich({
         <span>= Richtung Entlastung bei A</span>
       </div>
 
+      {/* Zeitlicher Verlauf A vs. B (US-KJ-010) */}
+      <VerlaufAvsB
+        serieA={zeitreihePlanungsraeume[raumA.id] ?? []}
+        serieB={zeitreihePlanungsraeume[raumB.id] ?? []}
+        raumA={raumA}
+        raumB={raumB}
+        sameRoom={sameRoom}
+        verlaufMetric={verlaufMetric}
+        setVerlaufMetric={setVerlaufMetric}
+        meldeMonatsIso={meldeMonatsIso}
+        basisA={basisA}
+        basisB={basisB}
+        hydrated={hydrated}
+      />
+
       <p style={{ margin: '0.75rem 0 0', fontSize: '0.8rem', color: 'var(--color-text-muted)', lineHeight: 1.5 }}>
-        Methodik (US-KJ-010 AK&nbsp;3 / AK&nbsp;4): Gegenüberstellung aggregierter Planungsraum-Kennzahlen am
-        Berichtsstand — keine Einrichtungsindividualdaten, keine Personenbezüge. Farbliche
-        Differenzmarkierung ist Orientierung, keine automatische Bewertung. CSV-Export enthält
-        Kennzahl, Werte A/B, Δ (A − B), Einheit und Meldebasis je Raum (aktive Auswahl).
-        Meldebasis-Stichprobe wie im Meldeeingang; Freigabe-Demo unter{' '}
+        Methodik (US-KJ-010 AK&nbsp;3 / AK&nbsp;4 + Verlauf): Gegenüberstellung aggregierter Planungsraum-Kennzahlen
+        am Berichtsstand und im 12-Monats-Verlauf — keine Einrichtungsindividualdaten, keine Personenbezüge.
+        Farbliche Differenzmarkierung ist Orientierung, keine automatische Bewertung und keine Trendprognose.
+        Raumreihen sind Demo-Verteilungen der kommunalen Monatsreihe nach Strukturanteilen. CSV-Export (AK&nbsp;4)
+        enthält die Stichtags-Kennzahlen inkl. Δ und Meldebasis (aktive Auswahl A/B). Meldemonat Oktober 2024 ist
+        methodisch an die Meldebasis-Stichprobe gekoppelt. Freigabe-Demo unter{' '}
         <a href="/kita/meldung" style={{ color: 'var(--color-primary)' }}>
           /kita/meldung
         </a>
         .
+      </p>
+    </div>
+  );
+}
+
+// ─── Monatsverlauf A vs. B ──────────────────────────────────────────────────
+
+function formatVerlaufValue(v: number, unit: 'zahl' | 'pct'): string {
+  if (unit === 'pct') return `${v.toFixed(1)} %`;
+  return v.toLocaleString('de-DE');
+}
+
+function VerlaufAvsB({
+  serieA,
+  serieB,
+  raumA,
+  raumB,
+  sameRoom,
+  verlaufMetric,
+  setVerlaufMetric,
+  meldeMonatsIso,
+  basisA,
+  basisB,
+  hydrated,
+}: {
+  serieA: MonatsKennzahl[];
+  serieB: MonatsKennzahl[];
+  raumA: PlanungsraumKennzahlen;
+  raumB: PlanungsraumKennzahlen;
+  sameRoom: boolean;
+  verlaufMetric: VerlaufMetric;
+  setVerlaufMetric: (k: VerlaufMetric) => void;
+  meldeMonatsIso: string;
+  basisA: PlanungsraumMeldebasis | undefined;
+  basisB: PlanungsraumMeldebasis | undefined;
+  hydrated: boolean;
+}) {
+  const metric = VERLAUF_METRICS.find(m => m.key === verlaufMetric) ?? VERLAUF_METRICS[0];
+
+  const rows = useMemo(() => {
+    const mdef = VERLAUF_METRICS.find(m => m.key === verlaufMetric) ?? VERLAUF_METRICS[0];
+    const byIsoB = new Map(serieB.map(m => [m.monat, m]));
+    return serieA.map(ma => {
+      const mb = byIsoB.get(ma.monat);
+      const va = mdef.get(ma);
+      const vb = mb ? mdef.get(mb) : null;
+      return {
+        monat: ma.monat,
+        monatLabel: ma.monatLabel,
+        va,
+        vb,
+        isMeldeMonat: ma.monat === meldeMonatsIso,
+      };
+    });
+  }, [serieA, serieB, verlaufMetric, meldeMonatsIso]);
+
+  const hatSerie = serieA.length > 0 && serieB.length > 0;
+
+  const lueckeA = hydrated && basisA?.hatDatenluecke;
+  const lueckeB = hydrated && basisB?.hatDatenluecke;
+  const hatMeldeLuecke = Boolean(lueckeA || lueckeB);
+
+  if (!hatSerie) {
+    return (
+      <div style={{ marginTop: '1.5rem' }}>
+        <h3 style={{ fontSize: '1rem', margin: '0 0 0.5rem' }}>
+          Verlauf der letzten 12 Monate (A vs. B)
+        </h3>
+        <p style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)', margin: 0 }}>
+          Für die gewählten Räume liegt keine Planungsraum-Zeitreihe vor.
+        </p>
+      </div>
+    );
+  }
+
+  const chipBase: React.CSSProperties = {
+    fontSize: '0.8rem',
+    padding: '0.35rem 0.7rem',
+    borderRadius: '999px',
+    border: '1px solid var(--color-border)',
+    background: 'var(--color-surface, #fff)',
+    color: 'var(--color-text)',
+    cursor: 'pointer',
+    fontWeight: 500,
+  };
+  const chipActive: React.CSSProperties = {
+    ...chipBase,
+    borderColor: 'var(--color-primary)',
+    background: 'var(--color-primary-light)',
+    color: 'var(--color-primary)',
+    fontWeight: 600,
+  };
+
+  return (
+    <div style={{ marginTop: '1.75rem' }}>
+      <div
+        style={{
+          display: 'flex',
+          flexWrap: 'wrap',
+          gap: '0.75rem',
+          alignItems: 'baseline',
+          justifyContent: 'space-between',
+          marginBottom: '0.75rem',
+        }}
+      >
+        <h3 style={{ fontSize: '1rem', margin: 0 }}>
+          Verlauf der letzten 12 Monate (A vs. B)
+        </h3>
+        <span style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>
+          {raumA.bezeichnung} · {raumB.bezeichnung}
+        </span>
+      </div>
+
+      <p style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)', margin: '0 0 0.75rem', lineHeight: 1.5 }}>
+        Dieselbe Raumauswahl im Monatsverlauf (US-KJ-010). Eine Kennzahl wählen — Werte A/B und Δ je Monat.
+        Keine Interpolation, keine Trendbewertung. Meldemonat ({demoKitaMeldeeingang.monatsLabel}) mit
+        Meldebasis-Hinweis, falls Lücke in A oder B.
+      </p>
+
+      <div
+        role="group"
+        aria-label="Kennzahl für Monatsverlauf A vs. B"
+        style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '0.85rem' }}
+      >
+        {VERLAUF_METRICS.map(m => (
+          <button
+            key={m.key}
+            type="button"
+            onClick={() => setVerlaufMetric(m.key)}
+            style={verlaufMetric === m.key ? chipActive : chipBase}
+            aria-pressed={verlaufMetric === m.key}
+          >
+            {m.label}
+          </button>
+        ))}
+      </div>
+
+      {hatMeldeLuecke && (
+        <p
+          role="status"
+          style={{
+            fontSize: '0.8rem',
+            margin: '0 0 0.75rem',
+            padding: '0.5rem 0.75rem',
+            background: 'var(--color-warning-light)',
+            borderRadius: 'var(--radius)',
+            borderLeft: '3px solid var(--color-warning)',
+            color: 'var(--color-text)',
+            lineHeight: 1.45,
+          }}
+        >
+          Meldebasis unvollständig im Berichtsmonat {demoKitaMeldeeingang.monatsLabel}
+          {lueckeA ? ` · A ${raumA.bezeichnung}` : ''}
+          {lueckeB ? ` · B ${raumB.bezeichnung}` : ''}
+          {' — '}Kennzahlen unverändert, keine Interpolation.
+        </p>
+      )}
+
+      <div style={{ overflowX: 'auto' }}>
+        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.85rem' }}>
+          <thead>
+            <tr style={{ background: 'var(--color-neutral-light)', borderBottom: '2px solid var(--color-border)' }}>
+              <th style={{ padding: '0.6rem 0.75rem', textAlign: 'left', fontWeight: 600 }}>Monat</th>
+              <th style={{ padding: '0.6rem 0.75rem', textAlign: 'right', fontWeight: 600 }}>
+                A · {raumA.bezeichnung}
+              </th>
+              <th style={{ padding: '0.6rem 0.75rem', textAlign: 'right', fontWeight: 600 }}>
+                B · {raumB.bezeichnung}
+              </th>
+              <th style={{ padding: '0.6rem 0.75rem', textAlign: 'right', fontWeight: 600, whiteSpace: 'nowrap' }}>
+                Δ (A − B)
+              </th>
+              <th style={{ padding: '0.6rem 0.75rem', textAlign: 'left', fontWeight: 600 }}>Meldebasis</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((row, i) => {
+              const delta =
+                sameRoom || row.vb === null
+                  ? { text: '–', color: 'var(--color-text-muted)' }
+                  : deltaDisplay(row.va, row.vb, metric.unit, metric.higherIsWorse);
+
+              const showLuecke =
+                row.isMeldeMonat &&
+                hydrated &&
+                ((basisA?.hatDatenluecke ?? false) || (basisB?.hatDatenluecke ?? false));
+
+              return (
+                <tr
+                  key={row.monat}
+                  style={{
+                    borderBottom: '1px solid var(--color-border)',
+                    background: row.isMeldeMonat
+                      ? 'var(--color-primary-light)'
+                      : i % 2 === 0
+                        ? 'transparent'
+                        : 'var(--color-neutral-light)',
+                    outline: showLuecke
+                      ? basisA?.schwere === 'UEBERFAELLIG' || basisB?.schwere === 'UEBERFAELLIG'
+                        ? '2px solid var(--color-danger)'
+                        : '2px solid var(--color-warning)'
+                      : undefined,
+                    outlineOffset: showLuecke ? '-2px' : undefined,
+                  }}
+                >
+                  <td style={{ padding: '0.5rem 0.75rem', fontWeight: 500, whiteSpace: 'nowrap' }}>
+                    {row.monatLabel}
+                    {row.isMeldeMonat && (
+                      <span
+                        className="badge badge-primary"
+                        style={{ marginLeft: '0.4rem', fontSize: '0.7rem', verticalAlign: 'middle' }}
+                      >
+                        Berichtsmonat
+                      </span>
+                    )}
+                  </td>
+                  <td style={{ padding: '0.5rem 0.75rem', textAlign: 'right', fontWeight: 600 }}>
+                    {formatVerlaufValue(row.va, metric.unit)}
+                  </td>
+                  <td style={{ padding: '0.5rem 0.75rem', textAlign: 'right', fontWeight: 600 }}>
+                    {row.vb === null ? '–' : formatVerlaufValue(row.vb, metric.unit)}
+                  </td>
+                  <td
+                    style={{
+                      padding: '0.5rem 0.75rem',
+                      textAlign: 'right',
+                      fontWeight: 600,
+                      color: delta.color,
+                      whiteSpace: 'nowrap',
+                    }}
+                  >
+                    {delta.text}
+                  </td>
+                  <td style={{ padding: '0.5rem 0.75rem', fontSize: '0.8rem' }}>
+                    {row.isMeldeMonat ? (
+                      hydrated ? (
+                        showLuecke ? (
+                          <span
+                            className="badge"
+                            style={{
+                              background: 'var(--color-warning-light)',
+                              color: 'var(--color-warning)',
+                              border: '1px solid var(--color-warning)',
+                            }}
+                          >
+                            Meldelücke
+                          </span>
+                        ) : (
+                          <span style={{ color: 'var(--color-text-muted)' }}>Stichprobe ok</span>
+                        )
+                      ) : (
+                        <span style={{ color: 'var(--color-text-muted)' }}>…</span>
+                      )
+                    ) : (
+                      <span style={{ color: 'var(--color-text-muted)' }}>–</span>
+                    )}
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+
+      <p style={{ margin: '0.65rem 0 0', fontSize: '0.75rem', color: 'var(--color-text-muted)', lineHeight: 1.45 }}>
+        Verlauf nutzt die raumbezogenen Demo-Zeitreihen (gleiche Anteile wie im Zeitreihenfilter).
+        Δ je Monat = Wert A − Wert B zur gewählten Kennzahl. Keine Kind- oder Personennamen.
       </p>
     </div>
   );
