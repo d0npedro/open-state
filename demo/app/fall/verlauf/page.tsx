@@ -4,6 +4,7 @@
 // Zeitstempel: menschlich lesbar, nicht maschinenformat.
 'use client';
 
+import { useEffect, useState } from 'react';
 import { useDemoState } from '@/context/DemoStateContext';
 import { EreignisTyp } from '@/types';
 import { berechneFairnessSignale } from '@/lib/fairness/rules';
@@ -64,6 +65,41 @@ export default function VerlaufPage() {
     s => s.typ === 'FALL_PAUSIERT'
   );
   const demoEvents = timeline.filter(e => e.id.startsWith('E-DEMO-'));
+  /** Hash-Tiefenlink aus Fairness-CTA (`#ere-{id}`) – Ziel-Karte hervorheben (Q-191). */
+  const [hashEreignisId, setHashEreignisId] = useState<string | null>(null);
+
+  // Fairness → Verlauf: zu #ere-… scrollen und hervorheben (US-AV-007/008, Parität UG Q-181).
+  // Auch hashchange: gleiche Route mit neuem Hash remountet die Page nicht immer.
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    let scrollTimer: number | undefined;
+
+    const applyHash = () => {
+      const raw = window.location.hash;
+      if (!raw.startsWith('#ere-')) {
+        setHashEreignisId(null);
+        return;
+      }
+      const id = raw.slice('#ere-'.length);
+      if (!id || !timeline.some(e => e.id === id)) {
+        setHashEreignisId(null);
+        return;
+      }
+      setHashEreignisId(id);
+      if (scrollTimer !== undefined) window.clearTimeout(scrollTimer);
+      scrollTimer = window.setTimeout(() => {
+        document.getElementById(`ere-${id}`)?.scrollIntoView({ block: 'center', behavior: 'smooth' });
+      }, 50);
+    };
+
+    applyHash();
+    window.addEventListener('hashchange', applyHash);
+    return () => {
+      window.removeEventListener('hashchange', applyHash);
+      if (scrollTimer !== undefined) window.clearTimeout(scrollTimer);
+    };
+  }, [timeline]);
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
@@ -132,6 +168,7 @@ export default function VerlaufPage() {
         {[...timeline].reverse().map((e, i) => {
           const dotColor = stelleColor[e.handelndeStelle] ?? 'var(--color-border)';
           const iconName = ereignisIcon[e.typ] ?? 'info';
+          const isHashTarget = hashEreignisId === e.id;
 
           return (
             <div
@@ -155,8 +192,24 @@ export default function VerlaufPage() {
                 justifyContent: 'center',
               }} />
 
-              {/* Karte */}
-              <div className="card" style={{ padding: '1rem 1.125rem' }}>
+              {/* Karte – Anker #ere-{id} für Fairness-Tiefenlink (Q-191) */}
+              <div
+                id={`ere-${e.id}`}
+                data-testid={`verlauf-ereignis-${e.id}`}
+                className="card"
+                style={{
+                  padding: '1rem 1.125rem',
+                  scrollMarginTop: '5rem',
+                  ...(isHashTarget
+                    ? {
+                        outline: '2px solid var(--color-primary)',
+                        outlineOffset: '2px',
+                        boxShadow: '0 0 0 4px color-mix(in srgb, var(--color-primary) 18%, transparent)',
+                      }
+                    : {}),
+                }}
+                aria-current={isHashTarget ? 'location' : undefined}
+              >
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '0.5rem', flexWrap: 'wrap', marginBottom: '0.5rem' }}>
                   <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', flexWrap: 'wrap' }}>
                     {/* Event-Typ */}

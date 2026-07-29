@@ -24,13 +24,13 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | Route | Inhalt | Story-IDs | Status |
 |-------|--------|-----------|--------|
 | `/` | Landing Page | – | ✓ |
-| `/fall` | Fallübersicht, Status, Fairness-Summary, Fristen-Countdown offener Unterlagen, Upload-Quittung + nächste offene Unterlage nach Session-Upload, Termin-Kachel Status live | US-AV-001, US-AV-002, US-AV-003, US-AV-005 | ✓ |
+| `/fall` | Fallübersicht, Status, Fairness-Summary + Verlauf-Sekundärlink, Fristen-Countdown offener Unterlagen, Upload-Quittung + nächste offene Unterlage nach Session-Upload, Termin-Kachel Status live | US-AV-001, US-AV-002, US-AV-003, US-AV-005 | ✓ |
 | `/fall/dokumente` | Dokumentenanforderungen + Frist-Resttage + lokale Upload-Quittung pro Karte nach Session-Markierung | US-AV-003 | ✓ |
 | `/fall/rueckfragen` | Rückfragen mit Fairness-Hinweis | US-AV-004 | ✓ |
 | `/fall/termine` | Termine; session-lokale Bestätigung; Nav-Badge nur unbestätigt/bald fällig | US-AV-005 | ✓ |
 | `/fall/bescheide` | Bescheide mit Fairness-Hinweisen | US-AV-006 | ✓ |
-| `/fall/verlauf` | Timeline mit Fairness-Hinweis; Antwort-Quittungsblock; Upload-Blöcke mit Dokumentbezeichnung | US-AV-007 | ✓ |
-| `/fall/hinweise` | Vollständige Fairness-Hinweisseite; UNTERLAGE- und RQ-Signal live inkl. Fristhinweis + CTA; Session-Antwort entfallen Signale | US-AV-008 | ✓ |
+| `/fall/verlauf` | Timeline mit Fairness-Hinweis; Antwort-Quittungsblock; Upload-Blöcke mit Dokumentbezeichnung; Anker `#ere-…` + Hash-Hervorhebung | US-AV-007 | ✓ |
+| `/fall/hinweise` | Vollständige Fairness-Hinweisseite; UNTERLAGE- und RQ-Signal live inkl. Fristhinweis + CTA; Verlauf-Sekundärlink; Session-Antwort entfallen Signale | US-AV-008 | ✓ |
 | `/stories` | Story Coverage Dashboard | – | ✓ |
 | `/feedback` | Feedback → GitHub Issues | – | ✓ |
 | `/gruendung` … | Unternehmensgründung (Übersicht Fairness-Kurzblock+Kurz-CTAs inkl. Steuernummer/Betriebsdatum/BG-Hilfstext session-sensitiv; Upload-Quittung + nächste offene Unterlage; Primär-/Aufgaben-CTA und Fairness-Ziel-Routing zentral in `gruendung-rules` (`naechsterSchrittZiel`, `aufgabeZiel`, `fairnessSignalZiel`); BG-Demo-Markierung session-lokal + Fallthrough Steuernummer; Fairness-Tiefenlink Verlauf; RQ-Quittung Tiefenlink + Session-Antwort-Badge im Verlauf; Dokumente lokale Upload-Quittung pro Karte + Verlauf-Tiefenlink Session-Upload-Badge; Behörden VS-04→Rückfrage + BG Demo-Aktion; Hinweise UNTERLAGE live + CTAs RQ/BG/Unterlagen/Steuernummer/Betriebsdatum/parallele Behörden + Verlauf-Sekundärlink; Verlauf Stelle+Ereignistyp-Filter + Anker `#ere-…`, …) | US-UG-001–006 | ✓ |
@@ -52,7 +52,7 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | Mock-Falldaten (ALG I) | `demo/data/mockFall.ts` | ✓ Vollständig |
 | Story Registry | `demo/data/storyRegistry.ts` | ✓ AV + KJ + UG registriert |
 | Fairness-Typen | `demo/types/fairness.ts` | ✓ |
-| Fairness-Regelwerk | `demo/lib/fairness/rules.ts` | ✓ 5 Regeln, berechnete Fristtagezahl (ISO-Datum + FIKTIVES_HEUTE); UNTERLAGE_FEHLT mit Resttagen / RELEVANT ≤3 Tage (Q-147) |
+| Fairness-Regelwerk | `demo/lib/fairness/rules.ts` | ✓ 5 Regeln, berechnete Fristtagezahl (ISO-Datum + FIKTIVES_HEUTE); UNTERLAGE_FEHLT mit Resttagen / RELEVANT ≤3 Tage (Q-147); `fairnessSignalVerlaufZiel` Tiefenlink Verlauf (Q-191) |
 | FairnessPanel-Komponente | `demo/components/fairness/FairnessPanel.tsx` | ✓ |
 | BuildInfo-Komponente | `demo/components/BuildInfo.tsx` | ✓ |
 | Demo-State-Kontext | `demo/context/DemoStateContext.tsx` | ✓ Rückfrage/Upload/Reset + Timeline; alle AV-Routen angebunden |
@@ -146,6 +146,7 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | UG Dokumente Upload-Quittung Verlauf-Tiefenlink | `/gruendung/dokumente` + `demoDokUploadEreignisId` + Verlauf | ✓ Sekundär-CTA „Im Verlauf ansehen“ → `#ere-UG-DEMO-DOK-…`; Session-Upload-Badge; E2E Tab-Nav (Q-188, US-UG-003/005) |
 | Kita Lagebild-CSV Regionenvergleich Stichtag | `KitaLagebildDruck` Blatt 7 | ✓ Paare i&lt;j, Δ, Rang, Meldebasis-Session; freigabeunabhängig (Q-189, US-KJ-005/010) |
 | Kita Lagebild-CSV Regionenvergleich Verlauf | `KitaLagebildDruck` Blatt 8 | ✓ Paare × 12 Monate × 4 Kennzahlen, Δ je Monat; freigabeunabhängig (Q-190, US-KJ-005/010) |
+| AV Fairness Verlauf-Tiefenlink | `fairness/rules.fairnessSignalVerlaufZiel` + Hinweise/Übersicht/Verlauf | ✓ Sekundär-CTA „Im Verlauf ansehen“ → `#ere-…` (Q-191, US-AV-007/008) |
 
 ---
 
@@ -301,6 +302,7 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 **Q-188 erledigt:** UG Dokumente Upload-Quittung mit Verlauf-Tiefenlink + Session-Upload-Badge (US-UG-003/005).
 **Q-189 erledigt:** Kita Lagebild-CSV Regionenvergleich Stichtag-Paare Blatt 7 (US-KJ-005/010).
 **Q-190 erledigt:** Kita Lagebild-CSV Regionenvergleich Verlauf-Paare Blatt 8 (US-KJ-005/010).
+**Q-191 erledigt:** AV Fairness-Tiefenlink zum auslösenden Verlauf-Ereignis (US-AV-007/008).
 
 ---
 

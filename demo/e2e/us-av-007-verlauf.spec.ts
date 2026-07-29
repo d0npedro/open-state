@@ -150,6 +150,63 @@ test.describe('US-AV-007 – Antworttext in Timeline lesbar', () => {
 });
 
 /**
+ * US-AV-007 / US-AV-008 / Q-191 – Fairness-Tiefenlink zum Verlauf-Ereignis
+ * Parität UG Q-181: Sekundär-CTA „Im Verlauf ansehen“ → #ere-…
+ */
+test.describe('US-AV-007/008 – Fairness-Tiefenlink zum Verlauf', () => {
+
+  test('Hinweise RQ: Im Verlauf ansehen führt zu E-010', async ({ page }) => {
+    await page.goto('/fall/hinweise');
+    const verlauf = page.getByTestId('hinweise-verlauf-cta-E-010');
+    await expect(verlauf).toBeVisible();
+    await expect(verlauf).toHaveAttribute('href', '/fall/verlauf#ere-E-010');
+    await expect(verlauf).toContainText(/Im Verlauf ansehen/i);
+    await verlauf.click();
+    await expect(page).toHaveURL(/\/fall\/verlauf#ere-E-010/);
+    const card = page.getByTestId('verlauf-ereignis-E-010');
+    await expect(card).toBeVisible();
+    await expect(card).toContainText(/Rückfrage gestellt/i);
+    await expect(card).toContainText(/Arbeitgeberbescheinigung/i);
+    await expect(card).toHaveAttribute('aria-current', 'location');
+  });
+
+  test('Hinweise UNTERLAGE: Im Verlauf ansehen führt zu E-004', async ({ page }) => {
+    await page.goto('/fall/hinweise');
+    const verlauf = page.getByTestId('hinweise-verlauf-cta-E-004');
+    await expect(verlauf).toBeVisible();
+    await expect(verlauf).toHaveAttribute('href', '/fall/verlauf#ere-E-004');
+    await verlauf.click();
+    await expect(page).toHaveURL(/\/fall\/verlauf#ere-E-004/);
+    const card = page.getByTestId('verlauf-ereignis-E-004');
+    await expect(card).toBeVisible();
+    await expect(card).toContainText(/Dokument angefordert/i);
+    await expect(card).toHaveAttribute('aria-current', 'location');
+  });
+
+  test('Übersicht Fairness: Tiefenlink RQ → E-010', async ({ page }) => {
+    await page.goto('/fall');
+    const verlauf = page.getByTestId('uebersicht-fairness-verlauf-E-010');
+    await expect(verlauf).toBeVisible();
+    await expect(verlauf).toHaveAttribute('href', '/fall/verlauf#ere-E-010');
+    await verlauf.click();
+    await expect(page).toHaveURL(/\/fall\/verlauf#ere-E-010/);
+    await expect(page.getByTestId('verlauf-ereignis-E-010')).toBeVisible();
+  });
+
+  test('Ereignis-Anker #ere-E-010 für Fairness-Tiefenlink', async ({ page }) => {
+    // Direkter Anker-Load (wie Browser nach Fairness-Klick mit Full-Navigation)
+    await page.goto('/fall/verlauf#ere-E-010');
+    await expect(page).toHaveURL(/\/fall\/verlauf#ere-E-010/);
+    const card = page.getByTestId('verlauf-ereignis-E-010');
+    await expect(card).toBeVisible();
+    await expect(page.locator('#ere-E-010')).toBeVisible();
+    await expect(card).toContainText(/Rückfrage gestellt/i);
+    await expect(card).toHaveAttribute('aria-current', 'location');
+  });
+
+});
+
+/**
  * US-AV-007 / Q-105 – Upload-Ereignisse mit Dokumentbezeichnung hervorheben
  */
 test.describe('US-AV-007 – Upload-Ereignisse mit Dokumentbezeichnung', () => {

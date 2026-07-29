@@ -273,3 +273,90 @@ export function filterSignaleNachPrioritaet(
 ): FairnessSignal[] {
   return signale.filter(s => prioritaeten.includes(s.prioritaet));
 }
+
+// ─── Fairness → Verlauf-Tiefenlink (Q-191 / US-AV-007/008, Parität UG Q-181) ─
+// Primär-CTA bleibt handlungsbezogen (Rückfrage/Unterlagen).
+// Sekundär-CTA: „Im Verlauf ansehen“ → Audit-Ereignis.
+
+/** Ziel „Im Verlauf ansehen“ für ein Fairness-Signal. */
+export interface FairnessVerlaufZiel {
+  href: string;
+  cta: string;
+  /** Stabiler Schlüssel für data-testid (ohne Seiten-Präfix). */
+  testKey: string;
+  ereignisId: string;
+  ariaLabel?: string;
+}
+
+/**
+ * Letztes Timeline-Ereignis eines Typs (Mock speichert älter→neuer; Session hängt an).
+ */
+function letztesTimelineEreignis(
+  fall: Fall,
+  typ: Fall['timeline'][number]['typ']
+): Fall['timeline'][number] | undefined {
+  const matches = fall.timeline.filter(e => e.typ === typ);
+  return matches[matches.length - 1];
+}
+
+/**
+ * Tiefenlink vom Fairness-Signal zum passenden Verlaufs-Ereignis.
+ * null, wenn kein belastbares Ereignis im Fallzustand existiert.
+ */
+export function fairnessSignalVerlaufZiel(
+  signal: FairnessSignal,
+  fall: Fall
+): FairnessVerlaufZiel | null {
+  // Offene Rückfrage → letztes „Rückfrage gestellt“ (Mock: E-010)
+  // Signal-ID-Muster: FH-RQ-…-FRIST
+  if (
+    signal.typ === 'RUECKFRAGE_OFFEN_FRIST_RELEVANT' ||
+    /^FH-RQ-.+-FRIST$/.test(signal.id)
+  ) {
+    const e = letztesTimelineEreignis(fall, 'RUECKFRAGE_GESTELLT');
+    if (!e) return null;
+    return {
+      href: `/fall/verlauf#ere-${e.id}`,
+      cta: 'Im Verlauf ansehen',
+      testKey: `verlauf-${e.id}`,
+      ereignisId: e.id,
+      ariaLabel: 'Rückfrage im Verlauf ansehen',
+    };
+  }
+
+  // Fehlende Unterlage → DOKUMENT_ANGEFORDERT für noch offenes Dokument, sonst letztes
+  // (Mock: nur E-004 Arbeitgeberbescheinigung; offene DOK-003/004 ohne eigenes Event → Fallback E-004)
+  if (signal.typ === 'UNTERLAGE_FEHLT_BLOCKIERT' || signal.id === 'FH-UNTERLAGEN-FEHLEND') {
+    const offen = fall.dokumente.filter(
+      d => d.status === 'ANGEFORDERT' || d.status === 'ABGELEHNT'
+    );
+    const anforderungen = fall.timeline.filter(e => e.typ === 'DOKUMENT_ANGEFORDERT');
+    let e: Fall['timeline'][number] | undefined;
+    for (let i = anforderungen.length - 1; i >= 0; i--) {
+      const candidate = anforderungen[i];
+      const trifftOffenes =
+        offen.some(
+          d =>
+            candidate.beschreibung.includes(d.bezeichnung) ||
+            (candidate.details != null && candidate.details.includes(d.id))
+        );
+      if (trifftOffenes) {
+        e = candidate;
+        break;
+      }
+    }
+    if (!e) {
+      e = anforderungen[anforderungen.length - 1];
+    }
+    if (!e) return null;
+    return {
+      href: `/fall/verlauf#ere-${e.id}`,
+      cta: 'Im Verlauf ansehen',
+      testKey: `verlauf-${e.id}`,
+      ereignisId: e.id,
+      ariaLabel: 'Dokumentanforderung im Verlauf ansehen',
+    };
+  }
+
+  return null;
+}

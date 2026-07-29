@@ -3,11 +3,12 @@
 import type { CSSProperties } from 'react';
 import Link from 'next/link';
 import { useDemoState } from '@/context/DemoStateContext';
-import { berechneFairnessSignale } from '@/lib/fairness/rules';
+import { berechneFairnessSignale, fairnessSignalVerlaufZiel } from '@/lib/fairness/rules';
 import { demoFall } from '@/data/mockFall';
 import { FairnessPanel } from '@/components/fairness/FairnessPanel';
 import { Icon } from '@/components/Icon';
 import type { FairnessSignal } from '@/types/fairness';
+import type { Fall } from '@/types';
 
 /** Initiale Signale aus dem unveränderten Mock – dienen als Vergleichsbasis */
 const INITIAL_SIGNALE = berechneFairnessSignale(demoFall);
@@ -52,9 +53,12 @@ function ctaWrapStyle(prioritaet: FairnessSignal['prioritaet']): CSSProperties {
 
 /**
  * Handlungs-CTA je Signaltyp (AV).
- * Routing bleibt seitenlokal – keine zentrale Ziel-Map nötig (nur 2 Ziele).
+ * Primär: handlungsbezogen (Rückfrage/Unterlagen).
+ * Sekundär: Fairness → Verlauf-Tiefenlink (Q-191, Parität UG Q-181).
  */
-function SignalCta({ signal }: { signal: FairnessSignal }) {
+function SignalCta({ signal, fall }: { signal: FairnessSignal; fall: Fall }) {
+  const verlaufZiel = fairnessSignalVerlaufZiel(signal, fall);
+
   if (signal.typ === 'RUECKFRAGE_OFFEN_FRIST_RELEVANT') {
     return (
       <div style={ctaWrapStyle(signal.prioritaet)} data-testid="hinweise-rq-cta-wrap">
@@ -66,16 +70,38 @@ function SignalCta({ signal }: { signal: FairnessSignal }) {
             ? `${signal.titel}. Antwort im Bereich „Fragen“ einreichen.`
             : 'Offene Rückfrage mit nahender Antwortfrist. Antwort im Bereich „Fragen“ einreichen.'}
         </p>
-        <Link
-          href="/fall/rueckfragen"
-          className="btn btn-primary"
-          style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', flexShrink: 0 }}
-          data-testid="hinweise-rq-cta"
-          aria-label="Zur offenen Rückfrage"
+        <div
+          style={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            alignItems: 'center',
+            gap: '0.5rem 0.75rem',
+            flexShrink: 0,
+          }}
         >
-          <Icon name="chat" size={15} />
-          Frage beantworten
-        </Link>
+          <Link
+            href="/fall/rueckfragen"
+            className="btn btn-primary"
+            style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', flexShrink: 0 }}
+            data-testid="hinweise-rq-cta"
+            aria-label="Zur offenen Rückfrage"
+          >
+            <Icon name="chat" size={15} />
+            Frage beantworten
+          </Link>
+          {verlaufZiel && (
+            <Link
+              href={verlaufZiel.href}
+              className="btn btn-secondary"
+              style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', flexShrink: 0 }}
+              data-testid={`hinweise-verlauf-cta-${verlaufZiel.ereignisId}`}
+              aria-label={verlaufZiel.ariaLabel ?? verlaufZiel.cta}
+            >
+              <Icon name="clock" size={15} />
+              {verlaufZiel.cta}
+            </Link>
+          )}
+        </div>
       </div>
     );
   }
@@ -91,16 +117,38 @@ function SignalCta({ signal }: { signal: FairnessSignal }) {
             ? `${signal.titel}. Unterlagen im Bereich „Unterlagen“ hochladen.`
             : 'Ausstehende Unterlagen im Bereich „Unterlagen“ hochladen.'}
         </p>
-        <Link
-          href="/fall/dokumente"
-          className="btn btn-primary"
-          style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', flexShrink: 0 }}
-          data-testid="hinweise-unterlagen-cta"
-          aria-label="Zu den ausstehenden Unterlagen"
+        <div
+          style={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            alignItems: 'center',
+            gap: '0.5rem 0.75rem',
+            flexShrink: 0,
+          }}
         >
-          <Icon name="upload" size={15} />
-          Unterlagen hochladen
-        </Link>
+          <Link
+            href="/fall/dokumente"
+            className="btn btn-primary"
+            style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', flexShrink: 0 }}
+            data-testid="hinweise-unterlagen-cta"
+            aria-label="Zu den ausstehenden Unterlagen"
+          >
+            <Icon name="upload" size={15} />
+            Unterlagen hochladen
+          </Link>
+          {verlaufZiel && (
+            <Link
+              href={verlaufZiel.href}
+              className="btn btn-secondary"
+              style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', flexShrink: 0 }}
+              data-testid={`hinweise-verlauf-cta-${verlaufZiel.ereignisId}`}
+              aria-label={verlaufZiel.ariaLabel ?? verlaufZiel.cta}
+            >
+              <Icon name="clock" size={15} />
+              {verlaufZiel.cta}
+            </Link>
+          )}
+        </div>
       </div>
     );
   }
@@ -226,7 +274,7 @@ function LiveSignalCard({
   );
 }
 
-function SignalBlock({ signal }: { signal: FairnessSignal }) {
+function SignalBlock({ signal, fall }: { signal: FairnessSignal; fall: Fall }) {
   const isUnterlagen = signal.typ === 'UNTERLAGE_FEHLT_BLOCKIERT';
   const isRueckfrage = signal.typ === 'RUECKFRAGE_OFFEN_FRIST_RELEVANT';
   const section = prioritaetSection[signal.prioritaet];
@@ -255,7 +303,7 @@ function SignalBlock({ signal }: { signal: FairnessSignal }) {
       ) : (
         <FairnessPanel signale={[signal]} />
       )}
-      <SignalCta signal={signal} />
+      <SignalCta signal={signal} fall={fall} />
     </div>
   );
 }
@@ -383,7 +431,7 @@ export default function HinweisePage() {
               </h2>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                 {relevant.map(sig => (
-                  <SignalBlock key={sig.id} signal={sig} />
+                  <SignalBlock key={sig.id} signal={sig} fall={fall} />
                 ))}
               </div>
             </section>
@@ -396,7 +444,7 @@ export default function HinweisePage() {
               </h2>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                 {hinweis.map(sig => (
-                  <SignalBlock key={sig.id} signal={sig} />
+                  <SignalBlock key={sig.id} signal={sig} fall={fall} />
                 ))}
               </div>
             </section>
@@ -409,7 +457,7 @@ export default function HinweisePage() {
               </h2>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                 {info.map(sig => (
-                  <SignalBlock key={sig.id} signal={sig} />
+                  <SignalBlock key={sig.id} signal={sig} fall={fall} />
                 ))}
               </div>
             </section>

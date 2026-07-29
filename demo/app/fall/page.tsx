@@ -6,7 +6,12 @@
 
 import Link from 'next/link';
 import { useDemoState } from '@/context/DemoStateContext';
-import { berechneFairnessSignale, berechneFristTage, FIKTIVES_HEUTE } from '@/lib/fairness/rules';
+import {
+  berechneFairnessSignale,
+  berechneFristTage,
+  fairnessSignalVerlaufZiel,
+  FIKTIVES_HEUTE,
+} from '@/lib/fairness/rules';
 import { Icon } from '@/components/Icon';
 
 /** Klarsprache für Resttage (analog Rückfrage-Frist). */
@@ -529,23 +534,47 @@ export default function FallPage() {
             Hinweise zu Ihrem Verfahren
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-            {fairnessSignale.map(sig => (
-              <div
-                key={sig.id}
-                className={`notice-box ${sig.prioritaet === 'RELEVANT' ? 'notice-box-warn' : sig.prioritaet === 'HINWEIS' ? 'notice-box-info' : 'notice-box-neutral'}`}
-              >
-                <Icon name="info" size={16} style={{ flexShrink: 0, marginTop: '2px' }} />
-                <div>
-                  <strong style={{ display: 'block', marginBottom: '0.25rem' }}>{sig.titel}</strong>
-                  <span style={{ fontSize: '0.875rem' }}>{sig.erklaerung}</span>
-                  {sig.naechsterSchritt && (
-                    <div style={{ marginTop: '0.5rem', fontWeight: 600, fontSize: '0.875rem' }}>
-                      → {sig.naechsterSchritt}
-                    </div>
-                  )}
+            {fairnessSignale.map(sig => {
+              const verlaufZiel = fairnessSignalVerlaufZiel(sig, fall);
+              return (
+                <div
+                  key={sig.id}
+                  className={`notice-box ${sig.prioritaet === 'RELEVANT' ? 'notice-box-warn' : sig.prioritaet === 'HINWEIS' ? 'notice-box-info' : 'notice-box-neutral'}`}
+                >
+                  <Icon name="info" size={16} style={{ flexShrink: 0, marginTop: '2px' }} />
+                  <div>
+                    <strong style={{ display: 'block', marginBottom: '0.25rem' }}>{sig.titel}</strong>
+                    <span style={{ fontSize: '0.875rem' }}>{sig.erklaerung}</span>
+                    {sig.naechsterSchritt && (
+                      <div style={{ marginTop: '0.5rem', fontWeight: 600, fontSize: '0.875rem' }}>
+                        → {sig.naechsterSchritt}
+                      </div>
+                    )}
+                    {verlaufZiel && (
+                      <div style={{ marginTop: '0.65rem' }}>
+                        <Link
+                          href={verlaufZiel.href}
+                          data-testid={`uebersicht-fairness-verlauf-${verlaufZiel.ereignisId}`}
+                          style={{
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '0.3rem',
+                            fontSize: '0.8rem',
+                            fontWeight: 600,
+                            color: 'var(--color-text-muted)',
+                            textDecoration: 'none',
+                          }}
+                          aria-label={verlaufZiel.ariaLabel ?? verlaufZiel.cta}
+                        >
+                          <Icon name="clock" size={13} />
+                          {verlaufZiel.cta} →
+                        </Link>
+                      </div>
+                    )}
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
           <Link
             href="/fall/hinweise"
