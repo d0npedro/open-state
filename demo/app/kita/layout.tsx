@@ -13,6 +13,7 @@ const nav = [
   { href: '/kita/bedarfsplanung', label: 'Bedarfsplanung',     hint: 'Demo: Entwurf § 80' },
   { href: '/kita/vorlage',        label: 'Gremienvorlage',     hint: 'Demo: Freigabe' },
   { href: '/kita/einrichtung',    label: 'Einrichtung',        hint: 'Demo: Belegung' },
+  { href: '/kita/tagesstand',     label: 'Tagesstand',         hint: 'Demo: US-KJ-001' },
   { href: '/kita/monatsbericht',  label: 'Monatsbericht',      hint: 'Demo: Leitung' },
   { href: '/kita/meldung',        label: 'Meldung freigeben',  hint: 'Demo: US-KJ-004' },
 ];
