@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { demoKitaLagebild } from '@/data/mockKitaLagebild';
 import { KitaCsvDownload } from '@/components/kita/KitaCsvDownload';
 import { KitaPlanungsraumExplorer } from '@/components/kita/KitaPlanungsraumExplorer';
@@ -203,6 +204,94 @@ export default function KitaTransparenzberichtPage() {
         Er enthält keine Empfehlungen und keine Werbung für Verwaltungsleistungen.
         Die Entscheidung über Maßnahmen liegt bei den zuständigen politischen Gremien.
         Freigabe: {lb.freigegebenVon}, {lb.freigegebenAm}.
+      </div>
+
+      {/* Steuerungskette JA (Demo): öffentlicher Bericht speist sich aus freigegebenen Aggregaten */}
+      <section aria-labelledby="steuerungskette-heading">
+        <h2 id="steuerungskette-heading" style={{ marginBottom: '0.5rem' }}>
+          Steuerungskette Jugendamt (Demo)
+        </h2>
+        <p
+          style={{
+            margin: '0 0 1rem',
+            fontSize: '0.875rem',
+            color: 'var(--color-text-muted)',
+            maxWidth: '44rem',
+          }}
+        >
+          Kommune <strong>{lb.kommuneBezeichnung}</strong>, freigegebene Version{' '}
+          <span style={{ fontFamily: 'monospace' }}>{lb.version}</span> ({lb.stand}
+          ). Dieser öffentliche Bericht enthält nur aggregierte Planungsraum- und
+          Kommunalkennzahlen — keine Einrichtungsdetails und keine Kind- oder Personennamen
+          (DEC-004). In der Demo sind die internen Steuerungsstufen verlinkt, aus denen die
+          freigegebene öffentliche Aggregation hervorgeht.
+        </p>
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+            gap: '0.75rem',
+          }}
+        >
+          {(
+            [
+              {
+                href: '/kita/lagebild',
+                story: 'US-KJ-005',
+                title: 'Steuerungslagebild',
+                text: 'Interne JA-Ansicht mit Engpass, Handlungsfeldern und Meldeeingang (höhere Granularität als der öffentliche Bericht).',
+                border: 'var(--color-primary)',
+              },
+              {
+                href: '/kita/bedarfsplanung',
+                story: 'US-KJ-007',
+                title: 'Bedarfsplanungsentwurf',
+                text: 'Planungslücken und Meldebasis aus dem Lagebild; Entwurf ohne automatische Entscheidung (§ 80 SGB VIII).',
+                border: 'var(--color-primary)',
+              },
+              {
+                href: '/kita/vorlage',
+                story: 'US-KJ-008',
+                title: 'Politische Vorlage',
+                text: 'Gremienvorlage aus Lagebild und Planungslücken; Freigabe nur aktiv durch JA-Leitung.',
+                border: 'var(--color-primary)',
+              },
+            ] as const
+          ).map(card => (
+            <Link
+              key={card.href}
+              href={card.href}
+              className="card"
+              style={{
+                textDecoration: 'none',
+                color: 'inherit',
+                borderTop: `3px solid ${card.border}`,
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '0.35rem',
+              }}
+            >
+              <span
+                className="badge badge-primary"
+                style={{ alignSelf: 'flex-start', fontSize: '0.68rem' }}
+              >
+                {card.story}
+              </span>
+              <strong style={{ fontSize: '0.95rem', color: 'var(--color-primary)' }}>
+                {card.title}
+              </strong>
+              <span style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', lineHeight: 1.45 }}>
+                {card.text}
+              </span>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      <div style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)' }}>
+        Steuerungskette Kommune {lb.kommuneBezeichnung}: Lagebild → Bedarfsplanung → Vorlage
+        (interne Demo-Routen). Öffentliche Aggregation hier ohne Einrichtungsdetail (DEC-004,
+        US-KJ-009). Betriebliche Meldebasis über freigegebene Monatsmeldungen (US-KJ-004).
       </div>
 
     </div>

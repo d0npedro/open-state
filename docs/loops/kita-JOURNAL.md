@@ -2,6 +2,29 @@
 
 Branch: `loop/kita` · Worktree: `D:\Projects\open-state-loop-kita`
 
+## Iteration 2026-07-29 – US-KJ-009 Öffentlicher Bericht Hub Steuerungskette
+
+### Was
+Öffentlicher Transparenzbericht (`/kita`, US-KJ-009): Hub-Karten zur JA-Steuerungskette gespiegelt (analog Lagebild/Bedarfsplanung/Vorlage). Karten Steuerungslagebild (US-KJ-005), Bedarfsplanungsentwurf (US-KJ-007), politische Vorlage (US-KJ-008); Text zu DEC-004 (keine Einrichtungsdetails, keine Kind-/Personennamen) und Footer mit Kette Lagebild → Bedarfsplanung → Vorlage. Nur Aggregate. Merge `origin/main` (ci-watcher docs) vor dem Feature.
+
+### Dateien
+- `demo/app/kita/page.tsx` (Steuerungskette Hub-Karten + Footer)
+- `docs/loops/kita-JOURNAL.md` (dieses Journal)
+
+### Story
+US-KJ-009 – Transparenzbericht (Hub zur Steuerungskette, DEC-004)
+
+### Build
+`npm run lint` + `npm run build` im `demo/`-Verzeichnis (siehe Commit dieses Laufs)
+
+### Nicht angefasst (Supervisor / verboten)
+Queue, BUILD_STATE, storyRegistry, DECISION_LOG, andere Domänen, package.json, CI, push
+
+### Nächster sinnvoller Schritt (Hinweis Supervisor)
+Meldung-Druckansicht freigabeunabhängig spiegeln (Status/Korrekturen/Freigabe), oder Tagesstand-Druckansicht Datenbasis.
+
+---
+
 ## Iteration 2026-07-29 – US-KJ-003 Monatsbericht-Druck Status/Datenbasis
 
 ### Was
