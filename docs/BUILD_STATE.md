@@ -1,6 +1,6 @@
 # BUILD_STATE.md – Aktueller Projektstand
 
-Zuletzt aktualisiert: nach Supervisor-Pflicht-Push 2026-07-29 (Merge AV Q-167 + UG Q-168 + Kita Q-169/170; lint+build 27 Seiten grün; E2E 250; origin/main sync 0)
+Zuletzt aktualisiert: nach Supervisor-Pflicht-Push 2026-07-29 (Merge UG Q-171 + Kita Q-172–Q-174 Regionenvergleich print-only; lint+build 27 Seiten grün; origin/main sync 0)
 
 Dieser Stand beschreibt, was tatsächlich existiert und funktioniert.
 Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
@@ -15,7 +15,7 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | Build-Status | ✓ Erfolgreich (27 statische Seiten) |
 | Deployment | Vercel, aus `demo/`-Verzeichnis |
 | Lokaler Start | `cd demo && npm install && npm run dev` |
-| Letzte Build-Prüfung | lint+build **27 Seiten** + `test:e2e:ci` **250 passed** (Supervisor Merge Q-167–Q-170) |
+| Letzte Build-Prüfung | lint+build **27 Seiten** grün (Supervisor Merge Q-171–Q-174) |
 
 ---
 
@@ -33,9 +33,9 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | `/fall/hinweise` | Vollständige Fairness-Hinweisseite; UNTERLAGE-Signal live nach Session-Upload inkl. Frist + CTA Unterlagen | US-AV-008 | ✓ |
 | `/stories` | Story Coverage Dashboard | – | ✓ |
 | `/feedback` | Feedback → GitHub Issues | – | ✓ |
-| `/gruendung` … | Unternehmensgründung (Übersicht Fairness-Kurzblock+Kurz-CTAs inkl. Steuernummer/Betriebsdatum/BG-Hilfstext session-sensitiv; CTA-Hilfstexte und Ziel-Routing zentral in `gruendung-rules` (`fairnessSignalZiel`), Dokumente lokale Upload-Quittung pro Karte, Behörden VS-04→Rückfrage, Hinweise-CTAs RQ/BG/Unterlagen/Steuernummer/Betriebsdatum/parallele Behörden, Verlauf Stelle+Ereignistyp-Filter, …) | US-UG-001–006 | ✓ |
-| `/kita` | Öffentlicher Transparenzbericht + Planungsraum-Filter + Residual↔Meldelücke + Engpass/Meldelücke-Schnellfilter + Zeitreihe Meldebasis + Regionenfilter + Regionenvergleich Zwei-Räume inkl. 12-Monats-Verlauf A/B + CSV Multi-Blatt Status/Meldebasis + Druck-Meta Status/Meldebasis print-only + Open-Data-Lizenz + Hub-Karten JA-Steuerungskette (Lagebild/Bedarfsplanung/Vorlage) | US-KJ-009, US-KJ-010 | ✓ |
-| `/kita/lagebild` | Jugendamt-Steuerungsansicht + Meldeeingang + Meldebeitrag + Engpass/Handlungsfelder/Planungsraum-Detail Meldelücke-Schnellfilter + Druck Meldelücke + CSV Aggregate Status/Meldebasis/Meldelücke + Zeitreihe-Blatt freigabeunabhängig + Monatsbericht-Vorschau + Steuerungskette Hub-Karten | US-KJ-005, US-KJ-006 | ✓ |
+| `/gruendung` … | Unternehmensgründung (Übersicht Fairness-Kurzblock+Kurz-CTAs inkl. Steuernummer/Betriebsdatum/BG-Hilfstext session-sensitiv; Upload-Quittung + nächste offene Unterlage nach Session-Upload; CTA-Hilfstexte und Ziel-Routing zentral in `gruendung-rules` (`fairnessSignalZiel`), Dokumente lokale Upload-Quittung pro Karte, Behörden VS-04→Rückfrage, Hinweise-CTAs RQ/BG/Unterlagen/Steuernummer/Betriebsdatum/parallele Behörden, Verlauf Stelle+Ereignistyp-Filter, …) | US-UG-001–006 | ✓ |
+| `/kita` | Öffentlicher Transparenzbericht + Planungsraum-Filter + Residual↔Meldelücke + Engpass/Meldelücke-Schnellfilter + Zeitreihe Meldebasis + Regionenfilter + Regionenvergleich Zwei-Räume inkl. 12-Monats-Verlauf A/B + print-only Filterstand A/B/Kennzahl/Meldebasis + CSV Multi-Blatt Status/Meldebasis + Druck-Meta Status/Meldebasis print-only + Open-Data-Lizenz + Hub-Karten JA-Steuerungskette (Lagebild/Bedarfsplanung/Vorlage) | US-KJ-009, US-KJ-010 | ✓ |
+| `/kita/lagebild` | Jugendamt-Steuerungsansicht + Meldeeingang + Meldebeitrag + Engpass/Handlungsfelder/Planungsraum-Detail Meldelücke-Schnellfilter + Druck Meldelücke + CSV Aggregate Status/Meldebasis/Meldelücke + 12-Monats-Zeitreihe UI + Zeitreihe-Blatt freigabeunabhängig + Zeitreihe print-only Filterstand/Meldebasis + Monatsbericht-Vorschau + Steuerungskette Hub-Karten | US-KJ-005, US-KJ-006 | ✓ |
 | `/kita/bedarfsplanung` | Bedarfsplanungsentwurf (§ 80 SGB VIII) + Meldebasis + Residual↔Meldelücke (Hinweis-only) + Steuerungskette Hub-Karten + Druck freigabeunabhängig mit Meldebasis-Session-Hinweis + CSV Aggregate freigabeunabhängig | US-KJ-007 | ✓ |
 | `/kita/vorlage` | Politische Gremienvorlage + Freigabe + Meldebasis/Residual↔Meldelücke + Engpass Meldelücke-Filter + Druck freigabeunabhängig + CSV Aggregate Status/Meldebasis freigabeunabhängig + Steuerungskette Hub-Karten | US-KJ-008 | ✓ |
 | `/kita/einrichtung` | Belegungsstand Einrichtung (aggregiert) + Prozesskette Tagesstand→Monatsbericht→Meldung + Druck Status/Datenbasis + CSV Status/Datenbasis-Metakopf | US-KJ-002 | ✓ |
@@ -70,7 +70,7 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | Kita Vorlage Engpass Meldelücke-Filter | `/kita/vorlage` Engpass-Liste | ✓ Schnellfilter Top-3 vs. Meldelücke, Session-sensitiv (Q-114) |
 | Kita Zeitreihe Meldebasis | `demo/components/kita/KitaZeitreiheTabelle.tsx` | ✓ Berichtsmonat an Meldeeingang-Stichprobe; Spalte Meldebasis, Badge/Rahmen bei Lücke, keine Interpolation (Q-115) |
 | Kita Zeitreihe Regionenfilter | `demo/components/kita/KitaZeitreiheTabelle.tsx` | ✓ Chips Gesamtkommune + 5 Planungsräume; raumbezogene Reihen/Meldebasis, Session-sensitiv (Q-117, US-KJ-010 AK2) |
-| Kita Regionenvergleich | `demo/components/kita/KitaRegionenVergleich.tsx` | ✓ Zwei Planungsräume A/B, Kernkennzahlen + Δ, Meldebasis-Badge (Q-118, US-KJ-010 AK3) |
+| Kita Regionenvergleich | `demo/components/kita/KitaRegionenVergleich.tsx` | ✓ Zwei Planungsräume A/B, Kernkennzahlen + Δ, Meldebasis-Badge; print-only Filterstand A/B/Kennzahl/Meldebasis, Auswahl/CSV no-print (Q-118/Q-174, US-KJ-010 AK3) |
 | UG Übersicht Fairness-Kurz-CTAs | `/gruendung` Fairness-Block | ✓ RELEVANT/HINWEIS → RQ/Unterlagen/BG/Steuernummer/Betriebsdatum-Anker; CTA entfällt nach State-Wechsel (Q-116, Q-127) |
 | AV Termin-Kachel live | `/fall` Schnellzugriff | ✓ Chip Ausstehend/Bestätigt nach session-lokaler Bestätigung (Q-104, US-AV-005) |
 | UG Behörden VS-04 → Rückfrage | `/gruendung/behoerden` | ✓ Verfahrensschritt mit offener RQ: CTA „Zur Rückfrage“ `#rq-…`; entfällt nach Beantworten (Q-120) |
@@ -126,6 +126,10 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | UG Dokumente lokale Upload-Quittung | `/gruendung/dokumente` + `sessionUploadedIds` | ✓ Quittung pro Dokumentenkarte nach Session-Markierung; E2E Tab-Nav (Q-168, US-UG-003) |
 | Kita Lagebild CSV Zeitreihe-Blatt | `KitaLagebildDruck` + `/kita/lagebild` | ✓ Blatt 6 Zeitreihe Gesamt+Planungsräume, Meldebasis Session-sensitiv (Q-169, US-KJ-005) |
 | Kita Transparenzbericht Druck-Meta | `KitaCsvDownload` + `/kita` | ✓ print-only Status/Meldebasis; Export-Karte Druck+CSV; Filterstand print-only (Q-170, US-KJ-009) |
+| UG Übersicht Upload-Quittung | `/gruendung` + `sessionUploadedIds` | ✓ Session-Upload-Quittung + nächste offene Unterlage inkl. Frist/CTA oder Vollständigkeit; E2E Tab-Nav (Q-171, US-UG-001/003) |
+| Kita Lagebild Zeitreihe-UI | `KitaZeitreiheTabelle` + `/kita/lagebild` | ✓ 12-Monats-Tabelle im Steuerungslagebild (Filter, Meldebasis, CSV), Anker `#kita-lagebild-zeitreihe` (Q-172, US-KJ-005/010) |
+| Kita Zeitreihe print-only Meta | `KitaZeitreiheTabelle` | ✓ Filter/CSV no-print; print-only Region/Peak/Meldebasis-Session (Q-173, US-KJ-005/009/010) |
+| Kita Regionenvergleich print-only | `KitaRegionenVergleich` + `/kita` | ✓ print-only Region A/B, Meldebasis je Raum, Verlaufskennzahl, Stichprobenmonat; Auswahl/Chips/CSV no-print (Q-174, US-KJ-010/009) |
 
 ---
 
@@ -261,6 +265,10 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 **Q-168 erledigt:** UG Dokumente lokale Upload-Quittung pro Dokumentenkarte nach Session-Markierung (US-UG-003).
 **Q-169 erledigt:** Kita Lagebild CSV Steuerungs-Export Blatt Zeitreihe Gesamt+Planungsräume (US-KJ-005).
 **Q-170 erledigt:** Kita Transparenzbericht Druck-Meta Status/Meldebasis print-only + Export-Karte Druck+CSV (US-KJ-009).
+**Q-171 erledigt:** UG Übersicht Upload-Quittung + nächste offene Unterlage nach Session-Upload (US-UG-001/003).
+**Q-172 erledigt:** Kita Lagebild 12-Monats-Zeitreihe im UI (US-KJ-005/010).
+**Q-173 erledigt:** Kita Zeitreihe print-only Filterstand und Meldebasis-Meta (US-KJ-005/009/010).
+**Q-174 erledigt:** Kita Regionenvergleich print-only Filterstand A/B und Kennzahl/Meldebasis (US-KJ-010/009).
 
 ---
 

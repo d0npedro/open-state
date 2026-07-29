@@ -205,6 +205,10 @@ Story-Dokumentation ist kein Pflicht-Vorläufer für Mock-Daten und Typen.
 | Q-168 | UG Dokumente: lokale Upload-Quittung pro Dokumentenkarte nach Session-Markierung (US-UG-003) | DEMO | S | Q-073 | DONE `27f0652` |
 | Q-169 | Kita Lagebild: CSV Steuerungs-Export Blatt Zeitreihe Gesamt+Planungsräume (US-KJ-005) | DEMO | S | Q-163 | DONE `d54835a` |
 | Q-170 | Kita Transparenzbericht: Druck-Meta Status/Meldebasis print-only + Export-Karte Druck+CSV (US-KJ-009) | DEMO | S | Q-166 | DONE `c6d08c8` |
+| Q-171 | UG Übersicht: Upload-Quittung + nächste offene Unterlage nach Session-Upload (US-UG-001/003, Parität AV Q-161) | DEMO | S | Q-168 | DONE `cba81a8` |
+| Q-172 | Kita Lagebild: 12-Monats-Zeitreihe im UI (`KitaZeitreiheTabelle`, US-KJ-005/010) | DEMO | S | Q-169 | DONE `6cdf3dc` |
+| Q-173 | Kita Zeitreihe: print-only Filterstand/Meldebasis-Meta; Filter/CSV no-print (US-KJ-005/009/010) | DEMO | S | Q-172 | DONE `7fc82ee` |
+| Q-174 | Kita Regionenvergleich: print-only Filterstand A/B + Kennzahl/Meldebasis; Auswahl/CSV no-print (US-KJ-010/009) | DEMO | S | Q-118 | DONE `fbe8bd3` |
 
 ---
 
@@ -380,3 +384,7 @@ Diese Punkte wurden in früheren Iterationen abgeschlossen und sind produktionsr
 | Q-168 UG Dokumente lokale Upload-Quittung | Session-Quittung pro Dokumentenkarte (US-UG-003) | `27f0652` → main |
 | Q-169 Kita Lagebild CSV Zeitreihe-Blatt | Blatt 6 Gesamt+Planungsräume (US-KJ-005) | `d54835a` → main |
 | Q-170 Kita Transparenzbericht Druck-Meta | Status/Meldebasis print-only + Druck+CSV-Karte (US-KJ-009) | `c6d08c8` → main |
+| Q-171 UG Übersicht Upload-Quittung | Session-Upload Quittung + nächste offene Unterlage (US-UG-001/003) | `cba81a8` → main |
+| Q-172 Kita Lagebild Zeitreihe-UI | 12-Monats-Tabelle im Steuerungslagebild (US-KJ-005/010) | `6cdf3dc` → main |
+| Q-173 Kita Zeitreihe print-only Meta | Filterstand/Meldebasis print-only; Filter/CSV no-print | `7fc82ee` → main |
+| Q-174 Kita Regionenvergleich print-only | Filterstand A/B + Kennzahl/Meldebasis print-only (US-KJ-010) | `fbe8bd3` → main |
