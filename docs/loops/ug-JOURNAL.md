@@ -8,6 +8,28 @@ Erlaubte Pfade nur: `demo/app/gruendung/**`, `demo/context/GruendungStateContext
 
 ---
 
+## 2026-07-29 – Iteration 5: Fairness-Kurzblock auf der Übersicht
+
+### Was
+Übersicht zeigt regelbasierte Fairness-Signale inline (wie AV) mit Titel,
+Erklärung und nächstem Schritt. Link „Alle Details ansehen“ führt zu
+`/gruendung/hinweise`. E2E deckt Kurzblock, Signaltext und Navigation ab.
+
+### Dateien
+- `demo/app/gruendung/page.tsx` – Fairness-Kurzblock + `berechneFairnessSignaleGruendung`
+- `demo/e2e/us-ug-gruendung.spec.ts` – Übersicht-Fairness-Test
+- `docs/loops/ug-JOURNAL.md` – dieses Journal
+
+### Build
+`npm run lint` + `npm run build` im Ordner `demo/` grün.
+
+### Nächster sinnvoller UG-Schritt (Vorschlag)
+- Hinweise: direkter CTA „Frage beantworten“ aus RELEVANT-Signal (Anker `#rq-…`)
+- Verlauf: Filter nach Ereignistyp (optional)
+- Übersicht: Fairness-Signale auf RELEVANT+HINWEIS begrenzen, wenn Liste wächst
+
+---
+
 ## 2026-07-29 – Iteration 4: Hinweise-Tab + Übersicht-Link zur offenen Frage
 
 ### Was
