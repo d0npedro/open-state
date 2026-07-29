@@ -8,6 +8,34 @@ Erlaubte Pfade nur: `demo/app/gruendung/**`, `demo/context/GruendungStateContext
 
 ---
 
+## 2026-07-29 – Iteration 29: BG-CTA-Hilfstext session-sensitiv (Übersicht + Hinweise)
+
+### Was
+CTA-Hilfstext für `UG-BG-ANMELDUNG` wird session-sensitiv angeglichen
+(wie Steuernummer/Betriebsdatum/parallele Behörden): bei offener RQ
+„Zuerst die offene Rückfrage des Finanzamts klären … Behördenkarte“;
+nach Antwort „Keine offene Rückfrage mehr – BG-Anmeldung außerhalb von
+Open State vornehmen …“. CTA-Label und Anker unverändert. Übersicht und
+Hinweise nutzen denselben Text; Hinweise mit `data-testid`
+`hinweise-bg-cta-hint-BEH-04`. E2E: Initial- + Session-Assertion.
+
+### Dateien
+- `demo/app/gruendung/page.tsx` – `fairnessSignalZiel` BG `hint`
+- `demo/app/gruendung/hinweise/page.tsx` – BG-CTA-Hint + testid
+- `demo/e2e/us-ug-gruendung.spec.ts` – Initial- + Session-Hilfstext BG
+- `docs/loops/ug-JOURNAL.md` – dieses Journal
+
+### Build
+`npm run lint` + `npm run build` im Ordner `demo/` grün.
+`npm run test:e2e:ug` Exit 0 (111 passed).
+
+### Nächster sinnvoller UG-Schritt (Vorschlag)
+- Fairness-CTA-Hilfstexte ggf. in gemeinsame Helper extrahieren (optional)
+- Übersicht/Hinweise: Hilfstext-Konsistenz Steuernummer vs. Betriebsdatum prüfen
+- Unterlagen-CTA optional session-sensitiven Hilfstext (bei offener RQ zuerst klären)
+
+---
+
 ## 2026-07-29 – Iteration 28: Parallele Behörden session-sensitiv (Signal + CTA)
 
 ### Was

@@ -163,16 +163,22 @@ function fairnessSignalZiel(
   }
 
   // BG-Anmeldung ausstehend
+  // Hilfstext: session-sensitiv (offene RQ → zuerst klären; danach BG-Fokus)
   if (signal.typ === 'UG_BG_ANMELDUNG_AUSSTEHEND' || signal.id === 'UG-BG-ANMELDUNG') {
     const bg = akte.beteiligteBehörden.find(
       b => b.typ === 'BERUFSGENOSSENSCHAFT' && b.status === 'NICHT_GESTARTET'
     );
     if (!bg) return null;
+    const hatOffeneRueckfrage = akte.rueckfragen.some(r => !r.beantwortet);
+    const hint = hatOffeneRueckfrage
+      ? 'Zuerst die offene Rückfrage des Finanzamts klären. Die BG-Anmeldung erfolgt außerhalb von Open State — Kontakt und Rolle auf der Behördenkarte.'
+      : 'Keine offene Rückfrage mehr – BG-Anmeldung außerhalb von Open State vornehmen. Kontakt und Rolle finden Sie auf der Behördenkarte.';
     return {
       href: `/gruendung/behoerden#beh-${bg.id}`,
       cta: 'Zur Behördenkarte',
       icon: 'building',
       testKey: `beh-${bg.id}`,
+      hint,
     };
   }
 

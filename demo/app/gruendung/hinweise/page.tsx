@@ -126,6 +126,13 @@ export default function GruendungHinweisePage() {
                     ? akte.beteiligteBehörden.find(b => b.typ === 'BERUFSGENOSSENSCHAFT')
                     : undefined;
                   const bgNochOffen = bgBehörde?.status === 'NICHT_GESTARTET';
+                  // Hilfstext BG-CTA: session-sensitiv wie Übersicht-Fairness-CTA
+                  const hatOffeneRqBg = akte.rueckfragen.some(r => !r.beantwortet);
+                  const bgCtaHint = bgNochOffen
+                    ? hatOffeneRqBg
+                      ? 'Zuerst die offene Rückfrage des Finanzamts klären. Die BG-Anmeldung erfolgt außerhalb von Open State — Kontakt und Rolle auf der Behördenkarte.'
+                      : 'Keine offene Rückfrage mehr – BG-Anmeldung außerhalb von Open State vornehmen. Kontakt und Rolle finden Sie auf der Behördenkarte.'
+                    : null;
                   return (
                     <div key={sig.id} data-testid={`hinweise-relevant-${sig.id}`}>
                       <FairnessPanel signale={[sig]} />
@@ -160,7 +167,7 @@ export default function GruendungHinweisePage() {
                           </Link>
                         </div>
                       )}
-                      {bgBehörde && bgNochOffen && (
+                      {bgBehörde && bgNochOffen && bgCtaHint && (
                         <div
                           style={{
                             marginTop: '0.5rem',
@@ -176,9 +183,11 @@ export default function GruendungHinweisePage() {
                           }}
                           data-testid={`hinweise-bg-cta-wrap-${bgBehörde.id}`}
                         >
-                          <p style={{ margin: 0, fontSize: '0.875rem', lineHeight: 1.45 }}>
-                            Die BG-Anmeldung erfolgt außerhalb von Open State. Kontakt und Rolle der Stelle
-                            finden Sie auf der Behördenkarte.
+                          <p
+                            style={{ margin: 0, fontSize: '0.875rem', lineHeight: 1.45 }}
+                            data-testid={`hinweise-bg-cta-hint-${bgBehörde.id}`}
+                          >
+                            {bgCtaHint}
                           </p>
                           <Link
                             href={`/gruendung/behoerden#beh-${bgBehörde.id}`}
