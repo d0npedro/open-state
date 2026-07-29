@@ -19,6 +19,14 @@ const DEMO_AKTION_ZEIT = '07.12.2024, 11:15';
 const BG_BEHOERDE_ID = 'BEH-04';
 const BG_SCHRITT_ID = 'VS-07';
 
+/**
+ * Verlauf-Anker-ID für die Demo-Antwort auf eine Rückfrage.
+ * Beispiel: RQ-01 → `UG-DEMO-RQ-RQ-01` (Hash `#ere-UG-DEMO-RQ-RQ-01`).
+ */
+export function demoRqAntwortEreignisId(rqId: string): string {
+  return `UG-DEMO-RQ-${rqId}`;
+}
+
 interface GruendungStateContextValue {
   akte: GruendungsAkte;
   /** Demo: beantwortet Rückfrage, optional mit Freitext. */
@@ -238,7 +246,7 @@ export function GruendungStateProvider({ children }: { children: React.ReactNode
       const antwortKurz =
         antwort.length > 120 ? `${antwort.slice(0, 117)}…` : antwort;
       extraEvents.push({
-        id: `UG-DEMO-RQ-${id}`,
+        id: demoRqAntwortEreignisId(id),
         typ: 'rueckfrage_beantwortet',
         zeitstempel: DEMO_AKTION_ZEIT,
         handelndeStelle: 'GRUENDER',

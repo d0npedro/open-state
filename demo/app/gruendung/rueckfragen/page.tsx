@@ -1,7 +1,11 @@
 'use client';
 
 import { useState } from 'react';
-import { useGruendungState } from '@/context/GruendungStateContext';
+import Link from 'next/link';
+import {
+  demoRqAntwortEreignisId,
+  useGruendungState,
+} from '@/context/GruendungStateContext';
 import { berechneFristTage } from '@/lib/fairness/rules';
 import { FIKTIVES_HEUTE_GRUENDUNG } from '@/lib/fairness/gruendung-rules';
 import { Icon } from '@/components/Icon';
@@ -38,6 +42,8 @@ export default function RueckfragenPage() {
         const fristKritisch = !rq.beantwortet && resttage <= 3;
         const draft = drafts[rq.id] ?? '';
         const formId = `ug-rq-antwort-${rq.id}`;
+        const verlaufEreignisId = demoRqAntwortEreignisId(rq.id);
+        const verlaufHref = `/gruendung/verlauf#ere-${verlaufEreignisId}`;
 
         return (
           <div
@@ -100,14 +106,15 @@ export default function RueckfragenPage() {
               </div>
             </div>
 
-            {/* Beantwortet: Quittung + Antworttext */}
+            {/* Beantwortet: Quittung + Antworttext + Verlauf-Tiefenlink (US-UG-005) */}
             {rq.beantwortet ? (
               <div
                 role="status"
                 aria-live="polite"
+                data-testid={`rq-antwort-quittung-${rq.id}`}
                 style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}
               >
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem', color: 'var(--color-success)', fontWeight: 700, fontSize: '0.95rem' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem', color: 'var(--color-success)', fontWeight: 700, fontSize: '0.95rem', flexWrap: 'wrap' }}>
                   <Icon name="check-circle" size={20} />
                   Beantwortet — die Behörde wurde informiert.
                   {rq.beantwortetAm && (
@@ -118,6 +125,7 @@ export default function RueckfragenPage() {
                 </div>
                 {rq.antwortText && (
                   <div
+                    data-testid={`rq-antwort-text-${rq.id}`}
                     style={{
                       background: 'var(--color-success-light, #f0fff4)',
                       border: '1px solid var(--color-success)',
@@ -133,6 +141,23 @@ export default function RueckfragenPage() {
                     </p>
                   </div>
                 )}
+                {/* Session-Antwort im Verlauf nachvollziehbar (Hash-Hervorhebung) */}
+                <Link
+                  href={verlaufHref}
+                  className="btn btn-secondary btn-inline"
+                  style={{
+                    alignSelf: 'flex-start',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '0.4rem',
+                    minHeight: 44,
+                  }}
+                  data-testid={`rq-verlauf-link-${rq.id}`}
+                  aria-label={`Ihre Antwort auf die Rückfrage im Verlauf ansehen`}
+                >
+                  <Icon name="clock" size={16} />
+                  Im Verlauf ansehen
+                </Link>
               </div>
             ) : (
               <div
