@@ -8,6 +8,36 @@ Erlaubte Pfade nur: `demo/app/gruendung/**`, `demo/context/GruendungStateContext
 
 ---
 
+## 2026-07-29 – Iteration 38: naechsterSchrittZiel / aufgabeZiel in gruendung-rules
+
+### Was
+Primär- und Aufgaben-CTA-Routing der Übersicht leben in `gruendung-rules.ts`
+(US-UG-001, Parität zu `fairnessSignalZiel` Iteration 34):
+
+1. **`aufgabeZiel`**: Textheuristik + Aktenzustand → href/cta/icon/testKey.
+2. **`naechsterSchrittZiel`**: Bürger-Reihenfolge RQ → Unterlagen → BG mit
+   session-sensitiven Hilfstexten; danach Fairness-Kopplung
+   (RELEVANT vor HINWEIS über `fairnessSignalZiel`).
+3. **Übersicht** importiert die Exports – keine lokalen Duplikate mehr.
+4. E2E: nach RQ + Session-Upload wechselt Primär-CTA zu BG-Hinweis (DEC-012).
+
+### Dateien
+- `demo/lib/fairness/gruendung-rules.ts` – `AufgabeZiel`, `NaechsterSchrittZiel`, Exports
+- `demo/app/gruendung/page.tsx` – Import statt lokaler Routing-Funktionen
+- `demo/e2e/us-ug-gruendung.spec.ts` – 1 neuer Test (RQ+Upload → BG)
+- `docs/loops/ug-JOURNAL.md` – dieses Journal
+
+### Build
+`npm run lint` + `npm run build` im Ordner `demo/` grün.
+`npm run test:e2e:ug` Exit 0 (122 passed).
+
+### Nächster sinnvoller UG-Schritt (Vorschlag)
+- Verlauf: Tiefenlink von Fairness-CTA zu passendem Ereignis (optional)
+- Fairness-Fallthrough nach BG (Steuernummer/Betriebsdatum) E2E absichern
+- Primär-CTA-Labels optional an Fairness-Kurz-CTAs angleichen (optional)
+
+---
+
 ## 2026-07-29 – Iteration 37: Hinweise UNTERLAGE live + Dokumenten-Frist (AV Q-167)
 
 ### Was

@@ -265,6 +265,154 @@ export function fairnessSignalZiel(
   return null;
 }
 
+// ─── Übersicht: Aufgaben- und Primär-Schritt-Ziele ───────────────────────────
+// Gleiche Quelle wie Fairness-CTAs; UI mappt nur Icons/testids.
+// Primär-CTA: Bürger-Handlungsreihenfolge RQ → Unterlagen → BG, danach
+// Fairness-Signale (RELEVANT vor HINWEIS) über fairnessSignalZiel.
+
+/** Ziel-Link für eine offene Aufgabe aus Klartext + aktuellem Aktenzustand. */
+export interface AufgabeZiel {
+  href: string;
+  cta: string;
+  icon: GruendungCtaIconKind;
+  testKey: string;
+}
+
+/**
+ * Leitet aus Aufgabentext und Aktenzustand den Ziel-Link ab.
+ * Heuristik bewusst textbasiert (Mock-Aufgaben sind Klartext) – keine Entscheidung.
+ */
+export function aufgabeZiel(text: string, akte: GruendungsAkte): AufgabeZiel | null {
+  const t = text.toLowerCase();
+
+  if (t.includes('rückfrage')) {
+    const rq = akte.rueckfragen.find(r => !r.beantwortet);
+    if (!rq) return null;
+    return {
+      href: `/gruendung/rueckfragen#rq-${rq.id}`,
+      cta: 'Zur Rückfrage',
+      icon: 'chat',
+      testKey: `rq-${rq.id}`,
+    };
+  }
+
+  if (
+    t.includes('hochladen') ||
+    t.includes('unterlage') ||
+    t.includes('qualifikation') ||
+    t.includes('nachweis')
+  ) {
+    const dok = akte.dokumente.find(
+      d => d.status === 'ANGEFORDERT' || d.status === 'ABGELEHNT'
+    );
+    if (!dok) return null;
+    return {
+      href: `/gruendung/dokumente#dok-${dok.id}`,
+      cta: 'Zu den Unterlagen',
+      icon: 'file',
+      testKey: `dok-${dok.id}`,
+    };
+  }
+
+  if (
+    t.includes('berufsgenossenschaft') ||
+    t.includes('bg etem') ||
+    (t.includes('bg ') && t.includes('anmeldung'))
+  ) {
+    const bg = akte.beteiligteBehörden.find(b => b.typ === 'BERUFSGENOSSENSCHAFT');
+    if (!bg) return null;
+    return {
+      href: `/gruendung/behoerden#beh-${bg.id}`,
+      cta: 'Zur Behördenkarte',
+      icon: 'building',
+      testKey: `beh-${bg.id}`,
+    };
+  }
+
+  return {
+    href: '/gruendung/behoerden',
+    cta: 'Zu den Behörden',
+    icon: 'building',
+    testKey: 'behoerden',
+  };
+}
+
+/** Primärer CTA zum „Nächster Schritt“-Block auf der Übersicht. */
+export interface NaechsterSchrittZiel {
+  href: string;
+  cta: string;
+  icon: GruendungCtaIconKind;
+  hint?: string;
+}
+
+/**
+ * Primär-CTA „Nächster Schritt“ (Übersicht).
+ *
+ * 1–3: Feste Bürger-Handlungsreihenfolge (RQ → Unterlagen → BG),
+ *      mit session-sensitiven Hilfstexten (identisch zu Fairness-CTAs).
+ * 4:   Fairness-Kopplung – höchstpriorisiertes verbleibendes Signal
+ *      (RELEVANT vor HINWEIS) über fairnessSignalZiel.
+ *
+ * Keine Entscheidung – reine Ableitung aus Aktenzustand + Regelwerk.
+ */
+export function naechsterSchrittZiel(akte: GruendungsAkte): NaechsterSchrittZiel | null {
+  const offeneRq = akte.rueckfragen.find(r => !r.beantwortet);
+  if (offeneRq) {
+    return {
+      href: `/gruendung/rueckfragen#rq-${offeneRq.id}`,
+      cta: 'Rückfrage beantworten',
+      icon: 'chat',
+      hint: rqCtaHilfstext(offeneRq),
+    };
+  }
+
+  const fehlendesDok = akte.dokumente.find(
+    d => d.status === 'ANGEFORDERT' || d.status === 'ABGELEHNT'
+  );
+  if (fehlendesDok) {
+    return {
+      href: `/gruendung/dokumente#dok-${fehlendesDok.id}`,
+      cta: 'Unterlage hochladen',
+      icon: 'file',
+      // Keine offene RQ mehr (sonst RQ-Zweig oben)
+      hint: unterlagenCtaHilfstext(false),
+    };
+  }
+
+  const bg = akte.beteiligteBehörden.find(
+    b => b.typ === 'BERUFSGENOSSENSCHAFT' && b.status === 'NICHT_GESTARTET'
+  );
+  if (bg) {
+    return {
+      href: `/gruendung/behoerden#beh-${bg.id}`,
+      cta: 'BG-Hinweis ansehen',
+      icon: 'building',
+      hint: bgCtaHilfstext(false),
+    };
+  }
+
+  // Fairness-Kopplung: weitere handlungsrelevante Signale (RELEVANT vor HINWEIS)
+  const signale = berechneFairnessSignaleGruendung(akte)
+    .filter(s => s.prioritaet === 'RELEVANT' || s.prioritaet === 'HINWEIS')
+    .sort((a, b) => {
+      const rank = (p: string) => (p === 'RELEVANT' ? 0 : 1);
+      return rank(a.prioritaet) - rank(b.prioritaet);
+    });
+  for (const sig of signale) {
+    const z = fairnessSignalZiel(sig, akte);
+    if (z) {
+      return {
+        href: z.href,
+        cta: z.cta,
+        icon: z.icon,
+        hint: z.hint,
+      };
+    }
+  }
+
+  return null;
+}
+
 export function berechneFairnessSignaleGruendung(akte: GruendungsAkte): FairnessSignal[] {
   const signale: FairnessSignal[] = [];
   const heute = FIKTIVES_HEUTE_GRUENDUNG;

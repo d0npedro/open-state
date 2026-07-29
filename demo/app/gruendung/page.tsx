@@ -3,17 +3,15 @@
 import Link from 'next/link';
 import { useGruendungState } from '@/context/GruendungStateContext';
 import {
+  aufgabeZiel,
   berechneFairnessSignaleGruendung,
-  bgCtaHilfstext,
   fairnessSignalZiel,
   FIKTIVES_HEUTE_GRUENDUNG,
-  rqCtaHilfstext,
-  unterlagenCtaHilfstext,
+  naechsterSchrittZiel,
 } from '@/lib/fairness/gruendung-rules';
 import { berechneFristTage } from '@/lib/fairness/rules';
 import { Icon } from '@/components/Icon';
 import type { IconName } from '@/components/Icon';
-import type { GruendungsAkte } from '@/types/gruendung';
 
 /** Klarsprache für Resttage (analog AV / Rückfrage-Frist). */
 function fristRestLabel(tage: number): string {
@@ -39,104 +37,6 @@ const statusToChip: Record<string, { label: string; css: string; icon: IconName 
   ENTSCHEIDUNG_AUSSTEHEND: { label: 'Entscheidung steht aus',    css: 'status-chip-neutral', icon: 'clock'        },
   GENEHMIGT:               { label: 'Genehmigt',                css: 'status-chip-success', icon: 'check-circle'  },
 };
-
-/** Ziel-Link für eine offene Aufgabe aus Klartext + aktuellem Aktenzustand. */
-function aufgabeZiel(
-  text: string,
-  akte: GruendungsAkte
-): { href: string; cta: string; icon: IconName; testKey: string } | null {
-  const t = text.toLowerCase();
-
-  if (t.includes('rückfrage')) {
-    const rq = akte.rueckfragen.find(r => !r.beantwortet);
-    if (!rq) return null;
-    return {
-      href: `/gruendung/rueckfragen#rq-${rq.id}`,
-      cta: 'Zur Rückfrage',
-      icon: 'chat',
-      testKey: `rq-${rq.id}`,
-    };
-  }
-
-  if (
-    t.includes('hochladen') ||
-    t.includes('unterlage') ||
-    t.includes('qualifikation') ||
-    t.includes('nachweis')
-  ) {
-    const dok = akte.dokumente.find(
-      d => d.status === 'ANGEFORDERT' || d.status === 'ABGELEHNT'
-    );
-    if (!dok) return null;
-    return {
-      href: `/gruendung/dokumente#dok-${dok.id}`,
-      cta: 'Zu den Unterlagen',
-      icon: 'file',
-      testKey: `dok-${dok.id}`,
-    };
-  }
-
-  if (
-    t.includes('berufsgenossenschaft') ||
-    t.includes('bg etem') ||
-    (t.includes('bg ') && t.includes('anmeldung'))
-  ) {
-    const bg = akte.beteiligteBehörden.find(b => b.typ === 'BERUFSGENOSSENSCHAFT');
-    if (!bg) return null;
-    return {
-      href: `/gruendung/behoerden#beh-${bg.id}`,
-      cta: 'Zur Behördenkarte',
-      icon: 'building',
-      testKey: `beh-${bg.id}`,
-    };
-  }
-
-  return {
-    href: '/gruendung/behoerden',
-    cta: 'Zu den Behörden',
-    icon: 'building',
-    testKey: 'behoerden',
-  };
-}
-
-/** Primärer CTA zum naechsterSchritt-Text (gleiche Heuristik wie Aufgaben). */
-function naechsterSchrittZiel(
-  akte: GruendungsAkte
-): { href: string; cta: string; icon: IconName; hint?: string } | null {
-  const offeneRq = akte.rueckfragen.find(r => !r.beantwortet);
-  if (offeneRq) {
-    return {
-      href: `/gruendung/rueckfragen#rq-${offeneRq.id}`,
-      cta: 'Rückfrage beantworten',
-      icon: 'chat',
-      hint: rqCtaHilfstext(offeneRq),
-    };
-  }
-  const fehlendesDok = akte.dokumente.find(
-    d => d.status === 'ANGEFORDERT' || d.status === 'ABGELEHNT'
-  );
-  if (fehlendesDok) {
-    return {
-      href: `/gruendung/dokumente#dok-${fehlendesDok.id}`,
-      cta: 'Unterlage hochladen',
-      icon: 'file',
-      // Session: keine offene RQ mehr (sonst wäre RQ-Zweig oben greifend)
-      hint: unterlagenCtaHilfstext(false),
-    };
-  }
-  const bg = akte.beteiligteBehörden.find(
-    b => b.typ === 'BERUFSGENOSSENSCHAFT' && b.status === 'NICHT_GESTARTET'
-  );
-  if (bg) {
-    return {
-      href: `/gruendung/behoerden#beh-${bg.id}`,
-      cta: 'BG-Hinweis ansehen',
-      icon: 'building',
-      hint: bgCtaHilfstext(false),
-    };
-  }
-  return null;
-}
 
 export default function GruendungPage() {
   const { akte, sessionUploadedIds } = useGruendungState();
