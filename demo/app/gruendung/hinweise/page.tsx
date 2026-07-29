@@ -33,6 +33,10 @@ function isUnterlagenFehlendSignal(signal: FairnessSignal): boolean {
 function isSteuernummerSignal(signal: FairnessSignal): boolean {
   return signal.typ === 'UG_STEUERNUMMER_FEHLT' || signal.id === 'UG-STEUERNUMMER-FEHLT';}
 
+/** Erkennung des HINWEIS-Signals zum überschrittenen Betriebsdatum. */
+function isBetriebsdatumSignal(signal: FairnessSignal): boolean {
+  return signal.typ === 'UG_BETRIEBSDATUM_UEBERSCHRITTEN' || signal.id === 'UG-BETRIEBSDATUM';}
+
 export default function GruendungHinweisePage() {
   const { akte } = useGruendungState();
   const signale = berechneFairnessSignaleGruendung(akte);
@@ -207,6 +211,9 @@ export default function GruendungHinweisePage() {
                   const steuernummerNochOffen = isSteuernummerSignal(sig)
                     ? akte.verfahrensSchritte.some(vs => vs.id === 'VS-05' && vs.status === 'AUSSTEHEND')
                     : false;
+                  const betriebsdatumNochOffen = isBetriebsdatumSignal(sig)
+                    ? !['GENEHMIGT', 'AKTIVER_BETRIEB', 'BETRIEB_EINGESTELLT'].includes(akte.status)
+                    : false;
                   return (
                     <div key={sig.id} data-testid={`hinweise-hinweis-${sig.id}`}>
                       <FairnessPanel signale={[sig]} />
@@ -273,6 +280,38 @@ export default function GruendungHinweisePage() {
                           >
                             <Icon name="building" size={15} />
                             Zum Finanzamt
+                          </Link>
+                        </div>
+                      )}
+                      {betriebsdatumNochOffen && (
+                        <div
+                          style={{
+                            marginTop: '0.5rem',
+                            display: 'flex',
+                            flexWrap: 'wrap',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                            gap: '0.75rem',
+                            padding: '0.75rem 1rem',
+                            background: 'var(--color-primary-light)',
+                            border: '1px solid var(--color-border)',
+                            borderRadius: 'var(--radius)',
+                          }}
+                          data-testid="hinweise-betriebsdatum-cta-wrap"
+                        >
+                          <p style={{ margin: 0, fontSize: '0.875rem', lineHeight: 1.45 }}>
+                            Status, Fortschritt und nächste Handlungsschritte finden Sie auf der
+                            Übersichtsseite Ihres Verfahrens.
+                          </p>
+                          <Link
+                            href="/gruendung#verfahrensstatus"
+                            className="btn btn-primary"
+                            style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', flexShrink: 0 }}
+                            data-testid="hinweise-betriebsdatum-cta"
+                            aria-label="Zum Verfahrensstatus auf der Übersicht"
+                          >
+                            <Icon name="refresh" size={15} />
+                            Zum Verfahrensstatus
                           </Link>
                         </div>
                       )}

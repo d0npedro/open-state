@@ -59,7 +59,12 @@ export default function GruendungPage() {
       )}
 
       {/* ─── Fall-Kopf ──────────────────────────────────────────── */}
-      <div className="card">
+      <div
+        className="card"
+        id="verfahrensstatus"
+        data-testid="uebersicht-verfahrensstatus"
+        style={{ scrollMarginTop: '5rem' }}
+      >
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem', marginBottom: '1rem' }}>
           <div>
             <h1 style={{ fontSize: '1.3rem', marginBottom: '0.25rem' }}>{akte.gewerbebezeichnung}</h1>

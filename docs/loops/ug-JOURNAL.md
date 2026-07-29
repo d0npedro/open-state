@@ -8,6 +8,33 @@ Erlaubte Pfade nur: `demo/app/gruendung/**`, `demo/context/GruendungStateContext
 
 ---
 
+## 2026-07-29 – Iteration 11: Hinweise-CTA für Betriebsdatum → Verfahrensstatus
+
+### Was
+Hinweise-Seite: HINWEIS-Signale zum überschrittenen Betriebsdatum
+(`UG-BETRIEBSDATUM` / `UG_BETRIEBSDATUM_UEBERSCHRITTEN`) erhalten einen CTA
+„Zum Verfahrensstatus“ mit Anker `/gruendung#verfahrensstatus`.
+Übersicht: Status-/Fortschrittskarte trägt `id="verfahrensstatus"` und
+`scroll-margin`. CTA nur solange der Verfahrensstatus nicht abgeschlossen ist.
+E2E: Linkziel und Navigation zum Statusblock.
+
+### Dateien
+- `demo/app/gruendung/hinweise/page.tsx` – CTA für UG-BETRIEBSDATUM
+- `demo/app/gruendung/page.tsx` – Anker-ID auf Verfahrensstatus-Karte
+- `demo/e2e/us-ug-gruendung.spec.ts` – zwei Betriebsdatum-CTA-Tests
+- `docs/loops/ug-JOURNAL.md` – dieses Journal
+
+### Build
+`npm run lint` + `npm run build` im Ordner `demo/` grün.
+`npm run test:e2e:ug` Exit 0.
+
+### Nächster sinnvoller UG-Schritt (Vorschlag)
+- Übersicht: Fairness-Signale auf RELEVANT+HINWEIS begrenzen (INFO ausblenden)
+- Übersicht: `naechsterSchritt` / offene Aufgaben mit Link zur betroffenen Stelle
+- Hinweise: CTA für parallele-Behörden-INFO zu `/gruendung/behoerden`
+
+---
+
 ## 2026-07-29 – Iteration 10: Verlauf-Filter nach Ereignistyp
 
 ### Was

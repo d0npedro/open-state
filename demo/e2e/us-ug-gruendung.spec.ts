@@ -466,6 +466,20 @@ test.describe('UG – Hinweise zur Verfahrenslage', () => {
     await expect(page.getByTestId('behoerde-karte-BEH-02')).toContainText(/Finanzamt/i);
   });
 
+  test('HINWEIS-Betriebsdatum-Signal hat CTA „Zum Verfahrensstatus“ mit Anker', async ({ page }) => {
+    const cta = page.getByTestId('hinweise-betriebsdatum-cta');
+    await expect(cta).toBeVisible();
+    await expect(cta).toContainText(/Zum Verfahrensstatus/i);
+    await expect(cta).toHaveAttribute('href', '/gruendung#verfahrensstatus');
+  });
+
+  test('CTA aus Betriebsdatum-Signal führt zum Statusblock der Übersicht', async ({ page }) => {
+    await page.getByTestId('hinweise-betriebsdatum-cta').click();
+    await expect(page).toHaveURL(/\/gruendung#verfahrensstatus/);
+    await expect(page.locator('#verfahrensstatus')).toBeVisible();
+    await expect(page.getByTestId('uebersicht-verfahrensstatus')).toContainText(/IT-Beratung|Verfahrensfortschritt|Sie sind hier/i);
+  });
+
 });
 
 // ─── Verlauf ──────────────────────────────────────────────────────────────────
