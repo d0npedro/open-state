@@ -230,6 +230,56 @@ test.describe('UG – Übersicht', () => {
     await expect(page.getByTestId('uebersicht-aufgabe-link-beh-BEH-04')).toBeVisible();
   });
 
+  test('Nach RQ + Upload + BG: Primär-CTA fällt auf Steuernummer durch (Fairness-Fallthrough)', async ({
+    page,
+  }) => {
+    // naechsterSchrittZiel: RQ → Unterlagen → BG → fairnessSignalZiel (Steuernummer)
+    // Kein page.goto nach State (DEC-012)
+    const { goUgTab } = await import('./helpers/sessionNav');
+
+    await goUgTab(page, 'Fragen', /\/gruendung\/rueckfragen/);
+    await page.getByRole('button', { name: /Rückfrage beantworten/i }).click();
+    await expect(page.getByText(/die Behörde wurde informiert|beantwortet/i).first()).toBeVisible();
+
+    await goUgTab(page, 'Unterlagen', /\/gruendung\/dokumente/);
+    await page.getByRole('button', { name: /Als hochgeladen markieren/i }).click();
+    await expect(page.getByTestId('dok-upload-quittung-DOK-03')).toBeVisible();
+
+    await goUgTab(page, 'Behörden', /\/gruendung\/behoerden/);
+    await expect(page.getByTestId('behoerde-bg-demo-aktion')).toBeVisible();
+    await page.getByTestId('behoerde-bg-erledigt-btn').click();
+    await expect(page.getByTestId('behoerde-bg-erledigt-quittung')).toBeVisible();
+    await expect(page.getByTestId('behoerde-karte-BEH-04')).toContainText(/Abgeschlossen/i);
+    await expect(page.getByTestId('behoerde-schritt-VS-07')).toContainText(/Erledigt/i);
+
+    await goUgTab(page, 'Übersicht', /\/gruendung$/);
+
+    // Primär-CTA: Fairness-Fallthrough → Steuernummer (VS-05 IN_BEARBEITUNG)
+    const cta = page.getByTestId('uebersicht-naechster-schritt-cta');
+    await expect(cta).toBeVisible();
+    await expect(cta).toHaveAttribute('href', /\/gruendung\/behoerden#beh-BEH-02/);
+    await expect(cta).toContainText(/Steuernummer-Stand ansehen/i);
+    const schrittHint = page.getByTestId('uebersicht-naechster-schritt-cta-hint');
+    await expect(schrittHint).toBeVisible();
+    await expect(schrittHint).toContainText(/in Bearbeitung/i);
+    await expect(schrittHint).toContainText(/Steuernummer|Behördenkarte/i);
+    await expect(schrittHint).not.toContainText(/BG-Anmeldung/i);
+
+    // BG-Aufgabe und Fairness-BG-CTA entfallen; Steuernummer + Betriebsdatum bleiben
+    await expect(page.getByTestId('uebersicht-aufgabe-link-beh-BEH-04')).toHaveCount(0);
+    await expect(page.getByTestId('uebersicht-fairness-cta-beh-BEH-04')).toHaveCount(0);
+    await expect(page.getByTestId('uebersicht-fairness-UG-BG-ANMELDUNG')).toHaveCount(0);
+    await expect(page.getByTestId('uebersicht-fairness-cta-steuernummer-BEH-02')).toBeVisible();
+    await expect(page.getByTestId('uebersicht-fairness-cta-steuernummer-BEH-02')).toContainText(
+      /Steuernummer-Stand ansehen/i
+    );
+    await expect(page.getByTestId('uebersicht-fairness-cta-betriebsdatum')).toBeVisible();
+    // Betriebsdatum-Signal: nach RQ + BG keine RQ-Priorität; Steuernummer/offene Punkte
+    const betriebsSignal = page.getByTestId('uebersicht-fairness-UG-BETRIEBSDATUM');
+    await expect(betriebsSignal).toContainText(/Steuernummer-Vergabe läuft|Rückfrage des Finanzamts ist beantwortet/i);
+    await expect(betriebsSignal).not.toContainText(/zuerst Rückfrage Finanzamt beantworten/i);
+  });
+
   test('Fairness-Kurzblock mit Link zu Hinweise', async ({ page }) => {
     const block = page.getByTestId('uebersicht-fairness-kurzblock');
     await expect(block).toBeVisible();
@@ -542,6 +592,25 @@ test.describe('UG – Behörden & Verfahrensschritte', () => {
     await expect(page.getByTestId('behoerde-rueckfrage-cta-BEH-01')).toHaveCount(0);
     await expect(page.getByTestId('behoerde-rueckfrage-cta-BEH-03')).toHaveCount(0);
     await expect(page.getByTestId('behoerde-rueckfrage-cta-BEH-04')).toHaveCount(0);
+  });
+
+  test('BG-Karte: Demo-Aktion Anmeldung als erledigt markieren', async ({ page }) => {
+    const aktion = page.getByTestId('behoerde-bg-demo-aktion');
+    await expect(aktion).toBeVisible();
+    await expect(aktion).toContainText(/außerhalb von Open State/i);
+    const btn = page.getByTestId('behoerde-bg-erledigt-btn');
+    await expect(btn).toBeVisible();
+    await btn.click();
+    await expect(page.getByTestId('behoerde-bg-erledigt-quittung')).toBeVisible();
+    await expect(page.getByTestId('behoerde-bg-demo-aktion')).toHaveCount(0);
+    await expect(page.getByTestId('behoerde-karte-BEH-04')).toContainText(/Abgeschlossen/i);
+    await expect(page.getByTestId('behoerde-schritt-VS-07')).toContainText(/Erledigt/i);
+    // Session bleibt nach Tab-Nav (DEC-012)
+    const { goUgTab } = await import('./helpers/sessionNav');
+    await goUgTab(page, 'Verlauf', /\/gruendung\/verlauf/);
+    await expect(page.getByText(/BG-Anmeldung als erledigt markiert/i).first()).toBeVisible();
+    await goUgTab(page, 'Behörden', /\/gruendung\/behoerden/);
+    await expect(page.getByTestId('behoerde-bg-erledigt-quittung')).toBeVisible();
   });
 
   test('Verfahrensschritt VS-04 hat Link zur offenen Rückfrage', async ({ page }) => {
@@ -1157,6 +1226,46 @@ test.describe('UG – Hinweise zur Verfahrenslage', () => {
     await expect(hint).toContainText(/Rückfrage beantwortet/i);
     await expect(hint).toContainText(/Steuernummer-Vergabe|offene Punkte/i);
     await expect(hint).not.toContainText(/offene Rückfrage des Finanzamts klären/i);
+  });
+
+  test('Nach RQ + BG: BG-Signal entfällt, Steuernummer- und Betriebsdatum-CTAs bleiben', async ({
+    page,
+  }) => {
+    // Fairness-Fallthrough nach BG (US-UG fairness / naechsterSchrittZiel)
+    // Kein page.goto nach State (DEC-012)
+    const { goUgTab } = await import('./helpers/sessionNav');
+    await goUgTab(page, 'Fragen', /\/gruendung\/rueckfragen/);
+    await page.getByRole('button', { name: /Rückfrage beantworten/i }).click();
+    await expect(page.getByText(/die Behörde wurde informiert|beantwortet/i).first()).toBeVisible();
+
+    await goUgTab(page, 'Behörden', /\/gruendung\/behoerden/);
+    await page.getByTestId('behoerde-bg-erledigt-btn').click();
+    await expect(page.getByTestId('behoerde-bg-erledigt-quittung')).toBeVisible();
+
+    await goUgTab(page, 'Hinweise', /\/gruendung\/hinweise/);
+
+    // BG-Signal und -CTA entfallen nach Markierung
+    await expect(page.getByTestId('hinweise-hinweis-UG-BG-ANMELDUNG')).toHaveCount(0);
+    await expect(page.getByTestId('hinweise-bg-cta-BEH-04')).toHaveCount(0);
+
+    // Steuernummer: VS-05 IN_BEARBEITUNG nach RQ-Antwort
+    const steuernummerPanel = page.getByTestId('hinweise-hinweis-UG-STEUERNUMMER-FEHLT');
+    await expect(steuernummerPanel).toBeVisible();
+    await expect(steuernummerPanel).toContainText(/Steuernummer in Bearbeitung/i);
+    const steuernummerCta = page.getByTestId('hinweise-steuernummer-cta-BEH-02');
+    await expect(steuernummerCta).toBeVisible();
+    await expect(steuernummerCta).toContainText(/Steuernummer-Stand ansehen/i);
+    await expect(steuernummerCta).toHaveAttribute('href', '/gruendung/behoerden#beh-BEH-02');
+    const steuernummerHint = page.getByTestId('hinweise-steuernummer-cta-hint-BEH-02');
+    await expect(steuernummerHint).toContainText(/in Bearbeitung/i);
+    await expect(steuernummerHint).not.toContainText(/offene Rückfrage des Finanzamts klären/i);
+
+    // Betriebsdatum bleibt mit session-sensitivem Hilfstext (Steuernummer-Fokus)
+    await expect(page.getByTestId('hinweise-hinweis-UG-BETRIEBSDATUM')).toBeVisible();
+    await expect(page.getByTestId('hinweise-betriebsdatum-cta')).toBeVisible();
+    const betriebsHint = page.getByTestId('hinweise-betriebsdatum-cta-hint');
+    await expect(betriebsHint).toContainText(/Steuernummer-Vergabe|offene Punkte/i);
+    await expect(betriebsHint).not.toContainText(/offene Rückfrage des Finanzamts klären/i);
   });
 
   test('INFO-Parallele-Behörden-Signal hat CTA „Zu den Behörden“', async ({ page }) => {

@@ -52,7 +52,7 @@ function rueckfrageFuerSchritt(
 }
 
 export default function BehoerdenPage() {
-  const { akte } = useGruendungState();
+  const { akte, markBgAnmeldungErledigt, sessionBgErledigt } = useGruendungState();
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
@@ -72,6 +72,13 @@ export default function BehoerdenPage() {
           r => r.anforderndeBehördeId === beh.id && !r.beantwortet
         );
         const ersteOffene = offeneRueckfragen[0];
+        const istBgAusstehend =
+          beh.typ === 'BERUFSGENOSSENSCHAFT' &&
+          beh.status === 'NICHT_GESTARTET' &&
+          !sessionBgErledigt;
+        const istBgErledigt =
+          beh.typ === 'BERUFSGENOSSENSCHAFT' &&
+          (sessionBgErledigt || beh.status === 'ABGESCHLOSSEN');
 
         return (
           <div
@@ -238,6 +245,68 @@ export default function BehoerdenPage() {
               <p style={{ fontSize: '0.875rem', color: 'var(--color-text-muted)', margin: 0 }}>
                 Diese Behörde wird außerhalb von Open State direkt kontaktiert.
               </p>
+            )}
+
+            {/* Demo: BG-Anmeldung außerhalb Open State als erledigt markieren
+                (ermöglicht Fairness-Fallthrough → Steuernummer/Betriebsdatum) */}
+            {istBgAusstehend && (
+              <div
+                className="notice-box notice-box-info"
+                style={{
+                  marginTop: '1rem',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '0.625rem',
+                  alignItems: 'flex-start',
+                }}
+                data-testid="behoerde-bg-demo-aktion"
+              >
+                <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.5rem' }}>
+                  <Icon name="info" size={16} style={{ flexShrink: 0, marginTop: '2px' }} />
+                  <div>
+                    <strong style={{ display: 'block', marginBottom: '0.25rem' }}>
+                      Anmeldung außerhalb von Open State
+                    </strong>
+                    <p style={{ margin: 0, fontSize: '0.875rem', lineHeight: 1.45 }}>
+                      Die gesetzliche Unfallversicherung melden Sie direkt bei der Berufsgenossenschaft.
+                      In der Demo können Sie die Anmeldung als erledigt markieren — es wird keine echte
+                      Meldung übermittelt.
+                    </p>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  className="btn btn-primary"
+                  onClick={markBgAnmeldungErledigt}
+                  data-testid="behoerde-bg-erledigt-btn"
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}
+                  aria-label="BG-Anmeldung in der Demo als erledigt markieren"
+                >
+                  <Icon name="check-circle" size={15} />
+                  Anmeldung als erledigt markieren (Demo)
+                </button>
+              </div>
+            )}
+
+            {istBgErledigt && beh.typ === 'BERUFSGENOSSENSCHAFT' && (
+              <div
+                className="notice-box notice-box-success"
+                role="status"
+                style={{ marginTop: '1rem' }}
+                data-testid="behoerde-bg-erledigt-quittung"
+              >
+                <Icon name="check-circle" size={16} style={{ flexShrink: 0, marginTop: '2px' }} />
+                <div>
+                  <strong style={{ display: 'block', marginBottom: '0.2rem' }}>
+                    BG-Anmeldung als erledigt markiert
+                  </strong>
+                  <p style={{ margin: 0, fontSize: '0.875rem', lineHeight: 1.45 }}>
+                    In dieser Demo-Session ist die Berufsgenossenschaft-Anmeldung erledigt.
+                    Fairness-Hinweise und der nächste Schritt richten sich jetzt auf offene
+                    Punkte wie die Steuernummer-Vergabe.
+                  </p>
+                </div>
+              </div>
             )}
           </div>
         );
