@@ -6,6 +6,7 @@
  * Leitet einen strukturierten Planungsentwurf aus dem bestehenden Kita-Lagebild ab.
  * Datenlücken je Planungsraum werden aus dem Meldeeingang abgeleitet (US-KJ-004→007):
  * z. B. Südost / Kita Sonnenwinkel überfällig, bis Session-Freigabe in /kita/meldung.
+ * Steuerungskette: Lagebild (US-KJ-005) → Bedarfsplanung → politische Vorlage (US-KJ-008).
  * Keine automatischen Handlungsempfehlungen (Story-Nicht-Ziel).
  * Kommentar und „Zur Freigabe“ sind session-lokal, ohne Backend.
  */
@@ -312,24 +313,110 @@ export default function BedarfsplanungPage() {
                   <strong style={{ fontSize: '0.875rem' }}>Zur Freigabe vorgemerkt</strong>
                   <p style={{ fontSize: '0.85rem', margin: '0.25rem 0 0' }}>
                     Demo: Keine echte Weiterleitung. In Produktion würde die JA-Leitung den Entwurf bestätigen (US-KJ-008).
+                    Nächster Demo-Schritt: politische Vorlage vorbereiten.
                   </p>
                 </div>
               </div>
               <button type="button" className="btn btn-secondary" onClick={() => setStatus('ENTWURF')}>
                 Entwurf wieder öffnen
               </button>
+              <Link href="/kita/vorlage" className="btn btn-primary">
+                Zur politischen Vorlage
+              </Link>
             </>
           )}
         </div>
       </section>
 
+      {/* Steuerungskette JA: Lagebild → Bedarfsplanung → Vorlage (+ Meldebasis) */}
+      <section aria-labelledby="prozesskette-heading" className="no-print">
+        <h2 id="prozesskette-heading" style={{ marginBottom: '0.5rem' }}>
+          Steuerungskette Jugendamt
+        </h2>
+        <p
+          style={{
+            margin: '0 0 1rem',
+            fontSize: '0.875rem',
+            color: 'var(--color-text-muted)',
+            maxWidth: '44rem',
+          }}
+        >
+          Kommune <strong>{lb.kommuneBezeichnung}</strong>, Lagebild{' '}
+          <span style={{ fontFamily: 'monospace' }}>{lb.version}</span> ({lb.stand}
+          ). Der Planungsentwurf basiert auf freigegebenen Aggregaten des Steuerungslagebilds und der
+          Meldebasis (Einrichtungsmeldungen). Nach fachlicher Freigabe fließen Kennzahlen in die
+          politische Gremienvorlage — ohne automatische Beschlussempfehlung. Keine Kind- oder
+          Personennamen.
+        </p>
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+            gap: '0.75rem',
+          }}
+        >
+          {(
+            [
+              {
+                href: '/kita/lagebild',
+                story: 'US-KJ-005',
+                title: 'Steuerungslagebild',
+                text: 'Versorgungslage, Engpässe und Meldeeingang — Datenbasis dieses Planungsentwurfs.',
+                border: 'var(--color-primary)',
+              },
+              {
+                href: '/kita/meldung',
+                story: 'US-KJ-004',
+                title: 'Monatsmeldung freigeben',
+                text: 'Einrichtungs-Aggregate freigeben; schließt Demo-Meldelücken (z. B. Südost / Sonnenwinkel).',
+                border: 'var(--color-warning)',
+              },
+              {
+                href: '/kita/vorlage',
+                story: 'US-KJ-008',
+                title: 'Politische Vorlage',
+                text: 'Gremienvorlage aus Lagebild und Planungslücken; Freigabe nur aktiv durch JA-Leitung.',
+                border: 'var(--color-primary)',
+              },
+            ] as const
+          ).map(card => (
+            <Link
+              key={card.href}
+              href={card.href}
+              className="card"
+              style={{
+                textDecoration: 'none',
+                color: 'inherit',
+                borderTop: `3px solid ${card.border}`,
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '0.35rem',
+              }}
+            >
+              <span
+                className="badge badge-primary"
+                style={{ alignSelf: 'flex-start', fontSize: '0.68rem' }}
+              >
+                {card.story}
+              </span>
+              <strong style={{ fontSize: '0.95rem', color: 'var(--color-primary)' }}>
+                {card.title}
+              </strong>
+              <span style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', lineHeight: 1.45 }}>
+                {card.text}
+              </span>
+            </Link>
+          ))}
+        </div>
+      </section>
+
       <div style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)' }}>
-        Verwandt:{' '}
-        <Link href="/kita/lagebild" style={{ color: 'var(--color-primary)' }}>Steuerungslagebild</Link>
-        {' · '}
-        <Link href="/kita/meldung" style={{ color: 'var(--color-primary)' }}>Monatsmeldung freigeben</Link>
-        {' · '}
-        <Link href="/kita" style={{ color: 'var(--color-primary)' }}>Öffentlicher Transparenzbericht</Link>
+        Steuerungskette Kommune {lb.kommuneBezeichnung}: Lagebild → Bedarfsplanung → Vorlage
+        (Planungslücken und Meldebasis). Öffentliche Aggregation ohne Einrichtungsdetail im{' '}
+        <Link href="/kita" style={{ color: 'var(--color-primary)' }}>
+          öffentlichen Bericht
+        </Link>{' '}
+        (DEC-004).
       </div>
     </div>
   );

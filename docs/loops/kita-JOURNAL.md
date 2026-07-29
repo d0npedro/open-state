@@ -2,6 +2,29 @@
 
 Branch: `loop/kita` · Worktree: `D:\Projects\open-state-loop-kita`
 
+## Iteration 2026-07-29 – US-KJ-007 Bedarfsplanung Steuerungskette Hub-Karten
+
+### Was
+Bedarfsplanung (US-KJ-007): JA-Steuerungskette als Hub-Karten gespiegelt (analog betriebliche Prozesskette). Karten Steuerungslagebild (US-KJ-005), Monatsmeldung/Meldebasis (US-KJ-004), politische Vorlage (US-KJ-008); nach „Zur Freigabe“ CTA zur Vorlage; Footer mit DEC-004-Hinweis zum öffentlichen Bericht. Nur Aggregate, keine Kind- oder Personennamen. `origin/main` bereits im Branch (kein Merge nötig).
+
+### Dateien
+- `demo/app/kita/bedarfsplanung/page.tsx` (Steuerungskette Hub-Karten + Footer + Freigabe-CTA Vorlage)
+- `docs/loops/kita-JOURNAL.md` (dieses Journal)
+
+### Story
+US-KJ-007 – Bedarfsplanungsentwurf (Steuerungskette Lagebild → Planung → Vorlage)
+
+### Build
+`npm run lint` + `npm run build` im `demo/`-Verzeichnis (siehe Commit dieses Laufs)
+
+### Nicht angefasst (Supervisor / verboten)
+Queue, BUILD_STATE, storyRegistry, DECISION_LOG, andere Domänen, package.json, CI, push
+
+### Nächster sinnvoller Schritt (Hinweis Supervisor)
+Bedarfsplanung-Druckansicht mit Meldebasis-Hinweis spiegeln, oder Vorlage/Lagebild Rücklink-Hub zur Bedarfsplanung.
+
+---
+
 ## Iteration 2026-07-29 – US-KJ-008 Vorlage-Druck freigabeunabhängig + Meldelücke-Filter
 
 ### Was
