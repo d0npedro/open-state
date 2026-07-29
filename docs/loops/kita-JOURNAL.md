@@ -2,6 +2,29 @@
 
 Branch: `loop/kita` · Worktree: `D:\Projects\open-state-loop-kita`
 
+## Iteration 2026-07-29 – US-KJ-004 Meldung Prozesskette Hub-Karten
+
+### Was
+Meldung-Seite (US-KJ-004): betriebliche Vorprozesse als Hub-Karten gespiegelt (analog Tagesstand/Einrichtung). Karten Tagesstand (US-KJ-001), Belegungsstand (US-KJ-002), Monatsbericht (US-KJ-003) für denselben Demo-Standort Kita Sonnenwinkel; Footer mit Prozesskette und DEC-004-Hinweis zu Steuerungslagebild (Meldeeingang) und öffentlichem Bericht. Nur Aggregate, keine Kind- oder Personennamen. `origin/main` bereits auf dem Branch (Merge-Commit vorhanden).
+
+### Dateien
+- `demo/app/kita/meldung/page.tsx` (Prozesskette Hub-Karten + Footer)
+- `docs/loops/kita-JOURNAL.md` (dieses Journal)
+
+### Story
+US-KJ-004 – Meldung prüfen und freigeben (Prozesskette zur Einrichtungs-Hub-Kette)
+
+### Build
+`npm run lint` + `npm run build` im `demo/`-Verzeichnis (siehe Commit dieses Laufs)
+
+### Nicht angefasst (Supervisor / verboten)
+Queue, BUILD_STATE, storyRegistry, DECISION_LOG, andere Domänen, package.json, CI, push
+
+### Nächster sinnvoller Schritt (Hinweis Supervisor)
+Vorlage-Druck freigabeunabhängig mit dokumentiertem Engpass-Meldelücke-Filter spiegeln, oder Bedarfsplanung Prozesskette/Hub zu Lagebild und Vorlage.
+
+---
+
 ## Iteration 2026-07-29 – US-KJ-001 Tagesstand Prozesskette Hub-Karten
 
 ### Was
