@@ -3,7 +3,12 @@
 import Link from 'next/link';
 import { useGruendungState } from '@/context/GruendungStateContext';
 import { Icon } from '@/components/Icon';
-import type { BehördeStatus, SchrittStatus } from '@/types/gruendung';
+import type {
+  BehördeStatus,
+  GruendungsRueckfrage,
+  SchrittStatus,
+  VerfahrensSchritt,
+} from '@/types/gruendung';
 import type { IconName } from '@/components/Icon';
 
 const behördeChip: Record<BehördeStatus, { label: string; css: string; icon: IconName }> = {
@@ -27,6 +32,24 @@ const schrittColor: Record<SchrittStatus, string> = {
   ABGESCHLOSSEN:  'var(--color-success)',
   BLOCKIERT:      'var(--color-danger)',
 };
+
+/**
+ * Offene Rückfrage, die zu einem Verfahrensschritt gehört (z. B. VS-04).
+ * Nur solange die Rückfrage unbeantwortet und der Schritt nicht erledigt ist.
+ */
+function rueckfrageFuerSchritt(
+  schritt: VerfahrensSchritt,
+  rueckfragen: GruendungsRueckfrage[]
+): GruendungsRueckfrage | null {
+  if (schritt.status === 'ABGESCHLOSSEN') return null;
+  const name = schritt.bezeichnung.toLowerCase();
+  if (!name.includes('rückfrage') && !name.includes('rueckfrage')) return null;
+  return (
+    rueckfragen.find(
+      r => r.anforderndeBehördeId === schritt.behördeId && !r.beantwortet
+    ) ?? null
+  );
+}
 
 export default function BehoerdenPage() {
   const { akte } = useGruendungState();
@@ -146,14 +169,21 @@ export default function BehoerdenPage() {
                   Verfahrensschritte
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                  {schritte.map(schritt => (
-                    <div key={schritt.id} style={{
+                  {schritte.map(schritt => {
+                    const schrittRq = rueckfrageFuerSchritt(schritt, akte.rueckfragen);
+                    return (
+                    <div
+                      key={schritt.id}
+                      id={`vs-${schritt.id}`}
+                      data-testid={`behoerde-schritt-${schritt.id}`}
+                      style={{
                       display: 'flex', gap: '0.875rem', padding: '0.75rem',
                       background: schritt.status === 'ABGESCHLOSSEN' ? 'var(--color-success-light, #f0fff4)'
                         : schritt.status === 'IN_BEARBEITUNG' ? 'var(--color-primary-light)'
                         : 'var(--color-neutral-light)',
                       borderRadius: 'var(--radius)',
                       borderLeft: `3px solid ${schrittColor[schritt.status]}`,
+                      scrollMarginTop: '5rem',
                     }}>
                       <div style={{ color: schrittColor[schritt.status], flexShrink: 0, marginTop: '2px' }}>
                         <Icon name={schrittIcon[schritt.status]} size={16} />
@@ -176,9 +206,30 @@ export default function BehoerdenPage() {
                             Erledigt am {schritt.erledigtAm}{schritt.ergebnis && ` · ${schritt.ergebnis}`}
                           </p>
                         )}
+                        {schrittRq && (
+                          <div style={{ marginTop: '0.625rem' }}>
+                            <Link
+                              href={`/gruendung/rueckfragen#rq-${schrittRq.id}`}
+                              className="btn btn-primary"
+                              style={{
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: '0.35rem',
+                                fontSize: '0.85rem',
+                                padding: '0.4rem 0.75rem',
+                              }}
+                              data-testid={`behoerde-schritt-rq-link-${schritt.id}`}
+                              aria-label={`Zur offenen Rückfrage: ${schritt.bezeichnung}`}
+                            >
+                              <Icon name="chat" size={14} />
+                              Zur Rückfrage
+                            </Link>
+                          </div>
+                        )}
                       </div>
                     </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
             )}

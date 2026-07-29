@@ -8,6 +8,32 @@ Erlaubte Pfade nur: `demo/app/gruendung/**`, `demo/context/GruendungStateContext
 
 ---
 
+## 2026-07-29 – Iteration 16: Behörden VS-04 → Link zur Rückfrage
+
+### Was
+Behörden-Seite: Verfahrensschritte, die eine offene Rückfrage betreffen
+(z. B. VS-04 „Rückfrage Finanzamt: Kleinunternehmerregelung“), erhalten
+einen CTA „Zur Rückfrage“ mit Ziel `/gruendung/rueckfragen#rq-…`.
+CTA nur solange die Rückfrage unbeantwortet und der Schritt nicht erledigt
+ist. Nach Beantworten entfallen Schritt-Link und Behörden-CTA.
+E2E: Linkziel, Navigation, Abwesenheit bei anderen Schritten, Session-Reaktion.
+
+### Dateien
+- `demo/app/gruendung/behoerden/page.tsx` – `rueckfrageFuerSchritt`, Schritt-CTA
+- `demo/e2e/us-ug-gruendung.spec.ts` – vier VS-04-/Session-Tests
+- `docs/loops/ug-JOURNAL.md` – dieses Journal
+
+### Build
+`npm run lint` + `npm run build` im Ordner `demo/` grün.
+`npm run test:e2e:ug` Exit 0 (100 passed).
+
+### Nächster sinnvoller UG-Schritt (Vorschlag)
+- Hinweise: nach Session-Wechsel CTA-Verschwinden für parallele Behörden (optional)
+- Übersicht: Fairness-CTA für Steuernummer/Betriebsdatum (optional)
+- Behörden: VS-04 Status nach Beantwortung auf ABGESCHLOSSEN setzen (optional)
+
+---
+
 ## 2026-07-29 – Iteration 15: Übersicht Fairness-Einträge mit Kurz-CTA
 
 ### Was
