@@ -3,11 +3,20 @@
 /**
  * Interaktive Planungsraum-Ansicht für den öffentlichen Transparenzbericht.
  * Filter zeigt einen Raum oder alle; Maßnahmen folgen dem Filter.
- * Keine Fachlogik-Änderung — reine Darstellung (Q-074).
+ * Residuale Planungslücke (Demo-Näherung wie US-KJ-007) wird methodisch an
+ * Meldelücken aus dem Meldeeingang gekoppelt — Hinweis only, keine Interpolation.
+ * Keine Kind- oder Personennamen (Q-074 / US-KJ-009 ↔ US-KJ-007).
  */
 
 import { useMemo, useState } from 'react';
+import Link from 'next/link';
 import type { Kapazitaetsmassnahme, PlanungsraumKennzahlen } from '@/types/kita';
+import {
+  MeldebasisBadge,
+  ResidualMeldeHinweis,
+  ResidualMeldeSummenHinweis,
+  useMeldeeingangFuerBedarfsplanung,
+} from '@/components/kita/KitaBedarfsplanungDatenbasis';
 
 function auslastungBadge(pct: number): { color: string; label: string } {
   if (pct >= 98) return { color: 'var(--color-danger)', label: 'Kritisch' };
@@ -24,6 +33,19 @@ function versorgungsquoteBadge(pct: number, altersgruppe: 'U3' | 'Ü3'): { color
   if (pct < 75) return { color: 'var(--color-danger)' };
   if (pct < 85) return { color: 'var(--color-warning)' };
   return { color: 'var(--color-success)' };
+}
+
+/** Residuale Planungslücke — gleiche Demo-Näherung wie Bedarfsplanung (US-KJ-007). */
+function planungslueckeResidual(
+  pr: PlanungsraumKennzahlen,
+  massnahmen: Kapazitaetsmassnahme[]
+): number {
+  const geplant = massnahmen
+    .filter(m => m.planungsraumId === pr.id)
+    .reduce((s, m) => s + m.erwarteteNeuePlaetze, 0);
+  const bedarf = pr.wartelisteBestand;
+  const angebotHeute = pr.freiePlaetzeU3 + pr.freiePlaetzeUe3;
+  return Math.max(0, bedarf - angebotHeute - geplant);
 }
 
 const statusColor: Record<string, string> = {
@@ -54,6 +76,15 @@ interface Props {
 
 export function KitaPlanungsraumExplorer({ planungsraeume, massnahmen, csvSlot }: Props) {
   const [selectedId, setSelectedId] = useState<string | 'ALL'>('ALL');
+  const { basen, byRaumId } = useMeldeeingangFuerBedarfsplanung();
+
+  const residualByRaumId = useMemo(() => {
+    const m = new Map<string, number>();
+    for (const pr of planungsraeume) {
+      m.set(pr.id, planungslueckeResidual(pr, massnahmen));
+    }
+    return m;
+  }, [planungsraeume, massnahmen]);
 
   const filteredRaeume = useMemo(
     () =>
@@ -73,6 +104,11 @@ export function KitaPlanungsraumExplorer({ planungsraeume, massnahmen, csvSlot }
 
   const selectedRaum =
     selectedId === 'ALL' ? null : planungsraeume.find(pr => pr.id === selectedId) ?? null;
+
+  const selectedResidual = selectedRaum
+    ? residualByRaumId.get(selectedRaum.id) ?? 0
+    : 0;
+  const selectedMeldebasis = selectedRaum ? byRaumId.get(selectedRaum.id) : undefined;
 
   const neuePlaetze = filteredMassnahmen.reduce((s, m) => s + m.erwarteteNeuePlaetze, 0);
   const imBau = filteredMassnahmen
@@ -212,9 +248,59 @@ export function KitaPlanungsraumExplorer({ planungsraeume, massnahmen, csvSlot }
                   {selectedRaum.inklusionsplaetzeBelegt} / {selectedRaum.inklusionsplaetzeGenehmigt}
                 </strong>
               </div>
+              <div>
+                <div style={{ color: 'var(--color-text-muted)', fontSize: '0.75rem' }}>Residuale Planungslücke</div>
+                <strong
+                  style={{
+                    color:
+                      selectedResidual > 40
+                        ? 'var(--color-danger)'
+                        : selectedResidual > 0
+                          ? 'var(--color-warning)'
+                          : 'var(--color-success)',
+                  }}
+                >
+                  {selectedResidual}
+                </strong>
+                <div style={{ fontSize: '0.7rem', color: 'var(--color-text-muted)', marginTop: '0.15rem' }}>
+                  Warteliste − frei − geplant
+                </div>
+              </div>
+              <div>
+                <div style={{ color: 'var(--color-text-muted)', fontSize: '0.75rem' }}>Meldebasis</div>
+                <MeldebasisBadge basis={selectedMeldebasis} />
+              </div>
             </div>
+            {selectedResidual > 0 && selectedMeldebasis?.hatDatenluecke && (
+              <div
+                style={{
+                  marginTop: '0.875rem',
+                  padding: '0.65rem 0.85rem',
+                  background: 'var(--color-warning-light, #fff8e8)',
+                  borderRadius: 'var(--radius)',
+                  borderLeft: '3px solid var(--color-warning)',
+                }}
+                role="note"
+              >
+                <ResidualMeldeHinweis
+                  basis={selectedMeldebasis}
+                  residual={selectedResidual}
+                />
+                <p style={{ margin: '0.4rem 0 0', fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>
+                  Gespiegelt aus Bedarfsplanung ·{' '}
+                  <Link href="/kita/bedarfsplanung" style={{ color: 'var(--color-primary)' }}>
+                    Bedarfsplanungsentwurf
+                  </Link>
+                  {' · '}
+                  <Link href="/kita/meldung" style={{ color: 'var(--color-primary)' }}>
+                    Monatsmeldung freigeben
+                  </Link>
+                </p>
+              </div>
+            )}
             <p style={{ margin: '0.875rem 0 0', fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>
-              Keine personen- oder einrichtungsbezogenen Daten. Aggregation auf Planungsraumebene (DEC-004).
+              Keine personenbezogenen Kinddaten. Aggregation auf Planungsraumebene (DEC-004).
+              Residuale Lücke und Meldebasis sind methodische Hinweise, keine automatische Handlungsempfehlung.
             </p>
           </div>
         )}
@@ -223,7 +309,7 @@ export function KitaPlanungsraumExplorer({ planungsraeume, massnahmen, csvSlot }
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.875rem' }}>
             <thead>
               <tr style={{ background: 'var(--color-neutral-light)', borderBottom: '2px solid var(--color-border)' }}>
-                {['Planungsraum', 'Frei U3', 'Frei Ü3', 'Auslastung', 'Versorgung U3', 'Versorgung Ü3', 'Warteliste', 'Personal-Ausfall'].map(h => (
+                {['Planungsraum', 'Frei U3', 'Frei Ü3', 'Auslastung', 'Versorgung U3', 'Versorgung Ü3', 'Warteliste', 'Planungslücke', 'Meldebasis', 'Personal-Ausfall'].map(h => (
                   <th key={h} style={{ padding: '0.75rem', textAlign: 'left', fontWeight: 600, whiteSpace: 'nowrap' }}>{h}</th>
                 ))}
               </tr>
@@ -233,6 +319,8 @@ export function KitaPlanungsraumExplorer({ planungsraeume, massnahmen, csvSlot }
                 const ausLast = auslastungBadge(pr.auslastungsgradProzent);
                 const vqU3 = versorgungsquoteBadge(pr.versorgungsquote.u3, 'U3');
                 const vqUe3 = versorgungsquoteBadge(pr.versorgungsquote.ue3, 'Ü3');
+                const residual = residualByRaumId.get(pr.id) ?? 0;
+                const meldebasis = byRaumId.get(pr.id);
                 const rowActive = selectedId === pr.id;
                 return (
                   <tr
@@ -277,6 +365,29 @@ export function KitaPlanungsraumExplorer({ planungsraeume, massnahmen, csvSlot }
                         (Druck: {pr.wartelisteDruckFaktor.toFixed(1)}x)
                       </span>
                     </td>
+                    <td style={{ padding: '0.75rem' }}>
+                      <span
+                        style={{
+                          fontWeight: 700,
+                          color:
+                            residual > 40
+                              ? 'var(--color-danger)'
+                              : residual > 0
+                                ? 'var(--color-warning)'
+                                : 'var(--color-text)',
+                        }}
+                      >
+                        {residual}
+                      </span>
+                      <ResidualMeldeHinweis
+                        basis={meldebasis}
+                        residual={residual}
+                        compact
+                      />
+                    </td>
+                    <td style={{ padding: '0.75rem' }}>
+                      <MeldebasisBadge basis={meldebasis} />
+                    </td>
                     <td style={{ padding: '0.75rem', color: pr.personalAusfallquoteProzent > 10 ? 'var(--color-danger)' : pr.personalAusfallquoteProzent > 8 ? 'var(--color-warning)' : 'var(--color-text)' }}>
                       {pr.personalAusfallquoteProzent.toFixed(1)} %
                     </td>
@@ -287,11 +398,20 @@ export function KitaPlanungsraumExplorer({ planungsraeume, massnahmen, csvSlot }
           </table>
         </div>
 
+        <div style={{ marginTop: '0.75rem' }}>
+          <ResidualMeldeSummenHinweis
+            basen={basen}
+            residualByRaumId={residualByRaumId}
+            highlightRaumId="PR-03"
+          />
+        </div>
+
         <div style={{ marginTop: '0.75rem', fontSize: '0.75rem', color: 'var(--color-text-muted)', display: 'flex', gap: '1.25rem', flexWrap: 'wrap' }}>
           <span><span style={{ color: 'var(--color-danger)', fontWeight: 600 }}>■</span> Kritisch</span>
           <span><span style={{ color: 'var(--color-warning)', fontWeight: 600 }}>■</span> Erhöht</span>
           <span><span style={{ color: 'var(--color-success)', fontWeight: 600 }}>■</span> Normal</span>
           <span>Druck-Faktor: Wartelistenanfragen / freie Plätze. Wert &gt; 1 = Engpass</span>
+          <span>Planungslücke = Warteliste − freie Plätze − geplante Kapazität (Demo-Näherung)</span>
           <span>Zeile anklicken filtert auf den Planungsraum</span>
         </div>
       </section>

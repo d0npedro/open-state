@@ -2,6 +2,30 @@
 
 Branch: `loop/kita` · Worktree: `D:\Projects\open-state-loop-kita`
 
+## Iteration 2026-07-29 – US-KJ-009/007 Planungsraum-Explorer Residual ↔ Meldelücke
+
+### Was
+Planungsraum-Explorer im öffentlichen Transparenzbericht spiegelt die residuale Planungslücke (Demo-Näherung wie Bedarfsplanung) und koppelt sie methodisch an Meldelücken aus dem Meldeeingang: Spalten „Planungslücke“ und „Meldebasis“, Detailkarte mit Residual + Meldebasis + Hinweisbox, Summenhinweis (Fokus Südost / PR-03). Hinweis-only, keine Interpolation; nach Session-Freigabe entfällt der Melde-Hinweis. Datenlage-Text auf `/kita` angepasst. Nur Aggregate, keine Kind- oder Personennamen.
+
+### Dateien
+- `demo/components/kita/KitaPlanungsraumExplorer.tsx` (Residual, Meldebasis, ResidualMeldeHinweis/-Summen)
+- `demo/app/kita/page.tsx` (Hinweis Datenlage Meldelücke/Residual)
+- `docs/loops/kita-JOURNAL.md` (dieses Journal)
+
+### Story
+US-KJ-009 / US-KJ-007 – Transparenzbericht Planungsraum-Explorer (Residual methodisch an Meldelücke)
+
+### Build
+`npm run lint` + `npm run build` im `demo/`-Verzeichnis (siehe Commit dieses Laufs)
+
+### Nicht angefasst (Supervisor / verboten)
+Queue, BUILD_STATE, storyRegistry, andere Domänen, package.json, CI, push
+
+### Nächster sinnvoller Schritt (Hinweis Supervisor)
+Vorlage-Seite (`/kita/vorlage`) Residual↔Melde-Hinweis spiegeln, oder Filter-Chip „Engpass“ um Meldelücke ergänzen.
+
+---
+
 ## Iteration 2026-07-29 – US-KJ-003 Monatsbericht ↔ Lagebild-Vorschau (Rücklink)
 
 ### Was
