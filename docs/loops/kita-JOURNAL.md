@@ -2,6 +2,29 @@
 
 Branch: `loop/kita` · Worktree: `D:\Projects\open-state-loop-kita`
 
+## Iteration 2026-07-29 – US-KJ-008 Vorlage CSV Aggregate Status/Meldebasis freigabeunabhängig
+
+### Was
+Politische Vorlage (`/kita/vorlage`, US-KJ-008): CSV-Export freigabeunabhängig analog Bedarfsplanung/Tagesstand. Metakopf: Status (Entwurf / Zur Freigabe / Freigegeben / Zurückgegeben), Freigabe-Nachweis bzw. Zurückgabe-Hinweis, Datenstand Lagebild, Meldebasis-Session (Lücken je Planungsraum), Engpass-Filter (Top-N / Meldelücke), Summen Residual/geplant, Versorgung Gesamt, Sachdarstellung-Auszug, DEC-004. Blätter: 1 Versorgung, 2 Planungsräume, 3 Engpass-Liste (Filterstand), 4 Meldebasis-Stichprobe Session-sensitiv. Dateiname mit Status-Suffix und optional `-meldeluecke`. Export-Karte Druck+CSV; Methodik/Footer. Nur Aggregate, keine Kind- oder Personennamen. Fast-forward `origin/main` vor dem Feature.
+
+### Dateien
+- `demo/app/kita/vorlage/page.tsx` (downloadCsv, Export-Karte, Methodik/Footer)
+- `docs/loops/kita-JOURNAL.md` (dieses Journal)
+
+### Story
+US-KJ-008 – Politische Vorlage vorbereiten und freigeben (CSV Aggregate-Export, freigabeunabhängig, Status/Meldebasis)
+
+### Build
+`npm run lint` + `npm run build` im `demo/`-Verzeichnis (siehe Commit dieses Laufs)
+
+### Nicht angefasst (Supervisor / verboten)
+Queue, BUILD_STATE, storyRegistry, DECISION_LOG, andere Domänen, package.json, CI, push
+
+### Nächster sinnvoller Schritt (Hinweis Supervisor)
+Lagebild Steuerungs-CSV Status/Meldelücke-Spiegel (US-KJ-005), oder öffentliche Kita-Hub CSV falls Lücken.
+
+---
+
 ## Iteration 2026-07-29 – US-KJ-007 Bedarfsplanung CSV Aggregate freigabeunabhängig
 
 ### Was

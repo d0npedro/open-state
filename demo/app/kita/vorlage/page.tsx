@@ -8,8 +8,9 @@
  * (Hinweis only, wie Bedarfsplanung / Transparenzbericht).
  * Engpass-Liste: Schnellfilter „Meldelücke“ (Session-sensitiv, wie Planungsraum-Explorer).
  * Freigabe nur aktiv durch JA-Leitung (simuliert). Keine automatischen Beschlüsse.
- * Export: Druck freigabeunabhängig (Browser-Druck → PDF); bei aktivem Meldelücke-Filter
- * print-only-Hinweis (Spiegel Lagebild US-KJ-005/006). Status Entwurf/Freigabe im Ausdruck.
+ * Export: Druck und CSV freigabeunabhängig (Browser-Druck → PDF; CSV Aggregate mit
+ * Status/Meldebasis-Metakopf, Spiegel Bedarfsplanung US-KJ-007). Bei aktivem Meldelücke-Filter
+ * print-only-Hinweis und CSV-Metakopf (Spiegel Lagebild US-KJ-005/006). Status im Export.
  */
 
 import { useMemo, useState } from 'react';
@@ -20,12 +21,24 @@ import {
   ResidualMeldeHinweis,
   ResidualMeldeSummenHinweis,
   useMeldeeingangFuerBedarfsplanung,
+  type PlanungsraumMeldebasis,
 } from '@/components/kita/KitaBedarfsplanungDatenbasis';
 
 type VorlageStatus = 'ENTWURF' | 'ZUR_FREIGABE' | 'FREIGEGEBEN' | 'ZURUECKGEGEBEN';
 
 /** Schnellfilter für Engpass-Liste (Spiegel zu Planungsraum-Explorer US-KJ-009). */
 type EngpassSchnellfilter = 'ALL' | 'MELDELUECKE';
+
+type VorlageRaumZeile = {
+  id: string;
+  name: string;
+  vqU3: number;
+  vqUe3: number;
+  warteliste: number;
+  druck: number;
+  geplant: number;
+  residual: number;
+};
 
 const VORLAGE_ID = 'JHA-2025-KITA-01';
 const GREMIUM = 'Jugendhilfeausschuss Musterstadt';
@@ -41,10 +54,323 @@ function planungslueckeResidual(
   return Math.max(0, warteliste - freie - geplant);
 }
 
+/** Dezimal für CSV: Komma als Trennzeichen (de-DE, Spiegel Bedarfsplanung/Monatsbericht). */
+function csvNum(n: number, decimals = 0): string {
+  return n.toFixed(decimals).replace('.', ',');
+}
+
+function csvSafe(s: string): string {
+  return s.replace(/;/g, ',').replace(/\r?\n/g, ' ');
+}
+
+function meldebasisLabel(basis: PlanungsraumMeldebasis | undefined): string {
+  if (!basis) return 'k. A. (keine Stichprobe)';
+  if (!basis.hatDatenluecke) return 'vollständig';
+  const schwere =
+    basis.schwere === 'UEBERFAELLIG'
+      ? 'überfällig'
+      : basis.schwere === 'AUSSTEHEND'
+        ? 'ausstehend'
+        : basis.schwere;
+  return `Lücke ${basis.freigegeben}/${basis.erwartet} (${schwere})`;
+}
+
+function statusFilenameSuffix(status: VorlageStatus): string {
+  switch (status) {
+    case 'ZUR_FREIGABE':
+      return '-zur-freigabe';
+    case 'FREIGEGEBEN':
+      return '-freigegeben';
+    case 'ZURUECKGEGEBEN':
+      return '-zurueckgegeben';
+    default:
+      return '-entwurf';
+  }
+}
+
+/**
+ * CSV Aggregate-Export freigabeunabhängig (US-KJ-008).
+ * Metakopf: Status (Entwurf / Zur Freigabe / Freigegeben / Zurückgegeben),
+ * Meldebasis-Session, Engpass-Filter, Summen Residual/geplant – Spiegel Druckansicht
+ * und Bedarfsplanung. Nur Aggregate, keine Kind- oder Personennamen (DEC-004).
+ */
+function downloadCsv(args: {
+  raumZeilen: VorlageRaumZeile[];
+  engpass: VorlageRaumZeile[];
+  engpassFilter: EngpassSchnellfilter;
+  byRaumId: Map<string, PlanungsraumMeldebasis>;
+  basen: PlanungsraumMeldebasis[];
+  status: VorlageStatus;
+  statusLabel: string;
+  titel: string;
+  sachtext: string;
+  summeResidual: number;
+  summeGeplant: number;
+  meldeMonatsLabel: string;
+  sessionFreigabeId: string | null;
+  hydrated: boolean;
+  freigabeStamp: { am: string; rolle: string } | null;
+  freigabeHinweis: string;
+  meldelueckeCount: number;
+}) {
+  const {
+    raumZeilen,
+    engpass,
+    engpassFilter,
+    byRaumId,
+    basen,
+    status,
+    statusLabel,
+    titel,
+    sachtext,
+    summeResidual,
+    summeGeplant,
+    meldeMonatsLabel,
+    sessionFreigabeId,
+    hydrated,
+    freigabeStamp,
+    freigabeHinweis,
+    meldelueckeCount,
+  } = args;
+
+  const lb = demoKitaLagebild;
+  const g = lb.gesamt;
+  const meldeLuecken = basen.filter(b => b.hatDatenluecke);
+  const meldeVoll = basen.filter(b => !b.hatDatenluecke).length;
+  const meldeStichprobe = basen.length;
+
+  const meldebasisMeta = !hydrated
+    ? 'Meldebasis: Session noch nicht geladen (clientseitig)'
+    : meldeLuecken.length === 0
+      ? `Meldebasis Stichprobe ${meldeMonatsLabel}: vollständig freigegeben (${meldeVoll}/${meldeStichprobe} Planungsräume mit Einträgen)`
+      : `Meldebasis Stichprobe ${meldeMonatsLabel}: Lücken in ${meldeLuecken
+          .map(b => {
+            const residual = raumZeilen.find(z => z.id === b.planungsraumId)?.residual ?? 0;
+            const schwere =
+              b.schwere === 'UEBERFAELLIG'
+                ? 'überfällig'
+                : b.schwere === 'AUSSTEHEND'
+                  ? 'ausstehend'
+                  : b.schwere;
+            return `${b.planungsraumBezeichnung} (${b.freigegeben}/${b.erwartet}, ${schwere}${
+              residual > 0 ? `, Residual ${residual}` : ''
+            })`;
+          })
+          .join('; ')}`;
+
+  const sessionMeta = sessionFreigabeId
+    ? `Session-Meldefreigabe: ${sessionFreigabeId} (aus /kita/meldung, Demo)`
+    : 'Session-Meldefreigabe: keine (Demo-Ausgangsstand Meldeeingang)';
+
+  const freigabeMeta =
+    status === 'FREIGEGEBEN' && freigabeStamp
+      ? `JA-Freigabe: ${freigabeStamp.rolle} · ${freigabeStamp.am} · Nachweis ${VORLAGE_ID}`
+      : status === 'ZURUECKGEGEBEN' && freigabeHinweis.trim()
+        ? `Zurückgabe-Hinweis: ${csvSafe(freigabeHinweis.trim())}`
+        : 'JA-Freigabe: nicht freigegeben (Export freigabeunabhängig)';
+
+  const engpassFilterMeta =
+    engpassFilter === 'MELDELUECKE'
+      ? `Engpass-Filter: Meldelücke aktiv (${engpass.length} von ${meldelueckeCount} Räumen mit Lücke, sortiert nach Wartelistendruck)`
+      : `Engpass-Filter: Standard Top ${ENGPASS_TOP_N} nach Wartelistendruck (Meldelücken in Stichprobe: ${meldelueckeCount})`;
+
+  const sachtextMeta = sachtext.trim()
+    ? csvSafe(sachtext.trim().slice(0, 400)) + (sachtext.trim().length > 400 ? '…' : '')
+    : '(keine Sachdarstellung)';
+
+  const meta = [
+    `# Politische Vorlage ${csvSafe(lb.kommuneBezeichnung)} · ${VORLAGE_ID}`,
+    `# Titel: ${csvSafe(titel)}`,
+    `# Gremium: ${csvSafe(GREMIUM)} | ${csvSafe(SITZUNG)}`,
+    `# Status: ${statusLabel} (${status}) | freigabeunabhängig exportierbar`,
+    `# ${csvSafe(freigabeMeta)}`,
+    `# Datenstand Lagebild: ${lb.stand} | Lagebild-Version: ${lb.version} | Freigabe Lagebild: ${csvSafe(lb.freigegebenVon)}, ${lb.freigegebenAm}`,
+    `# ${csvSafe(meldebasisMeta)}`,
+    `# ${csvSafe(sessionMeta)}`,
+    `# ${csvSafe(engpassFilterMeta)}`,
+    `# Summen: geplante neue Plätze ${summeGeplant} · residuale Planungslücken ${summeResidual} · Planungsräume ${raumZeilen.length}`,
+    `# Versorgung Gesamt: real nutzbar ${g.realNutzbarePlaetze} · belegt ${g.belegtePlaetze} · frei ${g.freiePlaetze} · Auslastung ${csvNum(g.auslastungsgradProzent, 1)} % · Warteliste ${g.wartelisteBestand}`,
+    `# Methodik Planungslücke: max(0, Warteliste − freie Plätze − geplante neue Plätze) · keine Interpolation fehlender Meldungen`,
+    `# Sachdarstellung (Auszug): ${sachtextMeta}`,
+    `# Steuerungskette: Lagebild (US-KJ-005) → Bedarfsplanung (US-KJ-007) → Vorlage (US-KJ-008) · Meldebasis US-KJ-004`,
+    `# Session-Stand, kein Backend · kein Gremienbeschluss · keine automatischen Handlungsempfehlungen`,
+    `# Keine personenbezogenen Daten · Keine Kind- oder Personennamen · Keine Einrichtungs-PII (DEC-004)`,
+    `# Trennzeichen: Semikolon · Dezimaltrennzeichen: Komma · Encoding: UTF-8 BOM`,
+  ];
+
+  const versorgungHeader = ['Kennzahl', 'Wert', 'Einheit'].join(';');
+  const versorgungRows = [
+    ['Real nutzbare Plätze', g.realNutzbarePlaetze, 'Plätze'],
+    ['Belegt', g.belegtePlaetze, 'Plätze'],
+    ['Frei', g.freiePlaetze, 'Plätze'],
+    ['Auslastung', csvNum(g.auslastungsgradProzent, 1), 'Prozent'],
+    ['Warteliste', g.wartelisteBestand, 'Plätze'],
+    ['Versorgung U3', csvNum(g.versorgungsquote.u3, 1), 'Prozent'],
+    ['Versorgung Ue3', csvNum(g.versorgungsquote.ue3, 1), 'Prozent'],
+  ].map(r => r.join(';'));
+
+  const raumHeader = [
+    'Planungsraum',
+    'Planungsraum-ID',
+    'Meldebasis',
+    'Meldebasis_Schluessel',
+    'Freigegeben',
+    'Erwartet',
+    'Versorgung_U3_Prozent',
+    'Versorgung_Ue3_Prozent',
+    'Warteliste',
+    'Druckfaktor',
+    'Geplant_plus',
+    'Planungsluecke_Residual',
+  ].join(';');
+
+  const raumRows = raumZeilen.map(r => {
+    const basis = byRaumId.get(r.id);
+    const meldeSchluessel = !basis
+      ? 'KEINE_STICHPROBE'
+      : basis.hatDatenluecke
+        ? basis.schwere
+        : 'OK';
+    return [
+      csvSafe(r.name),
+      r.id,
+      csvSafe(meldebasisLabel(basis)),
+      meldeSchluessel,
+      basis?.freigegeben ?? '',
+      basis?.erwartet ?? '',
+      csvNum(r.vqU3, 1),
+      csvNum(r.vqUe3, 1),
+      r.warteliste,
+      csvNum(r.druck, 1),
+      r.geplant,
+      r.residual,
+    ].join(';');
+  });
+
+  const raumSumme = [
+    'SUMME (Kommune)',
+    '',
+    '',
+    '',
+    '',
+    '',
+    '',
+    '',
+    raumZeilen.reduce((s, r) => s + r.warteliste, 0),
+    '',
+    summeGeplant,
+    summeResidual,
+  ].join(';');
+
+  const engpassHeader = [
+    'Rang',
+    'Planungsraum',
+    'Planungsraum-ID',
+    'Meldebasis',
+    'Meldebasis_Schluessel',
+    'Druckfaktor',
+    'Warteliste',
+    'Geplant_plus',
+    'Planungsluecke_Residual',
+    'Filter',
+  ].join(';');
+
+  const engpassRows = engpass.map((r, i) => {
+    const basis = byRaumId.get(r.id);
+    const meldeSchluessel = !basis
+      ? 'KEINE_STICHPROBE'
+      : basis.hatDatenluecke
+        ? basis.schwere
+        : 'OK';
+    return [
+      i + 1,
+      csvSafe(r.name),
+      r.id,
+      csvSafe(meldebasisLabel(basis)),
+      meldeSchluessel,
+      csvNum(r.druck, 1),
+      r.warteliste,
+      r.geplant,
+      r.residual,
+      engpassFilter === 'MELDELUECKE' ? 'MELDELUECKE' : `TOP_${ENGPASS_TOP_N}`,
+    ].join(';');
+  });
+
+  const parts: string[] = [
+    ...meta,
+    '',
+    '# Blatt 1: Versorgungslage Gesamtkommune (Aggregate)',
+    versorgungHeader,
+    ...versorgungRows,
+    '',
+    '# Blatt 2: Planungsräume und Planungslücke (Aggregate)',
+    raumHeader,
+    ...raumRows,
+    raumSumme,
+    '',
+    `# Blatt 3: Engpass-Liste (${
+      engpassFilter === 'MELDELUECKE'
+        ? 'Filter Meldelücke'
+        : `Top ${ENGPASS_TOP_N} Wartelistendruck`
+    })`,
+    engpassHeader,
+    ...(engpassRows.length > 0
+      ? engpassRows
+      : ['# (keine Engpass-Räume im aktuellen Filter)']),
+  ];
+
+  if (basen.length > 0) {
+    const meldeHeader = [
+      'Planungsraum',
+      'Planungsraum-ID',
+      'Freigegeben',
+      'Erwartet',
+      'Hat_Datenluecke',
+      'Schwere',
+      'Luecken_Einrichtungen',
+    ].join(';');
+    const meldeRows = basen.map(b => {
+      const lueckenNamen = b.luecken
+        .map(e => `${e.einrichtungBezeichnung} (${e.status})`)
+        .join(' | ');
+      return [
+        csvSafe(b.planungsraumBezeichnung),
+        b.planungsraumId,
+        b.freigegeben,
+        b.erwartet,
+        b.hatDatenluecke ? 'ja' : 'nein',
+        b.schwere,
+        csvSafe(lueckenNamen),
+      ].join(';');
+    });
+    parts.push(
+      '',
+      '# Blatt 4: Meldebasis je Planungsraum (Demo-Stichprobe Meldeeingang, Session-sensitiv)',
+      meldeHeader,
+      ...meldeRows
+    );
+  }
+
+  const csv = parts.join('\n');
+  const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  const filterSuffix = engpassFilter === 'MELDELUECKE' ? '-meldeluecke' : '';
+  const kommuneSlug = lb.kommuneBezeichnung
+    .toLowerCase()
+    .replace(/[^a-z0-9äöüß]+/gi, '-')
+    .replace(/^-|-$/g, '');
+  a.download = `vorlage-${VORLAGE_ID.toLowerCase()}-${kommuneSlug || 'kommune'}-${lb.stand}${statusFilenameSuffix(status)}${filterSuffix}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
 export default function PolitischeVorlagePage() {
   const lb = demoKitaLagebild;
   const g = lb.gesamt;
-  const { basen, byRaumId } = useMeldeeingangFuerBedarfsplanung();
+  const { base: meldeBase, session, hydrated, basen, byRaumId } =
+    useMeldeeingangFuerBedarfsplanung();
 
   const [status, setStatus] = useState<VorlageStatus>('ENTWURF');
   const [titel, setTitel] = useState(
@@ -201,7 +527,7 @@ export default function PolitischeVorlagePage() {
         </div>
       </div>
 
-      {/* Druck freigabeunabhängig – Spiegel Lagebild (US-KJ-005/006 Druckleiste) */}
+      {/* Druck + CSV freigabeunabhängig – Spiegel Lagebild/Bedarfsplanung (Status/Meldebasis) */}
       <div
         className="no-print card"
         style={{
@@ -212,9 +538,9 @@ export default function PolitischeVorlagePage() {
           justifyContent: 'space-between',
         }}
       >
-        <div style={{ maxWidth: '38rem' }}>
+        <div style={{ maxWidth: '40rem' }}>
           <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>Export</div>
-          <strong style={{ fontSize: '0.95rem' }}>Druckansicht Vorlage</strong>
+          <strong style={{ fontSize: '0.95rem' }}>Druck und CSV Vorlage</strong>
           <p
             style={{
               fontSize: '0.8rem',
@@ -223,20 +549,53 @@ export default function PolitischeVorlagePage() {
               lineHeight: 1.5,
             }}
           >
-            Druck ist freigabeunabhängig (Entwurf, Freigabe-Warteschlange und freigegebene Fassung).
-            Status und Engpass-Filter „Meldelücke“ erscheinen im Ausdruck als Hinweis
-            (Session-Stand Meldeeingang). Filter-Chips und Steuerleiste werden nicht gedruckt.
-            Rangfolge bleibt nach Wartelistendruck.
+            Druck und CSV sind freigabeunabhängig (Entwurf, Freigabe-Warteschlange, freigegeben,
+            zurückgegeben). Status, Meldebasis-Stand (Session-sensitiv aus Meldeeingang) und
+            Engpass-Filter „Meldelücke“ erscheinen im Ausdruck bzw. im CSV-Metakopf. CSV lädt
+            Versorgung, Planungsraum-Aggregate, Engpass-Liste und Meldebasis-Blatt (Semikolon,
+            UTF-8 BOM). Filter-Chips und Steuerleiste sind no-print. Keine Kind- oder Personennamen
+            (DEC-004).
           </p>
         </div>
-        <button
-          type="button"
-          className="btn btn-secondary"
-          onClick={() => window.print()}
-          style={{ fontSize: '0.875rem', flexShrink: 0 }}
-        >
-          Drucken / als PDF speichern
-        </button>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', flexShrink: 0 }}>
+          <button
+            type="button"
+            className="btn btn-secondary"
+            onClick={() => window.print()}
+            style={{ fontSize: '0.875rem' }}
+          >
+            Drucken / als PDF speichern
+          </button>
+          <button
+            type="button"
+            className="btn btn-secondary"
+            onClick={() =>
+              downloadCsv({
+                raumZeilen,
+                engpass,
+                engpassFilter,
+                byRaumId,
+                basen,
+                status,
+                statusLabel: statusLabel[status],
+                titel,
+                sachtext,
+                summeResidual,
+                summeGeplant,
+                meldeMonatsLabel: meldeBase.monatsLabel,
+                sessionFreigabeId: session?.freigabeId ?? null,
+                hydrated,
+                freigabeStamp,
+                freigabeHinweis,
+                meldelueckeCount,
+              })
+            }
+            style={{ fontSize: '0.875rem' }}
+            aria-label="Vorlage-Aggregate als CSV herunterladen (keine Kind- oder Personennamen)"
+          >
+            CSV exportieren
+          </button>
+        </div>
       </div>
 
       {status === 'ZURUECKGEGEBEN' && freigabeHinweis && (
@@ -662,11 +1021,12 @@ export default function PolitischeVorlagePage() {
               (Session-sensitiv aus Meldeeingang-Stichprobe, analog Planungsraum-Explorer). Keine Umbewertung der Rangfolge.
             </li>
             <li>
-              Druckansicht ist freigabeunabhängig: Entwurf und freigegebene Fassung sind exportierbar.
-              Bei aktivem Meldelücke-Filter dokumentiert der Ausdruck den Filterstand (print-only-Hinweis,
-              Spiegel Steuerungslagebild). Steuerleiste und Filter-Chips sind no-print.
+              Druck und CSV sind freigabeunabhängig: Entwurf, Freigabe-Warteschlange, freigegebene und
+              zurückgegebene Fassung sind exportierbar. Status, Meldebasis und Engpass-Filter stehen im
+              Ausdruck (print-only) bzw. im CSV-Metakopf (Blätter: Versorgung, Planungsräume, Engpass,
+              Meldebasis-Stichprobe). Steuerleiste und Filter-Chips sind no-print.
             </li>
-            <li>Keine personen- oder kindbezogenen Einzeldaten in dieser Vorlage; Einrichtungsaggregate nur als Meldebasis-Hinweis.</li>
+            <li>Keine personen- oder kindbezogenen Einzeldaten in dieser Vorlage; Einrichtungsaggregate nur als Meldebasis-Hinweis (DEC-004).</li>
             {lb.methodik.slice(0, 3).map(m => (
               <li key={m.kennzahl}>
                 <strong>{m.kennzahl}:</strong> {m.definition}
@@ -769,7 +1129,8 @@ export default function PolitischeVorlagePage() {
         <Link href="/kita" style={{ color: 'var(--color-primary)' }}>
           öffentlichen Bericht
         </Link>{' '}
-        (DEC-004). Druck: freigabeunabhängig mit dokumentiertem Meldelücke-Filter.
+        (DEC-004). Druck und CSV: freigabeunabhängig mit Status/Meldebasis und dokumentiertem
+        Meldelücke-Filter.
       </div>
 
       <style
