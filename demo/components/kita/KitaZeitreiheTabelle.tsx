@@ -621,9 +621,10 @@ export function KitaZeitreiheTabelle({
         Methodik (US-KJ-010 AK&nbsp;2 / AK&nbsp;4 / AK&nbsp;6): Regionenfilter grenzt die Zeitreihe auf die
         Gesamtkommune oder einen Planungsraum ein. Der CSV-Export (AK&nbsp;4) enthält genau die
         aktuell gefilterte Zeitreihentabelle inkl. Meldebasis-Hinweis und Regionsspalten — kein
-        separater Gesamtexport aller Räume. Raumreihen sind Demo-Verteilungen der kommunalen
-        Reihe nach Strukturanteilen — keine unabhängige Einrichtungsaggregation. Datenlücken im
-        Zeitverlauf sind am Meldemonat sichtbar markiert
+        separater Gesamtexport aller Räume. Im CSV-Metakopf: Open-Data-Lizenzhinweis (Demo
+        vorläufig, finale Lizenz je Bundesland zu klären). Raumreihen sind Demo-Verteilungen der
+        kommunalen Reihe nach Strukturanteilen — keine unabhängige Einrichtungsaggregation.
+        Datenlücken im Zeitverlauf sind am Meldemonat sichtbar markiert
         {filterId !== FILTER_ALL ? ' (raumbezogen)' : ''}. Historische Monate ohne
         Stichproben-Meldeeingang zeigen „–“ in der Spalte Meldebasis. Keine Schätzwerte, keine
         Trendkorrektur. Nur Aggregate; Freigabe-Demo unter{' '}

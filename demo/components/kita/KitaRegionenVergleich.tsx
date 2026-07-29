@@ -614,7 +614,8 @@ export function KitaRegionenVergleich({
         Farbliche Differenzmarkierung ist Orientierung, keine automatische Bewertung und keine Trendprognose.
         Raumreihen sind Demo-Verteilungen der kommunalen Monatsreihe nach Strukturanteilen. CSV-Export (AK&nbsp;4):
         (1) Stichtags-Kennzahlen inkl. Δ und Meldebasis; (2) aktiver 12-Monats-Verlauf der gewählten Kennzahl
-        (Monate · Wert A/B · Δ · Meldebasis). Meldemonat Oktober 2024 ist methodisch an die Meldebasis-Stichprobe
+        (Monate · Wert A/B · Δ · Meldebasis). Lizenzhinweis im CSV-Metakopf (Open-Data vorläufig, finale
+        Lizenz je Bundesland zu klären). Meldemonat Oktober 2024 ist methodisch an die Meldebasis-Stichprobe
         gekoppelt. Freigabe-Demo unter{' '}
         <a href="/kita/meldung" style={{ color: 'var(--color-primary)' }}>
           /kita/meldung
@@ -1023,7 +1024,8 @@ function VerlaufAvsB({
       <p style={{ margin: '0.65rem 0 0', fontSize: '0.75rem', color: 'var(--color-text-muted)', lineHeight: 1.45 }}>
         Verlauf nutzt die raumbezogenen Demo-Zeitreihen (gleiche Anteile wie im Zeitreihenfilter).
         Δ je Monat = Wert A − Wert B zur gewählten Kennzahl. CSV enthält nur die aktive Kennzahl
-        und Auswahl A/B inkl. Meldebasis-Spalte am Berichtsmonat. Keine Kind- oder Personennamen.
+        und Auswahl A/B inkl. Meldebasis-Spalte am Berichtsmonat sowie Open-Data-Lizenzhinweis im
+        Metakopf (Demo vorläufig). Keine Kind- oder Personennamen.
       </p>
     </div>
   );
