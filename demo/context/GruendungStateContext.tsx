@@ -93,7 +93,10 @@ export function GruendungStateProvider({ children }: { children: React.ReactNode
 
     // Verfahrensschritte: „Rückfrage …“-Schritte abschließen, sobald die
     // zugehörige Behörde keine offenen Rückfragen mehr hat (z. B. VS-04).
-    const updatedSchritte = demoGruendungsAkte.verfahrensSchritte.map(vs => {
+    // Anschließend den nächsten AUSSTEHEND-Schritt derselben Behörde auf
+    // IN_BEARBEITUNG heben (z. B. VS-05 Steuernummer).
+    const closedRueckfrageBehoerdeIds = new Set<string>();
+    let updatedSchritte = demoGruendungsAkte.verfahrensSchritte.map(vs => {
       if (vs.status === 'ABGESCHLOSSEN') return vs;
       const name = vs.bezeichnung.toLowerCase();
       if (!name.includes('rückfrage') && !name.includes('rueckfrage')) return vs;
@@ -101,6 +104,7 @@ export function GruendungStateProvider({ children }: { children: React.ReactNode
         r => r.anforderndeBehördeId === vs.behördeId && !r.beantwortet
       );
       if (nochOffen) return vs;
+      closedRueckfrageBehoerdeIds.add(vs.behördeId);
       return {
         ...vs,
         status: 'ABGESCHLOSSEN' as const,
@@ -108,6 +112,18 @@ export function GruendungStateProvider({ children }: { children: React.ReactNode
         ergebnis:
           'Rückfrage beantwortet. Die Behörde setzt die Bearbeitung fort.',
       };
+    });
+
+    // Nächster ausstehender Schritt der betroffenen Behörde startet
+    // (Listenreihenfolge; nur wenn kein Geschwisterschritt schon IN_BEARBEITUNG).
+    updatedSchritte = updatedSchritte.map(vs => {
+      if (vs.status !== 'AUSSTEHEND') return vs;
+      if (!closedRueckfrageBehoerdeIds.has(vs.behördeId)) return vs;
+      const sameBehoerde = updatedSchritte.filter(s => s.behördeId === vs.behördeId);
+      if (sameBehoerde.some(s => s.status === 'IN_BEARBEITUNG')) return vs;
+      const firstAusstehend = sameBehoerde.find(s => s.status === 'AUSSTEHEND');
+      if (firstAusstehend?.id !== vs.id) return vs;
+      return { ...vs, status: 'IN_BEARBEITUNG' as const };
     });
 
     let status = demoGruendungsAkte.status;
@@ -192,6 +208,26 @@ export function GruendungStateProvider({ children }: { children: React.ReactNode
           details:
             vs.ergebnis ??
             'Rückfrage-Schritt nach Antwort des Gründers als erledigt markiert.',
+        });
+      }
+      // Nächster Schritt derselben Behörde, der durch die Antwort gestartet wurde
+      const gestarteteSchritte = updatedSchritte.filter(
+        vs =>
+          vs.status === 'IN_BEARBEITUNG' &&
+          vs.behördeId === rq?.anforderndeBehördeId &&
+          demoGruendungsAkte.verfahrensSchritte.find(s => s.id === vs.id)?.status ===
+            'AUSSTEHEND'
+      );
+      for (const vs of gestarteteSchritte) {
+        extraEvents.push({
+          id: `UG-DEMO-VS-START-${vs.id}-${id}`,
+          typ: 'status_aktualisiert',
+          zeitstempel: DEMO_AKTION_ZEIT,
+          handelndeStelle: 'SYSTEM',
+          behördeId: vs.behördeId,
+          beschreibung: `Verfahrensschritt gestartet: ${vs.bezeichnung}`,
+          details:
+            'Nächster Schritt der Behörde nach Beantwortung der Rückfrage.',
         });
       }
     }
