@@ -1,6 +1,6 @@
 # BUILD_STATE.md – Aktueller Projektstand
 
-Zuletzt aktualisiert: nach Supervisor-Pflicht-Push 2026-07-29 (E2E 237 chromium grün auf HEAD e14e39d; Q-105/129/130/131)
+Zuletzt aktualisiert: nach Supervisor-Pflicht-Push 2026-07-29 (Merge UG Q-132 + Kita Q-133; E2E 237 chromium grün)
 
 Dieser Stand beschreibt, was tatsächlich existiert und funktioniert.
 Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
@@ -15,7 +15,7 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | Build-Status | ✓ Erfolgreich (27 statische Seiten) |
 | Deployment | Vercel, aus `demo/`-Verzeichnis |
 | Lokaler Start | `cd demo && npm install && npm run dev` |
-| Letzte Build-Prüfung | lint+build+`test:e2e:ci` **237 passed** (Supervisor Pflicht-Push, HEAD inkl. Q-105/129/130/131) |
+| Letzte Build-Prüfung | lint+build+`test:e2e:ci` **237 passed** (Supervisor Pflicht-Push, Merge Q-132/Q-133) |
 
 ---
 
@@ -39,7 +39,7 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | `/kita/bedarfsplanung` | Bedarfsplanungsentwurf (§ 80 SGB VIII) + Meldebasis + Residual↔Meldelücke (Hinweis-only) | US-KJ-007 | ✓ |
 | `/kita/vorlage` | Politische Gremienvorlage + Freigabe + Meldebasis/Residual↔Meldelücke + Engpass-Liste Meldelücke-Filter | US-KJ-008 | ✓ |
 | `/kita/einrichtung` | Belegungsstand Einrichtung (aggregiert) + Prozesskette Tagesstand→Monatsbericht→Meldung | US-KJ-002 | ✓ |
-| `/kita/tagesstand` | Tagesstand erfassen (Aggregate, Freigabe) | US-KJ-001 | ✓ |
+| `/kita/tagesstand` | Tagesstand erfassen (Aggregate, Freigabe) + Prozesskette Hub-Karten Belegung/Monatsbericht/Meldung | US-KJ-001 | ✓ |
 | `/kita/monatsbericht` | Monatsbericht + Vorschau + Rücklink Lagebild + Einrichtungs-Kontext + Prozesskette | US-KJ-003 | ✓ |
 | `/kita/meldung` | Monatsmeldung prüfen, korrigieren, freigeben | US-KJ-004 | ✓ |
 
@@ -87,6 +87,8 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | UG Betriebsdatum-Signal Text | `gruendung-rules.ts` | ✓ Text session-sensitiv nach RQ-Antwort (Q-129) |
 | Kita Lagebild Druck | `KitaLagebildDruck.tsx` | ✓ Druckleiste + print-only Meldelücke-Filterhinweise (Q-130) |
 | Kita Prozesskette Betrieb | `/kita/einrichtung` + `/kita/monatsbericht` | ✓ Hub-Karten, Datenlücke-Links, Story-Labels (Q-131) |
+| UG Übersicht Steuernummer-CTA Label | `/gruendung` Fairness-Kurzblock | ✓ CTA-Text „Zum Finanzamt“ vs. „Steuernummer-Stand ansehen“ je VS-05 (Q-132) |
+| Kita Tagesstand Prozesskette | `/kita/tagesstand` | ✓ Hub-Karten Belegung/Monatsbericht/Meldung + DEC-004-Footer (Q-133, US-KJ-001) |
 
 ---
 
@@ -183,6 +185,8 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 **Q-129 erledigt:** UG Betriebsdatum-Signal-Text session-sensitiv nach RQ-Antwort.
 **Q-130 erledigt:** Kita Lagebild Druckansicht mit Meldelücke-Filter-Hinweisen.
 **Q-131 erledigt:** Kita Monatsbericht ↔ Einrichtung Prozesskette.
+**Q-132 erledigt:** UG Übersicht Steuernummer-CTA-Text bei VS-05 IN_BEARBEITUNG.
+**Q-133 erledigt:** Kita Tagesstand Prozesskette Hub-Karten (US-KJ-001).
 
 ---
 
