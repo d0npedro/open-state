@@ -2,6 +2,29 @@
 
 Branch: `loop/kita` · Worktree: `D:\Projects\open-state-loop-kita`
 
+## Iteration 2026-07-29 – US-KJ-007 Bedarfsplanung-Druckansicht Meldebasis
+
+### Was
+Bedarfsplanung (`/kita/bedarfsplanung`, US-KJ-007): Druckansicht freigabeunabhängig (Entwurf / Zur Freigabe) mit Druckleiste analog Lagebild/Vorlage. Print-only: Status, Meldebasis-Stand (Session-sensitiv aus Meldeeingang, Räume mit Lücke inkl. Residual-Fokus Südost/PR-03), Planungskommentar als statischer Text (Textarea/Aktionen no-print). Methodik- und Footer-Hinweis zur Druckdokumentation. Steuerungskette-Hub no-print. Nur Aggregate, keine Kind- oder Personennamen. Merge `origin/main` (ci-watcher docs) vor dem Feature.
+
+### Dateien
+- `demo/app/kita/bedarfsplanung/page.tsx` (Druckleiste, print-only Status/Meldebasis/Kommentar, Print-CSS)
+- `docs/loops/kita-JOURNAL.md` (dieses Journal)
+
+### Story
+US-KJ-007 – Bedarfsplanungsentwurf (Druck freigabeunabhängig, Meldebasis dokumentiert)
+
+### Build
+`npm run lint` + `npm run build` im `demo/`-Verzeichnis (siehe Commit dieses Laufs)
+
+### Nicht angefasst (Supervisor / verboten)
+Queue, BUILD_STATE, storyRegistry, DECISION_LOG, andere Domänen, package.json, CI, push
+
+### Nächster sinnvoller Schritt (Hinweis Supervisor)
+Vorlage/Lagebild Rücklink-Hub zur Bedarfsplanung, oder Monatsbericht-Druckansicht Meldebasis/Vorschau-Status spiegeln.
+
+---
+
 ## Iteration 2026-07-29 – US-KJ-007 Bedarfsplanung Steuerungskette Hub-Karten
 
 ### Was
