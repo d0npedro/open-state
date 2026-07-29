@@ -1,6 +1,6 @@
 # BUILD_STATE.md – Aktueller Projektstand
 
-Zuletzt aktualisiert: nach Supervisor-Pflicht-Push 2026-07-29 (Merge loop/kita → Q-157 Einrichtung CSV Status/Datenbasis; lint+build 27 Seiten grün; origin/main sync 0)
+Zuletzt aktualisiert: nach Supervisor-Pflicht-Push 2026-07-29 (Merge loop/ug+kita → Q-158–Q-159; lint+build 27 Seiten grün; E2E 241; origin/main sync 0)
 
 Dieser Stand beschreibt, was tatsächlich existiert und funktioniert.
 Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
@@ -15,7 +15,7 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | Build-Status | ✓ Erfolgreich (27 statische Seiten) |
 | Deployment | Vercel, aus `demo/`-Verzeichnis |
 | Lokaler Start | `cd demo && npm install && npm run dev` |
-| Letzte Build-Prüfung | lint+build **27 Seiten** (Supervisor Merge Q-157) |
+| Letzte Build-Prüfung | lint+build **27 Seiten** + `test:e2e:ci` **241 passed** (Supervisor Merge Q-158–Q-159) |
 
 ---
 
@@ -36,7 +36,7 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | `/gruendung` … | Unternehmensgründung (Übersicht Fairness-Kurzblock+Kurz-CTAs inkl. Steuernummer/Betriebsdatum/BG-Hilfstext session-sensitiv, Behörden VS-04→Rückfrage, Hinweise-CTAs RQ/BG/Unterlagen/Steuernummer/Betriebsdatum/parallele Behörden, Verlauf Stelle+Ereignistyp-Filter, …) | US-UG-001–006 | ✓ |
 | `/kita` | Öffentlicher Transparenzbericht + Planungsraum-Filter + Residual↔Meldelücke + Engpass/Meldelücke-Schnellfilter + Zeitreihe Meldebasis + Regionenfilter + Regionenvergleich Zwei-Räume inkl. 12-Monats-Verlauf A/B + CSV-Export + Open-Data-Lizenz + Hub-Karten JA-Steuerungskette (Lagebild/Bedarfsplanung/Vorlage) | US-KJ-009, US-KJ-010 | ✓ |
 | `/kita/lagebild` | Jugendamt-Steuerungsansicht + Meldeeingang + Meldebeitrag + Engpass/Handlungsfelder/Planungsraum-Detail Meldelücke-Schnellfilter + Druck Meldelücke + Monatsbericht-Vorschau + Steuerungskette Hub-Karten | US-KJ-005, US-KJ-006 | ✓ |
-| `/kita/bedarfsplanung` | Bedarfsplanungsentwurf (§ 80 SGB VIII) + Meldebasis + Residual↔Meldelücke (Hinweis-only) + Steuerungskette Hub-Karten + Druck freigabeunabhängig mit Meldebasis-Session-Hinweis | US-KJ-007 | ✓ |
+| `/kita/bedarfsplanung` | Bedarfsplanungsentwurf (§ 80 SGB VIII) + Meldebasis + Residual↔Meldelücke (Hinweis-only) + Steuerungskette Hub-Karten + Druck freigabeunabhängig mit Meldebasis-Session-Hinweis + CSV Aggregate freigabeunabhängig | US-KJ-007 | ✓ |
 | `/kita/vorlage` | Politische Gremienvorlage + Freigabe + Meldebasis/Residual↔Meldelücke + Engpass Meldelücke-Filter + Druck freigabeunabhängig + Steuerungskette Hub-Karten | US-KJ-008 | ✓ |
 | `/kita/einrichtung` | Belegungsstand Einrichtung (aggregiert) + Prozesskette Tagesstand→Monatsbericht→Meldung + Druck Status/Datenbasis + CSV Status/Datenbasis-Metakopf | US-KJ-002 | ✓ |
 | `/kita/tagesstand` | Tagesstand erfassen (Aggregate, Freigabe) + Prozesskette Hub-Karten Belegung/Monatsbericht/Meldung + Druck freigabeunabhängig + CSV Aggregate-Export | US-KJ-001 | ✓ |
@@ -113,6 +113,8 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | Kita Monatsbericht CSV Vorschau-Metadaten | `/kita/monatsbericht` | ✓ CSV-Metakopf Demo-Modus/Status/Tagesstand-Quellen; Vorschau-Suffix (Q-155, US-KJ-003) |
 | Kita Meldung CSV Aggregate freigabeunabhängig | `/kita/meldung` | ✓ Session-Kennzahlen + Korrekturprotokoll, Metakopf Status/Frist/Freigabe, DEC-004 (Q-156, US-KJ-004) |
 | Kita Einrichtung CSV Status/Datenbasis-Metakopf | `/kita/einrichtung` | ✓ Metakopf aktuell/veraltet (3-Tage), Summen, Prozessbezug; Export-Karte Druck+CSV; DEC-004 (Q-157, US-KJ-002) |
+| UG Primär-CTA Nächster Schritt RQ-Frist-Hilfstext | `/gruendung` | ✓ Primär-CTA mit Antwortfrist/Konsequenz; nach Antwort Unterlagen-Hinweis (Q-158) |
+| Kita Bedarfsplanung CSV Aggregate freigabeunabhängig | `/kita/bedarfsplanung` | ✓ Status/Meldebasis-Metakopf, Planungsraum-/Meldebasis-Blatt; Export-Karte Druck+CSV; DEC-004 (Q-159, US-KJ-007) |
 
 ---
 
@@ -235,6 +237,8 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 **Q-155 erledigt:** Kita Monatsbericht CSV Vorschau-Modus-Metadaten (US-KJ-003).
 **Q-156 erledigt:** Kita Meldung CSV Aggregate freigabeunabhängig (US-KJ-004, DEC-004).
 **Q-157 erledigt:** Kita Einrichtung CSV Status/Datenbasis-Metakopf (US-KJ-002, DEC-004).
+**Q-158 erledigt:** UG Primär-CTA Nächster Schritt mit RQ-Frist-/Konsequenz-Hilfstext (Übersicht).
+**Q-159 erledigt:** Kita Bedarfsplanung CSV Aggregate freigabeunabhängig (US-KJ-007, DEC-004).
 
 ---
 
