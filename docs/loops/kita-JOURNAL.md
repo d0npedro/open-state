@@ -2,6 +2,29 @@
 
 Branch: `loop/kita` · Worktree: `D:\Projects\open-state-loop-kita`
 
+## Iteration 2026-07-29 – US-KJ-001 Tagesstand-Druck freigabeunabhängig Status/Datenbasis/Freigabe
+
+### Was
+Tagesstand (`/kita/tagesstand`, US-KJ-001): Druckansicht freigabeunabhängig (Aufforderung / Erfassung / Zusammenfassung / freigegeben) mit Druckleiste analog Monatsbericht/Meldung/Bedarfsplanung. Print-only: Status inkl. UI-Phase und Tagesstand-ID, Datenbasis (Vorbelegung aus Belegung US-KJ-002, Gruppen offen/geschlossen, Aggregate, Schlüssel-Hinweis, Summenprüfung) und Freigabenachweis bzw. „nicht freigegeben“ (DEC-004). In Phase Aufforderung: Vorbelegungs-Aggregate und Gruppenwerte im Ausdruck. Eingabefelder, Bestätigungsdialog, Aktionsbuttons und Prozess-Hub no-print; Gruppenwerte als statischer Text im Ausdruck. Methodik- und Footer-Hinweis. Nur Aggregate, keine Kind- oder Personennamen. Merge `origin/main` (ci-watcher docs) vor dem Feature.
+
+### Dateien
+- `demo/app/kita/tagesstand/page.tsx` (Druckleiste, print-only Status/Datenbasis/Freigabe, Print-CSS, Methodik)
+- `docs/loops/kita-JOURNAL.md` (dieses Journal)
+
+### Story
+US-KJ-001 – Tagesstand erfassen (Druck freigabeunabhängig, Status/Datenbasis/Freigabe dokumentiert)
+
+### Build
+`npm run lint` + `npm run build` im `demo/`-Verzeichnis (siehe Commit dieses Laufs)
+
+### Nicht angefasst (Supervisor / verboten)
+Queue, BUILD_STATE, storyRegistry, DECISION_LOG, andere Domänen, package.json, CI, push
+
+### Nächster sinnvoller Schritt (Hinweis Supervisor)
+Einrichtung Belegungsstand-Druckansicht spiegeln, oder Tagesstand-CSV Aggregate-Export (DEC-004).
+
+---
+
 ## Iteration 2026-07-29 – US-KJ-004 Meldung-Druck freigabeunabhängig Status/Korrekturen/Freigabe
 
 ### Was
