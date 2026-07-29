@@ -152,6 +152,34 @@ Jede User Story in Open State enthält einen oder mehrere explizit definierte Fe
 
 ---
 
+## 8.9 Theme- und Darstellungsarchitektur
+
+Darstellung (Theme, Dichte, Kontrast) ist ein reines Querschnittskonzept der Präsentationsschicht. Sie steuert **ausschließlich** die visuelle Darstellung und hat keinen Einfluss auf Fachlogik, Statusberechnungen, Zugriffsrechte oder Routen (DEC-010).
+
+**Mechanismen (Demo)**
+
+| Mechanismus | Umsetzung |
+|-------------|-----------|
+| Theme | `[data-theme]` auf `<html>`, Werte: `civic-neutral`, `citizen-warm`, `office-dense`, `accessible-contrast` |
+| Density | `[data-density]` auf `<html>` (normal / compact / accessible) |
+| Persistenz | `localStorage` Schlüssel `os-theme`, `os-density` |
+| Anti-Flash | Inline-Script im Layout wendet gespeicherte Werte vor dem ersten Paint an |
+| UI | `ThemeProvider`, `ThemeSwitcher` im Footer |
+
+**Trennung der Concerns**
+
+- Fachwerte, Fairness-Signale und Mock-Falldaten ändern sich nicht beim Theme-Wechsel.
+- Barrierefreiheit (Kontrast, Schriftgröße) ist ein Darstellungsziel, kein Funktionsschalter.
+- Design-Tokens leben in CSS-Variablen (`demo/app/globals.css`); Theme-Registry in `demo/design-system/themes/themes.ts`.
+
+**Story- / Qualitätsbezug**
+
+Themes unterstützen WCAG-Ziele (Abschnitt 8.7), ersetzen aber keine semantische HTML-Struktur, Tastaturbedienung oder Kontrastprüfungen im Inhalt.
+
+---
+
 *Verweis: [docs/stories/TRACEABILITY_MATRIX.md](../../docs/stories/TRACEABILITY_MATRIX.md)*
 *Verweis: [docs/engines/verfahrensfairness/04_TRANSPARENZ_UND_AUDITIERBARKEIT.md](../../docs/engines/verfahrensfairness/04_TRANSPARENZ_UND_AUDITIERBARKEIT.md)*
 *Verweis: [docs/LEITBILD_STAAT_UND_VERTRAUEN.md](../../docs/LEITBILD_STAAT_UND_VERTRAUEN.md)*
+*Verweis: [demo/design-system/README.md](../../demo/design-system/README.md)*
+

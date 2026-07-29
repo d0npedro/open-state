@@ -96,5 +96,36 @@ Höherer Redaktionsaufwand für die Erstellung und Qualitätssicherung der Erkl�
 
 ---
 
+---
+
+## ADR-007: Drei-Schichten-Modell für Kita-Berichtsschicht
+
+**Status:** Akzeptiert
+
+**Kontext:**
+Kindertagesbetreuung erzeugt Daten auf Einrichtungsebene (Belegung, Anwesenheit, Personal). Jugendämter brauchen aggregierte Steuerungskennzahlen. Öffentlichkeit und Gremien brauchen transparente Versorgungsberichte. Ein direkter Durchgriff auf operative Rohdaten wäre datenschutzrechtlich und kindeswohlbezogen unzulässig; vollständig öffentliche Rohdaten würden Rückschlüsse auf Einzelpersonen und Einrichtungen ermöglichen. Gleichzeitig erzeugen manuelle Excel-Lagebilder Verzögerung und Intransparenz.
+
+**Entscheidung:**
+Strikte Trennung in drei Schichten mit expliziten Freigabeübergängen:
+
+1. **Betriebsebene** – operative Daten in der Einrichtung (personenbezogen möglich, nicht öffentlich).
+2. **Steuerungsebene** – aggregierte Planungsraum-/Kommunkennzahlen für Jugendamt-Planung (kein direkter Einrichtungs-Rohdatenzugriff ohne Freigabe).
+3. **Öffentlichkeitsebene** – nur freigegebene Aggregate mit Methodik, Datenstand und dokumentierten Datenlücken.
+
+Jeder Übergang erfordert eine aktive Freigabe und ist protokollierbar. Personenbezogene Kinder- und Elterndaten verlassen die Betriebsebene nicht. Öffentliche Berichte enthalten keine einrichtungsbezogene Qualitätsbewertung.
+
+**Alternativen erwogen:**
+- Jugendamt mit Direktzugriff auf alle Einrichtungsdaten (datenschutzrechtlich und organisationspolitisch problematisch)
+- Vollständig öffentliche Rohdaten (Kindeswohl- und Identifizierungsrisiko)
+- Nur jährliche PDF-Berichte ohne maschinenlesbare Kennzahlen (keine laufende Steuerungstransparenz)
+
+**Konsequenzen:**
+Höherer Aufwand für Freigabe-Workflows, Aggregationsregeln und Methodikdokumentation. Dafür: Kindeswohl und Datenschutz by Design, vertrauenswürdige öffentliche Transparenz, klare Verantwortung je Schicht. Demo: `/kita` (öffentlich), `/kita/lagebild` (Steuerung). Domänendoku und DEC-004 im Decision Log bestätigen die Entscheidung.
+
+**Bezug:** DEC-004, US-KJ-004 (Meldung freigeben), US-KJ-005/006 (Lagebild/Engpass), US-KJ-009/010 (Transparenzbericht/Zeitreihe)
+
+---
+
 *Verweis: [04_LOESUNGSSTRATEGIE.md](04_LOESUNGSSTRATEGIE.md) – Narrative Begründungen*
 *Verweis: [docs/stories/TRACEABILITY_MATRIX.md](../../docs/stories/TRACEABILITY_MATRIX.md)*
+*Verweis: [docs/DECISION_LOG.md](../../docs/DECISION_LOG.md) – DEC-004*

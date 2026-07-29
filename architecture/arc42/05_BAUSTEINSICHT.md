@@ -76,7 +76,7 @@ graph TB
 |----------|-------------|
 | **Name** | Domänenmodule (Arbeitsverwaltung, Unternehmensgründung, Jugendhilfe, Sozialleistungen, Wohnsitz, Rechtsstreit) |
 | **Verantwortung** | Fachliche Logik je Domäne: Zuständigkeitsermittlung, Verfahrensregeln, domänenspezifische Statuszustände, Pflichtfelder, Fristen |
-| **Story-Bezug** | US-AV-001 bis US-AV-007 (Arbeitsverwaltung); weitere Domänen folgen demselben Muster |
+| **Story-Bezug** | US-AV-001 bis US-AV-008 (Arbeitsverwaltung); US-UG-001–006 (Unternehmensgründung); US-KJ-001–010 (Kita / Jugendamt); weitere Domänen folgen demselben Muster |
 | **Inputs** | Bürgeranfragen (über API Gateway), Ereignisse aus Behörden-Adapter-Layer, Verfahrensfairness Engine Signale |
 | **Outputs** | Fallanlage, Statusübergänge, Dokumentenanforderungen, Rückfragen, Bescheidinitiierung |
 | **Abhängigkeiten** | Fallakte, Statusmodell, Behörden-Adapter-Layer, Benachrichtigungsdienst, Audit-Log |
@@ -223,5 +223,49 @@ Die Verfahrensfairness Engine ist zwischen dem Process Orchestrator und den Dom�
 
 ---
 
+### 5.2.12 Domäne Kita-Betrieb & Jugendamt-Steuerung
+
+| Attribut | Beschreibung |
+|----------|-------------|
+| **Name** | Kita- / Jugendamt-Domänenmodul inkl. Berichtsschicht |
+| **Verantwortung** | Operative Erfassung und Meldung (Einrichtungsebene), Aggregation zu Steuerungskennzahlen (Jugendamt), Freigabe und Bereitstellung öffentlicher Transparenzberichte – strikt getrennte Schichten |
+| **Story-Bezug** | US-KJ-001–004 (Betrieb), US-KJ-005–008 (Steuerung), US-KJ-009–010 (Öffentlichkeit) |
+| **Inputs** | Tages- und Monatsmeldungen aus Einrichtungen (nach Freigabe), Planungsraum-Stammdaten, amtliche Bevölkerungsgrundlagen |
+| **Outputs** | Belegungs- und Versorgungskennzahlen, Engpasssignale, öffentliche Berichte mit Methodik und Datenstand |
+| **Abhängigkeiten** | Drei-Schichten-Modell (ADR-007), Audit-Log, Freigabe-Workflow, öffentliche API nur für freigegebene Aggregate |
+
+#### Schichten (DEC-004 / ADR-007)
+
+```
+Einrichtung (operativ)  →  Freigabe  →  Jugendamt (Steuerung)  →  Freigabe  →  Öffentlichkeit (Bericht)
+```
+
+| Schicht | Zugang | Inhalt | Demo-Route |
+|---------|--------|--------|------------|
+| Betrieb | Kita-Leitung / Fachkraft | Anwesenheit, Belegung, Personalausfälle, Meldungsentwurf | (nicht klickbar in Demo) |
+| Steuerung | Jugendamt Planung | Lagebild, Engpassrangliste, Handlungsfelder | `/kita/lagebild` |
+| Öffentlichkeit | ohne Login | Versorgungsquoten, Zeitreihe, Methodik, CSV-Export | `/kita` |
+
+**Datenschutz:** Keine personenbezogenen Kinder- oder Elterndaten in Steuerungs- oder Öffentlichkeitsschicht. Keine einrichtungsbezogene Qualitätsbewertung in öffentlichen Berichten. Aggregation und Freigabe sind Pflichtübergänge – kein direkter Durchgriff.
+
+**Demo-Bausteine:** `demo/data/mockKitaLagebild.ts`, `demo/types/kita.ts`, Routen `/kita` und `/kita/lagebild`.
+
+---
+
+### 5.2.13 Domäne Unternehmensgründung (Demo-Baustein)
+
+| Attribut | Beschreibung |
+|----------|-------------|
+| **Name** | Gründungsakte / Mehrbehördenprozess |
+| **Verantwortung** | Digitale Gründungsakte mit Status, beteiligten Behörden, Dokumenten, Rückfragen und Verlauf |
+| **Story-Bezug** | US-UG-001–006 |
+| **Inputs** | Gründerangaben, Behördenstatus, Dokumentanforderungen, Rückfragen |
+| **Outputs** | Klartext-Status, Behördenübersicht, Handlungshinweise, Timeline |
+| **Abhängigkeiten** | Fallakten-Muster, Fairness-Regeln UG, Mock-Daten `mockGruendungsfall.ts` |
+
+---
+
 *Verweis: [architecture/05_Systemarchitektur.md](../05_Systemarchitektur.md) – Vollständiges Mermaid-Gesamtdiagramm*
 *Verweis: [docs/engines/verfahrensfairness/](../../docs/engines/verfahrensfairness/README.md)*
+*Verweis: [docs/domains/kita_betrieb_und_jugendamt_steuerung/](../../docs/domains/kita_betrieb_und_jugendamt_steuerung/README.md)*
+
