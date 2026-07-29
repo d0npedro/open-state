@@ -2,14 +2,15 @@
 
 | Feld | Wert |
 |------|------|
-| last_checked | 2026-07-29T09:27:11Z |
-| last_run_id | 30439521553 |
+| last_checked | 2026-07-29T09:33:30Z |
+| last_run_id | 30439917958 |
 | last_status | success |
-| last_sha | 5bfa550 |
+| last_sha | ddc414a |
 | fix_attempts | 0 |
 
 ## Log
 
+- Build `30439917970` + E2E `30439917958` **success** (SHA ddc414a Merge loop/kita — latest code path: UG Übersicht Upload-Quittung + Kita Zeitreihe UI/print-meta + Regionenvergleich print). Catch-up this tick: origin/main..main was 7 → lint+build grün → push `ab349bd..ddc414a` → origin/main..main = 0. Concurrent supervisor docs Q-171–Q-174 (`199ce68` HEAD) path-skip; E2E `30440074821` may still be queued (docs-only). No fix. fix_attempts=0.
 - E2E `30439521553` **success** (SHA 5bfa550 docs ci-watcher HEAD). E2E `30439328562` **success** (SHA c4cadfa). E2E `30439123702` **success** (SHA 438db40). Build `30438888095` + E2E `30438888125` **success** (SHA 310bf10 Merge loop/kita print-meta + Lagebild Zeitreihe-CSV Q-169 — latest code path). Catch-up: origin/main..main = 0. No fix. fix_attempts=0.
 - E2E `30439328562` **success** (SHA c4cadfa / 438db40 docs ci-watcher HEAD). E2E `30439123702` **success** (SHA 438db40). E2E `30438939366` **success** (SHA fa4aaeb docs supervisor Q-167–Q-170). Build `30438888095` + E2E `30438888125` **success** (SHA 310bf10 Merge loop/kita print-meta + Lagebild Zeitreihe-CSV Q-169 — latest code path). Catch-up: origin/main..main = 0. No fix. fix_attempts=0.
 - E2E `30439123702` **success** (SHA 438db40 docs ci-watcher HEAD). E2E `30438939366` **success** (SHA fa4aaeb docs supervisor Q-167–Q-170). Build `30438888095` + E2E `30438888125` **success** (SHA 310bf10 Merge loop/kita print-meta + Lagebild Zeitreihe-CSV Q-169 — latest code path). Catch-up: origin/main..main = 0. No fix. fix_attempts=0.
