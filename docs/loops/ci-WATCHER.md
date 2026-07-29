@@ -2,14 +2,15 @@
 
 | Feld | Wert |
 |------|------|
-| last_checked | 2026-07-29T08:56:30Z |
-| last_run_id | 30437292198 |
+| last_checked | 2026-07-29T09:03:08Z |
+| last_run_id | 30437820369 |
 | last_status | success |
-| last_sha | dce505a |
+| last_sha | af481fa |
 | fix_attempts | 0 |
 
 ## Log
 
+- Build `30437820507` + E2E `30437820369` **success** (SHA af481fa Merge loop/kita — latest code path: AV Upload-Quittung + UG Fairness CTA helpers + Kita CSV Aggregate Status/Meldelücke). Catch-up this tick: origin/main..main was 9 → lint+build grün → push `f2505ab..af481fa` → origin/main..main = 0. Concurrent supervisor docs Q-161–Q-166 (`091c6bf` HEAD) path-skip; E2E `30437957278` / `30437899063` may still be in_progress (docs-only). No fix. fix_attempts=0.
 - E2E `30437292198` **success** (SHA dce505a docs ci-watcher HEAD). E2E `30437085046` **success** (SHA f96a507). E2E `30436887078` **success** (SHA d9d86e6). Build latest code path still `30436124632` **success** (SHA 800469f / `c3be039` Merge loop/kita — latest code path; HEAD docs-only path-skip). Catch-up: origin/main..main = 0. No fix. fix_attempts=0.
 - E2E `30437085046` **success** (SHA f96a507 docs ci-watcher HEAD). E2E `30436887078` **success** (SHA d9d86e6). E2E `30436829523` **success** (SHA 2757284 supervisor Q-160). Build latest code path still `30436124632` **success** (SHA 800469f / `c3be039` Merge loop/kita — latest code path; HEAD docs-only path-skip). Catch-up: origin/main..main = 0. No fix. fix_attempts=0.
 - E2E `30436887078` **success** (SHA d9d86e6 docs ci-watcher HEAD). E2E `30436829523` **success** (SHA 2757284 supervisor Q-160). E2E `30436673364` **success** (SHA 61626e9). Build latest code path still `30436124632` **success** (SHA 800469f / `c3be039` Merge loop/kita — latest code path; HEAD docs-only path-skip). Catch-up: origin/main..main = 0. No fix. fix_attempts=0.
