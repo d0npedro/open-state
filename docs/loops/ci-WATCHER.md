@@ -2,7 +2,7 @@
 
 | Feld | Wert |
 |------|------|
-| last_checked | 2026-07-29T07:16:30Z |
+| last_checked | 2026-07-29T07:15:45Z |
 | last_run_id | 30430814843 |
 | last_status | success |
 | last_sha | 692a96d |
@@ -10,7 +10,7 @@
 
 ## Log
 
-- E2E `30430814843` **success** (SHA 692a96d docs supervisor Q-132..Q-135). E2E `30430744424` + Build `30430744932` **success** (SHA fc6ae7d docs ci-watcher). E2E `30430649458` **success** (SHA a456e59). Build + E2E latest code path still Merge loop/kita (SHA 777f932 / 77526a3; HEAD docs-only path-skip). Catch-up this tick: origin/main..main was 1 (unpushed prior journal) + this journal → lint+build grün (`NEXT_DIST_DIR=.next-ci-watcher`) → push. No fix. fix_attempts=0.
+- E2E `30430814843` **success** (SHA 692a96d docs supervisor Q-132..Q-135). E2E `30430744424` + Build `30430744932` **success** (SHA fc6ae7d). E2E `30430649458` **success** (SHA a456e59). Build latest code path still Merge loop/kita (SHA 77526a3; HEAD docs-only path-skip). Catch-up: origin/main..main = 0. Newer HEAD `59c59e4` docs ci-watcher: E2E `30430962463` in_progress next tick. No fix. fix_attempts=0.
 - E2E `30430744424` **success** (SHA fc6ae7d docs ci-watcher HEAD). E2E `30430649458` **success** (SHA a456e59 supervisor Q-132/Q-133). E2E `30430517106` + Build `30430517207` **success** (SHA 77526a3/777f932 Merge loop/kita - latest code path). Build `30430744932` **success** (SHA fc6ae7d). Catch-up: origin/main..main = 0 (prior concurrent catch-up already pushed). Newer HEAD `692a96d` docs supervisor Q-132..Q-135: E2E `30430814843` later **success**. No fix. fix_attempts=0.
 - E2E `30430536099` **success** (SHA 4194e3f docs ci-watcher HEAD). E2E `30430517106` + Build `30430517207` **success** (SHA 77526a3 Merge loop/kita — latest code path before concurrent). Prior E2E `30430418198` **success** (SHA 774d525 supervisor E2E 237). Catch-up this tick: origin/main..main was 5 (Kita Meldung Prozesskette US-KJ-004 + UG Hinweise Steuernummer-CTA VS-05 + supervisor Q-132/Q-133 + merges) → lint+build grün (`NEXT_DIST_DIR=.next-ci-watcher`) → push `4194e3f..777f932` → origin/main..main = 0. No fix. fix_attempts=0.
 - E2E `30430333527` **success** (SHA 95e0d84 docs ci-watcher HEAD). Prior E2E `30430170093` **success** (SHA e14e39d). Build latest code path `30430084296` **success** (SHA dcb22ee; newer HEAD docs/merges). Catch-up this tick: origin/main..main was 5 → lint+build grün (`NEXT_DIST_DIR=.next-ci-watcher`) → push `774d525..77526a3` (kita Tagesstand Prozesskette + UG Steuernummer-CTA VS-05 + merges) → origin/main..main = 0. New CI for `77526a3` next tick. No fix. fix_attempts=0.
