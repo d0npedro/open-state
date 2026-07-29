@@ -117,4 +117,39 @@ test.describe('US-AV-002 – Status einsehen', () => {
     await expect(activeTab).toContainText('Übersicht');
   });
 
+  test('Nach Rückfrage-Antwort: Fortschritt bleibt stabil und zeigt Unterlagen-Phase', async ({ page }) => {
+    // Initial: RUECKFRAGE_OFFEN → Fortschritt ~57 % (Schritt 4/7), nie 0 %
+    await expect(page.getByText(/57\s*%|%/).first()).toBeVisible();
+    const before = await page.locator('.progress-bar-fill').getAttribute('style');
+    expect(before).toMatch(/width:\s*5[0-9]%/);
+
+    // Demo: Rückfrage beantworten → Status UNTERLAGEN_FEHLEN
+    await page.goto('/fall/rueckfragen');
+    await page.getByRole('button', { name: /Jetzt beantworten/i }).click();
+    await page.goto('/fall');
+
+    // Fortschritt darf nicht auf 0 % kollabieren (Bug: Status nicht in statusFlow)
+    const after = await page.locator('.progress-bar-fill').getAttribute('style');
+    expect(after).toMatch(/width:\s*5[0-9]%/);
+    await expect(page.getByText('Unterlagen fehlen noch')).toBeVisible();
+    await expect(page.getByText('Sie sind hier')).toBeVisible();
+    await expect(page.getByRole('link', { name: /Unterlagen hochladen/i })).toBeVisible();
+  });
+
+  test('Nach allen Bürger-Aktionen: Ruhezustand-Banner sichtbar', async ({ page }) => {
+    await page.goto('/fall/rueckfragen');
+    await page.getByRole('button', { name: /Jetzt beantworten/i }).click();
+    await page.goto('/fall/dokumente');
+    // Beide ausstehenden Unterlagen als hochgeladen markieren
+    const uploadButtons = page.getByRole('button', { name: /Als hochgeladen markieren/i });
+    const count = await uploadButtons.count();
+    for (let i = 0; i < count; i++) {
+      await uploadButtons.nth(0).click();
+    }
+    await page.goto('/fall');
+    await expect(page.getByTestId('ruhezustand-banner')).toBeVisible();
+    await expect(page.getByText('Kein Handeln von Ihnen erforderlich')).toBeVisible();
+    await expect(page.locator('.action-banner')).toHaveCount(0);
+  });
+
 });
