@@ -135,7 +135,11 @@ export default function KitaEinrichtungBelegungPage() {
           <div>
             <strong style={{ fontSize: '0.875rem' }}>Daten veraltet</strong>
             <p style={{ fontSize: '0.875rem', margin: '0.25rem 0 0' }}>
-              Die letzte Erfassung liegt mehr als 3 Tage zurück. Bitte Tagesstand aktualisieren (US-KJ-001, in dieser Demo nicht interaktiv).
+              Die letzte Erfassung liegt mehr als 3 Tage zurück. Bitte{' '}
+              <Link href="/kita/tagesstand" style={{ color: 'var(--color-primary)' }}>
+                Tagesstand aktualisieren (US-KJ-001)
+              </Link>
+              .
             </p>
           </div>
         </div>
@@ -283,6 +287,9 @@ export default function KitaEinrichtungBelegungPage() {
         {' '}und den{' '}
         <Link href="/kita" style={{ color: 'var(--color-primary)' }}>öffentlichen Bericht</Link>
         {' '}ein — ohne Einrichtungsdetail in der Öffentlichkeit (DEC-004).{' '}
+        Tagesstand:{' '}
+        <Link href="/kita/tagesstand" style={{ color: 'var(--color-primary)' }}>Erfassen (US-KJ-001)</Link>
+        {' · '}
         Monatsauswertung:{' '}
         <Link href="/kita/monatsbericht" style={{ color: 'var(--color-primary)' }}>Monatsbericht (US-KJ-003)</Link>
         {' · '}
