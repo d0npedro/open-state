@@ -789,6 +789,10 @@ test.describe('UG – Hinweise zur Verfahrenslage', () => {
     await expect(cta).toBeVisible();
     await expect(cta).toContainText(/Zum Verfahrensstatus/i);
     await expect(cta).toHaveAttribute('href', '/gruendung#verfahrensstatus');
+    // Hilfstext bei offener RQ: zuerst Finanzamt-Rückfrage klären (wie Übersicht)
+    const hint = page.getByTestId('hinweise-betriebsdatum-cta-hint');
+    await expect(hint).toBeVisible();
+    await expect(hint).toContainText(/offene Rückfrage des Finanzamts klären/i);
   });
 
   test('Betriebsdatum-Signal bei offener Rückfrage: zuerst Rückfrage beantworten', async ({ page }) => {
@@ -825,6 +829,12 @@ test.describe('UG – Hinweise zur Verfahrenslage', () => {
       'href',
       '/gruendung#verfahrensstatus'
     );
+    // CTA-Hilfstext nach RQ-Antwort: Fokus Steuernummer/offene Punkte (wie Übersicht)
+    const hint = page.getByTestId('hinweise-betriebsdatum-cta-hint');
+    await expect(hint).toBeVisible();
+    await expect(hint).toContainText(/Rückfrage beantwortet/i);
+    await expect(hint).toContainText(/Steuernummer-Vergabe|offene Punkte/i);
+    await expect(hint).not.toContainText(/offene Rückfrage des Finanzamts klären/i);
   });
 
   test('INFO-Parallele-Behörden-Signal hat CTA „Zu den Behörden“', async ({ page }) => {

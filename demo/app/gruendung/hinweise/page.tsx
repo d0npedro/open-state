@@ -222,6 +222,17 @@ export default function GruendungHinweisePage() {
                   const betriebsdatumNochOffen = isBetriebsdatumSignal(sig)
                     ? !['GENEHMIGT', 'AKTIVER_BETRIEB', 'BETRIEB_EINGESTELLT'].includes(akte.status)
                     : false;
+                  // Hilfstext Betriebsdatum-CTA: session-sensitiv wie Übersicht-Fairness-CTA
+                  const hatOffeneRueckfrage = akte.rueckfragen.some(r => !r.beantwortet);
+                  const vs05Status = akte.verfahrensSchritte.find(vs => vs.id === 'VS-05')?.status;
+                  const steuernummerVergabeLaeuft = vs05Status === 'IN_BEARBEITUNG';
+                  const betriebsdatumCtaHint = betriebsdatumNochOffen
+                    ? hatOffeneRueckfrage
+                      ? 'Zuerst die offene Rückfrage des Finanzamts klären; Fortschritt und nächste Schritte im Statusblock.'
+                      : steuernummerVergabeLaeuft
+                        ? 'Rückfrage beantwortet – Steuernummer-Vergabe und weitere offene Punkte im Statusblock prüfen.'
+                        : 'Offene Punkte und aktuellen Fortschritt im Statusblock prüfen.'
+                    : null;
                   return (
                     <div key={sig.id} data-testid={`hinweise-hinweis-${sig.id}`}>
                       <FairnessPanel signale={[sig]} />
@@ -314,9 +325,11 @@ export default function GruendungHinweisePage() {
                           }}
                           data-testid="hinweise-betriebsdatum-cta-wrap"
                         >
-                          <p style={{ margin: 0, fontSize: '0.875rem', lineHeight: 1.45 }}>
-                            Status, Fortschritt und nächste Handlungsschritte finden Sie auf der
-                            Übersichtsseite Ihres Verfahrens.
+                          <p
+                            style={{ margin: 0, fontSize: '0.875rem', lineHeight: 1.45 }}
+                            data-testid="hinweise-betriebsdatum-cta-hint"
+                          >
+                            {betriebsdatumCtaHint}
                           </p>
                           <Link
                             href="/gruendung#verfahrensstatus"
