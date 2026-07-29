@@ -166,6 +166,8 @@ Story-Dokumentation ist kein Pflicht-Vorläufer für Mock-Daten und Typen.
 | Q-129 | UG Fairness: Betriebsdatum-Signal-Text session-sensitiv nach RQ-Antwort | DEMO | S | Q-124 | DONE `7a28bed` |
 | Q-130 | Kita Lagebild: Druckansicht mit Meldelücke-Filter-Hinweisen (`KitaLagebildDruck`) | DEMO | S | Q-128 | DONE `0cdeae4` |
 | Q-131 | Kita Monatsbericht ↔ Einrichtung: Prozesskette (Hub-Karten, Datenlücke-Links, Story-Labels) | DEMO | S | Q-102 | DONE `ba2c4aa` |
+| Q-132 | UG Übersicht: Steuernummer-CTA-Text nach VS-05 IN_BEARBEITUNG differenzieren | DEMO | S | Q-127 | DONE `bc4221a` |
+| Q-133 | Kita Tagesstand: Prozesskette Hub-Karten (Belegung/Monatsbericht/Meldung, US-KJ-001) | DEMO | S | Q-131 | DONE `810240d` |
 
 ---
 
@@ -302,3 +304,5 @@ Diese Punkte wurden in früheren Iterationen abgeschlossen und sind produktionsr
 | Q-129 UG Betriebsdatum-Text nach RQ | Signal-Text session-sensitiv | `7a28bed` → main |
 | Q-130 Kita Lagebild Druck Meldelücke | `KitaLagebildDruck` print-only Hinweise | `0cdeae4` → main |
 | Q-131 Kita Monatsbericht↔Einrichtung | Prozesskette Hub-Karten | `ba2c4aa` → main |
+| Q-132 UG Übersicht Steuernummer-CTA Label | VS-05 IN_BEARBEITUNG CTA-Text | `bc4221a` → main |
+| Q-133 Kita Tagesstand Prozesskette | Hub-Karten Belegung/Monatsbericht/Meldung | `810240d` → main |

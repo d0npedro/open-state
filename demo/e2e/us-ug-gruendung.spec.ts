@@ -249,9 +249,15 @@ test.describe('UG – Übersicht', () => {
     await expect(page.getByTestId('uebersicht-fairness-cta-beh-BEH-04')).toBeVisible();
     await expect(page.getByTestId('uebersicht-fairness-cta-steuernummer-BEH-02')).toBeVisible();
     await expect(page.getByTestId('uebersicht-fairness-cta-betriebsdatum')).toBeVisible();
-    // Steuernummer-Signal wechselt auf „in Bearbeitung“, CTA bleibt zum Finanzamt
+    // Steuernummer-Signal wechselt auf „in Bearbeitung“; CTA-Text differenziert
     await expect(page.getByTestId('uebersicht-fairness-UG-STEUERNUMMER-FEHLT')).toContainText(
       /Steuernummer in Bearbeitung/i
+    );
+    await expect(page.getByTestId('uebersicht-fairness-cta-steuernummer-BEH-02')).toContainText(
+      /Steuernummer-Stand ansehen/i
+    );
+    await expect(page.getByTestId('uebersicht-fairness-cta-steuernummer-BEH-02')).not.toContainText(
+      /^Zum Finanzamt/i
     );
     // Betriebsdatum-Signal: keine „zuerst Rückfrage beantworten“-Anweisung mehr
     const betriebsSignal = page.getByTestId('uebersicht-fairness-UG-BETRIEBSDATUM');

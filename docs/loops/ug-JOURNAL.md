@@ -8,6 +8,30 @@ Erlaubte Pfade nur: `demo/app/gruendung/**`, `demo/context/GruendungStateContext
 
 ---
 
+## 2026-07-29 – Iteration 22: Übersicht Steuernummer-CTA bei IN_BEARBEITUNG
+
+### Was
+Übersicht-Fairness-CTA für `UG-STEUERNUMMER-FEHLT` differenziert nach
+VS-05-Status: bei `AUSSTEHEND` weiterhin „Zum Finanzamt“; nach Session-
+Antwort und VS-05 `IN_BEARBEITUNG` „Steuernummer-Stand ansehen“ (gleicher
+Anker Finanzamt-Karte). E2E: Initialtext + Session-Erwartung.
+
+### Dateien
+- `demo/app/gruendung/page.tsx` – `fairnessSignalZiel` CTA-Text VS-05
+- `demo/e2e/us-ug-gruendung.spec.ts` – Session-Assertion CTA-Text
+- `docs/loops/ug-JOURNAL.md` – dieses Journal
+
+### Build
+`npm run lint` + `npm run build` im Ordner `demo/` grün.
+`npm run test:e2e:ug` Exit 0 (109 passed).
+
+### Nächster sinnvoller UG-Schritt (Vorschlag)
+- Übersicht: Fairness-CTA-Hilfstext bei Betriebsdatum nach RQ-Antwort (optional)
+- Hinweise: nach Session-Wechsel CTA-Verschwinden für parallele Behörden (optional)
+- Hinweise: Steuernummer-CTA-Label bei IN_BEARBEITUNG spiegeln (optional)
+
+---
+
 ## 2026-07-29 – Iteration 21: Betriebsdatum-Signal-Text nach RQ-Antwort
 
 ### Was
