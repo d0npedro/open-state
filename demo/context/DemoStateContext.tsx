@@ -24,6 +24,8 @@ interface DemoStateContextValue {
   answerRueckfrage: (id: string, antwortText?: string) => void;
   /** Demo: markiert ein angefordertes/abgelehntes Dokument als hochgeladen. */
   uploadDokument: (id: string) => void;
+  /** Demo: bestätigt Termin session-lokal (AUSSTEHEND → BESTAETIGT; Tab-Badge entfällt). */
+  confirmTermin: (id: string) => void;
   /** Demo: setzt Session auf den Ausgangs-Mock zurück. */
   resetSession: () => void;
   /** True, sobald in dieser Session gehandelt wurde. */
@@ -34,6 +36,7 @@ const DemoStateContext = createContext<DemoStateContextValue>({
   fall: demoFall,
   answerRueckfrage: () => {},
   uploadDokument: () => {},
+  confirmTermin: () => {},
   resetSession: () => {},
   hasSessionChanges: false,
 });
@@ -43,6 +46,8 @@ export function DemoStateProvider({ children }: { children: React.ReactNode }) {
   /** Antworttexte je Rückfrage-ID (Session, ohne Backend). */
   const [antwortTexte, setAntwortTexte] = useState<Record<string, string>>({});
   const [uploadedIds, setUploadedIds] = useState<string[]>([]);
+  /** Session-bestätigte Termine (Q-092 / US-AV-005). */
+  const [confirmedTerminIds, setConfirmedTerminIds] = useState<string[]>([]);
 
   const answerRueckfrage = useCallback((id: string, antwortText?: string) => {
     setAnsweredIds(prev => (prev.includes(id) ? prev : [...prev, id]));
@@ -55,13 +60,19 @@ export function DemoStateProvider({ children }: { children: React.ReactNode }) {
     setUploadedIds(prev => (prev.includes(id) ? prev : [...prev, id]));
   }, []);
 
+  const confirmTermin = useCallback((id: string) => {
+    setConfirmedTerminIds(prev => (prev.includes(id) ? prev : [...prev, id]));
+  }, []);
+
   const resetSession = useCallback(() => {
     setAnsweredIds([]);
     setAntwortTexte({});
     setUploadedIds([]);
+    setConfirmedTerminIds([]);
   }, []);
 
-  const hasSessionChanges = answeredIds.length > 0 || uploadedIds.length > 0;
+  const hasSessionChanges =
+    answeredIds.length > 0 || uploadedIds.length > 0 || confirmedTerminIds.length > 0;
 
   const fall = useMemo((): Fall => {
     const updatedRueckfragen = demoFall.rueckfragen.map(rq => {
@@ -89,6 +100,13 @@ export function DemoStateProvider({ children }: { children: React.ReactNode }) {
     const hasFehlendeUnterlagen = updatedDokumente.some(
       d => d.status === 'ANGEFORDERT' || d.status === 'ABGELEHNT'
     );
+
+    // Q-092: session-lokale Terminbestätigung (Badge-Zähler reagiert live)
+    const updatedTermine = demoFall.termine.map(t => {
+      if (!confirmedTerminIds.includes(t.id)) return t;
+      if (t.status === 'ABGESAGT') return t;
+      return { ...t, status: 'BESTAETIGT' as const };
+    });
 
     let status = demoFall.status;
     let statusBeschreibung = demoFall.statusBeschreibung;
@@ -209,25 +227,49 @@ export function DemoStateProvider({ children }: { children: React.ReactNode }) {
       });
     }
 
+    for (const id of confirmedTerminIds) {
+      const termin = demoFall.termine.find(t => t.id === id);
+      extraEvents.push({
+        id: `E-DEMO-TERM-${id}`,
+        typ: 'STATUS_GEAENDERT',
+        zeitstempel: DEMO_AKTION_ZEIT,
+        handelndeStelle: 'BUERGER',
+        beschreibung: termin
+          ? `Termin bestätigt: ${termin.zweck}`
+          : `Termin ${id} bestätigt`,
+        details: termin
+          ? `Teilnahme am ${termin.datum}, ${termin.uhrzeit} bestätigt (Demo-Session, keine echte Terminbuchung).`
+          : `Termin ${id} session-lokal bestätigt (Demo).`,
+      });
+    }
+
     return {
       ...demoFall,
       rueckfragen: updatedRueckfragen,
       dokumente: updatedDokumente,
+      termine: updatedTermine,
       status,
       statusBeschreibung,
       naechsterSchritt,
       offeneAufgaben,
       timeline: [...demoFall.timeline, ...extraEvents],
       letzteAktivitaet:
-        uploadedIds.length > 0 || answeredIds.length > 0
+        uploadedIds.length > 0 || answeredIds.length > 0 || confirmedTerminIds.length > 0
           ? DEMO_AKTION_DATUM
           : demoFall.letzteAktivitaet,
     };
-  }, [answeredIds, antwortTexte, uploadedIds]);
+  }, [answeredIds, antwortTexte, uploadedIds, confirmedTerminIds]);
 
   return (
     <DemoStateContext.Provider
-      value={{ fall, answerRueckfrage, uploadDokument, resetSession, hasSessionChanges }}
+      value={{
+        fall,
+        answerRueckfrage,
+        uploadDokument,
+        confirmTermin,
+        resetSession,
+        hasSessionChanges,
+      }}
     >
       {children}
     </DemoStateContext.Provider>

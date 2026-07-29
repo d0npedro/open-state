@@ -6,6 +6,40 @@ Scope: nur `demo/app/fall/**`, DemoStateContext, fairness/rules, mockFall, e2e u
 
 ---
 
+## 2026-07-29 – Iteration 7: Termin-Bestätigung session-lokal (Q-092)
+
+### Was
+Unbestätigter Termin (T-001) lässt sich in der Demo session-lokal bestätigen (US-AV-005 / Q-092):
+
+1. **`confirmTermin(id)`** in `DemoStateContext` — `AUSSTEHEND` → `BESTAETIGT`, nur Browser-Session.
+2. **Tab-Badge „Termine“** nutzt weiter `terminHatHandlungsbedarf` und entfällt live nach Bestätigung.
+3. **`/fall/termine`:** CTA „Termin bestätigen“, Status-Chip + Bestätigungshinweis; Demo-Hinweis im Kopf.
+4. Timeline: Ereignis „Termin bestätigt“ (STATUS_GEAENDERT, handelndeStelle BUERGER).
+5. E2E: Badge weg nach Klick; Session bleibt über Tab-Nav (kein `page.goto` nach Interaktion, DEC-012).
+
+### Dateien
+- `demo/context/DemoStateContext.tsx`
+- `demo/app/fall/termine/page.tsx`
+- `demo/data/mockFall.ts` (Kommentar)
+- `demo/e2e/us-av-005-termine.spec.ts`
+- `docs/loops/av-JOURNAL.md`
+
+### Story-IDs
+- US-AV-005 (Termin einsehen / Teilnahme)
+
+### Build
+`npm run lint` + `npm run build` + `npm run test:e2e:av` → Exit 0
+
+### Vorschlag Queue-ID
+- Q-092 (AV Termin-Bestätigung session-lokal)
+
+### Nächster sinnvoller AV-Schritt (Vorschlag)
+- Fairness-Signal UNTERLAGE mit berechneter Dokumenten-Frist
+- Verlauf: Upload-Ereignisse mit Dokumentbezeichnung hervorheben
+- Übersicht: Termin-Kachel Status „Bestätigt“ live nach Session-Aktion
+
+---
+
 ## 2026-07-29 – Iteration 6: Antworttext im Verlauf lesbar (Quittungsblock)
 
 ### Was

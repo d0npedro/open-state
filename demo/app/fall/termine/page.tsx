@@ -1,13 +1,14 @@
 // UX-Grund: Termine sind zeitkritisch. Datum + Uhrzeit müssen SOFORT lesbar sein —
 // groß, hervorgehoben. Vorbereitung als Checkliste (vertrautes Mental-Modell).
 // Format-Chip: "Persönlich / Online" mit Icon.
+// Q-092: unbestätigte Termine session-lokal bestätigen → Tab-Badge entfällt live.
 'use client';
 
 import { useDemoState } from '@/context/DemoStateContext';
 import { Icon } from '@/components/Icon';
 
 export default function TerminePage() {
-  const { fall } = useDemoState();
+  const { fall, confirmTermin } = useDemoState();
   const { termine } = fall;
   const hatKommende = termine.some(t => t.status !== 'ABGESAGT');
 
@@ -20,6 +21,11 @@ export default function TerminePage() {
         <p style={{ color: 'var(--color-neutral)' }}>
           {hatKommende ? 'Bitte erscheinen Sie pünktlich und vorbereitet.' : 'Derzeit sind keine Termine geplant.'}
         </p>
+        {termine.some(t => t.status === 'AUSSTEHEND') && (
+          <p style={{ margin: '0.5rem 0 0', fontSize: '0.875rem', color: 'var(--color-text-muted)' }}>
+            <strong>Demo:</strong> «Termin bestätigen» speichert nur in dieser Browser-Session — der Tab-Zähler verschwindet sofort.
+          </p>
+        )}
       </div>
 
       {/* ─── Termine ─────────────────────────────────────────────── */}
@@ -34,19 +40,28 @@ export default function TerminePage() {
         termine.map(t => {
           const bestaetigt = t.status === 'BESTAETIGT';
           const abgesagt   = t.status === 'ABGESAGT';
+          const ausstehend = t.status === 'AUSSTEHEND';
 
           return (
             <div
               key={t.id}
               className="card"
+              data-testid={`termin-karte-${t.id}`}
               style={{
-                borderLeft: bestaetigt ? '5px solid var(--color-primary)' : abgesagt ? '5px solid var(--color-danger)' : '5px solid var(--color-border)',
+                borderLeft: bestaetigt
+                  ? '5px solid var(--color-success)'
+                  : abgesagt
+                    ? '5px solid var(--color-danger)'
+                    : '5px solid var(--color-warning)',
                 opacity: abgesagt ? 0.6 : 1,
               }}
             >
               {/* Status + Format */}
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '1rem' }}>
-                <span className={`status-chip ${bestaetigt ? 'status-chip-success' : abgesagt ? 'status-chip-danger' : 'status-chip-neutral'}`}>
+                <span
+                  className={`status-chip ${bestaetigt ? 'status-chip-success' : abgesagt ? 'status-chip-danger' : 'status-chip-warning'}`}
+                  data-testid={`termin-status-${t.id}`}
+                >
                   <Icon name={bestaetigt ? 'check-circle' : abgesagt ? 'x-circle' : 'info'} size={14} />
                   {bestaetigt ? 'Bestätigt' : abgesagt ? 'Abgesagt' : 'Ausstehend'}
                 </span>
@@ -100,7 +115,7 @@ export default function TerminePage() {
               {/* UX-Grund: Checkliste ist ein universell bekanntes Mental-Modell.
                   Jeder Mensch hat schon mal eine Einkaufsliste gesehen.         */}
               {t.vorbereitung.length > 0 && (
-                <div>
+                <div style={{ marginBottom: ausstehend ? '1rem' : 0 }}>
                   <div style={{ fontWeight: 700, fontSize: '0.875rem', marginBottom: '0.625rem', display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--color-text)' }}>
                     <Icon name="scroll" size={16} />
                     Das bringen Sie bitte mit:
@@ -116,6 +131,52 @@ export default function TerminePage() {
                     ))}
                   </ul>
                 </div>
+              )}
+
+              {/* Q-092: session-lokale Bestätigung — Badge in Navigation aktualisiert live */}
+              {ausstehend && (
+                <div
+                  style={{
+                    display: 'flex',
+                    flexWrap: 'wrap',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    gap: '0.75rem',
+                    paddingTop: '0.25rem',
+                    borderTop: '1px solid var(--color-border)',
+                  }}
+                >
+                  <p style={{ margin: 0, fontSize: '0.875rem', color: 'var(--color-text-muted)', flex: '1 1 12rem' }}>
+                    Bitte bestätigen Sie Ihre Teilnahme, damit die Agentur planen kann.
+                  </p>
+                  <button
+                    type="button"
+                    className="btn btn-primary btn-inline"
+                    onClick={() => confirmTermin(t.id)}
+                    aria-label={`Termin bestätigen: ${t.zweck}`}
+                    data-testid={`termin-bestaetigen-${t.id}`}
+                  >
+                    <Icon name="check-circle" size={16} />
+                    Termin bestätigen
+                  </button>
+                </div>
+              )}
+
+              {bestaetigt && (
+                <p
+                  data-testid={`termin-bestaetigt-hinweis-${t.id}`}
+                  style={{
+                    margin: '0.75rem 0 0',
+                    fontSize: '0.875rem',
+                    color: 'var(--color-success)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.4rem',
+                  }}
+                >
+                  <Icon name="check-circle" size={16} />
+                  Teilnahme bestätigt — keine weitere Handlung zu diesem Termin nötig.
+                </p>
               )}
             </div>
           );

@@ -70,7 +70,7 @@ export const demoFall: Fall = {
         'Vorstellungen zu angestrebter Tätigkeit formulieren',
         'Fragen zu Ihrem Anspruch gerne mitbringen'
       ],
-      // Unbestätigt → Tab-Badge „Termine“ (Q-089); Bestätigung ist Behördenseite, Demo zeigt Handlungsbedarf
+      // Unbestätigt → Tab-Badge „Termine“ (Q-089); session-lokal bestätigbar (Q-092)
       status: 'AUSSTEHEND'
     }
   ],
