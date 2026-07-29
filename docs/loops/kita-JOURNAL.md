@@ -2,6 +2,30 @@
 
 Branch: `loop/kita` · Worktree: `D:\Projects\open-state-loop-kita`
 
+## Iteration 2026-07-29 – US-KJ-009 Transparenzbericht CSV Multi-Blatt Status/Meldebasis
+
+### Was
+Öffentlicher Transparenzbericht (`/kita`, US-KJ-009 AK 6): CSV-Export an Steuerungs-/Vorlage-Muster angeglichen. Metakopf: Bericht-Status (freigegeben, Version, Rolle+Datum), Datenstand, Meldebasis-Session (Lücken je Planungsraum, raumaggregiert), Session-Meldefreigabe, optionaler Export-Filter „Meldelücke“, Versorgung Gesamt, Open-Data-Lizenz, DEC-004. Blätter: 1 Versorgung, 2 Planungsräume (Meldebasis-Spalten, Rang nach Wartelistendruck), 3 Kapazitätsmaßnahmen, 4 Meldebasis-Stichprobe ohne Einrichtungsnamen. Dateiname mit Versions-/Datenstand und optional `-meldeluecke`. Methodik/Footer auf der Seite. Nur freigegebene Aggregate, keine Kind- oder Personennamen. Merge `origin/main` (ci-watcher) vor dem Feature.
+
+### Dateien
+- `demo/components/kita/KitaCsvDownload.tsx` (Multi-Blatt downloadCsv, Meldebasis, Export-Filter)
+- `demo/app/kita/page.tsx` (Methodik/Footer CSV-Hinweis)
+- `docs/loops/kita-JOURNAL.md` (dieses Journal)
+
+### Story
+US-KJ-009 – Öffentlichen Transparenzbericht einsehen (CSV Multi-Blatt Aggregate, Status/Meldebasis)
+
+### Build
+`npm run lint` + `npm run build` im `demo/`-Verzeichnis (siehe Commit dieses Laufs)
+
+### Nicht angefasst (Supervisor / verboten)
+Queue, BUILD_STATE, storyRegistry, DECISION_LOG, andere Domänen, package.json, CI, push
+
+### Nächster sinnvoller Schritt (Hinweis Supervisor)
+Lagebild Zeitreihen-Blatt im Steuerungs-CSV (US-KJ-005), oder Druck-Meta Status/Meldebasis print-only auf `/kita` schärfen.
+
+---
+
 ## Iteration 2026-07-29 – US-KJ-005 Lagebild Steuerungs-CSV Status/Meldelücke-Spiegel
 
 ### Was
