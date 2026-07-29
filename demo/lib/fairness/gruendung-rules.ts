@@ -8,7 +8,7 @@
  * Alle Signale sind Hinweise – keine Entscheidungen.
  */
 
-import type { GruendungsAkte } from '@/types/gruendung';
+import type { GruendungsAkte, GruendungsRueckfrage } from '@/types/gruendung';
 import type { FairnessSignal } from '@/types/fairness';
 import { berechneFristTage } from './rules';
 
@@ -26,6 +26,94 @@ const FRIST_RELEVANT_AB_TAGEN = 10;
 
 /** Gesetzliche Frist für BG-Anmeldung nach § 192 SGB VII (in Tagen) */
 const BG_ANMELDEFRIST_TAGE = 7;
+
+// ─── CTA-Hilfstexte (Übersicht + Hinweise, identischer Wortlaut) ─────────────
+// Session-sensitive Kurztexte für Fairness-/Primär-CTAs. Reine Ableitung aus
+// Aktendaten – keine Entscheidung. Eine Quelle für beide Screens (US-UG fairness).
+
+/** Ob mindestens eine Rückfrage noch unbeantwortet ist. */
+export function hatOffeneRueckfrage(akte: GruendungsAkte): boolean {
+  return akte.rueckfragen.some(r => !r.beantwortet);
+}
+
+/**
+ * Hilfstext für Primär- und Fairness-CTA bei offener Rückfrage:
+ * Antwortfrist (Datum + Resttage) und Konsequenz (Erfassung/Steuernummer).
+ */
+export function rqCtaHilfstext(
+  rq: GruendungsRueckfrage,
+  heute: string = FIKTIVES_HEUTE_GRUENDUNG
+): string {
+  const fristTage = berechneFristTage(rq.fristDatum, heute);
+  const fristLabel =
+    fristTage < 0
+      ? `${Math.abs(fristTage)} Tage überschritten`
+      : fristTage === 0
+        ? 'heute fällig'
+        : `noch ${fristTage} Tag${fristTage === 1 ? '' : 'e'}`;
+  return (
+    `Antwortfrist ${rq.frist} (${fristLabel}). ` +
+    'Ohne Antwort kann das Finanzamt die steuerliche Erfassung und die Steuernummer-Vergabe nicht abschließen. ' +
+    'Frage, Begründung und Formular finden Sie unter Rückfragen.'
+  );
+}
+
+/** Hilfstext Unterlagen-CTA: offene RQ → zuerst klären; danach Nachreichung. */
+export function unterlagenCtaHilfstext(hatOffeneRq: boolean): string {
+  return hatOffeneRq
+    ? 'Zuerst die offene Rückfrage des Finanzamts klären. Begründung und Upload-Möglichkeit finden Sie im Bereich Unterlagen.'
+    : 'Keine offene Rückfrage mehr – ausstehende Unterlage nachreichen. Begründung und Upload-Möglichkeit finden Sie im Bereich Unterlagen.';
+}
+
+/** Hilfstext BG-CTA: offene RQ → zuerst klären; danach BG-Fokus. */
+export function bgCtaHilfstext(hatOffeneRq: boolean): string {
+  return hatOffeneRq
+    ? 'Zuerst die offene Rückfrage des Finanzamts klären. Die BG-Anmeldung erfolgt außerhalb von Open State — Kontakt und Rolle auf der Behördenkarte.'
+    : 'Keine offene Rückfrage mehr – BG-Anmeldung außerhalb von Open State vornehmen. Kontakt und Rolle finden Sie auf der Behördenkarte.';
+}
+
+/**
+ * Hilfstext Steuernummer-CTA:
+ * IN_BEARBEITUNG → Vergabe läuft; sonst offene RQ → klären; sonst Erfassung.
+ */
+export function steuernummerCtaHilfstext(opts: {
+  inBearbeitung: boolean;
+  hatOffeneRq: boolean;
+}): string {
+  if (opts.inBearbeitung) {
+    return 'Die Vergabe der Steuernummer ist beim Finanzamt in Bearbeitung. Status und Kontakt finden Sie auf der Behördenkarte.';
+  }
+  return opts.hatOffeneRq
+    ? 'Zuerst die offene Rückfrage des Finanzamts klären. Rolle, Kontakt und offene Schritte finden Sie auf der Behördenkarte.'
+    : 'Die Steuernummer vergibt das Finanzamt nach Abschluss der steuerlichen Erfassung. Rolle, Kontakt und offene Schritte finden Sie auf der Behördenkarte.';
+}
+
+/**
+ * Hilfstext Betriebsdatum-CTA:
+ * offene RQ → klären; nach Antwort optional Steuernummer-Vergabe-Hinweis.
+ */
+export function betriebsdatumCtaHilfstext(opts: {
+  hatOffeneRq: boolean;
+  steuernummerInBearbeitung: boolean;
+}): string {
+  if (opts.hatOffeneRq) {
+    return 'Zuerst die offene Rückfrage des Finanzamts klären; Fortschritt und nächste Schritte im Statusblock.';
+  }
+  if (opts.steuernummerInBearbeitung) {
+    return 'Rückfrage beantwortet – Steuernummer-Vergabe und weitere offene Punkte im Statusblock prüfen.';
+  }
+  return 'Offene Punkte und aktuellen Fortschritt im Statusblock prüfen.';
+}
+
+/**
+ * Hilfstext parallele Behörden (INFO, primär Hinweise-Seite):
+ * offene RQ → zuerst klären; danach Überblick paralleler Stände.
+ */
+export function paralleleBehoerdenCtaHilfstext(hatOffeneRq: boolean): string {
+  return hatOffeneRq
+    ? 'Offene Rückfragen zuerst klären; Status und offene Schritte aller Stellen finden Sie unter Behörden & Verfahrensschritte.'
+    : 'Keine offene Rückfrage – Überblick über parallele Verfahren und Kontakte unter Behörden & Verfahrensschritte.';
+}
 
 export function berechneFairnessSignaleGruendung(akte: GruendungsAkte): FairnessSignal[] {
   const signale: FairnessSignal[] = [];

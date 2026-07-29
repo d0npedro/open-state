@@ -4,9 +4,14 @@ import Link from 'next/link';
 import { useGruendungState } from '@/context/GruendungStateContext';
 import {
   berechneFairnessSignaleGruendung,
-  FIKTIVES_HEUTE_GRUENDUNG,
+  bgCtaHilfstext,
+  betriebsdatumCtaHilfstext,
+  hatOffeneRueckfrage,
+  paralleleBehoerdenCtaHilfstext,
+  rqCtaHilfstext,
+  steuernummerCtaHilfstext,
+  unterlagenCtaHilfstext,
 } from '@/lib/fairness/gruendung-rules';
-import { berechneFristTage } from '@/lib/fairness/rules';
 import { demoGruendungsAkte } from '@/data/mockGruendungsfall';
 import { FairnessPanel } from '@/components/fairness/FairnessPanel';
 import { Icon } from '@/components/Icon';
@@ -127,35 +132,15 @@ export default function GruendungHinweisePage() {
                     ? akte.rueckfragen.find(r => r.id === rqId && !r.beantwortet)
                     : undefined;
                   const rqNochOffen = !!rqOffen;
-                  // Hilfstext RQ-CTA: Fristlabel + kurze Konsequenz (wie Übersicht)
-                  const rqCtaHint = (() => {
-                    if (!rqOffen) return null;
-                    const fristTage = berechneFristTage(
-                      rqOffen.fristDatum,
-                      FIKTIVES_HEUTE_GRUENDUNG
-                    );
-                    const fristLabel =
-                      fristTage < 0
-                        ? `${Math.abs(fristTage)} Tage überschritten`
-                        : fristTage === 0
-                          ? 'heute fällig'
-                          : `noch ${fristTage} Tag${fristTage === 1 ? '' : 'e'}`;
-                    return (
-                      `Antwortfrist ${rqOffen.frist} (${fristLabel}). ` +
-                      'Ohne Antwort kann das Finanzamt die steuerliche Erfassung und die Steuernummer-Vergabe nicht abschließen. ' +
-                      'Frage, Begründung und Formular finden Sie unter Rückfragen.'
-                    );
-                  })();
+                  // Hilfstext RQ-CTA: gemeinsame Quelle (gruendung-rules)
+                  const rqCtaHint = rqOffen ? rqCtaHilfstext(rqOffen) : null;
                   const bgBehörde = isBgAnmeldungSignal(sig)
                     ? akte.beteiligteBehörden.find(b => b.typ === 'BERUFSGENOSSENSCHAFT')
                     : undefined;
                   const bgNochOffen = bgBehörde?.status === 'NICHT_GESTARTET';
-                  // Hilfstext BG-CTA: session-sensitiv wie Übersicht-Fairness-CTA
-                  const hatOffeneRqBg = akte.rueckfragen.some(r => !r.beantwortet);
+                  // Hilfstext BG-CTA: session-sensitiv, gemeinsame Quelle
                   const bgCtaHint = bgNochOffen
-                    ? hatOffeneRqBg
-                      ? 'Zuerst die offene Rückfrage des Finanzamts klären. Die BG-Anmeldung erfolgt außerhalb von Open State — Kontakt und Rolle auf der Behördenkarte.'
-                      : 'Keine offene Rückfrage mehr – BG-Anmeldung außerhalb von Open State vornehmen. Kontakt und Rolle finden Sie auf der Behördenkarte.'
+                    ? bgCtaHilfstext(hatOffeneRueckfrage(akte))
                     : null;
                   return (
                     <div key={sig.id} data-testid={`hinweise-relevant-${sig.id}`}>
@@ -258,16 +243,15 @@ export default function GruendungHinweisePage() {
                   const betriebsdatumNochOffen = isBetriebsdatumSignal(sig)
                     ? !['GENEHMIGT', 'AKTIVER_BETRIEB', 'BETRIEB_EINGESTELLT'].includes(akte.status)
                     : false;
-                  // Hilfstext Betriebsdatum-CTA: session-sensitiv wie Übersicht-Fairness-CTA
-                  const hatOffeneRueckfrage = akte.rueckfragen.some(r => !r.beantwortet);
+                  // Hilfstexte: gemeinsame Quelle (gruendung-rules), session-sensitiv
+                  const offeneRq = hatOffeneRueckfrage(akte);
                   const vs05Status = akte.verfahrensSchritte.find(vs => vs.id === 'VS-05')?.status;
                   const steuernummerVergabeLaeuft = vs05Status === 'IN_BEARBEITUNG';
                   const betriebsdatumCtaHint = betriebsdatumNochOffen
-                    ? hatOffeneRueckfrage
-                      ? 'Zuerst die offene Rückfrage des Finanzamts klären; Fortschritt und nächste Schritte im Statusblock.'
-                      : steuernummerVergabeLaeuft
-                        ? 'Rückfrage beantwortet – Steuernummer-Vergabe und weitere offene Punkte im Statusblock prüfen.'
-                        : 'Offene Punkte und aktuellen Fortschritt im Statusblock prüfen.'
+                    ? betriebsdatumCtaHilfstext({
+                        hatOffeneRq: offeneRq,
+                        steuernummerInBearbeitung: steuernummerVergabeLaeuft,
+                      })
                     : null;
                   return (
                     <div key={sig.id} data-testid={`hinweise-hinweis-${sig.id}`}>
@@ -293,9 +277,7 @@ export default function GruendungHinweisePage() {
                             style={{ margin: 0, fontSize: '0.875rem', lineHeight: 1.45 }}
                             data-testid="hinweise-unterlagen-cta-hint"
                           >
-                            {hatOffeneRueckfrage
-                              ? 'Zuerst die offene Rückfrage des Finanzamts klären. Begründung und Upload-Möglichkeit finden Sie im Bereich Unterlagen.'
-                              : 'Keine offene Rückfrage mehr – ausstehende Unterlage nachreichen. Begründung und Upload-Möglichkeit finden Sie im Bereich Unterlagen.'}
+                            {unterlagenCtaHilfstext(offeneRq)}
                             {fehlendeDocs.length > 1
                               ? ` ${fehlendeDocs.length} Dokumente stehen aus.`
                               : ''}
@@ -333,11 +315,10 @@ export default function GruendungHinweisePage() {
                             style={{ margin: 0, fontSize: '0.875rem', lineHeight: 1.45 }}
                             data-testid={`hinweise-steuernummer-cta-hint-${finanzamt.id}`}
                           >
-                            {steuernummerInBearbeitung
-                              ? 'Die Vergabe der Steuernummer ist beim Finanzamt in Bearbeitung. Status und Kontakt finden Sie auf der Behördenkarte.'
-                              : hatOffeneRueckfrage
-                                ? 'Zuerst die offene Rückfrage des Finanzamts klären. Rolle, Kontakt und offene Schritte finden Sie auf der Behördenkarte.'
-                                : 'Die Steuernummer vergibt das Finanzamt nach Abschluss der steuerlichen Erfassung. Rolle, Kontakt und offene Schritte finden Sie auf der Behördenkarte.'}
+                            {steuernummerCtaHilfstext({
+                              inBearbeitung: !!steuernummerInBearbeitung,
+                              hatOffeneRq: offeneRq,
+                            })}
                           </p>
                           <Link
                             href={`/gruendung/behoerden#beh-${finanzamt.id}`}
@@ -409,12 +390,9 @@ export default function GruendungHinweisePage() {
                         b => b.status === 'IN_BEARBEITUNG' || b.status === 'RUECKFRAGE_OFFEN'
                       ).length > 1
                     : false;
-                  // Hilfstext parallele Behörden: session-sensitiv (wie Steuernummer/Betriebsdatum)
-                  const hatOffeneRueckfrageParallel = akte.rueckfragen.some(r => !r.beantwortet);
+                  // Hilfstext parallele Behörden: gemeinsame Quelle, session-sensitiv
                   const paralleleCtaHint = paralleleNochAktiv
-                    ? hatOffeneRueckfrageParallel
-                      ? 'Offene Rückfragen zuerst klären; Status und offene Schritte aller Stellen finden Sie unter Behörden & Verfahrensschritte.'
-                      : 'Keine offene Rückfrage – Überblick über parallele Verfahren und Kontakte unter Behörden & Verfahrensschritte.'
+                    ? paralleleBehoerdenCtaHilfstext(hatOffeneRueckfrage(akte))
                     : null;
                   return (
                     <div key={sig.id} data-testid={`hinweise-info-${sig.id}`}>
