@@ -1,0 +1,42 @@
+name: Fachlicher Hinweis
+description: Fachlicher Korrektur- oder Ergänzungsvorschlag zur Domänenlogik
+title: "[Fach] "
+labels: ["fachlich"]
+body:
+  - type: dropdown
+    id: domain
+    attributes:
+      label: Domäne
+      options:
+        - Arbeitsverwaltung (AV)
+        - Unternehmensgründung (UG)
+        - Kita / Jugendamt (KJ)
+        - Querschnitt / Fairness
+        - Architektur
+        - Sonstiges
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Kontext
+      description: Welches Dokument, welche Story oder welcher Screen ist betroffen?
+    validations:
+      required: true
+  - type: textarea
+    id: hinweis
+    attributes:
+      label: Fachlicher Hinweis
+      description: Was ist ungenau, unvollständig oder verbesserungswürdig?
+    validations:
+      required: true
+  - type: textarea
+    id: vorschlag
+    attributes:
+      label: Änderungsvorschlag (optional)
+      description: Konkrete Formulierung oder Rechtsbezug
+  - type: input
+    id: rechtsbezug
+    attributes:
+      label: Rechtsgrundlage (optional)
+      placeholder: z. B. § 141 SGB III

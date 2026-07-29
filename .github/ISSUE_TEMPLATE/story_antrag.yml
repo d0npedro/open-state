@@ -1,0 +1,54 @@
+name: Story-Antrag
+description: Neue User Story vorschlagen oder priorisieren
+title: "[Story] "
+labels: ["story"]
+body:
+  - type: dropdown
+    id: domain
+    attributes:
+      label: Domäne
+      options:
+        - AV – Arbeitsverwaltung
+        - UG – Unternehmensgründung
+        - KJ – Kita / Jugendamt
+        - Neu / andere
+    validations:
+      required: true
+  - type: input
+    id: role
+    attributes:
+      label: Primäre Rolle
+      placeholder: z. B. Bürger, Gründerin, Kita-Leitung
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: Welches konkrete Problem soll gelöst werden?
+    validations:
+      required: true
+  - type: textarea
+    id: story
+    attributes:
+      label: User Story (Entwurf)
+      placeholder: Als … möchte ich … damit …
+    validations:
+      required: true
+  - type: textarea
+    id: ak
+    attributes:
+      label: Grobe Akzeptanzkriterien
+      placeholder: |
+        1. …
+        2. …
+    validations:
+      required: true
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Vorgeschlagene Priorität
+      options:
+        - Hoch (sichtbarer Demo-Nutzen)
+        - Mittel
+        - Niedrig (Docs / Nachzug)

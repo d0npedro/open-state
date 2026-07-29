@@ -1,0 +1,49 @@
+name: Rechtliche Einschätzung
+description: Offene Rechts- oder Policy-Frage markieren (keine Rechtsberatung)
+title: "[Recht] "
+labels: ["recht", "policy"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Dieses Template dokumentiert **offene Prüfpunkte**. Es ersetzt keine anwaltliche oder behördliche Rechtsberatung.
+  - type: dropdown
+    id: domain
+    attributes:
+      label: Domäne / Querschnitt
+      options:
+        - Arbeitsverwaltung
+        - Unternehmensgründung
+        - Kita / Jugendamt / Kindeswohl
+        - Datenschutz / DSGVO
+        - Verfahrensrecht
+        - Föderale Zuständigkeit
+        - Sonstiges
+    validations:
+      required: true
+  - type: textarea
+    id: frage
+    attributes:
+      label: Rechts- oder Policy-Frage
+    validations:
+      required: true
+  - type: textarea
+    id: impact
+    attributes:
+      label: Auswirkung auf Demo / Architektur
+      description: Was darf nicht implementiert oder freigegeben werden, solange die Frage offen ist?
+    validations:
+      required: true
+  - type: input
+    id: refs
+    attributes:
+      label: Normen / Dokumente (optional)
+      placeholder: z. B. § 35a VwVfG, DEC-004, ADR-007
+  - type: dropdown
+    id: urgency
+    attributes:
+      label: Dringlichkeit für die Weiterentwicklung
+      options:
+        - Blockiert Implementierung
+        - Sollte vor DEMONSTRIERBAR geklärt sein
+        - Dokumentationshinweis ausreichend

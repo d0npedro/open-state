@@ -1,0 +1,49 @@
+name: Bug
+description: Fehler in der Demo oder in der Dokumentation melden
+title: "[Bug] "
+labels: ["bug"]
+body:
+  - type: dropdown
+    id: area
+    attributes:
+      label: Bereich
+      options:
+        - Demo UI
+        - Build / CI
+        - E2E Tests
+        - Dokumentation
+        - Sonstiges
+    validations:
+      required: true
+  - type: input
+    id: route
+    attributes:
+      label: Route / Datei
+      placeholder: z. B. /gruendung/rueckfragen
+  - type: textarea
+    id: repro
+    attributes:
+      label: Schritte zur Reproduktion
+      placeholder: |
+        1. …
+        2. …
+        3. …
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Erwartetes Verhalten
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Tatsächliches Verhalten
+    validations:
+      required: true
+  - type: input
+    id: env
+    attributes:
+      label: Umgebung
+      placeholder: Browser, OS, Commit-SHA falls bekannt
