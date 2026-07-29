@@ -2,14 +2,15 @@
 
 | Feld | Wert |
 |------|------|
-| last_checked | 2026-07-29T10:06:30Z |
-| last_run_id | 30442150914 |
+| last_checked | 2026-07-29T10:09:10Z |
+| last_run_id | 30442365717 |
 | last_status | success |
-| last_sha | 7c8fc06 |
+| last_sha | 9bdc452 |
 | fix_attempts | 0 |
 
 ## Log
 
+- E2E `30442365717` **success** (SHA 9bdc452 docs ci-watcher HEAD). E2E `30442150914` **success** (SHA 7c8fc06 docs). E2E `30442086406` **success** (SHA d0da64a docs supervisor Q-180–Q-184). Build `30441945089` + E2E `30441945078` **success** (SHA 2190a70 Merge loop/kita — latest code path: AV RQ-Signal live + UG Fairness-Tiefenlink/BG-Demo + Kita Regionenvergleich + Meldeeingang Druck-Meta). Catch-up: origin/main..main = 0. Watched docs E2E to green. No fix. fix_attempts=0.
 - E2E `30442150914` **success** (SHA 7c8fc06 docs ci-watcher HEAD). E2E `30442086406` **success** (SHA d0da64a docs supervisor Q-180–Q-184). Build `30441945089` + E2E `30441945078` **success** (SHA 2190a70 Merge loop/kita — latest code path: AV RQ-Signal live + UG Fairness-Tiefenlink/BG-Demo + Kita Regionenvergleich + Meldeeingang Druck-Meta). Catch-up: origin/main..main = 0 (prior concurrent catch-up already pushed). Local lint grün; shared `.next` race → isolated rebuild `NEXT_DIST_DIR=.next-ci-watcher` grün. Watched docs E2E to green. No fix. fix_attempts=0.
 - Build `30441945089` + E2E `30441945078` **success** (SHA 2190a70 Merge loop/kita — latest code path: AV RQ-Signal live + UG Fairness-Tiefenlink/BG-Demo + Kita Regionenvergleich + Meldeeingang Druck-Meta). Prior E2E `30441631208` **success** (SHA c1755cd docs). Catch-up this tick: origin/main..main was 8 → lint+build grün → push `c1755cd..2190a70` → origin/main..main = 0. Watched Build/E2E to green. Concurrent supervisor docs HEAD `d0da64a` (Q-180–Q-184 path-skip); E2E `30442086406` may still be in_progress (docs-only). No fix. fix_attempts=0.
 - E2E `30441424346` **success** (SHA e40be83 docs ci-watcher HEAD). E2E `30441228404` **success** (SHA e3d1c36 docs supervisor E2E 257 after Q-175–Q-179). Build latest code path still `30440899115` **success** (SHA bd018cd Merge loop/kita Explorer print-only Filterstand/Meldebasis — HEAD docs-only path-skip). Catch-up: origin/main..main = 0. Watched E2E to green. No fix. fix_attempts=0.
