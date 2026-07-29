@@ -2,14 +2,15 @@
 
 | Feld | Wert |
 |------|------|
-| last_checked | 2026-07-29T07:42:00Z |
-| last_run_id | 30432205198 |
+| last_checked | 2026-07-29T07:43:00Z |
+| last_run_id | 30432383614 |
 | last_status | success |
-| last_sha | ea9b781 |
+| last_sha | dc1038b |
 | fix_attempts | 0 |
 
 ## Log
 
+- E2E `30432383614` **success** (SHA dc1038b docs ci-watcher HEAD). E2E `30432205198` **success** (SHA ea9b781). E2E `30432026086` **success** (SHA 99d4bae). Build latest `30431979526` **success** (SHA 77a2196; HEAD docs-only path-skip). Catch-up: origin/main..main = 0. No fix. fix_attempts=0.
 - E2E `30432205198` **success** (SHA ea9b781 docs ci-watcher HEAD). E2E `30432026086` **success** (SHA 99d4bae). E2E `30431979685` + Build `30431979526` **success** (SHA 77a2196; HEAD docs-only path-skip). Catch-up: origin/main..main = 0. No fix. fix_attempts=0.
 - E2E `30432026086` **success** (SHA 99d4bae docs supervisor Q-139/Q-140 HEAD). E2E `30431979685` **success** (SHA 77a2196). Build `30431979526` **success** (SHA 77a2196; HEAD docs-only path-skip). Catch-up: origin/main..main = 0. No fix. fix_attempts=0.
 - E2E `30431649961` **success** (SHA 8e52cba docs ci-watcher HEAD). E2E `30431592630` **success** (SHA 82012a0). E2E `30431410850` **success** (SHA 7de80f1). Build latest `30430744932` **success** (SHA fc6ae7d; HEAD docs-only path-skip). Catch-up this tick: origin/main..main was 6 (kita bedarfsplanung hub + vorlage print + UG Betriebsdatum fairness CTA + merges) → lint+build grün (`NEXT_DIST_DIR=.next-ci-watcher`) + local `test:e2e:ci` **237 passed** → push. No fix. fix_attempts=0.
