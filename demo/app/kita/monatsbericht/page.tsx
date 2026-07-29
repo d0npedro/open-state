@@ -4,9 +4,12 @@
  * US-KJ-003 – Monatsbericht abrufen (Einrichtungsebene, Demo)
  *
  * Aggregierte Monatsauswertung je Gruppe + Vorjahresvergleich.
- * Datenlücken sichtbar. CSV-Export und druckoptimierte Ansicht (PDF via Browser).
+ * Datenlücken sichtbar. CSV-Export und Druckansicht (PDF via Browser).
  * Demo-Umschalter: Monatsabschluss (lückenhaft) vs. laufender Monat (VORSCHAU)
  * mit gemischten Tagesstand-Quellen (FREIGEGEBEN / FEHLT / IN_ERFASSUNG).
+ * Druck: Status (VOLLSTAENDIG / LUECKENHAFT / VORSCHAU) und Datenbasis-Stand
+ * (Tagesstand-Quellen freigegeben/fehlt/in Erfassung) im Ausdruck dokumentiert
+ * (Spiegel Lagebild/Bedarfsplanung/Vorlage). Demo-Umschalter und Aktionen no-print.
  * VORSCHAU: Rücklink zum Meldeeingang im Steuerungslagebild (US-KJ-005).
  * Einrichtungs-Kontext: Belegungsstand (US-KJ-002) und Prozesskette zur Meldung.
  * Keine Kind- oder Personennamen.
@@ -189,9 +192,12 @@ export default function KitaMonatsberichtPage() {
   ).length;
   const istVorschau = b.status === 'VORSCHAU';
 
+  const modusLabel =
+    modus === 'VORSCHAU' ? 'Laufender Monat (Vorschau)' : 'Monatsabschluss (Demo)';
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1.75rem' }}>
-      <div>
+      <div className="no-print">
         <div
           style={{
             fontSize: '0.8rem',
@@ -244,6 +250,107 @@ export default function KitaMonatsberichtPage() {
         >
           Laufender Monat Nov 2024 (Vorschau)
         </button>
+      </div>
+
+      {/* Druck: Status + Datenbasis (Tagesstand-Quellen) im Ausdruck – Spiegel Lagebild/Vorlage */}
+      <div
+        className="no-print card"
+        style={{
+          display: 'flex',
+          flexWrap: 'wrap',
+          gap: '1rem',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+        }}
+      >
+        <div style={{ maxWidth: '40rem' }}>
+          <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>Export</div>
+          <strong style={{ fontSize: '0.95rem' }}>Druckansicht Monatsbericht</strong>
+          <p
+            style={{
+              fontSize: '0.8rem',
+              color: 'var(--color-text-muted)',
+              margin: '0.25rem 0 0',
+              lineHeight: 1.5,
+            }}
+          >
+            Druck dokumentiert den aktiven Demo-Modus (Abschluss / Vorschau), den Berichtsstatus
+            und die Datenbasis aus Tagesstand-Quellen (freigegeben / fehlt / in Erfassung).
+            Umschalter, Prozess-Hub und Aktionsbuttons sind no-print. Keine Kind- oder Personennamen.
+          </p>
+        </div>
+        <button
+          type="button"
+          className="btn btn-secondary"
+          onClick={() => window.print()}
+          style={{ fontSize: '0.875rem', flexShrink: 0 }}
+        >
+          Drucken / als PDF speichern
+        </button>
+      </div>
+
+      {/* print-only Kopf + Status + Datenbasis-Dokumentation */}
+      <div className="print-only print-block" style={{ margin: 0 }}>
+        <p style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', margin: '0 0 0.35rem' }}>
+          US-KJ-003 · Monatsbericht · Demo Einrichtung / Kita-Leitung
+        </p>
+        <h1 style={{ margin: '0 0 0.35rem', fontSize: '1.35rem' }}>
+          Monatsbericht {b.monatsLabel}
+        </h1>
+        <p style={{ color: 'var(--color-text-muted)', margin: '0 0 0.75rem', fontSize: '0.9rem' }}>
+          {b.einrichtungBezeichnung} · {b.traeger} · Planungsraum {b.planungsraumBezeichnung}
+        </p>
+        <div
+          style={{
+            marginBottom: '0.75rem',
+            padding: '0.75rem 1rem',
+            border: '1px solid var(--color-border)',
+            borderRadius: 'var(--radius)',
+            fontSize: '0.875rem',
+            background: 'var(--color-neutral-light)',
+            borderLeft: `4px solid ${st.color}`,
+          }}
+          role="status"
+        >
+          <strong style={{ color: st.color }}>
+            Status im Ausdruck: {st.label}
+            {istVorschau ? ' (Monat nicht abgeschlossen)' : ''}
+          </strong>
+          <div style={{ marginTop: '0.25rem', color: 'var(--color-text-muted)', fontSize: '0.8rem' }}>
+            Demo-Modus: {modusLabel} · Stand {b.standLabel} · Vergleich {b.vorjahresLabel} · ID{' '}
+            <span style={{ fontFamily: 'monospace' }}>{b.id}</span>
+          </div>
+          <p style={{ margin: '0.4rem 0 0', fontSize: '0.8rem', lineHeight: 1.45 }}>
+            {st.hint}
+          </p>
+        </div>
+        <div
+          style={{
+            marginBottom: '0.5rem',
+            padding: '0.75rem 1rem',
+            border: '1px solid var(--color-border)',
+            borderRadius: 'var(--radius)',
+            fontSize: '0.875rem',
+          }}
+          role="note"
+        >
+          <strong style={{ display: 'block', marginBottom: '0.35rem' }}>
+            Datenbasis im Ausdruck (Tagesstand-Quellen, US-KJ-001)
+          </strong>
+          <p style={{ margin: 0, fontSize: '0.8rem', lineHeight: 1.5 }}>
+            Freigegeben {freigegebenCount}/{b.betriebstageImMonat}
+            {istVorschau ? ' bis Stichtag' : ''} · fehlt {fehltCount} · in Erfassung {inErfassungCount}{' '}
+            (Entwürfe nicht einbezogen) · Tage Personalschlüssel unterschritten (aus freigegebenen
+            Ständen): {schluesselTage}. Kennzahlen nur aus freigegebenen Tagesständen; Lücken werden
+            nicht interpoliert.
+            {luecke
+              ? ` Fehlende Tage: ${b.fehlendeTage.join(', ')}.`
+              : ' Keine fehlenden Betriebstage in der Datenbasis.'}
+            {istVorschau
+              ? ' Vorschau-Zwischenstand methodisch getrennt von freigegebener Monatsmeldung (US-KJ-004).'
+              : ''}
+          </p>
+        </div>
       </div>
 
       {/* Metadaten */}
@@ -851,11 +958,20 @@ export default function KitaMonatsberichtPage() {
                 {b.methodik.datenquelle}
               </dd>
             </div>
+            <div>
+              <dt style={{ fontWeight: 600 }}>Druckansicht</dt>
+              <dd style={{ margin: '0.2rem 0 0', color: 'var(--color-text-muted)' }}>
+                Ausdruck dokumentiert den aktiven Demo-Modus (Abschluss oder Vorschau), den
+                Berichtsstatus (vollständig / lückenhaft / Vorschau) und den Datenbasis-Stand der
+                Tagesstand-Quellen (freigegeben, fehlt, in Erfassung) – Spiegel der Druckhinweise
+                in Lagebild, Bedarfsplanung und Vorlage. Keine Kind- oder Personennamen.
+              </dd>
+            </div>
           </dl>
         </div>
       </section>
 
-      <div style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)' }}>
+      <div className="no-print" style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)' }}>
         Prozesskette Einrichtung {b.einrichtungBezeichnung}:{' '}
         <Link href="/kita/tagesstand" style={{ color: 'var(--color-primary)' }}>
           Tagesstand (US-KJ-001)
@@ -882,14 +998,32 @@ export default function KitaMonatsberichtPage() {
             </Link>
           </>
         )}
-        .
+        . Druck: Status und Datenbasis-Stand der Tagesstand-Quellen im Ausdruck dokumentiert.
+      </div>
+
+      <div
+        className="print-only print-block"
+        style={{
+          marginTop: '0.5rem',
+          fontSize: '0.8rem',
+          color: 'var(--color-text-muted)',
+          lineHeight: 1.45,
+        }}
+      >
+        Druckansicht US-KJ-003: Status {st.label}
+        {istVorschau ? ' (Vorschau)' : ''}; Datenbasis freigegeben {freigegebenCount}/
+        {b.betriebstageImMonat}, fehlt {fehltCount}, in Erfassung {inErfassungCount}. Nur Aggregate,
+        keine Kind- oder Personennamen. Demo-Modus: {modusLabel}.
       </div>
 
       <style
         dangerouslySetInnerHTML={{
           __html: `
+            .print-only { display: none; }
             @media print {
               .no-print { display: none !important; }
+              .print-only { display: inline !important; }
+              .print-only.print-block { display: block !important; }
               body > div > header,
               body nav { display: none !important; }
               main { padding: 0 !important; }

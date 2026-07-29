@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { demoKitaLagebild } from '@/data/mockKitaLagebild';
 import { KitaMeldeeingangPanel } from '@/components/kita/KitaMeldeeingangPanel';
 import { KitaEngpassRangliste } from '@/components/kita/KitaEngpassRangliste';
@@ -205,6 +206,96 @@ export default function KitaLagebildPage() {
         Bedarfsplanung und Transparenzbericht), keine automatische Handlungsempfehlung. Schnellfilter
         „Meldelücke“ in Engpass, Handlungsfeldern und Detailkarten ändern nur die Sichtbarkeit; bei
         aktivem Filter dokumentiert der Ausdruck den Filterstand (print-only-Hinweis je Abschnitt).
+      </div>
+
+      {/* Steuerungskette JA: Lagebild → Bedarfsplanung → Vorlage (+ Meldebasis) */}
+      <section aria-labelledby="prozesskette-heading" className="no-print">
+        <h2 id="prozesskette-heading" style={{ marginBottom: '0.5rem' }}>
+          Steuerungskette Jugendamt
+        </h2>
+        <p
+          style={{
+            margin: '0 0 1rem',
+            fontSize: '0.875rem',
+            color: 'var(--color-text-muted)',
+            maxWidth: '44rem',
+          }}
+        >
+          Kommune <strong>{lb.kommuneBezeichnung}</strong>, Lagebild{' '}
+          <span style={{ fontFamily: 'monospace' }}>{lb.version}</span> ({lb.stand}
+          ). Dieses Lagebild speist den Bedarfsplanungsentwurf und die politische Gremienvorlage.
+          Meldebasis aus freigegebenen Einrichtungsmeldungen (Session-Demo). Keine Kind- oder
+          Personennamen; keine automatische Beschlussempfehlung.
+        </p>
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+            gap: '0.75rem',
+          }}
+        >
+          {(
+            [
+              {
+                href: '/kita/bedarfsplanung',
+                story: 'US-KJ-007',
+                title: 'Bedarfsplanungsentwurf',
+                text: 'Planungslücken und Meldebasis aus diesem Lagebild; Entwurf ohne automatische Entscheidung.',
+                border: 'var(--color-primary)',
+              },
+              {
+                href: '/kita/vorlage',
+                story: 'US-KJ-008',
+                title: 'Politische Vorlage',
+                text: 'Gremienvorlage aus Lagebild und Planungslücken; Freigabe nur aktiv durch JA-Leitung.',
+                border: 'var(--color-primary)',
+              },
+              {
+                href: '/kita/meldung',
+                story: 'US-KJ-004',
+                title: 'Monatsmeldung freigeben',
+                text: 'Einrichtungs-Aggregate freigeben; schließt Demo-Meldelücken (z. B. Südost / Sonnenwinkel).',
+                border: 'var(--color-warning)',
+              },
+            ] as const
+          ).map(card => (
+            <Link
+              key={card.href}
+              href={card.href}
+              className="card"
+              style={{
+                textDecoration: 'none',
+                color: 'inherit',
+                borderTop: `3px solid ${card.border}`,
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '0.35rem',
+              }}
+            >
+              <span
+                className="badge badge-primary"
+                style={{ alignSelf: 'flex-start', fontSize: '0.68rem' }}
+              >
+                {card.story}
+              </span>
+              <strong style={{ fontSize: '0.95rem', color: 'var(--color-primary)' }}>
+                {card.title}
+              </strong>
+              <span style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', lineHeight: 1.45 }}>
+                {card.text}
+              </span>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      <div className="no-print" style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)' }}>
+        Steuerungskette Kommune {lb.kommuneBezeichnung}: Lagebild → Bedarfsplanung → Vorlage
+        (Planungslücken und Meldebasis). Öffentliche Aggregation ohne Einrichtungsdetail im{' '}
+        <Link href="/kita" style={{ color: 'var(--color-primary)' }}>
+          öffentlichen Bericht
+        </Link>{' '}
+        (DEC-004).
       </div>
     </div>
   );
