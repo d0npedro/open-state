@@ -2,6 +2,30 @@
 
 Branch: `loop/kita` · Worktree: `D:\Projects\open-state-loop-kita`
 
+## Iteration 2026-07-29 – US-KJ-003/005 Meldeeingang ↔ Monatsbericht-Vorschau
+
+### Was
+Steuerungslagebild-Meldeeingang koppelt den Status freigegebener Monatsmeldungen (Abschlussmonat) mit der Monatsbericht-Vorschau des laufenden Monats für Kita Sonnenwinkel: gemischte Tagesstand-Quellen (freigegeben / fehlt / in Erfassung), methodische Trennung von Meldeeingang und Vorschau, Links zu Monatsbericht und Freigabe. Vorschau ersetzt fehlende Monatsmeldung nicht. Nur Aggregate, keine Kind- oder Personennamen.
+
+### Dateien
+- `demo/components/kita/KitaMeldeeingangMonatsberichtVorschau.tsx` (neu)
+- `demo/components/kita/KitaMeldeeingangPanel.tsx` (Einbindung + Methodik-Link)
+- `docs/loops/kita-JOURNAL.md` (dieses Journal)
+
+### Story
+US-KJ-003 / US-KJ-005 – Monatsbericht-Vorschau im Meldeeingang-Kontext des Lagebilds
+
+### Build
+`npm run lint` + `npm run build` im `demo/`-Verzeichnis (siehe Commit dieses Laufs)
+
+### Nicht angefasst (Supervisor / verboten)
+Queue, BUILD_STATE, storyRegistry, andere Domänen, package.json, CI, push
+
+### Nächster sinnvoller Schritt (Hinweis Supervisor)
+Bedarfsplanung: residuale Lücke Südost methodisch an fehlende Meldung knüpfen (Hinweis-only), oder Monatsbericht-Seite Rücklink „im Lagebild als Vorschau sichtbar“.
+
+---
+
 ## Iteration 2026-07-29 – US-KJ-007 Bedarfsplanung Datenlücke aus Meldeeingang
 
 ### Was
