@@ -2,6 +2,29 @@
 
 Branch: `loop/kita` · Worktree: `D:\Projects\open-state-loop-kita`
 
+## Iteration 2026-07-29 – US-KJ-003 Monatsbericht CSV Vorschau-Modus-Metadaten
+
+### Was
+Monatsbericht (`/kita/monatsbericht`, US-KJ-003): CSV-Metakopf an Druckansicht und Tagesstand-CSV geschärft. Demo-Modus (Abschluss / Vorschau), Status-Label + Hinweis, Stand/Vergleich/ID, Datenbasis-Zähler (freigegeben/fehlt/in Erfassung), fehlende Tage, Schlüssel-Tage. Im Vorschau-Modus: methodische Trennung zu Monatsmeldung (US-KJ-004) und Lagebild-Vorschau (US-KJ-005); Dateiname mit `-vorschau`. Quellenblatt mit Datum-Label und Status-Label; Personal-Ist-Stunden mit Komma-Dezimal. Export-Karte Druck+CSV, Methodik-Punkt CSV. Nur Aggregate, keine Kind- oder Personennamen (DEC-004). Merge `origin/main` (ci-watcher docs) vor dem Feature.
+
+### Dateien
+- `demo/app/kita/monatsbericht/page.tsx` (downloadCsv Meta/Quellen, Export-Karte, Methodik)
+- `docs/loops/kita-JOURNAL.md` (dieses Journal)
+
+### Story
+US-KJ-003 – Monatsbericht abrufen (CSV Vorschau-/Abschluss-Metadaten, Quellenblatt)
+
+### Build
+`npm run lint` + `npm run build` im `demo/`-Verzeichnis (siehe Commit dieses Laufs)
+
+### Nicht angefasst (Supervisor / verboten)
+Queue, BUILD_STATE, storyRegistry, DECISION_LOG, andere Domänen, package.json, CI, push
+
+### Nächster sinnvoller Schritt (Hinweis Supervisor)
+Meldung-CSV Aggregate freigabeunabhängig (DEC-004), oder Einrichtungs-CSV Metakopf an Tagesstand/Monatsbericht spiegeln falls Lücken.
+
+---
+
 ## Iteration 2026-07-29 – US-KJ-001 Tagesstand CSV Aggregate-Export
 
 ### Was
