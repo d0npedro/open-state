@@ -61,6 +61,54 @@ test.describe('US-AV-005 – Termin einsehen und verstehen', () => {
     await expect(page.getByTestId('tab-badge-termine')).toHaveCount(0);
   });
 
+  test('Q-196: Termin-Quittung mit Verlauf-Tiefenlink (US-AV-005/007)', async ({ page }) => {
+    // Quittung verlinkt auf Session-Ereignis; Hash-Hervorhebung + Badge im Verlauf
+    // Kein page.goto nach State (DEC-012)
+    await page.getByTestId('termin-bestaetigen-T-001').click();
+
+    await expect(page.getByTestId('termin-bestaetigt-quittung-T-001')).toBeVisible();
+    await expect(page.getByTestId('termin-bestaetigt-hinweis-T-001')).toContainText(
+      /Teilnahme bestätigt/i
+    );
+    await expect(page.getByTestId('termin-bestaetigt-text-T-001')).toContainText(
+      /Erstgespräch mit persönlicher Ansprechpartnerin/i
+    );
+
+    const verlaufLink = page.getByTestId('termin-verlauf-link-T-001');
+    await expect(verlaufLink).toBeVisible();
+    await expect(verlaufLink).toHaveAttribute(
+      'href',
+      '/fall/verlauf#ere-E-DEMO-TERM-T-001'
+    );
+    await expect(verlaufLink).toContainText(/Im Verlauf ansehen/i);
+
+    await verlaufLink.click();
+    await expect(page).toHaveURL(/\/fall\/verlauf#ere-E-DEMO-TERM-T-001/);
+
+    const card = page.getByTestId('verlauf-ereignis-E-DEMO-TERM-T-001');
+    await expect(card).toBeVisible();
+    await expect(card).toHaveAttribute('aria-current', 'location');
+    await expect(card).toHaveAttribute('data-session-termin', 'true');
+    await expect(card).toContainText(/Termin bestätigt/i);
+    await expect(page.getByTestId('verlauf-session-termin-badge-E-DEMO-TERM-T-001')).toBeVisible();
+    await expect(page.getByTestId('verlauf-session-termin-badge-E-DEMO-TERM-T-001')).toContainText(
+      /Ihre Bestätigung/i
+    );
+  });
+
+  test('Q-196: Session-Terminbestätigung bleibt im Verlauf nach Tab-Nav', async ({ page }) => {
+    await page.getByTestId('termin-bestaetigen-T-001').click();
+    await expect(page.getByTestId('termin-bestaetigt-quittung-T-001')).toBeVisible();
+
+    await goFallTab(page, 'Verlauf', /\/fall\/verlauf/);
+    const card = page.getByTestId('verlauf-ereignis-E-DEMO-TERM-T-001');
+    await expect(card).toBeVisible();
+    await expect(card).toHaveAttribute('data-session-termin', 'true');
+    await expect(page.getByTestId('verlauf-session-termin-badge-E-DEMO-TERM-T-001')).toContainText(
+      /Ihre Bestätigung/i
+    );
+  });
+
   test('Q-104: Übersicht-Kachel zeigt Termin-Status live nach Bestätigung', async ({ page }) => {
     // Initial: unbestätigt → Kachel auf Übersicht „Ausstehend“
     await goFallTab(page, /^Übersicht/, /\/fall\/?$/);

@@ -35,6 +35,14 @@ export function demoRqAntwortEreignisId(rqId: string): string {
   return `E-DEMO-RQ-${rqId}`;
 }
 
+/**
+ * Verlauf-Anker-ID für die Demo-Bestätigung eines Termins.
+ * Beispiel: T-001 → `E-DEMO-TERM-T-001` (Hash `#ere-E-DEMO-TERM-T-001`).
+ */
+export function demoTerminBestaetigungEreignisId(terminId: string): string {
+  return `E-DEMO-TERM-${terminId}`;
+}
+
 interface DemoStateContextValue {
   fall: Fall;
   /** Demo: markiert Rückfrage als beantwortet; optionaler Antworttext für Quittung/Verlauf. */
@@ -49,6 +57,8 @@ interface DemoStateContextValue {
   hasSessionChanges: boolean;
   /** Dokument-IDs, die in dieser Session hochgeladen wurden (Upload-Quittung Übersicht). */
   sessionUploadedIds: string[];
+  /** Termin-IDs, die in dieser Session bestätigt wurden (Quittung + Verlauf-Tiefenlink). */
+  sessionConfirmedTerminIds: string[];
 }
 
 const DemoStateContext = createContext<DemoStateContextValue>({
@@ -59,6 +69,7 @@ const DemoStateContext = createContext<DemoStateContextValue>({
   resetSession: () => {},
   hasSessionChanges: false,
   sessionUploadedIds: [],
+  sessionConfirmedTerminIds: [],
 });
 
 export function DemoStateProvider({ children }: { children: React.ReactNode }) {
@@ -251,7 +262,7 @@ export function DemoStateProvider({ children }: { children: React.ReactNode }) {
     for (const id of confirmedTerminIds) {
       const termin = demoFall.termine.find(t => t.id === id);
       extraEvents.push({
-        id: `E-DEMO-TERM-${id}`,
+        id: demoTerminBestaetigungEreignisId(id),
         typ: 'STATUS_GEAENDERT',
         zeitstempel: DEMO_AKTION_ZEIT,
         handelndeStelle: 'BUERGER',
@@ -291,6 +302,7 @@ export function DemoStateProvider({ children }: { children: React.ReactNode }) {
         resetSession,
         hasSessionChanges,
         sessionUploadedIds: uploadedIds,
+        sessionConfirmedTerminIds: confirmedTerminIds,
       }}
     >
       {children}

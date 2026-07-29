@@ -1,6 +1,6 @@
 # BUILD_STATE.md – Aktueller Projektstand
 
-Zuletzt aktualisiert: nach Q-195 UG Übersicht Upload-Quittung Verlauf-Tiefenlink (US-UG-001/003/005, Parität AV Q-194)
+Zuletzt aktualisiert: nach Q-196 AV Termin-Bestätigung Quittung + Verlauf-Tiefenlink (US-AV-005/007)
 
 Dieser Stand beschreibt, was tatsächlich existiert und funktioniert.
 Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
@@ -27,7 +27,7 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | `/fall` | Fallübersicht, Status, Fairness-Summary + Verlauf-Sekundärlink, Fristen-Countdown offener Unterlagen, Upload-Quittung mit Verlauf-Tiefenlink pro Session-Upload + nächste Unterlage `#dok-…`, Termin-Kachel Status live | US-AV-001, US-AV-002, US-AV-003, US-AV-005, US-AV-007 | ✓ |
 | `/fall/dokumente` | Dokumentenanforderungen + Frist-Resttage + lokale Upload-Quittung pro Karte nach Session-Markierung + Verlauf-Tiefenlink `#ere-E-DEMO-DOK-…` | US-AV-003, US-AV-007 | ✓ |
 | `/fall/rueckfragen` | Rückfragen mit Fairness-Hinweis; Antwort-Quittung + Verlauf-Tiefenlink Session-Antwort | US-AV-004 | ✓ |
-| `/fall/termine` | Termine; session-lokale Bestätigung; Nav-Badge nur unbestätigt/bald fällig | US-AV-005 | ✓ |
+| `/fall/termine` | Termine; session-lokale Bestätigung mit Quittung + Verlauf-Tiefenlink `#ere-E-DEMO-TERM-…`; Nav-Badge nur unbestätigt/bald fällig | US-AV-005, US-AV-007 | ✓ |
 | `/fall/bescheide` | Bescheide mit Fairness-Hinweisen | US-AV-006 | ✓ |
 | `/fall/verlauf` | Timeline mit Fairness-Hinweis; Antwort-Quittungsblock; Upload-Blöcke mit Dokumentbezeichnung; Anker `#ere-…` + Hash-Hervorhebung; Session-Antwort/Upload-Badge | US-AV-007 | ✓ |
 | `/fall/hinweise` | Vollständige Fairness-Hinweisseite; UNTERLAGE- und RQ-Signal live inkl. Fristhinweis + CTA; Verlauf-Sekundärlink; Session-Antwort entfallen Signale | US-AV-008 | ✓ |
@@ -63,6 +63,7 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | Kita Meldebeitrag Planungsraum | `demo/components/kita/KitaPlanungsraumMeldebeitrag.tsx` | ✓ Beitrag freigegebener Meldungen auf Planungsraum-Karten; Südost/Sonnenwinkel nach Session-Freigabe hervorgehoben |
 | Kita Bedarfsplanung Meldebasis | `demo/components/kita/KitaBedarfsplanungDatenbasis.tsx` | ✓ Datenlücke je Planungsraum aus Meldeeingang; Residual↔Meldelücke Hinweis-only; schließt sich nach Session-Freigabe |
 | AV Termin-Bestätigung | `DemoStateContext.confirmTermin` + `/fall/termine` | ✓ session-lokal AUSSTEHEND→BESTAETIGT; Tab-Badge live |
+| AV Termin-Quittung Verlauf | `/fall/termine` + `demoTerminBestaetigungEreignisId` + Verlauf | ✓ Quittung + „Im Verlauf ansehen“ → `#ere-E-DEMO-TERM-…`; Badge „Ihre Bestätigung“ (Q-196, US-AV-005/007) |
 | UG Verlauf Typ-Filter | `/gruendung/verlauf` | ✓ Stelle + Ereignistyp (Vorgang/Dokumente/Rückfragen/Bescheide), UND-Kombination |
 | UG Hinweise Steuernummer-CTA | `/gruendung/hinweise` | ✓ CTA „Zum Finanzamt“ → `#beh-BEH-02` bei VS-05 AUSSTEHEND oder IN_BEARBEITUNG; Signal-Text session-sensitiv (Q-124) |
 | UG Hinweise Betriebsdatum-CTA | `/gruendung/hinweise` + Übersicht `#verfahrensstatus` | ✓ CTA „Zum Verfahrensstatus“ aus HINWEIS-Betriebsdatum |
@@ -311,6 +312,7 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 **Q-193 erledigt:** AV Dokumente Upload-Quittung mit Verlauf-Tiefenlink + Session-Upload-Badge (US-AV-003/007, Parität UG Q-188).
 **Q-194 erledigt:** AV Übersicht Upload-Quittung mit Verlauf-Tiefenlink pro Session-Upload + nächste Unterlage Dokument-Anker (US-AV-001/003/007).
 **Q-195 erledigt:** UG Übersicht Upload-Quittung mit Verlauf-Tiefenlink pro Session-Upload (US-UG-001/003/005, Parität AV Q-194).
+**Q-196 erledigt:** AV Termin-Bestätigung Quittung + Verlauf-Tiefenlink + Session-Badge „Ihre Bestätigung“ (US-AV-005/007).
 
 ---
 

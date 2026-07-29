@@ -2,13 +2,18 @@
 // groß, hervorgehoben. Vorbereitung als Checkliste (vertrautes Mental-Modell).
 // Format-Chip: "Persönlich / Online" mit Icon.
 // Q-092: unbestätigte Termine session-lokal bestätigen → Tab-Badge entfällt live.
+// Q-196: Session-Bestätigung mit Quittung + Verlauf-Tiefenlink (Parität RQ/Upload).
 'use client';
 
-import { useDemoState } from '@/context/DemoStateContext';
+import Link from 'next/link';
+import {
+  demoTerminBestaetigungEreignisId,
+  useDemoState,
+} from '@/context/DemoStateContext';
 import { Icon } from '@/components/Icon';
 
 export default function TerminePage() {
-  const { fall, confirmTermin } = useDemoState();
+  const { fall, confirmTermin, sessionConfirmedTerminIds } = useDemoState();
   const { termine } = fall;
   const hatKommende = termine.some(t => t.status !== 'ABGESAGT');
 
@@ -41,6 +46,7 @@ export default function TerminePage() {
           const bestaetigt = t.status === 'BESTAETIGT';
           const abgesagt   = t.status === 'ABGESAGT';
           const ausstehend = t.status === 'AUSSTEHEND';
+          const istSessionBestaetigung = sessionConfirmedTerminIds.includes(t.id);
 
           return (
             <div
@@ -115,7 +121,7 @@ export default function TerminePage() {
               {/* UX-Grund: Checkliste ist ein universell bekanntes Mental-Modell.
                   Jeder Mensch hat schon mal eine Einkaufsliste gesehen.         */}
               {t.vorbereitung.length > 0 && (
-                <div style={{ marginBottom: ausstehend ? '1rem' : 0 }}>
+                <div style={{ marginBottom: ausstehend || istSessionBestaetigung ? '1rem' : 0 }}>
                   <div style={{ fontWeight: 700, fontSize: '0.875rem', marginBottom: '0.625rem', display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--color-text)' }}>
                     <Icon name="scroll" size={16} />
                     Das bringen Sie bitte mit:
@@ -162,7 +168,57 @@ export default function TerminePage() {
                 </div>
               )}
 
-              {bestaetigt && (
+              {/* Session-Bestätigung: Quittung + Verlauf-Tiefenlink (Q-196, US-AV-005/007) */}
+              {bestaetigt && istSessionBestaetigung && (
+                <div
+                  className="notice-box notice-box-success"
+                  role="status"
+                  aria-live="polite"
+                  data-testid={`termin-bestaetigt-quittung-${t.id}`}
+                  style={{ marginTop: '0.75rem' }}
+                >
+                  <Icon name="check-circle" size={16} style={{ flexShrink: 0, marginTop: '2px' }} />
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                    <div>
+                      <strong
+                        style={{ fontSize: '0.875rem', display: 'block', marginBottom: '0.25rem' }}
+                        data-testid={`termin-bestaetigt-hinweis-${t.id}`}
+                      >
+                        Teilnahme bestätigt
+                      </strong>
+                      <p style={{ fontSize: '0.875rem', margin: 0 }} data-testid={`termin-bestaetigt-text-${t.id}`}>
+                        {t.zweck}
+                        <span style={{ color: 'var(--color-text-muted)' }}>
+                          {' '}
+                          · {t.datum}, {t.uhrzeit} Uhr
+                        </span>
+                      </p>
+                      <p style={{ fontSize: '0.8rem', margin: '0.35rem 0 0', color: 'var(--color-text-muted)' }}>
+                        Keine weitere Handlung zu diesem Termin nötig.
+                        Demo: Die Bestätigung gilt für diese Browser-Session.
+                      </p>
+                    </div>
+                    <Link
+                      href={`/fall/verlauf#ere-${demoTerminBestaetigungEreignisId(t.id)}`}
+                      className="btn btn-secondary btn-inline"
+                      style={{
+                        alignSelf: 'flex-start',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '0.4rem',
+                        minHeight: 44,
+                      }}
+                      data-testid={`termin-verlauf-link-${t.id}`}
+                      aria-label={`Terminbestätigung für ${t.zweck} im Verlauf ansehen`}
+                    >
+                      <Icon name="clock" size={16} />
+                      Im Verlauf ansehen
+                    </Link>
+                  </div>
+                </div>
+              )}
+
+              {bestaetigt && !istSessionBestaetigung && (
                 <p
                   data-testid={`termin-bestaetigt-hinweis-${t.id}`}
                   style={{
