@@ -188,6 +188,9 @@ Story-Dokumentation ist kein Pflicht-Vorläufer für Mock-Daten und Typen.
 | Q-151 | UG Unterlagen-CTA-Hilfstext session-sensitiv (Übersicht Fairness + Hinweise, offene RQ priorisiert) | DEMO | S | Q-098 | DONE `b33b784` |
 | Q-152 | Kita Einrichtung: Belegungsstand-Druck Status und Datenbasis (US-KJ-002) | DEMO | S | Q-078 | DONE `53e3b27` |
 | Q-153 | Kita Tagesstand: CSV Aggregate-Export freigabeunabhängig (US-KJ-001, DEC-004) | DEMO | S | Q-150 | DONE `c0b9c3e` |
+| Q-154 | UG RQ-CTA-Hilfstext: Frist und Konsequenz (Übersicht Fairness + Hinweise) | DEMO | S | Q-151 | DONE `6d3a25f` |
+| Q-155 | Kita Monatsbericht: CSV Vorschau-Modus-Metadaten (Status/Tagesstand-Quellen, US-KJ-003) | DEMO | S | Q-144 | DONE `560930e` |
+| Q-156 | Kita Meldung: CSV Aggregate freigabeunabhängig (Kennzahlen + Korrekturprotokoll, US-KJ-004, DEC-004) | DEMO | S | Q-149 | DONE `17ef33b` |
 
 ---
 
@@ -346,3 +349,6 @@ Diese Punkte wurden in früheren Iterationen abgeschlossen und sind produktionsr
 | Q-151 UG Unterlagen-CTA-Hilfstext session-sensitiv | Übersicht + Hinweise nach RQ | `b33b784` → main |
 | Q-152 Kita Einrichtung Belegungsstand-Druck | Status/Datenbasis print-only (US-KJ-002) | `53e3b27` → main |
 | Q-153 Kita Tagesstand CSV Aggregate-Export | freigabeunabhängig, DEC-004 Aggregate (US-KJ-001) | `c0b9c3e` → main |
+| Q-154 UG RQ-CTA-Hilfstext Frist/Konsequenz | Übersicht + Hinweise Fairness-CTA | `6d3a25f` → main |
+| Q-155 Kita Monatsbericht CSV Vorschau-Metadaten | Demo-Modus/Status/Tagesstand-Quellen (US-KJ-003) | `560930e` → main |
+| Q-156 Kita Meldung CSV Aggregate freigabeunabhängig | Kennzahlen + Korrekturen, DEC-004 (US-KJ-004) | `17ef33b` → main |
