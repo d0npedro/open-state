@@ -29,6 +29,10 @@ function isBgAnmeldungSignal(signal: FairnessSignal): boolean {
 function isUnterlagenFehlendSignal(signal: FairnessSignal): boolean {
   return signal.typ === 'UG_UNTERLAGE_FEHLT' || signal.id === 'UG-UNTERLAGEN-FEHLEND';}
 
+/** Erkennung des HINWEIS-Signals zur noch fehlenden Steuernummer. */
+function isSteuernummerSignal(signal: FairnessSignal): boolean {
+  return signal.typ === 'UG_STEUERNUMMER_FEHLT' || signal.id === 'UG-STEUERNUMMER-FEHLT';}
+
 export default function GruendungHinweisePage() {
   const { akte } = useGruendungState();
   const signale = berechneFairnessSignaleGruendung(akte);
@@ -197,6 +201,12 @@ export default function GruendungHinweisePage() {
                     ? akte.dokumente.filter(d => d.status === 'ANGEFORDERT' || d.status === 'ABGELEHNT')
                     : [];
                   const erstesFehlend = fehlendeDocs[0];
+                  const finanzamt = isSteuernummerSignal(sig)
+                    ? akte.beteiligteBehörden.find(b => b.typ === 'FINANZAMT')
+                    : undefined;
+                  const steuernummerNochOffen = isSteuernummerSignal(sig)
+                    ? akte.verfahrensSchritte.some(vs => vs.id === 'VS-05' && vs.status === 'AUSSTEHEND')
+                    : false;
                   return (
                     <div key={sig.id} data-testid={`hinweise-hinweis-${sig.id}`}>
                       <FairnessPanel signale={[sig]} />
@@ -231,6 +241,38 @@ export default function GruendungHinweisePage() {
                           >
                             <Icon name="file" size={15} />
                             Zu den Unterlagen
+                          </Link>
+                        </div>
+                      )}
+                      {finanzamt && steuernummerNochOffen && (
+                        <div
+                          style={{
+                            marginTop: '0.5rem',
+                            display: 'flex',
+                            flexWrap: 'wrap',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                            gap: '0.75rem',
+                            padding: '0.75rem 1rem',
+                            background: 'var(--color-primary-light)',
+                            border: '1px solid var(--color-border)',
+                            borderRadius: 'var(--radius)',
+                          }}
+                          data-testid={`hinweise-steuernummer-cta-wrap-${finanzamt.id}`}
+                        >
+                          <p style={{ margin: 0, fontSize: '0.875rem', lineHeight: 1.45 }}>
+                            Die Steuernummer vergibt das Finanzamt nach Abschluss der steuerlichen Erfassung.
+                            Rolle, Kontakt und offene Schritte finden Sie auf der Behördenkarte.
+                          </p>
+                          <Link
+                            href={`/gruendung/behoerden#beh-${finanzamt.id}`}
+                            className="btn btn-primary"
+                            style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', flexShrink: 0 }}
+                            data-testid={`hinweise-steuernummer-cta-${finanzamt.id}`}
+                            aria-label={`Zur Behördenkarte ${finanzamt.bezeichnung}`}
+                          >
+                            <Icon name="building" size={15} />
+                            Zum Finanzamt
                           </Link>
                         </div>
                       )}

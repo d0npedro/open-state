@@ -452,6 +452,20 @@ test.describe('UG – Hinweise zur Verfahrenslage', () => {
     await expect(page.getByTestId('hinweise-unterlagen-cta')).toHaveCount(0);
   });
 
+  test('HINWEIS-Steuernummer-Signal hat CTA „Zum Finanzamt“ mit Anker', async ({ page }) => {
+    const cta = page.getByTestId('hinweise-steuernummer-cta-BEH-02');
+    await expect(cta).toBeVisible();
+    await expect(cta).toContainText(/Zum Finanzamt/i);
+    await expect(cta).toHaveAttribute('href', '/gruendung/behoerden#beh-BEH-02');
+  });
+
+  test('CTA aus Steuernummer-Signal führt zur Finanzamt-Karte', async ({ page }) => {
+    await page.getByTestId('hinweise-steuernummer-cta-BEH-02').click();
+    await expect(page).toHaveURL(/\/gruendung\/behoerden#beh-BEH-02/);
+    await expect(page.locator('#beh-BEH-02')).toBeVisible();
+    await expect(page.getByTestId('behoerde-karte-BEH-02')).toContainText(/Finanzamt/i);
+  });
+
 });
 
 // ─── Verlauf ──────────────────────────────────────────────────────────────────
