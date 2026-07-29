@@ -2,6 +2,29 @@
 
 Branch: `loop/kita` · Worktree: `D:\Projects\open-state-loop-kita`
 
+## Iteration 2026-07-29 – US-KJ-008 Vorlage Residual ↔ Meldelücke
+
+### Was
+Politische Vorlage (`/kita/vorlage`) spiegelt residuale Planungslücke methodisch an Meldelücken aus dem Meldeeingang: Spalte „Meldebasis“, kompakte Residual-Hinweise je Zeile, Summenhinweis (Fokus Südost / PR-03), Engpass-Liste mit Meldebasis-Zusatz, Methodik-Punkt. Hinweis-only, keine Interpolation; nach Session-Freigabe entfällt der Melde-Hinweis. Nur Aggregate, keine Kind- oder Personennamen.
+
+### Dateien
+- `demo/app/kita/vorlage/page.tsx` (Meldebasis, ResidualMeldeHinweis/-Summen, Engpass/Methodik)
+- `docs/loops/kita-JOURNAL.md` (dieses Journal)
+
+### Story
+US-KJ-008 / US-KJ-007 – Politische Vorlage (Residual methodisch an Meldelücke, wie Bedarfsplanung)
+
+### Build
+`npm run lint` + `npm run build` im `demo/`-Verzeichnis (siehe Commit dieses Laufs)
+
+### Nicht angefasst (Supervisor / verboten)
+Queue, BUILD_STATE, storyRegistry, andere Domänen, package.json, CI, push
+
+### Nächster sinnvoller Schritt (Hinweis Supervisor)
+Filter-Chip „Engpass“ im Planungsraum-Explorer um Meldelücke ergänzen, oder Lagebild-Planungsraum-Karten Residual↔Melde-Kurzhinweis.
+
+---
+
 ## Iteration 2026-07-29 – US-KJ-009/007 Planungsraum-Explorer Residual ↔ Meldelücke
 
 ### Was

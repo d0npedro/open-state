@@ -4,6 +4,8 @@
  * US-KJ-008 – Politische Vorlage vorbereiten und freigeben (Demo)
  *
  * Entwurf aus Steuerungslagebild + Bedarfsplanung-Kennzahlen.
+ * Residuale Planungslücke methodisch an Meldelücken aus dem Meldeeingang gekoppelt
+ * (Hinweis only, wie Bedarfsplanung / Transparenzbericht).
  * Freigabe nur aktiv durch JA-Leitung (simuliert). Keine automatischen Beschlüsse.
  * Export: druckoptimierte Ansicht (Browser-Druck → PDF).
  */
@@ -11,6 +13,12 @@
 import { useMemo, useState } from 'react';
 import Link from 'next/link';
 import { demoKitaLagebild } from '@/data/mockKitaLagebild';
+import {
+  MeldebasisBadge,
+  ResidualMeldeHinweis,
+  ResidualMeldeSummenHinweis,
+  useMeldeeingangFuerBedarfsplanung,
+} from '@/components/kita/KitaBedarfsplanungDatenbasis';
 
 type VorlageStatus = 'ENTWURF' | 'ZUR_FREIGABE' | 'FREIGEGEBEN' | 'ZURUECKGEGEBEN';
 
@@ -29,6 +37,7 @@ function planungslueckeResidual(
 export default function PolitischeVorlagePage() {
   const lb = demoKitaLagebild;
   const g = lb.gesamt;
+  const { basen, byRaumId } = useMeldeeingangFuerBedarfsplanung();
 
   const [status, setStatus] = useState<VorlageStatus>('ENTWURF');
   const [titel, setTitel] = useState(
@@ -37,6 +46,7 @@ export default function PolitischeVorlagePage() {
   const [sachtext, setSachtext] = useState(
     'Das Jugendamt legt dem Ausschuss die aktuelle Versorgungslage und die aus dem Bedarfsplanungsentwurf abgeleiteten Planungslücken vor. ' +
       'Die Zahlen stammen aus dem freigegebenen Steuerungslagebild. ' +
+      'Fehlende freigegebene Einrichtungsmeldungen mindern die Aussagekraft residualer Planungslücken und werden nicht interpoliert. ' +
       'Es werden keine Beschlussvorschläge automatisiert erzeugt; die politische Abwägung bleibt dem Gremium vorbehalten.'
   );
   const [freigabeHinweis, setFreigabeHinweis] = useState('');
@@ -64,6 +74,12 @@ export default function PolitischeVorlagePage() {
   const summeGeplant = raumZeilen.reduce((s, r) => s + r.geplant, 0);
   const summeResidual = raumZeilen.reduce((s, r) => s + r.residual, 0);
   const engpass = [...raumZeilen].sort((a, b) => b.druck - a.druck).slice(0, 3);
+  const suedostLuecke = byRaumId.get('PR-03')?.hatDatenluecke ?? false;
+  const residualByRaumId = useMemo(() => {
+    const m = new Map<string, number>();
+    for (const r of raumZeilen) m.set(r.id, r.residual);
+    return m;
+  }, [raumZeilen]);
 
   const statusLabel: Record<VorlageStatus, string> = {
     ENTWURF: 'Entwurf in Bearbeitung',
@@ -258,13 +274,29 @@ export default function PolitischeVorlagePage() {
         <section style={{ marginBottom: '1.5rem' }}>
           <h3 style={{ fontSize: '1rem', marginBottom: '0.75rem' }}>2. Engpass-Räume (nach Wartelistendruck)</h3>
           <ol style={{ margin: 0, paddingLeft: '1.25rem', lineHeight: 1.7, fontSize: '0.9rem' }}>
-            {engpass.map(r => (
-              <li key={r.id}>
-                <strong>{r.name}</strong> — Druck {r.druck.toFixed(1)}×, Warteliste {r.warteliste},
-                residuale Planungslücke {r.residual}
-              </li>
-            ))}
+            {engpass.map(r => {
+              const meldebasis = byRaumId.get(r.id);
+              const meldeHinweis =
+                meldebasis?.hatDatenluecke && r.residual > 0
+                  ? meldebasis.schwere === 'UEBERFAELLIG'
+                    ? ' · Meldebasis unvollständig (überfällig)'
+                    : ' · Meldebasis unvollständig (ausstehend)'
+                  : '';
+              return (
+                <li key={r.id}>
+                  <strong>{r.name}</strong> — Druck {r.druck.toFixed(1)}×, Warteliste {r.warteliste},
+                  residuale Planungslücke {r.residual}
+                  {meldeHinweis}
+                </li>
+              );
+            })}
           </ol>
+          {suedostLuecke && (
+            <p style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', margin: '0.65rem 0 0', lineHeight: 1.5 }}>
+              Fokus Südost: residuale Planungslücke methodisch an fehlende freigegebene Einrichtungsmeldung
+              gekoppelt (Hinweis only, keine Interpolation). Nach Session-Freigabe in der Monatsmeldung entfällt der Hinweis.
+            </p>
+          )}
         </section>
 
         <section style={{ marginBottom: '1.5rem' }}>
@@ -273,30 +305,88 @@ export default function PolitischeVorlagePage() {
             Summe geplanter neuer Plätze (Maßnahmen): <strong>+{summeGeplant}</strong> ·
             Summe residuale Planungslücken: <strong>{summeResidual}</strong>
             {' '}(Näherung: Warteliste − freie Plätze − geplante Plätze; siehe Bedarfsplanung).
+            {suedostLuecke && (
+              <>
+                {' '}Südost: Residual methodisch an Meldelücke gekoppelt (Hinweis).
+              </>
+            )}
           </p>
+          <div style={{ marginBottom: '0.75rem' }}>
+            <ResidualMeldeSummenHinweis
+              basen={basen}
+              residualByRaumId={residualByRaumId}
+              highlightRaumId="PR-03"
+            />
+          </div>
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.85rem' }}>
               <thead>
                 <tr style={{ background: 'var(--color-neutral-light)', borderBottom: '2px solid var(--color-border)' }}>
-                  {['Planungsraum', 'VQ U3', 'VQ Ü3', 'Warteliste', 'Geplant +', 'Lücke'].map(h => (
+                  {['Planungsraum', 'Meldebasis', 'VQ U3', 'VQ Ü3', 'Warteliste', 'Geplant +', 'Lücke'].map(h => (
                     <th key={h} style={{ padding: '0.6rem', textAlign: 'left', fontWeight: 600 }}>{h}</th>
                   ))}
                 </tr>
               </thead>
               <tbody>
-                {raumZeilen.map((r, i) => (
-                  <tr key={r.id} style={{ borderBottom: '1px solid var(--color-border)', background: i % 2 ? 'var(--color-neutral-light)' : 'transparent' }}>
-                    <td style={{ padding: '0.6rem', fontWeight: 600 }}>{r.name}</td>
-                    <td style={{ padding: '0.6rem' }}>{r.vqU3.toFixed(1)} %</td>
-                    <td style={{ padding: '0.6rem' }}>{r.vqUe3.toFixed(1)} %</td>
-                    <td style={{ padding: '0.6rem' }}>{r.warteliste}</td>
-                    <td style={{ padding: '0.6rem' }}>+{r.geplant}</td>
-                    <td style={{ padding: '0.6rem', fontWeight: 700 }}>{r.residual}</td>
-                  </tr>
-                ))}
+                {raumZeilen.map((r, i) => {
+                  const meldebasis = byRaumId.get(r.id);
+                  const highlightSuedost = r.id === 'PR-03' && suedostLuecke;
+                  return (
+                    <tr
+                      key={r.id}
+                      style={{
+                        borderBottom: '1px solid var(--color-border)',
+                        background: highlightSuedost
+                          ? 'var(--color-warning-light, #fff8e8)'
+                          : i % 2
+                            ? 'var(--color-neutral-light)'
+                            : 'transparent',
+                      }}
+                    >
+                      <td style={{ padding: '0.6rem', fontWeight: 600 }}>
+                        {r.name}
+                        {highlightSuedost && (
+                          <div style={{ fontSize: '0.72rem', color: 'var(--color-text-muted)', fontWeight: 500 }}>
+                            Meldeeingang kritisch
+                          </div>
+                        )}
+                      </td>
+                      <td style={{ padding: '0.6rem' }}>
+                        <MeldebasisBadge basis={meldebasis} />
+                      </td>
+                      <td style={{ padding: '0.6rem' }}>{r.vqU3.toFixed(1)} %</td>
+                      <td style={{ padding: '0.6rem' }}>{r.vqUe3.toFixed(1)} %</td>
+                      <td style={{ padding: '0.6rem' }}>{r.warteliste}</td>
+                      <td style={{ padding: '0.6rem' }}>+{r.geplant}</td>
+                      <td
+                        style={{
+                          padding: '0.6rem',
+                          fontWeight: 700,
+                          color:
+                            r.residual > 40
+                              ? 'var(--color-danger)'
+                              : r.residual > 0
+                                ? 'var(--color-warning)'
+                                : 'var(--color-success)',
+                        }}
+                      >
+                        {r.residual}
+                        <ResidualMeldeHinweis
+                          basis={meldebasis}
+                          residual={r.residual}
+                          compact
+                        />
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
+          <p style={{ marginTop: '0.65rem', fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>
+            Meldebasis aus Demo-Stichprobe Meldeeingang (US-KJ-004). Residualzahl unverändert bei Meldelücke —
+            keine Schätzung fehlender Aggregate. Keine Kind- oder Personennamen.
+          </p>
         </section>
 
         <section style={{ marginBottom: '1.5rem' }}>
@@ -337,7 +427,11 @@ export default function PolitischeVorlagePage() {
             <li>
               Planungslücke ist eine Demo-Näherung (Warteliste kann Mehrfachanmeldungen enthalten). Keine demografische Prognose.
             </li>
-            <li>Keine personen- oder einrichtungsbezogenen Einzeldaten in dieser Vorlage.</li>
+            <li>
+              Residuale Planungslücken mit Meldelücke (fehlende freigegebene Einrichtungsmeldungen) werden methodisch
+              ausgewiesen und nicht interpoliert — gleiche Methodik wie Bedarfsplanung und öffentlicher Transparenzbericht.
+            </li>
+            <li>Keine personen- oder kindbezogenen Einzeldaten in dieser Vorlage; Einrichtungsaggregate nur als Meldebasis-Hinweis.</li>
             {lb.methodik.slice(0, 3).map(m => (
               <li key={m.kennzahl}>
                 <strong>{m.kennzahl}:</strong> {m.definition}
