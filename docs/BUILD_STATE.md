@@ -1,6 +1,6 @@
 # BUILD_STATE.md – Aktueller Projektstand
 
-Zuletzt aktualisiert: nach Q-073 (UG Dokument-Upload + Fairness UG_UNTERLAGE_FEHLT)
+Zuletzt aktualisiert: nach Q-074 (Planungsraum-Filter auf /kita)
 
 Dieser Stand beschreibt, was tatsächlich existiert und funktioniert.
 Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
@@ -12,10 +12,10 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | Eigenschaft | Wert |
 |-------------|------|
 | Framework | Next.js 14.2.5, React 18, TypeScript 5 strict |
-| Build-Status | ✓ Erfolgreich (13 statische Seiten) |
+| Build-Status | ✓ Erfolgreich (21 statische Seiten) |
 | Deployment | Vercel, aus `demo/`-Verzeichnis |
 | Lokaler Start | `cd demo && npm install && npm run dev` |
-| Letzte Build-Prüfung | Commit `d6fc0c7` — grün, 13/13 Seiten |
+| Letzte Build-Prüfung | nach Q-074 — grün, 21/21 Seiten |
 
 ---
 
@@ -34,7 +34,7 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | `/stories` | Story Coverage Dashboard | – | ✓ |
 | `/feedback` | Feedback → GitHub Issues | – | ✓ |
 | `/gruendung` … | Unternehmensgründung (Übersicht, Dokumente, Behörden, …) | US-UG-001–006 | ✓ |
-| `/kita` | Öffentlicher Transparenzbericht | US-KJ-009, US-KJ-010 | ✓ |
+| `/kita` | Öffentlicher Transparenzbericht + Planungsraum-Filter | US-KJ-009, US-KJ-010 | ✓ |
 | `/kita/lagebild` | Jugendamt-Steuerungsansicht | US-KJ-005, US-KJ-006 | ✓ |
 
 ---
@@ -91,6 +91,7 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 **Q-071 erledigt:** Interaktiver Dokument-Upload im AV-Demo (`uploadDokument`); Fairness-Signal entfällt live.
 **Q-072 erledigt:** `/fall/bescheide`, `/termine`, `/verlauf` nutzen DemoState; Interaktionen erzeugen Timeline-Ereignisse.
 **Q-073 erledigt:** UG `uploadDokument`, Signal `UG_UNTERLAGE_FEHLT`, Verlauf bei Upload/Rückfrage.
+**Q-074 erledigt:** `KitaPlanungsraumExplorer` — Filter-Chips, Detailkarte, gefilterte Maßnahmen auf `/kita`.
 
 ---
 
@@ -134,6 +135,7 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | ~~Dokument-Upload ohne State~~ | ~~Upload-Alert nur, kein Fairness-Effekt~~ | Q-071 ✓ |
 | ~~AV-Unterseiten mit statischem mockFall~~ | ~~Fairness/Verlauf nicht session-konsistent~~ | Q-072 ✓ |
 | ~~UG-Upload ohne State~~ | ~~Kein Fairness-/Verlaufseffekt bei UG-Unterlagen~~ | Q-073 ✓ |
+| ~~Kita-Bericht ohne interaktiven Raumfilter~~ | ~~Gesamttabelle nur, keine Raum-Fokussierung~~ | Q-074 ✓ |
 | DSFA für Kita-Domäne noch ausstehend | Konzeptlücke — extern abhängig | — |
 | Queue ohne weitere OFFEN-Einträge | Nächste Iteration braucht Queue-Nachfüllung | — |
 

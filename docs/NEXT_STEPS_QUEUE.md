@@ -67,6 +67,7 @@ Die Kita-Domäne ist mit 7 Dokumenten und 10 Stories am stärksten vorbereitete 
 | Q-022 | Demo-Route `/kita`: öffentlicher Transparenzbericht mit Versorgungsquoten, Planungsraumübersicht und Methodik-Hinweis (US-KJ-009) | DEMO | L | Q-021 | DONE `650498b` |
 | Q-024 | Monatsvergleich / Trenddarstellung: HTML-Tabelle mit Zeitreihe, Veränderung zum Vormonat sichtbar — ohne Chart-Bibliothek | DEMO | M | Q-022 | DONE `97f2916` |
 | Q-023 | Demo-Route `/kita/lagebild`: Jugendamt-Steuerungsansicht mit Planungsräumen, Bedarfslücken, Handlungsfeldern (US-KJ-005, US-KJ-006) — nur intern zugänglich in Demo-Logik | DEMO | L | Q-022 | DONE `7988f18` |
+| Q-074 | Planungsraum-Filter auf `/kita`: Chip-Filter + Detailkarte + gefilterte Maßnahmen (US-KJ-009, interaktiv) | DEMO | S | Q-022 | DONE |
 
 ---
 
@@ -178,4 +179,5 @@ Diese Punkte wurden in früheren Iterationen abgeschlossen und sind produktionsr
 | Q-070 UG Registry | US-UG-001–006 in demo storyRegistry | `70937e8` |
 | Q-071 Dokument-Upload | Interaktiver Upload AV + Fairness live | `9a5f89a` |
 | Q-072 AV-State/Timeline | Alle AV-Seiten + Timeline-Events | `91567b3` |
-| Q-073 UG Upload/Fairness | Interaktiver UG-Upload + UG_UNTERLAGE_FEHLT | (diese Iteration) |
+| Q-073 UG Upload/Fairness | Interaktiver UG-Upload + UG_UNTERLAGE_FEHLT | `7b18166` |
+| Q-074 Kita-Planungsfilter | Filter/Detail auf Transparenzbericht | (diese Iteration) |
