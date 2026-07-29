@@ -285,10 +285,16 @@ export default function GruendungHinweisePage() {
                             className="btn btn-primary"
                             style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', flexShrink: 0 }}
                             data-testid={`hinweise-steuernummer-cta-${finanzamt.id}`}
-                            aria-label={`Zur Behördenkarte ${finanzamt.bezeichnung}`}
+                            aria-label={
+                              steuernummerInBearbeitung
+                                ? `Steuernummer-Stand beim ${finanzamt.bezeichnung} ansehen`
+                                : `Zur Behördenkarte ${finanzamt.bezeichnung}`
+                            }
                           >
                             <Icon name="building" size={15} />
-                            Zum Finanzamt
+                            {steuernummerInBearbeitung
+                              ? 'Steuernummer-Stand ansehen'
+                              : 'Zum Finanzamt'}
                           </Link>
                         </div>
                       )}

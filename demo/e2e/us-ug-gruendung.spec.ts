@@ -766,11 +766,12 @@ test.describe('UG – Hinweise zur Verfahrenslage', () => {
     const ctaWrap = page.getByTestId('hinweise-steuernummer-cta-wrap-BEH-02');
     await expect(ctaWrap).toBeVisible();
     await expect(ctaWrap).toContainText(/in Bearbeitung/i);
-    await expect(page.getByTestId('hinweise-steuernummer-cta-BEH-02')).toBeVisible();
-    await expect(page.getByTestId('hinweise-steuernummer-cta-BEH-02')).toHaveAttribute(
-      'href',
-      '/gruendung/behoerden#beh-BEH-02'
-    );
+    const steuernummerCta = page.getByTestId('hinweise-steuernummer-cta-BEH-02');
+    await expect(steuernummerCta).toBeVisible();
+    await expect(steuernummerCta).toHaveAttribute('href', '/gruendung/behoerden#beh-BEH-02');
+    // CTA-Label spiegelt Übersicht: bei VS-05 IN_BEARBEITUNG „Steuernummer-Stand ansehen“
+    await expect(steuernummerCta).toContainText(/Steuernummer-Stand ansehen/i);
+    await expect(steuernummerCta).not.toContainText(/^Zum Finanzamt/i);
   });
 
   test('HINWEIS-Betriebsdatum-Signal hat CTA „Zum Verfahrensstatus“ mit Anker', async ({ page }) => {
