@@ -201,6 +201,10 @@ Story-Dokumentation ist kein Pflicht-Vorläufer für Mock-Daten und Typen.
 | Q-164 | AV Dokumente: lokale Upload-Quittung pro Dokumentenkarte nach Session-Markierung (US-AV-003) | DEMO | S | Q-161 | DONE `dc9ca84` |
 | Q-165 | UG Fairness: CTA-Ziel-Routing (`fairnessSignalZiel`) in `gruendung-rules` zentralisieren | DEMO | S | Q-162 | DONE `bfe39e3` |
 | Q-166 | Kita Transparenzbericht: CSV Multi-Blatt Status/Meldebasis freigabeunabhängig (US-KJ-009, DEC-004) | DEMO | S | Q-145 | DONE `e5955e2` |
+| Q-167 | AV Hinweise: UNTERLAGE-Signal live nach Session-Upload inkl. Fristhinweis + CTA (US-AV-008/003) | DEMO | S | Q-164 | DONE `88375f9` |
+| Q-168 | UG Dokumente: lokale Upload-Quittung pro Dokumentenkarte nach Session-Markierung (US-UG-003) | DEMO | S | Q-073 | DONE `27f0652` |
+| Q-169 | Kita Lagebild: CSV Steuerungs-Export Blatt Zeitreihe Gesamt+Planungsräume (US-KJ-005) | DEMO | S | Q-163 | DONE `d54835a` |
+| Q-170 | Kita Transparenzbericht: Druck-Meta Status/Meldebasis print-only + Export-Karte Druck+CSV (US-KJ-009) | DEMO | S | Q-166 | DONE `c6d08c8` |
 
 ---
 
@@ -372,3 +376,7 @@ Diese Punkte wurden in früheren Iterationen abgeschlossen und sind produktionsr
 | Q-164 AV Dokumente lokale Upload-Quittung | Session-Quittung pro Dokumentenkarte | `dc9ca84` → main |
 | Q-165 UG Fairness CTA-Ziel-Routing zentral | `fairnessSignalZiel` Übersicht+Hinweise | `bfe39e3` → main |
 | Q-166 Kita Transparenzbericht CSV Multi-Blatt | Status/Meldebasis/Maßnahmen, DEC-004 (US-KJ-009) | `e5955e2` → main |
+| Q-167 AV Hinweise UNTERLAGE live | Session-Upload + Frist + CTA (US-AV-008/003) | `88375f9` → main |
+| Q-168 UG Dokumente lokale Upload-Quittung | Session-Quittung pro Dokumentenkarte (US-UG-003) | `27f0652` → main |
+| Q-169 Kita Lagebild CSV Zeitreihe-Blatt | Blatt 6 Gesamt+Planungsräume (US-KJ-005) | `d54835a` → main |
+| Q-170 Kita Transparenzbericht Druck-Meta | Status/Meldebasis print-only + Druck+CSV-Karte (US-KJ-009) | `c6d08c8` → main |
