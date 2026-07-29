@@ -7,6 +7,7 @@
 import Link from 'next/link';
 import {
   demoDokUploadEreignisId,
+  demoRqAntwortEreignisId,
   demoTerminBestaetigungEreignisId,
   useDemoState,
 } from '@/context/DemoStateContext';
@@ -77,7 +78,12 @@ const statusToChip: Record<string, { label: string; css: string; icon: string }>
 };
 
 export default function FallPage() {
-  const { fall, sessionUploadedIds, sessionConfirmedTerminIds } = useDemoState();
+  const {
+    fall,
+    sessionUploadedIds,
+    sessionConfirmedTerminIds,
+    sessionAnsweredRqIds,
+  } = useDemoState();
   const chip = statusToChip[fall.status] ?? { label: fall.status, css: 'status-chip-neutral', icon: 'info' };
   const currentIndex = resolveProgressIndex(fall.status);
   const fortschrittProzent = Math.round(((currentIndex + 1) / statusFlow.length) * 100);
@@ -109,6 +115,10 @@ export default function FallPage() {
   const sessionTermine = sessionConfirmedTerminIds
     .map(id => fall.termine.find(t => t.id === id))
     .filter((t): t is NonNullable<typeof t> => Boolean(t));
+  /** Session-Antworten auf Rückfragen für Quittung auf der Übersicht (Q-198, US-AV-004/007). */
+  const sessionAntworten = sessionAnsweredRqIds
+    .map(id => fall.rueckfragen.find(r => r.id === id))
+    .filter((r): r is NonNullable<typeof r> => Boolean(r));
   // Nächster Termin: bestätigt oder ausstehend (nicht abgesagt) — Status live auf Kachel (Q-104)
   const naechsterTermin = fall.termine.find(t => t.status !== 'ABGESAGT');
   const terminStatusLabel =
@@ -169,6 +179,116 @@ export default function FallPage() {
             <p style={{ margin: '0.5rem 0 0', fontSize: '0.85rem', color: 'var(--color-text-muted)' }}>
               {fall.statusBeschreibung}
             </p>
+          </div>
+        </div>
+      )}
+
+      {/* ─── 1b. RQ-QUITTUNG: Session-Antwort auf der Übersicht ─
+          UX: Nach dem Beantworten muss klar sein, *welche* Frage erledigt ist
+          und wo die Antwort im Verlauf nachvollziehbar ist (US-AV-004/007). */}
+      {sessionAntworten.length > 0 && (
+        <div
+          className="notice-box notice-box-success"
+          role="status"
+          aria-live="polite"
+          data-testid="rq-quittung"
+        >
+          <Icon name="check-circle" size={20} style={{ flexShrink: 0, marginTop: '2px' }} />
+          <div style={{ flex: 1 }}>
+            <strong
+              style={{ display: 'block', marginBottom: '0.35rem', fontSize: '1rem' }}
+              data-testid="rq-quittung-titel"
+            >
+              {sessionAntworten.length === 1
+                ? 'Antwort übermittelt'
+                : `${sessionAntworten.length} Antworten übermittelt`}
+            </strong>
+            <ul
+              style={{ margin: '0 0 0.5rem', paddingLeft: '1.15rem', fontSize: '0.9rem' }}
+              data-testid="rq-quittung-liste"
+            >
+              {sessionAntworten.map(rq => {
+                const kurz =
+                  rq.text.length > 90 ? `${rq.text.slice(0, 87).trim()}…` : rq.text;
+                const beantwortetAm = (rq as { beantwortetAm?: string }).beantwortetAm;
+                return (
+                  <li
+                    key={rq.id}
+                    data-testid={`rq-quittung-item-${rq.id}`}
+                    style={{ marginBottom: '0.35rem' }}
+                  >
+                    {kurz}
+                    {beantwortetAm ? (
+                      <span style={{ color: 'var(--color-text-muted)' }}>
+                        {' '}
+                        · beantwortet am {beantwortetAm}
+                      </span>
+                    ) : null}
+                    {' '}
+                    <Link
+                      href={`/fall/verlauf#ere-${demoRqAntwortEreignisId(rq.id)}`}
+                      className="btn btn-secondary btn-inline"
+                      style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '0.3rem',
+                        minHeight: 36,
+                        fontSize: '0.8rem',
+                        marginLeft: '0.25rem',
+                        verticalAlign: 'middle',
+                      }}
+                      data-testid={`rq-quittung-verlauf-${rq.id}`}
+                      aria-label="Ihre Antwort auf die Rückfrage im Verlauf ansehen"
+                    >
+                      <Icon name="clock" size={14} />
+                      Im Verlauf ansehen
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+            <p style={{ margin: '0.25rem 0 0.5rem', fontSize: '0.875rem', color: 'var(--color-text-muted)' }}>
+              Die Sachbearbeitung wurde informiert.
+              {ausstehendeUnterlagen > 0
+                ? ' Als Nächstes fehlen noch Unterlagen.'
+                : ' Keine offene Rückfrage mehr.'}
+              {' '}
+              Demo: Die Antwort gilt für diese Browser-Session.
+            </p>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+              <Link
+                href="/fall/rueckfragen"
+                className="btn btn-secondary btn-inline"
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.4rem',
+                  minHeight: 44,
+                }}
+                data-testid="rq-quittung-fragen-cta"
+              >
+                Zu den Fragen
+                <Icon name="arrow-right" size={16} />
+              </Link>
+              {ausstehendeUnterlagen > 0 && (
+                <Link
+                  href="/fall/dokumente"
+                  className="btn btn-primary btn-inline"
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '0.4rem',
+                    minHeight: 44,
+                    background: '#B45309',
+                    borderColor: '#B45309',
+                  }}
+                  data-testid="rq-quittung-unterlagen-cta"
+                >
+                  Unterlagen hochladen
+                  <Icon name="arrow-right" size={16} />
+                </Link>
+              )}
+            </div>
           </div>
         </div>
       )}

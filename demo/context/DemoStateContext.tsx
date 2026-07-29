@@ -59,6 +59,8 @@ interface DemoStateContextValue {
   sessionUploadedIds: string[];
   /** Termin-IDs, die in dieser Session bestätigt wurden (Quittung + Verlauf-Tiefenlink). */
   sessionConfirmedTerminIds: string[];
+  /** Rückfrage-IDs, die in dieser Session beantwortet wurden (Quittung + Verlauf-Tiefenlink). */
+  sessionAnsweredRqIds: string[];
 }
 
 const DemoStateContext = createContext<DemoStateContextValue>({
@@ -70,6 +72,7 @@ const DemoStateContext = createContext<DemoStateContextValue>({
   hasSessionChanges: false,
   sessionUploadedIds: [],
   sessionConfirmedTerminIds: [],
+  sessionAnsweredRqIds: [],
 });
 
 export function DemoStateProvider({ children }: { children: React.ReactNode }) {
@@ -303,6 +306,7 @@ export function DemoStateProvider({ children }: { children: React.ReactNode }) {
         hasSessionChanges,
         sessionUploadedIds: uploadedIds,
         sessionConfirmedTerminIds: confirmedTerminIds,
+        sessionAnsweredRqIds: answeredIds,
       }}
     >
       {children}

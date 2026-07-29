@@ -192,6 +192,56 @@ test.describe('US-AV-002 – Status einsehen', () => {
     ).toBeVisible();
   });
 
+  test('Q-198: Übersicht RQ-Quittung mit Verlauf-Tiefenlink', async ({ page }) => {
+    // US-AV-004/007: nach Session-Antwort Quittung auf Übersicht + #ere-E-DEMO-RQ-…
+    // Kein page.goto nach State (DEC-012)
+    const { goFallTab } = await import('./helpers/sessionNav');
+
+    await goFallTab(page, 'Fragen', /\/fall\/rueckfragen/);
+    await page.getByRole('button', { name: /Jetzt beantworten|Rückfrage beantworten/i }).click();
+    await page.getByTestId('rq-antwort-absenden').click();
+    await expect(page.getByTestId('rq-antwort-quittung-RQ-001')).toBeVisible();
+
+    await goFallTab(page, 'Übersicht', /\/fall$/);
+
+    const quittung = page.getByTestId('rq-quittung');
+    await expect(quittung).toBeVisible();
+    await expect(page.getByTestId('rq-quittung-titel')).toHaveText('Antwort übermittelt');
+    await expect(page.getByTestId('rq-quittung-item-RQ-001')).toContainText(
+      /Arbeitgeberbescheinigung/i
+    );
+    await expect(page.getByTestId('rq-quittung-item-RQ-001')).toContainText(
+      /beantwortet am 24\.\s*November 2024/i
+    );
+
+    const verlaufLink = page.getByTestId('rq-quittung-verlauf-RQ-001');
+    await expect(verlaufLink).toBeVisible();
+    await expect(verlaufLink).toHaveAttribute(
+      'href',
+      '/fall/verlauf#ere-E-DEMO-RQ-RQ-001'
+    );
+    await expect(verlaufLink).toContainText(/Im Verlauf ansehen/i);
+
+    await expect(page.getByTestId('rq-quittung-fragen-cta')).toHaveAttribute(
+      'href',
+      '/fall/rueckfragen'
+    );
+    await expect(page.getByTestId('rq-quittung-unterlagen-cta')).toHaveAttribute(
+      'href',
+      '/fall/dokumente'
+    );
+
+    await verlaufLink.click();
+    await expect(page).toHaveURL(/\/fall\/verlauf#ere-E-DEMO-RQ-RQ-001/);
+    const card = page.getByTestId('verlauf-ereignis-E-DEMO-RQ-RQ-001');
+    await expect(card).toBeVisible();
+    await expect(card).toHaveAttribute('aria-current', 'location');
+    await expect(card).toHaveAttribute('data-session-antwort', 'true');
+    await expect(page.getByTestId('verlauf-session-antwort-badge-E-DEMO-RQ-RQ-001')).toContainText(
+      /Ihre Antwort/i
+    );
+  });
+
   test('Nach allen Bürger-Aktionen: Ruhezustand-Banner sichtbar', async ({ page }) => {
     // Client-Navigation: DemoState liegt im Fall-Layout und geht bei page.goto() verloren
     await page.locator('.tab-nav-item').filter({ hasText: 'Fragen' }).click();

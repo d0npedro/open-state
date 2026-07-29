@@ -1,6 +1,6 @@
 # BUILD_STATE.md – Aktueller Projektstand
 
-Zuletzt aktualisiert: nach Q-197 AV Übersicht Termin-Quittung + Verlauf-Tiefenlink (US-AV-005/007)
+Zuletzt aktualisiert: nach Q-198 AV Übersicht RQ-Antwort-Quittung + Verlauf-Tiefenlink (US-AV-004/007)
 
 Dieser Stand beschreibt, was tatsächlich existiert und funktioniert.
 Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
@@ -24,7 +24,7 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | Route | Inhalt | Story-IDs | Status |
 |-------|--------|-----------|--------|
 | `/` | Landing Page | – | ✓ |
-| `/fall` | Fallübersicht, Status, Fairness-Summary + Verlauf-Sekundärlink, Fristen-Countdown offener Unterlagen, Upload-Quittung mit Verlauf-Tiefenlink, Termin-Bestätigung-Quittung mit Verlauf-Tiefenlink, Termin-Kachel Status live | US-AV-001, US-AV-002, US-AV-003, US-AV-005, US-AV-007 | ✓ |
+| `/fall` | Fallübersicht, Status, Fairness-Summary + Verlauf-Sekundärlink, Fristen-Countdown offener Unterlagen, Upload-/Termin-/RQ-Quittungen mit Verlauf-Tiefenlinks, Termin-Kachel Status live | US-AV-001, US-AV-002, US-AV-003, US-AV-004, US-AV-005, US-AV-007 | ✓ |
 | `/fall/dokumente` | Dokumentenanforderungen + Frist-Resttage + lokale Upload-Quittung pro Karte nach Session-Markierung + Verlauf-Tiefenlink `#ere-E-DEMO-DOK-…` | US-AV-003, US-AV-007 | ✓ |
 | `/fall/rueckfragen` | Rückfragen mit Fairness-Hinweis; Antwort-Quittung + Verlauf-Tiefenlink Session-Antwort | US-AV-004 | ✓ |
 | `/fall/termine` | Termine; session-lokale Bestätigung mit Quittung + Verlauf-Tiefenlink `#ere-E-DEMO-TERM-…`; Nav-Badge nur unbestätigt/bald fällig | US-AV-005, US-AV-007 | ✓ |
@@ -65,6 +65,7 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | AV Termin-Bestätigung | `DemoStateContext.confirmTermin` + `/fall/termine` | ✓ session-lokal AUSSTEHEND→BESTAETIGT; Tab-Badge live |
 | AV Termin-Quittung Verlauf | `/fall/termine` + `demoTerminBestaetigungEreignisId` + Verlauf | ✓ Quittung + „Im Verlauf ansehen“ → `#ere-E-DEMO-TERM-…`; Badge „Ihre Bestätigung“ (Q-196, US-AV-005/007) |
 | AV Übersicht Termin-Quittung | `/fall` + `sessionConfirmedTerminIds` | ✓ Session-Bestätigung Quittung + Verlauf-Tiefenlink + CTA Termine (Q-197, US-AV-005/007) |
+| AV Übersicht RQ-Quittung | `/fall` + `sessionAnsweredRqIds` | ✓ Session-Antwort Quittung + Verlauf-Tiefenlink + CTA Fragen/Unterlagen (Q-198, US-AV-004/007) |
 | UG Verlauf Typ-Filter | `/gruendung/verlauf` | ✓ Stelle + Ereignistyp (Vorgang/Dokumente/Rückfragen/Bescheide), UND-Kombination |
 | UG Hinweise Steuernummer-CTA | `/gruendung/hinweise` | ✓ CTA „Zum Finanzamt“ → `#beh-BEH-02` bei VS-05 AUSSTEHEND oder IN_BEARBEITUNG; Signal-Text session-sensitiv (Q-124) |
 | UG Hinweise Betriebsdatum-CTA | `/gruendung/hinweise` + Übersicht `#verfahrensstatus` | ✓ CTA „Zum Verfahrensstatus“ aus HINWEIS-Betriebsdatum |
@@ -315,6 +316,7 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 **Q-195 erledigt:** UG Übersicht Upload-Quittung mit Verlauf-Tiefenlink pro Session-Upload (US-UG-001/003/005, Parität AV Q-194).
 **Q-196 erledigt:** AV Termin-Bestätigung Quittung + Verlauf-Tiefenlink + Session-Badge „Ihre Bestätigung“ (US-AV-005/007).
 **Q-197 erledigt:** AV Übersicht Termin-Bestätigung Quittung + Verlauf-Tiefenlink (US-AV-005/007, Parität Upload Q-194).
+**Q-198 erledigt:** AV Übersicht RQ-Antwort-Quittung + Verlauf-Tiefenlink (US-AV-004/007, Parität Termin Q-197).
 
 ---
 
