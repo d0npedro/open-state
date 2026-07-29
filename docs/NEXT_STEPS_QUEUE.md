@@ -194,6 +194,7 @@ Story-Dokumentation ist kein Pflicht-Vorläufer für Mock-Daten und Typen.
 | Q-157 | Kita Einrichtung: CSV Status/Datenbasis-Metakopf (aktuell/veraltet, Summen, Prozessbezug, US-KJ-002) | DEMO | S | Q-152 | DONE `20c9483` |
 | Q-158 | UG Primär-CTA Nächster Schritt: RQ-Frist-/Konsequenz-Hilfstext (Übersicht, session-sensitiv) | DEMO | S | Q-154 | DONE `636815e` |
 | Q-159 | Kita Bedarfsplanung: CSV Aggregate freigabeunabhängig (Status/Meldebasis-Metakopf, US-KJ-007, DEC-004) | DEMO | S | Q-140 | DONE `1a69b2e` |
+| Q-160 | Kita Vorlage: CSV Aggregate Status/Meldebasis freigabeunabhängig (US-KJ-008, DEC-004) | DEMO | S | Q-136 | DONE `c3be039` |
 
 ---
 
@@ -358,3 +359,4 @@ Diese Punkte wurden in früheren Iterationen abgeschlossen und sind produktionsr
 | Q-157 Kita Einrichtung CSV Status/Datenbasis-Metakopf | Belegungsstand-CSV Status/Summen/Prozessbezug (US-KJ-002) | `20c9483` → main |
 | Q-158 UG Primär-CTA Nächster Schritt RQ-Frist-Hilfstext | Übersicht session-sensitiv (RQ/Unterlagen) | `636815e` → main |
 | Q-159 Kita Bedarfsplanung CSV Aggregate freigabeunabhängig | Status/Meldebasis-Metakopf, DEC-004 (US-KJ-007) | `1a69b2e` → main |
+| Q-160 Kita Vorlage CSV Aggregate freigabeunabhängig | Status/Meldebasis/Engpass-Filter, DEC-004 (US-KJ-008) | `c3be039` → main |
