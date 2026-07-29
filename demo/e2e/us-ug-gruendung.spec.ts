@@ -391,6 +391,26 @@ test.describe('UG – Hinweise zur Verfahrenslage', () => {
     await expect(page.getByText('US-UG-007')).not.toBeVisible();
   });
 
+  test('RELEVANT-Rückfrage-Signal hat CTA „Frage beantworten“ mit Anker', async ({ page }) => {
+    const cta = page.getByTestId('hinweise-rq-cta-RQ-01');
+    await expect(cta).toBeVisible();
+    await expect(cta).toContainText(/Frage beantworten/i);
+    await expect(cta).toHaveAttribute('href', '/gruendung/rueckfragen#rq-RQ-01');
+  });
+
+  test('CTA aus RELEVANT-Signal führt zur Rückfrage-Karte', async ({ page }) => {
+    await page.getByTestId('hinweise-rq-cta-RQ-01').click();
+    await expect(page).toHaveURL(/\/gruendung\/rueckfragen#rq-RQ-01/);
+    await expect(page.locator('#rq-RQ-01')).toBeVisible();
+  });
+
+  test('Nach Beantworten entfällt RELEVANT-CTA auf Hinweise', async ({ page }) => {
+    await page.goto('/gruendung/rueckfragen');
+    await page.getByRole('button', { name: /Rückfrage beantworten/i }).click();
+    await page.goto('/gruendung/hinweise');
+    await expect(page.getByTestId('hinweise-rq-cta-RQ-01')).toHaveCount(0);
+  });
+
 });
 
 // ─── Verlauf ──────────────────────────────────────────────────────────────────

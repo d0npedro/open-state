@@ -8,6 +8,29 @@ Erlaubte Pfade nur: `demo/app/gruendung/**`, `demo/context/GruendungStateContext
 
 ---
 
+## 2026-07-29 – Iteration 6: Hinweise-CTA aus RELEVANT-Rückfrage-Signal
+
+### Was
+Hinweise-Seite: RELEVANT-Signale vom Typ offene Rückfrage-Frist erhalten einen
+direkten CTA „Frage beantworten“ mit Anker `/gruendung/rueckfragen#rq-{id}`.
+CTA nur solange die Rückfrage offen ist; nach Beantworten entfällt er.
+E2E: Linkziel, Navigation zur Karte, Verschwinden nach Antwort.
+
+### Dateien
+- `demo/app/gruendung/hinweise/page.tsx` – pro RELEVANT-RQ-Signal CTA + Anker
+- `demo/e2e/us-ug-gruendung.spec.ts` – drei Hinweise-CTA-Tests
+- `docs/loops/ug-JOURNAL.md` – dieses Journal
+
+### Build
+`npm run lint` + `npm run build` im Ordner `demo/` grün.
+
+### Nächster sinnvoller UG-Schritt (Vorschlag)
+- Verlauf: Filter nach Ereignistyp (optional)
+- Übersicht: Fairness-Signale auf RELEVANT+HINWEIS begrenzen, wenn Liste wächst
+- Hinweise: CTA für BG-Anmeldung (RELEVANT) zu Behörden-Karte
+
+---
+
 ## 2026-07-29 – Iteration 5: Fairness-Kurzblock auf der Übersicht
 
 ### Was
