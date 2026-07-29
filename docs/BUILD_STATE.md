@@ -1,6 +1,6 @@
 # BUILD_STATE.md – Aktueller Projektstand
 
-Zuletzt aktualisiert: nach Supervisor-Pflicht-Push 2026-07-29 (Merge Kita Q-115 Zeitreihe Meldebasis-Datenlücken; lint+build grün; Queue Q-115 DONE)
+Zuletzt aktualisiert: nach Supervisor-Pflicht-Push 2026-07-29 (E2E-Isolation `.next-e2e` via NEXT_DIST_DIR; lint+build+E2E 216 chromium)
 
 Dieser Stand beschreibt, was tatsächlich existiert und funktioniert.
 Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
@@ -15,7 +15,7 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | Build-Status | ✓ Erfolgreich (27 statische Seiten) |
 | Deployment | Vercel, aus `demo/`-Verzeichnis |
 | Lokaler Start | `cd demo && npm install && npm run dev` |
-| Letzte Build-Prüfung | lint+build grün (Supervisor-Merge Q-115); E2E zuletzt 216 chromium Port 3010 |
+| Letzte Build-Prüfung | lint+build grün; `test:e2e:ci` 216 passed (chromium, workers=1, distDir `.next-e2e`) |
 
 ---
 
