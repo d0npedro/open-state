@@ -161,7 +161,8 @@ Story-Dokumentation ist kein Pflicht-Vorläufer für Mock-Daten und Typen.
 | Q-124 | UG Fairness: Steuernummer-Signal auch bei VS-05 IN_BEARBEITUNG (Text/CTA session-sensitiv) | DEMO | S | Q-122 | DONE `dc05794` |
 | Q-125 | Kita Lagebild Engpass-Rangliste: Schnellfilter Meldelücke (Session-sensitiv, analog Vorlage Q-114) | DEMO | S | Q-112 | DONE `549b998` |
 | Q-126 | Kita Lagebild Handlungsfelder: Schnellfilter Meldelücke (Session-sensitiv, analog Engpass Q-125) | DEMO | S | Q-125 | DONE `e8d51f1` |
-| Q-128 | Kita Lagebild Planungsraum-Detail: Schnellfilter Meldelücke (Session-sensitiv, analog Engpass/Handlungsfelder) | DEMO | S | Q-126 | DONE `ef924c9` |
+| Q-127 | UG Übersicht: Fairness-Kurz-CTAs für Steuernummer und Betriebsdatum (ergänzend zu Q-116) | DEMO | S | Q-116 | DONE `9e7ae4a` |
+| Q-128 | Kita Lagebild Planungsraum-Detail: Schnellfilter Meldelücke (`KitaPlanungsraumDetailListe`, Session-sensitiv) | DEMO | S | Q-126 | DONE `ef924c9` |
 
 ---
 
@@ -291,6 +292,6 @@ Diese Punkte wurden in früheren Iterationen abgeschlossen und sind produktionsr
 | Q-124 UG Steuernummer VS-05 Signal | Fairness auch bei IN_BEARBEITUNG | `dc05794` → main |
 | Q-125 Kita Lagebild Engpass-Filter | Engpass-Rangliste Meldelücke-Schnellfilter | `549b998` → main |
 | Q-126 Kita Lagebild Handlungsfelder-Filter | Handlungsfelder Meldelücke-Schnellfilter | `e8d51f1` → main |
-| Q-104 AV Termin-Kachel live | Übersicht Schnellzugriff Status Bestätigt | `a2ae873` → main |
-| Q-127 UG Übersicht Steuernummer/Betriebsdatum-CTA | Fairness-Kurzblock Finanzamt + Verfahrensstatus | `9e7ae4a` → main |
-| Q-128 Kita Lagebild Planungsraum-Detail-Filter | Detailkarten Meldelücke-Schnellfilter | `ef924c9` → main |
+| Q-104 AV Termin-Kachel live | Übersicht Status Ausstehend/Bestätigt | `a2ae873` → main |
+| Q-127 UG Übersicht Steuernummer/Betriebsdatum-CTAs | Fairness-Kurzblock erweiterte CTAs | `9e7ae4a` → main |
+| Q-128 Kita Planungsraum-Detail Meldelücke-Filter | `KitaPlanungsraumDetailListe` Schnellfilter | `ef924c9` → main |

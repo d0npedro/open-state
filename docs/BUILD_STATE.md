@@ -1,6 +1,6 @@
 # BUILD_STATE.md – Aktueller Projektstand
 
-Zuletzt aktualisiert: nach Supervisor-Pflicht-Push 2026-07-29 (Merge AV Q-104 Termin-Kachel + UG Q-127 Übersicht-CTAs Steuernummer/Betriebsdatum + Kita Q-128 Planungsraum-Detail-Filter; lint+build grün)
+Zuletzt aktualisiert: nach Supervisor-Pflicht-Push 2026-07-29 (Merge AV Q-104, UG Q-124/127, Kita Q-125/126/128; lint+build+e2e grün)
 
 Dieser Stand beschreibt, was tatsächlich existiert und funktioniert.
 Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
@@ -15,7 +15,7 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | Build-Status | ✓ Erfolgreich (27 statische Seiten) |
 | Deployment | Vercel, aus `demo/`-Verzeichnis |
 | Lokaler Start | `cd demo && npm install && npm run dev` |
-| Letzte Build-Prüfung | lint+build grün (Supervisor); E2E CI-Watcher nach Push |
+| Letzte Build-Prüfung | lint+build grün; `test:e2e:ci` 233 chromium passed (Supervisor) |
 
 ---
 
@@ -73,7 +73,6 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | Kita Regionenvergleich | `demo/components/kita/KitaRegionenVergleich.tsx` | ✓ Zwei Planungsräume A/B, Kernkennzahlen + Δ, Meldebasis-Badge (Q-118, US-KJ-010 AK3) |
 | UG Übersicht Fairness-Kurz-CTAs | `/gruendung` Fairness-Block | ✓ RELEVANT/HINWEIS → RQ/Unterlagen/BG/Steuernummer/Betriebsdatum-Anker; CTA entfällt nach State-Wechsel (Q-116, Q-127) |
 | AV Termin-Kachel live | `/fall` Schnellzugriff | ✓ Chip Ausstehend/Bestätigt nach session-lokaler Bestätigung (Q-104, US-AV-005) |
-| Kita Planungsraum-Detail Meldelücke-Filter | `KitaPlanungsraumDetailListe.tsx` | ✓ Schnellfilter Alle/Meldelücke auf Detailkarten, Rang-Erhalt, Session-sensitiv (Q-128, US-KJ-005/006) |
 | UG Behörden VS-04 → Rückfrage | `/gruendung/behoerden` | ✓ Verfahrensschritt mit offener RQ: CTA „Zur Rückfrage“ `#rq-…`; entfällt nach Beantworten (Q-120) |
 | UG VS-04 Abschluss nach RQ | `GruendungStateContext` + Behörden/Verlauf | ✓ Nach Beantworten: VS-04 → ABGESCHLOSSEN, System-Verlaufsereignis (Q-121) |
 | UG VS-05 Start nach RQ | `GruendungStateContext` + Behörden/Verlauf | ✓ Nach Beantworten: nächster AUSSTEHEND-Schritt derselben Behörde → IN_BEARBEITUNG (VS-05 Steuernummer) + Verlauf (Q-122) |
@@ -83,6 +82,7 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | UG Steuernummer-Signal VS-05 | `gruendung-rules.ts` + Hinweise | ✓ Signal auch bei IN_BEARBEITUNG; Text blockiert/in Bearbeitung je Session (Q-124) |
 | Kita Lagebild Engpass Meldelücke-Filter | `KitaEngpassRangliste.tsx` | ✓ Schnellfilter Alle/Meldelücke, Rang-Erhalt, Session-sensitiv (Q-125, US-KJ-006) |
 | Kita Lagebild Handlungsfelder Meldelücke-Filter | `KitaHandlungsfelder.tsx` | ✓ Schnellfilter Alle/Meldelücke, Leerzustand nach Freigabe (Q-126, US-KJ-005/006) |
+| Kita Lagebild Planungsraum-Detail Meldelücke-Filter | `KitaPlanungsraumDetailListe.tsx` | ✓ Schnellfilter Alle/Meldelücke, Rang-Erhalt, Session-sensitiv (Q-128, US-KJ-005/006) |
 
 ---
 
