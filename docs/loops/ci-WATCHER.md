@@ -2,14 +2,15 @@
 
 | Feld | Wert |
 |------|------|
-| last_checked | 2026-07-29T08:10:22Z |
-| last_run_id | 30434304458 |
+| last_checked | 2026-07-29T08:18:06Z |
+| last_run_id | 30434812379 |
 | last_status | success |
-| last_sha | 1f4c507 |
+| last_sha | e438548 |
 | fix_attempts | 0 |
 
 ## Log
 
+- E2E `30434812379` + Build `30434812204` **success** (SHA e438548 supervisor Q-151–Q-153 UG Unterlagen-CTA + Kita Druck/CSV — latest code path). Prior E2E `30434304458` **success** (SHA 1f4c507). Catch-up this tick: origin/main..main was 5 (Kita CSV/Druck + UG Unterlagen-CTA + merges) → lint+build grün (`NEXT_DIST_DIR=.next-ci-watcher`; shared `.next` ENOENT multi-loop race) → concurrent supervisor already pushed (incl. Q-151–Q-153 docs `e438548`) → origin/main..main = 0. Older E2E `30434513222` docs `a3beb10` still in_progress (docs-only). No fix. fix_attempts=0.
 - E2E `30434304458` + `30434246968` **success** (SHA 1f4c507 / 81494a1 docs ci-watcher HEAD). E2E `30434060034` **success** (SHA 81494a1 / bf8bf5b). Build latest `30433868191` **success** (SHA bf8bf5b supervisor Q-148–Q-149 UG BG-CTA + Kita Meldung-Druck — latest code path; HEAD docs-only path-skip). Catch-up: origin/main..main = 0. No fix. fix_attempts=0.
 - E2E `30434060034` **success** (SHA 81494a1 docs ci-watcher HEAD). E2E `30433924515` **success** (SHA eaeb450 / 178c94f supervisor Q-148–Q-150). E2E `30433868099` + Build `30433868191` **success** (SHA bf8bf5b supervisor Q-148–Q-149 UG BG-CTA + Kita Meldung-Druck — latest code path; HEAD docs-only path-skip). Catch-up: origin/main..main = 0. No fix. fix_attempts=0.
 - E2E `30433868099` + Build `30433868191` **success** (SHA bf8bf5b supervisor Q-148–Q-149 UG BG-CTA + Kita Meldung-Druck — latest code path). Prior E2E `30433583586` **success** (SHA 54f209e). Catch-up this tick: origin/main..main was 5 (UG BG-CTA + Kita Meldung-Druck + merges) → lint+build grün (`NEXT_DIST_DIR=.next-ci-watcher`) + local `test:e2e:ci` **240 passed** → concurrent supervisor pushed first (incl. Q-148–Q-150 docs `eaeb450`) → origin/main..main = 0. HEAD docs `eaeb450` E2E may still be in_progress (docs-only). No fix. fix_attempts=0.
