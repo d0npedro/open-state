@@ -184,6 +184,7 @@ Story-Dokumentation ist kein Pflicht-Vorläufer für Mock-Daten und Typen.
 | Q-147 | AV Fairness: UNTERLAGE_FEHLT mit berechneter Dokumenten-Frist (Resttage, RELEVANT ≤3) | DEMO | S | Q-004 | DONE `b768063` |
 | Q-148 | UG BG-CTA-Hilfstext session-sensitiv (Übersicht Fairness + Hinweise, offene RQ priorisiert) | DEMO | S | Q-096 | DONE `35a5d95` |
 | Q-149 | Kita Meldung: Druck freigabeunabhängig Status/Korrekturen/Freigabenachweis (US-KJ-004) | DEMO | S | Q-135 | DONE `2952d04` |
+| Q-150 | Kita Tagesstand: Druck freigabeunabhängig Status/Datenbasis/Freigabenachweis (US-KJ-001) | DEMO | S | Q-133 | DONE `19d915b` |
 
 ---
 
@@ -338,3 +339,4 @@ Diese Punkte wurden in früheren Iterationen abgeschlossen und sind produktionsr
 | Q-147 AV UNTERLAGE berechnete Dokumenten-Frist | Resttage / RELEVANT ≤3 Tage | `b768063` → main |
 | Q-148 UG BG-CTA-Hilfstext session-sensitiv | Übersicht + Hinweise nach RQ | `35a5d95` → main |
 | Q-149 Kita Meldung Druck freigabeunabhängig | Status/Korrekturen/Freigabe print-only | `2952d04` → main |
+| Q-150 Kita Tagesstand Druck freigabeunabhängig | Status/Datenbasis/Freigabe print-only | `19d915b` → main |

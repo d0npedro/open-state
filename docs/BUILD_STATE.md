@@ -1,6 +1,6 @@
 # BUILD_STATE.md – Aktueller Projektstand
 
-Zuletzt aktualisiert: nach Supervisor-Pflicht-Push 2026-07-29 (Merge loop/av + loop/ug + loop/kita → Q-148 UG BG-CTA-Hilfstext + Q-149 Kita Meldung-Druck; lint+build 27 Seiten; E2E chromium 240 passed; origin/main sync 0)
+Zuletzt aktualisiert: nach Supervisor-Pflicht-Push 2026-07-29 (Merge loop/kita → Q-148–Q-150; lint+build 27 Seiten grün; origin/main sync 0)
 
 Dieser Stand beschreibt, was tatsächlich existiert und funktioniert.
 Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
@@ -15,7 +15,7 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | Build-Status | ✓ Erfolgreich (27 statische Seiten) |
 | Deployment | Vercel, aus `demo/`-Verzeichnis |
 | Lokaler Start | `cd demo && npm install && npm run dev` |
-| Letzte Build-Prüfung | lint+build **27 Seiten** + `test:e2e:ci` **240 passed** (Supervisor Merge Q-148/Q-149) |
+| Letzte Build-Prüfung | lint+build **27 Seiten** grün (Supervisor Merge Q-148–Q-150) |
 
 ---
 
@@ -39,7 +39,7 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | `/kita/bedarfsplanung` | Bedarfsplanungsentwurf (§ 80 SGB VIII) + Meldebasis + Residual↔Meldelücke (Hinweis-only) + Steuerungskette Hub-Karten + Druck freigabeunabhängig mit Meldebasis-Session-Hinweis | US-KJ-007 | ✓ |
 | `/kita/vorlage` | Politische Gremienvorlage + Freigabe + Meldebasis/Residual↔Meldelücke + Engpass Meldelücke-Filter + Druck freigabeunabhängig + Steuerungskette Hub-Karten | US-KJ-008 | ✓ |
 | `/kita/einrichtung` | Belegungsstand Einrichtung (aggregiert) + Prozesskette Tagesstand→Monatsbericht→Meldung | US-KJ-002 | ✓ |
-| `/kita/tagesstand` | Tagesstand erfassen (Aggregate, Freigabe) + Prozesskette Hub-Karten Belegung/Monatsbericht/Meldung | US-KJ-001 | ✓ |
+| `/kita/tagesstand` | Tagesstand erfassen (Aggregate, Freigabe) + Prozesskette Hub-Karten Belegung/Monatsbericht/Meldung + Druck freigabeunabhängig (Status/Datenbasis/Freigabenachweis) | US-KJ-001 | ✓ |
 | `/kita/monatsbericht` | Monatsbericht + Vorschau + Rücklink Lagebild + Einrichtungs-Kontext + Prozesskette + Druck Status/Tagesstand-Datenbasis | US-KJ-003 | ✓ |
 | `/kita/meldung` | Monatsmeldung prüfen, korrigieren, freigeben + Prozesskette Hub-Karten + Druck freigabeunabhängig (Status/Korrekturen/Freigabenachweis) | US-KJ-004 | ✓ |
 
@@ -105,6 +105,7 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | AV UNTERLAGE berechnete Dokumenten-Frist | `fairness/rules` + `/fall/dokumente` | ✓ Resttage ggü. FIKTIVES_HEUTE; RELEVANT ≤3 / abgelehnt (Q-147) |
 | UG BG-CTA-Hilfstext session-sensitiv | `/gruendung` + `/gruendung/hinweise` | ✓ Offene RQ priorisiert; nach Antwort Fokus BG-Anmeldung außerhalb (Q-148) |
 | Kita Meldung Druck freigabeunabhängig | `/kita/meldung` | ✓ Print Status/Korrekturen/Freigabenachweis; interaktive Phasen no-print (Q-149, US-KJ-004) |
+| Kita Tagesstand Druck freigabeunabhängig | `/kita/tagesstand` | ✓ Print Status/Datenbasis/Freigabenachweis; interaktive Phasen no-print (Q-150, US-KJ-001) |
 
 ---
 
@@ -219,6 +220,7 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 **Q-147 erledigt:** AV UNTERLAGE_FEHLT mit berechneter Dokumenten-Frist (Resttage, RELEVANT ≤3).
 **Q-148 erledigt:** UG BG-CTA-Hilfstext session-sensitiv (Übersicht + Hinweise, offene RQ priorisiert).
 **Q-149 erledigt:** Kita Meldung Druck freigabeunabhängig Status/Korrekturen/Freigabenachweis (US-KJ-004).
+**Q-150 erledigt:** Kita Tagesstand Druck freigabeunabhängig Status/Datenbasis/Freigabenachweis (US-KJ-001).
 
 ---
 
