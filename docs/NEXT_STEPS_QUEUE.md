@@ -168,6 +168,8 @@ Story-Dokumentation ist kein Pflicht-Vorläufer für Mock-Daten und Typen.
 | Q-131 | Kita Monatsbericht ↔ Einrichtung: Prozesskette (Hub-Karten, Datenlücke-Links, Story-Labels) | DEMO | S | Q-102 | DONE `ba2c4aa` |
 | Q-132 | UG Übersicht: Steuernummer-CTA-Text nach VS-05 IN_BEARBEITUNG differenzieren | DEMO | S | Q-127 | DONE `bc4221a` |
 | Q-133 | Kita Tagesstand: Prozesskette Hub-Karten (Belegung/Monatsbericht/Meldung, US-KJ-001) | DEMO | S | Q-131 | DONE `810240d` |
+| Q-134 | UG Hinweise: Steuernummer-CTA-Label bei VS-05 IN_BEARBEITUNG (Spiegel Übersicht) | DEMO | S | Q-132 | DONE `6fb313f` |
+| Q-135 | Kita Meldung: Prozesskette Hub-Karten (Tagesstand/Belegung/Monatsbericht, US-KJ-004) | DEMO | S | Q-133 | DONE `3e7cbf9` |
 
 ---
 
@@ -306,3 +308,5 @@ Diese Punkte wurden in früheren Iterationen abgeschlossen und sind produktionsr
 | Q-131 Kita Monatsbericht↔Einrichtung | Prozesskette Hub-Karten | `ba2c4aa` → main |
 | Q-132 UG Übersicht Steuernummer-CTA Label | VS-05 IN_BEARBEITUNG CTA-Text | `bc4221a` → main |
 | Q-133 Kita Tagesstand Prozesskette | Hub-Karten Belegung/Monatsbericht/Meldung | `810240d` → main |
+| Q-134 UG Hinweise Steuernummer-CTA Label | VS-05 IN_BEARBEITUNG CTA-Text gespiegelt | `6fb313f` → main |
+| Q-135 Kita Meldung Prozesskette | Hub-Karten Tagesstand/Belegung/Monatsbericht | `3e7cbf9` → main |
