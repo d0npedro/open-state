@@ -7,7 +7,8 @@
  * Filterstand inkl. Meldebasis-Session (Spiegel Explorer/Zeitreihe).
  * CSV: freigabeunabhängig Aggregate mit Status (Lagebild-Freigabe), Meldebasis-Session
  * und optionalem Export-Filter „Meldelücke“ (Spiegel Engpass/Vorlage).
- * Blätter inkl. Zeitreihe (6) und Regionenvergleich Stichtag Paare (7, US-KJ-010).
+ * Blätter inkl. Zeitreihe (6), Regionenvergleich Stichtag Paare (7) und
+ * Verlauf-Paare 12 Monate (8, US-KJ-010).
  * DEC-004. Keine Kind- oder Personennamen.
  */
 
@@ -51,7 +52,8 @@ function meldeSchluessel(basis: PlanungsraumMeldebasis | undefined): string {
  * CSV Aggregate-Export Steuerungslagebild (US-KJ-005).
  * Metakopf: Status (Lagebild freigegeben), Meldebasis-Session, optional Meldelücke-Filter.
  * Blätter: Versorgung, Engpass-Rangliste, Handlungsfelder, Maßnahmen, Meldebasis-Stichprobe,
- * Zeitreihe (Gesamtkommune + Planungsräume), Regionenvergleich Stichtag Paare (US-KJ-010).
+ * Zeitreihe (Gesamtkommune + Planungsräume), Regionenvergleich Stichtag Paare und
+ * Verlauf-Paare 12 Monate (US-KJ-010).
  * Nur Aggregate, keine Kind- oder Personennamen (DEC-004).
  */
 function downloadCsv(args: {
@@ -133,7 +135,7 @@ function downloadCsv(args: {
     `# Inklusion: belegt ${g.inklusionsplaetzeBelegt}/${g.inklusionsplaetzeGenehmigt} · Versorgung U3 ${csvNum(g.versorgungsquote.u3, 1)} % · Ue3 ${csvNum(g.versorgungsquote.ue3, 1)} %`,
     `# Methodik: Wartelistendruck = Anfragen / freie Plätze · Handlungsfelder: Druckfaktor > 5 · keine Interpolation fehlender Meldungen`,
     `# Zeitreihe: 12-Monats-Aggregate Gesamtkommune und Planungsräume (Demo-Verteilung nach Strukturanteilen) · Meldebasis nur im Stichprobenmonat ${csvSafe(meldeMonatsLabel)} (${meldeMonatsIso}) · keine Trendbewertung`,
-    `# Regionenvergleich: Stichtag Paare aller exportierten Planungsräume (i < j, sortiert nach Wartelistendruck) · Δ = A − B rein rechnerisch · keine Bewertung · interaktiver A/B + Verlauf-CSV an der UI-Komponente`,
+    `# Regionenvergleich: Stichtag-Paare (Blatt 7) und 12-Monats-Verlauf-Paare (Blatt 8) aller exportierten Planungsräume (i < j, sortiert nach Wartelistendruck) · Δ = A − B rein rechnerisch · keine Bewertung · interaktiver A/B + Komponenten-CSV an der UI`,
     `# Steuerungskette: Lagebild (US-KJ-005/006) → Bedarfsplanung (US-KJ-007) → Vorlage (US-KJ-008) · Meldebasis US-KJ-004 · Zeitreihe/Regionenvergleich US-KJ-010-kompatibel`,
     `# Jugendamt-intern · Session-Stand, kein Backend · keine automatischen Handlungsempfehlungen`,
     `# Keine personenbezogenen Daten · Keine Kind- oder Personennamen · Keine Einrichtungs-PII (DEC-004)`,
@@ -591,6 +593,162 @@ function downloadCsv(args: {
         ])
   );
 
+  // Blatt 8: Regionenvergleich Verlauf – alle Paare i < j × 4 Kennzahlen × Monate (US-KJ-005 / US-KJ-010)
+  type VerlaufExportMetric = {
+    key: string;
+    label: string;
+    unit: 'zahl' | 'pct';
+    get: (m: (typeof lb.zeitreihe)[number]) => number;
+  };
+
+  const verlaufMetrics: VerlaufExportMetric[] = [
+    {
+      key: 'warteliste',
+      label: 'Wartelistenbestand',
+      unit: 'zahl',
+      get: m => m.wartelisteBestand,
+    },
+    {
+      key: 'auslastung',
+      label: 'Auslastungsgrad',
+      unit: 'pct',
+      get: m => m.auslastungsgradProzent,
+    },
+    {
+      key: 'freiePlaetze',
+      label: 'Freie Plätze',
+      unit: 'zahl',
+      get: m => m.freiePlaetze,
+    },
+    {
+      key: 'personal',
+      label: 'Personalausfallquote',
+      unit: 'pct',
+      get: m => m.personalAusfallquoteProzent,
+    },
+  ];
+
+  const verlaufHeader = [
+    'Monat',
+    'Monat_ISO',
+    'Kennzahl',
+    'Kennzahl_Key',
+    'Region_A',
+    'Region_A_ID',
+    'Rang_A',
+    'Wert_A',
+    'Region_B',
+    'Region_B_ID',
+    'Rang_B',
+    'Wert_B',
+    'Delta_A_minus_B',
+    'Einheit',
+    'Meldebasis_A',
+    'Meldebasis_B',
+    'Ist_Berichtsmonat',
+    'Filter',
+  ].join(';');
+
+  const verlaufRows: string[] = [];
+
+  for (let i = 0; i < raumExport.length; i++) {
+    for (let j = i + 1; j < raumExport.length; j++) {
+      const raumA = raumExport[i];
+      const raumB = raumExport[j];
+      const basisA = byRaumId.get(raumA.id);
+      const basisB = byRaumId.get(raumB.id);
+      const rangA = sorted.findIndex(s => s.id === raumA.id) + 1;
+      const rangB = sorted.findIndex(s => s.id === raumB.id) + 1;
+      const serieA = lb.zeitreihePlanungsraeume[raumA.id] ?? [];
+      const serieB = lb.zeitreihePlanungsraeume[raumB.id] ?? [];
+      const byMonatB = new Map(serieB.map(m => [m.monat, m]));
+      const meldeA = !hydrated ? 'Session nicht geladen' : meldebasisLabel(basisA);
+      const meldeB = !hydrated ? 'Session nicht geladen' : meldebasisLabel(basisB);
+
+      if (serieA.length === 0 && serieB.length === 0) continue;
+
+      // Monate aus A (Referenz); fehlende B-Werte bleiben leer (keine Interpolation)
+      const monate =
+        serieA.length > 0
+          ? serieA
+          : serieB.map(m => ({
+              ...m,
+              // Platzhalter: nur Monatsachsen, Werte kommen aus B bzw. leer
+            }));
+
+      for (const mon of monate) {
+        const rowA = serieA.find(m => m.monat === mon.monat);
+        const rowB = byMonatB.get(mon.monat);
+        const isMeldeMonat = mon.monat === meldeMonatsIso;
+        const monLabel = rowA?.monatLabel ?? rowB?.monatLabel ?? mon.monatLabel;
+
+        for (const metric of verlaufMetrics) {
+          let wertA = '';
+          let wertB = '';
+          let delta = '';
+          const einheit = metric.unit === 'pct' ? 'Prozent' : 'Zahl';
+
+          if (rowA) {
+            const va = metric.get(rowA);
+            wertA = metric.unit === 'pct' ? csvNum(va, 1) : String(Math.round(va));
+          }
+          if (rowB) {
+            const vb = metric.get(rowB);
+            wertB = metric.unit === 'pct' ? csvNum(vb, 1) : String(Math.round(vb));
+          }
+          if (rowA && rowB) {
+            const va = metric.get(rowA);
+            const vb = metric.get(rowB);
+            delta =
+              metric.unit === 'pct'
+                ? csvNum(va - vb, 1)
+                : String(Math.round(va - vb));
+          }
+
+          verlaufRows.push(
+            [
+              csvSafe(monLabel),
+              mon.monat,
+              csvSafe(metric.label),
+              metric.key,
+              csvSafe(raumA.bezeichnung),
+              raumA.id,
+              rangA,
+              wertA,
+              csvSafe(raumB.bezeichnung),
+              raumB.id,
+              rangB,
+              wertB,
+              delta,
+              einheit,
+              // Meldebasis nur im Stichprobenmonat fachlich relevant (sonst „–“)
+              isMeldeMonat ? csvSafe(meldeA) : '–',
+              isMeldeMonat ? csvSafe(meldeB) : '–',
+              isMeldeMonat ? 'ja' : 'nein',
+              filterCsvLabel,
+            ].join(';')
+          );
+        }
+      }
+    }
+  }
+
+  const verlaufFilterLabel =
+    exportFilter === 'MELDELUECKE'
+      ? `Filter Meldelücke: ${pairCount} Paare aus ${raumExport.length} Räumen mit Lücke · 4 Kennzahlen · 12 Monate`
+      : `${pairCount} Paare aus ${raumExport.length} Planungsräumen · 4 Kennzahlen · 12 Monate (sortiert nach Wartelistendruck)`;
+
+  parts.push(
+    '',
+    `# Blatt 8: Regionenvergleich Verlauf 12 Monate (${verlaufFilterLabel}; Δ = A − B rein rechnerisch je Monat, keine Bewertung/Interpolation/Trend; Meldebasis nur im Stichprobenmonat ${csvSafe(meldeMonatsLabel)}; interaktiver A/B-Verlauf-CSV an UI-Komponente)`,
+    verlaufHeader,
+    ...(verlaufRows.length > 0
+      ? verlaufRows
+      : [
+          '# (weniger als zwei Planungsräume mit Zeitreihe im aktuellen Export-Filter — kein Verlaufs-Paarvergleich)',
+        ])
+  );
+
   const csv = parts.join('\n');
   const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
   const url = URL.createObjectURL(blob);
@@ -649,8 +807,9 @@ export function KitaLagebildDruck() {
             Meldebasis-Session. Zeitreihe und Regionenvergleich A/B mit eigenem print-only
             Filterstand und Komponenten-CSV (Stichtag/Verlauf). Gesamt-CSV: Aggregate mit
             Lagebild-Status, Meldebasis-Session, Zeitreihe (Blatt 6), Regionenvergleich Stichtag
-            Paare (Blatt 7, Δ rein rechnerisch) und optionalem Export-Filter „Meldelücke“
-            (Semikolon, UTF-8 BOM). Nur Aggregate, keine Kind- oder Personennamen (DEC-004).
+            Paare (Blatt 7) und Verlauf-Paare 12 Monate (Blatt 8, Δ rein rechnerisch, 4 Kennzahlen)
+            sowie optionalem Export-Filter „Meldelücke“ (Semikolon, UTF-8 BOM). Nur Aggregate,
+            keine Kind- oder Personennamen (DEC-004).
           </p>
           <div
             style={{
