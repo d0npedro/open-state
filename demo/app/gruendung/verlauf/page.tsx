@@ -25,10 +25,46 @@ const ereignisLabels: Record<GruendungsEreignisTyp, string> = {
 
 type StelleFilter = 'ALLE' | 'GRUENDER' | 'BEHOERDE' | 'SYSTEM';
 
+/** Bürgernahe Kategorien über mehrere technische Ereignistypen */
+type TypFilter = 'ALLE' | 'VORGANG' | 'DOKUMENTE' | 'RUECKFRAGEN' | 'BESCHEIDE';
+
+const TYP_KATEGORIE: Record<Exclude<TypFilter, 'ALLE'>, readonly GruendungsEreignisTyp[]> = {
+  VORGANG: [
+    'vorgang_erstellt',
+    'vorgang_eingereicht',
+    'eingang_bestaetigt',
+    'status_aktualisiert',
+    'stillstand_markiert',
+    'zustaendigkeitswechsel',
+    'gruendungsakte_abgeschlossen',
+  ],
+  DOKUMENTE: [
+    'dokument_hochgeladen',
+    'dokument_akzeptiert',
+    'dokument_abgelehnt',
+  ],
+  RUECKFRAGEN: [
+    'rueckfrage_gestellt',
+    'rueckfrage_beantwortet',
+  ],
+  BESCHEIDE: [
+    'bescheid_erteilt',
+    'ablehnung_erteilt',
+    'steuernummer_vergeben',
+  ],
+};
+
 const stelleLabel: Record<Exclude<StelleFilter, 'ALLE'>, string> = {
   GRUENDER: 'Sie',
   BEHOERDE: 'Behörde',
   SYSTEM:   'System',
+};
+
+const typLabel: Record<Exclude<TypFilter, 'ALLE'>, string> = {
+  VORGANG:     'Vorgang',
+  DOKUMENTE:   'Dokumente',
+  RUECKFRAGEN: 'Rückfragen',
+  BESCHEIDE:   'Bescheide',
 };
 
 const stelleDotStyle: Record<Exclude<StelleFilter, 'ALLE'>, React.CSSProperties> = {
@@ -37,32 +73,90 @@ const stelleDotStyle: Record<Exclude<StelleFilter, 'ALLE'>, React.CSSProperties>
   SYSTEM:   { background: 'white', border: '2px solid var(--color-border)' },
 };
 
-const filterOptions: { id: StelleFilter; label: string }[] = [
+const stelleFilterOptions: { id: StelleFilter; label: string }[] = [
   { id: 'ALLE',     label: 'Alle' },
   { id: 'GRUENDER', label: 'Sie' },
   { id: 'BEHOERDE', label: 'Behörde' },
   { id: 'SYSTEM',   label: 'System' },
 ];
 
+const typFilterOptions: { id: TypFilter; label: string }[] = [
+  { id: 'ALLE',        label: 'Alle' },
+  { id: 'VORGANG',     label: 'Vorgang' },
+  { id: 'DOKUMENTE',   label: 'Dokumente' },
+  { id: 'RUECKFRAGEN', label: 'Rückfragen' },
+  { id: 'BESCHEIDE',   label: 'Bescheide' },
+];
+
+function matchesTyp(typ: GruendungsEreignisTyp, filter: TypFilter): boolean {
+  if (filter === 'ALLE') return true;
+  return (TYP_KATEGORIE[filter] as readonly GruendungsEreignisTyp[]).includes(typ);
+}
+
 export default function VerlaufPage() {
   const { akte } = useGruendungState();
-  const [filter, setFilter] = useState<StelleFilter>('ALLE');
+  const [stelleFilter, setStelleFilter] = useState<StelleFilter>('ALLE');
+  const [typFilter, setTypFilter] = useState<TypFilter>('ALLE');
 
-  const counts = useMemo(() => {
+  const stelleCounts = useMemo(() => {
     const base = { ALLE: 0, GRUENDER: 0, BEHOERDE: 0, SYSTEM: 0 };
     for (const e of akte.ereignisse) {
+      if (!matchesTyp(e.typ, typFilter)) continue;
       base.ALLE += 1;
       base[e.handelndeStelle] += 1;
     }
     return base;
-  }, [akte.ereignisse]);
+  }, [akte.ereignisse, typFilter]);
+
+  const typCounts = useMemo(() => {
+    const base: Record<TypFilter, number> = {
+      ALLE: 0,
+      VORGANG: 0,
+      DOKUMENTE: 0,
+      RUECKFRAGEN: 0,
+      BESCHEIDE: 0,
+    };
+    for (const e of akte.ereignisse) {
+      if (stelleFilter !== 'ALLE' && e.handelndeStelle !== stelleFilter) continue;
+      base.ALLE += 1;
+      for (const key of Object.keys(TYP_KATEGORIE) as Exclude<TypFilter, 'ALLE'>[]) {
+        if ((TYP_KATEGORIE[key] as readonly GruendungsEreignisTyp[]).includes(e.typ)) {
+          base[key] += 1;
+        }
+      }
+    }
+    return base;
+  }, [akte.ereignisse, stelleFilter]);
 
   const chronologisch = useMemo(() => {
-    const list = filter === 'ALLE'
-      ? akte.ereignisse
-      : akte.ereignisse.filter(e => e.handelndeStelle === filter);
+    const list = akte.ereignisse.filter(e => {
+      if (stelleFilter !== 'ALLE' && e.handelndeStelle !== stelleFilter) return false;
+      if (!matchesTyp(e.typ, typFilter)) return false;
+      return true;
+    });
     return [...list].reverse();
-  }, [akte.ereignisse, filter]);
+  }, [akte.ereignisse, stelleFilter, typFilter]);
+
+  const totalCount = akte.ereignisse.length;
+
+  const filterSummary = useMemo(() => {
+    const parts: string[] = [];
+    if (stelleFilter !== 'ALLE') parts.push(stelleLabel[stelleFilter]);
+    if (typFilter !== 'ALLE') parts.push(typLabel[typFilter]);
+    if (parts.length === 0) return `${totalCount} Einträge insgesamt`;
+    return `${chronologisch.length} von ${totalCount} Einträgen · Filter: ${parts.join(' · ')}`;
+  }, [stelleFilter, typFilter, chronologisch.length, totalCount]);
+
+  const emptyMessage = useMemo(() => {
+    if (stelleFilter === 'SYSTEM' && typFilter === 'ALLE') {
+      return 'Noch keine System-Einträge. Automatische Statusmeldungen erscheinen hier nach Demo-Aktionen.';
+    }
+    const parts: string[] = [];
+    if (stelleFilter !== 'ALLE') parts.push(stelleLabel[stelleFilter]);
+    if (typFilter !== 'ALLE') parts.push(typLabel[typFilter]);
+    if (parts.length === 0) return 'Keine Einträge.';
+    return `Keine Einträge für „${parts.join(' · ')}“.`;
+  }, [stelleFilter, typFilter]);
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
@@ -74,25 +168,25 @@ export default function VerlaufPage() {
         </p>
       </div>
 
-      {/* Filter nach handelnder Stelle */}
-      <div className="card" style={{ padding: '0.875rem 1rem' }}>
+      {/* Filter: handelnde Stelle + Ereignistyp */}
+      <div className="card" style={{ padding: '0.875rem 1rem', display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
         <div
           role="group"
           aria-label="Verlauf filtern nach handelnder Stelle"
           style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', alignItems: 'center' }}
         >
           <span style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', marginRight: '0.25rem' }}>
-            Zeigen:
+            Von:
           </span>
-          {filterOptions.map(opt => {
-            const active = filter === opt.id;
-            const count = counts[opt.id];
+          {stelleFilterOptions.map(opt => {
+            const active = stelleFilter === opt.id;
+            const count = stelleCounts[opt.id];
             return (
               <button
                 key={opt.id}
                 type="button"
                 aria-pressed={active}
-                onClick={() => setFilter(opt.id)}
+                onClick={() => setStelleFilter(opt.id)}
                 className={active ? 'btn btn-primary' : 'btn btn-secondary'}
                 style={{
                   fontSize: '0.8rem',
@@ -128,10 +222,50 @@ export default function VerlaufPage() {
             );
           })}
         </div>
-        <p style={{ margin: '0.65rem 0 0', fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>
-          {filter === 'ALLE'
-            ? `${counts.ALLE} Einträge insgesamt`
-            : `${chronologisch.length} von ${counts.ALLE} Einträgen · Filter: ${stelleLabel[filter]}`}
+
+        <div
+          role="group"
+          aria-label="Verlauf filtern nach Ereignistyp"
+          style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', alignItems: 'center' }}
+        >
+          <span style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', marginRight: '0.25rem' }}>
+            Art:
+          </span>
+          {typFilterOptions.map(opt => {
+            const active = typFilter === opt.id;
+            const count = typCounts[opt.id];
+            return (
+              <button
+                key={opt.id}
+                type="button"
+                aria-pressed={active}
+                onClick={() => setTypFilter(opt.id)}
+                className={active ? 'btn btn-primary' : 'btn btn-secondary'}
+                style={{
+                  fontSize: '0.8rem',
+                  padding: '0.35rem 0.75rem',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.4rem',
+                }}
+              >
+                {opt.label}
+                <span
+                  style={{
+                    fontSize: '0.7rem',
+                    opacity: 0.85,
+                    fontVariantNumeric: 'tabular-nums',
+                  }}
+                >
+                  ({count})
+                </span>
+              </button>
+            );
+          })}
+        </div>
+
+        <p style={{ margin: 0, fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>
+          {filterSummary}
         </p>
       </div>
 
@@ -139,11 +273,7 @@ export default function VerlaufPage() {
       {chronologisch.length === 0 ? (
         <div className="notice-box notice-box-neutral" role="status">
           <Icon name="clock" size={15} style={{ flexShrink: 0 }} />
-          <span>
-            {filter === 'SYSTEM'
-              ? 'Noch keine System-Einträge. Automatische Statusmeldungen erscheinen hier nach Demo-Aktionen.'
-              : `Keine Einträge für „${filter === 'ALLE' ? 'Alle' : stelleLabel[filter as Exclude<StelleFilter, 'ALLE'>]}“.`}
-          </span>
+          <span>{emptyMessage}</span>
         </div>
       ) : (
         <div style={{ position: 'relative', paddingLeft: '1.75rem' }}>
