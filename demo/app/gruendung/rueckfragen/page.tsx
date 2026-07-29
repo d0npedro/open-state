@@ -1,11 +1,16 @@
 'use client';
 
+import { useState } from 'react';
 import { useGruendungState } from '@/context/GruendungStateContext';
+import { berechneFristTage } from '@/lib/fairness/rules';
+import { FIKTIVES_HEUTE_GRUENDUNG } from '@/lib/fairness/gruendung-rules';
 import { Icon } from '@/components/Icon';
 
 export default function RueckfragenPage() {
   const { akte, answerRueckfrage } = useGruendungState();
   const offeneAnzahl = akte.rueckfragen.filter(r => !r.beantwortet).length;
+  /** Draft-Antworten pro Rückfrage-ID (lokaler Formularzustand) */
+  const [drafts, setDrafts] = useState<Record<string, string>>({});
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
@@ -22,22 +27,39 @@ export default function RueckfragenPage() {
       <div className="notice-box notice-box-info">
         <Icon name="info" size={16} style={{ flexShrink: 0, marginTop: '1px' }} />
         <span>
-          <strong>Demo:</strong> Klicken Sie auf «Rückfrage beantworten» — der Status ändert sich in der gesamten App.
+          <strong>Demo:</strong> Formulieren Sie optional eine Antwort und senden Sie sie ab —
+          der Status ändert sich in der gesamten App. Ohne Text wird eine Beispielantwort verwendet.
         </span>
       </div>
 
       {akte.rueckfragen.map(rq => {
         const behörde = akte.beteiligteBehörden.find(b => b.id === rq.anforderndeBehördeId);
+        const resttage = berechneFristTage(rq.fristDatum, FIKTIVES_HEUTE_GRUENDUNG);
+        const fristKritisch = !rq.beantwortet && resttage <= 3;
+        const draft = drafts[rq.id] ?? '';
+        const formId = `ug-rq-antwort-${rq.id}`;
 
         return (
-          <div key={rq.id} className="card" style={{
-            borderLeft: rq.beantwortet ? '5px solid var(--color-success)' : '5px solid var(--color-warning)',
-          }}>
+          <div
+            key={rq.id}
+            className="card"
+            style={{
+              borderLeft: rq.beantwortet
+                ? '5px solid var(--color-success)'
+                : fristKritisch
+                  ? '5px solid var(--color-danger)'
+                  : '5px solid var(--color-warning)',
+            }}
+          >
             {/* Status-Header */}
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '1.125rem' }}>
-              <span className={`status-chip ${rq.beantwortet ? 'status-chip-success' : 'status-chip-warning'}`}>
+              <span className={`status-chip ${rq.beantwortet ? 'status-chip-success' : fristKritisch ? 'status-chip-danger' : 'status-chip-warning'}`}>
                 <Icon name={rq.beantwortet ? 'check-circle' : 'alert'} size={15} />
-                {rq.beantwortet ? 'Beantwortet' : 'Ihre Antwort erwartet'}
+                {rq.beantwortet
+                  ? 'Beantwortet'
+                  : fristKritisch
+                    ? `Dringend — nur noch ${resttage} Tag${resttage === 1 ? '' : 'e'}!`
+                    : 'Ihre Antwort erwartet'}
               </span>
               <span style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>
                 Gefragt am {rq.gestelltAm}
@@ -76,30 +98,130 @@ export default function RueckfragenPage() {
               </div>
             </div>
 
-            {/* Frist + Button oder Bestätigung */}
+            {/* Beantwortet: Quittung + Antworttext */}
             {rq.beantwortet ? (
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem', color: 'var(--color-success)', fontWeight: 700, fontSize: '0.95rem' }}>
-                <Icon name="check-circle" size={20} />
-                Beantwortet — die Behörde wurde informiert.
+              <div
+                role="status"
+                aria-live="polite"
+                style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem', color: 'var(--color-success)', fontWeight: 700, fontSize: '0.95rem' }}>
+                  <Icon name="check-circle" size={20} />
+                  Beantwortet — die Behörde wurde informiert.
+                  {rq.beantwortetAm && (
+                    <span style={{ fontWeight: 500, color: 'var(--color-text-muted)', fontSize: '0.85rem' }}>
+                      am {rq.beantwortetAm}
+                    </span>
+                  )}
+                </div>
+                {rq.antwortText && (
+                  <div
+                    style={{
+                      background: 'var(--color-success-light, #f0fff4)',
+                      border: '1px solid var(--color-success)',
+                      borderRadius: 'var(--radius)',
+                      padding: '0.875rem 1rem',
+                    }}
+                  >
+                    <div style={{ fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--color-text-muted)', marginBottom: '0.4rem' }}>
+                      Ihre übermittelte Antwort
+                    </div>
+                    <p style={{ margin: 0, fontSize: '0.9rem', lineHeight: 1.5, whiteSpace: 'pre-wrap' }}>
+                      {rq.antwortText}
+                    </p>
+                  </div>
+                )}
               </div>
             ) : (
-              <div style={{
-                background: 'var(--color-warning-light)', borderRadius: 'var(--radius)',
-                padding: '1rem', display: 'flex', justifyContent: 'space-between',
-                alignItems: 'center', flexWrap: 'wrap', gap: '1rem',
-              }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: 700, color: 'var(--color-warning)', fontSize: '0.95rem' }}>
-                  <Icon name="calendar" size={16} />
-                  Frist: {rq.frist}
+              <div
+                style={{
+                  background: fristKritisch ? 'var(--color-danger-light, #fff5f5)' : 'var(--color-warning-light)',
+                  borderRadius: 'var(--radius)',
+                  padding: '1rem',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '0.875rem',
+                }}
+              >
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '0.75rem' }}>
+                  <div>
+                    <div style={{
+                      display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: 700,
+                      color: fristKritisch ? 'var(--color-danger)' : 'var(--color-warning)',
+                      fontSize: '0.95rem',
+                    }}>
+                      <Icon name="calendar" size={16} />
+                      Frist: {rq.frist}
+                    </div>
+                    <div style={{
+                      fontSize: '0.875rem',
+                      color: fristKritisch ? 'var(--color-danger)' : 'var(--color-warning)',
+                      marginTop: '0.25rem',
+                    }}>
+                      {resttage < 0
+                        ? `${Math.abs(resttage)} Tag${Math.abs(resttage) === 1 ? '' : 'e'} überschritten`
+                        : resttage === 0
+                          ? 'Heute fällig'
+                          : `Noch ${resttage} Tag${resttage === 1 ? '' : 'e'} verbleibend`}
+                    </div>
+                  </div>
                 </div>
-                <button
-                  className="btn btn-primary btn-inline"
-                  onClick={() => answerRueckfrage(rq.id)}
-                  aria-label={`Rückfrage beantworten: ${rq.text}`}
-                >
-                  Rückfrage beantworten
-                  <Icon name="send" size={16} />
-                </button>
+
+                <div>
+                  <label
+                    htmlFor={formId}
+                    style={{
+                      display: 'block',
+                      fontSize: '0.8rem',
+                      fontWeight: 700,
+                      marginBottom: '0.4rem',
+                      color: 'var(--color-text)',
+                    }}
+                  >
+                    Ihre Antwort an {behörde?.bezeichnung ?? 'die Behörde'}
+                  </label>
+                  <textarea
+                    id={formId}
+                    name={formId}
+                    rows={4}
+                    value={draft}
+                    onChange={e => setDrafts(prev => ({ ...prev, [rq.id]: e.target.value }))}
+                    placeholder="z. B. Ja, Kleinunternehmerregelung; voraussichtlicher Umsatz …"
+                    aria-describedby={`${formId}-hint`}
+                    style={{
+                      width: '100%',
+                      boxSizing: 'border-box',
+                      padding: '0.75rem',
+                      borderRadius: 'var(--radius)',
+                      border: '1px solid var(--color-border)',
+                      fontFamily: 'inherit',
+                      fontSize: '0.9rem',
+                      lineHeight: 1.45,
+                      resize: 'vertical',
+                      background: 'white',
+                      color: 'var(--color-text)',
+                    }}
+                  />
+                  <p
+                    id={`${formId}-hint`}
+                    style={{ margin: '0.35rem 0 0', fontSize: '0.75rem', color: 'var(--color-text-muted)' }}
+                  >
+                    Optional in der Demo. Leer lassen → es wird eine Beispielantwort übermittelt.
+                  </p>
+                </div>
+
+                <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                  <button
+                    type="button"
+                    className="btn btn-primary btn-inline"
+                    style={{ background: fristKritisch ? 'var(--color-danger)' : 'var(--color-primary)' }}
+                    onClick={() => answerRueckfrage(rq.id, draft)}
+                    aria-label={`Rückfrage beantworten: ${rq.text}`}
+                  >
+                    Rückfrage beantworten
+                    <Icon name="send" size={16} />
+                  </button>
+                </div>
               </div>
             )}
           </div>

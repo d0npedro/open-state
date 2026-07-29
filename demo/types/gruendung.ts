@@ -130,6 +130,10 @@ export interface GruendungsRueckfrage {
   fristDatum: string;
   beantwortet: boolean;
   gestelltAm: string;
+  /** Freitext-Antwort der Gründerin / des Gründers (Demo-Session) */
+  antwortText?: string;
+  /** Datum der Antwort (Anzeigeformat, z. B. 07.12.2024) */
+  beantwortetAm?: string;
 }
 
 export interface GruendungsEreignis {

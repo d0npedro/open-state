@@ -249,6 +249,11 @@ test.describe('UG – Rückfragen (Anzeige)', () => {
     await expect(btn).toBeEnabled();
   });
 
+  test('Antwort-Formular mit Label und Fristcountdown sichtbar', async ({ page }) => {
+    await expect(page.getByLabel(/Ihre Antwort an/i)).toBeVisible();
+    await expect(page.getByText(/Noch \d+ Tag/)).toBeVisible();
+  });
+
   test('Kein interner Code sichtbar', async ({ page }) => {
     await expect(page.getByText('RQ-01')).not.toBeVisible();
     await expect(page.getByText('RUECKFRAGE_AUSSTEHEND')).not.toBeVisible();
@@ -269,6 +274,15 @@ test.describe('UG – Rückfragen (Interaktion)', () => {
     await btn.click();
     await expect(page.getByText(/die Behörde wurde informiert/)).toBeVisible();
     await expect(btn).not.toBeVisible();
+  });
+
+  test('Freitext-Antwort wird nach Absenden angezeigt', async ({ page }) => {
+    await page.goto('/gruendung/rueckfragen');
+    const antwort = 'Demo: Kleinunternehmerregelung ja, Umsatz unter 22.000 Euro.';
+    await page.getByLabel(/Ihre Antwort an/i).fill(antwort);
+    await page.getByRole('button', { name: /Rückfrage beantworten/i }).click();
+    await expect(page.getByText('Ihre übermittelte Antwort')).toBeVisible();
+    await expect(page.getByText(antwort)).toBeVisible();
   });
 
   test('Nach Beantworten: Übersicht zeigt keinen Action-Banner mehr', async ({ page }) => {
