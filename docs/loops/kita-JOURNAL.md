@@ -2,6 +2,30 @@
 
 Branch: `loop/kita` · Worktree: `D:\Projects\open-state-loop-kita`
 
+## Iteration 2026-07-29 – US-KJ-002/003 Monatsbericht↔Einrichtung Verlinkung
+
+### Was
+Betriebliche Verlinkung zwischen Belegungsstand und Monatsbericht geschärft (gleiche Demo-Einrichtung Kita Sonnenwinkel). Einrichtung: Prozessketten-Karten Tagesstand → Monatsbericht → Meldung. Monatsbericht: Einrichtungs-Kontext-Karte (Stichtag-Belegung vs. Monatsauswertung), Datenlücke mit Aktionslinks zu Tagesstand/Belegung, Aktionsleiste inkl. Meldung freigeben, Footer-Prozesskette mit Story-Labels. Nur Aggregate, keine Kind- oder Personennamen. Merge `origin/main` (ci-watcher docs) vor dem Feature.
+
+### Dateien
+- `demo/app/kita/einrichtung/page.tsx` (Prozesskette US-KJ-001/003/004)
+- `demo/app/kita/monatsbericht/page.tsx` (Einrichtungs-Kontext, Datenlücke-Links, Footer)
+- `docs/loops/kita-JOURNAL.md` (dieses Journal)
+
+### Story
+US-KJ-002 / US-KJ-003 – Belegungsstand und Monatsbericht (Prozesskette Einrichtung)
+
+### Build
+`npm run lint` + `npm run build` im `demo/`-Verzeichnis (siehe Commit dieses Laufs)
+
+### Nicht angefasst (Supervisor / verboten)
+Queue, BUILD_STATE, storyRegistry, DECISION_LOG, andere Domänen, package.json, CI, push
+
+### Nächster sinnvoller Schritt (Hinweis Supervisor)
+Tagesstand-Seite Prozesskette spiegeln (Einrichtung/Monatsbericht/Meldung als Hub-Karten), oder Vorlage-Druck freigabeunabhängig mit dokumentiertem Engpass-Meldelücke-Filter.
+
+---
+
 ## Iteration 2026-07-29 – US-KJ-005/006 Lagebild Druckansicht Meldelücke-Filter
 
 ### Was

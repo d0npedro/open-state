@@ -8,6 +8,7 @@
  * Demo-Umschalter: Monatsabschluss (lückenhaft) vs. laufender Monat (VORSCHAU)
  * mit gemischten Tagesstand-Quellen (FREIGEGEBEN / FEHLT / IN_ERFASSUNG).
  * VORSCHAU: Rücklink zum Meldeeingang im Steuerungslagebild (US-KJ-005).
+ * Einrichtungs-Kontext: Belegungsstand (US-KJ-002) und Prozesskette zur Meldung.
  * Keine Kind- oder Personennamen.
  */
 
@@ -17,6 +18,7 @@ import {
   demoKitaMonatsbericht,
   demoKitaMonatsberichtVorschau,
 } from '@/data/mockKitaMonatsbericht';
+import { demoKitaEinrichtung } from '@/data/mockKitaEinrichtung';
 import type {
   KitaMonatsbericht,
   MonatsberichtStatus,
@@ -322,9 +324,68 @@ export default function KitaMonatsberichtPage() {
               freigegebene Betriebstage ({freigegebenCount} von {b.betriebstageImMonat}
               {istVorschau ? ' bis Stichtag' : ''}).
             </p>
+            <p style={{ fontSize: '0.875rem', margin: '0.65rem 0 0', lineHeight: 1.5 }} className="no-print">
+              Lücken schließen über die{' '}
+              <Link href="/kita/tagesstand" style={{ color: 'var(--color-primary)', fontWeight: 600 }}>
+                Tagesstand-Erfassung (US-KJ-001)
+              </Link>
+              ; stichtagsbezogene Platzzahlen im{' '}
+              <Link href="/kita/einrichtung" style={{ color: 'var(--color-primary)', fontWeight: 600 }}>
+                Belegungsstand derselben Einrichtung
+              </Link>
+              .
+            </p>
           </div>
         </div>
       )}
+
+      {/* Einrichtungs-Kontext: Belegungsstand vs. Monatsauswertung (US-KJ-002 ↔ US-KJ-003) */}
+      <section
+        className="no-print card"
+        aria-labelledby="einrichtungs-kontext-heading"
+        style={{ borderLeft: '4px solid var(--color-primary)' }}
+      >
+        <div
+          style={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            justifyContent: 'space-between',
+            gap: '1rem',
+            alignItems: 'flex-start',
+          }}
+        >
+          <div style={{ flex: '1 1 16rem', minWidth: 0 }}>
+            <h2 id="einrichtungs-kontext-heading" style={{ margin: '0 0 0.35rem', fontSize: '1rem' }}>
+              Einrichtungs-Kontext
+            </h2>
+            <p style={{ margin: 0, fontSize: '0.85rem', color: 'var(--color-text-muted)', lineHeight: 1.5 }}>
+              Monatsbericht und Belegungsstand beziehen sich auf dieselbe Demo-Einrichtung{' '}
+              <strong>{b.einrichtungBezeichnung}</strong>{' '}
+              <span style={{ fontFamily: 'monospace' }}>({b.einrichtungId})</span>, Planungsraum{' '}
+              {b.planungsraumBezeichnung}. Der Belegungsstand ist stichtagsbezogen (US-KJ-002); dieser
+              Monatsbericht wertet freigegebene Tagesstände über den Berichtsmonat aus (US-KJ-003) –
+              methodisch getrennt, gleiche Gruppenstruktur.
+            </p>
+            <p style={{ margin: '0.5rem 0 0', fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>
+              Belegungsstand Demo-Stichtag: <strong>{demoKitaEinrichtung.standLabel}</strong> · letzte
+              Erfassung {demoKitaEinrichtung.letzteErfassung} ·{' '}
+              {demoKitaEinrichtung.gruppen.reduce((s, g) => s + g.belegtePlaetze, 0)} belegt /{' '}
+              {demoKitaEinrichtung.gruppen.reduce((s, g) => s + g.freiePlaetze, 0)} frei (Aggregate).
+            </p>
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', flexShrink: 0 }}>
+            <Link href="/kita/einrichtung" className="btn btn-secondary" style={{ fontSize: '0.85rem' }}>
+              Belegungsstand öffnen (US-KJ-002)
+            </Link>
+            <Link href="/kita/tagesstand" className="btn btn-secondary" style={{ fontSize: '0.85rem' }}>
+              Tagesstand (US-KJ-001)
+            </Link>
+            <Link href="/kita/meldung" className="btn btn-secondary" style={{ fontSize: '0.85rem' }}>
+              Meldung freigeben (US-KJ-004)
+            </Link>
+          </div>
+        </div>
+      </section>
 
       <div className="notice-box notice-box-neutral" role="note">
         <div style={{ fontSize: '0.875rem' }}>
@@ -355,7 +416,10 @@ export default function KitaMonatsberichtPage() {
           Tagesstand erfassen (US-KJ-001)
         </Link>
         <Link href="/kita/einrichtung" className="btn btn-secondary" style={{ fontSize: '0.875rem' }}>
-          Zum Belegungsstand
+          Belegungsstand (US-KJ-002)
+        </Link>
+        <Link href="/kita/meldung" className="btn btn-secondary" style={{ fontSize: '0.875rem' }}>
+          Meldung freigeben (US-KJ-004)
         </Link>
         {istVorschau && (
           <Link
@@ -792,17 +856,17 @@ export default function KitaMonatsberichtPage() {
       </section>
 
       <div style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)' }}>
-        Tagesstand-Erfassung (Quelle):{' '}
+        Prozesskette Einrichtung {b.einrichtungBezeichnung}:{' '}
         <Link href="/kita/tagesstand" style={{ color: 'var(--color-primary)' }}>
-          /kita/tagesstand
+          Tagesstand (US-KJ-001)
         </Link>
-        {' · '}
-        Belegungsstand:{' '}
+        {' → '}
         <Link href="/kita/einrichtung" style={{ color: 'var(--color-primary)' }}>
-          /kita/einrichtung
+          Belegungsstand (US-KJ-002)
         </Link>
-        {' · '}
-        Übermittlung an das Jugendamt erfordert aktive Freigabe:{' '}
+        {' → '}
+        <strong>Monatsbericht (US-KJ-003)</strong>
+        {' → '}
         <Link href="/kita/meldung" style={{ color: 'var(--color-primary)' }}>
           Meldung freigeben (US-KJ-004)
         </Link>
