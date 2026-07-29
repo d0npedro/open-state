@@ -1,7 +1,10 @@
 import { demoKitaLagebild } from '@/data/mockKitaLagebild';
 import type { PlanungsraumKennzahlen, Kapazitaetsmassnahme } from '@/types/kita';
 import { KitaMeldeeingangPanel } from '@/components/kita/KitaMeldeeingangPanel';
-import { KitaPlanungsraumMeldebeitrag } from '@/components/kita/KitaPlanungsraumMeldebeitrag';
+import {
+  KitaLagebildResidualSummenHinweis,
+  KitaPlanungsraumMeldebeitrag,
+} from '@/components/kita/KitaPlanungsraumMeldebeitrag';
 
 // ─── Hilfsfunktionen ────────────────────────────────────────────────────────
 
@@ -21,6 +24,19 @@ function druckLabel(faktor: number): string {
 function deckungsgrad(warteliste: number, neuePlaetze: number): number {
   if (warteliste === 0) return 100;
   return Math.min(Math.round((neuePlaetze / warteliste) * 100), 100);
+}
+
+/**
+ * Residuale Planungslücke — gleiche Demo-Näherung wie Bedarfsplanung / Explorer (US-KJ-007).
+ * max(0, Warteliste − freie Plätze − geplante Maßnahmenplätze).
+ */
+function planungslueckeResidual(
+  pr: PlanungsraumKennzahlen,
+  massnahmen: Kapazitaetsmassnahme[]
+): number {
+  const geplant = massnahmen.reduce((s, m) => s + m.erwarteteNeuePlaetze, 0);
+  const frei = pr.freiePlaetzeU3 + pr.freiePlaetzeUe3;
+  return Math.max(0, pr.wartelisteBestand - frei - geplant);
 }
 
 function MiniDruckBar({ faktor, maxFaktor }: { faktor: number; maxFaktor: number }) {
@@ -61,6 +77,7 @@ function PlanungsraumKarte({
   maxDruck: number;
 }) {
   const neuePlaetze = massnahmen.reduce((s, m) => s + m.erwarteteNeuePlaetze, 0);
+  const residual = planungslueckeResidual(pr, massnahmen);
   const deckung = deckungsgrad(pr.wartelisteBestand, neuePlaetze);
   const color = druckColor(pr.wartelisteDruckFaktor);
   const gesamtRealNutzbar = pr.realNutzbarePlaetzeU3 + pr.realNutzbarePlaetzeUe3;
@@ -141,10 +158,11 @@ function PlanungsraumKarte({
         <p style={{ fontSize: '0.875rem', color: 'var(--color-text-muted)', margin: 0 }}>Keine laufenden Maßnahmen für diesen Planungsraum.</p>
       )}
 
-      {/* Meldebeitrag freigegebener Einrichtungsmeldungen (US-KJ-004 → Südost/Sonnenwinkel) */}
+      {/* Meldebeitrag + Residual↔Meldelücke (US-KJ-004 → 005/006/007, Südost/Sonnenwinkel) */}
       <KitaPlanungsraumMeldebeitrag
         planungsraumId={pr.id}
         planungsraumBezeichnung={pr.bezeichnung}
+        residualPlanungsluecke={residual}
       />
     </div>
   );
@@ -307,7 +325,16 @@ export default function KitaLagebildPage() {
 
       {/* Planungsraum-Detailkarten (AK 4 US-KJ-006: Detailsicht) */}
       <section>
-        <h2 style={{ marginBottom: '1rem' }}>Planungsraum-Detailansicht</h2>
+        <h2 style={{ marginBottom: '0.5rem' }}>Planungsraum-Detailansicht</h2>
+        <p style={{ fontSize: '0.875rem', color: 'var(--color-text-muted)', marginBottom: '1rem' }}>
+          Je Karte: Bedarfslücke, Maßnahmen, Meldebeitrag freigegebener Einrichtungen sowie residuale
+          Planungslücke (Demo-Näherung) methodisch an Meldelücken — Hinweis only, keine Interpolation.
+        </p>
+        <KitaLagebildResidualSummenHinweis
+          residualByRaumId={Object.fromEntries(
+            sorted.map(pr => [pr.id, planungslueckeResidual(pr, massnahmenByPR[pr.id] ?? [])])
+          )}
+        />
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
           {sorted.map((pr, i) => (
             <PlanungsraumKarte
@@ -326,6 +353,8 @@ export default function KitaLagebildPage() {
         Definitionen aller Kennzahlen und Berechnungsformeln finden Sie im{' '}
         <a href="/kita" style={{ color: 'var(--color-primary)' }}>öffentlichen Transparenzbericht (Methodik-Abschnitt)</a>.
         Dieses Lagebild verwendet dieselben Berechnungsgrundlagen — intern mit höherer regionaler Granularität.
+        Residuale Planungslücke und Meldebasis sind methodische Hinweise (wie Bedarfsplanung und
+        Transparenzbericht), keine automatische Handlungsempfehlung.
       </div>
 
     </div>

@@ -4,6 +4,8 @@
  * Beitrag freigegebener Einrichtungsmeldungen je Planungsraum-Karte (US-KJ-004 → US-KJ-005/006).
  *
  * Für Südost: Kita Sonnenwinkel nach Session-Freigabe in /kita/meldung hervorgehoben.
+ * Residuale Planungslücke (Demo-Näherung wie US-KJ-007) wird methodisch an Meldelücken
+ * gekoppelt — Hinweis only, keine Interpolation (Lagebild-Karten, US-KJ-005/006 ↔ 007).
  * Nur Aggregate – keine Kind- oder Personennamen.
  */
 
@@ -19,6 +21,13 @@ import {
   MELDEEINGANG_SESSION_KEY,
   kennzahlenToKurz,
 } from '@/types/kitaMeldeeingang';
+import {
+  MeldebasisBadge,
+  ResidualMeldeHinweis,
+  ResidualMeldeSummenHinweis,
+  derivePlanungsraumMeldebasis,
+  useMeldeeingangFuerBedarfsplanung,
+} from '@/components/kita/KitaBedarfsplanungDatenbasis';
 
 function statusMeta(status: MeldeeingangStatus): { label: string; color: string } {
   switch (status) {
@@ -81,11 +90,17 @@ function applySession(
 interface Props {
   planungsraumId: string;
   planungsraumBezeichnung: string;
+  /**
+   * Residuale Planungslücke (Demo-Näherung wie Bedarfsplanung US-KJ-007):
+   * max(0, Warteliste − freie Plätze − geplante Maßnahmenplätze).
+   */
+  residualPlanungsluecke?: number;
 }
 
 export function KitaPlanungsraumMeldebeitrag({
   planungsraumId,
   planungsraumBezeichnung,
+  residualPlanungsluecke,
 }: Props) {
   const base = demoKitaMeldeeingang;
   const [session, setSession] = useState<MeldeeingangSessionFreigabe | null>(null);
@@ -117,6 +132,16 @@ export function KitaPlanungsraumMeldebeitrag({
     return all.filter(e => e.planungsraumId === planungsraumId);
   }, [base.eintraege, session, planungsraumId]);
 
+  const meldebasis = useMemo(() => {
+    if (eintraege.length === 0) return undefined;
+    return derivePlanungsraumMeldebasis(eintraege)[0];
+  }, [eintraege]);
+
+  const residual =
+    typeof residualPlanungsluecke === 'number' && residualPlanungsluecke > 0
+      ? residualPlanungsluecke
+      : 0;
+
   if (eintraege.length === 0) {
     return (
       <div
@@ -129,6 +154,12 @@ export function KitaPlanungsraumMeldebeitrag({
         }}
       >
         Keine Demo-Stichprobe für Einrichtungsmeldungen in diesem Planungsraum.
+        {residual > 0 && (
+          <p style={{ margin: '0.5rem 0 0', fontSize: '0.8rem' }}>
+            Residuale Planungslücke (Demo-Näherung): <strong>{residual}</strong> – ohne
+            Meldebasis-Stichprobe kein methodischer Meldelücken-Hinweis.
+          </p>
+        )}
       </div>
     );
   }
@@ -186,6 +217,53 @@ export function KitaPlanungsraumMeldebeitrag({
           ? ' – fehlende Meldungen fließen nicht in die Aggregation ein (keine Interpolation).'
           : '.'}
       </p>
+
+      {/* Residual ↔ Meldelücke (Hinweis-only, wie Bedarfsplanung / Explorer) */}
+      {residual > 0 && (
+        <div
+          style={{
+            marginBottom: '0.65rem',
+            padding: '0.55rem 0.7rem',
+            borderRadius: 'var(--radius)',
+            background: 'rgba(255,255,255,0.7)',
+            border:
+              meldebasis?.hatDatenluecke
+                ? '1px solid var(--color-warning)'
+                : '1px solid var(--color-border)',
+          }}
+          role="note"
+        >
+          <div
+            style={{
+              display: 'flex',
+              flexWrap: 'wrap',
+              gap: '0.75rem 1.25rem',
+              alignItems: 'baseline',
+              marginBottom: meldebasis?.hatDatenluecke ? '0.4rem' : 0,
+            }}
+          >
+            <div>
+              <div style={{ fontSize: '0.7rem', color: 'var(--color-text-muted)' }}>
+                Residuale Planungslücke
+              </div>
+              <div style={{ fontWeight: 700, fontSize: '1rem' }}>{residual}</div>
+            </div>
+            <div>
+              <div style={{ fontSize: '0.7rem', color: 'var(--color-text-muted)' }}>
+                Meldebasis
+              </div>
+              <MeldebasisBadge basis={meldebasis} />
+            </div>
+          </div>
+          <ResidualMeldeHinweis basis={meldebasis} residual={residual} />
+          {!meldebasis?.hatDatenluecke && (
+            <p style={{ margin: 0, fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>
+              Demo-Näherung: Warteliste − frei − geplante Maßnahmen. Keine Interpolation
+              fehlender Meldungen.
+            </p>
+          )}
+        </div>
+      )}
 
       {hasSessionHighlight && sessionEintrag && (
         <div
@@ -276,6 +354,31 @@ export function KitaPlanungsraumMeldebeitrag({
           );
         })}
       </ul>
+    </div>
+  );
+}
+
+/**
+ * Abschnittshinweis im Lagebild: residuale Lücken mit Meldebasis-Lücken verknüpfen
+ * (client-seitig wegen Session-Meldeeingang).
+ */
+export function KitaLagebildResidualSummenHinweis({
+  residualByRaumId,
+}: {
+  residualByRaumId: Record<string, number>;
+}) {
+  const { basen } = useMeldeeingangFuerBedarfsplanung();
+  const map = useMemo(() => {
+    const m = new Map<string, number>();
+    for (const [id, residual] of Object.entries(residualByRaumId)) {
+      m.set(id, residual);
+    }
+    return m;
+  }, [residualByRaumId]);
+
+  return (
+    <div style={{ marginBottom: '1rem' }}>
+      <ResidualMeldeSummenHinweis basen={basen} residualByRaumId={map} />
     </div>
   );
 }
