@@ -1,0 +1,269 @@
+openapi: 3.0.3
+info:
+  title: Open State – Kita-Meldeschnittstelle
+  description: |
+    Konzeptueller OpenAPI-Entwurf für Meldungen von der Kita-Betriebsebene
+    an die Jugendamt-Steuerungsebene (Drei-Schichten-Modell, ADR-007 / DEC-004).
+
+    - Keine personenbezogenen Kinder-/Elterndaten in dieser Schnittstelle
+    - Aktive Freigabe durch Kita-Leitung vor Übermittlung (US-KJ-004)
+    - Aggregierte Monatsmeldungen, keine Roh-Tageslisten an die Öffentlichkeit
+  version: 0.1.0
+
+servers:
+  - url: https://api.example.open-state.invalid/v1
+    description: Konzept-Server (nicht produktiv)
+
+tags:
+  - name: Meldung
+  - name: Freigabe
+  - name: Steuerung
+  - name: Oeffentlichkeit
+
+paths:
+  /kita/einrichtungen/{einrichtungId}/monatsmeldungen:
+    get:
+      tags: [Meldung]
+      summary: Monatsmeldungsentwürfe der Einrichtung
+      operationId: listMonatsmeldungen
+      parameters:
+        - $ref: '#/components/parameters/EinrichtungId'
+        - name: monat
+          in: query
+          schema:
+            type: string
+            pattern: '^\d{4}-\d{2}$'
+            example: '2024-10'
+      responses:
+        '200':
+          description: Meldungsliste
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Monatsmeldung'
+
+  /kita/einrichtungen/{einrichtungId}/monatsmeldungen/{meldungId}:
+    get:
+      tags: [Meldung]
+      summary: Einzelne Monatsmeldung
+      operationId: getMonatsmeldung
+      parameters:
+        - $ref: '#/components/parameters/EinrichtungId'
+        - $ref: '#/components/parameters/MeldungId'
+      responses:
+        '200':
+          description: Monatsmeldung
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Monatsmeldung'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /kita/einrichtungen/{einrichtungId}/monatsmeldungen/{meldungId}/freigabe:
+    post:
+      tags: [Freigabe]
+      summary: Meldung an Jugendamt freigeben
+      description: |
+        Aktive Freigabe durch Kita-Leitung. Ohne Freigabe keine Übermittlung
+        in die Steuerungsebene (US-KJ-004).
+      operationId: freigebenMonatsmeldung
+      parameters:
+        - $ref: '#/components/parameters/EinrichtungId'
+        - $ref: '#/components/parameters/MeldungId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [bestaetigt, freigegebenDurch]
+              properties:
+                bestaetigt:
+                  type: boolean
+                  description: Muss true sein
+                freigegebenDurch:
+                  type: string
+                  description: Rollenbezeichnung / Funktionskennung, kein Klarnamen-Zwang in Demo
+                kommentar:
+                  type: string
+      responses:
+        '200':
+          description: Freigabe protokolliert, Status FREIGEGEBEN
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Monatsmeldung'
+        '400':
+          description: bestaetigt muss true sein
+        '409':
+          description: Meldung bereits freigegeben oder unvollständig
+
+  /kita/steuerung/lagebild:
+    get:
+      tags: [Steuerung]
+      summary: Aggregiertes Versorgungslagebild (Jugendamt)
+      description: Nur freigegebene Meldungen und freigegebene Aggregate (US-KJ-005, US-KJ-006).
+      operationId: getSteuerungsLagebild
+      parameters:
+        - name: stichtag
+          in: query
+          schema:
+            type: string
+            format: date
+      responses:
+        '200':
+          description: Steuerungslagebild
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SteuerungsLagebild'
+
+  /kita/oeffentlich/transparenzbericht:
+    get:
+      tags: [Oeffentlichkeit]
+      summary: Öffentlicher Transparenzbericht
+      description: |
+        Ohne Authentifizierung. Nur freigegebene öffentliche Aggregate.
+        Inkl. Methodik und Datenlücken (US-KJ-009, US-KJ-010).
+      operationId: getTransparenzbericht
+      responses:
+        '200':
+          description: Öffentlicher Bericht
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transparenzbericht'
+
+components:
+  parameters:
+    EinrichtungId:
+      name: einrichtungId
+      in: path
+      required: true
+      schema:
+        type: string
+    MeldungId:
+      name: meldungId
+      in: path
+      required: true
+      schema:
+        type: string
+
+  responses:
+    NotFound:
+      description: Nicht gefunden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+  schemas:
+    Error:
+      type: object
+      required: [code, message]
+      properties:
+        code: { type: string }
+        message: { type: string }
+
+    MeldungStatus:
+      type: string
+      enum: [ENTWURF, ZUR_PRUEFUNG, FREIGEGEBEN, ZURUECKGEWIESEN]
+
+    Monatsmeldung:
+      type: object
+      required:
+        - id
+        - einrichtungId
+        - monat
+        - status
+        - genehmmigtePlaetze
+        - belegtePlaetze
+        - freiePlaetze
+        - wartelisteBestand
+        - personalAusfallquoteProzent
+      properties:
+        id: { type: string }
+        einrichtungId: { type: string }
+        monat:
+          type: string
+          pattern: '^\d{4}-\d{2}$'
+        status: { $ref: '#/components/schemas/MeldungStatus' }
+        genehmmigtePlaetze: { type: integer, minimum: 0 }
+        belegtePlaetze: { type: integer, minimum: 0 }
+        freiePlaetze: { type: integer, minimum: 0 }
+        wartelisteBestand: { type: integer, minimum: 0 }
+        personalAusfallquoteProzent: { type: number, minimum: 0, maximum: 100 }
+        freigegebenAm: { type: string, format: date-time }
+        freigegebenDurch: { type: string }
+        hinweis:
+          type: string
+          description: Optionale methodische Einschränkung
+
+    PlanungsraumKennzahlen:
+      type: object
+      required: [id, bezeichnung, versorgungsquoteU3, versorgungsquoteUe3, auslastungsgradProzent, wartelisteBestand]
+      properties:
+        id: { type: string }
+        bezeichnung: { type: string }
+        versorgungsquoteU3: { type: number }
+        versorgungsquoteUe3: { type: number }
+        auslastungsgradProzent: { type: number }
+        wartelisteBestand: { type: integer }
+        wartelisteDruckFaktor: { type: number }
+        personalAusfallquoteProzent: { type: number }
+
+    SteuerungsLagebild:
+      type: object
+      required: [stichtag, planungsraeume, methodikHinweis]
+      properties:
+        stichtag: { type: string, format: date }
+        planungsraeume:
+          type: array
+          items:
+            $ref: '#/components/schemas/PlanungsraumKennzahlen'
+        engpassRangliste:
+          type: array
+          items:
+            type: object
+            properties:
+              planungsraumId: { type: string }
+              rang: { type: integer }
+              begruendung: { type: string }
+        methodikHinweis: { type: string }
+        datenstand: { type: string, format: date }
+
+    MonatsKennzahl:
+      type: object
+      required: [monat, auslastungsgradProzent, wartelisteBestand]
+      properties:
+        monat: { type: string, pattern: '^\d{4}-\d{2}$' }
+        monatLabel: { type: string }
+        genehmmigtePlaetze: { type: integer }
+        belegtePlaetze: { type: integer }
+        freiePlaetze: { type: integer }
+        auslastungsgradProzent: { type: number }
+        wartelisteBestand: { type: integer }
+        wartelisteDeltaVormonat:
+          type: integer
+          nullable: true
+
+    Transparenzbericht:
+      type: object
+      required: [datenstand, planungsraeume, zeitreihe, methodik, einschraenkungen]
+      properties:
+        datenstand: { type: string, format: date }
+        planungsraeume:
+          type: array
+          items:
+            $ref: '#/components/schemas/PlanungsraumKennzahlen'
+        zeitreihe:
+          type: array
+          items:
+            $ref: '#/components/schemas/MonatsKennzahl'
+        methodik: { type: string }
+        einschraenkungen:
+          type: array
+          items: { type: string }

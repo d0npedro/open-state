@@ -1,0 +1,434 @@
+openapi: 3.0.3
+info:
+  title: Open State – Arbeitsverwaltung Fallakte API
+  description: |
+    Konzeptueller OpenAPI-Entwurf für die Bürger-Fallakte der Domäne Arbeitsverwaltung.
+    Phase 0: Mock-Demo; Endpunkte sind Spezifikation, kein laufender Server.
+    Prinzipien: Transparenz-Felder (Begründung, Konsequenz, Frist, Rechtsgrundlage),
+    keine KI-Letztentscheidung, Auditierbarkeit.
+  version: 0.1.0
+  contact:
+    name: Open State
+    url: https://github.com/d0npedro/open-state
+
+servers:
+  - url: https://api.example.open-state.invalid/v1
+    description: Konzept-Server (nicht produktiv)
+
+tags:
+  - name: Fall
+  - name: Dokumente
+  - name: Rueckfragen
+  - name: Termine
+  - name: Bescheide
+  - name: Verlauf
+  - name: Fairness
+
+paths:
+  /faelle/{fallId}:
+    get:
+      tags: [Fall]
+      summary: Fallakte abrufen
+      operationId: getFall
+      parameters:
+        - $ref: '#/components/parameters/FallId'
+      responses:
+        '200':
+          description: Fallakte
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Fall'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /faelle/{fallId}/status:
+    get:
+      tags: [Fall]
+      summary: Klartext-Status und nächster Schritt
+      operationId: getFallStatus
+      parameters:
+        - $ref: '#/components/parameters/FallId'
+      responses:
+        '200':
+          description: Statusansicht
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FallStatusView'
+
+  /faelle/{fallId}/dokumente:
+    get:
+      tags: [Dokumente]
+      summary: Dokumentenanforderungen und Status
+      operationId: listDokumente
+      parameters:
+        - $ref: '#/components/parameters/FallId'
+      responses:
+        '200':
+          description: Dokumentliste
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Dokument'
+    post:
+      tags: [Dokumente]
+      summary: Dokument nachreichen (Upload-Metadaten)
+      operationId: uploadDokument
+      parameters:
+        - $ref: '#/components/parameters/FallId'
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [dokumentId, datei]
+              properties:
+                dokumentId:
+                  type: string
+                datei:
+                  type: string
+                  format: binary
+      responses:
+        '201':
+          description: Eingang bestätigt
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Dokument'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+
+  /faelle/{fallId}/rueckfragen:
+    get:
+      tags: [Rueckfragen]
+      summary: Rückfragen listen
+      operationId: listRueckfragen
+      parameters:
+        - $ref: '#/components/parameters/FallId'
+      responses:
+        '200':
+          description: Rückfragen
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Rueckfrage'
+
+  /faelle/{fallId}/rueckfragen/{rueckfrageId}/antwort:
+    post:
+      tags: [Rueckfragen]
+      summary: Rückfrage beantworten
+      operationId: answerRueckfrage
+      parameters:
+        - $ref: '#/components/parameters/FallId'
+        - name: rueckfrageId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [antwortText]
+              properties:
+                antwortText:
+                  type: string
+                  minLength: 1
+      responses:
+        '200':
+          description: Antwort angenommen, Fallstatus ggf. aktualisiert
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Rueckfrage'
+        '409':
+          description: Rückfrage bereits beantwortet
+
+  /faelle/{fallId}/termine:
+    get:
+      tags: [Termine]
+      summary: Termine listen
+      operationId: listTermine
+      parameters:
+        - $ref: '#/components/parameters/FallId'
+      responses:
+        '200':
+          description: Termine
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Termin'
+
+  /faelle/{fallId}/bescheide:
+    get:
+      tags: [Bescheide]
+      summary: Bescheide mit Zwei-Schichten-Darstellung
+      operationId: listBescheide
+      parameters:
+        - $ref: '#/components/parameters/FallId'
+      responses:
+        '200':
+          description: Bescheide
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Bescheid'
+
+  /faelle/{fallId}/verlauf:
+    get:
+      tags: [Verlauf]
+      summary: Chronologische Timeline
+      operationId: getVerlauf
+      parameters:
+        - $ref: '#/components/parameters/FallId'
+        - name: typ
+          in: query
+          schema:
+            $ref: '#/components/schemas/EreignisTyp'
+      responses:
+        '200':
+          description: Timeline
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TimelineEreignis'
+
+  /faelle/{fallId}/fairness-signale:
+    get:
+      tags: [Fairness]
+      summary: Regelbasierte Verfahrenshinweise (keine Entscheidung)
+      operationId: getFairnessSignale
+      parameters:
+        - $ref: '#/components/parameters/FallId'
+      responses:
+        '200':
+          description: Hinweissignale
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FairnessSignal'
+
+components:
+  parameters:
+    FallId:
+      name: fallId
+      in: path
+      required: true
+      schema:
+        type: string
+        example: AV-2024-0847
+
+  responses:
+    NotFound:
+      description: Ressource nicht gefunden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: Ungültige Anfrage
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+  schemas:
+    Error:
+      type: object
+      required: [code, message]
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+          description: Handlungsorientierte Meldung in Alltagssprache
+
+    FallStatus:
+      type: string
+      enum:
+        - ANGELEGT
+        - EINGEGANGEN
+        - IN_PRUEFUNG
+        - UNTERLAGEN_FEHLEN
+        - RUECKFRAGE_OFFEN
+        - TERMIN_ANGESETZT
+        - ENTSCHEIDUNG_VORBEREITET
+        - BESCHEID_ZUGESTELLT
+        - PAUSIERT
+
+    DokumentStatus:
+      type: string
+      enum: [ANGEFORDERT, HOCHGELADEN, IN_PRUEFUNG, AKZEPTIERT, ABGELEHNT]
+
+    EreignisTyp:
+      type: string
+      enum:
+        - FALL_ANGELEGT
+        - DOKUMENT_ANGEFORDERT
+        - DOKUMENT_EINGEREICHT
+        - RUECKFRAGE_GESTELLT
+        - RUECKFRAGE_BEANTWORTET
+        - TERMIN_ZUGETEILT
+        - STATUS_GEAENDERT
+        - BESCHEID_ERSTELLT
+        - BESCHEID_ZUGESTELLT
+        - WIDERSPRUCH_EINGEREICHT
+
+    Dokument:
+      type: object
+      required: [id, bezeichnung, status, begruendung]
+      properties:
+        id: { type: string }
+        bezeichnung: { type: string }
+        status: { $ref: '#/components/schemas/DokumentStatus' }
+        begruendung: { type: string }
+        frist: { type: string, description: Anzeigefrist }
+        hochgeladenAm: { type: string, format: date-time }
+
+    Rueckfrage:
+      type: object
+      required: [id, text, begruendung, konsequenz, frist, fristDatum, beantwortet, gestelltAm]
+      properties:
+        id: { type: string }
+        text: { type: string }
+        begruendung: { type: string }
+        konsequenz: { type: string }
+        frist: { type: string }
+        fristDatum: { type: string, format: date }
+        beantwortet: { type: boolean }
+        gestelltAm: { type: string, format: date }
+
+    Termin:
+      type: object
+      required: [id, zweck, datum, uhrzeit, format, vorbereitung, status]
+      properties:
+        id: { type: string }
+        zweck: { type: string }
+        datum: { type: string, format: date }
+        uhrzeit: { type: string }
+        format: { type: string, enum: [PERSOENLICH, DIGITAL] }
+        ort: { type: string }
+        vorbereitung:
+          type: array
+          items: { type: string }
+        status: { type: string, enum: [BESTAETIGT, AUSSTEHEND, ABGESAGT] }
+
+    Bescheid:
+      type: object
+      required:
+        - id
+        - typ
+        - datum
+        - rechtlicheFassung
+        - erklaerung
+        - entscheidung
+        - begruendung
+        - rechtsgrundlage
+        - widerspruchsfristTage
+        - widerspruchsfristAblauf
+      properties:
+        id: { type: string }
+        typ: { type: string }
+        datum: { type: string, format: date }
+        rechtlicheFassung: { type: string }
+        erklaerung: { type: string }
+        entscheidung: { type: string }
+        begruendung: { type: string }
+        rechtsgrundlage: { type: string }
+        widerspruchsfristTage: { type: integer }
+        widerspruchsfristAblauf: { type: string, format: date }
+
+    TimelineEreignis:
+      type: object
+      required: [id, typ, zeitstempel, handelndeStelle, beschreibung]
+      properties:
+        id: { type: string }
+        typ: { $ref: '#/components/schemas/EreignisTyp' }
+        zeitstempel: { type: string, format: date-time }
+        handelndeStelle: { type: string, enum: [BUERGER, SACHBEARBEITUNG, SYSTEM] }
+        beschreibung: { type: string }
+        details: { type: string }
+
+    Fall:
+      type: object
+      required:
+        - id
+        - typ
+        - status
+        - statusBeschreibung
+        - angelegtAm
+        - letzteAktivitaet
+        - naechsterSchritt
+        - offeneAufgaben
+        - dokumente
+        - rueckfragen
+        - termine
+        - bescheide
+        - timeline
+      properties:
+        id: { type: string }
+        typ: { type: string }
+        status: { $ref: '#/components/schemas/FallStatus' }
+        statusBeschreibung: { type: string }
+        angelegtAm: { type: string, format: date }
+        letzteAktivitaet: { type: string, format: date }
+        naechsterSchritt: { type: string }
+        offeneAufgaben:
+          type: array
+          items: { type: string }
+        dokumente:
+          type: array
+          items: { $ref: '#/components/schemas/Dokument' }
+        rueckfragen:
+          type: array
+          items: { $ref: '#/components/schemas/Rueckfrage' }
+        termine:
+          type: array
+          items: { $ref: '#/components/schemas/Termin' }
+        bescheide:
+          type: array
+          items: { $ref: '#/components/schemas/Bescheid' }
+        timeline:
+          type: array
+          items: { $ref: '#/components/schemas/TimelineEreignis' }
+
+    FallStatusView:
+      type: object
+      required: [status, statusBeschreibung, naechsterSchritt, letzteAktivitaet]
+      properties:
+        status: { $ref: '#/components/schemas/FallStatus' }
+        statusBeschreibung: { type: string }
+        naechsterSchritt: { type: string }
+        letzteAktivitaet: { type: string, format: date }
+        offeneAufgaben:
+          type: array
+          items: { type: string }
+
+    FairnessSignal:
+      type: object
+      required: [id, typ, titel, erklaerung, auswirkung, naechsterSchritt, prioritaet]
+      properties:
+        id: { type: string }
+        typ: { type: string }
+        titel: { type: string }
+        erklaerung: { type: string }
+        auswirkung: { type: string }
+        naechsterSchritt: { type: string }
+        bezug: { type: string }
+        prioritaet: { type: string, enum: [RELEVANT, HINWEIS, INFO] }
