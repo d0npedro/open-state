@@ -2,6 +2,31 @@
 
 Branch: `loop/kita` · Worktree: `D:\Projects\open-state-loop-kita`
 
+## Iteration 2026-07-29 – US-KJ-005/009/010 Zeitreihe Druck Filterstand/Meta
+
+### Was
+Zeitreihe (`KitaZeitreiheTabelle`, US-KJ-005 Lagebild + US-KJ-009/010 öffentlicher Bericht): Druckansicht an Explorer/Engpass-Muster. Filter-Chips und CSV-Button `no-print`; print-only Block mit aktivem Regionenfilter (Gesamtkommune oder Planungsraum), Monatsanzahl, Peak-Warteliste, Meldebasis-Session (Stichprobe/Lücken, Session-sensitiv) und Stichprobenmonat. Methodik- und Footer-Hinweise auf `/kita/lagebild` und `/kita`. Keine Interpolation, keine Trendbewertung. Nur Aggregate, keine Kind- oder Personennamen. Merge `origin/main` (ci-watcher) vor dem Feature.
+
+### Dateien
+- `demo/components/kita/KitaZeitreiheTabelle.tsx` (print-only Filterstand/Meta, no-print Filter/CSV)
+- `demo/app/kita/lagebild/page.tsx` (Methodik/Footer/Badge)
+- `demo/app/kita/page.tsx` (Datenlage/Footer/print-Footer)
+- `docs/loops/kita-JOURNAL.md` (dieses Journal)
+
+### Story
+US-KJ-005 / US-KJ-009 / US-KJ-010 – Zeitreihe Druck-Meta Filterstand und Meldebasis
+
+### Build
+`npm run lint` + `npm run build` im `demo/`-Verzeichnis (siehe Commit dieses Laufs)
+
+### Nicht angefasst (Supervisor / verboten)
+Queue, BUILD_STATE, storyRegistry, DECISION_LOG, andere Domänen, package.json, CI, push
+
+### Nächster sinnvoller Schritt (Hinweis Supervisor)
+Regionenvergleich print-only Filterstand (A/B + Kennzahl), oder Explorer/Meldebasis-Druckhinweis weiter schärfen, oder Bedarfsplanung/Vorlage Feinschliff falls Lücken.
+
+---
+
 ## Iteration 2026-07-29 – US-KJ-005 Lagebild Zeitreihe-UI (12 Monate)
 
 ### Was
