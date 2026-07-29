@@ -148,10 +148,13 @@ test.describe('US-AV-002 – Status einsehen', () => {
     expect(before).toMatch(/width:\s*5[0-9]%/);
 
     // Demo: Rückfrage beantworten → Status UNTERLAGEN_FEHLEN
-    await page.goto('/fall/rueckfragen');
+    // Client-Navigation (Tab), damit DemoStateProvider den Session-State behält
+    await page.locator('.tab-nav-item').filter({ hasText: 'Fragen' }).click();
+    await expect(page).toHaveURL(/\/fall\/rueckfragen/);
     // Accessible name kommt aus aria-label „Rückfrage beantworten: …“
     await page.getByRole('button', { name: /Rückfrage beantworten/i }).click();
-    await page.goto('/fall');
+    await page.locator('.tab-nav-item').filter({ hasText: 'Übersicht' }).click();
+    await expect(page).toHaveURL('/fall');
 
     // Fortschritt darf nicht auf 0 % kollabieren (Bug: Status nicht in statusFlow)
     const after = await page.locator('.progress-bar-fill').getAttribute('style');
@@ -162,17 +165,21 @@ test.describe('US-AV-002 – Status einsehen', () => {
   });
 
   test('Nach allen Bürger-Aktionen: Ruhezustand-Banner sichtbar', async ({ page }) => {
-    await page.goto('/fall/rueckfragen');
+    // Client-Navigation: DemoState liegt im Fall-Layout und geht bei page.goto() verloren
+    await page.locator('.tab-nav-item').filter({ hasText: 'Fragen' }).click();
+    await expect(page).toHaveURL(/\/fall\/rueckfragen/);
     // Accessible name kommt aus aria-label „Rückfrage beantworten: …“
     await page.getByRole('button', { name: /Rückfrage beantworten/i }).click();
-    await page.goto('/fall/dokumente');
+    await page.locator('.tab-nav-item').filter({ hasText: 'Unterlagen' }).click();
+    await expect(page).toHaveURL(/\/fall\/dokumente/);
     // Beide ausstehenden Unterlagen als hochgeladen markieren
     const uploadButtons = page.getByRole('button', { name: /Als hochgeladen markieren/i });
     const count = await uploadButtons.count();
     for (let i = 0; i < count; i++) {
       await uploadButtons.nth(0).click();
     }
-    await page.goto('/fall');
+    await page.locator('.tab-nav-item').filter({ hasText: 'Übersicht' }).click();
+    await expect(page).toHaveURL('/fall');
     await expect(page.getByTestId('ruhezustand-banner')).toBeVisible();
     await expect(page.getByText('Kein Handeln von Ihnen erforderlich')).toBeVisible();
     await expect(page.locator('.action-banner')).toHaveCount(0);
