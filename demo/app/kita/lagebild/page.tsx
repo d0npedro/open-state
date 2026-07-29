@@ -210,7 +210,7 @@ export default function KitaLagebildPage() {
         <div style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginBottom: '0.75rem' }}>
           <span className="badge badge-primary">US-KJ-005</span>
           <span className="badge badge-primary">US-KJ-006</span>
-          <span>Versorgungslagebild · Engpass-Analyse · Jugendamt-intern</span>
+          <span>Versorgungslagebild · Engpass · Handlungsfelder · Meldelücke-Filter · Jugendamt-intern</span>
         </div>
         <h1 style={{ marginBottom: '0.4rem' }}>Steuerungslagebild Kindertagesbetreuung</h1>
         <p style={{ color: 'var(--color-text-muted)' }}>
