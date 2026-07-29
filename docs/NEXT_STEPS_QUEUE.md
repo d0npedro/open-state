@@ -219,6 +219,9 @@ Story-Dokumentation ist kein Pflicht-Vorläufer für Mock-Daten und Typen.
 | Q-182 | Kita Lagebild: Regionenvergleich Zwei-Räume UI (Spiegel öffentlicher Bericht, US-KJ-005/010) | DEMO | S | Q-118 | DONE `05a7f76` |
 | Q-183 | UG BG-Demo-Markierung + Fairness-Fallthrough zu Steuernummer (US-UG-001) | DEMO | S | Q-178 | DONE `c6b77a8` |
 | Q-184 | Kita Meldeeingang: Druck-Meta Status/Datenbasis/Session + Monatsbericht-Vorschau (US-KJ-004/005) | DEMO | S | Q-179 | DONE `18bb244` |
+| Q-185 | UG Verlauf: Session-Antwort hervorheben + RQ-Quittung Tiefenlink (US-UG-005) | DEMO | S | Q-181 | DONE `ef6288a` |
+| Q-186 | Kita Meldeeingang: CSV Aggregate Status/Lücken/Session freigabeunabhängig (US-KJ-004/005, DEC-004) | DEMO | S | Q-184 | DONE `699aff5` |
+| Q-187 | Kita Meldeeingang Monatsbericht-Vorschau: CSV Aggregate freigabeunabhängig (US-KJ-003/005, DEC-004) | DEMO | S | Q-186 | DONE `d376dc9` |
 
 ---
 
@@ -408,3 +411,6 @@ Diese Punkte wurden in früheren Iterationen abgeschlossen und sind produktionsr
 | Q-182 Kita Lagebild Regionenvergleich | Zwei-Räume UI Spiegel öffentlicher Bericht (US-KJ-010) | `05a7f76` → main |
 | Q-183 UG BG-Demo + Fallthrough Steuernummer | Session-BG erledigt, Primär-CTA Fairness (US-UG-001) | `c6b77a8` → main |
 | Q-184 Kita Meldeeingang Druck-Meta | Status/Datenbasis/Session print-only (US-KJ-004/005) | `18bb244` → main |
+| Q-185 UG Session-Antwort Verlauf | RQ-Quittung Tiefenlink + Badge im Verlauf (US-UG-005) | `ef6288a` → main |
+| Q-186 Kita Meldeeingang CSV Aggregate | Status/Lücken/Session freigabeunabhängig (US-KJ-004/005) | `699aff5` → main |
+| Q-187 Kita Monatsbericht-Vorschau CSV | Vorschau-CSV am Meldeeingang freigabeunabhängig (US-KJ-003/005) | `d376dc9` → main |
