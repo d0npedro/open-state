@@ -126,9 +126,10 @@ export function berechneFairnessSignaleGruendung(akte: GruendungsAkte): Fairness
   }
 
   // ─── Signal 3: Steuernummer fehlt – Rechnungsstellung eingeschränkt ────────
-  // Regel: Wenn VS-05 (Steuernummer erhalten) noch AUSSTEHEND ist und das
-  //        geplante Betriebsdatum bereits erreicht oder überschritten ist,
-  //        ist Rechnungsstellung ohne Steuernummer rechtlich unvollständig.
+  // Regel: Wenn VS-05 (Steuernummer erhalten) noch nicht ABGESCHLOSSEN ist
+  //        (AUSSTEHEND oder IN_BEARBEITUNG) und das geplante Betriebsdatum
+  //        bereits erreicht oder überschritten ist, ist Rechnungsstellung
+  //        ohne Steuernummer rechtlich unvollständig. Text je nach Status.
   const steuernummerSchritt = akte.verfahrensSchritte.find(vs => vs.id === 'VS-05');
   const betriebsDatumErreicht = akte.geplantesBetriebsdatum
     ? berechneFristTage(
@@ -137,22 +138,37 @@ export function berechneFairnessSignaleGruendung(akte: GruendungsAkte): Fairness
       ) <= 0
     : false;
 
-  if (steuernummerSchritt && steuernummerSchritt.status === 'AUSSTEHEND' && betriebsDatumErreicht) {
+  const steuernummerOffen =
+    steuernummerSchritt &&
+    (steuernummerSchritt.status === 'AUSSTEHEND' ||
+      steuernummerSchritt.status === 'IN_BEARBEITUNG');
+
+  if (steuernummerOffen && betriebsDatumErreicht) {
+    const inBearbeitung = steuernummerSchritt.status === 'IN_BEARBEITUNG';
     signale.push({
       id: 'UG-STEUERNUMMER-FEHLT',
       typ: 'UG_STEUERNUMMER_FEHLT',
-      titel: 'Steuernummer noch nicht erteilt – Rechnungsstellung eingeschränkt',
-      erklaerung:
-        'Das Finanzamt hat die Steuernummer noch nicht vergeben. ' +
-        'Ohne Steuernummer müssen Ausgangsrechnungen einen Hinweis auf das schwebende Verfahren enthalten. ' +
-        'Die Steuernummer-Vergabe ist blockiert durch die offene Rückfrage zur Kleinunternehmerregelung.',
+      titel: inBearbeitung
+        ? 'Steuernummer in Bearbeitung – noch nicht erteilt'
+        : 'Steuernummer noch nicht erteilt – Rechnungsstellung eingeschränkt',
+      erklaerung: inBearbeitung
+        ? 'Das Finanzamt bearbeitet die Vergabe der Steuernummer. ' +
+          'Die offene Rückfrage zur Kleinunternehmerregelung ist beantwortet; ' +
+          'die Steuernummer liegt noch nicht vor. ' +
+          'Ohne Steuernummer müssen Ausgangsrechnungen einen Hinweis auf das schwebende Verfahren enthalten.'
+        : 'Das Finanzamt hat die Steuernummer noch nicht vergeben. ' +
+          'Ohne Steuernummer müssen Ausgangsrechnungen einen Hinweis auf das schwebende Verfahren enthalten. ' +
+          'Die Steuernummer-Vergabe ist blockiert durch die offene Rückfrage zur Kleinunternehmerregelung.',
       auswirkung:
         'Rechnungen ohne Steuernummer können bei Auftraggebern zu Rückfragen führen. ' +
         'Die Vorsteuerabzugsberechtigung beim Empfänger hängt von einer gültigen Steuernummer ab.',
-      naechsterSchritt:
-        'Beantworten Sie zuerst die Rückfrage des Finanzamts (Bereich „Rückfragen"). ' +
-        'Nach Eingang der Antwort vergibt das Finanzamt die Steuernummer in der Regel binnen weniger Wochen.',
-      bezug: `Verfahrensschritt VS-05 (${steuernummerSchritt.bezeichnung}) · Status: AUSSTEHEND`,
+      naechsterSchritt: inBearbeitung
+        ? 'Keine Handlung von Ihnen erforderlich für die Steuernummer. ' +
+          'Prüfen Sie den Bearbeitungsstand unter „Behörden & Schritte“. ' +
+          'Parallel können Sie die BG-Anmeldung vornehmen (außerhalb von Open State).'
+        : 'Beantworten Sie zuerst die Rückfrage des Finanzamts (Bereich „Rückfragen"). ' +
+          'Nach Eingang der Antwort vergibt das Finanzamt die Steuernummer in der Regel binnen weniger Wochen.',
+      bezug: `Verfahrensschritt VS-05 (${steuernummerSchritt.bezeichnung}) · Status: ${steuernummerSchritt.status}`,
       prioritaet: 'HINWEIS',
     });
   }

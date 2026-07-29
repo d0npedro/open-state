@@ -212,9 +212,13 @@ export default function GruendungHinweisePage() {
                   const finanzamt = isSteuernummerSignal(sig)
                     ? akte.beteiligteBehörden.find(b => b.typ === 'FINANZAMT')
                     : undefined;
-                  const steuernummerNochOffen = isSteuernummerSignal(sig)
-                    ? akte.verfahrensSchritte.some(vs => vs.id === 'VS-05' && vs.status === 'AUSSTEHEND')
-                    : false;
+                  const vs05 = isSteuernummerSignal(sig)
+                    ? akte.verfahrensSchritte.find(vs => vs.id === 'VS-05')
+                    : undefined;
+                  const steuernummerNochOffen =
+                    !!vs05 &&
+                    (vs05.status === 'AUSSTEHEND' || vs05.status === 'IN_BEARBEITUNG');
+                  const steuernummerInBearbeitung = vs05?.status === 'IN_BEARBEITUNG';
                   const betriebsdatumNochOffen = isBetriebsdatumSignal(sig)
                     ? !['GENEHMIGT', 'AKTIVER_BETRIEB', 'BETRIEB_EINGESTELLT'].includes(akte.status)
                     : false;
@@ -272,8 +276,9 @@ export default function GruendungHinweisePage() {
                           data-testid={`hinweise-steuernummer-cta-wrap-${finanzamt.id}`}
                         >
                           <p style={{ margin: 0, fontSize: '0.875rem', lineHeight: 1.45 }}>
-                            Die Steuernummer vergibt das Finanzamt nach Abschluss der steuerlichen Erfassung.
-                            Rolle, Kontakt und offene Schritte finden Sie auf der Behördenkarte.
+                            {steuernummerInBearbeitung
+                              ? 'Die Vergabe der Steuernummer ist beim Finanzamt in Bearbeitung. Status und Kontakt finden Sie auf der Behördenkarte.'
+                              : 'Die Steuernummer vergibt das Finanzamt nach Abschluss der steuerlichen Erfassung. Rolle, Kontakt und offene Schritte finden Sie auf der Behördenkarte.'}
                           </p>
                           <Link
                             href={`/gruendung/behoerden#beh-${finanzamt.id}`}
