@@ -201,6 +201,35 @@ test.describe('UG – Übersicht', () => {
     await expect(schrittHint).not.toContainText(/Antwortfrist/i);
   });
 
+  test('Nach RQ + Upload: Primär-CTA wechselt zu BG-Hinweis (gruendung-rules)', async ({ page }) => {
+    // Bürger-Reihenfolge in naechsterSchrittZiel: RQ → Unterlagen → BG
+    // Kein page.goto nach State (DEC-012)
+    const { goUgTab } = await import('./helpers/sessionNav');
+
+    await goUgTab(page, 'Fragen', /\/gruendung\/rueckfragen/);
+    await page.getByRole('button', { name: /Rückfrage beantworten/i }).click();
+    await expect(page.getByText(/die Behörde wurde informiert|beantwortet/i).first()).toBeVisible();
+
+    await goUgTab(page, 'Unterlagen', /\/gruendung\/dokumente/);
+    await page.getByRole('button', { name: /Als hochgeladen markieren/i }).click();
+    await expect(page.getByTestId('dok-upload-quittung-DOK-03')).toBeVisible();
+
+    await goUgTab(page, 'Übersicht', /\/gruendung$/);
+
+    const cta = page.getByTestId('uebersicht-naechster-schritt-cta');
+    await expect(cta).toBeVisible();
+    await expect(cta).toHaveAttribute('href', /\/gruendung\/behoerden#beh-BEH-04/);
+    await expect(cta).toContainText(/BG-Hinweis ansehen/i);
+    const schrittHint = page.getByTestId('uebersicht-naechster-schritt-cta-hint');
+    await expect(schrittHint).toBeVisible();
+    await expect(schrittHint).toContainText(/Keine offene Rückfrage mehr/i);
+    await expect(schrittHint).toContainText(/BG-Anmeldung|Berufsgenossenschaft|Behördenkarte/i);
+    // RQ- und Unterlagen-Aufgaben entfallen; BG bleibt
+    await expect(page.getByTestId('uebersicht-aufgabe-link-rq-RQ-01')).toHaveCount(0);
+    await expect(page.getByTestId('uebersicht-aufgabe-link-dok-DOK-03')).toHaveCount(0);
+    await expect(page.getByTestId('uebersicht-aufgabe-link-beh-BEH-04')).toBeVisible();
+  });
+
   test('Fairness-Kurzblock mit Link zu Hinweise', async ({ page }) => {
     const block = page.getByTestId('uebersicht-fairness-kurzblock');
     await expect(block).toBeVisible();
