@@ -2,14 +2,15 @@
 
 | Feld | Wert |
 |------|------|
-| last_checked | 2026-07-29T06:10:40Z |
-| last_run_id | 30427213813 |
+| last_checked | 2026-07-29T06:16:00Z |
+| last_run_id | 30427363259 |
 | last_status | success |
-| last_fix_sha | 81adcd7 |
+| last_fix_sha | 2ebedea |
 | fix_attempts | 0 |
 
 ## Log
 
+- E2E `30427363259` **success** (SHA 2ebedea docs ci-watcher). Prior E2E `30427213813` **success** (SHA 81adcd7). Build latest `30426767115` success (SHA 11b9890; newer HEAD docs-only path-skip). Catch-up: origin/main..main was 6 (kita CSV + UG VS-04 + supervisor merges) → lint+build+`test:e2e:ci` **226 passed** → push. No fix. fix_attempts=0.
 - E2E `30427213813` **success** (SHA 81adcd7 docs ci-watcher). Prior E2E `30427078241` **success** (SHA 4b60614). Build latest `30426767115` success (SHA 11b9890; newer HEAD docs-only path-skip). Catch-up: origin/main..main = 0. No fix. fix_attempts=0.
 - E2E `30427078241` **success** (SHA 4b60614 docs ci-watcher). Prior E2E `30426924360` **success** (SHA 3ae692f supervisor Q-117/Q-118/Q-120). Build latest `30426767115` success (SHA 11b9890; newer HEAD docs-only path-skip). Catch-up: origin/main..main = 0. No fix. fix_attempts=0.
 - E2E `30426924360` **success** (SHA 3ae692f supervisor Q-117/Q-118/Q-120). Prior E2E `30426905806` + `30426885328` **success** (SHA 4e900e4 / 4f40f4e). Build latest `30426767115` success (SHA 11b9890; newer HEAD docs-only path-skip). Catch-up: origin/main..main = 0. No fix. fix_attempts=0.
