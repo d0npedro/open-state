@@ -1,6 +1,6 @@
 # BUILD_STATE.md – Aktueller Projektstand
 
-Zuletzt aktualisiert: nach Supervisor-Merge 2026-07-29 (UG Q-100/Q-101, Kita Q-102/Q-103, AV Q-092; E2E 206 chromium grün; Queue Q-104–Q-109 OFFEN)
+Zuletzt aktualisiert: nach Supervisor-Merge 2026-07-29 (UG Q-100/Q-101, Kita Q-102/Q-103/Q-108, AV Q-092; E2E chromium grün; Queue Q-104–Q-107/Q-109 OFFEN)
 
 Dieser Stand beschreibt, was tatsächlich existiert und funktioniert.
 Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
@@ -34,7 +34,7 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | `/stories` | Story Coverage Dashboard | – | ✓ |
 | `/feedback` | Feedback → GitHub Issues | – | ✓ |
 | `/gruendung` … | Unternehmensgründung (Übersicht Fairness-Kurzblock, Hinweise-CTAs RQ/BG/Unterlagen/Steuernummer, Verlauf Stelle+Ereignistyp-Filter, …) | US-UG-001–006 | ✓ |
-| `/kita` | Öffentlicher Transparenzbericht + Planungsraum-Filter | US-KJ-009, US-KJ-010 | ✓ |
+| `/kita` | Öffentlicher Transparenzbericht + Planungsraum-Filter + Residual↔Meldelücke | US-KJ-009, US-KJ-010 | ✓ |
 | `/kita/lagebild` | Jugendamt-Steuerungsansicht + Meldeeingang + Meldebeitrag + Monatsbericht-Vorschau-Kopplung | US-KJ-005, US-KJ-006 | ✓ |
 | `/kita/bedarfsplanung` | Bedarfsplanungsentwurf (§ 80 SGB VIII) + Meldebasis + Residual↔Meldelücke (Hinweis-only) | US-KJ-007 | ✓ |
 | `/kita/vorlage` | Politische Gremienvorlage + Freigabe | US-KJ-008 | ✓ |
