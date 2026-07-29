@@ -4,6 +4,7 @@
  * US-KJ-002 – Belegungsstand einsehen (Einrichtungsebene, Demo)
  *
  * Aggregierte Platzzahlen je Gruppe. Keine Kind- oder Vertragsdaten.
+ * Prozesskette: Tagesstand (US-KJ-001) → Monatsbericht (US-KJ-003) → Meldung (US-KJ-004).
  */
 
 import { demoKitaEinrichtung } from '@/data/mockKitaEinrichtung';
@@ -281,19 +282,80 @@ export default function KitaEinrichtungBelegungPage() {
         </div>
       </section>
 
+      {/* Betriebliche Prozesskette: Belegung → Tagesstand → Monatsbericht → Meldung */}
+      <section aria-labelledby="prozesskette-heading" className="no-print">
+        <h2 id="prozesskette-heading" style={{ marginBottom: '0.5rem' }}>
+          Betriebliche Folgeprozesse
+        </h2>
+        <p style={{ margin: '0 0 1rem', fontSize: '0.875rem', color: 'var(--color-text-muted)', maxWidth: '44rem' }}>
+          Derselbe Demo-Standort <strong>{e.bezeichnung}</strong> ({e.id}). Der Belegungsstand ist der
+          stichtagsbezogene Überblick; Tagesstände speisen den Monatsbericht; die Monatsmeldung geht
+          erst nach aktiver Freigabe an das Jugendamt. Keine Kind- oder Personennamen.
+        </p>
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+            gap: '0.75rem',
+          }}
+        >
+          {(
+            [
+              {
+                href: '/kita/tagesstand',
+                story: 'US-KJ-001',
+                title: 'Tagesstand erfassen',
+                text: 'Tägliche Aggregate je Gruppe (Anwesenheit, Personalstunden). Quelle für den Monatsbericht.',
+                border: 'var(--color-primary)',
+              },
+              {
+                href: '/kita/monatsbericht',
+                story: 'US-KJ-003',
+                title: 'Monatsbericht abrufen',
+                text: 'Monatsauswertung aus freigegebenen Tagesständen inkl. Vorjahresvergleich und Datenlücken.',
+                border: 'var(--color-primary)',
+              },
+              {
+                href: '/kita/meldung',
+                story: 'US-KJ-004',
+                title: 'Meldung freigeben',
+                text: 'Systemvorschlag prüfen, ggf. korrigieren und aktiv an das Jugendamt freigeben.',
+                border: 'var(--color-warning)',
+              },
+            ] as const
+          ).map(card => (
+            <Link
+              key={card.href}
+              href={card.href}
+              className="card"
+              style={{
+                textDecoration: 'none',
+                color: 'inherit',
+                borderTop: `3px solid ${card.border}`,
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '0.35rem',
+              }}
+            >
+              <span className="badge badge-primary" style={{ alignSelf: 'flex-start', fontSize: '0.68rem' }}>
+                {card.story}
+              </span>
+              <strong style={{ fontSize: '0.95rem', color: 'var(--color-primary)' }}>{card.title}</strong>
+              <span style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', lineHeight: 1.45 }}>
+                {card.text}
+              </span>
+            </Link>
+          ))}
+        </div>
+      </section>
+
       <div style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)' }}>
         Aggregierte Daten fließen in das{' '}
         <Link href="/kita/lagebild" style={{ color: 'var(--color-primary)' }}>Steuerungslagebild</Link>
         {' '}und den{' '}
         <Link href="/kita" style={{ color: 'var(--color-primary)' }}>öffentlichen Bericht</Link>
-        {' '}ein — ohne Einrichtungsdetail in der Öffentlichkeit (DEC-004).{' '}
-        Tagesstand:{' '}
-        <Link href="/kita/tagesstand" style={{ color: 'var(--color-primary)' }}>Erfassen (US-KJ-001)</Link>
-        {' · '}
-        Monatsauswertung:{' '}
-        <Link href="/kita/monatsbericht" style={{ color: 'var(--color-primary)' }}>Monatsbericht (US-KJ-003)</Link>
-        {' · '}
-        <Link href="/kita/meldung" style={{ color: 'var(--color-primary)' }}>Meldung freigeben (US-KJ-004)</Link>.
+        {' '}ein — ohne Einrichtungsdetail in der Öffentlichkeit (DEC-004). Prozesskette oben:
+        Tagesstand → Monatsbericht → Meldung (gleiche Einrichtung).
       </div>
     </div>
   );
