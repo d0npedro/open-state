@@ -2,6 +2,30 @@
 
 Branch: `loop/kita` · Worktree: `D:\Projects\open-state-loop-kita`
 
+## Iteration 2026-07-29 – US-KJ-003 Monatsbericht-Vorschau gemischte Quellen
+
+### Was
+Monatsbericht zeigt Demo-Ansicht „Laufender Monat“ (Status VORSCHAU, Nov 2024 bis Stichtag 12.11.): gemischte Tagesstand-Quellen FREIGEGEBEN (6), FEHLT (1, nicht interpoliert), IN_ERFASSUNG (1 Entwurf, nicht in Kennzahlen). Umschalter Abschluss Okt 2024 vs. Vorschau Nov 2024. Zählerkarte „In Erfassung“, Vorschau-Hinweis, Tabellenzeilen für Entwürfe. Nur Aggregate, keine Kind- oder Personennamen.
+
+### Dateien
+- `demo/data/mockKitaMonatsbericht.ts` (`demoKitaMonatsberichtVorschau`)
+- `demo/app/kita/monatsbericht/page.tsx` (Umschalter, Vorschau-UI, IN_ERFASSUNG)
+- `docs/loops/kita-JOURNAL.md` (dieses Journal)
+
+### Story
+US-KJ-003 – Monatsbericht (Vorschau-Status / gemischte Datenbasis)
+
+### Build
+`npm run lint` + `npm run build` im `demo/`-Verzeichnis (siehe Commit dieses Laufs)
+
+### Nicht angefasst (Supervisor / verboten)
+Queue, BUILD_STATE, storyRegistry, andere Domänen, package.json, CI, push
+
+### Nächster sinnvoller Schritt (Hinweis Supervisor)
+Bedarfsplanung: Datenlücke Südost aus Meldeeingang ableiten, oder Lagebild-Meldeeingang mit Vorschau-Monatsstatus koppeln.
+
+---
+
 ## Iteration 2026-07-29 – US-KJ-005/006 Meldebeitrag Planungsraum-Karte
 
 ### Was

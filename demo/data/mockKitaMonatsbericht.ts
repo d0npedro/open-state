@@ -191,3 +191,188 @@ export const demoKitaMonatsbericht: KitaMonatsbericht = {
       'Nur freigegebene Tagesstände der Einrichtung (US-KJ-001). Jeder Betriebstag der Datenbasis ist unten ausgewiesen. Fehlende Tage werden als Lücke markiert und nicht interpoliert. Nicht freigegebene Entwürfe fließen nicht ein.',
   },
 };
+
+/**
+ * Laufender Monat (Demo-Stichtag 12.11.2024): Status VORSCHAU.
+ * Gemischte Quellen: FREIGEGEBEN, FEHLT (vergangener Tag ohne Freigabe),
+ * IN_ERFASSUNG (Entwurf – fließt nicht in Kennzahlen ein).
+ * Nur Aggregate, keine Kind- oder Personennamen.
+ */
+function buildNovember2024VorschauQuellen(): MonatsberichtTagesstandQuelle[] {
+  /** Betriebstage bis Demo-Stichtag inkl. (Mo–Fr) */
+  const tage: Array<{
+    iso: string;
+    status: MonatsberichtTagesstandQuelle['status'];
+    anwesend?: number;
+    personal?: number;
+    schluessel?: boolean;
+  }> = [
+    { iso: '2024-11-01', status: 'FREIGEGEBEN', anwesend: 53, personal: 59, schluessel: false },
+    { iso: '2024-11-04', status: 'FREIGEGEBEN', anwesend: 55, personal: 61, schluessel: false },
+    { iso: '2024-11-05', status: 'FREIGEGEBEN', anwesend: 52, personal: 57, schluessel: true },
+    { iso: '2024-11-06', status: 'FREIGEGEBEN', anwesend: 54, personal: 60, schluessel: false },
+    { iso: '2024-11-07', status: 'FEHLT' },
+    { iso: '2024-11-08', status: 'FREIGEGEBEN', anwesend: 51, personal: 56, schluessel: false },
+    { iso: '2024-11-11', status: 'FREIGEGEBEN', anwesend: 56, personal: 62, schluessel: false },
+    { iso: '2024-11-12', status: 'IN_ERFASSUNG' },
+  ];
+
+  return tage.map(t => {
+    const d = new Date(`${t.iso}T12:00:00`);
+    const label = d.toLocaleDateString('de-DE', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+    });
+
+    if (t.status === 'FREIGEGEBEN') {
+      return {
+        tagesstandId: `TS-EINR-DEMO-01-${t.iso}`,
+        datumIso: t.iso,
+        datumLabel: label,
+        status: 'FREIGEGEBEN' as const,
+        anwesendGesamt: t.anwesend ?? null,
+        personalIstStundenGesamt: t.personal ?? null,
+        personalschluesselUnterschritten: t.schluessel ?? false,
+        freigegebenAm: `${label}, 16:15`,
+        freigegebenDurchRolle: 'Kita-Leitung (Demo)',
+      };
+    }
+
+    if (t.status === 'IN_ERFASSUNG') {
+      return {
+        tagesstandId: `TS-EINR-DEMO-01-${t.iso}-ENTWURF`,
+        datumIso: t.iso,
+        datumLabel: label,
+        status: 'IN_ERFASSUNG' as const,
+        anwesendGesamt: null,
+        personalIstStundenGesamt: null,
+        personalschluesselUnterschritten: null,
+        freigegebenAm: null,
+        freigegebenDurchRolle: null,
+      };
+    }
+
+    return {
+      tagesstandId: null,
+      datumIso: t.iso,
+      datumLabel: label,
+      status: 'FEHLT' as const,
+      anwesendGesamt: null,
+      personalIstStundenGesamt: null,
+      personalschluesselUnterschritten: null,
+      freigegebenAm: null,
+      freigegebenDurchRolle: null,
+    };
+  });
+}
+
+const vorschauQuellen = buildNovember2024VorschauQuellen();
+
+/** Monatsbericht-Vorschau laufender Monat mit gemischten Tagesstand-Quellen (US-KJ-003) */
+export const demoKitaMonatsberichtVorschau: KitaMonatsbericht = {
+  id: 'MB-EINR-DEMO-01-2024-11-VORSCHAU',
+  einrichtungId: 'EINR-DEMO-01',
+  einrichtungBezeichnung: 'Kita Sonnenwinkel',
+  traeger: 'Freier Träger „Gemeinsam wachsen e. V.“ (fiktiv)',
+  planungsraumBezeichnung: 'Südost',
+  monatsLabel: 'November 2024',
+  monatsIso: '2024-11',
+  vorjahresLabel: 'November 2023',
+  standLabel: 'Vorschau bis 12.11.2024 (Demo-Stichtag)',
+  status: 'VORSCHAU',
+  /** Bis Stichtag: 8 Betriebstage (noch kein Monatsabschluss) */
+  betriebstageImMonat: 8,
+  erfassteTagesstaende: 6,
+  fehlendeTage: ['2024-11-07'],
+  tagesstandQuellen: vorschauQuellen,
+  gruppen: [
+    {
+      gruppeId: 'GR-01',
+      bezeichnung: 'Nestgruppe A (U3)',
+      altersgruppe: 'U3',
+      anwesenheitsquoteProzent: 89.1,
+      anwesenheitsquoteVorjahrProzent: 87.0,
+      auslastungsgradProzent: 96.5,
+      auslastungsgradVorjahrProzent: 95.0,
+      personalAusfallquoteProzent: 5.8,
+      personalAusfallquoteVorjahrProzent: 6.1,
+      tagePersonalschluesselUnterschritten: 1,
+      tagePersonalschluesselUnterschrittenVorjahr: 1,
+    },
+    {
+      gruppeId: 'GR-02',
+      bezeichnung: 'Nestgruppe B (U3)',
+      altersgruppe: 'U3',
+      anwesenheitsquoteProzent: 90.4,
+      anwesenheitsquoteVorjahrProzent: 88.5,
+      auslastungsgradProzent: 84.0,
+      auslastungsgradVorjahrProzent: 86.0,
+      personalAusfallquoteProzent: 3.9,
+      personalAusfallquoteVorjahrProzent: 5.2,
+      tagePersonalschluesselUnterschritten: 0,
+      tagePersonalschluesselUnterschrittenVorjahr: 0,
+    },
+    {
+      gruppeId: 'GR-03',
+      bezeichnung: 'Elementargruppe Sonne',
+      altersgruppe: 'UE3',
+      anwesenheitsquoteProzent: 92.8,
+      anwesenheitsquoteVorjahrProzent: 91.2,
+      auslastungsgradProzent: 99.0,
+      auslastungsgradVorjahrProzent: 97.5,
+      personalAusfallquoteProzent: 7.1,
+      personalAusfallquoteVorjahrProzent: 6.8,
+      tagePersonalschluesselUnterschritten: 0,
+      tagePersonalschluesselUnterschrittenVorjahr: 2,
+    },
+    {
+      gruppeId: 'GR-04',
+      bezeichnung: 'Elementargruppe Mond',
+      altersgruppe: 'UE3',
+      anwesenheitsquoteProzent: 91.0,
+      anwesenheitsquoteVorjahrProzent: 90.0,
+      auslastungsgradProzent: 91.5,
+      auslastungsgradVorjahrProzent: 93.0,
+      personalAusfallquoteProzent: 4.5,
+      personalAusfallquoteVorjahrProzent: 4.0,
+      tagePersonalschluesselUnterschritten: 0,
+      tagePersonalschluesselUnterschrittenVorjahr: 0,
+    },
+    {
+      gruppeId: 'GR-05',
+      bezeichnung: 'Elementargruppe Sterne',
+      altersgruppe: 'UE3',
+      anwesenheitsquoteProzent: 0,
+      anwesenheitsquoteVorjahrProzent: 88.0,
+      auslastungsgradProzent: 0,
+      auslastungsgradVorjahrProzent: 94.0,
+      personalAusfallquoteProzent: 11.0,
+      personalAusfallquoteVorjahrProzent: 5.0,
+      tagePersonalschluesselUnterschritten: 0,
+      tagePersonalschluesselUnterschrittenVorjahr: 1,
+    },
+  ],
+  gesamt: {
+    anwesenheitsquoteProzent: 87.2,
+    anwesenheitsquoteVorjahrProzent: 88.1,
+    auslastungsgradProzent: 85.8,
+    auslastungsgradVorjahrProzent: 91.0,
+    personalAusfallquoteProzent: 6.5,
+    personalAusfallquoteVorjahrProzent: 5.9,
+    tagePersonalschluesselUnterschritten: 1,
+    tagePersonalschluesselUnterschrittenVorjahr: 4,
+  },
+  methodik: {
+    anwesenheitDefinition:
+      'Anwesenheitsquote = Summe Anwesenheitstage (aggregiert) ÷ (Belegungstage × Betriebstage mit freigegebenem Tagesstand). Nur freigegebene Tage; Entwürfe (IN_ERFASSUNG) zählen nicht.',
+    auslastungDefinition:
+      'Auslastungsgrad = belegte Plätze (Mittel über freigegebene Tage) ÷ real nutzbare Plätze. Vorschau: Teilmonat bis Stichtag.',
+    personalAusfallDefinition:
+      'Personalausfallquote = Ausfallstunden ÷ geplante Stunden je Gruppe – nur freigegebene Tagesstände.',
+    personalschluesselDefinition:
+      'Tag zählt als Unterschreitung nur bei freigegebenem Stand. Keine automatische Meldung an das Jugendamt (US-KJ-004).',
+    datenquelle:
+      'Vorschau laufender Monat: Kennzahlen nur aus freigegebenen Tagesständen bis Stichtag. Status je Betriebstag: FREIGEGEBEN (einbezogen), FEHLT (Lücke, nicht interpoliert), IN_ERFASSUNG (Entwurf, nicht einbezogen). Noch ausstehende Betriebstage des Monats erscheinen erst nach dem jeweiligen Tag.',
+  },
+};
