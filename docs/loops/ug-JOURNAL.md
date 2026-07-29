@@ -8,6 +8,31 @@ Erlaubte Pfade nur: `demo/app/gruendung/**`, `demo/context/GruendungStateContext
 
 ---
 
+## 2026-07-29 – Iteration 4: Hinweise-Tab + Übersicht-Link zur offenen Frage
+
+### Was
+UG-Navigation erhält den Tab „Hinweise“ (bestehende Fairness-Seite).
+Übersicht: Behörden-Zeilen mit offener Rückfrage verlinken zur Anker-Zielkarte
+`/gruendung/rueckfragen#rq-{id}`; Behörden ohne offene Frage bleiben ohne Link.
+Hinweise-Seite ohne Story-Badge/Developer-Jargon. E2E: 6 Tabs, Nav, Übersicht-Link, Hinweise-Inhalt.
+
+### Dateien
+- `demo/app/gruendung/layout.tsx` – Tab „Hinweise“
+- `demo/app/gruendung/page.tsx` – Behörden-Zeile mit RQ-Link + Link zu Behörden
+- `demo/app/gruendung/hinweise/page.tsx` – bürgernahe Kopfzeile
+- `demo/e2e/us-ug-gruendung.spec.ts` – Tab-, Übersichts- und Hinweise-Tests
+- `docs/loops/ug-JOURNAL.md` – dieses Journal
+
+### Build
+`npm run lint` + `npm run build` im Ordner `demo/` grün.
+
+### Nächster sinnvoller UG-Schritt (Vorschlag)
+- Übersicht: Fairness-Kurzblock mit Link zu /gruendung/hinweise (wie AV)
+- Verlauf: Filter nach Ereignistyp (optional)
+- Hinweise: direkter CTA „Frage beantworten“ aus RELEVANT-Signal
+
+---
+
 ## 2026-07-29 – Iteration 3: Behörden-CTA zu offener Rückfrage
 
 ### Was

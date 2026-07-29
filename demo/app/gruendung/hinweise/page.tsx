@@ -21,10 +21,9 @@ export default function GruendungHinweisePage() {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-      {/* Story-Badge */}
       <div style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
-        <span className="badge badge-neutral">US-UG-007</span>
-        <span>Verfahrensfairness · Hinweise zur Gründungslage (Story geplant)</span>
+        <span className="badge badge-neutral">Verfahrensfairness</span>
+        <span>Regelbasierte Hinweise aus dem Aktenzustand — keine Entscheidung</span>
       </div>
 
       {/* Header */}

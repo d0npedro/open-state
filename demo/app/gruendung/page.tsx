@@ -157,16 +157,38 @@ export default function GruendungPage() {
           {akte.beteiligteBehörden.map(beh => {
             const isOpen = beh.status === 'RUECKFRAGE_OFFEN';
             const isDone = beh.status === 'ABGESCHLOSSEN';
+            const offeneRq = akte.rueckfragen.find(
+              r => r.anforderndeBehördeId === beh.id && !r.beantwortet
+            );
             return (
-              <div key={beh.id} style={{
-                display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-                padding: '0.75rem', borderRadius: 'var(--radius)',
-                background: isOpen ? 'var(--color-warning-light)' : isDone ? 'var(--color-success-light, #f0fff4)' : 'var(--color-neutral-light)',
-                gap: '0.75rem', flexWrap: 'wrap',
-              }}>
-                <div>
+              <div
+                key={beh.id}
+                data-testid={`uebersicht-behoerde-${beh.id}`}
+                style={{
+                  display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+                  padding: '0.75rem', borderRadius: 'var(--radius)',
+                  background: isOpen ? 'var(--color-warning-light)' : isDone ? 'var(--color-success-light, #f0fff4)' : 'var(--color-neutral-light)',
+                  gap: '0.75rem', flexWrap: 'wrap',
+                }}
+              >
+                <div style={{ flex: 1, minWidth: 0 }}>
                   <div style={{ fontWeight: 600, fontSize: '0.9rem' }}>{beh.bezeichnung}</div>
                   <div style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>{beh.zustaendigeStelle}</div>
+                  {offeneRq && (
+                    <Link
+                      href={`/gruendung/rueckfragen#rq-${offeneRq.id}`}
+                      data-testid={`uebersicht-rq-link-${beh.id}`}
+                      style={{
+                        display: 'inline-flex', alignItems: 'center', gap: '0.3rem',
+                        marginTop: '0.4rem', fontSize: '0.8rem', fontWeight: 600,
+                        color: 'var(--color-warning)', textDecoration: 'none',
+                      }}
+                      aria-label={`Offene Rückfrage von ${beh.bezeichnung} beantworten`}
+                    >
+                      <Icon name="chat" size={13} />
+                      Offene Frage beantworten →
+                    </Link>
+                  )}
                 </div>
                 <span className={`status-chip ${isOpen ? 'status-chip-warning' : isDone ? 'status-chip-success' : beh.status === 'IN_BEARBEITUNG' ? 'status-chip-primary' : 'status-chip-neutral'}`}>
                   <Icon name={isDone ? 'check-circle' : isOpen ? 'alert' : beh.status === 'IN_BEARBEITUNG' ? 'refresh' : 'clock'} size={14} />
@@ -176,6 +198,12 @@ export default function GruendungPage() {
             );
           })}
         </div>
+        <Link
+          href="/gruendung/behoerden"
+          style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem', marginTop: '0.875rem', fontSize: '0.875rem', color: 'var(--color-primary)' }}
+        >
+          Alle Behörden und Schritte <Icon name="arrow-right" size={14} />
+        </Link>
       </div>
 
       {/* ─── Demo-Hinweis ────────────────────────────────────────── */}

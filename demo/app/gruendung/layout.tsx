@@ -13,6 +13,7 @@ const tabs: { href: string; label: string; icon: IconName }[] = [
   { href: '/gruendung/behoerden',   label: 'Behörden',   icon: 'building' },
   { href: '/gruendung/dokumente',   label: 'Unterlagen', icon: 'file'     },
   { href: '/gruendung/rueckfragen', label: 'Fragen',     icon: 'chat'     },
+  { href: '/gruendung/hinweise',    label: 'Hinweise',   icon: 'info'     },
   { href: '/gruendung/verlauf',     label: 'Verlauf',    icon: 'clock'    },
 ];
 
