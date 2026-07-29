@@ -25,6 +25,10 @@ function rueckfrageIdAusSignal(signal: FairnessSignal): string | null {
 function isBgAnmeldungSignal(signal: FairnessSignal): boolean {
   return signal.typ === 'UG_BG_ANMELDUNG_AUSSTEHEND' || signal.id === 'UG-BG-ANMELDUNG';}
 
+/** Erkennung des HINWEIS-Signals zu fehlenden Unterlagen. */
+function isUnterlagenFehlendSignal(signal: FairnessSignal): boolean {
+  return signal.typ === 'UG_UNTERLAGE_FEHLT' || signal.id === 'UG-UNTERLAGEN-FEHLEND';}
+
 export default function GruendungHinweisePage() {
   const { akte } = useGruendungState();
   const signale = berechneFairnessSignaleGruendung(akte);
@@ -187,7 +191,53 @@ export default function GruendungHinweisePage() {
               <h2 style={{ fontSize: '0.875rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--color-primary)', marginBottom: '0.75rem' }}>
                 Hinweise ({hinweis.length})
               </h2>
-              <FairnessPanel signale={hinweis} />
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                {hinweis.map(sig => {
+                  const fehlendeDocs = isUnterlagenFehlendSignal(sig)
+                    ? akte.dokumente.filter(d => d.status === 'ANGEFORDERT' || d.status === 'ABGELEHNT')
+                    : [];
+                  const erstesFehlend = fehlendeDocs[0];
+                  return (
+                    <div key={sig.id} data-testid={`hinweise-hinweis-${sig.id}`}>
+                      <FairnessPanel signale={[sig]} />
+                      {erstesFehlend && (
+                        <div
+                          style={{
+                            marginTop: '0.5rem',
+                            display: 'flex',
+                            flexWrap: 'wrap',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                            gap: '0.75rem',
+                            padding: '0.75rem 1rem',
+                            background: 'var(--color-primary-light)',
+                            border: '1px solid var(--color-border)',
+                            borderRadius: 'var(--radius)',
+                          }}
+                          data-testid="hinweise-unterlagen-cta-wrap"
+                        >
+                          <p style={{ margin: 0, fontSize: '0.875rem', lineHeight: 1.45 }}>
+                            Begründung und Upload-Möglichkeit finden Sie im Bereich Unterlagen.
+                            {fehlendeDocs.length > 1
+                              ? ` ${fehlendeDocs.length} Dokumente stehen aus.`
+                              : ''}
+                          </p>
+                          <Link
+                            href={`/gruendung/dokumente#dok-${erstesFehlend.id}`}
+                            className="btn btn-primary"
+                            style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', flexShrink: 0 }}
+                            data-testid="hinweise-unterlagen-cta"
+                            aria-label="Zu den ausstehenden Unterlagen"
+                          >
+                            <Icon name="file" size={15} />
+                            Zu den Unterlagen
+                          </Link>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
             </section>
           )}
           {info.length > 0 && (

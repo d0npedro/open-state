@@ -428,6 +428,30 @@ test.describe('UG – Hinweise zur Verfahrenslage', () => {
     await expect(page.getByTestId('behoerde-karte-BEH-04')).toContainText(/Berufsgenossenschaft|BG ETEM/i);
   });
 
+  test('HINWEIS-Unterlagen-Signal hat CTA „Zu den Unterlagen“ mit Anker', async ({ page }) => {
+    const cta = page.getByTestId('hinweise-unterlagen-cta');
+    await expect(cta).toBeVisible();
+    await expect(cta).toContainText(/Zu den Unterlagen/i);
+    await expect(cta).toHaveAttribute('href', '/gruendung/dokumente#dok-DOK-03');
+  });
+
+  test('CTA aus Unterlagen-Signal führt zur Dokumentenkarte', async ({ page }) => {
+    await page.getByTestId('hinweise-unterlagen-cta').click();
+    await expect(page).toHaveURL(/\/gruendung\/dokumente#dok-DOK-03/);
+    await expect(page.locator('#dok-DOK-03')).toBeVisible();
+    await expect(page.getByTestId('dokument-karte-DOK-03')).toContainText(/Qualifikation/i);
+  });
+
+  test('Nach Upload entfällt Unterlagen-CTA auf Hinweise', async ({ page }) => {
+    // Client-Navigation: Session-State bleibt im Layout-Provider
+    await page.locator('.tab-nav-item').filter({ hasText: 'Unterlagen' }).click();
+    await expect(page).toHaveURL(/\/gruendung\/dokumente/);
+    await page.getByRole('button', { name: /Als hochgeladen markieren/i }).click();
+    await page.locator('.tab-nav-item').filter({ hasText: 'Hinweise' }).click();
+    await expect(page).toHaveURL(/\/gruendung\/hinweise/);
+    await expect(page.getByTestId('hinweise-unterlagen-cta')).toHaveCount(0);
+  });
+
 });
 
 // ─── Verlauf ──────────────────────────────────────────────────────────────────
