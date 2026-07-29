@@ -6,6 +6,39 @@ Scope: nur `demo/app/fall/**`, DemoStateContext, fairness/rules, mockFall, e2e u
 
 ---
 
+## 2026-07-29 – Iteration 6: Antworttext im Verlauf lesbar (Quittungsblock)
+
+### Was
+Timeline-Detail nach Rückfrage-Antwort zeigt den vollen Wortlaut lesbar (US-AV-007 / US-AV-004):
+
+1. **Kein 80-Zeichen-Kürzel** mehr in `DemoStateContext` — `details` enthält den kompletten Antworttext.
+2. **Beschreibung** mit Bezug zur Rückfrage (Frage-Kurzfassung, max. 72 Zeichen).
+3. **`/fall/verlauf`:** für `RUECKFRAGE_BEANTWORTET` eigener Quittungsblock (`data-testid="timeline-antwort-block"`) analog `/fall/rueckfragen` — Label „Ihre übermittelte Antwort“, `white-space: pre-wrap`, grüner Rahmen.
+4. E2E: langer Freitext erscheint ungekürzt im Verlauf (ohne „…“).
+
+### Dateien
+- `demo/context/DemoStateContext.tsx`
+- `demo/app/fall/verlauf/page.tsx`
+- `demo/e2e/us-av-007-verlauf.spec.ts`
+- `docs/loops/av-JOURNAL.md`
+
+### Story-IDs
+- US-AV-007 (Historie nachvollziehen)
+- US-AV-004 (Antwort-Quittung / Transparenz)
+
+### Build
+`npm run lint` + `npm run build` → Exit 0
+
+### Vorschlag Queue-ID
+- Q-AV-VERLAUF-ANTWORT (Verlauf Antworttext lesbar)
+
+### Nächster sinnvoller AV-Schritt (Vorschlag)
+- Fairness-Signal UNTERLAGE mit berechneter Dokumenten-Frist
+- Termin-Bestätigung session-lokal (Badge entfällt live)
+- Verlauf: Upload-Ereignisse mit Dokumentbezeichnung hervorheben
+
+---
+
 ## 2026-07-29 – Iteration 5: Tab-Badge Termine (unbestätigt / bald fällig)
 
 ### Was

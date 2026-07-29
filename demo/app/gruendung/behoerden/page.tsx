@@ -51,9 +51,16 @@ export default function BehoerdenPage() {
         const ersteOffene = offeneRueckfragen[0];
 
         return (
-          <div key={beh.id} className="card" style={{
-            borderLeft: `4px solid ${beh.status === 'ABGESCHLOSSEN' ? 'var(--color-success)' : beh.status === 'RUECKFRAGE_OFFEN' ? 'var(--color-warning)' : beh.status === 'IN_BEARBEITUNG' ? 'var(--color-primary)' : 'var(--color-border)'}`,
-          }}>
+          <div
+            key={beh.id}
+            id={`beh-${beh.id}`}
+            className="card"
+            data-testid={`behoerde-karte-${beh.id}`}
+            style={{
+              borderLeft: `4px solid ${beh.status === 'ABGESCHLOSSEN' ? 'var(--color-success)' : beh.status === 'RUECKFRAGE_OFFEN' ? 'var(--color-warning)' : beh.status === 'IN_BEARBEITUNG' ? 'var(--color-primary)' : 'var(--color-border)'}`,
+              scrollMarginTop: '5rem',
+            }}
+          >
             {/* Behörde-Kopf */}
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '0.75rem', marginBottom: '1rem' }}>
               <div>

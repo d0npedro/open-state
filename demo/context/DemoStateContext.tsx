@@ -141,19 +141,26 @@ export function DemoStateProvider({ children }: { children: React.ReactNode }) {
     for (const id of answeredIds) {
       const rq = demoFall.rueckfragen.find(r => r.id === id);
       const antwort = antwortTexte[id];
-      const antwortKurz =
-        antwort && antwort.length > 80 ? `${antwort.slice(0, 80)}…` : antwort;
+      // Voller Antworttext in details (kein 80-Zeichen-Kürzel) —
+      // /fall/verlauf rendert RUECKFRAGE_BEANTWORTET als lesbaren Quittungsblock.
+      const frageKurz = rq?.text
+        ? rq.text.length > 72
+          ? `${rq.text.slice(0, 72).trim()}…`
+          : rq.text
+        : null;
       extraEvents.push({
         id: `E-DEMO-RQ-${id}`,
         typ: 'RUECKFRAGE_BEANTWORTET',
         zeitstempel: DEMO_AKTION_ZEIT,
         handelndeStelle: 'BUERGER',
-        beschreibung: 'Rückfrage beantwortet',
-        details: rq
-          ? antwortKurz
-            ? `Antwort zu Rückfrage eingereicht: „${antwortKurz}“ (Demo).`
-            : `Antwort zu ${rq.id} eingereicht (Demo-Interaktion).`
-          : `Rückfrage ${id} beantwortet (Demo-Interaktion).`,
+        beschreibung: frageKurz
+          ? `Antwort zur Rückfrage: ${frageKurz}`
+          : 'Rückfrage beantwortet',
+        details: antwort
+          ? antwort
+          : rq
+            ? 'Antwort ohne Freitext übermittelt (Demo-Interaktion).'
+            : `Rückfrage ${id} beantwortet (Demo-Interaktion).`,
       });
       seq += 1;
       extraEvents.push({

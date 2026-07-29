@@ -174,11 +174,49 @@ export default function VerlaufPage() {
                 <p style={{ fontWeight: 600, color: 'var(--color-text)', margin: '0 0 0.25rem', fontSize: '0.925rem' }}>
                   {e.beschreibung}
                 </p>
-                {e.details && (
+                {/* UX: Antworttext als Quittungsblock (wie /fall/rueckfragen), nicht als
+                    eine gekürzte Fließtext-Zeile — Bürger:innen müssen den Wortlaut lesen können. */}
+                {e.typ === 'RUECKFRAGE_BEANTWORTET' && e.details ? (
+                  <div
+                    data-testid="timeline-antwort-block"
+                    style={{
+                      marginTop: '0.5rem',
+                      background: 'var(--color-success-light, #f0fff4)',
+                      border: '1px solid var(--color-success)',
+                      borderLeft: '4px solid var(--color-success)',
+                      borderRadius: 'var(--radius)',
+                      padding: '0.75rem 0.9rem',
+                    }}
+                  >
+                    <div
+                      style={{
+                        fontSize: '0.72rem',
+                        fontWeight: 700,
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.05em',
+                        color: 'var(--color-text-muted)',
+                        marginBottom: '0.35rem',
+                      }}
+                    >
+                      Ihre übermittelte Antwort
+                    </div>
+                    <p
+                      style={{
+                        margin: 0,
+                        fontSize: '0.9rem',
+                        lineHeight: 1.55,
+                        whiteSpace: 'pre-wrap',
+                        color: 'var(--color-text)',
+                      }}
+                    >
+                      {e.details}
+                    </p>
+                  </div>
+                ) : e.details ? (
                   <p style={{ fontSize: '0.875rem', color: 'var(--color-neutral)', margin: 0, lineHeight: 1.5 }}>
                     {e.details}
                   </p>
-                )}
+                ) : null}
               </div>
             </div>
           );

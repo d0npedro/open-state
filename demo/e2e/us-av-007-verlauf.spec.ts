@@ -116,3 +116,33 @@ test.describe('US-AV-007 – Historie nachvollziehen', () => {
   });
 
 });
+
+/**
+ * US-AV-007 / US-AV-004 – Antworttext im Verlauf lesbar (Quittungsblock)
+ * Nach Beantworten erscheint der volle Wortlaut, nicht gekürzt mit „…“.
+ */
+test.describe('US-AV-007 – Antworttext in Timeline lesbar', () => {
+
+  test('Freitext-Antwort erscheint ungekürzt im Verlauf-Quittungsblock', async ({ page }) => {
+    const freitext =
+      'Beschäftigungsaufnahme war der 15.01.2021. Zusätzlich: Probezeit endete am 15.04.2021 ohne Verlängerung.';
+
+    await page.goto('/fall/rueckfragen');
+    await page.getByRole('button', { name: /Jetzt beantworten|Rückfrage beantworten/i }).click();
+    await expect(page.getByTestId('rq-bestaetigung')).toBeVisible();
+    await page.getByTestId('rq-antwort-textarea').fill(freitext);
+    await page.getByTestId('rq-antwort-absenden').click();
+    await expect(page.getByTestId('rq-antwort-quittung')).toBeVisible();
+
+    await page.goto('/fall/verlauf');
+    const block = page.getByTestId('timeline-antwort-block');
+    await expect(block).toBeVisible();
+    await expect(block).toContainText('Ihre übermittelte Antwort');
+    await expect(block).toContainText('15.01.2021');
+    await expect(block).toContainText('Probezeit endete am 15.04.2021');
+    // Kein Truncation-Marker aus der früheren 80-Zeichen-Kürzung
+    await expect(block).not.toContainText('…');
+    await expect(page.getByText(/Antwort zur Rückfrage/i).first()).toBeVisible();
+  });
+
+});

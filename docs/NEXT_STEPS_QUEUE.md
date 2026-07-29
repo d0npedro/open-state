@@ -107,6 +107,7 @@ Story-Dokumentation ist kein Pflicht-Vorläufer für Mock-Daten und Typen.
 | Q-085 | AV Rückfrage-Antwort: kurzer Bestätigungsdialog (was wurde beantwortet) | DEMO | S | Q-081 | DONE |
 | Q-086 | AV Fristen-Countdown auf Übersicht für offene Dokumente (analog RQ-Frist) | DEMO | S | Q-072 | DONE |
 | Q-089 | AV Tab-Badge „Termine“ nur bei unbestätigt / bald fällig | DEMO | S | Q-081 | DONE |
+| Q-095 | AV Verlauf: Antworttext als lesbarer Quittungsblock (kein 80-Zeichen-Kürzel) | DEMO | S | Q-085 | DONE |
 | Q-092 | AV Termin-Bestätigung session-lokal (Badge entfällt live) | DEMO | S | Q-089 | OFFEN |
 
 ---
@@ -117,7 +118,8 @@ Story-Dokumentation ist kein Pflicht-Vorläufer für Mock-Daten und Typen.
 |----|---------|-----|---------|--------------|--------|
 | Q-087 | UG Hinweise-Tab in Navigation + Behörden-Zeile auf Übersicht mit Link zur offenen Rückfrage | DEMO | S | Q-084 | DONE |
 | Q-090 | UG Übersicht: Fairness-Kurzblock mit Link zu `/gruendung/hinweise` (analog AV) | DEMO | S | Q-087 | DONE |
-| Q-093 | UG Hinweise: CTA „Frage beantworten“ aus RELEVANT-Signal (Anker `#rq-…`) | DEMO | S | Q-090 | OFFEN |
+| Q-093 | UG Hinweise: CTA „Frage beantworten“ aus RELEVANT-Signal (Anker `#rq-…`) | DEMO | S | Q-090 | DONE |
+| Q-096 | UG Hinweise: CTA „Zur Behördenkarte“ aus RELEVANT-BG-Anmeldung (`#beh-…`) | DEMO | S | Q-093 | DONE |
 
 ---
 
@@ -127,6 +129,7 @@ Story-Dokumentation ist kein Pflicht-Vorläufer für Mock-Daten und Typen.
 |----|---------|-----|---------|--------------|--------|
 | Q-088 | Kita Lagebild: Meldeeingang freigegebener Monatsmeldungen (Session-Link von `/kita/meldung`) | DEMO | M | Q-080 | DONE |
 | Q-091 | Kita Lagebild: Planungsraum Südost nach Session-Freigabe Sonnenwinkel hervorheben | DEMO | S | Q-088 | DONE |
+| Q-097 | Kita Monatsbericht: Vorschau laufender Monat mit gemischten Tagesstand-Quellen | DEMO | S | Q-079 | DONE |
 | Q-094 | Kita Bedarfsplanung: Datenlücke Südost aus Meldeeingang ableiten | DEMO | S | Q-091 | OFFEN |
 
 ---
