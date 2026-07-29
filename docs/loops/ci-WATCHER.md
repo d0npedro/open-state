@@ -2,14 +2,15 @@
 
 | Feld | Wert |
 |------|------|
-| last_checked | 2026-07-29T08:40:30Z |
-| last_run_id | 30436226430 |
+| last_checked | 2026-07-29T08:42:27Z |
+| last_run_id | 30436416004 |
 | last_status | success |
-| last_sha | 4880e5b |
+| last_sha | 2f074f1 |
 | fix_attempts | 0 |
 
 ## Log
 
+- E2E `30436416004` **success** (SHA 2f074f1 docs ci-watcher HEAD). E2E `30436353856` **success** (SHA 110ce68 docs). E2E `30436226430` **success** (SHA 4880e5b). E2E `30436124611` + Build `30436124632` **success** (SHA 800469f Merge loop/kita — latest code path; HEAD docs-only path-skip). Catch-up: origin/main..main = 0. No fix. fix_attempts=0.
 - E2E `30436226430` **success** (SHA 4880e5b docs supervisor Q-158–Q-159 HEAD). E2E `30436124611` + Build `30436124632` **success** (SHA 800469f Merge loop/kita — latest code path; HEAD docs-only path-skip). Prior E2E `30435988261` **success** (SHA cce5d22). Catch-up this tick: origin/main..main was 4 → lint+build grün → push `cce5d22..800469f` → origin/main..main = 0. Concurrent supervisor then pushed Q-158–Q-159 docs. No fix. fix_attempts=0.
 - E2E `30436124611` + Build `30436124632` **success** (SHA 800469f Merge loop/kita — latest code path: Kita Bedarfsplanung CSV Aggregate freigabeunabhängig + concurrent UG merge). Prior E2E `30435988261` **success** (SHA cce5d22 docs). Prior E2E `30435788048` + Build `30435788121` **success** (SHA 91b5a43). Catch-up: origin/main..main = 0. HEAD `4880e5b` supervisor Q-158–Q-159 docs path-skip; E2E `30436226430` may still be in_progress (docs-only). No fix. fix_attempts=0.
 - E2E `30435788048` + Build `30435788121` **success** (SHA 91b5a43 Merge loop/kita — latest code path). Prior E2E `30435539817` **success** (SHA e122947). Catch-up this tick: origin/main..main was 9 (UG RQ-CTA Frist + Kita Meldung/Monatsbericht/Einrichtung CSV + merges) → lint+build grün → push `e122947..91b5a43` → origin/main..main = 0. Concurrent supervisor docs Q-154–Q-157 (`aede484`/`2b1f617` HEAD) path-skip; E2E `30435886963` docs `bb17972` may still be in_progress. No fix. fix_attempts=0.
