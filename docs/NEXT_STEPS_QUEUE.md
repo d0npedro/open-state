@@ -229,6 +229,7 @@ Story-Dokumentation ist kein Pflicht-Vorläufer für Mock-Daten und Typen.
 | Q-192 | AV Verlauf: Session-Antwort hervorheben + RQ-Quittung Tiefenlink (US-AV-007/004, Parität UG Q-185) | DEMO | S | Q-191 | DONE |
 | Q-193 | AV Dokumente: Upload-Quittung mit Verlauf-Tiefenlink + Session-Upload-Badge (US-AV-003/007, Parität UG Q-188) | DEMO | S | Q-192 | DONE |
 | Q-194 | AV Übersicht: Upload-Quittung mit Verlauf-Tiefenlink pro Session-Upload + nächste Unterlage Dokument-Anker (US-AV-001/003/007) | DEMO | S | Q-193 | DONE |
+| Q-195 | UG Übersicht: Upload-Quittung mit Verlauf-Tiefenlink pro Session-Upload (US-UG-001/003/005, Parität AV Q-194) | DEMO | S | Q-194 | DONE |
 
 ---
 
@@ -428,3 +429,4 @@ Diese Punkte wurden in früheren Iterationen abgeschlossen und sind produktionsr
 | Q-192 AV Session-Antwort Verlauf | RQ-Quittung Tiefenlink + Badge im Verlauf (US-AV-007/004) | local |
 | Q-193 AV Upload-Quittung Verlauf-Tiefenlink | Dokumente → `#ere-E-DEMO-DOK-…` + Session-Upload-Badge (US-AV-003/007) | local |
 | Q-194 AV Übersicht Upload-Quittung Verlauf + Anker | Übersicht → `#ere-E-DEMO-DOK-…` + nächste Unterlage `#dok-…` (US-AV-001/003/007) | local |
+| Q-195 UG Übersicht Upload-Quittung Verlauf | Übersicht → `#ere-UG-DEMO-DOK-…` + Session-Upload-Badge (US-UG-001/003/005) | local |

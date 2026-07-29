@@ -1,6 +1,6 @@
 # BUILD_STATE.md – Aktueller Projektstand
 
-Zuletzt aktualisiert: nach Q-194 AV Übersicht Upload-Quittung Verlauf-Tiefenlink + Dokument-Anker (US-AV-001/003/007)
+Zuletzt aktualisiert: nach Q-195 UG Übersicht Upload-Quittung Verlauf-Tiefenlink (US-UG-001/003/005, Parität AV Q-194)
 
 Dieser Stand beschreibt, was tatsächlich existiert und funktioniert.
 Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
@@ -33,7 +33,7 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | `/fall/hinweise` | Vollständige Fairness-Hinweisseite; UNTERLAGE- und RQ-Signal live inkl. Fristhinweis + CTA; Verlauf-Sekundärlink; Session-Antwort entfallen Signale | US-AV-008 | ✓ |
 | `/stories` | Story Coverage Dashboard | – | ✓ |
 | `/feedback` | Feedback → GitHub Issues | – | ✓ |
-| `/gruendung` … | Unternehmensgründung (Übersicht Fairness-Kurzblock+Kurz-CTAs inkl. Steuernummer/Betriebsdatum/BG-Hilfstext session-sensitiv; Upload-Quittung + nächste offene Unterlage; Primär-/Aufgaben-CTA und Fairness-Ziel-Routing zentral in `gruendung-rules` (`naechsterSchrittZiel`, `aufgabeZiel`, `fairnessSignalZiel`); BG-Demo-Markierung session-lokal + Fallthrough Steuernummer; Fairness-Tiefenlink Verlauf; RQ-Quittung Tiefenlink + Session-Antwort-Badge im Verlauf; Dokumente lokale Upload-Quittung pro Karte + Verlauf-Tiefenlink Session-Upload-Badge; Behörden VS-04→Rückfrage + BG Demo-Aktion; Hinweise UNTERLAGE live + CTAs RQ/BG/Unterlagen/Steuernummer/Betriebsdatum/parallele Behörden + Verlauf-Sekundärlink; Verlauf Stelle+Ereignistyp-Filter + Anker `#ere-…`, …) | US-UG-001–006 | ✓ |
+| `/gruendung` … | Unternehmensgründung (Übersicht Fairness-Kurzblock+Kurz-CTAs inkl. Steuernummer/Betriebsdatum/BG-Hilfstext session-sensitiv; Upload-Quittung mit Verlauf-Tiefenlink pro Session-Upload + nächste offene Unterlage; Primär-/Aufgaben-CTA und Fairness-Ziel-Routing zentral in `gruendung-rules` (`naechsterSchrittZiel`, `aufgabeZiel`, `fairnessSignalZiel`); BG-Demo-Markierung session-lokal + Fallthrough Steuernummer; Fairness-Tiefenlink Verlauf; RQ-Quittung Tiefenlink + Session-Antwort-Badge im Verlauf; Dokumente lokale Upload-Quittung pro Karte + Verlauf-Tiefenlink Session-Upload-Badge; Behörden VS-04→Rückfrage + BG Demo-Aktion; Hinweise UNTERLAGE live + CTAs RQ/BG/Unterlagen/Steuernummer/Betriebsdatum/parallele Behörden + Verlauf-Sekundärlink; Verlauf Stelle+Ereignistyp-Filter + Anker `#ere-…`, …) | US-UG-001–006 | ✓ |
 | `/kita` | Öffentlicher Transparenzbericht + Planungsraum-Filter + Residual↔Meldelücke + Engpass/Meldelücke-Schnellfilter + Zeitreihe Meldebasis + Regionenfilter + Regionenvergleich Zwei-Räume inkl. 12-Monats-Verlauf A/B + Explorer print-only Filterstand/Meldebasis + Regionenvergleich print-only A/B/Kennzahl/Meldebasis + CSV Multi-Blatt Status/Meldebasis + Druck-Meta Status/Meldebasis print-only + Open-Data-Lizenz + Hub-Karten JA-Steuerungskette (Lagebild/Bedarfsplanung/Vorlage) | US-KJ-009, US-KJ-010 | ✓ |
 | `/kita/lagebild` | Jugendamt-Steuerungsansicht + Meldeeingang Druck-Meta Status/Datenbasis/Session + Meldeeingang CSV Aggregate Status/Lücken/Session + Monatsbericht-Vorschau CSV + Meldebeitrag + Engpass/Handlungsfelder/Planungsraum-Detail Meldelücke-Schnellfilter + print-only Filterstand/Meldebasis-Session + Regionenvergleich Zwei-Räume UI + Druck Meldelücke + CSV Aggregate Status/Meldebasis/Meldelücke + 12-Monats-Zeitreihe UI + Zeitreihe-Blatt freigabeunabhängig + Zeitreihe print-only Filterstand/Meldebasis + CSV Regionenvergleich Stichtag-Paare (Blatt 7) + Verlauf-Paare 12 Monate (Blatt 8) + Monatsbericht-Vorschau print-only Meta + Steuerungskette Hub-Karten | US-KJ-005, US-KJ-006, US-KJ-010 | ✓ |
 | `/kita/bedarfsplanung` | Bedarfsplanungsentwurf (§ 80 SGB VIII) + Meldebasis + Residual↔Meldelücke (Hinweis-only) + Steuerungskette Hub-Karten + Druck freigabeunabhängig mit Meldebasis-Session-Hinweis + CSV Aggregate freigabeunabhängig | US-KJ-007 | ✓ |
@@ -127,6 +127,7 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | Kita Lagebild CSV Zeitreihe-Blatt | `KitaLagebildDruck` + `/kita/lagebild` | ✓ Blatt 6 Zeitreihe Gesamt+Planungsräume, Meldebasis Session-sensitiv (Q-169, US-KJ-005) |
 | Kita Transparenzbericht Druck-Meta | `KitaCsvDownload` + `/kita` | ✓ print-only Status/Meldebasis; Export-Karte Druck+CSV; Filterstand print-only (Q-170, US-KJ-009) |
 | UG Übersicht Upload-Quittung | `/gruendung` + `sessionUploadedIds` | ✓ Session-Upload-Quittung + nächste offene Unterlage inkl. Frist/CTA oder Vollständigkeit; E2E Tab-Nav (Q-171, US-UG-001/003) |
+| UG Übersicht Upload-Quittung Verlauf | `/gruendung` + `demoDokUploadEreignisId` | ✓ Pro Session-Upload „Im Verlauf ansehen“ → `#ere-UG-DEMO-DOK-…` (Q-195, US-UG-001/003/005, Parität AV Q-194) |
 | Kita Lagebild Zeitreihe-UI | `KitaZeitreiheTabelle` + `/kita/lagebild` | ✓ 12-Monats-Tabelle im Steuerungslagebild (Filter, Meldebasis, CSV), Anker `#kita-lagebild-zeitreihe` (Q-172, US-KJ-005/010) |
 | Kita Zeitreihe print-only Meta | `KitaZeitreiheTabelle` | ✓ Filter/CSV no-print; print-only Region/Peak/Meldebasis-Session (Q-173, US-KJ-005/009/010) |
 | Kita Regionenvergleich print-only | `KitaRegionenVergleich` + `/kita` | ✓ print-only Region A/B, Meldebasis je Raum, Verlaufskennzahl, Stichprobenmonat; Auswahl/Chips/CSV no-print (Q-174, US-KJ-010/009) |
@@ -309,6 +310,7 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 **Q-192 erledigt:** AV Verlauf Session-Antwort hervorheben + RQ-Quittung Tiefenlink (US-AV-007/004, Parität UG Q-185).
 **Q-193 erledigt:** AV Dokumente Upload-Quittung mit Verlauf-Tiefenlink + Session-Upload-Badge (US-AV-003/007, Parität UG Q-188).
 **Q-194 erledigt:** AV Übersicht Upload-Quittung mit Verlauf-Tiefenlink pro Session-Upload + nächste Unterlage Dokument-Anker (US-AV-001/003/007).
+**Q-195 erledigt:** UG Übersicht Upload-Quittung mit Verlauf-Tiefenlink pro Session-Upload (US-UG-001/003/005, Parität AV Q-194).
 
 ---
 

@@ -179,6 +179,38 @@ test.describe('UG – Übersicht', () => {
     await expect(page.getByTestId('upload-quittung-vollstaendig')).toBeVisible();
   });
 
+  test('Übersicht Upload-Quittung: Verlauf-Tiefenlink zum Session-Upload (Q-195)', async ({ page }) => {
+    // US-UG-001/003/005: Quittung pro Session-Upload mit Tiefenlink #ere-UG-DEMO-DOK-…
+    // Parität AV Q-194 — kein page.goto nach State (DEC-012)
+    const { goUgTab } = await import('./helpers/sessionNav');
+
+    await goUgTab(page, 'Unterlagen', /\/gruendung\/dokumente/);
+    await page.getByRole('button', { name: /Als hochgeladen markieren/i }).click();
+    await expect(page.getByTestId('dok-upload-quittung-DOK-03')).toBeVisible();
+
+    await goUgTab(page, 'Übersicht', /\/gruendung$/);
+    await expect(page.getByTestId('upload-quittung')).toBeVisible();
+
+    const verlaufLink = page.getByTestId('upload-quittung-verlauf-DOK-03');
+    await expect(verlaufLink).toBeVisible();
+    await expect(verlaufLink).toHaveAttribute(
+      'href',
+      '/gruendung/verlauf#ere-UG-DEMO-DOK-DOK-03'
+    );
+    await expect(verlaufLink).toContainText(/Im Verlauf ansehen/i);
+
+    await verlaufLink.click();
+    await expect(page).toHaveURL(/\/gruendung\/verlauf#ere-UG-DEMO-DOK-DOK-03/);
+
+    const card = page.getByTestId('verlauf-ereignis-UG-DEMO-DOK-DOK-03');
+    await expect(card).toBeVisible();
+    await expect(card).toHaveAttribute('aria-current', 'location');
+    await expect(card).toHaveAttribute('data-session-upload', 'true');
+    await expect(page.getByTestId('verlauf-session-upload-badge-UG-DEMO-DOK-DOK-03')).toContainText(
+      /Ihr Upload/i
+    );
+  });
+
   test('Nach Beantworten entfällt Rückfrage-Aufgabe auf Übersicht', async ({ page }) => {
     const { goUgTab } = await import('./helpers/sessionNav');
     await goUgTab(page, 'Fragen', /\/gruendung\/rueckfragen/);
