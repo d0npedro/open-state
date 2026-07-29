@@ -391,6 +391,40 @@ test.describe('UG – Hinweise zur Verfahrenslage', () => {
     await expect(page.getByText('US-UG-007')).not.toBeVisible();
   });
 
+  test('RELEVANT-Rückfrage-Signal hat CTA „Frage beantworten“ mit Anker', async ({ page }) => {
+    const cta = page.getByTestId('hinweise-rq-cta-RQ-01');
+    await expect(cta).toBeVisible();
+    await expect(cta).toContainText(/Frage beantworten/i);
+    await expect(cta).toHaveAttribute('href', '/gruendung/rueckfragen#rq-RQ-01');
+  });
+
+  test('CTA aus RELEVANT-Signal führt zur Rückfrage-Karte', async ({ page }) => {
+    await page.getByTestId('hinweise-rq-cta-RQ-01').click();
+    await expect(page).toHaveURL(/\/gruendung\/rueckfragen#rq-RQ-01/);
+    await expect(page.locator('#rq-RQ-01')).toBeVisible();
+  });
+
+  test('Nach Beantworten entfällt RELEVANT-CTA auf Hinweise', async ({ page }) => {
+    await page.goto('/gruendung/rueckfragen');
+    await page.getByRole('button', { name: /Rückfrage beantworten/i }).click();
+    await page.goto('/gruendung/hinweise');
+    await expect(page.getByTestId('hinweise-rq-cta-RQ-01')).toHaveCount(0);
+  });
+
+  test('RELEVANT-BG-Signal hat CTA „Zur Behördenkarte“ mit Anker', async ({ page }) => {
+    const cta = page.getByTestId('hinweise-bg-cta-BEH-04');
+    await expect(cta).toBeVisible();
+    await expect(cta).toContainText(/Zur Behördenkarte/i);
+    await expect(cta).toHaveAttribute('href', '/gruendung/behoerden#beh-BEH-04');
+  });
+
+  test('CTA aus BG-Signal führt zur Berufsgenossenschaft-Karte', async ({ page }) => {
+    await page.getByTestId('hinweise-bg-cta-BEH-04').click();
+    await expect(page).toHaveURL(/\/gruendung\/behoerden#beh-BEH-04/);
+    await expect(page.locator('#beh-BEH-04')).toBeVisible();
+    await expect(page.getByTestId('behoerde-karte-BEH-04')).toContainText(/Berufsgenossenschaft|BG ETEM/i);
+  });
+
 });
 
 // ─── Verlauf ──────────────────────────────────────────────────────────────────
