@@ -2,6 +2,30 @@
 
 Branch: `loop/kita` · Worktree: `D:\Projects\open-state-loop-kita`
 
+## Iteration 2026-07-29 – US-KJ-010 Regionenvergleich Zwei-Räume (AK 3)
+
+### Was
+Öffentlicher Transparenzbericht: Regionenvergleich zweier Planungsräume nebeneinander (`KitaRegionenVergleich`, US-KJ-010 AK 3). Auswahl A/B (Default Südost vs. Nordwest), gemeinsame Kernkennzahlen, Differenzspalte Δ (A − B), Kopfkarten mit Meldebasis-Badge (Session-sensitiv). Keine automatische Bewertung, keine Chart-Bibliothek. Datenlage-Hinweis auf `/kita` ergänzt. Nur Aggregate, keine Kind- oder Personennamen.
+
+### Dateien
+- `demo/components/kita/KitaRegionenVergleich.tsx` (neu: Client, Zwei-Räume-Vergleich, Meldebasis)
+- `demo/app/kita/page.tsx` (Sektion Regionenvergleich, Datenlage-Hinweis)
+- `docs/loops/kita-JOURNAL.md` (dieses Journal)
+
+### Story
+US-KJ-010 – Zeitreihen und Regionenvergleich (AK 3: Zwei Regionen nebeneinander)
+
+### Build
+`npm run lint` + `npm run build` im `demo/`-Verzeichnis (siehe Commit dieses Laufs)
+
+### Nicht angefasst (Supervisor / verboten)
+Queue, BUILD_STATE, storyRegistry, andere Domänen, package.json, CI, push
+
+### Nächster sinnvoller Schritt (Hinweis Supervisor)
+Zeitreihe je Planungsraum filtern (AK 2) und optional in den Regionenvergleich einbinden, oder CSV-Export gefilterter Vergleichsdaten (AK 4).
+
+---
+
 ## Iteration 2026-07-29 – US-KJ-010 Zeitreihe Meldebasis (Datenlücken)
 
 ### Was
