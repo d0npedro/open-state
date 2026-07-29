@@ -82,19 +82,29 @@ docs/stories/
 ├── FRONTEND_TRACEABILITY_PRINCIPLES.md ← Wie Story-IDs in der UI auftauchen
 ├── story_registry.json                ← Maschinenlesbare Story-Übersicht
 │
-└── arbeitsverwaltung/
+├── arbeitsverwaltung/
+│   ├── README.md
+│   ├── STORY_MAP.md
+│   ├── US-AV-001_Fall_anlegen.md
+│   ├── … US-AV-007
+│
+├── kita_betrieb_und_jugendamt_steuerung/
+│   ├── STORY_MAP.md
+│   └── US-KJ-001 … US-KJ-010
+│
+└── unternehmensgruendung/
     ├── README.md
     ├── STORY_MAP.md
-    ├── US-AV-001_Fall_anlegen.md
-    ├── US-AV-002_Status_einsehen.md
-    ├── US-AV-003_Unterlagen_nachreichen.md
-    ├── US-AV-004_Rueckfrage_verstehen.md
-    ├── US-AV-005_Termin_einsehen_und_verstehen.md
-    ├── US-AV-006_Bescheid_verstehen.md
-    └── US-AV-007_Historie_nachvollziehen.md
+    ├── US-UG-001_Gruendungsstatus_einsehen.md
+    ├── US-UG-002_Behoerden_einsehen.md
+    ├── US-UG-003_Unterlagen_nachreichen.md
+    ├── US-UG-004_Rueckfrage_verstehen.md
+    ├── US-UG-005_Verlauf_nachvollziehen.md
+    └── US-UG-006_Naechste_Schritte_verstehen.md
 ```
 
 Weitere Domänen folgen demselben Muster unter `docs/stories/[domäne]/`.
+
 
 ---
 

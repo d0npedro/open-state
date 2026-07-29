@@ -1,6 +1,6 @@
 # BUILD_STATE.md – Aktueller Projektstand
 
-Zuletzt aktualisiert: nach Q-031 (React Demo-State, interaktive Rückfragen-Beantwortung)
+Zuletzt aktualisiert: nach Q-010 (UG Story-System: US-UG-001–006)
 
 Dieser Stand beschreibt, was tatsächlich existiert und funktioniert.
 Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
@@ -78,12 +78,15 @@ Weitere Domänen (Kita, Unternehmensgründung): nur Dokumentation, keine UI-Rout
 
 | Domäne | Stories in docs/ | Stories in storyRegistry.ts | Status |
 |--------|-----------------|----------------------------|--------|
-| Arbeitsverwaltung (AV) | US-AV-001 – 008 | ✓ 8 registriert | DEMONSTRIERBAR |
-| Kita / Jugendamt (KJ) | US-KJ-001 – 010 | ✗ nicht registriert | ENTWURF (Docs only) |
-| Unternehmensgründung (UG) | 0 | ✗ | Nicht gestartet |
+| Arbeitsverwaltung (AV) | US-AV-001 – 007 (US-AV-008 Datei fehlt) | ✓ 8 registriert | DEMONSTRIERBAR (Demo) |
+| Kita / Jugendamt (KJ) | US-KJ-001 – 010 | ✓ registriert | gemischt (teilweise Demo) |
+| Unternehmensgründung (UG) | US-UG-001 – 006 + STORY_MAP + README | ✗ noch nicht in Demo-Registry | ENTWURF (Docs); Demo-Routen existieren |
 
 **Bekannte Inkonsistenz:** US-AV-008 existiert im Code (Route `/fall/hinweise`, storyRegistry.ts),
-aber die Story-Datei `docs/stories/arbeitsverwaltung/US-AV-008_*.md` fehlt noch.
+aber die Story-Datei `docs/stories/arbeitsverwaltung/US-AV-008_*.md` fehlt noch (Q-001).
+
+**Q-010 erledigt:** `docs/stories/unternehmensgruendung/` mit 6 Stories, Story-Map, README;
+Einträge in `story_registry.json` und TRACEABILITY_MATRIX. Demo-`storyRegistry.ts` enthält UG noch nicht.
 
 ---
 
@@ -94,8 +97,8 @@ aber die Story-Datei `docs/stories/arbeitsverwaltung/US-AV-008_*.md` fehlt noch.
 | Domäne | Pfad | Umfang | Status |
 |--------|------|--------|--------|
 | Arbeitsverwaltung | `docs/domains/arbeitsverwaltung/` | 9 Dok + Story-System | ✓ Vollständig |
-| Unternehmensgründung | `docs/domains/unternehmensgruendung/` | 6 Dok | Nur Docs, keine Demo |
-| Kita-Betrieb & JA-Steuerung | `docs/domains/kita_betrieb_und_jugendamt_steuerung/` | 7 Dok + 10 Stories | Nur Docs, keine Demo |
+| Unternehmensgründung | `docs/domains/unternehmensgruendung/` | 6 Dok + 6 Stories (US-UG-001–006) | Demo-Routen unter `/gruendung` vorhanden |
+| Kita-Betrieb & JA-Steuerung | `docs/domains/kita_betrieb_und_jugendamt_steuerung/` | 7 Dok + 10 Stories | Demo-Routen `/kita`, `/kita/lagebild` vorhanden |
 
 ### Querschnittsdokumentation
 
@@ -124,13 +127,9 @@ aber die Story-Datei `docs/stories/arbeitsverwaltung/US-AV-008_*.md` fehlt noch.
 |-------|----------------|----------|
 | ~~Fairness-Fristen sind statische Zahlen~~ | ~~Glaubwürdigkeitsproblem~~ | Q-004 ✓ |
 | ~~Demo vollständig statisch~~ | ~~Demo wirkt wie Slideshow~~ | Q-031 ✓ |
-| `/fall/hinweise` reagiert noch nicht auf State-Wechsel | Signale bleiben auch nach Antwort sichtbar | Q-032 |
-| Keine Kita-/JA-Demo-Route | Einzigartigster Inhalt fehlt komplett | Q-020–Q-024 |
-| Keine Unternehmensgründungs-Demo-Route | Plattformgedanke nicht sichtbar | Q-011–Q-015 |
-| US-KJ-001–010 nicht in storyRegistry.ts | /stories zeigt Kita-Domäne nicht | Q-002 |
 | Story-Datei `US-AV-008` in docs/stories/ fehlt | Docs-Inkonsistenz, kein Demo-Effekt | Q-001 |
+| UG-Stories nicht in `demo/data/storyRegistry.ts` | `/stories` zeigt UG-Doku-Stories nicht | — |
 | DSFA für Kita-Domäne noch ausstehend | Konzeptlücke — extern abhängig | — |
-| Keine automatisierten Tests | Bewusste Schuld | — |
 
 ---
 

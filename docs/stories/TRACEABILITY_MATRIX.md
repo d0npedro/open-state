@@ -18,6 +18,19 @@ Diese Matrix gibt einen vollständigen Überblick über alle dokumentierten User
 
 ---
 
+## Unternehmensgründung (UG)
+
+| Story-ID | Domäne | Kurztitel | Primäre Rolle | UI-Screen | Status | AK-Anzahl | Transparenzbezug | Technische Referenz |
+|----------|--------|-----------|---------------|-----------|--------|-----------|-----------------|---------------------|
+| US-UG-001 | Unternehmensgründung | Gründungsstatus einsehen | Gründerin / Gründer | `/gruendung` | ENTWURF | 6 | Klartext-Status, Fortschritt, nächster Schritt | `GET /api/v1/gruendung/{id}`, mockGruendungsfall |
+| US-UG-002 | Unternehmensgründung | Beteiligte Behörden einsehen | Gründerin / Gründer | `/gruendung/behoerden` | ENTWURF | 5 | Rolle, Status und Kontakt je Behörde | `GET /api/v1/gruendung/{id}/behoerden` |
+| US-UG-003 | Unternehmensgründung | Unterlagen nachreichen | Gründerin / Gründer | `/gruendung/dokumente` | ENTWURF | 6 | Anforderung mit Begründung und Dokumentenstatus | `GET/POST /api/v1/gruendung/{id}/dokumente` |
+| US-UG-004 | Unternehmensgründung | Rückfrage verstehen und beantworten | Gründerin / Gründer | `/gruendung/rueckfragen` | ENTWURF | 6 | Begründung, Frist und Konsequenz je Rückfrage | `GET/POST .../rueckfragen`, GruendungStateContext |
+| US-UG-005 | Unternehmensgründung | Verfahrensverlauf nachvollziehen | Gründerin / Gründer | `/gruendung/verlauf` | ENTWURF | 5 | Chronologische Timeline mit Urheber | `GET /api/v1/gruendung/{id}/verlauf` |
+| US-UG-006 | Unternehmensgründung | Nächste Schritte und Pflichten verstehen | Gründerin / Gründer | `/gruendung`, `/gruendung/hinweise` | ENTWURF | 5 | Fallbezogene Handlungshinweise mit Begründung | offeneAufgaben, Fairness-Signale |
+
+---
+
 ## Hinweise zur Verwendung
 
 - **AK-Anzahl**: Gibt an, wie viele nummerierte Akzeptanzkriterien in der Story definiert sind. Alle müssen erfüllt sein, bevor eine Story als DEMONSTRIERBAR gilt.
@@ -27,17 +40,17 @@ Diese Matrix gibt einen vollständigen Überblick über alle dokumentierten User
 
 ---
 
-## Geplante Domänen (noch ohne Stories)
+## Geplante Domänen (noch ohne Story-Dateien in docs/stories)
 
 | Domäne | Kürzel | Status |
 |--------|--------|--------|
-| Unternehmensgründung | UG | Ausstehend |
 | Sozialleistungen | SL | Ausstehend |
-| Jugendhilfe | JH | Ausstehend |
+| Jugendhilfe | JH | Ausstehend (KJ-Stories existieren unter kita_betrieb_und_jugendamt_steuerung) |
 | Wohnsitzmanagement | WM | Ausstehend |
 | Rechtsstreit / Bußgeld | RB | Ausstehend |
 
 ---
 
-*Zuletzt aktualisiert: Story-System Initialversion*
+*Zuletzt aktualisiert: Q-010 – UG Stories US-UG-001–006*
 *Pfad zur maschinenlesbaren Variante: [story_registry.json](story_registry.json)*
+

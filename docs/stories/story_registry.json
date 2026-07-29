@@ -82,5 +82,78 @@
     "transparency_focus": "Vollständige chronologische Timeline aller Ereignisse mit handelnder Stelle und Begründung",
     "acceptance_criteria_count": 6,
     "source_file": "docs/stories/arbeitsverwaltung/US-AV-007_Historie_nachvollziehen.md"
+  },
+  {
+    "id": "US-UG-001",
+    "domain": "Unternehmensgründung",
+    "title": "Gründungsstatus einsehen",
+    "role": "Gründerin / Gründer",
+    "status": "ENTWURF",
+    "problem": "Gründer wissen nicht, wo ihre Gewerbeanmeldung steht, und müssen bei mehreren Behörden nachfragen.",
+    "screen": "Gründungsakte / Übersicht",
+    "transparency_focus": "Klartext-Status, Fortschritt und nächster Schritt ohne internen Code",
+    "acceptance_criteria_count": 6,
+    "source_file": "docs/stories/unternehmensgruendung/US-UG-001_Gruendungsstatus_einsehen.md"
+  },
+  {
+    "id": "US-UG-002",
+    "domain": "Unternehmensgründung",
+    "title": "Beteiligte Behörden einsehen",
+    "role": "Gründerin / Gründer",
+    "status": "ENTWURF",
+    "problem": "Mehrere Behörden sind beteiligt, aber Zuständigkeiten und Bearbeitungsstände sind nicht an einem Ort sichtbar.",
+    "screen": "Behördenübersicht",
+    "transparency_focus": "Rolle, Status und Kontakt je Behörde erklärbar",
+    "acceptance_criteria_count": 5,
+    "source_file": "docs/stories/unternehmensgruendung/US-UG-002_Behoerden_einsehen.md"
+  },
+  {
+    "id": "US-UG-003",
+    "domain": "Unternehmensgründung",
+    "title": "Unterlagen nachreichen",
+    "role": "Gründerin / Gründer",
+    "status": "ENTWURF",
+    "problem": "Dokumentenanforderungen kommen ohne ausreichenden Kontext, Begründung und Formatangabe.",
+    "screen": "Unterlagen / Dokumente",
+    "transparency_focus": "Anforderung mit Begründung, Rechtsgrundlage und Dokumentenstatus",
+    "acceptance_criteria_count": 6,
+    "source_file": "docs/stories/unternehmensgruendung/US-UG-003_Unterlagen_nachreichen.md"
+  },
+  {
+    "id": "US-UG-004",
+    "domain": "Unternehmensgründung",
+    "title": "Rückfrage verstehen und beantworten",
+    "role": "Gründerin / Gründer",
+    "status": "ENTWURF",
+    "problem": "Rückfragen kommen in Behördensprache ohne Frist und Konsequenz; Antworten sind nicht aktenkundig nachvollziehbar.",
+    "screen": "Rückfragen",
+    "transparency_focus": "Frage, Begründung, Frist und Konsequenz je Rückfrage",
+    "acceptance_criteria_count": 6,
+    "source_file": "docs/stories/unternehmensgruendung/US-UG-004_Rueckfrage_verstehen.md"
+  },
+  {
+    "id": "US-UG-005",
+    "domain": "Unternehmensgründung",
+    "title": "Verfahrensverlauf nachvollziehen",
+    "role": "Gründerin / Gründer",
+    "status": "ENTWURF",
+    "problem": "Es fehlt eine chronologische Übersicht, wer wann was in der Gründungsakte entschieden oder angefordert hat.",
+    "screen": "Verlauf / Timeline",
+    "transparency_focus": "Lückenlose Timeline mit Ereignistyp, Datum und Urheber",
+    "acceptance_criteria_count": 5,
+    "source_file": "docs/stories/unternehmensgruendung/US-UG-005_Verlauf_nachvollziehen.md"
+  },
+  {
+    "id": "US-UG-006",
+    "domain": "Unternehmensgründung",
+    "title": "Nächste Schritte und Pflichten verstehen",
+    "role": "Gründerin / Gründer",
+    "status": "ENTWURF",
+    "problem": "Generische Checklisten passen nicht zum konkreten Fall; Gründer wissen nicht, wer handeln muss und was Untätigkeit bedeutet.",
+    "screen": "Übersicht / Hinweise",
+    "transparency_focus": "Fallbezogene nächste Schritte mit Begründung und Handlungsträger",
+    "acceptance_criteria_count": 5,
+    "source_file": "docs/stories/unternehmensgruendung/US-UG-006_Naechste_Schritte_verstehen.md"
   }
 ]
+
