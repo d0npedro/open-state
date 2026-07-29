@@ -147,12 +147,13 @@ export const storyRegistry: StoryRegistryEntry[] = [
     domain: 'Kita-Betrieb & Jugendamt-Steuerung',
     title: 'Monatsbericht abrufen',
     role: 'Kita-Leitung',
-    status: 'BEREIT',
+    status: 'DEMONSTRIERBAR',
     problem: 'Monatliche Auswertungen werden manuell aus heterogenen Quellen zusammengestellt – fehleranfällig und zeitaufwändig',
-    screen: 'Monatsbericht (nicht implementiert)',
+    screen: 'Monatsbericht Einrichtung',
     transparency_focus: 'Automatisch erzeugter Bericht mit Anwesenheitsquoten, Auslastung, Personalstunden',
     acceptance_criteria_count: 4,
-    implemented_criteria: 0,
+    implemented_criteria: 4,
+    route: '/kita/monatsbericht',
     source_file: 'docs/stories/kita_betrieb_und_jugendamt_steuerung/US-KJ-003_Monatsbericht_abrufen.md'
   },
   {

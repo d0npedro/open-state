@@ -20,21 +20,26 @@ Parallele Entwicklungs-Streams mit getrennten Worktrees und einem Supervisor, de
 
 ## Supervisor
 
-1. `git fetch` (lokal: Branches sind im selben Repo)
-2. Rebase/Merge der Reihe nach: `loop/av` → `loop/ug` → `loop/kita`
-3. Nach jedem Merge: `cd demo && npm run lint && npm run build`
-4. Queue/BUILD_STATE aus Journals aktualisieren
-5. storyRegistry nur wenn neue Routen/Stories in Journals dokumentiert
-6. Kein Push (Standard)
+1. `git fetch origin` und Status prüfen
+2. Merge der Reihe nach: `loop/av` → `loop/ug` → `loop/kita`
+3. Nach allen Merges (oder wenn bereits alles gemerged): `cd demo && npm run lint && npm run build`
+4. Queue/BUILD_STATE aus Journals aktualisieren; storyRegistry bei neuen Routen
+5. Docs-Commit falls nötig: `docs: supervisor merge sync`
+6. **Push (Pflicht, Dauerbetrieb):**  
+   `git push origin main`  
+   nur nach grünem lint+build und sauberem main.  
+   Domain-Branches optional: `git push origin loop/av loop/ug loop/kita` (kein force).
+7. Domain-Worktrees mit main synchronisieren (`merge main` in jedem Worktree, kein force).
 
 ## Intervalle
 
-- Domain-Loops: 12 min (AV, UG, Kita parallel, fire immediately)
-- Supervisor: 15 min (erster Lauf nach 15 min, dann periodisch)
+- Domain-Loops: 12 min (AV, UG, Kita parallel)
+- Supervisor: 15 min — **merget und pusht regelmäßig nach origin**
 
 ## Betriebshinweise
 
-- Alter Einzel-Loop auf `main` wurde gestoppt (vermeidet Race Conditions).
-- Domain-Streams committen nur auf `loop/*`; Supervisor merget nach `main`.
-- Push bleibt manuell („pushe“).
+- Domain-Streams committen nur auf `loop/*` und pushen **nicht** selbst.
+- Supervisor ist die einzige Stelle für `git push origin main` im Dauerbetrieb.
+- Nutzer-Freigabe für Dauer-Push: ausdrückliche Anweisung „Sorge dafür dass regelmäßig gepusht wird“ / Dauerbetrieb mit Remote-Sync.
+- Bei Push-Fehler (Auth, non-ff): melden, nicht force-pushen.
 - Bei wiederholten Merge-Konflikten: Intervall erhöhen oder einen Stream pausieren.

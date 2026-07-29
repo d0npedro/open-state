@@ -73,6 +73,14 @@ Ein Push erfolgt **ausschließlich nach erfolgreichem Commit und grünem `lint` 
 Kein Push bei fehlgeschlagenem Lint/Build oder nicht committeten, push-relevanten Änderungen.
 Lokaler Build ist die Vorbedingung für GitHub Actions „Build Check“ – Agenten dürfen CI-Rot nicht als Überraschung erzeugen.
 
+### Dauerbetrieb / Multi-Loop
+
+Wenn der Nutzer **regelmäßiges Pushen** oder **Dauerbetrieb mit Remote-Sync** anweist:
+
+- Domain-Loops pushen weiterhin **nicht**.
+- Der **Supervisor** pusht nach erfolgreichem Merge + `lint` + `build` auf `origin main` (kein force).
+- Details: `docs/loops/MULTI_LOOP_BETRIEB.md`.
+
 ---
 
 ## Pflichtlektüre vor jeder Iteration

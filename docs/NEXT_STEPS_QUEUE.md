@@ -188,4 +188,7 @@ Diese Punkte wurden in früheren Iterationen abgeschlossen und sind produktionsr
 | Q-075 Demo-Reset | Session-Leiste + resetSession AV/UG | `9f55a89` |
 | Q-076 Bedarfsplanung | `/kita/bedarfsplanung` US-KJ-007 | `bd935e8` |
 | Q-077 Gremienvorlage | `/kita/vorlage` US-KJ-008 Freigabe | `c7a1599` |
-| Q-078 Kita-Belegung | `/kita/einrichtung` US-KJ-002 | (diese Iteration) |
+| Q-078 Kita-Belegung | `/kita/einrichtung` US-KJ-002 | `6c63d65` |
+| Multi-Loop AV | Progress UNTERLAGEN_FEHLEN + Ruhezustand | `a42cf4c` → main |
+| Multi-Loop UG | Strukturierte Rückfrage + Fristcountdown | `0571ef6` → main |
+| Multi-Loop Kita | Monatsbericht US-KJ-003 | `259b361` → main |
