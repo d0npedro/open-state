@@ -1,6 +1,6 @@
 # BUILD_STATE.md – Aktueller Projektstand
 
-Zuletzt aktualisiert: nach Supervisor-Pflicht-Push 2026-07-29 (Merge UG Q-122 VS-05-Start + Kita Regionenvergleich/CSV-Verlauf; lint+build+E2E chromium 227)
+Zuletzt aktualisiert: nach Supervisor-Pflicht-Push 2026-07-29 (Merge Kita Q-123 Open-Data-Lizenzhinweis CSV; lint+build grün)
 
 Dieser Stand beschreibt, was tatsächlich existiert und funktioniert.
 Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
@@ -34,7 +34,7 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | `/stories` | Story Coverage Dashboard | – | ✓ |
 | `/feedback` | Feedback → GitHub Issues | – | ✓ |
 | `/gruendung` … | Unternehmensgründung (Übersicht Fairness-Kurzblock+Kurz-CTAs, Behörden VS-04→Rückfrage, Hinweise-CTAs RQ/BG/Unterlagen/Steuernummer/Betriebsdatum/parallele Behörden, Verlauf Stelle+Ereignistyp-Filter, …) | US-UG-001–006 | ✓ |
-| `/kita` | Öffentlicher Transparenzbericht + Planungsraum-Filter + Residual↔Meldelücke + Engpass/Meldelücke-Schnellfilter + Zeitreihe Meldebasis + Regionenfilter + Regionenvergleich Zwei-Räume inkl. 12-Monats-Verlauf A/B + CSV-Export Zeitreihe/Vergleich/Verlauf | US-KJ-009, US-KJ-010 | ✓ |
+| `/kita` | Öffentlicher Transparenzbericht + Planungsraum-Filter + Residual↔Meldelücke + Engpass/Meldelücke-Schnellfilter + Zeitreihe Meldebasis + Regionenfilter + Regionenvergleich Zwei-Räume inkl. 12-Monats-Verlauf A/B + CSV-Export Zeitreihe/Vergleich/Verlauf inkl. Open-Data-Lizenzhinweis | US-KJ-009, US-KJ-010 | ✓ |
 | `/kita/lagebild` | Jugendamt-Steuerungsansicht + Meldeeingang + Meldebeitrag + Engpass-Rangliste Meldebasis + Monatsbericht-Vorschau-Kopplung | US-KJ-005, US-KJ-006 | ✓ |
 | `/kita/bedarfsplanung` | Bedarfsplanungsentwurf (§ 80 SGB VIII) + Meldebasis + Residual↔Meldelücke (Hinweis-only) | US-KJ-007 | ✓ |
 | `/kita/vorlage` | Politische Gremienvorlage + Freigabe + Meldebasis/Residual↔Meldelücke + Engpass-Liste Meldelücke-Filter | US-KJ-008 | ✓ |
@@ -77,6 +77,7 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | UG VS-05 Start nach RQ | `GruendungStateContext` + Behörden/Verlauf | ✓ Nach Beantworten: nächster AUSSTEHEND-Schritt derselben Behörde → IN_BEARBEITUNG (VS-05 Steuernummer) + Verlauf (Q-122) |
 | Kita Zeitreihe/Vergleich CSV | `KitaZeitreiheTabelle` + `KitaRegionenVergleich` | ✓ CSV-Export gefilterter Ansicht inkl. Meldebasis/Δ und Verlauf A vs. B; Semikolon, UTF-8 BOM (Q-119, US-KJ-010 AK4) |
 | Kita Regionenvergleich Verlauf | `KitaRegionenVergleich` | ✓ 12-Monats-Verlauf A vs. B neben Kernkennzahlen (US-KJ-010, Q-118-Erweiterung) |
+| Kita CSV Open-Data-Lizenz | `kitaCsvLizenz.ts` + CSV-Komponenten | ✓ Demo-Lizenzhinweis Meta-Kopf + UI (vorläufig CC-BY-ähnlich; finale Lizenz BL-offen) (Q-123, US-KJ-010) |
 
 ---
 
@@ -161,6 +162,8 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 **Q-120 erledigt:** UG Behörden-Verfahrensschritt VS-04 mit Link zur offenen Rückfrage (`#rq-…`, Session-sensitiv).
 **Q-119 erledigt:** Kita Zeitreihe + Regionenvergleich CSV-Export der gefilterten Ansicht (US-KJ-010 AK4).
 **Q-121 erledigt:** UG VS-04 nach Rückfrage-Antwort session-lokal ABGESCHLOSSEN inkl. Verlaufsereignis.
+**Q-122 erledigt:** UG nach RQ-Antwort nächster AUSSTEHEND-Schritt derselben Behörde → IN_BEARBEITUNG (VS-05) + Verlauf.
+**Q-123 erledigt:** Kita Open-Data-Lizenzhinweis in öffentlichen CSV-Exporten (Meta + UI, `kitaCsvLizenz`, US-KJ-010).
 
 ---
 

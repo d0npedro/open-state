@@ -2,6 +2,33 @@
 
 Branch: `loop/kita` · Worktree: `D:\Projects\open-state-loop-kita`
 
+## Iteration 2026-07-29 – US-KJ-010 Open-Data-Lizenzhinweis CSV-Export
+
+### Was
+Öffentliche Kita-CSV-Exporte tragen einen transparenten Demo-Lizenzhinweis im Metakommentarkopf und in der UI (US-KJ-010 offene fachliche Frage). Gemeinsames Modul `kitaCsvLizenz`: Open-Data-Status vorläufig, finale Lizenz je Bundesland zu klären; Vorschlag Demo-Nachnutzung CC-BY 4.0-ähnlich mit Quellenangabe. Eingebunden in Planungsraumdaten-, Zeitreihen- und Regionenvergleich-CSV (Stichtag + Verlauf). Datenlage-Hinweis auf `/kita`. Keine Kind- oder Personennamen, keine endgültige Rechtsentscheidung.
+
+### Dateien
+- `demo/components/kita/kitaCsvLizenz.ts` (neu: Meta-Zeilen, UI- und Button-Hinweis)
+- `demo/components/kita/KitaCsvDownload.tsx` (Meta + UI)
+- `demo/components/kita/KitaZeitreiheTabelle.tsx` (Meta + UI)
+- `demo/components/kita/KitaRegionenVergleich.tsx` (Meta Stichtag/Verlauf + UI)
+- `demo/app/kita/page.tsx` (Badge + Datenlage-Hinweis)
+- `docs/loops/kita-JOURNAL.md` (dieses Journal)
+
+### Story
+US-KJ-010 – Zeitreihen und Regionenvergleich (offene Frage Datenlizenz / Open Data)
+
+### Build
+`npm run lint` + `npm run build` im `demo/`-Verzeichnis (siehe Commit dieses Laufs)
+
+### Nicht angefasst (Supervisor / verboten)
+Queue, BUILD_STATE, storyRegistry, DECISION_LOG, andere Domänen, package.json, CI, push
+
+### Nächster sinnvoller Schritt (Hinweis Supervisor)
+Druckansicht Lagebild mit Engpass/Meldebasis dokumentieren, oder Meldelücke-Schnellfilter in Lagebild-Engpass-Rangliste spiegeln (analog Vorlage).
+
+---
+
 ## Iteration 2026-07-29 – US-KJ-010 Regionenvergleich Verlauf CSV-Export (AK 4)
 
 ### Was
