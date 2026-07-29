@@ -209,6 +209,11 @@ Story-Dokumentation ist kein Pflicht-Vorläufer für Mock-Daten und Typen.
 | Q-172 | Kita Lagebild: 12-Monats-Zeitreihe im UI (`KitaZeitreiheTabelle`, US-KJ-005/010) | DEMO | S | Q-169 | DONE `6cdf3dc` |
 | Q-173 | Kita Zeitreihe: print-only Filterstand/Meldebasis-Meta; Filter/CSV no-print (US-KJ-005/009/010) | DEMO | S | Q-172 | DONE `7fc82ee` |
 | Q-174 | Kita Regionenvergleich: print-only Filterstand A/B + Kennzahl/Meldebasis; Auswahl/CSV no-print (US-KJ-010/009) | DEMO | S | Q-118 | DONE `fbe8bd3` |
+| Q-175 | UG Hinweise: UNTERLAGE-Signal live nach Session-Upload inkl. Fristhinweis + CTA (US-UG-003, Parität AV Q-167) | DEMO | S | Q-168 | DONE `5891346` |
+| Q-176 | Kita Explorer: print-only Filterstand/Meldebasis-Session immer (US-KJ-009) | DEMO | S | Q-170 | DONE `a8f3456` |
+| Q-177 | Kita Engpass/Handlungsfelder: print-only Filterstand/Meldebasis-Session immer (US-KJ-005/006) | DEMO | S | Q-173 | DONE `49e6958` |
+| Q-178 | UG Übersicht: `naechsterSchrittZiel` / `aufgabeZiel` in `gruendung-rules` zentralisieren (US-UG-001) | DEMO | S | Q-165 | DONE `36a5723` |
+| Q-179 | Kita Lagebild Detailkarten: print-only Filterstand/Meldebasis-Session immer (US-KJ-005/006) | DEMO | S | Q-177 | DONE `26429b8` |
 
 ---
 
@@ -388,3 +393,8 @@ Diese Punkte wurden in früheren Iterationen abgeschlossen und sind produktionsr
 | Q-172 Kita Lagebild Zeitreihe-UI | 12-Monats-Tabelle im Steuerungslagebild (US-KJ-005/010) | `6cdf3dc` → main |
 | Q-173 Kita Zeitreihe print-only Meta | Filterstand/Meldebasis print-only; Filter/CSV no-print | `7fc82ee` → main |
 | Q-174 Kita Regionenvergleich print-only | Filterstand A/B + Kennzahl/Meldebasis print-only (US-KJ-010) | `fbe8bd3` → main |
+| Q-175 UG Hinweise UNTERLAGE live | Session-Upload + Frist + CTA (US-UG-003) | `5891346` → main |
+| Q-176 Kita Explorer print-only Meta | Filterstand/Meldebasis-Session print-only (US-KJ-009) | `a8f3456` → main |
+| Q-177 Kita Engpass/Handlungsfelder print-only | Filterstand/Meldebasis-Session print-only (US-KJ-005/006) | `49e6958` → main |
+| Q-178 UG naechsterSchrittZiel/aufgabeZiel | Primär- und Aufgaben-CTA-Routing in `gruendung-rules` (US-UG-001) | `36a5723` → main |
+| Q-179 Kita Detailkarten print-only | Planungsraum-Detail Filterstand/Meldebasis print-only (US-KJ-005/006) | `26429b8` → main |
