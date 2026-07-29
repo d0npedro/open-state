@@ -1,6 +1,6 @@
 # BUILD_STATE.md – Aktueller Projektstand
 
-Zuletzt aktualisiert: nach Supervisor-Pflicht-Push 2026-07-29 (Merge UG Q-116 Fairness-Kurz-CTAs + Q-113–Q-115; lint+build+E2E chromium)
+Zuletzt aktualisiert: nach Supervisor-Merge+Push 2026-07-29 (Kita Q-117 Zeitreihe Regionenfilter + Q-118 Regionenvergleich; lint+build grün)
 
 Dieser Stand beschreibt, was tatsächlich existiert und funktioniert.
 Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
@@ -15,7 +15,7 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | Build-Status | ✓ Erfolgreich (27 statische Seiten) |
 | Deployment | Vercel, aus `demo/`-Verzeichnis |
 | Lokaler Start | `cd demo && npm install && npm run dev` |
-| Letzte Build-Prüfung | lint+build grün (Supervisor-Merge Q-115/Q-116); E2E zuletzt 216 chromium |
+| Letzte Build-Prüfung | lint+build grün (Supervisor-Merge Q-117/Q-118); E2E zuletzt 216 chromium |
 
 ---
 
@@ -34,7 +34,7 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | `/stories` | Story Coverage Dashboard | – | ✓ |
 | `/feedback` | Feedback → GitHub Issues | – | ✓ |
 | `/gruendung` … | Unternehmensgründung (Übersicht Fairness-Kurzblock+Kurz-CTAs, Hinweise-CTAs RQ/BG/Unterlagen/Steuernummer/Betriebsdatum/parallele Behörden, Verlauf Stelle+Ereignistyp-Filter, …) | US-UG-001–006 | ✓ |
-| `/kita` | Öffentlicher Transparenzbericht + Planungsraum-Filter + Residual↔Meldelücke + Engpass/Meldelücke-Schnellfilter + Zeitreihe Meldebasis-Markierung | US-KJ-009, US-KJ-010 | ✓ |
+| `/kita` | Öffentlicher Transparenzbericht + Planungsraum-Filter + Residual↔Meldelücke + Engpass/Meldelücke-Schnellfilter + Zeitreihe Meldebasis + Regionenfilter + Regionenvergleich Zwei-Räume | US-KJ-009, US-KJ-010 | ✓ |
 | `/kita/lagebild` | Jugendamt-Steuerungsansicht + Meldeeingang + Meldebeitrag + Engpass-Rangliste Meldebasis + Monatsbericht-Vorschau-Kopplung | US-KJ-005, US-KJ-006 | ✓ |
 | `/kita/bedarfsplanung` | Bedarfsplanungsentwurf (§ 80 SGB VIII) + Meldebasis + Residual↔Meldelücke (Hinweis-only) | US-KJ-007 | ✓ |
 | `/kita/vorlage` | Politische Gremienvorlage + Freigabe + Meldebasis/Residual↔Meldelücke + Engpass-Liste Meldelücke-Filter | US-KJ-008 | ✓ |
@@ -69,6 +69,8 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | UG Hinweise parallele-Behörden-CTA | `/gruendung/hinweise` → `/gruendung/behoerden` | ✓ CTA „Zu den Behörden“ aus INFO parallele Behörden (Q-113) |
 | Kita Vorlage Engpass Meldelücke-Filter | `/kita/vorlage` Engpass-Liste | ✓ Schnellfilter Top-3 vs. Meldelücke, Session-sensitiv (Q-114) |
 | Kita Zeitreihe Meldebasis | `demo/components/kita/KitaZeitreiheTabelle.tsx` | ✓ Berichtsmonat an Meldeeingang-Stichprobe; Spalte Meldebasis, Badge/Rahmen bei Lücke, keine Interpolation (Q-115) |
+| Kita Zeitreihe Regionenfilter | `demo/components/kita/KitaZeitreiheTabelle.tsx` | ✓ Chips Gesamtkommune + 5 Planungsräume; raumbezogene Reihen/Meldebasis, Session-sensitiv (Q-117, US-KJ-010 AK2) |
+| Kita Regionenvergleich | `demo/components/kita/KitaRegionenVergleich.tsx` | ✓ Zwei Planungsräume A/B, Kernkennzahlen + Δ, Meldebasis-Badge (Q-118, US-KJ-010 AK3) |
 | UG Übersicht Fairness-Kurz-CTAs | `/gruendung` Fairness-Block | ✓ RELEVANT/HINWEIS → RQ/Unterlagen/BG-Anker; CTA entfällt nach State-Wechsel (Q-116) |
 
 ---
@@ -149,6 +151,8 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 **Q-114 erledigt:** Kita Vorlage Engpass-Liste Schnellfilter Meldelücke (Session-sensitiv, analog Explorer).
 **Q-115 erledigt:** Kita Zeitreihe Meldebasis-Datenlücken (`KitaZeitreiheTabelle`, Session-sensitiv, Hinweis-only, keine Interpolation).
 **Q-116 erledigt:** UG Übersicht Fairness-Signale RELEVANT/HINWEIS mit Kurz-CTAs zu RQ/Unterlagen/BG (Session-sensitiv).
+**Q-117 erledigt:** Kita Zeitreihe Regionenfilter Planungsraum (`KitaZeitreiheTabelle`, US-KJ-010 AK2, Session-sensitiv).
+**Q-118 erledigt:** Kita Regionenvergleich zwei Planungsräume (`KitaRegionenVergleich`, US-KJ-010 AK3, Session-sensitiv).
 
 ---
 

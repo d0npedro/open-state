@@ -150,6 +150,9 @@ Story-Dokumentation ist kein Pflicht-Vorläufer für Mock-Daten und Typen.
 | Q-112 | Kita Lagebild Engpass-Rangliste: Meldebasis-Kurzmarkierung je Planungsraum (Session-sensitiv, Hinweis-only) | DEMO | S | Q-108 | DONE `eda28fd` |
 | Q-114 | Kita Vorlage Engpass-Liste: Schnellfilter Meldelücke (Session-sensitiv, analog Planungsraum-Explorer) | DEMO | S | Q-109 | DONE `fe2f684` |
 | Q-115 | Kita Zeitreihe: Meldebasis-Datenlücken am Berichtsmonat markieren (Session-sensitiv, Hinweis-only, keine Interpolation) | DEMO | S | Q-112 | DONE `4486fe5` |
+| Q-117 | Kita Zeitreihe: Regionenfilter Planungsraum (Gesamtkommune + 5 Räume, raumbezogene Meldebasis, US-KJ-010 AK2) | DEMO | S | Q-115 | DONE `28d5cae` |
+| Q-118 | Kita Regionenvergleich: zwei Planungsräume nebeneinander mit Δ und Meldebasis (US-KJ-010 AK3) | DEMO | S | Q-115 | DONE `c4289dd` |
+| Q-119 | Kita Zeitreihe/Vergleich: CSV-Export gefilterter Daten (US-KJ-010 AK4) | DEMO | S | Q-117 | OFFEN |
 
 ---
 
@@ -269,3 +272,5 @@ Diese Punkte wurden in früheren Iterationen abgeschlossen und sind produktionsr
 | Q-114 Kita Vorlage Engpass-Filter | Engpass-Liste Meldelücke-Schnellfilter | `fe2f684` → main |
 | Q-115 Kita Zeitreihe Meldebasis | Berichtsmonat Meldelücke in `KitaZeitreiheTabelle` | `4486fe5` → main |
 | Q-116 UG Fairness Kurz-CTAs | Übersicht RELEVANT/HINWEIS → RQ/Unterlagen/BG | `54700cb` → main |
+| Q-117 Kita Zeitreihe Regionenfilter | Planungsraum-Chips in `KitaZeitreiheTabelle` (US-KJ-010 AK2) | `28d5cae` → main |
+| Q-118 Kita Regionenvergleich | Zwei-Räume-Vergleich `KitaRegionenVergleich` (US-KJ-010 AK3) | `c4289dd` → main |
