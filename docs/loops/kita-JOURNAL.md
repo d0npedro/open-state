@@ -2,6 +2,29 @@
 
 Branch: `loop/kita` · Worktree: `D:\Projects\open-state-loop-kita`
 
+## Iteration 2026-07-29 – US-KJ-005 Lagebild Zeitreihe-UI (12 Monate)
+
+### Was
+Steuerungslagebild (`/kita/lagebild`, US-KJ-005 / US-KJ-010): 12-Monats-Zeitreihe nicht nur im CSV-Blatt 6, sondern im UI. Einbindung `KitaZeitreiheTabelle` (Regionenfilter Gesamt/Planungsraum, Meldebasis-Stichprobe Session-sensitiv, CSV der aktiven Filteransicht, Open-Data-Lizenz). Anker `#kita-lagebild-zeitreihe`. Ergänzt Gesamtlage-Kennzahl „Δ Warteliste (3 Monate)“. Methodik/Badge/Footer. Keine Interpolation, keine Trendbewertung. Nur Aggregate, keine Kind- oder Personennamen. Fast-forward `origin/main` vor dem Feature.
+
+### Dateien
+- `demo/app/kita/lagebild/page.tsx` (Zeitreihe-Sektion, Import, Methodik/Footer)
+- `docs/loops/kita-JOURNAL.md` (dieses Journal)
+
+### Story
+US-KJ-005 / US-KJ-010 – Steuerungslagebild Zeitreihe im UI (Spiegel öffentlicher Bericht + CSV-Blatt)
+
+### Build
+`npm run lint` + `npm run build` im `demo/`-Verzeichnis (siehe Commit dieses Laufs)
+
+### Nicht angefasst (Supervisor / verboten)
+Queue, BUILD_STATE, storyRegistry, DECISION_LOG, andere Domänen, package.json, CI, push
+
+### Nächster sinnvoller Schritt (Hinweis Supervisor)
+Zeitreihe print-only Filterstand/Meta im Lagebild, oder Explorer/Meldebasis-Druckhinweis weiter schärfen, oder öffentliche Zeitreihe print-only Meta.
+
+---
+
 ## Iteration 2026-07-29 – US-KJ-009 Transparenzbericht Druck-Meta Status/Meldebasis
 
 ### Was
