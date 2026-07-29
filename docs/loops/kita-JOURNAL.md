@@ -2,6 +2,56 @@
 
 Branch: `loop/kita` · Worktree: `D:\Projects\open-state-loop-kita`
 
+## Iteration 2026-07-29 – US-KJ-005/006 Engpass/Handlungsfelder Druck Filterstand + Meldebasis-Session
+
+### Was
+Steuerungslagebild Engpass-Rangliste und Handlungsfelder (`KitaEngpassRangliste`, `KitaHandlungsfelder`, US-KJ-005/006 auf `/kita/lagebild`): Druck-Meta an Explorer/Zeitreihe/Regionenvergleich angeglichen. Filter-Chips bleiben `no-print`; print-only Filterstand **immer** (nicht nur bei aktivem Meldelücke-Filter): Schnellfilter-Stand, Anzahl sichtbarer Ränge/Felder, Meldebasis-Session (Lückenliste raumaggregiert, Session-sensitiv, Stichprobenmonat ISO+Label). Methodik/Footer/Export-Hinweis auf `/kita/lagebild` und in `KitaLagebildDruck`. Keine Interpolation, keine Umbewertung nach Meldeschwere. Nur Aggregate, keine Kind- oder Personennamen. Merge `origin/main` (ci-watcher) vor dem Feature.
+
+### Dateien
+- `demo/components/kita/KitaEngpassRangliste.tsx` (print-only Filterstand immer + Meldebasis-Session)
+- `demo/components/kita/KitaHandlungsfelder.tsx` (print-only Filterstand immer + Meldebasis-Session)
+- `demo/components/kita/KitaLagebildDruck.tsx` (Export-Hinweis Druck-Meta)
+- `demo/app/kita/lagebild/page.tsx` (Methodik/Footer)
+- `docs/loops/kita-JOURNAL.md` (dieses Journal)
+
+### Story
+US-KJ-005 / US-KJ-006 – Engpass/Handlungsfelder Druck-Meta Filterstand und Meldebasis
+
+### Build
+`npm run lint` + `npm run build` im `demo/`-Verzeichnis (siehe Commit dieses Laufs)
+
+### Nicht angefasst (Supervisor / verboten)
+Queue, BUILD_STATE, storyRegistry, DECISION_LOG, andere Domänen, package.json, CI, push
+
+### Nächster sinnvoller Schritt (Hinweis Supervisor)
+Detailkarten print-only Meldebasis-Session schärfen (KitaPlanungsraumDetailListe), oder Lagebild-Regionenvergleich (US-KJ-010 Spiegel öffentlicher Bericht), oder Bedarfsplanung Feinschliff falls Lücken.
+
+---
+
+## Iteration 2026-07-29 – US-KJ-009 Explorer Druck Filterstand + Meldebasis-Session
+
+### Was
+Planungsraum-Explorer (`KitaPlanungsraumExplorer`, US-KJ-009 auf `/kita`): Druck-Meta an Zeitreihe/Regionenvergleich angeglichen. Filter-Chips bleiben `no-print`; print-only Filterstand **immer** (nicht nur bei aktivem Filter): Raumauswahl oder Schnellfilter Engpass/Meldelücke, Anzahl sichtbarer Räume, Maßnahmenbezug (+ geplante Plätze), residuale Planungslücke bei Einzelraum, Meldebasis-Session (raumbezogen oder Lückenliste, Session-sensitiv, Stichprobenmonat ISO+Label). Methodik/Footer/Datenlage auf `/kita`. Keine Interpolation. Nur Aggregate, keine Kind- oder Personennamen. Fast-forward `origin/main` vor dem Feature.
+
+### Dateien
+- `demo/components/kita/KitaPlanungsraumExplorer.tsx` (print-only Filterstand immer + Meldebasis-Session)
+- `demo/app/kita/page.tsx` (Datenlage, Footer/print-Footer)
+- `docs/loops/kita-JOURNAL.md` (dieses Journal)
+
+### Story
+US-KJ-009 – Planungsraum-Explorer Druck-Meta Filterstand und Meldebasis
+
+### Build
+`npm run lint` + `npm run build` im `demo/`-Verzeichnis (siehe Commit dieses Laufs)
+
+### Nicht angefasst (Supervisor / verboten)
+Queue, BUILD_STATE, storyRegistry, DECISION_LOG, andere Domänen, package.json, CI, push
+
+### Nächster sinnvoller Schritt (Hinweis Supervisor)
+Lagebild-Regionenvergleich (US-KJ-010 Spiegel öffentlicher Bericht), oder Engpass/Handlungsfelder print-only Meldebasis-Session schärfen, oder Bedarfsplanung Feinschliff falls Lücken.
+
+---
+
 ## Iteration 2026-07-29 – US-KJ-010 Regionenvergleich Druck Filterstand A/B + Kennzahl
 
 ### Was

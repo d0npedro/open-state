@@ -6,7 +6,10 @@
  * Residuale Planungslücke (Demo-Näherung wie US-KJ-007) wird methodisch an
  * Meldelücken aus dem Meldeeingang gekoppelt — Hinweis only, keine Interpolation.
  * Filter-Chips: Engpass (Auslastung/Warteliste) und Meldelücke (Meldeeingang).
- * Keine Kind- oder Personennamen (Q-074 / US-KJ-009 ↔ US-KJ-007).
+ * Druck (US-KJ-009): Filter-Chips no-print; print-only Filterstand immer
+ * (Raumauswahl, Schnellfilter, Meldebasis-Session, Maßnahmenbezug) —
+ * Spiegel Zeitreihe/Regionenvergleich. Keine Kind- oder Personennamen
+ * (Q-074 / US-KJ-009 ↔ US-KJ-007).
  */
 
 import { useMemo, useState } from 'react';
@@ -91,7 +94,7 @@ interface Props {
 export function KitaPlanungsraumExplorer({ planungsraeume, massnahmen, csvSlot }: Props) {
   const [selectedId, setSelectedId] = useState<string | 'ALL'>('ALL');
   const [schnellfilter, setSchnellfilter] = useState<Schnellfilter>('ALL');
-  const { basen, byRaumId } = useMeldeeingangFuerBedarfsplanung();
+  const { basen, byRaumId, hydrated, base: meldeBase } = useMeldeeingangFuerBedarfsplanung();
 
   const residualByRaumId = useMemo(() => {
     const m = new Map<string, number>();
@@ -109,6 +112,37 @@ export function KitaPlanungsraumExplorer({ planungsraeume, massnahmen, csvSlot }
     () => planungsraeume.filter(pr => hasMeldeluecke(byRaumId.get(pr.id))).length,
     [planungsraeume, byRaumId]
   );
+
+  const meldeMonatsLabel = meldeBase.monatsLabel;
+  const meldeMonatsIso = meldeBase.monatsIso;
+
+  const meldebasisDruckText = useMemo(() => {
+    if (!hydrated) {
+      return 'Meldebasis: Session noch nicht geladen (clientseitig)';
+    }
+    if (selectedId !== 'ALL') {
+      const b = byRaumId.get(selectedId);
+      if (!b) {
+        return `Meldebasis ${meldeMonatsLabel} · Einzelraum: keine Stichprobe für diesen Raum`;
+      }
+      if (b.hatDatenluecke) {
+        return `Meldebasis ${meldeMonatsLabel} · ${b.planungsraumBezeichnung}: Lücke (${b.freigegeben}/${b.erwartet} freigegeben)${
+          b.schwere === 'UEBERFAELLIG' ? ' — überfällig' : ' — ausstehend'
+        }`;
+      }
+      return `Meldebasis ${meldeMonatsLabel} · ${b.planungsraumBezeichnung}: ohne Lücke (${b.freigegeben}/${b.erwartet} freigegeben)`;
+    }
+    const luecken = basen.filter(b => b.hatDatenluecke);
+    const mitEintraegen = basen.filter(b => b.erwartet > 0);
+    const voll = mitEintraegen.filter(b => !b.hatDatenluecke).length;
+    if (luecken.length === 0) {
+      return `Meldebasis ${meldeMonatsLabel}: Stichprobe vollständig (${voll}/${mitEintraegen.length} Planungsräume mit Einträgen freigegeben)`;
+    }
+    const lueckenKurz = luecken
+      .map(b => `${b.planungsraumBezeichnung} (${b.freigegeben}/${b.erwartet})`)
+      .join(', ');
+    return `Meldebasis ${meldeMonatsLabel}: Lücken in ${lueckenKurz} · ${voll}/${mitEintraegen.length} Räume vollständig`;
+  }, [hydrated, selectedId, byRaumId, basen, meldeMonatsLabel]);
 
   const filteredRaeume = useMemo(() => {
     let list =
@@ -306,29 +340,37 @@ export function KitaPlanungsraumExplorer({ planungsraeume, massnahmen, csvSlot }
                 : `${filteredRaeume.length} Planungsräume angezeigt`}
         </p>
 
-        {/* print-only: aktiver Filterstand (Status/Meldebasis-Spiegel, US-KJ-009) */}
-        {(selectedId !== 'ALL' || schnellfilter !== 'ALL') && (
-          <div
-            className="print-only print-block"
-            style={{
-              marginBottom: '0.75rem',
-              padding: '0.65rem 0.9rem',
-              border: '1px solid var(--color-border)',
-              borderRadius: 'var(--radius)',
-              fontSize: '0.8rem',
-              background: 'var(--color-neutral-light)',
-            }}
-            role="note"
-          >
-            <strong>Druckfilter Planungsräume: </strong>
-            {selectedId !== 'ALL'
-              ? `Einzelraum ${selectedRaum?.bezeichnung ?? selectedId}`
-              : schnellfilter === 'ENGPASS'
-                ? `Engpass aktiv (${filteredRaeume.length} Raum${filteredRaeume.length === 1 ? '' : 'e'}; Wartelistendruck > 10 oder Auslastung ≥ 98 %)`
-                : `Meldelücke aktiv (${filteredRaeume.length} Raum${filteredRaeume.length === 1 ? '' : 'e'} mit unvollständiger Meldebasis in der Demo-Stichprobe)`}
-            . Rangfolge und Kennzahlen unverändert; Filter ändert nur Sichtbarkeit.
-          </div>
-        )}
+        {/* print-only: Filterstand + Meldebasis-Session (immer; Spiegel Zeitreihe US-KJ-009/010) */}
+        <div
+          className="print-only print-block"
+          style={{
+            marginBottom: '0.75rem',
+            padding: '0.65rem 0.9rem',
+            border: '1px solid var(--color-border)',
+            borderRadius: 'var(--radius)',
+            fontSize: '0.8rem',
+            background: 'var(--color-neutral-light)',
+            lineHeight: 1.5,
+          }}
+          role="note"
+        >
+          <strong>Druckfilter Planungsräume: </strong>
+          {selectedId !== 'ALL'
+            ? `Einzelraum ${selectedRaum?.bezeichnung ?? selectedId} (${selectedId})`
+            : schnellfilter === 'ENGPASS'
+              ? `Schnellfilter Engpass · ${filteredRaeume.length} von ${planungsraeume.length} Raum${planungsraeume.length === 1 ? '' : 'e'} (Wartelistendruck > 10 oder Auslastung ≥ 98 %)`
+              : schnellfilter === 'MELDELUECKE'
+                ? `Schnellfilter Meldelücke · ${filteredRaeume.length} von ${planungsraeume.length} Raum${planungsraeume.length === 1 ? '' : 'e'} mit unvollständiger Meldebasis`
+                : `Alle Räume (${filteredRaeume.length} Planungsräume, kein Schnellfilter)`}
+          {selectedId !== 'ALL' && selectedResidual > 0
+            ? ` · Residuale Planungslücke (Demo): ${selectedResidual}`
+            : ''}
+          . Maßnahmen unten folgen demselben Filter ({filteredMassnahmen.length} Maßnahme
+          {filteredMassnahmen.length === 1 ? '' : 'n'}
+          {neuePlaetze > 0 ? `, +${neuePlaetze} geplante Plätze` : ''}). {meldebasisDruckText}.
+          Rangfolge und Kennzahlen unverändert; Filter ändert nur Sichtbarkeit — keine Interpolation.
+          Stichprobenmonat: {meldeMonatsLabel} ({meldeMonatsIso}).
+        </div>
 
         {/* Detailkarte bei Einzelauswahl */}
         {selectedRaum && (
@@ -577,7 +619,11 @@ export function KitaPlanungsraumExplorer({ planungsraeume, massnahmen, csvSlot }
           <span>Engpass-Filter: Wartelistendruck &gt; 10 oder Auslastung ≥ 98 %</span>
           <span>Meldelücke-Filter: fehlende freigegebene Monatsmeldung (Demo-Stichprobe, Session-sensitiv)</span>
           <span>Planungslücke = Warteliste − freie Plätze − geplante Kapazität (Demo-Näherung)</span>
-          <span>Zeile anklicken filtert auf den Planungsraum</span>
+          <span className="no-print">Zeile anklicken filtert auf den Planungsraum</span>
+          <span>
+            Ausdruck: Filter-Chips no-print; print-only Filterstand inkl. Meldebasis-Session und
+            Maßnahmenbezug (Spiegel Zeitreihe)
+          </span>
         </div>
       </section>
 

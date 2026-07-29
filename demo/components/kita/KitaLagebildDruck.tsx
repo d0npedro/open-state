@@ -471,11 +471,11 @@ export function KitaLagebildDruck() {
               lineHeight: 1.5,
             }}
           >
-            Druck: Filter-Chips werden nicht gedruckt; aktiver Meldelücke-Filter in Engpass,
-            Handlungsfeldern oder Detail erscheint als print-only-Hinweis. CSV: Aggregate mit
-            Lagebild-Status, Meldebasis-Session, Zeitreihe (12 Monate Gesamt + Planungsräume) und
-            optionalem Export-Filter „Meldelücke“ (Semikolon, UTF-8 BOM). Nur Aggregate, keine
-            Kind- oder Personennamen (DEC-004).
+            Druck: Filter-Chips no-print. Engpass und Handlungsfelder: immer print-only Filterstand
+            inkl. Meldebasis-Session (Schnellfilter, Stichprobenmonat). Detail: print-only bei
+            aktivem Meldelücke-Filter. CSV: Aggregate mit Lagebild-Status, Meldebasis-Session,
+            Zeitreihe (12 Monate Gesamt + Planungsräume) und optionalem Export-Filter „Meldelücke“
+            (Semikolon, UTF-8 BOM). Nur Aggregate, keine Kind- oder Personennamen (DEC-004).
           </p>
           <div
             style={{

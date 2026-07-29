@@ -166,6 +166,7 @@ export default function KitaTransparenzberichtPage() {
           <li>Wartelistenzahlen können Mehrfachanmeldungen enthalten. Der tatsächliche Platzbedarf kann geringer sein.</li>
           <li>Alle Angaben zu freien Plätzen beziehen sich auf den Meldestichtag (31.10.2024), nicht auf den aktuellen Tag.</li>
           <li>Einrichtungen mit fehlender freigegebener Monatsmeldung mindern die Aussagekraft residualer Planungslücken (Hinweis only, keine Interpolation). Demo: Planungsraum Südost kann initial eine Meldelücke zeigen – nach Freigabe in der Monatsmeldung geschlossen.</li>
+          <li>Planungsraum-Explorer (US-KJ-009, Druck): Filter-Chips (Engpass/Meldelücke, Raumauswahl) no-print. Im Ausdruck immer print-only Filterstand: Raumauswahl oder Schnellfilter, Anzahl sichtbarer Räume, Maßnahmenbezug, residuale Planungslücke bei Einzelraum, Meldebasis-Session (Stichprobenmonat, Lückenliste raumaggregiert). Kennzahlen unverändert; Filter ändert nur Sichtbarkeit — keine Interpolation.</li>
           <li>Zeitreihe (US-KJ-010 AK&nbsp;2 / AK&nbsp;4, Druck): Regionenfilter auf Gesamtkommune oder einzelnen Planungsraum. CSV-Export lädt die aktuell gefilterte Zeitreihentabelle (Semikolon, UTF-8 BOM) inkl. Region und Meldebasis-Hinweis — keine Kind- oder Personennamen. Im Ausdruck: Filter-Chips und CSV no-print; print-only Filterstand (Region, Meldebasis-Session, Peak, Monate). Raumreihen sind Demo-Verteilungen der kommunalen Monatsreihe nach Strukturanteilen. Der Berichtsmonat Oktober 2024 ist methodisch an die Meldebasis-Stichprobe gekoppelt (raumbezogen im Filter). Meldelücken werden markiert, ohne Kennzahlen zu verändern oder zu interpolieren.</li>
           <li>Regionenvergleich (US-KJ-010 AK&nbsp;3 / AK&nbsp;4 + Verlauf, Druck): Zwei Planungsräume mit denselben Stichtags-Kennzahlen; Δ (A − B) ist rechnerisch und keine automatische Bewertung. Zusätzlich 12-Monats-Verlauf derselben Auswahl A/B (Kennzahl wählbar: Warteliste, Auslastung, freie Plätze, Personalausfall) mit monatsweiser Δ und Meldebasis-Hinweis am Berichtsmonat. CSV-Export (AK&nbsp;4): (1) Stichtags-Auswahl A/B inkl. Δ und Meldebasis; (2) aktiver Verlauf der gewählten Kennzahl (12 Monate · Wert A/B · Δ · Meldebasis). Im Ausdruck: Auswahl A/B, Kennzahl-Chips und CSV no-print; print-only Filterstand (Region A/B, Meldebasis-Session, Verlaufskennzahl, Stichprobenmonat). Semikolon, UTF-8 BOM — keine Kind- oder Personennamen. Raumreihen wie Zeitreihenfilter (Demo-Verteilung). Meldebasis je Raum session-sensitiv.</li>
           <li>Druck und CSV Transparenzbericht (US-KJ-009 AK&nbsp;6): Druck dokumentiert Status (freigegeben, Version, Freigabe Rolle+Datum) und Meldebasis-Session print-only — Spiegel Bedarfsplanung/Vorlage. CSV: Multi-Blatt freigegebene Aggregate mit Status/Freigabe im Metakopf, Meldebasis-Session (raumaggregiert) und optionalem Export-Filter „Meldelücke“. Blätter: Versorgung Gesamt, Planungsräume (Meldebasis-Spalten), Kapazitätsmaßnahmen, Meldebasis-Stichprobe. Keine Einrichtungs-PII (DEC-004). Semikolon, UTF-8 BOM.</li>
@@ -297,7 +298,8 @@ export default function KitaTransparenzberichtPage() {
         Steuerungskette Kommune {lb.kommuneBezeichnung}: Lagebild → Bedarfsplanung → Vorlage
         (interne Demo-Routen). Öffentliche Aggregation hier ohne Einrichtungsdetail (DEC-004,
         US-KJ-009). Betriebliche Meldebasis über freigegebene Monatsmeldungen (US-KJ-004).
-        Druck: Status und Meldebasis-Session print-only; Zeitreihe print-only Filterstand
+        Druck: Status und Meldebasis-Session print-only; Planungsraum-Explorer print-only
+        Filterstand (Raum/Schnellfilter/Meldebasis/Maßnahmen); Zeitreihe print-only Filterstand
         (Region/Meldebasis); Regionenvergleich print-only Filterstand (A/B, Kennzahl, Meldebasis);
         CSV Multi-Blatt Aggregate.
       </div>
@@ -307,8 +309,9 @@ export default function KitaTransparenzberichtPage() {
         style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', marginTop: '1rem' }}
       >
         Druckansicht US-KJ-009 · Status freigegeben · Version {lb.version} · Datenstand {lb.stand} ·
-        Meldebasis raumaggregiert (Session, Demo-Stichprobe Meldeeingang) · Zeitreihe mit
-        dokumentiertem Regionenfilter/Meldebasis (print-only) · Regionenvergleich mit dokumentiertem
+        Meldebasis raumaggregiert (Session, Demo-Stichprobe Meldeeingang) · Planungsraum-Explorer mit
+        dokumentiertem Filterstand (Raum/Schnellfilter/Meldebasis/Maßnahmen, print-only) · Zeitreihe
+        mit dokumentiertem Regionenfilter/Meldebasis (print-only) · Regionenvergleich mit dokumentiertem
         Filterstand A/B und Verlaufskennzahl (print-only) · keine Kind- oder Personennamen (DEC-004).
       </div>
 

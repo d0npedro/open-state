@@ -244,8 +244,10 @@ export default function KitaLagebildPage() {
         . Dieses Lagebild verwendet dieselben Berechnungsgrundlagen — intern mit höherer regionaler
         Granularität. Residuale Planungslücke und Meldebasis sind methodische Hinweise (wie
         Bedarfsplanung und Transparenzbericht), keine automatische Handlungsempfehlung. Schnellfilter
-        „Meldelücke“ in Engpass, Handlungsfeldern und Detailkarten ändern nur die Sichtbarkeit; bei
-        aktivem Filter dokumentiert der Ausdruck den Filterstand (print-only-Hinweis je Abschnitt).
+        „Meldelücke“ in Engpass, Handlungsfeldern und Detailkarten ändern nur die Sichtbarkeit.
+        Engpass und Handlungsfelder: Filter-Chips no-print; Ausdruck immer print-only Filterstand
+        (Schnellfilter, Anzahl sichtbarer Ränge/Felder, Meldebasis-Session, Stichprobenmonat —
+        Spiegel Explorer/Zeitreihe). Detailkarten: print-only-Hinweis bei aktivem Meldelücke-Filter.
         Zeitreihe (US-KJ-005 / US-KJ-010): 12-Monats-Tabelle mit Regionenfilter und Meldebasis-Hinweis
         im UI; CSV der aktiven Filteransicht an der Tabelle; im Ausdruck print-only Filterstand
         (Region, Meldebasis-Session, Peak, Monate — Filter-Chips/CSV no-print). Steuerungs-CSV
@@ -339,10 +341,11 @@ export default function KitaLagebildPage() {
 
       <div className="no-print" style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)' }}>
         Steuerungskette Kommune {lb.kommuneBezeichnung}: Lagebild → Bedarfsplanung → Vorlage
-        (Planungslücken und Meldebasis). Zeitreihe 12 Monate im UI (Filter + CSV aktiver Ansicht;
-        Druck: print-only Filterstand Region/Meldebasis) und im Steuerungs-CSV (Blatt 6). Druck und
-        CSV: Status/Meldebasis und optionaler Meldelücke-Filter im Export. Öffentliche Aggregation
-        ohne Einrichtungsdetail im{' '}
+        (Planungslücken und Meldebasis). Engpass/Handlungsfelder: Druck print-only Filterstand inkl.
+        Meldebasis-Session. Zeitreihe 12 Monate im UI (Filter + CSV aktiver Ansicht; Druck:
+        print-only Filterstand Region/Meldebasis) und im Steuerungs-CSV (Blatt 6). Druck und CSV:
+        Status/Meldebasis und optionaler Meldelücke-Filter im Export. Öffentliche Aggregation ohne
+        Einrichtungsdetail im{' '}
         <Link href="/kita" style={{ color: 'var(--color-primary)' }}>
           öffentlichen Bericht
         </Link>{' '}
