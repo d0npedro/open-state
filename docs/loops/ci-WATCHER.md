@@ -2,14 +2,15 @@
 
 | Feld | Wert |
 |------|------|
-| last_checked | 2026-07-29T09:22:00Z |
-| last_run_id | 30439123702 |
+| last_checked | 2026-07-29T09:27:00Z |
+| last_run_id | 30439328562 |
 | last_status | success |
-| last_sha | 438db40 |
+| last_sha | c4cadfa |
 | fix_attempts | 0 |
 
 ## Log
 
+- E2E `30439328562` **success** (SHA c4cadfa / 438db40 docs ci-watcher HEAD). E2E `30439123702` **success** (SHA 438db40). E2E `30438939366` **success** (SHA fa4aaeb docs supervisor Q-167–Q-170). Build `30438888095` + E2E `30438888125` **success** (SHA 310bf10 Merge loop/kita print-meta + Lagebild Zeitreihe-CSV Q-169 — latest code path). Catch-up: origin/main..main = 0. No fix. fix_attempts=0.
 - E2E `30439123702` **success** (SHA 438db40 docs ci-watcher HEAD). E2E `30438939366` **success** (SHA fa4aaeb docs supervisor Q-167–Q-170). Build `30438888095` + E2E `30438888125` **success** (SHA 310bf10 Merge loop/kita print-meta + Lagebild Zeitreihe-CSV Q-169 — latest code path). Catch-up: origin/main..main = 0. No fix. fix_attempts=0.
 - E2E `30438939366` **success** (SHA fa4aaeb docs supervisor Q-167–Q-170 HEAD). Build `30438888095` + E2E `30438888125` **success** (SHA 310bf10 Merge loop/kita print-meta + Lagebild Zeitreihe-CSV Q-169 — latest code path). Catch-up this tick: origin/main..main was 8 → lint+build grün → push `dd84b56..310bf10` → origin/main..main = 0. Concurrent supervisor docs Q-167–Q-170 (`fa4aaeb`). No fix. fix_attempts=0.
 - E2E `30438383166` **success** (SHA 1b187a0 docs ci-watcher HEAD). E2E `30438312783` **success** (SHA 6f175f1 docs). E2E `30438181068` **success** (SHA 091c6bf). Build `30437820507` + E2E `30437820369` **success** (SHA af481fa Merge loop/kita — latest code path). Catch-up: origin/main..main = 0. No fix. fix_attempts=0.
