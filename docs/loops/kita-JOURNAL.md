@@ -2,6 +2,29 @@
 
 Branch: `loop/kita` · Worktree: `D:\Projects\open-state-loop-kita`
 
+## Iteration 2026-07-29 – US-KJ-007 Bedarfsplanung CSV Aggregate freigabeunabhängig
+
+### Was
+Bedarfsplanungsentwurf (`/kita/bedarfsplanung`, US-KJ-007): CSV-Export freigabeunabhängig analog Einrichtung/Monatsbericht/Meldung. Metakopf: Status (Entwurf / Zur Freigabe), Version, Datenstand Lagebild, Meldebasis-Session (Lücken je Planungsraum, Freigabe-ID), Summen Residual/geplant, Methodik, Planungskommentar, DEC-004. Blatt 1 Planungsräume (Meldebasis, Versorgung, Warteliste, Druck, Frei, Geplant, Residual, Maßnahmen); Blatt 2 Meldebasis-Stichprobe Session-sensitiv. Dateiname mit `-entwurf` / `-zur-freigabe`. Export-Karte Druck+CSV; Methodik/Footer. Nur Aggregate, keine Kind- oder Personennamen. Fast-forward `origin/main` vor dem Feature.
+
+### Dateien
+- `demo/app/kita/bedarfsplanung/page.tsx` (downloadCsv, Export-Karte, Methodik/Footer)
+- `docs/loops/kita-JOURNAL.md` (dieses Journal)
+
+### Story
+US-KJ-007 – Bedarfsplanung erstellen (CSV Aggregate-Export, freigabeunabhängig, Status/Meldebasis)
+
+### Build
+`npm run lint` + `npm run build` im `demo/`-Verzeichnis (siehe Commit dieses Laufs)
+
+### Nicht angefasst (Supervisor / verboten)
+Queue, BUILD_STATE, storyRegistry, DECISION_LOG, andere Domänen, package.json, CI, push
+
+### Nächster sinnvoller Schritt (Hinweis Supervisor)
+Vorlage CSV Aggregate Status/Meldebasis freigabeunabhängig (US-KJ-008), oder Lagebild Steuerungs-CSV Status/Meldelücke-Spiegel.
+
+---
+
 ## Iteration 2026-07-29 – US-KJ-002 Einrichtung CSV Status/Datenbasis-Metakopf
 
 ### Was
