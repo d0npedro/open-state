@@ -2,14 +2,15 @@
 
 | Feld | Wert |
 |------|------|
-| last_checked | 2026-07-29T07:43:00Z |
-| last_run_id | 30432383614 |
+| last_checked | 2026-07-29T07:48:00Z |
+| last_run_id | 30432844365 |
 | last_status | success |
-| last_sha | dc1038b |
+| last_sha | 2296820 |
 | fix_attempts | 0 |
 
 ## Log
 
+- E2E `30432844365` + Build `30432844364` **success** (SHA 2296820 Merge loop/kita). Catch-up this tick: origin/main..main was 8 → lint+build grün → push `513f487..2296820` → origin/main..main = 0. Concurrent local later ahead (AV Fairness UNTERLAGE + UG parallele Behörden + merges) → second catch-up after state update. No fix. fix_attempts=0.
 - E2E `30432383614` **success** (SHA dc1038b docs ci-watcher HEAD). E2E `30432205198` **success** (SHA ea9b781). E2E `30432026086` **success** (SHA 99d4bae). Build latest `30431979526` **success** (SHA 77a2196; HEAD docs-only path-skip). Catch-up: origin/main..main = 0. No fix. fix_attempts=0.
 - E2E `30432205198` **success** (SHA ea9b781 docs ci-watcher HEAD). E2E `30432026086` **success** (SHA 99d4bae). E2E `30431979685` + Build `30431979526` **success** (SHA 77a2196; HEAD docs-only path-skip). Catch-up: origin/main..main = 0. No fix. fix_attempts=0.
 - E2E `30432026086` **success** (SHA 99d4bae docs supervisor Q-139/Q-140 HEAD). E2E `30431979685` **success** (SHA 77a2196). Build `30431979526` **success** (SHA 77a2196; HEAD docs-only path-skip). Catch-up: origin/main..main = 0. No fix. fix_attempts=0.
