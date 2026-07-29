@@ -85,9 +85,16 @@ export default function DokumentePage() {
         const behörde = akte.beteiligteBehörden.find(b => b.id === dok.anforderndeBehördeId);
 
         return (
-          <div key={dok.id} className="card" style={{
-            borderLeft: `4px solid ${isAusstehend ? 'var(--color-warning)' : dok.status === 'AKZEPTIERT' ? 'var(--color-success)' : 'var(--color-primary)'}`,
-          }}>
+          <div
+            key={dok.id}
+            id={`dok-${dok.id}`}
+            className="card"
+            data-testid={`dokument-karte-${dok.id}`}
+            style={{
+              borderLeft: `4px solid ${isAusstehend ? 'var(--color-warning)' : dok.status === 'AKZEPTIERT' ? 'var(--color-success)' : 'var(--color-primary)'}`,
+              scrollMarginTop: '5rem',
+            }}
+          >
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '1rem', flexWrap: 'wrap', marginBottom: '0.875rem' }}>
               <div>
                 <h3 style={{ margin: '0 0 0.25rem' }}>{dok.bezeichnung}</h3>

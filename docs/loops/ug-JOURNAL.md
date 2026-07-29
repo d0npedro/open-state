@@ -8,6 +8,32 @@ Erlaubte Pfade nur: `demo/app/gruendung/**`, `demo/context/GruendungStateContext
 
 ---
 
+## 2026-07-29 – Iteration 8: Hinweise-CTA für fehlende Unterlagen → Dokumente
+
+### Was
+Hinweise-Seite: HINWEIS-Signale zu fehlenden Unterlagen (`UG-UNTERLAGEN-FEHLEND`)
+erhalten einen CTA „Zu den Unterlagen“ mit Anker
+`/gruendung/dokumente#dok-{id}` (erstes ausstehendes Dokument).
+Dokumentenkarten tragen `id` + `scroll-margin`. CTA nur solange
+`ANGEFORDERT`/`ABGELEHNT`-Dokumente existieren. E2E: Linkziel, Navigation,
+Verschwinden nach Upload.
+
+### Dateien
+- `demo/app/gruendung/hinweise/page.tsx` – CTA für UG-UNTERLAGEN-FEHLEND
+- `demo/app/gruendung/dokumente/page.tsx` – Anker-IDs auf Dokumentenkarten
+- `demo/e2e/us-ug-gruendung.spec.ts` – drei Unterlagen-CTA-Tests
+- `docs/loops/ug-JOURNAL.md` – dieses Journal
+
+### Build
+`npm run lint` + `npm run build` im Ordner `demo/` grün.
+
+### Nächster sinnvoller UG-Schritt (Vorschlag)
+- Verlauf: Filter nach Ereignistyp (optional)
+- Übersicht: Fairness-Signale auf RELEVANT+HINWEIS begrenzen, wenn Liste wächst
+- Hinweise: CTA für Steuernummer-HINWEIS zur Finanzamt-Behördenkarte
+
+---
+
 ## 2026-07-29 – Iteration 7: Hinweise-CTA für BG-Anmeldung → Behördenkarte
 
 ### Was
