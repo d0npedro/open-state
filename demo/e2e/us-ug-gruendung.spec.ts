@@ -186,6 +186,13 @@ test.describe('UG – Übersicht', () => {
     await expect(rqCta).toBeVisible();
     await expect(rqCta).toHaveAttribute('href', '/gruendung/rueckfragen#rq-RQ-01');
     await expect(rqCta).toContainText(/Frage beantworten/i);
+    // Hilfstext RQ-CTA: Frist + kurze Konsequenz (Steuernummer/Erfassung)
+    const rqHint = page.getByTestId('uebersicht-fairness-cta-hint-rq-RQ-01');
+    await expect(rqHint).toBeVisible();
+    await expect(rqHint).toContainText(/Antwortfrist/i);
+    await expect(rqHint).toContainText(/10\.12\.2024|noch 3 Tage/i);
+    await expect(rqHint).toContainText(/Steuernummer|steuerliche Erfassung/i);
+    await expect(rqHint).toContainText(/Rückfragen/i);
 
     const dokCta = page.getByTestId('uebersicht-fairness-cta-dok-DOK-03');
     await expect(dokCta).toBeVisible();
@@ -711,6 +718,13 @@ test.describe('UG – Hinweise zur Verfahrenslage', () => {
     await expect(cta).toBeVisible();
     await expect(cta).toContainText(/Frage beantworten/i);
     await expect(cta).toHaveAttribute('href', '/gruendung/rueckfragen#rq-RQ-01');
+    // Hilfstext: Frist + kurze Konsequenz (wie Übersicht-Fairness-CTA)
+    const hint = page.getByTestId('hinweise-rq-cta-hint-RQ-01');
+    await expect(hint).toBeVisible();
+    await expect(hint).toContainText(/Antwortfrist/i);
+    await expect(hint).toContainText(/10\.12\.2024|noch 3 Tage/i);
+    await expect(hint).toContainText(/Steuernummer|steuerliche Erfassung/i);
+    await expect(hint).toContainText(/Rückfragen/i);
   });
 
   test('CTA aus RELEVANT-Signal führt zur Rückfrage-Karte', async ({ page }) => {

@@ -8,6 +8,32 @@ Erlaubte Pfade nur: `demo/app/gruendung/**`, `demo/context/GruendungStateContext
 
 ---
 
+## 2026-07-29 – Iteration 31: RQ-CTA-Hilfstext mit Frist und Konsequenz
+
+### Was
+Fairness-CTA zur offenen Rückfrage erhält einen kurzen Hilfstext mit
+Antwortfrist (Datum + Resttage) und Konsequenz (keine steuerliche Erfassung /
+keine Steuernummer ohne Antwort). Übersicht (`uebersicht-fairness-cta-hint-rq-*`)
+und Hinweise (`hinweise-rq-cta-hint-*`) nutzen denselben Wortlaut. CTA-Label und
+Anker unverändert. E2E: Frist- und Konsequenz-Assertionen.
+
+### Dateien
+- `demo/app/gruendung/page.tsx` – `fairnessSignalZiel` RQ `hint`
+- `demo/app/gruendung/hinweise/page.tsx` – RQ-CTA-Hint + testid
+- `demo/e2e/us-ug-gruendung.spec.ts` – RQ-Hilfstext Übersicht + Hinweise
+- `docs/loops/ug-JOURNAL.md` – dieses Journal
+
+### Build
+`npm run lint` + `npm run build` im Ordner `demo/` grün.
+`npm run test:e2e:ug` Exit 0 (112 passed).
+
+### Nächster sinnvoller UG-Schritt (Vorschlag)
+- Fairness-CTA-Hilfstexte ggf. in gemeinsame Helper extrahieren (optional)
+- Übersicht/Hinweise: Hilfstext-Konsistenz Steuernummer vs. Betriebsdatum prüfen
+- Primär-CTA „Nächster Schritt“ optional denselben RQ-Frist-Hilfstext
+
+---
+
 ## 2026-07-29 – Iteration 30: Unterlagen-CTA-Hilfstext session-sensitiv (Übersicht + Hinweise)
 
 ### Was
