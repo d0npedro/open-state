@@ -1,6 +1,6 @@
 # BUILD_STATE.md – Aktueller Projektstand
 
-Zuletzt aktualisiert: nach Supervisor-Merge 2026-07-29 (UG Q-106 Fairness-Filter, Kita Lagebild-Residual; E2E 210 chromium Port 3010; test:e2e:ci ? next start)
+Zuletzt aktualisiert: nach Supervisor-Pflicht-Push 2026-07-29 (Q-112 Engpass-Rangliste Meldebasis auf main; lint+build grün; Push origin/main + loop/*)
 
 Dieser Stand beschreibt, was tatsächlich existiert und funktioniert.
 Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
@@ -15,7 +15,7 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | Build-Status | ✓ Erfolgreich (27 statische Seiten) |
 | Deployment | Vercel, aus `demo/`-Verzeichnis |
 | Lokaler Start | `cd demo && npm install && npm run dev` |
-| Letzte Build-Prüfung | lint+build grün; `test:e2e:ci` 206 passed (chromium, workers=1) |
+| Letzte Build-Prüfung | lint+build grün; `test:e2e:ci` chromium Port 3010 (siehe Supervisor-Lauf) |
 
 ---
 
@@ -35,7 +35,7 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | `/feedback` | Feedback → GitHub Issues | – | ✓ |
 | `/gruendung` … | Unternehmensgründung (Übersicht Fairness-Kurzblock, Hinweise-CTAs RQ/BG/Unterlagen/Steuernummer, Verlauf Stelle+Ereignistyp-Filter, …) | US-UG-001–006 | ✓ |
 | `/kita` | Öffentlicher Transparenzbericht + Planungsraum-Filter + Residual↔Meldelücke + Engpass/Meldelücke-Schnellfilter | US-KJ-009, US-KJ-010 | ✓ |
-| `/kita/lagebild` | Jugendamt-Steuerungsansicht + Meldeeingang + Meldebeitrag + Monatsbericht-Vorschau-Kopplung | US-KJ-005, US-KJ-006 | ✓ |
+| `/kita/lagebild` | Jugendamt-Steuerungsansicht + Meldeeingang + Meldebeitrag + Engpass-Rangliste Meldebasis + Monatsbericht-Vorschau-Kopplung | US-KJ-005, US-KJ-006 | ✓ |
 | `/kita/bedarfsplanung` | Bedarfsplanungsentwurf (§ 80 SGB VIII) + Meldebasis + Residual↔Meldelücke (Hinweis-only) | US-KJ-007 | ✓ |
 | `/kita/vorlage` | Politische Gremienvorlage + Freigabe + Meldebasis/Residual↔Meldelücke (Hinweis-only) | US-KJ-008 | ✓ |
 | `/kita/einrichtung` | Belegungsstand Einrichtung (aggregiert) | US-KJ-002 | ✓ |
@@ -140,6 +140,7 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 **Q-109 erledigt:** Kita Vorlage Meldebasis-Kurzhinweis + Residual↔Meldelücke (Hinweis-only, Fokus Südost; Session-Freigabe).
 **Q-110 erledigt:** Kita Planungsraum-Explorer Schnellfilter Engpass und Meldelücke (Zähler, Raum-Chips, Tabelle/Maßnahmen, Leerzustand).
 **Q-111 erledigt:** UG Hinweise CTA Betriebsdatum → Verfahrensstatus (`#verfahrensstatus` auf Übersicht).
+**Q-112 erledigt:** Kita Lagebild Engpass-Rangliste Meldebasis-Kurzmarkierung (`KitaEngpassRangliste`, Session-sensitiv, Hinweis-only).
 
 ---
 
