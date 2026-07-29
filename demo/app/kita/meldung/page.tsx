@@ -6,6 +6,8 @@
  * Systemvorschlag aus Monatsbericht prüfen, optional korrigieren (mit Begründung),
  * aktiv freigeben. Danach Freigabe-ID, Zeitstempel, Rolle und JA-Eingang sichtbar.
  * Prozesskette: Tagesstand (US-KJ-001) → Belegung (US-KJ-002) → Monatsbericht (US-KJ-003).
+ * Druck freigabeunabhängig: Status, Korrekturen und Freigabenachweis im Ausdruck
+ * (Spiegel Monatsbericht/Bedarfsplanung/Vorlage). Interaktive Phasen no-print.
  * Nur Aggregate – keine Kind- oder Personennamen. Session-lokal, kein Backend.
  */
 
@@ -232,9 +234,20 @@ export default function KitaMeldungPage() {
 
   const readOnly = freigegeben || phase === 'FREIGEGEBEN';
 
+  const phaseLabel =
+    phase === 'FREIGEGEBEN'
+      ? 'Freigegeben & übermittelt'
+      : phase === 'BESTAETIGUNG'
+        ? 'Aktive Freigabe (Bestätigung ausstehend)'
+        : phase === 'KORREKTUR'
+          ? 'Korrekturmodus (vor Freigabe)'
+          : freigegeben
+            ? 'Freigegeben & übermittelt'
+            : 'Prüfung (vor Freigabe)';
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1.75rem' }}>
-      <div>
+      <div className="no-print">
         <div
           style={{
             fontSize: '0.8rem',
@@ -255,9 +268,151 @@ export default function KitaMeldungPage() {
         </p>
       </div>
 
+      {/* Druck freigabeunabhängig – Spiegel Monatsbericht/Bedarfsplanung/Vorlage */}
+      <div
+        className="no-print card"
+        style={{
+          display: 'flex',
+          flexWrap: 'wrap',
+          gap: '1rem',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+        }}
+      >
+        <div style={{ maxWidth: '40rem' }}>
+          <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>Export</div>
+          <strong style={{ fontSize: '0.95rem' }}>Druckansicht Monatsmeldung</strong>
+          <p
+            style={{
+              fontSize: '0.8rem',
+              color: 'var(--color-text-muted)',
+              margin: '0.25rem 0 0',
+              lineHeight: 1.5,
+            }}
+          >
+            Druck ist freigabeunabhängig (Prüfung, Korrektur, Bestätigung und freigegebene Fassung).
+            Status, dokumentierte Korrekturen und Freigabenachweis erscheinen im Ausdruck.
+            Aktionsbuttons, Korrekturmaske, Bestätigungsdialog und Prozess-Hub sind no-print. Keine
+            Kind- oder Personennamen.
+          </p>
+        </div>
+        <button
+          type="button"
+          className="btn btn-secondary"
+          onClick={() => window.print()}
+          style={{ fontSize: '0.875rem', flexShrink: 0 }}
+        >
+          Drucken / als PDF speichern
+        </button>
+      </div>
+
+      {/* print-only Kopf + Status + Korrekturen + Freigabe */}
+      <div className="print-only print-block" style={{ margin: 0 }}>
+        <p style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', margin: '0 0 0.35rem' }}>
+          US-KJ-004 · Monatsmeldung freigeben · Demo Kita-Leitung · DEC-004
+        </p>
+        <h1 style={{ margin: '0 0 0.35rem', fontSize: '1.35rem' }}>
+          Monatsmeldung {base.monatsLabel}
+        </h1>
+        <p style={{ color: 'var(--color-text-muted)', margin: '0 0 0.75rem', fontSize: '0.9rem' }}>
+          {base.einrichtungBezeichnung} · {base.traeger} · Planungsraum {base.planungsraumBezeichnung}
+        </p>
+        <div
+          style={{
+            marginBottom: '0.75rem',
+            padding: '0.75rem 1rem',
+            border: '1px solid var(--color-border)',
+            borderRadius: 'var(--radius)',
+            fontSize: '0.875rem',
+            background: 'var(--color-neutral-light)',
+            borderLeft: `4px solid ${st.color}`,
+          }}
+          role="status"
+        >
+          <strong style={{ color: st.color }}>Status im Ausdruck: {st.label}</strong>
+          <div style={{ marginTop: '0.25rem', color: 'var(--color-text-muted)', fontSize: '0.8rem' }}>
+            UI-Phase: {phaseLabel} · Meldung-ID{' '}
+            <span style={{ fontFamily: 'monospace' }}>{base.id}</span> · Monat {base.monatsIso} ·
+            Meldefrist {base.meldefristLabel}
+            {ueberfaellig ? ' (überfällig)' : ''}
+          </div>
+          {fristHinweis && (
+            <p style={{ margin: '0.4rem 0 0', fontSize: '0.8rem', lineHeight: 1.45 }}>{fristHinweis}</p>
+          )}
+        </div>
+        <div
+          style={{
+            marginBottom: '0.75rem',
+            padding: '0.75rem 1rem',
+            border: '1px solid var(--color-border)',
+            borderRadius: 'var(--radius)',
+            fontSize: '0.875rem',
+          }}
+          role="note"
+        >
+          <strong style={{ display: 'block', marginBottom: '0.35rem' }}>
+            Korrekturen im Ausdruck
+          </strong>
+          {korrekturen.length === 0 ? (
+            <p style={{ margin: 0, fontSize: '0.8rem', lineHeight: 1.5 }}>
+              Keine dokumentierten Korrekturen. Meldeinhalt entspricht dem Systemvorschlag aus dem
+              Monatsbericht ({base.monatsberichtId}), ggf. unverändert freigegeben bzw. in Prüfung.
+            </p>
+          ) : (
+            <p style={{ margin: 0, fontSize: '0.8rem', lineHeight: 1.5 }}>
+              {korrekturen.length} dokumentierte Korrektur
+              {korrekturen.length === 1 ? '' : 'en'} mit Begründung und Zeitstempel
+              {korrekturen.length > 0
+                ? `: ${korrekturen
+                    .map(k => {
+                      const dec = isPercentField(k.feld) ? 1 : 0;
+                      return `${FELD_LABELS[k.feld]} ${fmtNum(k.wertVorher, dec)} → ${fmtNum(
+                        k.wertNachher,
+                        dec
+                      )}${isPercentField(k.feld) ? ' %' : ''}`;
+                    })
+                    .join('; ')}`
+                : ''}
+              . Details im Korrekturprotokoll unten.
+            </p>
+          )}
+        </div>
+        <div
+          style={{
+            marginBottom: '0.5rem',
+            padding: '0.75rem 1rem',
+            border: '1px solid var(--color-border)',
+            borderRadius: 'var(--radius)',
+            fontSize: '0.875rem',
+            borderLeft: freigabe
+              ? '4px solid var(--color-success)'
+              : '4px solid var(--color-border)',
+          }}
+          role="note"
+        >
+          <strong style={{ display: 'block', marginBottom: '0.35rem' }}>
+            Freigabe im Ausdruck
+          </strong>
+          {freigabe ? (
+            <p style={{ margin: 0, fontSize: '0.8rem', lineHeight: 1.5 }}>
+              Freigabe-ID <span style={{ fontFamily: 'monospace' }}>{freigabe.freigabeId}</span> ·
+              freigegeben am {freigabe.freigegebenAm} · Rolle {freigabe.freigegebenDurchRolle} ·
+              Eingang Jugendamt (Demo) {freigabe.eingegangenBeimJugendamtAm}. Aktive Bestätigung:
+              ja. Aggregate session-lokal im Steuerungslagebild (Meldeeingang) sichtbar.
+            </p>
+          ) : (
+            <p style={{ margin: 0, fontSize: '0.8rem', lineHeight: 1.5 }}>
+              Noch nicht freigegeben. Keine Übermittlung an das Jugendamt – Entwürfe bleiben für das
+              JA unsichtbar (DEC-004). Druck dokumentiert den Prüfungs- bzw. Korrekturstand ohne
+              stillen Versand.
+            </p>
+          )}
+        </div>
+      </div>
+
       {/* Statusleiste + Aktionen */}
       <div
-        className="card"
+        className="card no-print"
         style={{
           display: 'flex',
           flexWrap: 'wrap',
@@ -306,7 +461,7 @@ export default function KitaMeldungPage() {
       </div>
 
       {ueberfaellig && (
-        <div className="notice-box notice-box-warn" role="status">
+        <div className="notice-box notice-box-warn no-print" role="status">
           <div>
             <strong style={{ fontSize: '0.875rem' }}>Meldeverzug</strong>
             <p style={{ fontSize: '0.875rem', margin: '0.25rem 0 0' }}>{fristHinweis}</p>
@@ -315,12 +470,12 @@ export default function KitaMeldungPage() {
       )}
 
       {!ueberfaellig && !freigegeben && fristHinweis && (
-        <p style={{ margin: 0, fontSize: '0.875rem', color: 'var(--color-text-muted)' }}>
+        <p className="no-print" style={{ margin: 0, fontSize: '0.875rem', color: 'var(--color-text-muted)' }}>
           {fristHinweis}
         </p>
       )}
 
-      <div className="notice-box notice-box-neutral" role="note">
+      <div className="notice-box notice-box-neutral no-print" role="note">
         <div style={{ fontSize: '0.875rem' }}>
           <strong>Datenschutz:</strong> Nur Aggregate der Einrichtung. Keine Kindnamen, keine
           Personalnamen. Jugendamt sieht unfreigegebene Entwürfe nicht (Demo-Prinzip DEC-004 /
@@ -328,10 +483,10 @@ export default function KitaMeldungPage() {
         </div>
       </div>
 
-      {/* Freigabe-Nachweis */}
+      {/* Freigabe-Nachweis (Screen; Ausdruck: print-only Freigabe-Block oben) */}
       {freigabe && (
         <div
-          className="card"
+          className="card no-print"
           style={{
             padding: '1rem 1.25rem',
             borderTop: '4px solid var(--color-success)',
@@ -374,9 +529,9 @@ export default function KitaMeldungPage() {
         </div>
       )}
 
-      {/* Korrekturmaske */}
+      {/* Korrekturmaske (no-print – dokumentierte Korrekturen im Ausdruck) */}
       {phase === 'KORREKTUR' && (
-        <section className="card" style={{ padding: '1.25rem' }} aria-labelledby="korrektur-titel">
+        <section className="card no-print" style={{ padding: '1.25rem' }} aria-labelledby="korrektur-titel">
           <h2 id="korrektur-titel" style={{ fontSize: '1.05rem', marginTop: 0 }}>
             Korrektur vor Freigabe
           </h2>
@@ -476,9 +631,9 @@ export default function KitaMeldungPage() {
         </section>
       )}
 
-      {/* Aktive Bestätigung */}
+      {/* Aktive Bestätigung (no-print – Freigabestatus im Ausdruck) */}
       {phase === 'BESTAETIGUNG' && (
-        <section className="card" style={{ padding: '1.25rem' }} aria-labelledby="freigabe-titel">
+        <section className="card no-print" style={{ padding: '1.25rem' }} aria-labelledby="freigabe-titel">
           <h2 id="freigabe-titel" style={{ fontSize: '1.05rem', marginTop: 0 }}>
             Aktive Freigabe
           </h2>
@@ -545,7 +700,7 @@ export default function KitaMeldungPage() {
         </section>
       )}
 
-      {/* Meldeinhalt */}
+      {/* Meldeinhalt (im Ausdruck sichtbar) */}
       <section className="card" style={{ padding: '1.25rem' }} aria-labelledby="inhalt-titel">
         <h2 id="inhalt-titel" style={{ fontSize: '1.05rem', marginTop: 0, marginBottom: '0.25rem' }}>
           Meldeinhalt (vollständig sichtbar vor Freigabe)
@@ -554,9 +709,11 @@ export default function KitaMeldungPage() {
           {base.einrichtungBezeichnung} · {base.traeger} · Planungsraum {base.planungsraumBezeichnung}
           <br />
           Quelle Monatsbericht:{' '}
-          <Link href="/kita/monatsbericht" style={{ color: 'var(--color-primary)' }}>
+          <Link href="/kita/monatsbericht" className="no-print" style={{ color: 'var(--color-primary)' }}>
             {base.monatsberichtId}
-          </Link>{' '}
+          </Link>
+          <span className="print-only">{base.monatsberichtId}</span>
+          {' '}
           · {base.standLabel}
         </p>
 
@@ -674,6 +831,12 @@ export default function KitaMeldungPage() {
         <p style={{ fontSize: '0.875rem', color: 'var(--color-text-muted)', marginBottom: 0 }}>
           {base.rechtsgrundlageHinweis}
         </p>
+        <p style={{ fontSize: '0.875rem', color: 'var(--color-text-muted)', marginBottom: 0 }}>
+          <strong>Druckansicht:</strong> freigabeunabhängig (Prüfung, Korrektur, Bestätigung,
+          freigegebene Fassung). Status, dokumentierte Korrekturen und Freigabenachweis erscheinen
+          im Ausdruck; Korrekturmaske, Bestätigungsdialog und Aktionsbuttons sind no-print (Spiegel
+          Monatsbericht/Bedarfsplanung/Vorlage).
+        </p>
       </section>
 
       {/* Betriebliche Prozesskette: Meldung ← Tagesstand · Belegung · Monatsbericht */}
@@ -758,7 +921,7 @@ export default function KitaMeldungPage() {
         </div>
       </section>
 
-      <div style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)' }}>
+      <div className="no-print" style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)' }}>
         Prozesskette Einrichtung {base.einrichtungBezeichnung}: Belegung → Tagesstand → Monatsbericht
         → Meldung (gleiche Demo-Einrichtung). Nach Freigabe sichtbar im{' '}
         <Link href="/kita/lagebild" style={{ color: 'var(--color-primary)' }}>
@@ -768,8 +931,34 @@ export default function KitaMeldungPage() {
         <Link href="/kita" style={{ color: 'var(--color-primary)' }}>
           öffentlichen Bericht
         </Link>{' '}
-        (DEC-004).
+        (DEC-004). Druck: freigabeunabhängig mit dokumentiertem Status, Korrekturen und
+        Freigabenachweis.
       </div>
+
+      <div
+        className="print-only print-block"
+        style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', marginTop: '0.5rem' }}
+      >
+        Druckansicht US-KJ-004 freigabeunabhängig · Status {st.label} · Korrekturen{' '}
+        {korrekturen.length} · {freigabe ? `Freigabe ${freigabe.freigabeId}` : 'nicht freigegeben'} ·
+        nur Aggregate, keine Kind- oder Personennamen (DEC-004).
+      </div>
+
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
+            .print-only { display: none; }
+            @media print {
+              .no-print { display: none !important; }
+              .print-only { display: inline !important; }
+              .print-only.print-block { display: block !important; }
+              body > div > header,
+              body nav { display: none !important; }
+              main { padding: 0 !important; }
+            }
+          `,
+        }}
+      />
     </div>
   );
 }
