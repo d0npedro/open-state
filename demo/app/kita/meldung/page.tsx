@@ -6,8 +6,8 @@
  * Systemvorschlag aus Monatsbericht prüfen, optional korrigieren (mit Begründung),
  * aktiv freigeben. Danach Freigabe-ID, Zeitstempel, Rolle und JA-Eingang sichtbar.
  * Prozesskette: Tagesstand (US-KJ-001) → Belegung (US-KJ-002) → Monatsbericht (US-KJ-003).
- * Druck freigabeunabhängig: Status, Korrekturen und Freigabenachweis im Ausdruck
- * (Spiegel Monatsbericht/Bedarfsplanung/Vorlage). Interaktive Phasen no-print.
+ * Druck und CSV freigabeunabhängig: Status, Korrekturen und Freigabenachweis
+ * (Spiegel Monatsbericht/Tagesstand/Belegung). Interaktive Phasen no-print.
  * Nur Aggregate – keine Kind- oder Personennamen. Session-lokal, kein Backend.
  */
 
@@ -86,6 +86,132 @@ function parseDeNumber(raw: string): number | null {
   if (t === '' || t === '-' || t === '.') return null;
   const n = Number(t);
   return Number.isFinite(n) ? n : null;
+}
+
+/** Dezimal für CSV: Komma als Trennzeichen (de-DE, Spiegel Tagesstand/Monatsbericht). */
+function csvNum(n: number, decimals = 0): string {
+  return n.toFixed(decimals).replace('.', ',');
+}
+
+/**
+ * CSV-Export der aktuellen Session-Aggregate (US-KJ-004).
+ * Freigabeunabhängig: Prüfung, Korrektur, Bestätigung und freigegebene Fassung.
+ * Kennzahlen + optionales Korrekturprotokoll – keine Kind- oder Personennamen (DEC-004).
+ */
+function downloadCsv(args: {
+  base: typeof demoKitaMonatsmeldung;
+  status: MeldungStatus;
+  statusLabel: string;
+  phaseLabel: string;
+  kennzahlen: MeldungKennzahlen;
+  korrekturen: MeldungKorrektur[];
+  freigabe: MeldungFreigabe | null;
+  ueberfaellig: boolean;
+}) {
+  const {
+    base,
+    status,
+    statusLabel,
+    phaseLabel,
+    kennzahlen,
+    korrekturen,
+    freigabe,
+    ueberfaellig,
+  } = args;
+
+  const freigabeMeta = freigabe
+    ? `Freigegeben: ${freigabe.freigegebenAm} | Freigabe-ID: ${freigabe.freigabeId} | Rolle: ${freigabe.freigegebenDurchRolle} | JA-Eingang (Demo): ${freigabe.eingegangenBeimJugendamtAm}`
+    : 'Freigabe: noch nicht freigegeben (Entwurf für JA unsichtbar, DEC-004)';
+
+  const fristMeta = ueberfaellig
+    ? `Meldefrist: ${base.meldefristLabel} (${base.meldefrist}) – überfällig (Demo-Stichtag ${base.fiktivesHeute})`
+    : `Meldefrist: ${base.meldefristLabel} (${base.meldefrist}) | Demo-Stichtag: ${base.fiktivesHeute}`;
+
+  const kennHeader = ['Feld', 'Feld_Schluessel', 'Wert', 'Einheit', 'Korrigiert'].join(';');
+  const kennRows = EDITABLE_FIELDS.map(feld => {
+    const dec = isPercentField(feld) ? 1 : 0;
+    const korrigiert = korrekturen.some(k => k.feld === feld) ? 'ja' : 'nein';
+    return [
+      FELD_LABELS[feld].replace(/;/g, ','),
+      feld,
+      csvNum(kennzahlen[feld], dec),
+      isPercentField(feld) ? '%' : 'Anzahl',
+      korrigiert,
+    ].join(';');
+  });
+
+  const meta = [
+    `# Monatsmeldung ${base.einrichtungBezeichnung}`,
+    `# ID: ${base.id} | Einrichtung: ${base.einrichtungId} | Träger: ${base.traeger.replace(/;/g, ',')}`,
+    `# Planungsraum: ${base.planungsraumBezeichnung} | Monat: ${base.monatsLabel} (${base.monatsIso})`,
+    `# Quelle Monatsbericht: ${base.monatsberichtId} | Stand: ${base.standLabel.replace(/;/g, ',')}`,
+    `# Status: ${statusLabel} (${status}) | UI-Phase: ${phaseLabel}`,
+    `# ${fristMeta}`,
+    `# ${freigabeMeta}`,
+    `# Korrekturen dokumentiert: ${korrekturen.length}`,
+    `# Session-Stand, kein Backend · Entwürfe ohne Freigabe nicht an JA (DEC-004)`,
+    `# Keine personenbezogenen Daten · Keine Kind- oder Personennamen (DEC-004)`,
+    `# Trennzeichen: Semikolon · Dezimaltrennzeichen: Komma · Encoding: UTF-8 BOM`,
+  ];
+
+  for (const h of base.hinweise) {
+    meta.push(`# Hinweis: ${h.replace(/;/g, ',')}`);
+  }
+
+  const parts: string[] = [
+    ...meta,
+    '',
+    '# Blatt 1: Meldekennzahlen (Session-Aggregate, ggf. korrigiert)',
+    kennHeader,
+    ...kennRows,
+  ];
+
+  if (korrekturen.length > 0) {
+    const korrHeader = [
+      'Feld',
+      'Feld_Schluessel',
+      'Wert_vorher',
+      'Wert_nachher',
+      'Einheit',
+      'Begruendung',
+      'Dokumentiert_am',
+      'Rolle',
+    ].join(';');
+    const korrRows = korrekturen.map(k => {
+      const dec = isPercentField(k.feld) ? 1 : 0;
+      return [
+        FELD_LABELS[k.feld].replace(/;/g, ','),
+        k.feld,
+        csvNum(k.wertVorher, dec),
+        csvNum(k.wertNachher, dec),
+        isPercentField(k.feld) ? '%' : 'Anzahl',
+        k.begruendung.replace(/;/g, ',').replace(/\r?\n/g, ' '),
+        k.dokumentiertAm.replace(/;/g, ','),
+        k.rolle.replace(/;/g, ','),
+      ].join(';');
+    });
+    parts.push(
+      '',
+      '# Blatt 2: Korrekturprotokoll (vor Freigabe dokumentiert)',
+      korrHeader,
+      ...korrRows
+    );
+  } else {
+    parts.push(
+      '',
+      '# Blatt 2: Korrekturprotokoll – keine dokumentierten Korrekturen (Systemvorschlag unverändert)'
+    );
+  }
+
+  const csv = parts.join('\n');
+  const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  const freigabeSuffix = freigabe ? '-freigegeben' : '';
+  a.download = `monatsmeldung-${base.einrichtungId}-${base.monatsIso}${freigabeSuffix}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
 }
 
 export default function KitaMeldungPage() {
@@ -268,7 +394,7 @@ export default function KitaMeldungPage() {
         </p>
       </div>
 
-      {/* Druck freigabeunabhängig – Spiegel Monatsbericht/Bedarfsplanung/Vorlage */}
+      {/* Druck + CSV freigabeunabhängig – Spiegel Monatsbericht/Tagesstand/Belegung */}
       <div
         className="no-print card"
         style={{
@@ -281,7 +407,7 @@ export default function KitaMeldungPage() {
       >
         <div style={{ maxWidth: '40rem' }}>
           <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>Export</div>
-          <strong style={{ fontSize: '0.95rem' }}>Druckansicht Monatsmeldung</strong>
+          <strong style={{ fontSize: '0.95rem' }}>Druck und CSV Monatsmeldung</strong>
           <p
             style={{
               fontSize: '0.8rem',
@@ -290,20 +416,43 @@ export default function KitaMeldungPage() {
               lineHeight: 1.5,
             }}
           >
-            Druck ist freigabeunabhängig (Prüfung, Korrektur, Bestätigung und freigegebene Fassung).
-            Status, dokumentierte Korrekturen und Freigabenachweis erscheinen im Ausdruck.
-            Aktionsbuttons, Korrekturmaske, Bestätigungsdialog und Prozess-Hub sind no-print. Keine
-            Kind- oder Personennamen.
+            Druck und CSV sind freigabeunabhängig (Prüfung, Korrektur, Bestätigung und freigegebene
+            Fassung). Status, dokumentierte Korrekturen und Freigabenachweis erscheinen im Ausdruck.
+            CSV lädt die aktuellen Session-Kennzahlen inkl. optionalem Korrekturprotokoll (Semikolon,
+            UTF-8 BOM). Aktionsbuttons, Korrekturmaske, Bestätigungsdialog und Prozess-Hub sind
+            no-print. Keine Kind- oder Personennamen (DEC-004).
           </p>
         </div>
-        <button
-          type="button"
-          className="btn btn-secondary"
-          onClick={() => window.print()}
-          style={{ fontSize: '0.875rem', flexShrink: 0 }}
-        >
-          Drucken / als PDF speichern
-        </button>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', flexShrink: 0 }}>
+          <button
+            type="button"
+            className="btn btn-secondary"
+            onClick={() =>
+              downloadCsv({
+                base,
+                status,
+                statusLabel: st.label,
+                phaseLabel,
+                kennzahlen,
+                korrekturen,
+                freigabe,
+                ueberfaellig,
+              })
+            }
+            style={{ fontSize: '0.875rem' }}
+            aria-label="Monatsmeldung-Aggregate als CSV herunterladen (keine Kind- oder Personennamen)"
+          >
+            CSV exportieren
+          </button>
+          <button
+            type="button"
+            className="btn btn-secondary"
+            onClick={() => window.print()}
+            style={{ fontSize: '0.875rem' }}
+          >
+            Drucken / als PDF speichern
+          </button>
+        </div>
       </div>
 
       {/* print-only Kopf + Status + Korrekturen + Freigabe */}
@@ -832,10 +981,11 @@ export default function KitaMeldungPage() {
           {base.rechtsgrundlageHinweis}
         </p>
         <p style={{ fontSize: '0.875rem', color: 'var(--color-text-muted)', marginBottom: 0 }}>
-          <strong>Druckansicht:</strong> freigabeunabhängig (Prüfung, Korrektur, Bestätigung,
+          <strong>Druck und CSV:</strong> freigabeunabhängig (Prüfung, Korrektur, Bestätigung,
           freigegebene Fassung). Status, dokumentierte Korrekturen und Freigabenachweis erscheinen
-          im Ausdruck; Korrekturmaske, Bestätigungsdialog und Aktionsbuttons sind no-print (Spiegel
-          Monatsbericht/Bedarfsplanung/Vorlage).
+          im Ausdruck. CSV-Metakopf spiegelt Status, Meldefrist und Freigabe; Kennzahlenblatt und
+          optional Korrekturprotokoll. Korrekturmaske, Bestätigungsdialog und Aktionsbuttons sind
+          no-print (Spiegel Monatsbericht/Tagesstand/Belegung).
         </p>
       </section>
 
@@ -931,8 +1081,8 @@ export default function KitaMeldungPage() {
         <Link href="/kita" style={{ color: 'var(--color-primary)' }}>
           öffentlichen Bericht
         </Link>{' '}
-        (DEC-004). Druck: freigabeunabhängig mit dokumentiertem Status, Korrekturen und
-        Freigabenachweis.
+        (DEC-004). Druck und CSV: freigabeunabhängig mit dokumentiertem Status, Korrekturen und
+        Freigabenachweis (Aggregate only).
       </div>
 
       <div

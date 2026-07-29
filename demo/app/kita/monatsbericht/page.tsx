@@ -7,9 +7,10 @@
  * Datenlücken sichtbar. CSV-Export und Druckansicht (PDF via Browser).
  * Demo-Umschalter: Monatsabschluss (lückenhaft) vs. laufender Monat (VORSCHAU)
  * mit gemischten Tagesstand-Quellen (FREIGEGEBEN / FEHLT / IN_ERFASSUNG).
- * Druck: Status (VOLLSTAENDIG / LUECKENHAFT / VORSCHAU) und Datenbasis-Stand
- * (Tagesstand-Quellen freigegeben/fehlt/in Erfassung) im Ausdruck dokumentiert
- * (Spiegel Lagebild/Bedarfsplanung/Vorlage). Demo-Umschalter und Aktionen no-print.
+ * Druck und CSV: Status (VOLLSTAENDIG / LUECKENHAFT / VORSCHAU), Demo-Modus und
+ * Datenbasis-Stand (Tagesstand-Quellen freigegeben/fehlt/in Erfassung) dokumentiert
+ * (Spiegel Lagebild/Bedarfsplanung/Vorlage; CSV-Metakopf analog Tagesstand US-KJ-001).
+ * Demo-Umschalter und Aktionen no-print.
  * VORSCHAU: Rücklink zum Meldeeingang im Steuerungslagebild (US-KJ-005).
  * Einrichtungs-Kontext: Belegungsstand (US-KJ-002) und Prozesskette zur Meldung.
  * Keine Kind- oder Personennamen.
@@ -82,7 +83,25 @@ function quellenStatusMeta(
   }
 }
 
+/**
+ * CSV-Export der Monats-Aggregate inkl. Datenbasis-Quellenblatt (US-KJ-003).
+ * Metakopf dokumentiert Demo-Modus (Abschluss / Vorschau), Berichtsstatus und
+ * Tagesstand-Quellen (freigegeben / fehlt / in Erfassung) – Spiegel Druckansicht.
+ * Nur Aggregate – keine Kind- oder Personennamen (DEC-004).
+ */
 function downloadCsv(b: KitaMonatsbericht) {
+  const st = statusMeta(b.status);
+  const istVorschau = b.status === 'VORSCHAU';
+  const modusLabel = istVorschau
+    ? 'Laufender Monat (Vorschau)'
+    : 'Monatsabschluss (Demo)';
+  const freigegebenCount = b.tagesstandQuellen.filter(q => q.status === 'FREIGEGEBEN').length;
+  const fehltCount = b.tagesstandQuellen.filter(q => q.status === 'FEHLT').length;
+  const inErfassungCount = b.tagesstandQuellen.filter(q => q.status === 'IN_ERFASSUNG').length;
+  const schluesselTage = b.tagesstandQuellen.filter(
+    q => q.status === 'FREIGEGEBEN' && q.personalschluesselUnterschritten
+  ).length;
+
   const header = [
     'Gruppe',
     'Altersgruppe',
@@ -98,7 +117,7 @@ function downloadCsv(b: KitaMonatsbericht) {
 
   const rows = b.gruppen.map(g =>
     [
-      g.bezeichnung,
+      g.bezeichnung.replace(/;/g, ','),
       g.altersgruppe,
       g.anwesenheitsquoteProzent.toFixed(1).replace('.', ','),
       g.anwesenheitsquoteVorjahrProzent.toFixed(1).replace('.', ','),
@@ -127,7 +146,9 @@ function downloadCsv(b: KitaMonatsbericht) {
 
   const quellenHeader = [
     'Datum',
+    'Datum_Label',
     'Status',
+    'Status_Label',
     'Tagesstand_ID',
     'Anwesend_Gesamt',
     'Personal_Ist_Stunden',
@@ -136,13 +157,18 @@ function downloadCsv(b: KitaMonatsbericht) {
     'Freigegeben_durch_Rolle',
   ].join(';');
 
-  const quellenRows = b.tagesstandQuellen.map((q: MonatsberichtTagesstandQuelle) =>
-    [
+  const quellenRows = b.tagesstandQuellen.map((q: MonatsberichtTagesstandQuelle) => {
+    const qMeta = quellenStatusMeta(q.status);
+    return [
       q.datumIso,
+      q.datumLabel.replace(/;/g, ','),
       q.status,
+      qMeta.label.replace(/;/g, ','),
       q.tagesstandId ?? '',
       q.anwesendGesamt ?? '',
-      q.personalIstStundenGesamt ?? '',
+      q.personalIstStundenGesamt != null
+        ? String(q.personalIstStundenGesamt).replace('.', ',')
+        : '',
       q.personalschluesselUnterschritten === null
         ? ''
         : q.personalschluesselUnterschritten
@@ -150,21 +176,49 @@ function downloadCsv(b: KitaMonatsbericht) {
           : 'nein',
       q.freigegebenAm ?? '',
       q.freigegebenDurchRolle ?? '',
-    ].join(';')
+    ].join(';');
+  });
+
+  const meta = [
+    `# Monatsbericht ${b.einrichtungBezeichnung}`,
+    `# ID: ${b.id} | Einrichtung: ${b.einrichtungId} | Planungsraum: ${b.planungsraumBezeichnung}`,
+    `# Monat: ${b.monatsLabel} (${b.monatsIso}) | Stand: ${b.standLabel}`,
+    `# Vergleich: ${b.vorjahresLabel}`,
+    `# Demo-Modus: ${modusLabel}`,
+    `# Status: ${st.label} (${b.status})${istVorschau ? ' · Monat nicht abgeschlossen' : ''}`,
+    `# Status-Hinweis: ${st.hint}`,
+    `# Datenbasis Tagesstand-Quellen (US-KJ-001): freigegeben ${freigegebenCount}/${b.betriebstageImMonat}${istVorschau ? ' bis Stichtag' : ''} · fehlt ${fehltCount} · in Erfassung ${inErfassungCount} (Entwürfe nicht in Kennzahlen)`,
+    `# Erfasste freigegebene Tagesstände: ${b.erfassteTagesstaende}/${b.betriebstageImMonat}`,
+    `# Fehlende Tage: ${b.fehlendeTage.length ? b.fehlendeTage.join(', ') : 'keine'}`,
+    `# Tage Personalschlüssel unterschritten (aus freigegebenen Ständen): ${schluesselTage}`,
+    `# Kennzahlen nur aus freigegebenen Tagesständen; Lücken nicht interpoliert`,
+  ];
+
+  if (istVorschau) {
+    meta.push(
+      `# Vorschau-Zwischenstand methodisch getrennt von freigegebener Monatsmeldung (US-KJ-004) und vom Monatsabschluss`,
+      `# Vorschau im Steuerungslagebild sichtbar (US-KJ-005, Meldeeingang · Monatsbericht-Vorschau)`
+    );
+  } else {
+    meta.push(
+      `# Monatsabschluss-Demo: Kennzahlen aus freigegebenen Tagesständen des Abschlussmonats (nicht mit Vorschau vermischen)`
+    );
+  }
+
+  meta.push(
+    `# Keine personenbezogenen Daten · Keine Kind- oder Personennamen (DEC-004)`,
+    `# Trennzeichen: Semikolon · Dezimaltrennzeichen: Komma · Encoding: UTF-8 BOM`
   );
 
   const csv = [
-    `# Monatsbericht ${b.einrichtungBezeichnung}`,
-    `# Monat: ${b.monatsLabel} | Status: ${b.status}`,
-    `# Freigegebene Tagesstände (US-KJ-001): ${b.erfassteTagesstaende}/${b.betriebstageImMonat}`,
-    `# Fehlende Tage: ${b.fehlendeTage.length ? b.fehlendeTage.join(', ') : 'keine'}`,
-    `# Keine personenbezogenen Daten`,
+    ...meta,
     '',
+    '# Blatt 1: Gruppenkennzahlen (Aggregate + Vorjahresvergleich)',
     header,
     ...rows,
     summe,
     '',
-    '# Datenbasis: freigegebene Tagesstände je Betriebstag',
+    '# Blatt 2: Datenbasis – Tagesstand-Quellen je Betriebstag (FREIGEGEBEN / FEHLT / IN_ERFASSUNG)',
     quellenHeader,
     ...quellenRows,
   ].join('\n');
@@ -173,7 +227,8 @@ function downloadCsv(b: KitaMonatsbericht) {
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = `monatsbericht-${b.einrichtungId}-${b.monatsIso}.csv`;
+  const vorschauSuffix = istVorschau ? '-vorschau' : '';
+  a.download = `monatsbericht-${b.einrichtungId}-${b.monatsIso}${vorschauSuffix}.csv`;
   a.click();
   URL.revokeObjectURL(url);
 }
@@ -252,7 +307,7 @@ export default function KitaMonatsberichtPage() {
         </button>
       </div>
 
-      {/* Druck: Status + Datenbasis (Tagesstand-Quellen) im Ausdruck – Spiegel Lagebild/Vorlage */}
+      {/* Druck + CSV: Status + Datenbasis (Tagesstand-Quellen) – Spiegel Lagebild/Tagesstand */}
       <div
         className="no-print card"
         style={{
@@ -265,7 +320,7 @@ export default function KitaMonatsberichtPage() {
       >
         <div style={{ maxWidth: '40rem' }}>
           <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>Export</div>
-          <strong style={{ fontSize: '0.95rem' }}>Druckansicht Monatsbericht</strong>
+          <strong style={{ fontSize: '0.95rem' }}>Druck und CSV Monatsbericht</strong>
           <p
             style={{
               fontSize: '0.8rem',
@@ -274,19 +329,36 @@ export default function KitaMonatsberichtPage() {
               lineHeight: 1.5,
             }}
           >
-            Druck dokumentiert den aktiven Demo-Modus (Abschluss / Vorschau), den Berichtsstatus
-            und die Datenbasis aus Tagesstand-Quellen (freigegeben / fehlt / in Erfassung).
-            Umschalter, Prozess-Hub und Aktionsbuttons sind no-print. Keine Kind- oder Personennamen.
+            Druck und CSV dokumentieren den aktiven Demo-Modus (Abschluss / Vorschau), den
+            Berichtsstatus und die Datenbasis aus Tagesstand-Quellen (freigegeben / fehlt / in
+            Erfassung). CSV-Metakopf inkl. Vorschau-Hinweis und Quellenblatt; Dateiname mit
+            „-vorschau“ im Vorschau-Modus. Umschalter und Prozess-Hub sind no-print. Keine Kind-
+            oder Personennamen.
           </p>
         </div>
-        <button
-          type="button"
-          className="btn btn-secondary"
-          onClick={() => window.print()}
-          style={{ fontSize: '0.875rem', flexShrink: 0 }}
-        >
-          Drucken / als PDF speichern
-        </button>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', flexShrink: 0 }}>
+          <button
+            type="button"
+            className="btn btn-secondary"
+            onClick={() => downloadCsv(b)}
+            style={{ fontSize: '0.875rem' }}
+            aria-label={
+              istVorschau
+                ? 'Monatsbericht-Vorschau als CSV herunterladen (Aggregate, keine Kind- oder Personennamen)'
+                : 'Monatsbericht als CSV herunterladen (Aggregate, keine Kind- oder Personennamen)'
+            }
+          >
+            CSV exportieren
+          </button>
+          <button
+            type="button"
+            className="btn btn-secondary"
+            onClick={() => window.print()}
+            style={{ fontSize: '0.875rem' }}
+          >
+            Drucken / als PDF speichern
+          </button>
+        </div>
       </div>
 
       {/* print-only Kopf + Status + Datenbasis-Dokumentation */}
@@ -967,6 +1039,17 @@ export default function KitaMonatsberichtPage() {
                 in Lagebild, Bedarfsplanung und Vorlage. Keine Kind- oder Personennamen.
               </dd>
             </div>
+            <div>
+              <dt style={{ fontWeight: 600 }}>CSV-Export</dt>
+              <dd style={{ margin: '0.2rem 0 0', color: 'var(--color-text-muted)' }}>
+                CSV-Metakopf spiegelt Druck: Demo-Modus, Status inkl. Hinweistext, Zähler
+                freigegeben/fehlt/in Erfassung, fehlende Tage, Schlüssel-Tage. Im Vorschau-Modus
+                zusätzlicher Hinweis zur methodischen Trennung von Monatsmeldung (US-KJ-004) und
+                Dateiname mit „-vorschau“. Zwei Blätter: Gruppenkennzahlen und Tagesstand-Quellen.
+                Semikolon, UTF-8 BOM, Dezimaltrennzeichen Komma. Keine Kind- oder Personennamen
+                (DEC-004).
+              </dd>
+            </div>
           </dl>
         </div>
       </section>
@@ -998,7 +1081,9 @@ export default function KitaMonatsberichtPage() {
             </Link>
           </>
         )}
-        . Druck: Status und Datenbasis-Stand der Tagesstand-Quellen im Ausdruck dokumentiert.
+        . Druck und CSV: Demo-Modus, Status und Datenbasis-Stand der Tagesstand-Quellen
+        dokumentiert
+        {istVorschau ? ' (Vorschau-Metadaten im CSV-Kopf)' : ''}.
       </div>
 
       <div
