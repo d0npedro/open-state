@@ -8,6 +8,32 @@ Erlaubte Pfade nur: `demo/app/gruendung/**`, `demo/context/GruendungStateContext
 
 ---
 
+## 2026-07-29 – Iteration 27: Hinweise Steuernummer-CTA-Hilfstext bei offener RQ
+
+### Was
+Hinweise-CTA für `UG-STEUERNUMMER-FEHLT` erhält session-sensitiven Hilfstext
+(Spiegel Übersicht): bei offener RQ und VS-05 `AUSSTEHEND` „Zuerst die offene
+Rückfrage des Finanzamts klären … Behördenkarte“; nach Antwort und VS-05
+`IN_BEARBEITUNG` „Vergabe … in Bearbeitung … Behördenkarte“. CTA-Label und
+Anker unverändert. Dediziertes `data-testid` für den Hilfstext. E2E: Initial-
+und Session-Assertion.
+
+### Dateien
+- `demo/app/gruendung/hinweise/page.tsx` – Steuernummer-CTA-Hint + testid
+- `demo/e2e/us-ug-gruendung.spec.ts` – Initial- + Session-Hilfstext Steuernummer
+- `docs/loops/ug-JOURNAL.md` – dieses Journal
+
+### Build
+`npm run lint` + `npm run build` im Ordner `demo/` grün.
+`npm run test:e2e:ug` Exit 0 (109 passed).
+
+### Nächster sinnvoller UG-Schritt (Vorschlag)
+- Hinweise: nach Session-Wechsel CTA-Verschwinden für parallele Behörden (optional)
+- Übersicht/Hinweise: Hilfstext-Konsistenz Steuernummer vs. Betriebsdatum prüfen
+- Fairness-CTA-Hilfstexte ggf. in gemeinsame Helper extrahieren (optional)
+
+---
+
 ## 2026-07-29 – Iteration 26: Übersicht Steuernummer-CTA-Hilfstext nach RQ
 
 ### Was

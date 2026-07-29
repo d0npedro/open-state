@@ -286,10 +286,16 @@ export default function GruendungHinweisePage() {
                           }}
                           data-testid={`hinweise-steuernummer-cta-wrap-${finanzamt.id}`}
                         >
-                          <p style={{ margin: 0, fontSize: '0.875rem', lineHeight: 1.45 }}>
+                          {/* Hilfstext: session-sensitiv wie Übersicht-Fairness-CTA Steuernummer */}
+                          <p
+                            style={{ margin: 0, fontSize: '0.875rem', lineHeight: 1.45 }}
+                            data-testid={`hinweise-steuernummer-cta-hint-${finanzamt.id}`}
+                          >
                             {steuernummerInBearbeitung
                               ? 'Die Vergabe der Steuernummer ist beim Finanzamt in Bearbeitung. Status und Kontakt finden Sie auf der Behördenkarte.'
-                              : 'Die Steuernummer vergibt das Finanzamt nach Abschluss der steuerlichen Erfassung. Rolle, Kontakt und offene Schritte finden Sie auf der Behördenkarte.'}
+                              : hatOffeneRueckfrage
+                                ? 'Zuerst die offene Rückfrage des Finanzamts klären. Rolle, Kontakt und offene Schritte finden Sie auf der Behördenkarte.'
+                                : 'Die Steuernummer vergibt das Finanzamt nach Abschluss der steuerlichen Erfassung. Rolle, Kontakt und offene Schritte finden Sie auf der Behördenkarte.'}
                           </p>
                           <Link
                             href={`/gruendung/behoerden#beh-${finanzamt.id}`}

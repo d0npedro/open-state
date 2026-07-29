@@ -758,9 +758,12 @@ test.describe('UG – Hinweise zur Verfahrenslage', () => {
     await expect(panel).toBeVisible();
     await expect(panel).toContainText(/Steuernummer noch nicht erteilt/i);
     await expect(panel).toContainText(/blockiert durch die offene Rückfrage/i);
-    await expect(page.getByTestId('hinweise-steuernummer-cta-wrap-BEH-02')).toContainText(
-      /nach Abschluss der steuerlichen Erfassung/i
-    );
+    // CTA-Hilfstext bei offener RQ: zuerst klären (wie Übersicht)
+    const hint = page.getByTestId('hinweise-steuernummer-cta-hint-BEH-02');
+    await expect(hint).toBeVisible();
+    await expect(hint).toContainText(/offene Rückfrage des Finanzamts klären/i);
+    await expect(hint).toContainText(/Behördenkarte/i);
+    await expect(hint).not.toContainText(/nach Abschluss der steuerlichen Erfassung/i);
   });
 
   test('CTA aus Steuernummer-Signal führt zur Finanzamt-Karte', async ({ page }) => {
@@ -793,6 +796,12 @@ test.describe('UG – Hinweise zur Verfahrenslage', () => {
     // CTA-Label spiegelt Übersicht: bei VS-05 IN_BEARBEITUNG „Steuernummer-Stand ansehen“
     await expect(steuernummerCta).toContainText(/Steuernummer-Stand ansehen/i);
     await expect(steuernummerCta).not.toContainText(/^Zum Finanzamt/i);
+    // CTA-Hilfstext nach RQ-Antwort: Vergabe in Bearbeitung, keine RQ-Priorität
+    const steuernummerHint = page.getByTestId('hinweise-steuernummer-cta-hint-BEH-02');
+    await expect(steuernummerHint).toBeVisible();
+    await expect(steuernummerHint).toContainText(/in Bearbeitung/i);
+    await expect(steuernummerHint).toContainText(/Behördenkarte/i);
+    await expect(steuernummerHint).not.toContainText(/offene Rückfrage des Finanzamts klären/i);
   });
 
   test('HINWEIS-Betriebsdatum-Signal hat CTA „Zum Verfahrensstatus“ mit Anker', async ({ page }) => {
