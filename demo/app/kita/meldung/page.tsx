@@ -5,6 +5,7 @@
  *
  * Systemvorschlag aus Monatsbericht prüfen, optional korrigieren (mit Begründung),
  * aktiv freigeben. Danach Freigabe-ID, Zeitstempel, Rolle und JA-Eingang sichtbar.
+ * Prozesskette: Tagesstand (US-KJ-001) → Belegung (US-KJ-002) → Monatsbericht (US-KJ-003).
  * Nur Aggregate – keine Kind- oder Personennamen. Session-lokal, kein Backend.
  */
 
@@ -675,21 +676,99 @@ export default function KitaMeldungPage() {
         </p>
       </section>
 
+      {/* Betriebliche Prozesskette: Meldung ← Tagesstand · Belegung · Monatsbericht */}
+      <section aria-labelledby="prozesskette-heading" className="no-print">
+        <h2 id="prozesskette-heading" style={{ marginBottom: '0.5rem' }}>
+          Betriebliche Vorprozesse
+        </h2>
+        <p
+          style={{
+            margin: '0 0 1rem',
+            fontSize: '0.875rem',
+            color: 'var(--color-text-muted)',
+            maxWidth: '44rem',
+          }}
+        >
+          Derselbe Demo-Standort <strong>{base.einrichtungBezeichnung}</strong> (
+          <span style={{ fontFamily: 'monospace' }}>{base.einrichtungId}</span>
+          ). Freigegebene Tagesstände speisen den Monatsbericht; der Belegungsstand zeigt
+          stichtagsbezogene Plätze; diese Monatsmeldung basiert auf dem Systemvorschlag aus dem
+          Monatsbericht und geht erst nach aktiver Freigabe an das Jugendamt. Keine Kind- oder
+          Personennamen.
+        </p>
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+            gap: '0.75rem',
+          }}
+        >
+          {(
+            [
+              {
+                href: '/kita/tagesstand',
+                story: 'US-KJ-001',
+                title: 'Tagesstand erfassen',
+                text: 'Tägliche Aggregate je Gruppe (Anwesenheit, Personalstunden). Quelle für den Monatsbericht.',
+                border: 'var(--color-primary)',
+              },
+              {
+                href: '/kita/einrichtung',
+                story: 'US-KJ-002',
+                title: 'Belegungsstand einsehen',
+                text: 'Stichtagsbezogene Platzzahlen je Gruppe derselben Einrichtung (genehmigt, belegt, frei).',
+                border: 'var(--color-primary)',
+              },
+              {
+                href: '/kita/monatsbericht',
+                story: 'US-KJ-003',
+                title: 'Monatsbericht abrufen',
+                text: 'Monatsauswertung und Systemvorschlag für diese Meldung inkl. Vorjahresvergleich und Datenlücken.',
+                border: 'var(--color-primary)',
+              },
+            ] as const
+          ).map(card => (
+            <Link
+              key={card.href}
+              href={card.href}
+              className="card"
+              style={{
+                textDecoration: 'none',
+                color: 'inherit',
+                borderTop: `3px solid ${card.border}`,
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '0.35rem',
+              }}
+            >
+              <span
+                className="badge badge-primary"
+                style={{ alignSelf: 'flex-start', fontSize: '0.68rem' }}
+              >
+                {card.story}
+              </span>
+              <strong style={{ fontSize: '0.95rem', color: 'var(--color-primary)' }}>
+                {card.title}
+              </strong>
+              <span style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', lineHeight: 1.45 }}>
+                {card.text}
+              </span>
+            </Link>
+          ))}
+        </div>
+      </section>
+
       <div style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)' }}>
-        Datenbasis:{' '}
-        <Link href="/kita/monatsbericht" style={{ color: 'var(--color-primary)' }}>
-          Monatsbericht (US-KJ-003)
-        </Link>
-        {' · '}
-        <Link href="/kita/einrichtung" style={{ color: 'var(--color-primary)' }}>
-          Belegungsstand (US-KJ-002)
-        </Link>
-        {' · '}
-        Empfang Steuerungsseite:{' '}
+        Prozesskette Einrichtung {base.einrichtungBezeichnung}: Belegung → Tagesstand → Monatsbericht
+        → Meldung (gleiche Demo-Einrichtung). Nach Freigabe sichtbar im{' '}
         <Link href="/kita/lagebild" style={{ color: 'var(--color-primary)' }}>
-          Lagebild (US-KJ-005)
-        </Link>
-        .
+          Steuerungslagebild
+        </Link>{' '}
+        (Meldeeingang); öffentliche Aggregation ohne Einrichtungsdetail im{' '}
+        <Link href="/kita" style={{ color: 'var(--color-primary)' }}>
+          öffentlichen Bericht
+        </Link>{' '}
+        (DEC-004).
       </div>
     </div>
   );
