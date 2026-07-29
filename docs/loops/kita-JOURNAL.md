@@ -2,6 +2,29 @@
 
 Branch: `loop/kita` · Worktree: `D:\Projects\open-state-loop-kita`
 
+## Iteration 2026-07-29 – US-KJ-004 Meldung CSV Aggregate freigabeunabhängig
+
+### Was
+Monatsmeldung (`/kita/meldung`, US-KJ-004): CSV-Export freigabeunabhängig analog Tagesstand/Monatsbericht. Session-Kennzahlen (Feld/Schlüssel/Wert/Einheit/Korrigiert) inkl. optionalem Korrekturprotokoll-Blatt. Metakopf: Status, UI-Phase, Meldefrist (überfällig), Freigabe-ID/Rolle/JA-Eingang bzw. „nicht freigegeben“, Hinweise, DEC-004. Semikolon, UTF-8 BOM, Dezimaltrennzeichen Komma. Button im Export-Block neben Druck; Methodik- und Footer-Hinweis. Nur Aggregate, keine Kind- oder Personennamen. Merge `origin/main` (ci-watcher docs) vor dem Feature.
+
+### Dateien
+- `demo/app/kita/meldung/page.tsx` (downloadCsv, Export-Button, Methodik/Footer)
+- `docs/loops/kita-JOURNAL.md` (dieses Journal)
+
+### Story
+US-KJ-004 – Meldung prüfen und freigeben (CSV Aggregate-Export, freigabeunabhängig)
+
+### Build
+`npm run lint` + `npm run build` im `demo/`-Verzeichnis (siehe Commit dieses Laufs)
+
+### Nicht angefasst (Supervisor / verboten)
+Queue, BUILD_STATE, storyRegistry, DECISION_LOG, andere Domänen, package.json, CI, push
+
+### Nächster sinnvoller Schritt (Hinweis Supervisor)
+Einrichtungs-CSV Metakopf an Tagesstand/Monatsbericht/Meldung spiegeln (Status/Datenbasis), oder Bedarfsplanung CSV Aggregate falls Lücken.
+
+---
+
 ## Iteration 2026-07-29 – US-KJ-003 Monatsbericht CSV Vorschau-Modus-Metadaten
 
 ### Was
