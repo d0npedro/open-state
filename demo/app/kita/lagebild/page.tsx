@@ -1,6 +1,7 @@
 import { demoKitaLagebild } from '@/data/mockKitaLagebild';
 import type { PlanungsraumKennzahlen, Kapazitaetsmassnahme } from '@/types/kita';
 import { KitaMeldeeingangPanel } from '@/components/kita/KitaMeldeeingangPanel';
+import { KitaEngpassRangliste } from '@/components/kita/KitaEngpassRangliste';
 import {
   KitaLagebildResidualSummenHinweis,
   KitaPlanungsraumMeldebeitrag,
@@ -37,19 +38,6 @@ function planungslueckeResidual(
   const geplant = massnahmen.reduce((s, m) => s + m.erwarteteNeuePlaetze, 0);
   const frei = pr.freiePlaetzeU3 + pr.freiePlaetzeUe3;
   return Math.max(0, pr.wartelisteBestand - frei - geplant);
-}
-
-function MiniDruckBar({ faktor, maxFaktor }: { faktor: number; maxFaktor: number }) {
-  const width = Math.min((faktor / maxFaktor) * 100, 100);
-  const color = druckColor(faktor);
-  return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-      <div style={{ flex: 1, height: '8px', background: 'var(--color-border)', borderRadius: '4px', overflow: 'hidden', minWidth: '60px' }}>
-        <div style={{ height: '100%', width: `${width}%`, background: color, borderRadius: '4px' }} />
-      </div>
-      <span style={{ fontSize: '0.85rem', fontWeight: 700, color, minWidth: '2.5rem' }}>{faktor.toFixed(1)}x</span>
-    </div>
-  );
 }
 
 function MassnahmeTag({ status }: { status: string }) {
@@ -255,35 +243,8 @@ export default function KitaLagebildPage() {
       {/* Meldeeingang / Datenbasis freigegebene Meldungen (US-KJ-004 → US-KJ-005, AK 4) */}
       <KitaMeldeeingangPanel />
 
-      {/* Engpass-Rangliste (AK 1+2 US-KJ-006) */}
-      <section>
-        <h2 style={{ marginBottom: '0.5rem' }}>Engpass-Rangliste nach Wartelistendruck</h2>
-        <p style={{ fontSize: '0.875rem', color: 'var(--color-text-muted)', marginBottom: '1rem' }}>
-          Wartelistendruck = offene Anfragen / real freie Plätze. Wert &gt; 1 bedeutet mehr Anfragen als freie Plätze.
-          Kontinuierliche Skala — kein Ampelsystem.
-        </p>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-          {sorted.map((pr, i) => (
-            <div key={pr.id} style={{
-              display: 'grid',
-              gridTemplateColumns: '1.5rem 10rem 1fr 5rem',
-              alignItems: 'center',
-              gap: '1rem',
-              padding: '0.625rem 0.875rem',
-              background: i === 0 ? 'var(--color-danger-light, #fff5f5)' : 'var(--color-neutral-light)',
-              borderRadius: 'var(--radius)',
-              borderLeft: `3px solid ${druckColor(pr.wartelisteDruckFaktor)}`,
-            }}>
-              <span style={{ fontWeight: 700, color: 'var(--color-text-muted)', fontSize: '0.875rem' }}>#{i + 1}</span>
-              <span style={{ fontWeight: 600 }}>{pr.bezeichnung}</span>
-              <MiniDruckBar faktor={pr.wartelisteDruckFaktor} maxFaktor={maxDruck} />
-              <span style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', textAlign: 'right' }}>
-                {pr.wartelisteBestand} Anfragen
-              </span>
-            </div>
-          ))}
-        </div>
-      </section>
+      {/* Engpass-Rangliste (AK 1+2 US-KJ-006) + Meldebasis-Kurzmarkierung (US-KJ-004→006) */}
+      <KitaEngpassRangliste sorted={sorted} maxDruck={maxDruck} />
 
       {/* Handlungsfelder (aus Daten abgeleitet — keine Empfehlungen) */}
       <section>

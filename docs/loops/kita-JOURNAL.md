@@ -2,6 +2,30 @@
 
 Branch: `loop/kita` · Worktree: `D:\Projects\open-state-loop-kita`
 
+## Iteration 2026-07-29 – US-KJ-006 Engpass-Rangliste Meldebasis
+
+### Was
+Steuerungslagebild-Engpass-Rangliste zeigt je Planungsraum Meldebasis-Kurzmarkierung aus dem Meldeeingang (Session-sensitiv): Badge „vollständig“ / „Lücke (n/m)“, Kurzlabel „· Meldelücke (überfällig|ausstehend)“, Rahmenfarbe bei Lücke, Summenhinweis unter der Liste. Rangfolge bleibt nach Wartelistendruck; keine Umbewertung, keine Interpolation. Nach Session-Freigabe in `/kita/meldung` entfällt die Markierung. Nur Aggregate, keine Kind- oder Personennamen.
+
+### Dateien
+- `demo/components/kita/KitaEngpassRangliste.tsx` (neu: Client-Komponente Rangliste + Meldebasis)
+- `demo/app/kita/lagebild/page.tsx` (Einbindung statt Inline-Rangliste)
+- `docs/loops/kita-JOURNAL.md` (dieses Journal)
+
+### Story
+US-KJ-006 / US-KJ-005 – Versorgungslagebild Engpass-Rangliste (Meldebasis-Kurzmarkierung)
+
+### Build
+`npm run lint` + `npm run build` im `demo/`-Verzeichnis (siehe Commit dieses Laufs)
+
+### Nicht angefasst (Supervisor / verboten)
+Queue, BUILD_STATE, storyRegistry, andere Domänen, package.json, CI, push
+
+### Nächster sinnvoller Schritt (Hinweis Supervisor)
+Handlungsfelder im Lagebild um Meldebasis-Kurzmarkierung ergänzen, oder Vorlage-Engpass-Liste mit Meldelücke-Filter spiegeln.
+
+---
+
 ## Iteration 2026-07-29 – US-KJ-005/006 Lagebild Residual ↔ Meldelücke
 
 ### Was
