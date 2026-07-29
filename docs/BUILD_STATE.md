@@ -15,7 +15,7 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | Build-Status | ✓ Erfolgreich (27 statische Seiten) |
 | Deployment | Vercel, aus `demo/`-Verzeichnis |
 | Lokaler Start | `cd demo && npm install && npm run dev` |
-| Letzte Build-Prüfung | lint+build **27 Seiten** grün (Supervisor Merge Q-148–Q-150) |
+| Letzte Build-Prüfung | lint+build **27 Seiten** + `test:e2e:ci` **240 passed** (Supervisor Merge Q-148–Q-150) |
 
 ---
 
