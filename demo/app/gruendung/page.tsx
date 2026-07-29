@@ -5,15 +5,12 @@ import { useGruendungState } from '@/context/GruendungStateContext';
 import {
   berechneFairnessSignaleGruendung,
   bgCtaHilfstext,
-  betriebsdatumCtaHilfstext,
-  hatOffeneRueckfrage,
+  fairnessSignalZiel,
   rqCtaHilfstext,
-  steuernummerCtaHilfstext,
   unterlagenCtaHilfstext,
 } from '@/lib/fairness/gruendung-rules';
 import { Icon } from '@/components/Icon';
 import type { IconName } from '@/components/Icon';
-import type { FairnessSignal } from '@/types/fairness';
 import type { GruendungsAkte } from '@/types/gruendung';
 
 const statusFlow = [
@@ -129,119 +126,6 @@ function naechsterSchrittZiel(
       hint: bgCtaHilfstext(false),
     };
   }
-  return null;
-}
-
-/**
- * Kurz-CTA für Fairness-Signale auf der Übersicht
- * (Rückfrage / Unterlagen / BG / Steuernummer / Betriebsdatum).
- * Nur solange der auslösende Aktenzustand noch greift.
- * Optionaler Hilfstext (`hint`) erklärt den CTA-Kontext session-sensitiv.
- */
-function fairnessSignalZiel(
-  signal: FairnessSignal,
-  akte: GruendungsAkte
-): { href: string; cta: string; icon: IconName; testKey: string; hint?: string } | null {
-  // Offene Rückfrage mit Frist
-  // Hilfstext: Fristlabel + kurze Konsequenz (Steuernummer/Erfassung) — wie Primär-CTA
-  if (
-    signal.typ === 'UG_RUECKFRAGE_OFFEN_FRIST_RELEVANT' ||
-    signal.id.startsWith('UG-RQ-')
-  ) {
-    const match = signal.id.match(/^UG-RQ-(.+)-FRIST$/);
-    const rqId = match?.[1];
-    if (!rqId) return null;
-    const rq = akte.rueckfragen.find(r => r.id === rqId && !r.beantwortet);
-    if (!rq) return null;
-    return {
-      href: `/gruendung/rueckfragen#rq-${rqId}`,
-      cta: 'Frage beantworten',
-      icon: 'chat',
-      testKey: `rq-${rqId}`,
-      hint: rqCtaHilfstext(rq),
-    };
-  }
-
-  // Fehlende Unterlagen
-  // Hilfstext: session-sensitiv (offene RQ → zuerst klären; danach Nachreichung)
-  if (signal.typ === 'UG_UNTERLAGE_FEHLT' || signal.id === 'UG-UNTERLAGEN-FEHLEND') {
-    const dok = akte.dokumente.find(
-      d => d.status === 'ANGEFORDERT' || d.status === 'ABGELEHNT'
-    );
-    if (!dok) return null;
-    return {
-      href: `/gruendung/dokumente#dok-${dok.id}`,
-      cta: 'Zu den Unterlagen',
-      icon: 'file',
-      testKey: `dok-${dok.id}`,
-      hint: unterlagenCtaHilfstext(hatOffeneRueckfrage(akte)),
-    };
-  }
-
-  // BG-Anmeldung ausstehend
-  // Hilfstext: session-sensitiv (offene RQ → zuerst klären; danach BG-Fokus)
-  if (signal.typ === 'UG_BG_ANMELDUNG_AUSSTEHEND' || signal.id === 'UG-BG-ANMELDUNG') {
-    const bg = akte.beteiligteBehörden.find(
-      b => b.typ === 'BERUFSGENOSSENSCHAFT' && b.status === 'NICHT_GESTARTET'
-    );
-    if (!bg) return null;
-    return {
-      href: `/gruendung/behoerden#beh-${bg.id}`,
-      cta: 'Zur Behördenkarte',
-      icon: 'building',
-      testKey: `beh-${bg.id}`,
-      hint: bgCtaHilfstext(hatOffeneRueckfrage(akte)),
-    };
-  }
-
-  // Steuernummer fehlt (VS-05 AUSSTEHEND oder IN_BEARBEITUNG)
-  // CTA-Text: bei offener Rückfrage/Ausstehend „Zum Finanzamt“;
-  // nach Start der Vergabe (IN_BEARBEITUNG) „Steuernummer-Stand ansehen“.
-  // Hilfstext: session-sensitiv (offene RQ → zuerst klären; IN_BEARBEITUNG → Vergabe läuft).
-  if (signal.typ === 'UG_STEUERNUMMER_FEHLT' || signal.id === 'UG-STEUERNUMMER-FEHLT') {
-    const vs05 = akte.verfahrensSchritte.find(vs => vs.id === 'VS-05');
-    const offen =
-      !!vs05 &&
-      (vs05.status === 'AUSSTEHEND' || vs05.status === 'IN_BEARBEITUNG');
-    if (!offen) return null;
-    const finanzamt = akte.beteiligteBehörden.find(b => b.typ === 'FINANZAMT');
-    if (!finanzamt) return null;
-    const inBearbeitung = vs05.status === 'IN_BEARBEITUNG';
-    return {
-      href: `/gruendung/behoerden#beh-${finanzamt.id}`,
-      cta: inBearbeitung ? 'Steuernummer-Stand ansehen' : 'Zum Finanzamt',
-      icon: 'building',
-      testKey: `steuernummer-${finanzamt.id}`,
-      hint: steuernummerCtaHilfstext({
-        inBearbeitung,
-        hatOffeneRq: hatOffeneRueckfrage(akte),
-      }),
-    };
-  }
-
-  // Geplantes Betriebsdatum überschritten – Verfahren noch offen
-  // Hilfstext: bei offener RQ zuerst klären; nach Antwort Fokus offene Punkte/Steuernummer
-  if (
-    signal.typ === 'UG_BETRIEBSDATUM_UEBERSCHRITTEN' ||
-    signal.id === 'UG-BETRIEBSDATUM'
-  ) {
-    const abgeschlossen = ['GENEHMIGT', 'AKTIVER_BETRIEB', 'BETRIEB_EINGESTELLT'].includes(
-      akte.status
-    );
-    if (abgeschlossen) return null;
-    const vs05 = akte.verfahrensSchritte.find(vs => vs.id === 'VS-05');
-    return {
-      href: '/gruendung#verfahrensstatus',
-      cta: 'Zum Verfahrensstatus',
-      icon: 'refresh',
-      testKey: 'betriebsdatum',
-      hint: betriebsdatumCtaHilfstext({
-        hatOffeneRq: hatOffeneRueckfrage(akte),
-        steuernummerInBearbeitung: vs05?.status === 'IN_BEARBEITUNG',
-      }),
-    };
-  }
-
   return null;
 }
 

@@ -1,54 +1,179 @@
 'use client';
 
+import type { CSSProperties } from 'react';
 import Link from 'next/link';
 import { useGruendungState } from '@/context/GruendungStateContext';
 import {
   berechneFairnessSignaleGruendung,
-  bgCtaHilfstext,
-  betriebsdatumCtaHilfstext,
-  hatOffeneRueckfrage,
-  paralleleBehoerdenCtaHilfstext,
-  rqCtaHilfstext,
-  steuernummerCtaHilfstext,
-  unterlagenCtaHilfstext,
+  fairnessSignalZiel,
+  type FairnessSignalZiel,
 } from '@/lib/fairness/gruendung-rules';
 import { demoGruendungsAkte } from '@/data/mockGruendungsfall';
 import { FairnessPanel } from '@/components/fairness/FairnessPanel';
 import { Icon } from '@/components/Icon';
+import type { IconName } from '@/components/Icon';
 import type { FairnessSignal } from '@/types/fairness';
+import type { GruendungsAkte } from '@/types/gruendung';
 
 /** Initiale Signale aus dem unveränderten Mock – Vergleichsbasis für Reaktions-Banner */
 const INITIAL_SIGNALE = berechneFairnessSignaleGruendung(demoGruendungsAkte);
 
 /**
- * Extrahiert die Rückfrage-ID aus einem UG-Frist-Signal
- * (Signal-ID: `UG-RQ-{rqId}-FRIST`).
+ * Stabile data-testid-Namen der Hinweise-CTAs (E2E-Kompatibilität).
+ * Leitet aus dem gemeinsamen testKey ab; Routing selbst kommt aus gruendung-rules.
  */
-function rueckfrageIdAusSignal(signal: FairnessSignal): string | null {
-  if (signal.typ !== 'UG_RUECKFRAGE_OFFEN_FRIST_RELEVANT') return null;
-  const match = signal.id.match(/^UG-RQ-(.+)-FRIST$/);
-  return match?.[1] ?? null;
+function hinweiseCtaTestIds(ziel: FairnessSignalZiel): {
+  wrap: string;
+  cta: string;
+  hint: string;
+} {
+  if (ziel.testKey.startsWith('rq-')) {
+    const id = ziel.testKey.slice(3);
+    return {
+      wrap: `hinweise-rq-cta-wrap-${id}`,
+      cta: `hinweise-rq-cta-${id}`,
+      hint: `hinweise-rq-cta-hint-${id}`,
+    };
+  }
+  if (ziel.testKey.startsWith('beh-')) {
+    const id = ziel.testKey.slice(4);
+    return {
+      wrap: `hinweise-bg-cta-wrap-${id}`,
+      cta: `hinweise-bg-cta-${id}`,
+      hint: `hinweise-bg-cta-hint-${id}`,
+    };
+  }
+  if (ziel.testKey.startsWith('dok-')) {
+    return {
+      wrap: 'hinweise-unterlagen-cta-wrap',
+      cta: 'hinweise-unterlagen-cta',
+      hint: 'hinweise-unterlagen-cta-hint',
+    };
+  }
+  if (ziel.testKey.startsWith('steuernummer-')) {
+    const id = ziel.testKey.slice('steuernummer-'.length);
+    return {
+      wrap: `hinweise-steuernummer-cta-wrap-${id}`,
+      cta: `hinweise-steuernummer-cta-${id}`,
+      hint: `hinweise-steuernummer-cta-hint-${id}`,
+    };
+  }
+  if (ziel.testKey === 'betriebsdatum') {
+    return {
+      wrap: 'hinweise-betriebsdatum-cta-wrap',
+      cta: 'hinweise-betriebsdatum-cta',
+      hint: 'hinweise-betriebsdatum-cta-hint',
+    };
+  }
+  if (ziel.testKey === 'parallele-behoerden') {
+    return {
+      wrap: 'hinweise-parallele-behoerden-cta-wrap',
+      cta: 'hinweise-parallele-behoerden-cta',
+      hint: 'hinweise-parallele-behoerden-cta-hint',
+    };
+  }
+  return {
+    wrap: `hinweise-cta-wrap-${ziel.testKey}`,
+    cta: `hinweise-cta-${ziel.testKey}`,
+    hint: `hinweise-cta-hint-${ziel.testKey}`,
+  };
 }
 
-/** Erkennung des RELEVANT/HINWEIS-Signals zur ausstehenden BG-Anmeldung. */
-function isBgAnmeldungSignal(signal: FairnessSignal): boolean {
-  return signal.typ === 'UG_BG_ANMELDUNG_AUSSTEHEND' || signal.id === 'UG-BG-ANMELDUNG';}
+/** Visueller Rahmen des CTA-Blocks nach Priorität (kein Einfluss auf Logik). */
+function ctaWrapStyle(prioritaet: FairnessSignal['prioritaet']): CSSProperties {
+  if (prioritaet === 'RELEVANT') {
+    return {
+      marginTop: '0.5rem',
+      display: 'flex',
+      flexWrap: 'wrap',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      gap: '0.75rem',
+      padding: '0.75rem 1rem',
+      background: 'var(--color-warning-light)',
+      border: '1px solid var(--color-warning)',
+      borderRadius: 'var(--radius)',
+    };
+  }
+  if (prioritaet === 'INFO') {
+    return {
+      marginTop: '0.5rem',
+      display: 'flex',
+      flexWrap: 'wrap',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      gap: '0.75rem',
+      padding: '0.75rem 1rem',
+      background: 'var(--color-neutral-light)',
+      border: '1px solid var(--color-border)',
+      borderRadius: 'var(--radius)',
+    };
+  }
+  return {
+    marginTop: '0.5rem',
+    display: 'flex',
+    flexWrap: 'wrap',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: '0.75rem',
+    padding: '0.75rem 1rem',
+    background: 'var(--color-primary-light)',
+    border: '1px solid var(--color-border)',
+    borderRadius: 'var(--radius)',
+  };
+}
 
-/** Erkennung des HINWEIS-Signals zu fehlenden Unterlagen. */
-function isUnterlagenFehlendSignal(signal: FairnessSignal): boolean {
-  return signal.typ === 'UG_UNTERLAGE_FEHLT' || signal.id === 'UG-UNTERLAGEN-FEHLEND';}
+/**
+ * Optionaler Zusatz für Unterlagen-Hilfstext bei mehreren offenen Dokumenten
+ * (nur Darstellung – Routing und Basistext aus gruendung-rules).
+ */
+function unterlagenHintErweiterung(ziel: FairnessSignalZiel, akte: GruendungsAkte): string {
+  if (!ziel.testKey.startsWith('dok-') || !ziel.hint) return ziel.hint ?? '';
+  const fehlende = akte.dokumente.filter(
+    d => d.status === 'ANGEFORDERT' || d.status === 'ABGELEHNT'
+  );
+  if (fehlende.length > 1) {
+    return `${ziel.hint} ${fehlende.length} Dokumente stehen aus.`;
+  }
+  return ziel.hint;
+}
 
-/** Erkennung des HINWEIS-Signals zur noch fehlenden Steuernummer. */
-function isSteuernummerSignal(signal: FairnessSignal): boolean {
-  return signal.typ === 'UG_STEUERNUMMER_FEHLT' || signal.id === 'UG-STEUERNUMMER-FEHLT';}
+function FairnessSignalCta({
+  signal,
+  akte,
+}: {
+  signal: FairnessSignal;
+  akte: GruendungsAkte;
+}) {
+  const ziel = fairnessSignalZiel(signal, akte);
+  if (!ziel) return null;
 
-/** Erkennung des HINWEIS-Signals zum überschrittenen Betriebsdatum. */
-function isBetriebsdatumSignal(signal: FairnessSignal): boolean {
-  return signal.typ === 'UG_BETRIEBSDATUM_UEBERSCHRITTEN' || signal.id === 'UG-BETRIEBSDATUM';}
+  const ids = hinweiseCtaTestIds(ziel);
+  const hintText = unterlagenHintErweiterung(ziel, akte);
 
-/** Erkennung des INFO-Signals zu parallel aktiven Behörden. */
-function isParalleleBehoerdenSignal(signal: FairnessSignal): boolean {
-  return signal.typ === 'UG_PARALLELE_BEHOERDEN_AKTIV' || signal.id === 'UG-PARALLELE-BEHOERDEN';}
+  return (
+    <div style={ctaWrapStyle(signal.prioritaet)} data-testid={ids.wrap}>
+      {hintText && (
+        <p
+          style={{ margin: 0, fontSize: '0.875rem', lineHeight: 1.45 }}
+          data-testid={ids.hint}
+        >
+          {hintText}
+        </p>
+      )}
+      <Link
+        href={ziel.href}
+        className="btn btn-primary"
+        style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', flexShrink: 0 }}
+        data-testid={ids.cta}
+        aria-label={ziel.ariaLabel ?? ziel.cta}
+      >
+        <Icon name={ziel.icon as IconName} size={15} />
+        {ziel.cta}
+      </Link>
+    </div>
+  );
+}
 
 export default function GruendungHinweisePage() {
   const { akte } = useGruendungState();
@@ -126,96 +251,12 @@ export default function GruendungHinweisePage() {
                 Relevant ({relevant.length})
               </h2>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                {relevant.map(sig => {
-                  const rqId = rueckfrageIdAusSignal(sig);
-                  const rqOffen = rqId
-                    ? akte.rueckfragen.find(r => r.id === rqId && !r.beantwortet)
-                    : undefined;
-                  const rqNochOffen = !!rqOffen;
-                  // Hilfstext RQ-CTA: gemeinsame Quelle (gruendung-rules)
-                  const rqCtaHint = rqOffen ? rqCtaHilfstext(rqOffen) : null;
-                  const bgBehörde = isBgAnmeldungSignal(sig)
-                    ? akte.beteiligteBehörden.find(b => b.typ === 'BERUFSGENOSSENSCHAFT')
-                    : undefined;
-                  const bgNochOffen = bgBehörde?.status === 'NICHT_GESTARTET';
-                  // Hilfstext BG-CTA: session-sensitiv, gemeinsame Quelle
-                  const bgCtaHint = bgNochOffen
-                    ? bgCtaHilfstext(hatOffeneRueckfrage(akte))
-                    : null;
-                  return (
-                    <div key={sig.id} data-testid={`hinweise-relevant-${sig.id}`}>
-                      <FairnessPanel signale={[sig]} />
-                      {rqId && rqNochOffen && rqCtaHint && (
-                        <div
-                          style={{
-                            marginTop: '0.5rem',
-                            display: 'flex',
-                            flexWrap: 'wrap',
-                            alignItems: 'center',
-                            justifyContent: 'space-between',
-                            gap: '0.75rem',
-                            padding: '0.75rem 1rem',
-                            background: 'var(--color-warning-light)',
-                            border: '1px solid var(--color-warning)',
-                            borderRadius: 'var(--radius)',
-                          }}
-                          data-testid={`hinweise-rq-cta-wrap-${rqId}`}
-                        >
-                          <p
-                            style={{ margin: 0, fontSize: '0.875rem', lineHeight: 1.45 }}
-                            data-testid={`hinweise-rq-cta-hint-${rqId}`}
-                          >
-                            {rqCtaHint}
-                          </p>
-                          <Link
-                            href={`/gruendung/rueckfragen#rq-${rqId}`}
-                            className="btn btn-primary"
-                            style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', flexShrink: 0 }}
-                            data-testid={`hinweise-rq-cta-${rqId}`}
-                            aria-label={`Rückfrage ${rqId} beantworten`}
-                          >
-                            <Icon name="chat" size={15} />
-                            Frage beantworten
-                          </Link>
-                        </div>
-                      )}
-                      {bgBehörde && bgNochOffen && bgCtaHint && (
-                        <div
-                          style={{
-                            marginTop: '0.5rem',
-                            display: 'flex',
-                            flexWrap: 'wrap',
-                            alignItems: 'center',
-                            justifyContent: 'space-between',
-                            gap: '0.75rem',
-                            padding: '0.75rem 1rem',
-                            background: 'var(--color-warning-light)',
-                            border: '1px solid var(--color-warning)',
-                            borderRadius: 'var(--radius)',
-                          }}
-                          data-testid={`hinweise-bg-cta-wrap-${bgBehörde.id}`}
-                        >
-                          <p
-                            style={{ margin: 0, fontSize: '0.875rem', lineHeight: 1.45 }}
-                            data-testid={`hinweise-bg-cta-hint-${bgBehörde.id}`}
-                          >
-                            {bgCtaHint}
-                          </p>
-                          <Link
-                            href={`/gruendung/behoerden#beh-${bgBehörde.id}`}
-                            className="btn btn-primary"
-                            style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', flexShrink: 0 }}
-                            data-testid={`hinweise-bg-cta-${bgBehörde.id}`}
-                            aria-label={`Zur Behördenkarte ${bgBehörde.bezeichnung}`}
-                          >
-                            <Icon name="building" size={15} />
-                            Zur Behördenkarte
-                          </Link>
-                        </div>
-                      )}
-                    </div>
-                  );
-                })}
+                {relevant.map(sig => (
+                  <div key={sig.id} data-testid={`hinweise-relevant-${sig.id}`}>
+                    <FairnessPanel signale={[sig]} />
+                    <FairnessSignalCta signal={sig} akte={akte} />
+                  </div>
+                ))}
               </div>
             </section>
           )}
@@ -225,156 +266,12 @@ export default function GruendungHinweisePage() {
                 Hinweise ({hinweis.length})
               </h2>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                {hinweis.map(sig => {
-                  const fehlendeDocs = isUnterlagenFehlendSignal(sig)
-                    ? akte.dokumente.filter(d => d.status === 'ANGEFORDERT' || d.status === 'ABGELEHNT')
-                    : [];
-                  const erstesFehlend = fehlendeDocs[0];
-                  const finanzamt = isSteuernummerSignal(sig)
-                    ? akte.beteiligteBehörden.find(b => b.typ === 'FINANZAMT')
-                    : undefined;
-                  const vs05 = isSteuernummerSignal(sig)
-                    ? akte.verfahrensSchritte.find(vs => vs.id === 'VS-05')
-                    : undefined;
-                  const steuernummerNochOffen =
-                    !!vs05 &&
-                    (vs05.status === 'AUSSTEHEND' || vs05.status === 'IN_BEARBEITUNG');
-                  const steuernummerInBearbeitung = vs05?.status === 'IN_BEARBEITUNG';
-                  const betriebsdatumNochOffen = isBetriebsdatumSignal(sig)
-                    ? !['GENEHMIGT', 'AKTIVER_BETRIEB', 'BETRIEB_EINGESTELLT'].includes(akte.status)
-                    : false;
-                  // Hilfstexte: gemeinsame Quelle (gruendung-rules), session-sensitiv
-                  const offeneRq = hatOffeneRueckfrage(akte);
-                  const vs05Status = akte.verfahrensSchritte.find(vs => vs.id === 'VS-05')?.status;
-                  const steuernummerVergabeLaeuft = vs05Status === 'IN_BEARBEITUNG';
-                  const betriebsdatumCtaHint = betriebsdatumNochOffen
-                    ? betriebsdatumCtaHilfstext({
-                        hatOffeneRq: offeneRq,
-                        steuernummerInBearbeitung: steuernummerVergabeLaeuft,
-                      })
-                    : null;
-                  return (
-                    <div key={sig.id} data-testid={`hinweise-hinweis-${sig.id}`}>
-                      <FairnessPanel signale={[sig]} />
-                      {erstesFehlend && (
-                        <div
-                          style={{
-                            marginTop: '0.5rem',
-                            display: 'flex',
-                            flexWrap: 'wrap',
-                            alignItems: 'center',
-                            justifyContent: 'space-between',
-                            gap: '0.75rem',
-                            padding: '0.75rem 1rem',
-                            background: 'var(--color-primary-light)',
-                            border: '1px solid var(--color-border)',
-                            borderRadius: 'var(--radius)',
-                          }}
-                          data-testid="hinweise-unterlagen-cta-wrap"
-                        >
-                          {/* Hilfstext: session-sensitiv wie Übersicht-Fairness-CTA Unterlagen */}
-                          <p
-                            style={{ margin: 0, fontSize: '0.875rem', lineHeight: 1.45 }}
-                            data-testid="hinweise-unterlagen-cta-hint"
-                          >
-                            {unterlagenCtaHilfstext(offeneRq)}
-                            {fehlendeDocs.length > 1
-                              ? ` ${fehlendeDocs.length} Dokumente stehen aus.`
-                              : ''}
-                          </p>
-                          <Link
-                            href={`/gruendung/dokumente#dok-${erstesFehlend.id}`}
-                            className="btn btn-primary"
-                            style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', flexShrink: 0 }}
-                            data-testid="hinweise-unterlagen-cta"
-                            aria-label="Zu den ausstehenden Unterlagen"
-                          >
-                            <Icon name="file" size={15} />
-                            Zu den Unterlagen
-                          </Link>
-                        </div>
-                      )}
-                      {finanzamt && steuernummerNochOffen && (
-                        <div
-                          style={{
-                            marginTop: '0.5rem',
-                            display: 'flex',
-                            flexWrap: 'wrap',
-                            alignItems: 'center',
-                            justifyContent: 'space-between',
-                            gap: '0.75rem',
-                            padding: '0.75rem 1rem',
-                            background: 'var(--color-primary-light)',
-                            border: '1px solid var(--color-border)',
-                            borderRadius: 'var(--radius)',
-                          }}
-                          data-testid={`hinweise-steuernummer-cta-wrap-${finanzamt.id}`}
-                        >
-                          {/* Hilfstext: session-sensitiv wie Übersicht-Fairness-CTA Steuernummer */}
-                          <p
-                            style={{ margin: 0, fontSize: '0.875rem', lineHeight: 1.45 }}
-                            data-testid={`hinweise-steuernummer-cta-hint-${finanzamt.id}`}
-                          >
-                            {steuernummerCtaHilfstext({
-                              inBearbeitung: !!steuernummerInBearbeitung,
-                              hatOffeneRq: offeneRq,
-                            })}
-                          </p>
-                          <Link
-                            href={`/gruendung/behoerden#beh-${finanzamt.id}`}
-                            className="btn btn-primary"
-                            style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', flexShrink: 0 }}
-                            data-testid={`hinweise-steuernummer-cta-${finanzamt.id}`}
-                            aria-label={
-                              steuernummerInBearbeitung
-                                ? `Steuernummer-Stand beim ${finanzamt.bezeichnung} ansehen`
-                                : `Zur Behördenkarte ${finanzamt.bezeichnung}`
-                            }
-                          >
-                            <Icon name="building" size={15} />
-                            {steuernummerInBearbeitung
-                              ? 'Steuernummer-Stand ansehen'
-                              : 'Zum Finanzamt'}
-                          </Link>
-                        </div>
-                      )}
-                      {betriebsdatumNochOffen && (
-                        <div
-                          style={{
-                            marginTop: '0.5rem',
-                            display: 'flex',
-                            flexWrap: 'wrap',
-                            alignItems: 'center',
-                            justifyContent: 'space-between',
-                            gap: '0.75rem',
-                            padding: '0.75rem 1rem',
-                            background: 'var(--color-primary-light)',
-                            border: '1px solid var(--color-border)',
-                            borderRadius: 'var(--radius)',
-                          }}
-                          data-testid="hinweise-betriebsdatum-cta-wrap"
-                        >
-                          <p
-                            style={{ margin: 0, fontSize: '0.875rem', lineHeight: 1.45 }}
-                            data-testid="hinweise-betriebsdatum-cta-hint"
-                          >
-                            {betriebsdatumCtaHint}
-                          </p>
-                          <Link
-                            href="/gruendung#verfahrensstatus"
-                            className="btn btn-primary"
-                            style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', flexShrink: 0 }}
-                            data-testid="hinweise-betriebsdatum-cta"
-                            aria-label="Zum Verfahrensstatus auf der Übersicht"
-                          >
-                            <Icon name="refresh" size={15} />
-                            Zum Verfahrensstatus
-                          </Link>
-                        </div>
-                      )}
-                    </div>
-                  );
-                })}
+                {hinweis.map(sig => (
+                  <div key={sig.id} data-testid={`hinweise-hinweis-${sig.id}`}>
+                    <FairnessPanel signale={[sig]} />
+                    <FairnessSignalCta signal={sig} akte={akte} />
+                  </div>
+                ))}
               </div>
             </section>
           )}
@@ -384,56 +281,12 @@ export default function GruendungHinweisePage() {
                 Informationen ({info.length})
               </h2>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                {info.map(sig => {
-                  const paralleleNochAktiv = isParalleleBehoerdenSignal(sig)
-                    ? akte.beteiligteBehörden.filter(
-                        b => b.status === 'IN_BEARBEITUNG' || b.status === 'RUECKFRAGE_OFFEN'
-                      ).length > 1
-                    : false;
-                  // Hilfstext parallele Behörden: gemeinsame Quelle, session-sensitiv
-                  const paralleleCtaHint = paralleleNochAktiv
-                    ? paralleleBehoerdenCtaHilfstext(hatOffeneRueckfrage(akte))
-                    : null;
-                  return (
-                    <div key={sig.id} data-testid={`hinweise-info-${sig.id}`}>
-                      <FairnessPanel signale={[sig]} />
-                      {paralleleNochAktiv && paralleleCtaHint && (
-                        <div
-                          style={{
-                            marginTop: '0.5rem',
-                            display: 'flex',
-                            flexWrap: 'wrap',
-                            alignItems: 'center',
-                            justifyContent: 'space-between',
-                            gap: '0.75rem',
-                            padding: '0.75rem 1rem',
-                            background: 'var(--color-neutral-light)',
-                            border: '1px solid var(--color-border)',
-                            borderRadius: 'var(--radius)',
-                          }}
-                          data-testid="hinweise-parallele-behoerden-cta-wrap"
-                        >
-                          <p
-                            style={{ margin: 0, fontSize: '0.875rem', lineHeight: 1.45 }}
-                            data-testid="hinweise-parallele-behoerden-cta-hint"
-                          >
-                            {paralleleCtaHint}
-                          </p>
-                          <Link
-                            href="/gruendung/behoerden"
-                            className="btn btn-primary"
-                            style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', flexShrink: 0 }}
-                            data-testid="hinweise-parallele-behoerden-cta"
-                            aria-label="Zu Behörden und Verfahrensschritten"
-                          >
-                            <Icon name="building" size={15} />
-                            Zu den Behörden
-                          </Link>
-                        </div>
-                      )}
-                    </div>
-                  );
-                })}
+                {info.map(sig => (
+                  <div key={sig.id} data-testid={`hinweise-info-${sig.id}`}>
+                    <FairnessPanel signale={[sig]} />
+                    <FairnessSignalCta signal={sig} akte={akte} />
+                  </div>
+                ))}
               </div>
             </section>
           )}
