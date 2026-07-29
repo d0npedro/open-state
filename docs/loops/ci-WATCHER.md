@@ -2,14 +2,15 @@
 
 | Feld | Wert |
 |------|------|
-| last_checked | 2026-07-29T06:56:00Z |
-| last_run_id | 30429678187 |
-| last_status | success |
-| last_fix_sha | e88f135 |
+| last_checked | 2026-07-29T07:01:00Z |
+| last_run_id | 30430084336 |
+| last_status | in_progress |
+| last_fix_sha | dcb22ee |
 | fix_attempts | 0 |
 
 ## Log
 
+- Catch-up this tick: origin/main..main was 2+ (multi-loop merges AV/UG/Kita landed concurrent) → lint+build grün → push `36039a0..dcb22ee` (incl. `ab6b920` AV Q-105, `ba2c4aa` Kita Prozesskette, `7a28bed` UG Fairness-Text, merges) → origin/main..main = 0. Prior E2E `30429843267` **success** (SHA e88f135 docs). Build `30430084296` + E2E `30430084336` **in_progress** (SHA dcb22ee Merge loop/kita). No fix. fix_attempts=0.
 - E2E `30429678187` **success** (SHA e88f135 docs ci-watcher HEAD). Prior E2E `30429524604` **success** (SHA 03a0d80); E2E `30429497016` **success** (SHA 6e3614f). Build `30429302810` **success** (SHA 99e736b Merge loop/kita — latest code path; HEAD docs-only path-skip). Catch-up: origin/main..main = 0. No fix. fix_attempts=0.
 - E2E `30429524604` **success** (SHA 03a0d80 docs ci-watcher HEAD). Prior E2E `30429497016` **success** (SHA 6e3614f supervisor); E2E `30429486494` **success** (SHA f0c4fcc); E2E `30429377427` **success** (SHA b9764ec). Build `30429302810` + E2E `30429302795` **success** (SHA 99e736b Merge loop/kita — latest code path; HEAD docs-only path-skip). Catch-up: origin/main..main = 0 (prior tick pushed merges). Local `test:e2e:ci` re-confirm **233 passed**. No fix. fix_attempts=0.
 - E2E `30429377427` **success** (SHA b9764ec docs supervisor Q-104/Q-127/Q-128). Build `30429302810` + E2E `30429302795` **success** (SHA 99e736b Merge loop/kita). Build latest code path still 99e736b (newer HEAD docs-only path-skip). Catch-up: origin/main..main may include concurrent supervisor docs; lint+build then push if ahead. No fix. fix_attempts=0.
