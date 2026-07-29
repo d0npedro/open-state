@@ -2,6 +2,30 @@
 
 Branch: `loop/kita` · Worktree: `D:\Projects\open-state-loop-kita`
 
+## Iteration 2026-07-29 – US-KJ-005/006 Planungsraum-Detail Meldelücke-Filter
+
+### Was
+Steuerungslagebild Planungsraum-Detailkarten: Schnellfilter „Meldelücke“ gespiegelt (wie Engpass-Rangliste / Handlungsfelder / Vorlage). Client-Komponente `KitaPlanungsraumDetailListe` mit Chips „Alle Räume“ und „Meldelücke (n)“; Original-Rang nach Wartelistendruck bleibt; Leerzustand nach Session-Freigabe; Summenhinweis Residual über alle Räume (unabhängig vom Sichtfilter). Keine Umbewertung nach Meldeschwere. Nur Aggregate, keine Kind- oder Personennamen. Merge `origin/main` (ci-watcher docs) vor dem Feature.
+
+### Dateien
+- `demo/components/kita/KitaPlanungsraumDetailListe.tsx` (neu: Detailkarten + Meldelücke-Schnellfilter)
+- `demo/app/kita/lagebild/page.tsx` (Einbindung statt Inline-Karten)
+- `docs/loops/kita-JOURNAL.md` (dieses Journal)
+
+### Story
+US-KJ-005 / US-KJ-006 – Versorgungslagebild Planungsraum-Detail (Meldelücke-Schnellfilter, Session-sensitiv)
+
+### Build
+`npm run lint` + `npm run build` im `demo/`-Verzeichnis (siehe Commit dieses Laufs)
+
+### Nicht angefasst (Supervisor / verboten)
+Queue, BUILD_STATE, storyRegistry, DECISION_LOG, andere Domänen, package.json, CI, push
+
+### Nächster sinnvoller Schritt (Hinweis Supervisor)
+Druckansicht Lagebild/Vorlage mit Engpass-/Handlungsfeld-/Detail-Meldelücke-Filter dokumentieren (print-only Hinweis bei aktivem Filter), oder Monatsbericht/Einrichtung-Verlinkung schärfen.
+
+---
+
 ## Iteration 2026-07-29 – US-KJ-005/006 Lagebild Handlungsfelder Meldelücke-Filter
 
 ### Was
