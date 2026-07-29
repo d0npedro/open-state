@@ -8,6 +8,31 @@ Erlaubte Pfade nur: `demo/app/gruendung/**`, `demo/context/GruendungStateContext
 
 ---
 
+## 2026-07-29 – Iteration 13: Übersicht nächster Schritt + Aufgaben-Links
+
+### Was
+Übersicht erhält den Block „Was als Nächstes?“ mit `naechsterSchritt`
+(inkl. CTA aus Aktenzustand) und Liste `offeneAufgaben` mit Deep-Links:
+Rückfrage → `#rq-…`, Unterlagen → `#dok-…`, BG → `#beh-…`.
+Nach Beantworten der Rückfrage entfällt die RQ-Aufgabe; CTA wechselt zu
+Unterlagen. E2E: Sichtbarkeit, Linkziele, Navigation, Session-Reaktion.
+
+### Dateien
+- `demo/app/gruendung/page.tsx` – Block, Ziel-Heuristik, data-testid
+- `demo/e2e/us-ug-gruendung.spec.ts` – vier Tests (Block, CTA, Dok-Link, Session)
+- `docs/loops/ug-JOURNAL.md` – dieses Journal
+
+### Build
+`npm run lint` + `npm run build` im Ordner `demo/` grün.
+`npm run test:e2e:ug` Exit 0 (90 passed).
+
+### Nächster sinnvoller UG-Schritt (Vorschlag)
+- Hinweise: CTA für parallele-Behörden-INFO zu `/gruendung/behoerden`
+- Übersicht: Fairness-Einträge mit Kurz-CTA (Rückfrage / Unterlagen / BG)
+- Behörden: Link von offenem Schritt VS-04 zur Rückfrage
+
+---
+
 ## 2026-07-29 – Iteration 12: Übersicht Fairness nur RELEVANT+HINWEIS
 
 ### Was

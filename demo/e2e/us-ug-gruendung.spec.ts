@@ -82,6 +82,66 @@ test.describe('UG – Übersicht', () => {
     await expect(page.getByTestId('uebersicht-behoerde-BEH-01')).toBeVisible();
   });
 
+  test('Nächster Schritt und offene Aufgaben mit Links sichtbar', async ({ page }) => {
+    const block = page.getByTestId('uebersicht-naechste-schritte');
+    await expect(block).toBeVisible();
+    await expect(block.getByRole('heading', { name: 'Was als Nächstes?' })).toBeVisible();
+
+    const schritt = page.getByTestId('uebersicht-naechster-schritt');
+    await expect(schritt).toBeVisible();
+    await expect(schritt).toContainText(/Rückfrage des Finanzamts|Kleinunternehmerregelung|Rückfragen/i);
+
+    const cta = page.getByTestId('uebersicht-naechster-schritt-cta');
+    await expect(cta).toBeVisible();
+    await expect(cta).toHaveAttribute('href', /\/gruendung\/rueckfragen#rq-/);
+    await expect(cta).toContainText(/Rückfrage beantworten/i);
+
+    const aufgaben = page.getByTestId('uebersicht-offene-aufgaben');
+    await expect(aufgaben).toBeVisible();
+    await expect(page.getByTestId('uebersicht-aufgabe-0')).toBeVisible();
+    await expect(page.getByTestId('uebersicht-aufgabe-link-rq-RQ-01')).toHaveAttribute(
+      'href',
+      '/gruendung/rueckfragen#rq-RQ-01'
+    );
+    await expect(page.getByTestId('uebersicht-aufgabe-link-dok-DOK-03')).toHaveAttribute(
+      'href',
+      '/gruendung/dokumente#dok-DOK-03'
+    );
+    await expect(page.getByTestId('uebersicht-aufgabe-link-beh-BEH-04')).toHaveAttribute(
+      'href',
+      '/gruendung/behoerden#beh-BEH-04'
+    );
+  });
+
+  test('CTA Nächster Schritt führt zur offenen Rückfrage', async ({ page }) => {
+    await page.getByTestId('uebersicht-naechster-schritt-cta').click();
+    await expect(page).toHaveURL(/\/gruendung\/rueckfragen#rq-RQ-01/);
+    await expect(page.locator('#rq-RQ-01')).toBeVisible();
+  });
+
+  test('Aufgaben-Link Unterlagen führt zur Dokumentenkarte', async ({ page }) => {
+    await page.getByTestId('uebersicht-aufgabe-link-dok-DOK-03').click();
+    await expect(page).toHaveURL(/\/gruendung\/dokumente#dok-DOK-03/);
+    await expect(page.locator('#dok-DOK-03')).toBeVisible();
+  });
+
+  test('Nach Beantworten entfällt Rückfrage-Aufgabe auf Übersicht', async ({ page }) => {
+    const { goUgTab } = await import('./helpers/sessionNav');
+    await goUgTab(page, 'Fragen', /\/gruendung\/rueckfragen/);
+    await page.getByRole('button', { name: /Rückfrage beantworten/i }).click();
+    await expect(page.getByText(/die Behörde wurde informiert|beantwortet/i).first()).toBeVisible();
+    await goUgTab(page, 'Übersicht', /\/gruendung$/);
+
+    await expect(page.getByTestId('uebersicht-naechste-schritte')).toBeVisible();
+    await expect(page.getByTestId('uebersicht-aufgabe-link-rq-RQ-01')).toHaveCount(0);
+    // Unterlagen und BG bleiben als offene Aufgaben
+    await expect(page.getByTestId('uebersicht-aufgabe-link-dok-DOK-03')).toBeVisible();
+    await expect(page.getByTestId('uebersicht-aufgabe-link-beh-BEH-04')).toBeVisible();
+    // Nächster Schritt wechselt von Rückfrage zu Unterlagen
+    const cta = page.getByTestId('uebersicht-naechster-schritt-cta');
+    await expect(cta).toHaveAttribute('href', /\/gruendung\/dokumente#dok-/);
+  });
+
   test('Fairness-Kurzblock mit Link zu Hinweise', async ({ page }) => {
     const block = page.getByTestId('uebersicht-fairness-kurzblock');
     await expect(block).toBeVisible();
