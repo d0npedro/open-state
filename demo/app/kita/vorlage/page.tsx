@@ -8,7 +8,8 @@
  * (Hinweis only, wie Bedarfsplanung / Transparenzbericht).
  * Engpass-Liste: Schnellfilter „Meldelücke“ (Session-sensitiv, wie Planungsraum-Explorer).
  * Freigabe nur aktiv durch JA-Leitung (simuliert). Keine automatischen Beschlüsse.
- * Export: druckoptimierte Ansicht (Browser-Druck → PDF).
+ * Export: Druck freigabeunabhängig (Browser-Druck → PDF); bei aktivem Meldelücke-Filter
+ * print-only-Hinweis (Spiegel Lagebild US-KJ-005/006). Status Entwurf/Freigabe im Ausdruck.
  */
 
 import { useMemo, useState } from 'react';
@@ -185,11 +186,6 @@ export default function PolitischeVorlagePage() {
               </button>
             </>
           )}
-          {freigegeben && (
-            <button type="button" className="btn btn-secondary" onClick={() => window.print()}>
-              Drucken / als PDF speichern
-            </button>
-          )}
           {status === 'FREIGEGEBEN' && (
             <button
               type="button"
@@ -203,6 +199,44 @@ export default function PolitischeVorlagePage() {
             </button>
           )}
         </div>
+      </div>
+
+      {/* Druck freigabeunabhängig – Spiegel Lagebild (US-KJ-005/006 Druckleiste) */}
+      <div
+        className="no-print card"
+        style={{
+          display: 'flex',
+          flexWrap: 'wrap',
+          gap: '1rem',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+        }}
+      >
+        <div style={{ maxWidth: '38rem' }}>
+          <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>Export</div>
+          <strong style={{ fontSize: '0.95rem' }}>Druckansicht Vorlage</strong>
+          <p
+            style={{
+              fontSize: '0.8rem',
+              color: 'var(--color-text-muted)',
+              margin: '0.25rem 0 0',
+              lineHeight: 1.5,
+            }}
+          >
+            Druck ist freigabeunabhängig (Entwurf, Freigabe-Warteschlange und freigegebene Fassung).
+            Status und Engpass-Filter „Meldelücke“ erscheinen im Ausdruck als Hinweis
+            (Session-Stand Meldeeingang). Filter-Chips und Steuerleiste werden nicht gedruckt.
+            Rangfolge bleibt nach Wartelistendruck.
+          </p>
+        </div>
+        <button
+          type="button"
+          className="btn btn-secondary"
+          onClick={() => window.print()}
+          style={{ fontSize: '0.875rem', flexShrink: 0 }}
+        >
+          Drucken / als PDF speichern
+        </button>
       </div>
 
       {status === 'ZURUECKGEGEBEN' && freigabeHinweis && (
@@ -243,30 +277,56 @@ export default function PolitischeVorlagePage() {
           </div>
         )}
 
+        {/* Druck: Status immer sichtbar (auch ohne Freigabe) */}
+        {!freigegeben && (
+          <div
+            className="print-only print-block"
+            style={{
+              marginBottom: '1.25rem',
+              padding: '0.75rem 1rem',
+              border: '1px solid var(--color-border)',
+              borderRadius: 'var(--radius)',
+              fontSize: '0.875rem',
+              background: 'var(--color-neutral-light)',
+            }}
+            role="status"
+          >
+            <strong>Status im Ausdruck: {statusLabel[status]}</strong>
+            <div style={{ marginTop: '0.25rem', color: 'var(--color-text-muted)', fontSize: '0.8rem' }}>
+              Noch nicht freigegeben · Vorlage-ID {VORLAGE_ID} · Demo-Session · kein Gremienbeschluss
+            </div>
+          </div>
+        )}
+
         <header style={{ marginBottom: '1.25rem', borderBottom: '1px solid var(--color-border)', paddingBottom: '1rem' }}>
           <p style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', marginBottom: '0.5rem' }}>
             {GREMIUM} · {SITZUNG}
           </p>
           {editierbar ? (
-            <label style={{ display: 'block' }}>
-              <span style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>Titel</span>
-              <input
-                type="text"
-                value={titel}
-                onChange={e => setTitel(e.target.value)}
-                style={{
-                  display: 'block',
-                  width: '100%',
-                  marginTop: '0.25rem',
-                  fontSize: '1.25rem',
-                  fontWeight: 700,
-                  padding: '0.5rem 0.75rem',
-                  border: '1px solid var(--color-border)',
-                  borderRadius: 'var(--radius)',
-                  fontFamily: 'inherit',
-                }}
-              />
-            </label>
+            <>
+              <label className="no-print" style={{ display: 'block' }}>
+                <span style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>Titel</span>
+                <input
+                  type="text"
+                  value={titel}
+                  onChange={e => setTitel(e.target.value)}
+                  style={{
+                    display: 'block',
+                    width: '100%',
+                    marginTop: '0.25rem',
+                    fontSize: '1.25rem',
+                    fontWeight: 700,
+                    padding: '0.5rem 0.75rem',
+                    border: '1px solid var(--color-border)',
+                    borderRadius: 'var(--radius)',
+                    fontFamily: 'inherit',
+                  }}
+                />
+              </label>
+              <h2 className="print-only print-block" style={{ margin: 0, fontSize: '1.35rem' }}>
+                {titel}
+              </h2>
+            </>
           ) : (
             <h2 style={{ margin: 0, fontSize: '1.35rem' }}>{titel}</h2>
           )}
@@ -342,12 +402,31 @@ export default function PolitischeVorlagePage() {
             </button>
           </div>
 
-          {engpassFilter === 'MELDELUECKE' && (
+          {engpassFilter === 'MELDELUECKE' ? (
             <p
-              className="print-only"
-              style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', margin: '0 0 0.5rem' }}
+              className="print-only print-block"
+              style={{
+                fontSize: '0.8rem',
+                color: 'var(--color-text-muted)',
+                margin: '0 0 0.65rem',
+                padding: '0.5rem 0.75rem',
+                background: 'var(--color-neutral-light)',
+                borderLeft: '3px solid var(--color-warning)',
+                borderRadius: 'var(--radius)',
+                lineHeight: 1.5,
+              }}
             >
-              Gefiltert: nur Planungsräume mit Meldelücke (Stand Entwurf).
+              <strong>Druckfilter aktiv: Meldelücke.</strong> Nur Planungsräume mit fehlender freigegebener
+              Monatsmeldung (Demo-Stichprobe Meldeeingang, Session-Stand). Original-Rang nach Wartelistendruck
+              unverändert; keine Umbewertung nach Meldeschwere. Anzahl in Stichprobe: {meldelueckeCount}.
+            </p>
+          ) : (
+            <p
+              className="print-only print-block"
+              style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', margin: '0 0 0.5rem', lineHeight: 1.5 }}
+            >
+              Druckfilter: Standard Top {ENGPASS_TOP_N} nach Wartelistendruck (kein Meldelücke-Filter aktiv).
+              Meldelücken in der Stichprobe: {meldelueckeCount}.
             </p>
           )}
 
@@ -530,21 +609,30 @@ export default function PolitischeVorlagePage() {
         <section style={{ marginBottom: '1.5rem' }}>
           <h3 style={{ fontSize: '1rem', marginBottom: '0.75rem' }}>4. Sachdarstellung</h3>
           {editierbar ? (
-            <textarea
-              value={sachtext}
-              onChange={e => setSachtext(e.target.value)}
-              rows={5}
-              style={{
-                width: '100%',
-                padding: '0.75rem 1rem',
-                borderRadius: 'var(--radius)',
-                border: '1px solid var(--color-border)',
-                fontFamily: 'inherit',
-                fontSize: '0.9rem',
-                lineHeight: 1.55,
-                resize: 'vertical',
-              }}
-            />
+            <>
+              <textarea
+                className="no-print"
+                value={sachtext}
+                onChange={e => setSachtext(e.target.value)}
+                rows={5}
+                style={{
+                  width: '100%',
+                  padding: '0.75rem 1rem',
+                  borderRadius: 'var(--radius)',
+                  border: '1px solid var(--color-border)',
+                  fontFamily: 'inherit',
+                  fontSize: '0.9rem',
+                  lineHeight: 1.55,
+                  resize: 'vertical',
+                }}
+              />
+              <p
+                className="print-only print-block"
+                style={{ fontSize: '0.95rem', lineHeight: 1.65, margin: 0, whiteSpace: 'pre-wrap' }}
+              >
+                {sachtext}
+              </p>
+            </>
           ) : (
             <p style={{ fontSize: '0.95rem', lineHeight: 1.65, margin: 0, whiteSpace: 'pre-wrap' }}>{sachtext}</p>
           )}
@@ -572,6 +660,11 @@ export default function PolitischeVorlagePage() {
             <li>
               Engpass-Liste: Top {ENGPASS_TOP_N} nach Wartelistendruck; optionaler Schnellfilter „Meldelücke“
               (Session-sensitiv aus Meldeeingang-Stichprobe, analog Planungsraum-Explorer). Keine Umbewertung der Rangfolge.
+            </li>
+            <li>
+              Druckansicht ist freigabeunabhängig: Entwurf und freigegebene Fassung sind exportierbar.
+              Bei aktivem Meldelücke-Filter dokumentiert der Ausdruck den Filterstand (print-only-Hinweis,
+              Spiegel Steuerungslagebild). Steuerleiste und Filter-Chips sind no-print.
             </li>
             <li>Keine personen- oder kindbezogenen Einzeldaten in dieser Vorlage; Einrichtungsaggregate nur als Meldebasis-Hinweis.</li>
             {lb.methodik.slice(0, 3).map(m => (
@@ -605,6 +698,7 @@ export default function PolitischeVorlagePage() {
             @media print {
               .no-print { display: none !important; }
               .print-only { display: inline !important; }
+              .print-only.print-block { display: block !important; }
               body > div > header,
               body nav { display: none !important; }
               main { padding: 0 !important; }
