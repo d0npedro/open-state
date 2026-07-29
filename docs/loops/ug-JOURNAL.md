@@ -8,6 +8,31 @@ Erlaubte Pfade nur: `demo/app/gruendung/**`, `demo/context/GruendungStateContext
 
 ---
 
+## 2026-07-29 – Iteration 15: Übersicht Fairness-Einträge mit Kurz-CTA
+
+### Was
+Übersicht-Fairness-Kurzblock: handlungsrelevante Signale erhalten Kurz-CTAs
+je nach Typ — Rückfrage → `#rq-…`, Unterlagen → `#dok-…`, BG → `#beh-…`.
+CTA nur solange der auslösende Aktenzustand greift; nach Beantworten der
+Rückfrage entfällt der RQ-CTA (Unterlagen/BG bleiben). E2E: Linkziele,
+Navigation, Session-Reaktion.
+
+### Dateien
+- `demo/app/gruendung/page.tsx` – `fairnessSignalZiel`, CTAs im Fairness-Block
+- `demo/e2e/us-ug-gruendung.spec.ts` – vier CTA-Tests
+- `docs/loops/ug-JOURNAL.md` – dieses Journal
+
+### Build
+`npm run lint` + `npm run build` im Ordner `demo/` grün.
+`npm run test:e2e:ug` Exit 0 (96 passed).
+
+### Nächster sinnvoller UG-Schritt (Vorschlag)
+- Behörden: Link von offenem Schritt VS-04 zur Rückfrage
+- Hinweise: nach Session-Wechsel CTA-Verschwinden für parallele Behörden (optional)
+- Übersicht: Fairness-CTA für Steuernummer/Betriebsdatum (optional)
+
+---
+
 ## 2026-07-29 – Iteration 14: Hinweise-CTA parallele Behörden → Behörden
 
 ### Was

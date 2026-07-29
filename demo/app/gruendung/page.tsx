@@ -5,6 +5,7 @@ import { useGruendungState } from '@/context/GruendungStateContext';
 import { berechneFairnessSignaleGruendung } from '@/lib/fairness/gruendung-rules';
 import { Icon } from '@/components/Icon';
 import type { IconName } from '@/components/Icon';
+import type { FairnessSignal } from '@/types/fairness';
 import type { GruendungsAkte } from '@/types/gruendung';
 
 const statusFlow = [
@@ -116,6 +117,63 @@ function naechsterSchrittZiel(
       icon: 'building',
     };
   }
+  return null;
+}
+
+/**
+ * Kurz-CTA für Fairness-Signale auf der Übersicht (Rückfrage / Unterlagen / BG).
+ * Nur solange der auslösende Aktenzustand noch greift.
+ */
+function fairnessSignalZiel(
+  signal: FairnessSignal,
+  akte: GruendungsAkte
+): { href: string; cta: string; icon: IconName; testKey: string } | null {
+  // Offene Rückfrage mit Frist
+  if (
+    signal.typ === 'UG_RUECKFRAGE_OFFEN_FRIST_RELEVANT' ||
+    signal.id.startsWith('UG-RQ-')
+  ) {
+    const match = signal.id.match(/^UG-RQ-(.+)-FRIST$/);
+    const rqId = match?.[1];
+    if (!rqId) return null;
+    const offen = akte.rueckfragen.some(r => r.id === rqId && !r.beantwortet);
+    if (!offen) return null;
+    return {
+      href: `/gruendung/rueckfragen#rq-${rqId}`,
+      cta: 'Frage beantworten',
+      icon: 'chat',
+      testKey: `rq-${rqId}`,
+    };
+  }
+
+  // Fehlende Unterlagen
+  if (signal.typ === 'UG_UNTERLAGE_FEHLT' || signal.id === 'UG-UNTERLAGEN-FEHLEND') {
+    const dok = akte.dokumente.find(
+      d => d.status === 'ANGEFORDERT' || d.status === 'ABGELEHNT'
+    );
+    if (!dok) return null;
+    return {
+      href: `/gruendung/dokumente#dok-${dok.id}`,
+      cta: 'Zu den Unterlagen',
+      icon: 'file',
+      testKey: `dok-${dok.id}`,
+    };
+  }
+
+  // BG-Anmeldung ausstehend
+  if (signal.typ === 'UG_BG_ANMELDUNG_AUSSTEHEND' || signal.id === 'UG-BG-ANMELDUNG') {
+    const bg = akte.beteiligteBehörden.find(
+      b => b.typ === 'BERUFSGENOSSENSCHAFT' && b.status === 'NICHT_GESTARTET'
+    );
+    if (!bg) return null;
+    return {
+      href: `/gruendung/behoerden#beh-${bg.id}`,
+      cta: 'Zur Behördenkarte',
+      icon: 'building',
+      testKey: `beh-${bg.id}`,
+    };
+  }
+
   return null;
 }
 
@@ -426,25 +484,48 @@ export default function GruendungPage() {
             style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}
             data-testid="uebersicht-fairness-liste"
           >
-            {fairnessSignale.map(sig => (
-              <div
-                key={sig.id}
-                data-testid={`uebersicht-fairness-${sig.id}`}
-                data-prioritaet={sig.prioritaet}
-                className={`notice-box ${sig.prioritaet === 'RELEVANT' ? 'notice-box-warn' : 'notice-box-info'}`}
-              >
-                <Icon name="info" size={16} style={{ flexShrink: 0, marginTop: '2px' }} />
-                <div>
-                  <strong style={{ display: 'block', marginBottom: '0.25rem' }}>{sig.titel}</strong>
-                  <span style={{ fontSize: '0.875rem' }}>{sig.erklaerung}</span>
-                  {sig.naechsterSchritt && (
-                    <div style={{ marginTop: '0.5rem', fontWeight: 600, fontSize: '0.875rem' }}>
-                      → {sig.naechsterSchritt}
-                    </div>
-                  )}
+            {fairnessSignale.map(sig => {
+              const ziel = fairnessSignalZiel(sig, akte);
+              return (
+                <div
+                  key={sig.id}
+                  data-testid={`uebersicht-fairness-${sig.id}`}
+                  data-prioritaet={sig.prioritaet}
+                  className={`notice-box ${sig.prioritaet === 'RELEVANT' ? 'notice-box-warn' : 'notice-box-info'}`}
+                >
+                  <Icon name="info" size={16} style={{ flexShrink: 0, marginTop: '2px' }} />
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <strong style={{ display: 'block', marginBottom: '0.25rem' }}>{sig.titel}</strong>
+                    <span style={{ fontSize: '0.875rem' }}>{sig.erklaerung}</span>
+                    {sig.naechsterSchritt && (
+                      <div style={{ marginTop: '0.5rem', fontWeight: 600, fontSize: '0.875rem' }}>
+                        → {sig.naechsterSchritt}
+                      </div>
+                    )}
+                    {ziel && (
+                      <Link
+                        href={ziel.href}
+                        data-testid={`uebersicht-fairness-cta-${ziel.testKey}`}
+                        style={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '0.3rem',
+                          marginTop: '0.65rem',
+                          fontSize: '0.8rem',
+                          fontWeight: 600,
+                          color: 'var(--color-primary)',
+                          textDecoration: 'none',
+                        }}
+                        aria-label={`${ziel.cta}: ${sig.titel}`}
+                      >
+                        <Icon name={ziel.icon} size={13} />
+                        {ziel.cta} →
+                      </Link>
+                    )}
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
           <Link
             href="/gruendung/hinweise"
