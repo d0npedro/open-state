@@ -6,12 +6,21 @@ import {
   berechneFairnessSignaleGruendung,
   bgCtaHilfstext,
   fairnessSignalZiel,
+  FIKTIVES_HEUTE_GRUENDUNG,
   rqCtaHilfstext,
   unterlagenCtaHilfstext,
 } from '@/lib/fairness/gruendung-rules';
+import { berechneFristTage } from '@/lib/fairness/rules';
 import { Icon } from '@/components/Icon';
 import type { IconName } from '@/components/Icon';
 import type { GruendungsAkte } from '@/types/gruendung';
+
+/** Klarsprache für Resttage (analog AV / Rückfrage-Frist). */
+function fristRestLabel(tage: number): string {
+  if (tage < 0) return `${Math.abs(tage)} Tage überschritten`;
+  if (tage === 0) return 'heute fällig';
+  return `noch ${tage} Tag${tage === 1 ? '' : 'e'}`;
+}
 
 const statusFlow = [
   { key: 'EINGEREICHT',             label: 'Eingereicht'     },
@@ -130,11 +139,20 @@ function naechsterSchrittZiel(
 }
 
 export default function GruendungPage() {
-  const { akte } = useGruendungState();
+  const { akte, sessionUploadedIds } = useGruendungState();
   const chip = statusToChip[akte.status] ?? { label: akte.status, css: 'status-chip-neutral', icon: 'info' as IconName };
   const isRueckfrage = akte.status === 'RUECKFRAGE_AUSSTEHEND';
   const offeneRueckfragen = akte.rueckfragen.filter(r => !r.beantwortet).length;
-  const ausstehendeDoks = akte.dokumente.filter(d => d.status === 'ANGEFORDERT').length;
+  // ANGEFORDERT + ABGELEHNT blockieren den Fortschritt (Parität zu /gruendung/dokumente)
+  const ausstehendeDokumente = akte.dokumente.filter(
+    d => d.status === 'ANGEFORDERT' || d.status === 'ABGELEHNT'
+  );
+  const ausstehendeDoks = ausstehendeDokumente.length;
+  /** Session-Uploads für Quittung auf der Übersicht (US-UG-001/003, Parität AV Q-161). */
+  const sessionUploads = sessionUploadedIds
+    .map(id => akte.dokumente.find(d => d.id === id))
+    .filter((d): d is NonNullable<typeof d> => Boolean(d));
+  const naechsteOffeneUnterlage = ausstehendeDokumente[0] ?? null;
   const alleFairnessSignale = berechneFairnessSignaleGruendung(akte);
   // Übersicht: nur handlungsrelevante Stufen — INFO bleibt auf /gruendung/hinweise
   const fairnessSignale = alleFairnessSignale.filter(
@@ -170,6 +188,124 @@ export default function GruendungPage() {
               Frage jetzt beantworten
               <Icon name="arrow-right" size={16} />
             </Link>
+          </div>
+        </div>
+      )}
+
+      {/* ─── Upload-Quittung: Session-Uploads auf der Übersicht ─────
+          UX: Nach Upload muss klar sein, *was* eingegangen ist und
+          *welche* Unterlage als Nächstes noch fehlt (US-UG-001/003). */}
+      {sessionUploads.length > 0 && (
+        <div
+          className="notice-box notice-box-success"
+          role="status"
+          aria-live="polite"
+          data-testid="upload-quittung"
+        >
+          <Icon name="check-circle" size={20} style={{ flexShrink: 0, marginTop: '2px' }} />
+          <div style={{ flex: 1 }}>
+            <strong
+              style={{ display: 'block', marginBottom: '0.35rem', fontSize: '1rem' }}
+              data-testid="upload-quittung-titel"
+            >
+              {sessionUploads.length === 1
+                ? 'Unterlage eingegangen'
+                : `${sessionUploads.length} Unterlagen eingegangen`}
+            </strong>
+            <ul
+              style={{ margin: '0 0 0.5rem', paddingLeft: '1.15rem', fontSize: '0.9rem' }}
+              data-testid="upload-quittung-liste"
+            >
+              {sessionUploads.map(dok => (
+                <li key={dok.id} data-testid={`upload-quittung-item-${dok.id}`}>
+                  {dok.bezeichnung}
+                  {dok.hochgeladenAm ? (
+                    <span style={{ color: 'var(--color-text-muted)' }}>
+                      {' '}
+                      · eingereicht am {dok.hochgeladenAm}
+                    </span>
+                  ) : null}
+                </li>
+              ))}
+            </ul>
+            {naechsteOffeneUnterlage ? (
+              <div
+                data-testid="upload-quittung-naechste"
+                style={{
+                  marginTop: '0.5rem',
+                  padding: '0.75rem 0.875rem',
+                  borderRadius: 'var(--radius)',
+                  background: 'var(--color-warning-light)',
+                  borderLeft: '4px solid var(--color-warning)',
+                }}
+              >
+                <div
+                  style={{
+                    fontSize: '0.8rem',
+                    fontWeight: 600,
+                    color: 'var(--color-warning)',
+                    marginBottom: '0.25rem',
+                  }}
+                >
+                  Nächste offene Unterlage
+                </div>
+                <div style={{ fontWeight: 700, fontSize: '0.95rem', color: 'var(--color-text)' }}>
+                  {naechsteOffeneUnterlage.bezeichnung}
+                </div>
+                {naechsteOffeneUnterlage.frist && (
+                  <div
+                    style={{
+                      marginTop: '0.35rem',
+                      fontSize: '0.85rem',
+                      fontWeight: 600,
+                      color: 'var(--color-warning)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.35rem',
+                      flexWrap: 'wrap',
+                    }}
+                  >
+                    <Icon name="calendar" size={14} />
+                    Einreichen bis {naechsteOffeneUnterlage.frist}
+                    {naechsteOffeneUnterlage.fristDatum && (
+                      <span data-testid="upload-quittung-naechste-countdown">
+                        ·{' '}
+                        {fristRestLabel(
+                          berechneFristTage(
+                            naechsteOffeneUnterlage.fristDatum,
+                            FIKTIVES_HEUTE_GRUENDUNG
+                          )
+                        )}
+                      </span>
+                    )}
+                  </div>
+                )}
+                <Link
+                  href={`/gruendung/dokumente#dok-${naechsteOffeneUnterlage.id}`}
+                  className="btn btn-primary"
+                  style={{
+                    marginTop: '0.75rem',
+                    background: '#B45309',
+                    borderColor: '#B45309',
+                    minHeight: 44,
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '0.4rem',
+                  }}
+                  data-testid="upload-quittung-naechste-cta"
+                >
+                  Nächste Unterlage hochladen
+                  <Icon name="arrow-right" size={16} />
+                </Link>
+              </div>
+            ) : (
+              <p
+                style={{ margin: '0.25rem 0 0', fontSize: '0.875rem', color: 'var(--color-text-muted)' }}
+                data-testid="upload-quittung-vollstaendig"
+              >
+                Alle angeforderten Unterlagen liegen vor. Die Behördenbearbeitung kann fortgesetzt werden.
+              </p>
+            )}
           </div>
         </div>
       )}

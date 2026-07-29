@@ -132,6 +132,53 @@ test.describe('UG – Übersicht', () => {
     await expect(page.locator('#dok-DOK-03')).toBeVisible();
   });
 
+  test('Ohne Session-Upload keine Upload-Quittung auf Übersicht', async ({ page }) => {
+    await expect(page.getByTestId('upload-quittung')).toHaveCount(0);
+  });
+
+  test('Nach Session-Upload: Übersicht zeigt Quittung und Vollständigkeit', async ({ page }) => {
+    // US-UG-001/003: nach Upload muss klar sein, was einging; Mock hat nur DOK-03 offen
+    // Kein page.goto nach State-Interaktion (DEC-012)
+    const { goUgTab } = await import('./helpers/sessionNav');
+
+    await goUgTab(page, 'Unterlagen', /\/gruendung\/dokumente/);
+    await page.getByRole('button', { name: /Als hochgeladen markieren/i }).click();
+    await expect(page.getByTestId('dok-upload-quittung-DOK-03')).toBeVisible();
+
+    await goUgTab(page, 'Übersicht', /\/gruendung$/);
+
+    const quittung = page.getByTestId('upload-quittung');
+    await expect(quittung).toBeVisible();
+    await expect(page.getByTestId('upload-quittung-titel')).toHaveText('Unterlage eingegangen');
+    await expect(page.getByTestId('upload-quittung-item-DOK-03')).toContainText(
+      /Nachweis beruflicher Qualifikation/i
+    );
+    await expect(page.getByTestId('upload-quittung-item-DOK-03')).toContainText(
+      /eingereicht am 07\.\s*12\.2024|eingereicht am 07\.12\.2024/i
+    );
+    // Mock: nur eine offene Unterlage → Vollständigkeit, keine „nächste“
+    await expect(page.getByTestId('upload-quittung-vollstaendig')).toContainText(
+      /Alle angeforderten Unterlagen liegen vor/i
+    );
+    await expect(page.getByTestId('upload-quittung-naechste')).toHaveCount(0);
+  });
+
+  test('Upload-Quittung bleibt nach Tab-Wechsel auf Übersicht (kein page.goto)', async ({ page }) => {
+    const { goUgTab } = await import('./helpers/sessionNav');
+
+    await goUgTab(page, 'Unterlagen', /\/gruendung\/dokumente/);
+    await page.getByRole('button', { name: /Als hochgeladen markieren/i }).click();
+    await goUgTab(page, 'Übersicht', /\/gruendung$/);
+    await expect(page.getByTestId('upload-quittung')).toBeVisible();
+
+    await goUgTab(page, 'Hinweise', /\/gruendung\/hinweise/);
+    await goUgTab(page, 'Übersicht', /\/gruendung$/);
+
+    await expect(page.getByTestId('upload-quittung')).toBeVisible();
+    await expect(page.getByTestId('upload-quittung-item-DOK-03')).toBeVisible();
+    await expect(page.getByTestId('upload-quittung-vollstaendig')).toBeVisible();
+  });
+
   test('Nach Beantworten entfällt Rückfrage-Aufgabe auf Übersicht', async ({ page }) => {
     const { goUgTab } = await import('./helpers/sessionNav');
     await goUgTab(page, 'Fragen', /\/gruendung\/rueckfragen/);
