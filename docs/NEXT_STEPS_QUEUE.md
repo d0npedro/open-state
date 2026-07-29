@@ -74,7 +74,7 @@ Die Kita-Domäne ist mit 7 Dokumenten und 10 Stories am stärksten vorbereitete 
 | Q-078 | Demo-Route `/kita/einrichtung`: Belegungsstand je Gruppe, aggregiert, CSV (US-KJ-002) | DEMO | M | – | DONE |
 | Q-079 | Demo-Route `/kita/monatsbericht`: Monatsbericht je Gruppe, Vorjahresvergleich, CSV/Druck (US-KJ-003) | DEMO | M | Q-078 | DONE |
 | Q-080 | Demo-Route `/kita/meldung`: Monatsmeldung prüfen, korrigieren, freigeben (US-KJ-004) | DEMO | M | Q-079 | DONE |
-| Q-083 | Demo-Route `/kita/tagesstand` oder Erweiterung Einrichtung: aggregierte Tagesstand-Erfassung session-lokal (US-KJ-001) | DEMO | M | Q-078 | OFFEN |
+| Q-083 | Demo-Route `/kita/tagesstand` oder Erweiterung Einrichtung: aggregierte Tagesstand-Erfassung session-lokal (US-KJ-001) | DEMO | M | Q-078 | DONE |
 
 ---
 
@@ -95,7 +95,7 @@ Story-Dokumentation ist kein Pflicht-Vorläufer für Mock-Daten und Typen.
 | Q-030 | Navigationsstruktur für mehrere Domänen: Landing Page zeigt alle klickbaren Demo-Domänen mit kurzem Kontext | DEMO | M | Q-014 | DONE `d11873a` |
 | Q-073 | UG Dokument-Upload interaktiv + Fairness UG_UNTERLAGE_FEHLT + Verlaufsereignisse bei Rückfrage/Upload | DEMO | S | Q-015 | DONE |
 | Q-082 | UG Verlauf-Filter nach handelnder Stelle (Alle / Sie / Behörde / System) mit Anzahlen und Leerzustand | DEMO | S | Q-073 | DONE |
-| Q-084 | UG Behörden-Karte: CTA zu offener Rückfrage der jeweiligen Behörde | DEMO | S | Q-082 | OFFEN |
+| Q-084 | UG Behörden-Karte: CTA zu offener Rückfrage der jeweiligen Behörde | DEMO | S | Q-082 | DONE |
 
 ---
 
@@ -104,7 +104,7 @@ Story-Dokumentation ist kein Pflicht-Vorläufer für Mock-Daten und Typen.
 | ID | Schritt | Typ | Aufwand | Abhängigkeit | Status |
 |----|---------|-----|---------|--------------|--------|
 | Q-081 | AV Tab-Badges: Zähler offener Fragen/Unterlagen in Fall-Navigation, live mit DemoState | DEMO | S | Q-072 | DONE |
-| Q-085 | AV Rückfrage-Antwort: kurzer Bestätigungsdialog (was wurde beantwortet) | DEMO | S | Q-081 | OFFEN |
+| Q-085 | AV Rückfrage-Antwort: kurzer Bestätigungsdialog (was wurde beantwortet) | DEMO | S | Q-081 | DONE |
 | Q-086 | AV Fristen-Countdown auf Übersicht für offene Dokumente (analog RQ-Frist) | DEMO | S | Q-072 | OFFEN |
 
 ---

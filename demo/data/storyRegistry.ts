@@ -120,12 +120,13 @@ export const storyRegistry: StoryRegistryEntry[] = [
     domain: 'Kita-Betrieb & Jugendamt-Steuerung',
     title: 'Tagesstand erfassen',
     role: 'Fachkraft / Kita-Leitung',
-    status: 'BEREIT',
+    status: 'DEMONSTRIERBAR',
     problem: 'Anwesenheiten werden auf Papier oder in Excel erfasst – nicht aggregierbar, nicht für Monatsberichte nutzbar',
-    screen: 'Tageserfassung (nicht implementiert)',
+    screen: 'Tagesstand-Erfassung (aggregiert, session-lokal)',
     transparency_focus: 'Lückenloser Nachweis für Förderabrechnungen und Betriebskontrollen',
     acceptance_criteria_count: 4,
-    implemented_criteria: 0,
+    implemented_criteria: 4,
+    route: '/kita/tagesstand',
     source_file: 'docs/stories/kita_betrieb_und_jugendamt_steuerung/US-KJ-001_Tagesstand_erfassen.md'
   },
   {

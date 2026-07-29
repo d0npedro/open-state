@@ -1,6 +1,6 @@
 # BUILD_STATE.md – Aktueller Projektstand
 
-Zuletzt aktualisiert: nach Supervisor-Merge 2026-07-29 (AV Tab-Badges, UG Verlauf-Filter, Kita US-KJ-004 Meldefreigabe)
+Zuletzt aktualisiert: nach Supervisor-Merge 2026-07-29 (AV Q-085 Bestätigungsdialog, UG Q-084 Behörden-CTA, Kita Q-083 Tagesstand + Monatsbericht-Quellen)
 
 Dieser Stand beschreibt, was tatsächlich existiert und funktioniert.
 Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
@@ -12,10 +12,10 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | Eigenschaft | Wert |
 |-------------|------|
 | Framework | Next.js 14.2.5, React 18, TypeScript 5 strict |
-| Build-Status | ✓ Erfolgreich (26 statische Seiten) |
+| Build-Status | ✓ Erfolgreich (27 statische Seiten) |
 | Deployment | Vercel, aus `demo/`-Verzeichnis |
 | Lokaler Start | `cd demo && npm install && npm run dev` |
-| Letzte Build-Prüfung | nach Merge AV/UG/Kita + storyRegistry US-KJ-004 — grün |
+| Letzte Build-Prüfung | nach Merge loop/av + loop/ug + loop/kita — lint+build grün |
 
 ---
 
@@ -39,7 +39,8 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | `/kita/bedarfsplanung` | Bedarfsplanungsentwurf (§ 80 SGB VIII) | US-KJ-007 | ✓ |
 | `/kita/vorlage` | Politische Gremienvorlage + Freigabe | US-KJ-008 | ✓ |
 | `/kita/einrichtung` | Belegungsstand Einrichtung (aggregiert) | US-KJ-002 | ✓ |
-| `/kita/monatsbericht` | Monatsbericht je Gruppe + CSV/Druck | US-KJ-003 | ✓ |
+| `/kita/tagesstand` | Tagesstand erfassen (Aggregate, Freigabe) | US-KJ-001 | ✓ |
+| `/kita/monatsbericht` | Monatsbericht je Gruppe + CSV/Druck + Tagesstand-Quellen | US-KJ-003 | ✓ |
 | `/kita/meldung` | Monatsmeldung prüfen, korrigieren, freigeben | US-KJ-004 | ✓ |
 
 ---
@@ -106,6 +107,9 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 **Q-080 erledigt:** `/kita/meldung` — Monatsmeldung freigeben mit Korrekturprotokoll (US-KJ-004).
 **Q-081 erledigt:** AV Tab-Badges für offene Fragen/Unterlagen in Fall-Navigation (US-AV-001/003/004).
 **Q-082 erledigt:** UG Verlauf-Filter nach handelnder Stelle (US-UG-006).
+**Q-083 erledigt:** `/kita/tagesstand` — aggregierte Tagesstand-Erfassung + Leitungsfreigabe (US-KJ-001); Monatsbericht zeigt freigegebene Tagesstände als Datenbasis.
+**Q-084 erledigt:** UG Behörden-Karte CTA zur offenen Rückfrage (Anker auf `/gruendung/rueckfragen`).
+**Q-085 erledigt:** AV Rückfrage-Antwort mit Bestätigungsdialog und Antwortquittung (US-AV-004).
 
 ---
 
@@ -156,7 +160,7 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | ~~US-KJ-002 ohne Demo-Screen~~ | ~~Belegung nur als Story dokumentiert~~ | Q-078 ✓ |
 | ~~US-KJ-003 ohne Demo-Screen~~ | ~~Monatsbericht nur als Story dokumentiert~~ | Q-079 ✓ |
 | ~~US-KJ-004 ohne Demo-Screen~~ | ~~Meldefreigabe nur als Story dokumentiert~~ | Q-080 ✓ |
-| US-KJ-001 Tagesstand-Erfassung fehlt | Betriebsdateneingabe nur konzeptionell | Q-083 |
+| ~~US-KJ-001 Tagesstand-Erfassung fehlt~~ | ~~Betriebsdateneingabe nur konzeptionell~~ | Q-083 ✓ |
 | DSFA für Kita-Domäne noch ausstehend | Konzeptlücke — extern abhängig | — |
 
 ---
