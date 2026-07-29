@@ -8,6 +8,31 @@ Erlaubte Pfade nur: `demo/app/gruendung/**`, `demo/context/GruendungStateContext
 
 ---
 
+## 2026-07-29 – Iteration 25: Hinweise Betriebsdatum-CTA-Hilfstext nach RQ
+
+### Was
+Hinweise-CTA für `UG-BETRIEBSDATUM` erhält session-sensitiven Hilfstext
+(spiegel Übersicht): bei offener RQ „Zuerst die offene Rückfrage des
+Finanzamts klären …“; nach Antwort und VS-05 `IN_BEARBEITUNG` „Rückfrage
+beantwortet – Steuernummer-Vergabe und weitere offene Punkte …“. CTA-Label
+und Anker unverändert. E2E: Initial- und Session-Assertion Hilfstext.
+
+### Dateien
+- `demo/app/gruendung/hinweise/page.tsx` – `betriebsdatumCtaHint` + testid
+- `demo/e2e/us-ug-gruendung.spec.ts` – Initial- + Session-Hilfstext
+- `docs/loops/ug-JOURNAL.md` – dieses Journal
+
+### Build
+`npm run lint` + `npm run build` im Ordner `demo/` grün.
+`npm run test:e2e:ug` Exit 0 (109 passed).
+
+### Nächster sinnvoller UG-Schritt (Vorschlag)
+- Übersicht: Fairness-CTA-Hilfstext auch für Steuernummer (optional)
+- Hinweise: nach Session-Wechsel CTA-Verschwinden für parallele Behörden (optional)
+- Übersicht/Hinweise: Hilfstext-Konsistenz Steuernummer vs. Betriebsdatum prüfen
+
+---
+
 ## 2026-07-29 – Iteration 24: Übersicht Betriebsdatum-CTA-Hilfstext nach RQ
 
 ### Was
