@@ -367,10 +367,17 @@ export default function GruendungHinweisePage() {
                         b => b.status === 'IN_BEARBEITUNG' || b.status === 'RUECKFRAGE_OFFEN'
                       ).length > 1
                     : false;
+                  // Hilfstext parallele Behörden: session-sensitiv (wie Steuernummer/Betriebsdatum)
+                  const hatOffeneRueckfrageParallel = akte.rueckfragen.some(r => !r.beantwortet);
+                  const paralleleCtaHint = paralleleNochAktiv
+                    ? hatOffeneRueckfrageParallel
+                      ? 'Offene Rückfragen zuerst klären; Status und offene Schritte aller Stellen finden Sie unter Behörden & Verfahrensschritte.'
+                      : 'Keine offene Rückfrage – Überblick über parallele Verfahren und Kontakte unter Behörden & Verfahrensschritte.'
+                    : null;
                   return (
                     <div key={sig.id} data-testid={`hinweise-info-${sig.id}`}>
                       <FairnessPanel signale={[sig]} />
-                      {paralleleNochAktiv && (
+                      {paralleleNochAktiv && paralleleCtaHint && (
                         <div
                           style={{
                             marginTop: '0.5rem',
@@ -386,9 +393,11 @@ export default function GruendungHinweisePage() {
                           }}
                           data-testid="hinweise-parallele-behoerden-cta-wrap"
                         >
-                          <p style={{ margin: 0, fontSize: '0.875rem', lineHeight: 1.45 }}>
-                            Status, Rolle und offene Schritte aller beteiligten Stellen finden Sie unter
-                            Behörden & Verfahrensschritte.
+                          <p
+                            style={{ margin: 0, fontSize: '0.875rem', lineHeight: 1.45 }}
+                            data-testid="hinweise-parallele-behoerden-cta-hint"
+                          >
+                            {paralleleCtaHint}
                           </p>
                           <Link
                             href="/gruendung/behoerden"
