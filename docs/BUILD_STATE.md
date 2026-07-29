@@ -1,6 +1,6 @@
 # BUILD_STATE.md – Aktueller Projektstand
 
-Zuletzt aktualisiert: nach Supervisor-Pflicht-Push 2026-07-29 (Merge loop/ug + loop/kita → Q-139–Q-140; lint+build 27 Seiten grün; origin/main sync 0)
+Zuletzt aktualisiert: nach Supervisor-Pflicht-Push 2026-07-29 (Merge loop/av + loop/ug + loop/kita → Q-141–Q-147; lint+build 27 Seiten grün; origin/main sync 0)
 
 Dieser Stand beschreibt, was tatsächlich existiert und funktioniert.
 Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
@@ -15,7 +15,7 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | Build-Status | ✓ Erfolgreich (27 statische Seiten) |
 | Deployment | Vercel, aus `demo/`-Verzeichnis |
 | Lokaler Start | `cd demo && npm install && npm run dev` |
-| Letzte Build-Prüfung | lint+build **27 Seiten** grün (Supervisor Merge Q-139–Q-140; E2E CI-Watcher) |
+| Letzte Build-Prüfung | lint+build **27 Seiten** grün (Supervisor Merge Q-141–Q-147) |
 
 ---
 
@@ -34,13 +34,13 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | `/stories` | Story Coverage Dashboard | – | ✓ |
 | `/feedback` | Feedback → GitHub Issues | – | ✓ |
 | `/gruendung` … | Unternehmensgründung (Übersicht Fairness-Kurzblock+Kurz-CTAs inkl. Steuernummer/Betriebsdatum, Behörden VS-04→Rückfrage, Hinweise-CTAs RQ/BG/Unterlagen/Steuernummer/Betriebsdatum/parallele Behörden, Verlauf Stelle+Ereignistyp-Filter, …) | US-UG-001–006 | ✓ |
-| `/kita` | Öffentlicher Transparenzbericht + Planungsraum-Filter + Residual↔Meldelücke + Engpass/Meldelücke-Schnellfilter + Zeitreihe Meldebasis + Regionenfilter + Regionenvergleich Zwei-Räume inkl. 12-Monats-Verlauf A/B + CSV-Export Zeitreihe/Vergleich/Verlauf inkl. Open-Data-Lizenzhinweis | US-KJ-009, US-KJ-010 | ✓ |
-| `/kita/lagebild` | Jugendamt-Steuerungsansicht + Meldeeingang + Meldebeitrag + Engpass/Handlungsfelder/Planungsraum-Detail Meldelücke-Schnellfilter + Druckansicht Meldelücke-Hinweise + Monatsbericht-Vorschau-Kopplung | US-KJ-005, US-KJ-006 | ✓ |
+| `/kita` | Öffentlicher Transparenzbericht + Planungsraum-Filter + Residual↔Meldelücke + Engpass/Meldelücke-Schnellfilter + Zeitreihe Meldebasis + Regionenfilter + Regionenvergleich Zwei-Räume inkl. 12-Monats-Verlauf A/B + CSV-Export + Open-Data-Lizenz + Hub-Karten JA-Steuerungskette (Lagebild/Bedarfsplanung/Vorlage) | US-KJ-009, US-KJ-010 | ✓ |
+| `/kita/lagebild` | Jugendamt-Steuerungsansicht + Meldeeingang + Meldebeitrag + Engpass/Handlungsfelder/Planungsraum-Detail Meldelücke-Schnellfilter + Druck Meldelücke + Monatsbericht-Vorschau + Steuerungskette Hub-Karten | US-KJ-005, US-KJ-006 | ✓ |
 | `/kita/bedarfsplanung` | Bedarfsplanungsentwurf (§ 80 SGB VIII) + Meldebasis + Residual↔Meldelücke (Hinweis-only) + Steuerungskette Hub-Karten + Druck freigabeunabhängig mit Meldebasis-Session-Hinweis | US-KJ-007 | ✓ |
-| `/kita/vorlage` | Politische Gremienvorlage + Freigabe + Meldebasis/Residual↔Meldelücke + Engpass-Liste Meldelücke-Filter + Druck freigabeunabhängig | US-KJ-008 | ✓ |
+| `/kita/vorlage` | Politische Gremienvorlage + Freigabe + Meldebasis/Residual↔Meldelücke + Engpass Meldelücke-Filter + Druck freigabeunabhängig + Steuerungskette Hub-Karten | US-KJ-008 | ✓ |
 | `/kita/einrichtung` | Belegungsstand Einrichtung (aggregiert) + Prozesskette Tagesstand→Monatsbericht→Meldung | US-KJ-002 | ✓ |
 | `/kita/tagesstand` | Tagesstand erfassen (Aggregate, Freigabe) + Prozesskette Hub-Karten Belegung/Monatsbericht/Meldung | US-KJ-001 | ✓ |
-| `/kita/monatsbericht` | Monatsbericht + Vorschau + Rücklink Lagebild + Einrichtungs-Kontext + Prozesskette | US-KJ-003 | ✓ |
+| `/kita/monatsbericht` | Monatsbericht + Vorschau + Rücklink Lagebild + Einrichtungs-Kontext + Prozesskette + Druck Status/Tagesstand-Datenbasis | US-KJ-003 | ✓ |
 | `/kita/meldung` | Monatsmeldung prüfen, korrigieren, freigeben + Prozesskette Hub-Karten | US-KJ-004 | ✓ |
 
 ---
@@ -52,7 +52,7 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | Mock-Falldaten (ALG I) | `demo/data/mockFall.ts` | ✓ Vollständig |
 | Story Registry | `demo/data/storyRegistry.ts` | ✓ AV + KJ + UG registriert |
 | Fairness-Typen | `demo/types/fairness.ts` | ✓ |
-| Fairness-Regelwerk | `demo/lib/fairness/rules.ts` | ✓ 5 Regeln, berechnete Fristtagezahl (ISO-Datum + FIKTIVES_HEUTE); Dokument-Fristen via `fristDatum` |
+| Fairness-Regelwerk | `demo/lib/fairness/rules.ts` | ✓ 5 Regeln, berechnete Fristtagezahl (ISO-Datum + FIKTIVES_HEUTE); UNTERLAGE_FEHLT mit Resttagen / RELEVANT ≤3 Tage (Q-147) |
 | FairnessPanel-Komponente | `demo/components/fairness/FairnessPanel.tsx` | ✓ |
 | BuildInfo-Komponente | `demo/components/BuildInfo.tsx` | ✓ |
 | Demo-State-Kontext | `demo/context/DemoStateContext.tsx` | ✓ Rückfrage/Upload/Reset + Timeline; alle AV-Routen angebunden |
@@ -96,6 +96,13 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | UG Übersicht Betriebsdatum-CTA-Hilfstext | `/gruendung` Fairness-Kurzblock | ✓ Hilfstext unter „Zum Verfahrensstatus“ session-sensitiv nach RQ (Q-138) |
 | UG Hinweise Betriebsdatum-CTA-Hilfstext | `/gruendung/hinweise` | ✓ Hilfstext unter Betriebsdatum-CTA session-sensitiv nach RQ (Q-139, Spiegel Übersicht) |
 | Kita Bedarfsplanung Druck Meldebasis | `/kita/bedarfsplanung` | ✓ Druck freigabeunabhängig; print-only Status + Meldebasis-Session (Q-140, US-KJ-007) |
+| UG Übersicht Steuernummer-CTA-Hilfstext | `/gruendung` Fairness-Kurzblock | ✓ Hilfstext unter Steuernummer-CTA session-sensitiv nach RQ (Q-141) |
+| Kita Lagebild/Vorlage Steuerungskette-Hub | `/kita/lagebild` + `/kita/vorlage` | ✓ Rücklink-Karten Bedarfsplanung ↔ Lagebild ↔ Vorlage + Meldung (Q-142) |
+| UG Hinweise Steuernummer-CTA-Hilfstext | `/gruendung/hinweise` | ✓ Offene RQ priorisiert; Spiegel Übersicht (Q-143) |
+| Kita Monatsbericht Druck Status/Datenbasis | `/kita/monatsbericht` | ✓ Print-only Status + Tagesstand-Quellen (Q-144, US-KJ-003) |
+| Kita öffentlicher Bericht Steuerungskette-Hub | `/kita` | ✓ Hub-Karten JA-Steuerungskette, DEC-004 Aggregate only (Q-145, US-KJ-009) |
+| UG parallele Behörden session-sensitiv | `gruendung-rules` + Hinweise | ✓ Signal/CTA-Hint nach RQ-Antwort (Q-146) |
+| AV UNTERLAGE berechnete Dokumenten-Frist | `fairness/rules` + `/fall/dokumente` | ✓ Resttage ggü. FIKTIVES_HEUTE; RELEVANT ≤3 / abgelehnt (Q-147) |
 
 ---
 

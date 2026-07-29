@@ -175,6 +175,13 @@ Story-Dokumentation ist kein Pflicht-Vorläufer für Mock-Daten und Typen.
 | Q-138 | UG Übersicht: Betriebsdatum-Fairness-CTA Hilfstext session-sensitiv nach RQ-Antwort | DEMO | S | Q-127 | DONE `5005038` |
 | Q-139 | UG Hinweise: Betriebsdatum-CTA Hilfstext session-sensitiv nach RQ-Antwort (Spiegel Übersicht) | DEMO | S | Q-138 | DONE `3f6e78c` |
 | Q-140 | Kita Bedarfsplanung: Druckansicht freigabeunabhängig + Meldebasis-Session-Hinweis (US-KJ-007) | DEMO | S | Q-137 | DONE `20f5501` |
+| Q-141 | UG Übersicht: Steuernummer-Fairness-CTA Hilfstext session-sensitiv nach RQ-Antwort | DEMO | S | Q-132 | DONE `6bef62e` |
+| Q-142 | Kita Lagebild + Vorlage: Steuerungskette Rücklink-Hub (Bedarfsplanung/Lagebild↔Vorlage/Meldung) | DEMO | S | Q-137 | DONE `b22381d` |
+| Q-143 | UG Hinweise: Steuernummer-CTA Hilfstext priorisiert offene RQ (Spiegel Übersicht) | DEMO | S | Q-141 | DONE `f5c9867` |
+| Q-144 | Kita Monatsbericht: Druckansicht Status + Tagesstand-Datenbasis (US-KJ-003) | DEMO | S | Q-131 | DONE `d9e7587` |
+| Q-145 | Kita öffentlicher Bericht: Hub-Karten JA-Steuerungskette (US-KJ-009, DEC-004) | DEMO | S | Q-142 | DONE `467f447` |
+| Q-146 | UG parallele Behörden: Signal + Hinweise-CTA Hilfstext session-sensitiv nach RQ | DEMO | S | Q-113 | DONE `e90d397` |
+| Q-147 | AV Fairness: UNTERLAGE_FEHLT mit berechneter Dokumenten-Frist (Resttage, RELEVANT ≤3) | DEMO | S | Q-004 | DONE `b768063` |
 
 ---
 
@@ -320,3 +327,10 @@ Diese Punkte wurden in früheren Iterationen abgeschlossen und sind produktionsr
 | Q-138 UG Übersicht Betriebsdatum-CTA-Hilfstext | Session-Text nach RQ-Antwort | `5005038` → main |
 | Q-139 UG Hinweise Betriebsdatum-CTA-Hilfstext | Session-Text nach RQ (Spiegel) | `3f6e78c` → main |
 | Q-140 Kita Bedarfsplanung Druck Meldebasis | Druck freigabeunabhängig + Meldebasis | `20f5501` → main |
+| Q-141 UG Übersicht Steuernummer-CTA-Hilfstext | Session-Text nach RQ-Antwort | `6bef62e` → main |
+| Q-142 Kita Lagebild/Vorlage Steuerungskette-Hub | Rücklink-Karten Bedarfsplanung↔Lagebild↔Vorlage | `b22381d` → main |
+| Q-143 UG Hinweise Steuernummer-CTA-Hilfstext | Offene RQ priorisiert (Spiegel) | `f5c9867` → main |
+| Q-144 Kita Monatsbericht Druck Status/Datenbasis | Print Status + Tagesstand-Quellen | `d9e7587` → main |
+| Q-145 Kita öffentlicher Bericht Steuerungskette-Hub | Hub-Karten auf `/kita` (US-KJ-009) | `467f447` → main |
+| Q-146 UG parallele Behörden session-sensitiv | Signal + CTA-Hint nach RQ | `e90d397` → main |
+| Q-147 AV UNTERLAGE berechnete Dokumenten-Frist | Resttage / RELEVANT ≤3 Tage | `b768063` → main |
