@@ -2,6 +2,30 @@
 
 Branch: `loop/kita` · Worktree: `D:\Projects\open-state-loop-kita`
 
+## Iteration 2026-07-29 – US-KJ-006 Lagebild Engpass Meldelücke-Filter
+
+### Was
+Steuerungslagebild-Engpass-Rangliste: Schnellfilter „Meldelücke“ gespiegelt (wie Vorlage US-KJ-008 / Planungsraum-Explorer). Chips „Alle Ränge“ und „Meldelücke (n)“; Original-Rang nach Wartelistendruck bleibt; Leerzustand nach Session-Freigabe; Summenhinweis. Keine Umbewertung nach Meldeschwere. Nur Aggregate, keine Kind- oder Personennamen.
+
+### Dateien
+- `demo/components/kita/KitaEngpassRangliste.tsx` (Schnellfilter Meldelücke, Leerzustand, Rang-Erhalt)
+- `demo/app/kita/lagebild/page.tsx` (Badge-Hinweis)
+- `docs/loops/kita-JOURNAL.md` (dieses Journal)
+
+### Story
+US-KJ-006 / US-KJ-005 – Versorgungslagebild Engpass-Rangliste (Meldelücke-Schnellfilter, Session-sensitiv)
+
+### Build
+`npm run lint` + `npm run build` im `demo/`-Verzeichnis (siehe Commit dieses Laufs)
+
+### Nicht angefasst (Supervisor / verboten)
+Queue, BUILD_STATE, storyRegistry, DECISION_LOG, andere Domänen, package.json, CI, push
+
+### Nächster sinnvoller Schritt (Hinweis Supervisor)
+Handlungsfelder im Lagebild optional mit Meldelücke-Schnellfilter spiegeln, oder Druckansicht Lagebild/Vorlage Engpass-Filter dokumentieren.
+
+---
+
 ## Iteration 2026-07-29 – US-KJ-010 Open-Data-Lizenzhinweis CSV-Export
 
 ### Was
