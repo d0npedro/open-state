@@ -7,8 +7,12 @@
  * Abgeleitet aus Wartelistendruck (keine Empfehlungen). Fehlende freigegebene
  * Einrichtungsmeldungen (Demo-Stichprobe, Session-sensitiv) werden je Feld
  * als methodischer Hinweis markiert — Hinweis only, keine Interpolation.
- * Filter ändert nur Sichtbarkeit, keine Umbewertung. Nur Aggregate, keine Kind-
- * oder Personennamen.
+ * Filter ändert nur Sichtbarkeit, keine Umbewertung.
+ *
+ * Druck (US-KJ-005/006): Filter-Chips no-print; print-only Filterstand immer
+ * (Schnellfilter, sichtbare Felder, Meldebasis-Session, Stichprobenmonat) —
+ * Spiegel Engpass / Explorer / Zeitreihe. Nur Aggregate, keine Kind- oder
+ * Personennamen.
  */
 
 import { useMemo, useState } from 'react';
@@ -52,8 +56,11 @@ export function KitaHandlungsfelder({
   handlungsfelder: PlanungsraumKennzahlen[];
   massnahmenByPR: Record<string, Kapazitaetsmassnahme[]>;
 }) {
-  const { byRaumId } = useMeldeeingangFuerBedarfsplanung();
+  const { byRaumId, basen, hydrated, base } = useMeldeeingangFuerBedarfsplanung();
   const [filter, setFilter] = useState<HandlungsfeldSchnellfilter>('ALL');
+
+  const meldeMonatsLabel = base.monatsLabel || 'Demo-Stichprobe';
+  const meldeMonatsIso = base.monatsIso || '2024-10';
 
   const lueckenCount = useMemo(
     () => handlungsfelder.filter(pr => byRaumId.get(pr.id)?.hatDatenluecke).length,
@@ -72,6 +79,27 @@ export function KitaHandlungsfelder({
     return withBasis;
   }, [handlungsfelder, byRaumId, filter]);
 
+  /** print-only Meldebasis-Session (Spiegel Engpass / Explorer / Zeitreihe). */
+  const meldebasisDruckText = useMemo(() => {
+    if (!hydrated) {
+      return 'Meldebasis: Session noch nicht geladen (clientseitig)';
+    }
+    const scoped = basen.filter(b => handlungsfelder.some(pr => pr.id === b.planungsraumId));
+    const mitEintraegen = scoped.filter(b => b.erwartet > 0);
+    const luecken = scoped.filter(b => b.hatDatenluecke);
+    const voll = mitEintraegen.filter(b => !b.hatDatenluecke).length;
+    if (mitEintraegen.length === 0) {
+      return `Meldebasis ${meldeMonatsLabel}: keine Stichprobe für Handlungsfelder`;
+    }
+    if (luecken.length === 0) {
+      return `Meldebasis ${meldeMonatsLabel}: Stichprobe vollständig (${voll}/${mitEintraegen.length} Planungsräume mit Einträgen freigegeben)`;
+    }
+    const lueckenKurz = luecken
+      .map(b => `${b.planungsraumBezeichnung} (${b.freigegeben}/${b.erwartet})`)
+      .join(', ');
+    return `Meldebasis ${meldeMonatsLabel}: Lücken in ${lueckenKurz} · ${voll}/${mitEintraegen.length} Räume vollständig`;
+  }, [hydrated, basen, handlungsfelder, meldeMonatsLabel]);
+
   return (
     <section>
       <h2 style={{ marginBottom: '0.5rem' }}>Handlungsfelder</h2>
@@ -81,6 +109,7 @@ export function KitaHandlungsfelder({
         {' '}Meldebasis je Planungsraum aus Demo-Stichprobe Meldeeingang (Hinweis only; nach
         Session-Freigabe in der Monatsmeldung kann die Markierung entfallen).
         Optional Schnellfilter „Meldelücke“ (wie Engpass-Rangliste / politische Vorlage).
+        Im Ausdruck: print-only Filterstand inkl. Meldebasis-Session.
       </p>
 
       {/* Schnellfilter: interaktiv / nicht drucken */}
@@ -118,20 +147,28 @@ export function KitaHandlungsfelder({
         </button>
       </div>
 
-      {filter === 'MELDELUECKE' && (
-        <p
-          className="print-only"
-          style={{
-            fontSize: '0.8rem',
-            color: 'var(--color-text-muted)',
-            margin: '0 0 0.65rem',
-            lineHeight: 1.5,
-          }}
-        >
-          Gefiltert: nur Handlungsfelder mit Meldelücke (Stand Ausdruck · Session-sensitiv).
-          Reihenfolge nach Wartelistendruck unverändert.
-        </p>
-      )}
+      {/* print-only: Filterstand + Meldebasis-Session (immer; Spiegel Engpass/Explorer) */}
+      <div
+        className="print-only print-block"
+        style={{
+          marginBottom: '0.75rem',
+          padding: '0.65rem 0.9rem',
+          border: '1px solid var(--color-border)',
+          borderRadius: 'var(--radius)',
+          fontSize: '0.8rem',
+          background: 'var(--color-neutral-light)',
+          lineHeight: 1.5,
+        }}
+        role="note"
+      >
+        <strong>Druckfilter Handlungsfelder: </strong>
+        {filter === 'MELDELUECKE'
+          ? `Schnellfilter Meldelücke · ${rows.length} von ${handlungsfelder.length} Feld${handlungsfelder.length === 1 ? '' : 'er'} mit unvollständiger Meldebasis (Reihenfolge nach Wartelistendruck)`
+          : `Alle Felder (${handlungsfelder.length} Handlungsfeld${handlungsfelder.length === 1 ? '' : 'er'}, kein Schnellfilter; ${lueckenCount} mit Meldelücke in der Stichprobe)`}
+        . {meldebasisDruckText}. Ableitung und Reihenfolge unverändert; Filter ändert nur
+        Sichtbarkeit — keine Interpolation, keine Umbewertung nach Meldeschwere. Stichprobenmonat:{' '}
+        {meldeMonatsLabel} ({meldeMonatsIso}).
+      </div>
 
       {rows.length === 0 ? (
         <p
