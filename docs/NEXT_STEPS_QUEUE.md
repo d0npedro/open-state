@@ -170,6 +170,9 @@ Story-Dokumentation ist kein Pflicht-Vorläufer für Mock-Daten und Typen.
 | Q-133 | Kita Tagesstand: Prozesskette Hub-Karten (Belegung/Monatsbericht/Meldung, US-KJ-001) | DEMO | S | Q-131 | DONE `810240d` |
 | Q-134 | UG Hinweise: Steuernummer-CTA-Label bei VS-05 IN_BEARBEITUNG (Spiegel Übersicht) | DEMO | S | Q-132 | DONE `6fb313f` |
 | Q-135 | Kita Meldung: Prozesskette Hub-Karten (Tagesstand/Belegung/Monatsbericht, US-KJ-004) | DEMO | S | Q-133 | DONE `3e7cbf9` |
+| Q-136 | Kita Vorlage: Druck freigabeunabhängig + Meldelücke-Filter-Hinweis im Ausdruck (US-KJ-008) | DEMO | S | Q-114 | DONE `1a22863` |
+| Q-137 | Kita Bedarfsplanung: Steuerungskette Hub-Karten Lagebild/Meldung/Vorlage (US-KJ-007) | DEMO | S | Q-135 | DONE `fc01b90` |
+| Q-138 | UG Übersicht: Betriebsdatum-Fairness-CTA Hilfstext session-sensitiv nach RQ-Antwort | DEMO | S | Q-127 | DONE `5005038` |
 
 ---
 
@@ -310,3 +313,6 @@ Diese Punkte wurden in früheren Iterationen abgeschlossen und sind produktionsr
 | Q-133 Kita Tagesstand Prozesskette | Hub-Karten Belegung/Monatsbericht/Meldung | `810240d` → main |
 | Q-134 UG Hinweise Steuernummer-CTA Label | VS-05 IN_BEARBEITUNG CTA-Text gespiegelt | `6fb313f` → main |
 | Q-135 Kita Meldung Prozesskette | Hub-Karten Tagesstand/Belegung/Monatsbericht | `3e7cbf9` → main |
+| Q-136 Kita Vorlage Druck freigabeunabhängig | Druckleiste + Meldelücke-Filter print-only | `1a22863` → main |
+| Q-137 Kita Bedarfsplanung Steuerungskette | Hub-Karten Lagebild/Meldung/Vorlage | `fc01b90` → main |
+| Q-138 UG Übersicht Betriebsdatum-CTA-Hilfstext | Session-Text nach RQ-Antwort | `5005038` → main |

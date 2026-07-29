@@ -1,6 +1,6 @@
 # BUILD_STATE.md – Aktueller Projektstand
 
-Zuletzt aktualisiert: nach Supervisor-Pflicht-Push 2026-07-29 (Re-Verify: keine neuen Loop-Commits; lint+build+E2E 237 chromium grün; origin/main sync 0)
+Zuletzt aktualisiert: nach Supervisor-Pflicht-Push 2026-07-29 (Merge loop/ug + loop/kita → Q-136–Q-138; lint+build+E2E 237 chromium grün; origin/main sync 0)
 
 Dieser Stand beschreibt, was tatsächlich existiert und funktioniert.
 Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
@@ -15,7 +15,7 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | Build-Status | ✓ Erfolgreich (27 statische Seiten) |
 | Deployment | Vercel, aus `demo/`-Verzeichnis |
 | Lokaler Start | `cd demo && npm install && npm run dev` |
-| Letzte Build-Prüfung | lint+build+`test:e2e:ci` **237 passed** (Supervisor Re-Verify, HEAD nach Q-132–Q-135 + ci-watcher) |
+| Letzte Build-Prüfung | lint+build+`test:e2e:ci` **237 passed** (Supervisor Merge Q-136–Q-138 + push) |
 
 ---
 
@@ -36,8 +36,8 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | `/gruendung` … | Unternehmensgründung (Übersicht Fairness-Kurzblock+Kurz-CTAs inkl. Steuernummer/Betriebsdatum, Behörden VS-04→Rückfrage, Hinweise-CTAs RQ/BG/Unterlagen/Steuernummer/Betriebsdatum/parallele Behörden, Verlauf Stelle+Ereignistyp-Filter, …) | US-UG-001–006 | ✓ |
 | `/kita` | Öffentlicher Transparenzbericht + Planungsraum-Filter + Residual↔Meldelücke + Engpass/Meldelücke-Schnellfilter + Zeitreihe Meldebasis + Regionenfilter + Regionenvergleich Zwei-Räume inkl. 12-Monats-Verlauf A/B + CSV-Export Zeitreihe/Vergleich/Verlauf inkl. Open-Data-Lizenzhinweis | US-KJ-009, US-KJ-010 | ✓ |
 | `/kita/lagebild` | Jugendamt-Steuerungsansicht + Meldeeingang + Meldebeitrag + Engpass/Handlungsfelder/Planungsraum-Detail Meldelücke-Schnellfilter + Druckansicht Meldelücke-Hinweise + Monatsbericht-Vorschau-Kopplung | US-KJ-005, US-KJ-006 | ✓ |
-| `/kita/bedarfsplanung` | Bedarfsplanungsentwurf (§ 80 SGB VIII) + Meldebasis + Residual↔Meldelücke (Hinweis-only) | US-KJ-007 | ✓ |
-| `/kita/vorlage` | Politische Gremienvorlage + Freigabe + Meldebasis/Residual↔Meldelücke + Engpass-Liste Meldelücke-Filter | US-KJ-008 | ✓ |
+| `/kita/bedarfsplanung` | Bedarfsplanungsentwurf (§ 80 SGB VIII) + Meldebasis + Residual↔Meldelücke (Hinweis-only) + Steuerungskette Hub-Karten (Lagebild/Meldung/Vorlage) | US-KJ-007 | ✓ |
+| `/kita/vorlage` | Politische Gremienvorlage + Freigabe + Meldebasis/Residual↔Meldelücke + Engpass-Liste Meldelücke-Filter + Druck freigabeunabhängig | US-KJ-008 | ✓ |
 | `/kita/einrichtung` | Belegungsstand Einrichtung (aggregiert) + Prozesskette Tagesstand→Monatsbericht→Meldung | US-KJ-002 | ✓ |
 | `/kita/tagesstand` | Tagesstand erfassen (Aggregate, Freigabe) + Prozesskette Hub-Karten Belegung/Monatsbericht/Meldung | US-KJ-001 | ✓ |
 | `/kita/monatsbericht` | Monatsbericht + Vorschau + Rücklink Lagebild + Einrichtungs-Kontext + Prozesskette | US-KJ-003 | ✓ |
@@ -91,6 +91,9 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | Kita Tagesstand Prozesskette | `/kita/tagesstand` | ✓ Hub-Karten Belegung/Monatsbericht/Meldung + DEC-004-Footer (Q-133, US-KJ-001) |
 | UG Hinweise Steuernummer-CTA Label | `/gruendung/hinweise` | ✓ CTA-Label gespiegelt wie Übersicht bei VS-05 IN_BEARBEITUNG (Q-134) |
 | Kita Meldung Prozesskette | `/kita/meldung` | ✓ Hub-Karten Tagesstand/Belegung/Monatsbericht (Q-135, US-KJ-004) |
+| Kita Vorlage Druck freigabeunabhängig | `/kita/vorlage` | ✓ Druckleiste immer; print-only Status + Meldelücke-Filter (Q-136, US-KJ-008) |
+| Kita Bedarfsplanung Steuerungskette | `/kita/bedarfsplanung` | ✓ Hub-Karten Lagebild/Meldung/Vorlage + Freigabe-CTA (Q-137, US-KJ-007) |
+| UG Übersicht Betriebsdatum-CTA-Hilfstext | `/gruendung` Fairness-Kurzblock | ✓ Hilfstext unter „Zum Verfahrensstatus“ session-sensitiv nach RQ (Q-138) |
 
 ---
 
@@ -191,6 +194,9 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 **Q-133 erledigt:** Kita Tagesstand Prozesskette Hub-Karten (US-KJ-001).
 **Q-134 erledigt:** UG Hinweise Steuernummer-CTA-Label bei VS-05 IN_BEARBEITUNG.
 **Q-135 erledigt:** Kita Meldung Prozesskette Hub-Karten (US-KJ-004).
+**Q-136 erledigt:** Kita Vorlage Druck freigabeunabhängig + Meldelücke-Filter im Ausdruck (US-KJ-008).
+**Q-137 erledigt:** Kita Bedarfsplanung Steuerungskette Hub-Karten (US-KJ-007).
+**Q-138 erledigt:** UG Übersicht Betriebsdatum-Fairness-CTA Hilfstext nach RQ-Antwort.
 
 ---
 
