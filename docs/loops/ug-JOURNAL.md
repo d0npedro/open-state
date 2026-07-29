@@ -8,6 +8,31 @@ Erlaubte Pfade nur: `demo/app/gruendung/**`, `demo/context/GruendungStateContext
 
 ---
 
+## 2026-07-29 – Iteration 18: VS-05 nach Antwort auf IN_BEARBEITUNG
+
+### Was
+Session: Nach Beantworten der Finanzamt-Rückfrage (VS-04 → ABGESCHLOSSEN)
+startet der nächste AUSSTEHEND-Schritt derselben Behörde (VS-05 Steuernummer)
+als `IN_BEARBEITUNG`. Generisch: Listenreihenfolge, nur wenn kein Geschwister-
+schritt schon in Bearbeitung. Verlauf erhält System-Ereignis
+„Verfahrensschritt gestartet …“. E2E: Status VS-05, Session-Test, Verlauf.
+
+### Dateien
+- `demo/context/GruendungStateContext.tsx` – Promote nächster Schritt + Event
+- `demo/e2e/us-ug-gruendung.spec.ts` – Erwartung VS-05 + zwei Tests angepasst/neu
+- `docs/loops/ug-JOURNAL.md` – dieses Journal
+
+### Build
+`npm run lint` + `npm run build` im Ordner `demo/` grün.
+`npm run test:e2e:ug` Exit 0 (103 passed).
+
+### Nächster sinnvoller UG-Schritt (Vorschlag)
+- Hinweise: Steuernummer-Signal auch bei VS-05 IN_BEARBEITUNG (Text anpassen)
+- Übersicht: Fairness-CTA für Steuernummer/Betriebsdatum (optional)
+- Hinweise: nach Session-Wechsel CTA-Verschwinden für parallele Behörden (optional)
+
+---
+
 ## 2026-07-29 – Iteration 17: VS-04 nach Antwort auf ABGESCHLOSSEN
 
 ### Was

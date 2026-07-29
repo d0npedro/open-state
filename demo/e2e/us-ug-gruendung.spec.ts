@@ -409,13 +409,34 @@ test.describe('UG – Behörden & Verfahrensschritte', () => {
     await expect(vs04.getByText('Erledigt', { exact: true })).toBeVisible();
     await expect(vs04).toContainText(/Erledigt am/);
     await expect(vs04).toContainText(/Rückfrage beantwortet/i);
-    // VS-05 bleibt ausstehend (nächster Finanzamt-Schritt)
-    await expect(page.getByTestId('behoerde-schritt-VS-05')).toContainText(/Ausstehend/i);
+    // VS-05 startet als nächster Finanzamt-Schritt
+    await expect(page.getByTestId('behoerde-schritt-VS-05')).toContainText(/In Bearbeitung/i);
     // Finanzamt-Zähler: 2 von 3 Schritten erledigt (VS-03, VS-04)
     await expect(page.getByTestId('behoerde-karte-BEH-02')).toContainText(/2\/3 Schritte erledigt/);
   });
 
-  test('Verlauf zeigt erledigten Rückfrage-Schritt nach Antwort', async ({ page }) => {
+  test('Nach Beantworten startet VS-05 Steuernummer in Bearbeitung', async ({ page }) => {
+    const { goUgTab } = await import('./helpers/sessionNav');
+    const vs05 = page.getByTestId('behoerde-schritt-VS-05');
+    await expect(vs05).toBeVisible();
+    await expect(vs05).toContainText(/Ausstehend/i);
+    await expect(vs05).toContainText(/Steuernummer/i);
+
+    await goUgTab(page, 'Fragen', /\/gruendung\/rueckfragen/);
+    await page.getByRole('button', { name: /Rückfrage beantworten/i }).click();
+    await expect(page.getByText(/die Behörde wurde informiert|beantwortet/i).first()).toBeVisible();
+    await goUgTab(page, 'Behörden', /\/gruendung\/behoerden/);
+
+    const gestartet = page.getByTestId('behoerde-schritt-VS-05');
+    await expect(gestartet).toBeVisible();
+    await expect(gestartet.getByText('In Bearbeitung', { exact: true })).toBeVisible();
+    await expect(gestartet).toContainText(/Steuernummer/i);
+    // VS-04 bleibt erledigt; kein Rückfrage-Link mehr
+    await expect(page.getByTestId('behoerde-schritt-VS-04').getByText('Erledigt', { exact: true })).toBeVisible();
+    await expect(page.getByTestId('behoerde-schritt-rq-link-VS-04')).toHaveCount(0);
+  });
+
+  test('Verlauf zeigt erledigten Rückfrage-Schritt und gestarteten Folgeschritt', async ({ page }) => {
     const { goUgTab } = await import('./helpers/sessionNav');
     await goUgTab(page, 'Fragen', /\/gruendung\/rueckfragen/);
     await page.getByRole('button', { name: /Rückfrage beantworten/i }).click();
@@ -424,6 +445,8 @@ test.describe('UG – Behörden & Verfahrensschritte', () => {
 
     await expect(page.getByText(/Verfahrensschritt erledigt:/i)).toBeVisible();
     await expect(page.getByText(/Kleinunternehmerregelung/i).first()).toBeVisible();
+    await expect(page.getByText(/Verfahrensschritt gestartet:/i)).toBeVisible();
+    await expect(page.getByText(/Steuernummer erhalten/i).first()).toBeVisible();
   });
 
 });
