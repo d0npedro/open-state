@@ -1,10 +1,11 @@
 'use client';
 
 /**
- * Öffentlicher CSV-Export für den Transparenzbericht (US-KJ-009 AK 6).
+ * Öffentlicher Export (Druck + CSV) für den Transparenzbericht (US-KJ-009 AK 6).
  *
- * Multi-Blatt Aggregate: Versorgung Gesamt, Planungsräume (Meldebasis session-sensitiv),
- * Kapazitätsmaßnahmen. Status/Freigabe im Metakopf, Open-Data-Lizenzhinweis, DEC-004.
+ * Druck: print-only Status (freigegeben/Version/Freigabe) und Meldebasis-Session.
+ * CSV: Multi-Blatt Aggregate (Versorgung, Planungsräume, Maßnahmen, Meldebasis),
+ * Status/Freigabe im Metakopf, Open-Data-Lizenzhinweis, DEC-004.
  * Keine Kind- oder Personennamen, keine Einrichtungs-PII in der öffentlichen Schicht.
  */
 
@@ -299,98 +300,225 @@ function downloadCsv(args: {
   URL.revokeObjectURL(url);
 }
 
+/**
+ * Export-Karte Druck + CSV für den öffentlichen Transparenzbericht (US-KJ-009).
+ *
+ * Druck: Status (freigegeben, Version, Rolle+Datum) und Meldebasis-Session als
+ * print-only-Meta — Spiegel Bedarfsplanung/Vorlage/Lagebild. CSV unverändert Multi-Blatt.
+ * Steuerungskette und interaktive Filter sind no-print (siehe PlanungsraumExplorer).
+ * Nur freigegebene Aggregate, keine Kind- oder Personennamen (DEC-004).
+ */
 export function KitaCsvDownload({ lagebild }: { lagebild: KitaLagebild }) {
   const { base, session, hydrated, basen, byRaumId } = useMeldeeingangFuerBedarfsplanung();
   const [exportFilter, setExportFilter] = useState<MeldeExportFilter>('ALL');
 
-  const meldelueckeCount = useMemo(
-    () => basen.filter(b => b.hatDatenluecke).length,
+  const meldeLuecken = useMemo(
+    () => basen.filter(b => b.hatDatenluecke),
     [basen]
   );
+  const meldelueckeCount = meldeLuecken.length;
+  const meldeVoll = basen.length - meldelueckeCount;
+  const meldeStichprobe = basen.length;
 
   const meldeMonatsLabel = base.monatsLabel || 'Demo-Stichprobe';
+  const lb = lagebild;
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '0.55rem',
-        alignItems: 'flex-start',
-      }}
-    >
+    <>
       <div
+        className="no-print card"
         style={{
           display: 'flex',
           flexWrap: 'wrap',
-          gap: '0.5rem',
+          gap: '1rem',
           alignItems: 'center',
+          justifyContent: 'space-between',
         }}
-        role="group"
-        aria-label="CSV-Export-Filter Meldelücke"
       >
-        <span style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>
-          CSV-Filter:
-        </span>
-        <button
-          type="button"
-          className={exportFilter === 'ALL' ? 'btn btn-primary' : 'btn btn-secondary'}
-          style={{ fontSize: '0.75rem', padding: '0.25rem 0.6rem' }}
-          onClick={() => setExportFilter('ALL')}
-          aria-pressed={exportFilter === 'ALL'}
-        >
-          Alle Räume
-        </button>
-        <button
-          type="button"
-          className={exportFilter === 'MELDELUECKE' ? 'btn btn-primary' : 'btn btn-secondary'}
-          style={{ fontSize: '0.75rem', padding: '0.25rem 0.6rem' }}
-          onClick={() => setExportFilter('MELDELUECKE')}
-          aria-pressed={exportFilter === 'MELDELUECKE'}
-          disabled={hydrated && meldelueckeCount === 0}
-          title={
-            hydrated && meldelueckeCount === 0
-              ? 'Keine Meldelücken in der aktuellen Demo-Stichprobe'
-              : `${meldelueckeCount} Planungsräume mit Meldelücke`
-          }
-        >
-          Meldelücke
-          {hydrated ? ` (${meldelueckeCount})` : ''}
-        </button>
+        <div style={{ maxWidth: '40rem', flex: '1 1 16rem' }}>
+          <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>Export</div>
+          <strong style={{ fontSize: '0.95rem' }}>Druck und CSV Transparenzbericht</strong>
+          <p
+            style={{
+              fontSize: '0.8rem',
+              color: 'var(--color-text-muted)',
+              margin: '0.25rem 0 0',
+              lineHeight: 1.5,
+            }}
+          >
+            Druck: Status (freigegeben, Version, Freigabe Rolle+Datum) und Meldebasis-Session
+            erscheinen print-only im Ausdruck. CSV: Multi-Blatt freigegebene Aggregate mit
+            Status/Meldebasis im Metakopf und optionalem Filter „Meldelücke“ (Semikolon, UTF-8 BOM).
+            Nur Aggregate, keine Kind- oder Personennamen (DEC-004). {KITA_CSV_LIZENZ_UI_HINWEIS}
+          </p>
+          <div
+            style={{
+              marginTop: '0.65rem',
+              display: 'flex',
+              flexWrap: 'wrap',
+              gap: '0.5rem',
+              alignItems: 'center',
+            }}
+            role="group"
+            aria-label="CSV-Export-Filter Meldelücke"
+          >
+            <span style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>
+              CSV-Filter:
+            </span>
+            <button
+              type="button"
+              className={exportFilter === 'ALL' ? 'btn btn-primary' : 'btn btn-secondary'}
+              style={{ fontSize: '0.75rem', padding: '0.25rem 0.6rem' }}
+              onClick={() => setExportFilter('ALL')}
+              aria-pressed={exportFilter === 'ALL'}
+            >
+              Alle Räume
+            </button>
+            <button
+              type="button"
+              className={exportFilter === 'MELDELUECKE' ? 'btn btn-primary' : 'btn btn-secondary'}
+              style={{ fontSize: '0.75rem', padding: '0.25rem 0.6rem' }}
+              onClick={() => setExportFilter('MELDELUECKE')}
+              aria-pressed={exportFilter === 'MELDELUECKE'}
+              disabled={hydrated && meldelueckeCount === 0}
+              title={
+                hydrated && meldelueckeCount === 0
+                  ? 'Keine Meldelücken in der aktuellen Demo-Stichprobe'
+                  : `${meldelueckeCount} Planungsräume mit Meldelücke`
+              }
+            >
+              Meldelücke
+              {hydrated ? ` (${meldelueckeCount})` : ''}
+            </button>
+          </div>
+        </div>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', flexShrink: 0 }}>
+          <button
+            type="button"
+            className="btn btn-secondary"
+            onClick={() => window.print()}
+            style={{ fontSize: '0.875rem' }}
+          >
+            Drucken / als PDF speichern
+          </button>
+          <button
+            type="button"
+            className="btn btn-primary"
+            onClick={() =>
+              downloadCsv({
+                lagebild,
+                exportFilter,
+                byRaumId,
+                basen,
+                meldeMonatsLabel,
+                sessionFreigabeId: session?.freigabeId ?? null,
+                hydrated,
+              })
+            }
+            style={{ fontSize: '0.875rem' }}
+            title={`${KITA_CSV_LIZENZ_BUTTON_TITLE}. Multi-Blatt: Versorgung, Planungsräume, Maßnahmen, Meldebasis.`}
+            aria-label="Transparenzbericht-Aggregate als CSV herunterladen (keine Kind- oder Personennamen)"
+          >
+            CSV exportieren
+          </button>
+        </div>
       </div>
-      <button
-        type="button"
-        className="btn btn-secondary"
-        onClick={() =>
-          downloadCsv({
-            lagebild,
-            exportFilter,
-            byRaumId,
-            basen,
-            meldeMonatsLabel,
-            sessionFreigabeId: session?.freigabeId ?? null,
-            hydrated,
-          })
-        }
-        style={{ fontSize: '0.875rem' }}
-        title={`${KITA_CSV_LIZENZ_BUTTON_TITLE}. Multi-Blatt: Versorgung, Planungsräume, Maßnahmen, Meldebasis.`}
-        aria-label="Transparenzbericht-Aggregate als CSV herunterladen (keine Kind- oder Personennamen)"
-      >
-        CSV herunterladen (Planungsraumdaten)
-      </button>
-      <p
-        style={{
-          margin: 0,
-          fontSize: '0.72rem',
-          color: 'var(--color-text-muted)',
-          lineHeight: 1.4,
-          maxWidth: '28rem',
+
+      {/* print-only: Status + Meldebasis – Spiegel Bedarfsplanung/Vorlage (US-KJ-009) */}
+      <div className="print-only print-block" style={{ margin: '0 0 1rem' }}>
+        <p style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', margin: '0 0 0.35rem' }}>
+          US-KJ-009 · Öffentlicher Transparenzbericht · freigegebene Aggregate · DEC-004
+        </p>
+        <h1 style={{ margin: '0 0 0.35rem', fontSize: '1.35rem' }}>
+          Transparenzbericht Kindertagesbetreuung
+        </h1>
+        <p style={{ color: 'var(--color-text-muted)', margin: '0 0 0.75rem', fontSize: '0.9rem' }}>
+          {lb.kommuneBezeichnung} · Berichtszeitraum: {lb.berichtszeitraum}
+        </p>
+        <div
+          style={{
+            marginBottom: '0.75rem',
+            padding: '0.75rem 1rem',
+            border: '1px solid var(--color-border)',
+            borderRadius: 'var(--radius)',
+            fontSize: '0.875rem',
+            background: 'var(--color-neutral-light)',
+            borderLeft: '4px solid var(--color-success)',
+          }}
+          role="status"
+        >
+          <strong>Status im Ausdruck: freigegeben</strong>
+          <div style={{ marginTop: '0.25rem', color: 'var(--color-text-muted)', fontSize: '0.8rem' }}>
+            Version {lb.version} · Datenstand {lb.stand} · freigegeben am {lb.freigegebenAm} durch{' '}
+            {lb.freigegebenVon} (Rolle, kein Personenname) · öffentlicher Lagebericht, keine
+            Handlungsempfehlung
+          </div>
+        </div>
+        <div
+          style={{
+            marginBottom: '0.5rem',
+            padding: '0.75rem 1rem',
+            border: '1px solid var(--color-border)',
+            borderRadius: 'var(--radius)',
+            fontSize: '0.875rem',
+          }}
+          role="note"
+        >
+          <strong style={{ display: 'block', marginBottom: '0.35rem' }}>
+            Meldebasis im Ausdruck (Session-Stand, raumaggregiert)
+          </strong>
+          {!hydrated ? (
+            <p style={{ margin: 0, fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>
+              Meldebasis wird clientseitig aus dem Meldeeingang geladen.
+            </p>
+          ) : meldelueckeCount === 0 ? (
+            <p style={{ margin: 0, fontSize: '0.8rem', lineHeight: 1.5 }}>
+              Stichprobe Meldeeingang ({meldeMonatsLabel}): in den erfassten Planungsräumen
+              vollständig freigegeben ({meldeVoll}/{meldeStichprobe}). Öffentliche Kennzahlen basieren
+              auf freigegebenen Aggregaten; keine Interpolation fehlender Meldungen.
+              {session?.freigabeId
+                ? ` Session-Meldefreigabe: ${session.freigabeId} (Demo aus /kita/meldung).`
+                : ' Session-Meldefreigabe: keine (Demo-Ausgangsstand Meldeeingang).'}
+            </p>
+          ) : (
+            <p style={{ margin: 0, fontSize: '0.8rem', lineHeight: 1.5 }}>
+              Unvollständige Meldebasis in{' '}
+              {meldeLuecken
+                .map(b => {
+                  const schwere =
+                    b.schwere === 'UEBERFAELLIG'
+                      ? 'überfällig'
+                      : b.schwere === 'AUSSTEHEND'
+                        ? 'ausstehend'
+                        : b.schwere;
+                  return `${b.planungsraumBezeichnung} (${b.freigegeben}/${b.erwartet}, ${schwere})`;
+                })
+                .join('; ')}
+              . Lücken sind Hinweis only — Kennzahlen unverändert, keine Schätzung (DEC-004,
+              raumaggregiert ohne Einrichtungsnamen).
+              {session?.freigabeId
+                ? ` Session-Meldefreigabe: ${session.freigabeId}.`
+                : ' Session-Meldefreigabe: keine (Demo-Ausgangsstand).'}
+            </p>
+          )}
+        </div>
+      </div>
+
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
+            .print-only { display: none; }
+            @media print {
+              .no-print { display: none !important; }
+              .print-only { display: inline !important; }
+              .print-only.print-block { display: block !important; }
+              body > div > header,
+              body nav { display: none !important; }
+              main { padding: 0 !important; }
+            }
+          `,
         }}
-      >
-        CSV (US-KJ-009 AK&nbsp;6): freigegebene Aggregate mit Status, Meldebasis-Session und
-        optionalem Filter „Meldelücke“. Blätter Versorgung, Planungsräume, Maßnahmen, Meldebasis
-        (raumaggregiert). {KITA_CSV_LIZENZ_UI_HINWEIS}
-      </p>
-    </div>
+      />
+    </>
   );
 }
