@@ -1,6 +1,6 @@
 # BUILD_STATE.md – Aktueller Projektstand
 
-Zuletzt aktualisiert: nach Supervisor-Pflicht-Push 2026-07-29 (Merge loop/av + loop/ug + loop/kita → Q-141–Q-147; lint+build 27 Seiten grün; origin/main sync 0)
+Zuletzt aktualisiert: nach Supervisor-Pflicht-Push 2026-07-29 (Merge loop/av + loop/ug + loop/kita → Q-148 UG BG-CTA-Hilfstext + Q-149 Kita Meldung-Druck; lint+build 27 Seiten; E2E chromium 240 passed; origin/main sync 0)
 
 Dieser Stand beschreibt, was tatsächlich existiert und funktioniert.
 Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
@@ -15,7 +15,7 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | Build-Status | ✓ Erfolgreich (27 statische Seiten) |
 | Deployment | Vercel, aus `demo/`-Verzeichnis |
 | Lokaler Start | `cd demo && npm install && npm run dev` |
-| Letzte Build-Prüfung | lint+build **27 Seiten** grün (Supervisor Merge Q-141–Q-147) |
+| Letzte Build-Prüfung | lint+build **27 Seiten** + `test:e2e:ci` **240 passed** (Supervisor Merge Q-148/Q-149) |
 
 ---
 
@@ -33,7 +33,7 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | `/fall/hinweise` | Vollständige Fairness-Hinweisseite | US-AV-008 | ✓ |
 | `/stories` | Story Coverage Dashboard | – | ✓ |
 | `/feedback` | Feedback → GitHub Issues | – | ✓ |
-| `/gruendung` … | Unternehmensgründung (Übersicht Fairness-Kurzblock+Kurz-CTAs inkl. Steuernummer/Betriebsdatum, Behörden VS-04→Rückfrage, Hinweise-CTAs RQ/BG/Unterlagen/Steuernummer/Betriebsdatum/parallele Behörden, Verlauf Stelle+Ereignistyp-Filter, …) | US-UG-001–006 | ✓ |
+| `/gruendung` … | Unternehmensgründung (Übersicht Fairness-Kurzblock+Kurz-CTAs inkl. Steuernummer/Betriebsdatum/BG-Hilfstext session-sensitiv, Behörden VS-04→Rückfrage, Hinweise-CTAs RQ/BG/Unterlagen/Steuernummer/Betriebsdatum/parallele Behörden, Verlauf Stelle+Ereignistyp-Filter, …) | US-UG-001–006 | ✓ |
 | `/kita` | Öffentlicher Transparenzbericht + Planungsraum-Filter + Residual↔Meldelücke + Engpass/Meldelücke-Schnellfilter + Zeitreihe Meldebasis + Regionenfilter + Regionenvergleich Zwei-Räume inkl. 12-Monats-Verlauf A/B + CSV-Export + Open-Data-Lizenz + Hub-Karten JA-Steuerungskette (Lagebild/Bedarfsplanung/Vorlage) | US-KJ-009, US-KJ-010 | ✓ |
 | `/kita/lagebild` | Jugendamt-Steuerungsansicht + Meldeeingang + Meldebeitrag + Engpass/Handlungsfelder/Planungsraum-Detail Meldelücke-Schnellfilter + Druck Meldelücke + Monatsbericht-Vorschau + Steuerungskette Hub-Karten | US-KJ-005, US-KJ-006 | ✓ |
 | `/kita/bedarfsplanung` | Bedarfsplanungsentwurf (§ 80 SGB VIII) + Meldebasis + Residual↔Meldelücke (Hinweis-only) + Steuerungskette Hub-Karten + Druck freigabeunabhängig mit Meldebasis-Session-Hinweis | US-KJ-007 | ✓ |
@@ -41,7 +41,7 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | `/kita/einrichtung` | Belegungsstand Einrichtung (aggregiert) + Prozesskette Tagesstand→Monatsbericht→Meldung | US-KJ-002 | ✓ |
 | `/kita/tagesstand` | Tagesstand erfassen (Aggregate, Freigabe) + Prozesskette Hub-Karten Belegung/Monatsbericht/Meldung | US-KJ-001 | ✓ |
 | `/kita/monatsbericht` | Monatsbericht + Vorschau + Rücklink Lagebild + Einrichtungs-Kontext + Prozesskette + Druck Status/Tagesstand-Datenbasis | US-KJ-003 | ✓ |
-| `/kita/meldung` | Monatsmeldung prüfen, korrigieren, freigeben + Prozesskette Hub-Karten | US-KJ-004 | ✓ |
+| `/kita/meldung` | Monatsmeldung prüfen, korrigieren, freigeben + Prozesskette Hub-Karten + Druck freigabeunabhängig (Status/Korrekturen/Freigabenachweis) | US-KJ-004 | ✓ |
 
 ---
 
@@ -103,6 +103,8 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | Kita öffentlicher Bericht Steuerungskette-Hub | `/kita` | ✓ Hub-Karten JA-Steuerungskette, DEC-004 Aggregate only (Q-145, US-KJ-009) |
 | UG parallele Behörden session-sensitiv | `gruendung-rules` + Hinweise | ✓ Signal/CTA-Hint nach RQ-Antwort (Q-146) |
 | AV UNTERLAGE berechnete Dokumenten-Frist | `fairness/rules` + `/fall/dokumente` | ✓ Resttage ggü. FIKTIVES_HEUTE; RELEVANT ≤3 / abgelehnt (Q-147) |
+| UG BG-CTA-Hilfstext session-sensitiv | `/gruendung` + `/gruendung/hinweise` | ✓ Offene RQ priorisiert; nach Antwort Fokus BG-Anmeldung außerhalb (Q-148) |
+| Kita Meldung Druck freigabeunabhängig | `/kita/meldung` | ✓ Print Status/Korrekturen/Freigabenachweis; interaktive Phasen no-print (Q-149, US-KJ-004) |
 
 ---
 
@@ -208,6 +210,15 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 **Q-138 erledigt:** UG Übersicht Betriebsdatum-Fairness-CTA Hilfstext nach RQ-Antwort.
 **Q-139 erledigt:** UG Hinweise Betriebsdatum-CTA Hilfstext session-sensitiv nach RQ (Spiegel Übersicht).
 **Q-140 erledigt:** Kita Bedarfsplanung Druck freigabeunabhängig + Meldebasis-Session-Hinweis (US-KJ-007).
+**Q-141 erledigt:** UG Übersicht Steuernummer-Fairness-CTA Hilfstext session-sensitiv nach RQ.
+**Q-142 erledigt:** Kita Lagebild/Vorlage Steuerungskette-Hub (Bedarfsplanung↔Lagebild↔Vorlage/Meldung).
+**Q-143 erledigt:** UG Hinweise Steuernummer-CTA Hilfstext priorisiert offene RQ (Spiegel Übersicht).
+**Q-144 erledigt:** Kita Monatsbericht Druck Status + Tagesstand-Datenbasis (US-KJ-003).
+**Q-145 erledigt:** Kita öffentlicher Bericht Hub-Karten JA-Steuerungskette (US-KJ-009).
+**Q-146 erledigt:** UG parallele Behörden Signal + Hinweise-CTA session-sensitiv nach RQ.
+**Q-147 erledigt:** AV UNTERLAGE_FEHLT mit berechneter Dokumenten-Frist (Resttage, RELEVANT ≤3).
+**Q-148 erledigt:** UG BG-CTA-Hilfstext session-sensitiv (Übersicht + Hinweise, offene RQ priorisiert).
+**Q-149 erledigt:** Kita Meldung Druck freigabeunabhängig Status/Korrekturen/Freigabenachweis (US-KJ-004).
 
 ---
 

@@ -182,6 +182,8 @@ Story-Dokumentation ist kein Pflicht-Vorläufer für Mock-Daten und Typen.
 | Q-145 | Kita öffentlicher Bericht: Hub-Karten JA-Steuerungskette (US-KJ-009, DEC-004) | DEMO | S | Q-142 | DONE `467f447` |
 | Q-146 | UG parallele Behörden: Signal + Hinweise-CTA Hilfstext session-sensitiv nach RQ | DEMO | S | Q-113 | DONE `e90d397` |
 | Q-147 | AV Fairness: UNTERLAGE_FEHLT mit berechneter Dokumenten-Frist (Resttage, RELEVANT ≤3) | DEMO | S | Q-004 | DONE `b768063` |
+| Q-148 | UG BG-CTA-Hilfstext session-sensitiv (Übersicht Fairness + Hinweise, offene RQ priorisiert) | DEMO | S | Q-096 | DONE `35a5d95` |
+| Q-149 | Kita Meldung: Druck freigabeunabhängig Status/Korrekturen/Freigabenachweis (US-KJ-004) | DEMO | S | Q-135 | DONE `2952d04` |
 
 ---
 
@@ -334,3 +336,5 @@ Diese Punkte wurden in früheren Iterationen abgeschlossen und sind produktionsr
 | Q-145 Kita öffentlicher Bericht Steuerungskette-Hub | Hub-Karten auf `/kita` (US-KJ-009) | `467f447` → main |
 | Q-146 UG parallele Behörden session-sensitiv | Signal + CTA-Hint nach RQ | `e90d397` → main |
 | Q-147 AV UNTERLAGE berechnete Dokumenten-Frist | Resttage / RELEVANT ≤3 Tage | `b768063` → main |
+| Q-148 UG BG-CTA-Hilfstext session-sensitiv | Übersicht + Hinweise nach RQ | `35a5d95` → main |
+| Q-149 Kita Meldung Druck freigabeunabhängig | Status/Korrekturen/Freigabe print-only | `2952d04` → main |
