@@ -95,6 +95,34 @@ test.describe('UG – Übersicht', () => {
     await expect(page.getByRole('heading', { name: 'Hinweise zur Verfahrenslage' })).toBeVisible();
   });
 
+  test('Fairness-Kurzblock zeigt nur RELEVANT und HINWEIS, nicht INFO', async ({ page }) => {
+    const block = page.getByTestId('uebersicht-fairness-kurzblock');
+    await expect(block).toBeVisible();
+
+    // INFO-Signal „parallele Behörden“ darf auf der Übersicht nicht erscheinen
+    await expect(page.getByTestId('uebersicht-fairness-UG-PARALLELE-BEHOERDEN')).toHaveCount(0);
+    await expect(block.getByText(/Behördenverfahren laufen parallel/i)).toHaveCount(0);
+
+    // Handlungsrelevante Signale bleiben sichtbar (Mock: Rückfrage RELEVANT, mehrere HINWEIS)
+    const liste = page.getByTestId('uebersicht-fairness-liste');
+    const items = liste.locator('[data-prioritaet]');
+    const count = await items.count();
+    expect(count).toBeGreaterThan(0);
+    for (let i = 0; i < count; i++) {
+      const prio = await items.nth(i).getAttribute('data-prioritaet');
+      expect(['RELEVANT', 'HINWEIS']).toContain(prio);
+    }
+
+    // Link weist auf weitere (INFO-)Hinweise hin
+    const link = page.getByTestId('uebersicht-fairness-hinweise-link');
+    await expect(link).toContainText(/weitere Hinweis/i);
+  });
+
+  test('INFO-Signal parallele Behörden erscheint auf Hinweise-Seite', async ({ page }) => {
+    await page.goto('/gruendung/hinweise');
+    await expect(page.getByText(/Behördenverfahren laufen parallel/i).first()).toBeVisible();
+  });
+
   test('Tab "Übersicht" ist aktiv hervorgehoben', async ({ page }) => {
     const activeTab = page.locator('.tab-nav-item.active');
     await expect(activeTab).toContainText('Übersicht');
