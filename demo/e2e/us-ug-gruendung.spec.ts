@@ -568,6 +568,20 @@ test.describe('UG – Hinweise zur Verfahrenslage', () => {
     await expect(page.getByTestId('uebersicht-verfahrensstatus')).toContainText(/IT-Beratung|Verfahrensfortschritt|Sie sind hier/i);
   });
 
+  test('INFO-Parallele-Behörden-Signal hat CTA „Zu den Behörden“', async ({ page }) => {
+    const cta = page.getByTestId('hinweise-parallele-behoerden-cta');
+    await expect(cta).toBeVisible();
+    await expect(cta).toContainText(/Zu den Behörden/i);
+    await expect(cta).toHaveAttribute('href', '/gruendung/behoerden');
+  });
+
+  test('CTA aus parallelen Behörden führt zur Behörden-Übersicht', async ({ page }) => {
+    await page.getByTestId('hinweise-parallele-behoerden-cta').click();
+    await expect(page).toHaveURL(/\/gruendung\/behoerden/);
+    await expect(page.getByRole('heading', { name: 'Behörden & Verfahrensschritte' })).toBeVisible();
+    await expect(page.getByTestId('behoerde-karte-BEH-02')).toBeVisible();
+  });
+
 });
 
 // ─── Verlauf ──────────────────────────────────────────────────────────────────

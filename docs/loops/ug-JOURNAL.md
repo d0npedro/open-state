@@ -8,6 +8,31 @@ Erlaubte Pfade nur: `demo/app/gruendung/**`, `demo/context/GruendungStateContext
 
 ---
 
+## 2026-07-29 – Iteration 14: Hinweise-CTA parallele Behörden → Behörden
+
+### Was
+Hinweise-Seite: INFO-Signale zu parallel aktiven Behörden
+(`UG-PARALLELE-BEHOERDEN` / `UG_PARALLELE_BEHOERDEN_AKTIV`) erhalten einen CTA
+„Zu den Behörden“ mit Ziel `/gruendung/behoerden`. INFO-Signale werden
+einzeln gerendert (wie RELEVANT/HINWEIS). CTA nur solange mehr als eine
+Behörde `IN_BEARBEITUNG` oder `RUECKFRAGE_OFFEN` ist. E2E: Linkziel und Navigation.
+
+### Dateien
+- `demo/app/gruendung/hinweise/page.tsx` – INFO-Map, parallele-Behörden-CTA
+- `demo/e2e/us-ug-gruendung.spec.ts` – zwei CTA-Tests
+- `docs/loops/ug-JOURNAL.md` – dieses Journal
+
+### Build
+`npm run lint` + `npm run build` im Ordner `demo/` grün.
+`npm run test:e2e:ug` Exit 0 (92 passed).
+
+### Nächster sinnvoller UG-Schritt (Vorschlag)
+- Übersicht: Fairness-Einträge mit Kurz-CTA (Rückfrage / Unterlagen / BG)
+- Behörden: Link von offenem Schritt VS-04 zur Rückfrage
+- Hinweise: nach Session-Wechsel CTA-Verschwinden für parallele Behörden (optional)
+
+---
+
 ## 2026-07-29 – Iteration 13: Übersicht nächster Schritt + Aufgaben-Links
 
 ### Was

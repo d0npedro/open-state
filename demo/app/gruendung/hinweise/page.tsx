@@ -37,6 +37,10 @@ function isSteuernummerSignal(signal: FairnessSignal): boolean {
 function isBetriebsdatumSignal(signal: FairnessSignal): boolean {
   return signal.typ === 'UG_BETRIEBSDATUM_UEBERSCHRITTEN' || signal.id === 'UG-BETRIEBSDATUM';}
 
+/** Erkennung des INFO-Signals zu parallel aktiven Behörden. */
+function isParalleleBehoerdenSignal(signal: FairnessSignal): boolean {
+  return signal.typ === 'UG_PARALLELE_BEHOERDEN_AKTIV' || signal.id === 'UG-PARALLELE-BEHOERDEN';}
+
 export default function GruendungHinweisePage() {
   const { akte } = useGruendungState();
   const signale = berechneFairnessSignaleGruendung(akte);
@@ -326,7 +330,52 @@ export default function GruendungHinweisePage() {
               <h2 style={{ fontSize: '0.875rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--color-neutral)', marginBottom: '0.75rem' }}>
                 Informationen ({info.length})
               </h2>
-              <FairnessPanel signale={info} />
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                {info.map(sig => {
+                  const paralleleNochAktiv = isParalleleBehoerdenSignal(sig)
+                    ? akte.beteiligteBehörden.filter(
+                        b => b.status === 'IN_BEARBEITUNG' || b.status === 'RUECKFRAGE_OFFEN'
+                      ).length > 1
+                    : false;
+                  return (
+                    <div key={sig.id} data-testid={`hinweise-info-${sig.id}`}>
+                      <FairnessPanel signale={[sig]} />
+                      {paralleleNochAktiv && (
+                        <div
+                          style={{
+                            marginTop: '0.5rem',
+                            display: 'flex',
+                            flexWrap: 'wrap',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                            gap: '0.75rem',
+                            padding: '0.75rem 1rem',
+                            background: 'var(--color-neutral-light)',
+                            border: '1px solid var(--color-border)',
+                            borderRadius: 'var(--radius)',
+                          }}
+                          data-testid="hinweise-parallele-behoerden-cta-wrap"
+                        >
+                          <p style={{ margin: 0, fontSize: '0.875rem', lineHeight: 1.45 }}>
+                            Status, Rolle und offene Schritte aller beteiligten Stellen finden Sie unter
+                            Behörden & Verfahrensschritte.
+                          </p>
+                          <Link
+                            href="/gruendung/behoerden"
+                            className="btn btn-primary"
+                            style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', flexShrink: 0 }}
+                            data-testid="hinweise-parallele-behoerden-cta"
+                            aria-label="Zu Behörden und Verfahrensschritten"
+                          >
+                            <Icon name="building" size={15} />
+                            Zu den Behörden
+                          </Link>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
             </section>
           )}
           <div style={{ padding: '0.875rem 1rem', background: 'var(--color-neutral-light)', borderRadius: 'var(--radius)', fontSize: '0.8rem', color: 'var(--color-text-muted)', lineHeight: 1.5 }}>
