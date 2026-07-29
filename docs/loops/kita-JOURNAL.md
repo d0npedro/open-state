@@ -2,6 +2,57 @@
 
 Branch: `loop/kita` · Worktree: `D:\Projects\open-state-loop-kita`
 
+## Iteration 2026-07-29 – US-KJ-003/005 Monatsbericht-Vorschau CSV am Meldeeingang
+
+### Was
+Monatsbericht-Vorschau im Steuerungslagebild (`KitaMeldeeingangMonatsberichtVorschau`, US-KJ-003 ↔ US-KJ-005 auf `/kita/lagebild`): CSV-Export freigabeunabhängig analog Monatsbericht-Seite. Button „CSV exportieren“ (no-print) neben Status VORSCHAU. Metakopf: Demo-Modus Vorschau, Status, Tagesstand-Quellen (freigegeben/fehlt/in Erfassung), Meldeeingang-Kopplung (Abschlussmonat Status/Periode/Freigabe-ID, Lücke vs. parallel), Methodik-Trennung, DEC-004. Blätter: 1 Gruppenkennzahlen + Summe, 2 Tagesstand-Quellen je Betriebstag bis Stichtag. Dateiname `…-vorschau-meldeeingang.csv`. Methodik/Badge/Footer und Export-Hinweis in `KitaLagebildDruck`, Meldeeingang-Panel und `/kita/lagebild`. Keine Interpolation. Nur Aggregate, keine Kind- oder Personennamen. `origin/main` bereits im Branch (kein Merge nötig).
+
+### Dateien
+- `demo/components/kita/KitaMeldeeingangMonatsberichtVorschau.tsx` (downloadVorschauCsv, Export-Button, Methodik)
+- `demo/components/kita/KitaLagebildDruck.tsx` (Export-Hinweis Vorschau-CSV)
+- `demo/components/kita/KitaMeldeeingangPanel.tsx` (Methodik Vorschau-CSV)
+- `demo/app/kita/lagebild/page.tsx` (Badge, Methodik, Footer)
+- `docs/loops/kita-JOURNAL.md` (dieses Journal)
+
+### Story
+US-KJ-003 / US-KJ-005 – Monatsbericht-Vorschau CSV Aggregate am Meldeeingang (Kopplung, freigabeunabhängig)
+
+### Build
+`npm run lint` + `npm run build` im `demo/`-Verzeichnis (siehe Commit dieses Laufs)
+
+### Nicht angefasst (Supervisor / verboten)
+Queue, BUILD_STATE, storyRegistry, DECISION_LOG, andere Domänen, package.json, CI, push
+
+### Nächster sinnvoller Schritt (Hinweis Supervisor)
+Bedarfsplanung Feinschliff falls Lücken, oder Lagebild-CSV um optionalen Regionenvergleich-Hinweis schärfen, oder Explorer Meldebasis-Druck weiter spiegeln falls nötig.
+
+---
+
+## Iteration 2026-07-29 – US-KJ-004/005 Meldeeingang CSV Aggregate Status/Lücken/Session
+
+### Was
+Meldeeingang im Steuerungslagebild (`KitaMeldeeingangPanel`, US-KJ-004→005 auf `/kita/lagebild`): CSV-Export freigabeunabhängig analog Meldung/Monatsbericht/Lagebild. Button „CSV exportieren“ (no-print) neben der Sektionsüberschrift. Metakopf: Berichtsmonat, Datenvollständigkeit bzw. Lückenliste, Session-Freigabe, Zähler freigegeben/überfällig/ausstehend, Methodik, DEC-004. Blätter: 1 Eingangsstatus je Einrichtung (Session-sensitiv), 2 Aggregate nur freigegebener Meldungen (unfreigegebene ohne Kennzahlen), 3 Lückenliste. Dateiname mit `-mit-luecken`/`-vollstaendig` und optional `-session`. Methodik/Badge/Footer und Export-Hinweis in `KitaLagebildDruck` sowie auf `/kita/lagebild`. Keine Interpolation. Nur Aggregate, keine Kind- oder Personennamen. `origin/main` bereits auf Branch (kein Merge nötig).
+
+### Dateien
+- `demo/components/kita/KitaMeldeeingangPanel.tsx` (downloadCsv, Export-Button, Methodik)
+- `demo/components/kita/KitaLagebildDruck.tsx` (Export-Hinweis Meldeeingang-CSV)
+- `demo/app/kita/lagebild/page.tsx` (Badge, Methodik, Footer)
+- `docs/loops/kita-JOURNAL.md` (dieses Journal)
+
+### Story
+US-KJ-004 / US-KJ-005 – Meldeeingang CSV Aggregate Status/Lücken/Session
+
+### Build
+`npm run lint` + `npm run build` im `demo/`-Verzeichnis (siehe Commit dieses Laufs)
+
+### Nicht angefasst (Supervisor / verboten)
+Queue, BUILD_STATE, storyRegistry, DECISION_LOG, andere Domänen, package.json, CI, push
+
+### Nächster sinnvoller Schritt (Hinweis Supervisor)
+Bedarfsplanung Feinschliff falls Lücken, oder Lagebild-CSV um optionalen Regionenvergleich-Hinweis schärfen, oder Monatsbericht-Vorschau-CSV am Meldeeingang falls fachlich gewünscht.
+
+---
+
 ## Iteration 2026-07-29 – US-KJ-004/005 Meldeeingang Druck-Meta Status/Datenbasis/Session
 
 ### Was
