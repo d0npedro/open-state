@@ -5,6 +5,7 @@
  * Filter zeigt einen Raum oder alle; Maßnahmen folgen dem Filter.
  * Residuale Planungslücke (Demo-Näherung wie US-KJ-007) wird methodisch an
  * Meldelücken aus dem Meldeeingang gekoppelt — Hinweis only, keine Interpolation.
+ * Filter-Chips: Engpass (Auslastung/Warteliste) und Meldelücke (Meldeeingang).
  * Keine Kind- oder Personennamen (Q-074 / US-KJ-009 ↔ US-KJ-007).
  */
 
@@ -16,7 +17,20 @@ import {
   ResidualMeldeHinweis,
   ResidualMeldeSummenHinweis,
   useMeldeeingangFuerBedarfsplanung,
+  type PlanungsraumMeldebasis,
 } from '@/components/kita/KitaBedarfsplanungDatenbasis';
+
+/** Versorgungs-Engpass: hoher Wartelistendruck oder kritische Auslastung. */
+function isEngpass(pr: PlanungsraumKennzahlen): boolean {
+  return pr.wartelisteDruckFaktor > 10 || pr.auslastungsgradProzent >= 98;
+}
+
+/** Meldelücke: mindestens eine nicht freigegebene Stichproben-Meldung im Raum. */
+function hasMeldeluecke(basis: PlanungsraumMeldebasis | undefined): boolean {
+  return Boolean(basis?.hatDatenluecke);
+}
+
+type Schnellfilter = 'ALL' | 'ENGPASS' | 'MELDELUECKE';
 
 function auslastungBadge(pct: number): { color: string; label: string } {
   if (pct >= 98) return { color: 'var(--color-danger)', label: 'Kritisch' };
@@ -76,6 +90,7 @@ interface Props {
 
 export function KitaPlanungsraumExplorer({ planungsraeume, massnahmen, csvSlot }: Props) {
   const [selectedId, setSelectedId] = useState<string | 'ALL'>('ALL');
+  const [schnellfilter, setSchnellfilter] = useState<Schnellfilter>('ALL');
   const { basen, byRaumId } = useMeldeeingangFuerBedarfsplanung();
 
   const residualByRaumId = useMemo(() => {
@@ -86,21 +101,38 @@ export function KitaPlanungsraumExplorer({ planungsraeume, massnahmen, csvSlot }
     return m;
   }, [planungsraeume, massnahmen]);
 
-  const filteredRaeume = useMemo(
-    () =>
-      selectedId === 'ALL'
-        ? planungsraeume
-        : planungsraeume.filter(pr => pr.id === selectedId),
-    [planungsraeume, selectedId]
+  const engpassCount = useMemo(
+    () => planungsraeume.filter(isEngpass).length,
+    [planungsraeume]
+  );
+  const meldelueckeCount = useMemo(
+    () => planungsraeume.filter(pr => hasMeldeluecke(byRaumId.get(pr.id))).length,
+    [planungsraeume, byRaumId]
   );
 
-  const filteredMassnahmen = useMemo(
-    () =>
+  const filteredRaeume = useMemo(() => {
+    let list =
       selectedId === 'ALL'
-        ? massnahmen
-        : massnahmen.filter(m => m.planungsraumId === selectedId),
-    [massnahmen, selectedId]
-  );
+        ? planungsraeume
+        : planungsraeume.filter(pr => pr.id === selectedId);
+
+    // Schnellfilter greift nur in der Mehrfachansicht (Alle Räume).
+    if (selectedId === 'ALL' && schnellfilter === 'ENGPASS') {
+      list = list.filter(isEngpass);
+    } else if (selectedId === 'ALL' && schnellfilter === 'MELDELUECKE') {
+      list = list.filter(pr => hasMeldeluecke(byRaumId.get(pr.id)));
+    }
+    return list;
+  }, [planungsraeume, selectedId, schnellfilter, byRaumId]);
+
+  const filteredMassnahmen = useMemo(() => {
+    if (selectedId !== 'ALL') {
+      return massnahmen.filter(m => m.planungsraumId === selectedId);
+    }
+    if (schnellfilter === 'ALL') return massnahmen;
+    const raumIds = new Set(filteredRaeume.map(pr => pr.id));
+    return massnahmen.filter(m => raumIds.has(m.planungsraumId));
+  }, [massnahmen, selectedId, schnellfilter, filteredRaeume]);
 
   const selectedRaum =
     selectedId === 'ALL' ? null : planungsraeume.find(pr => pr.id === selectedId) ?? null;
@@ -115,6 +147,11 @@ export function KitaPlanungsraumExplorer({ planungsraeume, massnahmen, csvSlot }
     .filter(m => m.status === 'IM_BAU')
     .reduce((s, m) => s + m.erwarteteNeuePlaetze, 0);
 
+  function selectRaum(id: string | 'ALL') {
+    setSelectedId(id);
+    if (id !== 'ALL') setSchnellfilter('ALL');
+  }
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
       {/* Planungsraum-Übersicht */}
@@ -124,7 +161,73 @@ export function KitaPlanungsraumExplorer({ planungsraeume, massnahmen, csvSlot }
           {csvSlot}
         </div>
 
-        {/* Filter-Chips */}
+        {/* Schnellfilter: Engpass / Meldelücke */}
+        <div
+          role="group"
+          aria-label="Schnellfilter Engpass und Meldelücke"
+          style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '0.65rem' }}
+        >
+          <button
+            type="button"
+            className={selectedId === 'ALL' && schnellfilter === 'ALL' ? 'btn btn-primary' : 'btn btn-secondary'}
+            aria-pressed={selectedId === 'ALL' && schnellfilter === 'ALL'}
+            onClick={() => {
+              setSelectedId('ALL');
+              setSchnellfilter('ALL');
+            }}
+            style={{ fontSize: '0.8rem', padding: '0.35rem 0.75rem' }}
+          >
+            Alle anzeigen
+          </button>
+          <button
+            type="button"
+            className={selectedId === 'ALL' && schnellfilter === 'ENGPASS' ? 'btn btn-primary' : 'btn btn-secondary'}
+            aria-pressed={selectedId === 'ALL' && schnellfilter === 'ENGPASS'}
+            onClick={() => {
+              setSelectedId('ALL');
+              setSchnellfilter(prev => (prev === 'ENGPASS' ? 'ALL' : 'ENGPASS'));
+            }}
+            style={{
+              fontSize: '0.8rem',
+              padding: '0.35rem 0.75rem',
+              borderColor:
+                selectedId === 'ALL' && schnellfilter === 'ENGPASS'
+                  ? undefined
+                  : 'var(--color-warning)',
+            }}
+            title="Wartelistendruck &gt; 10 oder Auslastung ≥ 98 %"
+          >
+            Engpass
+            <span style={{ marginLeft: '0.35rem', fontSize: '0.72rem', opacity: 0.9 }}>
+              ({engpassCount})
+            </span>
+          </button>
+          <button
+            type="button"
+            className={selectedId === 'ALL' && schnellfilter === 'MELDELUECKE' ? 'btn btn-primary' : 'btn btn-secondary'}
+            aria-pressed={selectedId === 'ALL' && schnellfilter === 'MELDELUECKE'}
+            onClick={() => {
+              setSelectedId('ALL');
+              setSchnellfilter(prev => (prev === 'MELDELUECKE' ? 'ALL' : 'MELDELUECKE'));
+            }}
+            style={{
+              fontSize: '0.8rem',
+              padding: '0.35rem 0.75rem',
+              borderColor:
+                selectedId === 'ALL' && schnellfilter === 'MELDELUECKE'
+                  ? undefined
+                  : 'var(--color-danger)',
+            }}
+            title="Planungsräume mit fehlender freigegebener Monatsmeldung (Demo-Stichprobe)"
+          >
+            Meldelücke
+            <span style={{ marginLeft: '0.35rem', fontSize: '0.72rem', opacity: 0.9 }}>
+              ({meldelueckeCount})
+            </span>
+          </button>
+        </div>
+
+        {/* Planungsraum-Chips */}
         <div
           role="group"
           aria-label="Planungsraum filtern"
@@ -134,31 +237,51 @@ export function KitaPlanungsraumExplorer({ planungsraeume, massnahmen, csvSlot }
             type="button"
             className={selectedId === 'ALL' ? 'btn btn-primary' : 'btn btn-secondary'}
             aria-pressed={selectedId === 'ALL'}
-            onClick={() => setSelectedId('ALL')}
+            onClick={() => selectRaum('ALL')}
             style={{ fontSize: '0.875rem', padding: '0.4rem 0.85rem' }}
           >
             Alle Räume
           </button>
           {planungsraeume.map(pr => {
             const active = selectedId === pr.id;
-            const engpass = pr.wartelisteDruckFaktor > 10 || pr.auslastungsgradProzent >= 98;
+            const engpass = isEngpass(pr);
+            const meldeluecke = hasMeldeluecke(byRaumId.get(pr.id));
+            const borderHint = !active
+              ? meldeluecke
+                ? 'var(--color-danger)'
+                : engpass
+                  ? 'var(--color-warning)'
+                  : undefined
+              : undefined;
             return (
               <button
                 key={pr.id}
                 type="button"
                 className={active ? 'btn btn-primary' : 'btn btn-secondary'}
                 aria-pressed={active}
-                onClick={() => setSelectedId(pr.id)}
+                onClick={() => selectRaum(pr.id)}
                 style={{
                   fontSize: '0.875rem',
                   padding: '0.4rem 0.85rem',
-                  borderColor: engpass && !active ? 'var(--color-warning)' : undefined,
+                  borderColor: borderHint,
                 }}
               >
                 {pr.bezeichnung}
                 {engpass && (
                   <span style={{ marginLeft: '0.35rem', fontSize: '0.75rem', opacity: 0.9 }}>
                     · Engpass
+                  </span>
+                )}
+                {meldeluecke && (
+                  <span
+                    style={{
+                      marginLeft: '0.35rem',
+                      fontSize: '0.75rem',
+                      opacity: 0.9,
+                      color: active ? undefined : 'var(--color-danger)',
+                    }}
+                  >
+                    · Meldelücke
                   </span>
                 )}
               </button>
@@ -171,9 +294,13 @@ export function KitaPlanungsraumExplorer({ planungsraeume, massnahmen, csvSlot }
           aria-live="polite"
           style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', marginBottom: '0.75rem' }}
         >
-          {selectedId === 'ALL'
-            ? `${planungsraeume.length} Planungsräume angezeigt`
-            : `Gefiltert: ${selectedRaum?.bezeichnung ?? selectedId}`}
+          {selectedId !== 'ALL'
+            ? `Gefiltert: ${selectedRaum?.bezeichnung ?? selectedId}`
+            : schnellfilter === 'ENGPASS'
+              ? `${filteredRaeume.length} Planungsraum${filteredRaeume.length === 1 ? '' : 'e'} mit Engpass`
+              : schnellfilter === 'MELDELUECKE'
+                ? `${filteredRaeume.length} Planungsraum${filteredRaeume.length === 1 ? '' : 'e'} mit Meldelücke`
+                : `${filteredRaeume.length} Planungsräume angezeigt`}
         </p>
 
         {/* Detailkarte bei Einzelauswahl */}
@@ -305,6 +432,15 @@ export function KitaPlanungsraumExplorer({ planungsraeume, massnahmen, csvSlot }
           </div>
         )}
 
+        {filteredRaeume.length === 0 ? (
+          <div className="card" style={{ color: 'var(--color-text-muted)', fontSize: '0.9rem' }} role="status">
+            {schnellfilter === 'MELDELUECKE'
+              ? 'Keine Planungsräume mit Meldelücke in der aktuellen Demo-Stichprobe (ggf. nach Freigabe in /kita/meldung geschlossen).'
+              : schnellfilter === 'ENGPASS'
+                ? 'Keine Planungsräume mit Versorgungs-Engpass nach den Demo-Schwellwerten.'
+                : 'Keine Planungsräume für diesen Filter.'}
+          </div>
+        ) : (
         <div style={{ overflowX: 'auto' }}>
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.875rem' }}>
             <thead>
@@ -334,11 +470,11 @@ export function KitaPlanungsraumExplorer({ planungsraeume, massnahmen, csvSlot }
                           : 'var(--color-neutral-light)',
                       cursor: 'pointer',
                     }}
-                    onClick={() => setSelectedId(prev => (prev === pr.id ? 'ALL' : pr.id))}
+                    onClick={() => selectRaum(selectedId === pr.id ? 'ALL' : pr.id)}
                     onKeyDown={e => {
                       if (e.key === 'Enter' || e.key === ' ') {
                         e.preventDefault();
-                        setSelectedId(prev => (prev === pr.id ? 'ALL' : pr.id));
+                        selectRaum(selectedId === pr.id ? 'ALL' : pr.id);
                       }
                     }}
                     tabIndex={0}
@@ -397,6 +533,7 @@ export function KitaPlanungsraumExplorer({ planungsraeume, massnahmen, csvSlot }
             </tbody>
           </table>
         </div>
+        )}
 
         <div style={{ marginTop: '0.75rem' }}>
           <ResidualMeldeSummenHinweis
@@ -410,7 +547,8 @@ export function KitaPlanungsraumExplorer({ planungsraeume, massnahmen, csvSlot }
           <span><span style={{ color: 'var(--color-danger)', fontWeight: 600 }}>■</span> Kritisch</span>
           <span><span style={{ color: 'var(--color-warning)', fontWeight: 600 }}>■</span> Erhöht</span>
           <span><span style={{ color: 'var(--color-success)', fontWeight: 600 }}>■</span> Normal</span>
-          <span>Druck-Faktor: Wartelistenanfragen / freie Plätze. Wert &gt; 1 = Engpass</span>
+          <span>Engpass-Filter: Wartelistendruck &gt; 10 oder Auslastung ≥ 98 %</span>
+          <span>Meldelücke-Filter: fehlende freigegebene Monatsmeldung (Demo-Stichprobe, Session-sensitiv)</span>
           <span>Planungslücke = Warteliste − freie Plätze − geplante Kapazität (Demo-Näherung)</span>
           <span>Zeile anklicken filtert auf den Planungsraum</span>
         </div>
