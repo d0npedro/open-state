@@ -2,14 +2,15 @@
 
 | Feld | Wert |
 |------|------|
-| last_checked | 2026-07-29T08:43:00Z |
-| last_run_id | 30436416004 |
+| last_checked | 2026-07-29T08:46:28Z |
+| last_run_id | 30436673364 |
 | last_status | success |
-| last_sha | 2f074f1 |
+| last_sha | 61626e9 |
 | fix_attempts | 0 |
 
 ## Log
 
+- E2E `30436673364` **success** (SHA 61626e9 docs ci-watcher HEAD). E2E `30436606772` **success** (SHA 0ff739b). Build latest `30436606797` **success** (SHA 0ff739b; HEAD `2757284` docs supervisor Q-160 path-skip). Build code path still `30436124632` **success** (SHA 800469f / `c3be039` Merge loop/kita — latest code path). Catch-up: origin/main..main = 0. Newer HEAD docs E2E `30436829523` may still be in_progress (docs-only). No fix. fix_attempts=0.
 - E2E `30436416004` **success** (SHA 2f074f1 docs ci-watcher HEAD). E2E `30436353856` **success** (SHA 110ce68). E2E `30436226430` **success** (SHA 4880e5b). Build latest `30436124632` **success** (SHA 800469f Merge loop/kita — latest code path; HEAD docs-only path-skip). Catch-up: origin/main..main = 0. No fix. fix_attempts=0.
 - E2E `30436226430` **success** (SHA 4880e5b docs supervisor Q-158–Q-159 HEAD). E2E `30436124611` + Build `30436124632` **success** (SHA 800469f Merge loop/kita — latest code path; HEAD docs-only path-skip). Prior E2E `30435988261` **success** (SHA cce5d22). Catch-up this tick: origin/main..main was 4 → lint+build grün → push `cce5d22..800469f` → origin/main..main = 0. Concurrent supervisor then pushed Q-158–Q-159 docs. No fix. fix_attempts=0.
 - E2E `30436124611` + Build `30436124632` **success** (SHA 800469f Merge loop/kita — latest code path: Kita Bedarfsplanung CSV Aggregate freigabeunabhängig + concurrent UG merge). Prior E2E `30435988261` **success** (SHA cce5d22 docs). Prior E2E `30435788048` + Build `30435788121` **success** (SHA 91b5a43). Catch-up: origin/main..main = 0. HEAD `4880e5b` supervisor Q-158–Q-159 docs path-skip; E2E `30436226430` may still be in_progress (docs-only). No fix. fix_attempts=0.
