@@ -4,6 +4,8 @@
  * US-KJ-007 – Bedarfsplanungsentwurf (Demo)
  *
  * Leitet einen strukturierten Planungsentwurf aus dem bestehenden Kita-Lagebild ab.
+ * Datenlücken je Planungsraum werden aus dem Meldeeingang abgeleitet (US-KJ-004→007):
+ * z. B. Südost / Kita Sonnenwinkel überfällig, bis Session-Freigabe in /kita/meldung.
  * Keine automatischen Handlungsempfehlungen (Story-Nicht-Ziel).
  * Kommentar und „Zur Freigabe“ sind session-lokal, ohne Backend.
  */
@@ -12,10 +14,15 @@ import { useMemo, useState } from 'react';
 import Link from 'next/link';
 import { demoKitaLagebild } from '@/data/mockKitaLagebild';
 import type { Kapazitaetsmassnahme, PlanungsraumKennzahlen } from '@/types/kita';
+import {
+  KitaBedarfsplanungDatenbasisPanel,
+  MeldebasisBadge,
+  useMeldeeingangFuerBedarfsplanung,
+} from '@/components/kita/KitaBedarfsplanungDatenbasis';
 
 const ENTWURF_VERSION = 'BP-2025-01-ENTWURF';
 const PLANUNGSZEITRAUM = 'Kalenderjahr 2025 / 2026 (Entwurf)';
-const DATENSTAND_QUELLE = 'Aggregierte Betriebs- und Meldedaten, freigegebenes Lagebild';
+const DATENSTAND_QUELLE = 'Lagebild + Meldeeingang (freigegebene Aggregate)';
 
 type EntwurfStatus = 'ENTWURF' | 'ZUR_FREIGABE';
 
@@ -34,6 +41,8 @@ function planungsluecke(pr: PlanungsraumKennzahlen, massnahmen: Kapazitaetsmassn
 
 export default function BedarfsplanungPage() {
   const lb = demoKitaLagebild;
+  const { base: meldeBase, session, hydrated, basen, byRaumId } =
+    useMeldeeingangFuerBedarfsplanung();
   const [status, setStatus] = useState<EntwurfStatus>('ENTWURF');
   const [kommentar, setKommentar] = useState(
     'Entwurf basiert auf dem freigegebenen Lagebild. Demografie-Prognose noch nicht eingepflegt (offene Fachfrage US-KJ-007).'
@@ -49,6 +58,7 @@ export default function BedarfsplanungPage() {
 
   const summeResidual = zeilen.reduce((s, z) => s + z.luecke.residual, 0);
   const summeGeplant = zeilen.reduce((s, z) => s + z.luecke.geplant, 0);
+  const suedostLuecke = byRaumId.get('PR-03')?.hatDatenluecke ?? false;
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1.75rem' }}>
@@ -113,10 +123,22 @@ export default function BedarfsplanungPage() {
           <p style={{ fontSize: '0.875rem', margin: 0, lineHeight: 1.55 }}>
             Planungslücke ≈ max(0, Wartelistenbestand − freie Plätze − geplante neue Plätze aus Kapazitätsmaßnahmen).
             Die Warteliste kann Mehrfachanmeldungen enthalten; die Lücke ist eine Planungshilfe, keine Prognose.
-            Keine automatische Empfehlung für Neubau oder Standortwahl.
+            Fehlende freigegebene Einrichtungsmeldungen (Meldeeingang) werden je Planungsraum als Datenlücke
+            ausgewiesen und nicht interpoliert. Keine automatische Empfehlung für Neubau oder Standortwahl.
           </p>
         </div>
       </div>
+
+      {/* Meldeeingang → Datenlücken je Planungsraum (US-KJ-004 → US-KJ-007, Fokus Südost) */}
+      <KitaBedarfsplanungDatenbasisPanel
+        basen={basen}
+        session={session}
+        hydrated={hydrated}
+        monatsLabel={meldeBase.monatsLabel}
+        fiktivesHeute={meldeBase.fiktivesHeute}
+        methodikKurz={meldeBase.methodikKurz}
+        highlightRaumId="PR-03"
+      />
 
       {/* Kennzahlen-Summe */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: '1rem' }}>
@@ -145,6 +167,7 @@ export default function BedarfsplanungPage() {
               <tr style={{ background: 'var(--color-neutral-light)', borderBottom: '2px solid var(--color-border)' }}>
                 {[
                   'Planungsraum',
+                  'Meldebasis',
                   'Versorgung U3',
                   'Versorgung Ü3',
                   'Warteliste',
@@ -166,10 +189,25 @@ export default function BedarfsplanungPage() {
                   key={pr.id}
                   style={{
                     borderBottom: '1px solid var(--color-border)',
-                    background: i % 2 === 0 ? 'transparent' : 'var(--color-neutral-light)',
+                    background:
+                      pr.id === 'PR-03' && suedostLuecke
+                        ? 'var(--color-warning-light, #fff8e8)'
+                        : i % 2 === 0
+                          ? 'transparent'
+                          : 'var(--color-neutral-light)',
                   }}
                 >
-                  <td style={{ padding: '0.75rem', fontWeight: 600 }}>{pr.bezeichnung}</td>
+                  <td style={{ padding: '0.75rem', fontWeight: 600 }}>
+                    {pr.bezeichnung}
+                    {pr.id === 'PR-03' && suedostLuecke && (
+                      <div style={{ fontSize: '0.72rem', color: 'var(--color-text-muted)', fontWeight: 500 }}>
+                        Meldeeingang kritisch
+                      </div>
+                    )}
+                  </td>
+                  <td style={{ padding: '0.75rem' }}>
+                    <MeldebasisBadge basis={byRaumId.get(pr.id)} />
+                  </td>
                   <td style={{ padding: '0.75rem' }}>{pr.versorgungsquote.u3.toFixed(1)} %</td>
                   <td style={{ padding: '0.75rem' }}>{pr.versorgungsquote.ue3.toFixed(1)} %</td>
                   <td style={{ padding: '0.75rem', fontWeight: 600 }}>{pr.wartelisteBestand}</td>
@@ -201,8 +239,8 @@ export default function BedarfsplanungPage() {
           </table>
         </div>
         <p style={{ marginTop: '0.75rem', fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>
-          Quelle je Zeile: freigegebenes Lagebild {lb.version} ({lb.stand}), Kommune {lb.kommuneBezeichnung}.
-          Keine einrichtungs- oder personenbezogenen Daten.
+          Quelle je Zeile: freigegebenes Lagebild {lb.version} ({lb.stand}), Kommune {lb.kommuneBezeichnung};
+          Meldebasis aus Demo-Stichprobe Meldeeingang (US-KJ-004). Keine Kind- oder Personennamen.
         </p>
       </section>
 
@@ -264,6 +302,8 @@ export default function BedarfsplanungPage() {
       <div style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)' }}>
         Verwandt:{' '}
         <Link href="/kita/lagebild" style={{ color: 'var(--color-primary)' }}>Steuerungslagebild</Link>
+        {' · '}
+        <Link href="/kita/meldung" style={{ color: 'var(--color-primary)' }}>Monatsmeldung freigeben</Link>
         {' · '}
         <Link href="/kita" style={{ color: 'var(--color-primary)' }}>Öffentlicher Transparenzbericht</Link>
       </div>

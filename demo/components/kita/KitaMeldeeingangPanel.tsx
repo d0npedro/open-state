@@ -20,6 +20,7 @@ import {
   MELDEEINGANG_SESSION_KEY,
   kennzahlenToKurz,
 } from '@/types/kitaMeldeeingang';
+import { KitaMeldeeingangMonatsberichtVorschau } from '@/components/kita/KitaMeldeeingangMonatsberichtVorschau';
 
 function statusMeta(status: MeldeeingangStatus): { label: string; color: string } {
   switch (status) {
@@ -298,6 +299,11 @@ export function KitaMeldeeingangPanel() {
         })}
       </div>
 
+      {/* Monatsbericht-Vorschau neben Meldeeingang (US-KJ-003 ↔ US-KJ-005) */}
+      <KitaMeldeeingangMonatsberichtVorschau
+        meldeeintrag={eintraege.find(e => e.einrichtungId === 'EINR-DEMO-01')}
+      />
+
       <p style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', margin: 0, lineHeight: 1.5 }}>
         {base.methodikKurz}{' '}
         {!hydrated && (
@@ -306,6 +312,10 @@ export function KitaMeldeeingangPanel() {
         Quelle Freigabe:{' '}
         <Link href="/kita/meldung" style={{ color: 'var(--color-primary)' }}>
           Monatsmeldung freigeben (US-KJ-004)
+        </Link>
+        . Laufende Betriebsdaten:{' '}
+        <Link href="/kita/monatsbericht" style={{ color: 'var(--color-primary)' }}>
+          Monatsbericht-Vorschau (US-KJ-003)
         </Link>
         .
       </p>
