@@ -2,6 +2,30 @@
 
 Branch: `loop/kita` · Worktree: `D:\Projects\open-state-loop-kita`
 
+## Iteration 2026-07-29 – US-KJ-005/006 Meldebeitrag Planungsraum-Karte
+
+### Was
+Planungsraum-Detailkarten im Steuerungslagebild zeigen den Beitrag freigegebener Einrichtungsmeldungen (Demo-Stichprobe). Planungsraum Südost: Kita Sonnenwinkel erscheint initial als Datenlücke; nach Session-Freigabe in `/kita/meldung` wird der Eingang auf der Karte hervorgehoben (Freigabe-ID, Kurz-Aggregate: Warteliste, Frei, Auslastung, Personalausfall). Nur Aggregate, keine Kind- oder Personennamen.
+
+### Dateien
+- `demo/components/kita/KitaPlanungsraumMeldebeitrag.tsx` (neu)
+- `demo/app/kita/lagebild/page.tsx` (Einbindung in PlanungsraumKarte)
+- `docs/loops/kita-JOURNAL.md` (dieses Journal)
+
+### Story
+US-KJ-005 / US-KJ-006 – Versorgungslagebild (Meldebeitrag je Planungsraum, Kopplung US-KJ-004)
+
+### Build
+`npm run lint` + `npm run build` im `demo/`-Verzeichnis (siehe Commit dieses Laufs)
+
+### Nicht angefasst (Supervisor / verboten)
+Queue, BUILD_STATE, storyRegistry, andere Domänen, package.json, CI, push
+
+### Nächster sinnvoller Schritt (Hinweis Supervisor)
+Monatsbericht-Vorschau-Status bei laufendem Monat mit gemischten Tagesstand-Quellen, oder Bedarfsplanung: Datenlücke Südost aus Meldeeingang ableiten.
+
+---
+
 ## Iteration 2026-07-29 – US-KJ-004→005 Meldeeingang im Lagebild
 
 ### Was
