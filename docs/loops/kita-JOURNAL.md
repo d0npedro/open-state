@@ -2,6 +2,54 @@
 
 Branch: `loop/kita` · Worktree: `D:\Projects\open-state-loop-kita`
 
+## Iteration 2026-07-29 – US-KJ-005/010 Lagebild-CSV Regionenvergleich Verlauf-Paare
+
+### Was
+Steuerungslagebild-CSV (`KitaLagebildDruck`, US-KJ-005 / US-KJ-010): Blatt 8 „Regionenvergleich Verlauf 12 Monate“. Alle Paare i < j der exportierten Planungsräume (sortiert nach Wartelistendruck; optional Filter Meldelücke) × 4 Kennzahlen (Warteliste, Auslastung, freie Plätze, Personalausfall) × Monate der Planungsraum-Zeitreihe. Δ (A − B) rein rechnerisch je Monat; fehlende Monatswerte leer (keine Interpolation); Meldebasis nur im Stichprobenmonat Session-sensitiv. Metakopf, Export-Karte, Methodik und Footer auf `/kita/lagebild` ergänzt (Komponenten-CSV Verlauf bleibt; Gesamt-CSV ergänzt Paar-Verläufe). Keine Trendbewertung. Nur Aggregate, keine Kind- oder Personennamen. Branch bereits auf main-Stand (kein Merge nötig).
+
+### Dateien
+- `demo/components/kita/KitaLagebildDruck.tsx` (Blatt 8, Meta, Export-Text)
+- `demo/app/kita/lagebild/page.tsx` (Sektions-Hinweis, Methodik, Footer)
+- `docs/loops/kita-JOURNAL.md` (dieses Journal)
+
+### Story
+US-KJ-005 / US-KJ-010 – Steuerungslagebild CSV Regionenvergleich Verlauf-Paare
+
+### Build
+`npm run lint` + `npm run build` im `demo/`-Verzeichnis (siehe Commit dieses Laufs)
+
+### Nicht angefasst (Supervisor / verboten)
+Queue, BUILD_STATE, storyRegistry, DECISION_LOG, andere Domänen, package.json, CI, push
+
+### Nächster sinnvoller Schritt (Hinweis Supervisor)
+Bedarfsplanung Feinschliff falls Lücken, oder Explorer/Bedarfsplanung CSV um Verlaufshinweise spiegeln, oder Druck-Meta Restlücken prüfen.
+
+---
+
+## Iteration 2026-07-29 – US-KJ-005/010 Lagebild-CSV Regionenvergleich Stichtag-Paare
+
+### Was
+Steuerungslagebild-CSV (`KitaLagebildDruck`, US-KJ-005 / US-KJ-010): Blatt 7 „Regionenvergleich Stichtag“. Alle Paare i < j der exportierten Planungsräume (sortiert nach Wartelistendruck; optional Filter Meldelücke). Kennzahlen wie Komponenten-Stichtags-CSV (Versorgung U3/Ü3, Auslastung, freie Plätze, Warteliste, Druckfaktor, Personal, real nutzbar, Inklusion) inkl. Rang A/B, Δ (A − B) rein rechnerisch, Meldebasis-Session je Raum. Metakopf-Hinweis; Export-Karte, Methodik und Footer auf `/kita/lagebild` geschärft (Komponenten-CSV Stichtag/Verlauf bleibt; Gesamt-CSV ergänzt Paare). Keine Interpolation, keine Bewertung. Nur Aggregate, keine Kind- oder Personennamen. Fast-forward `origin/main` vor dem Feature.
+
+### Dateien
+- `demo/components/kita/KitaLagebildDruck.tsx` (Blatt 7, Meta, Export-Text)
+- `demo/app/kita/lagebild/page.tsx` (Sektions-Hinweis, Methodik, Footer)
+- `docs/loops/kita-JOURNAL.md` (dieses Journal)
+
+### Story
+US-KJ-005 / US-KJ-010 – Steuerungslagebild CSV Regionenvergleich Stichtag-Paare
+
+### Build
+`npm run lint` + `npm run build` im `demo/`-Verzeichnis (siehe Commit dieses Laufs)
+
+### Nicht angefasst (Supervisor / verboten)
+Queue, BUILD_STATE, storyRegistry, DECISION_LOG, andere Domänen, package.json, CI, push
+
+### Nächster sinnvoller Schritt (Hinweis Supervisor)
+Bedarfsplanung Feinschliff falls Lücken, oder Explorer Meldebasis-Druck weiter spiegeln, oder optional Verlaufs-Paare im Steuerungs-CSV falls fachlich gewünscht.
+
+---
+
 ## Iteration 2026-07-29 – US-KJ-003/005 Monatsbericht-Vorschau CSV am Meldeeingang
 
 ### Was
