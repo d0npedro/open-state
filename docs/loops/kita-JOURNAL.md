@@ -2,6 +2,30 @@
 
 Branch: `loop/kita` · Worktree: `D:\Projects\open-state-loop-kita`
 
+## Iteration 2026-07-29 – US-KJ-005 Lagebild Steuerungs-CSV Status/Meldelücke-Spiegel
+
+### Was
+Steuerungslagebild (`/kita/lagebild`, US-KJ-005/006): CSV-Export freigabeunabhängig analog Vorlage/Bedarfsplanung. Export-Karte Druck+CSV in `KitaLagebildDruck`. Metakopf: Lagebild-Status (Version/Freigabe Rolle+Datum), Datenstand, Meldebasis-Session (Lücken je Planungsraum), Session-Meldefreigabe, optionaler Export-Filter „Meldelücke“, Versorgung Gesamt, DEC-004. Blätter: 1 Versorgung, 2 Engpass-Rangliste (Meldebasis, Filterstand), 3 Handlungsfelder inkl. Maßnahmen-Kurz, 4 Kapazitätsmaßnahmen, 5 Meldebasis-Stichprobe Session-sensitiv. Dateiname mit Versions-/Datenstand und optional `-meldeluecke`. Methodik/Footer auf der Seite. Nur Aggregate, keine Kind- oder Personennamen. Fast-forward `origin/main` (ci-watcher) vor dem Feature.
+
+### Dateien
+- `demo/components/kita/KitaLagebildDruck.tsx` (downloadCsv, Export-Filter, Druck+CSV-Karte)
+- `demo/app/kita/lagebild/page.tsx` (Badge, Methodik, Footer)
+- `docs/loops/kita-JOURNAL.md` (dieses Journal)
+
+### Story
+US-KJ-005 – Steuerungslagebild (CSV Aggregate-Export Status/Meldebasis/Meldelücke-Spiegel)
+
+### Build
+`npm run lint` + `npm run build` im `demo/`-Verzeichnis (siehe Commit dieses Laufs)
+
+### Nicht angefasst (Supervisor / verboten)
+Queue, BUILD_STATE, storyRegistry, DECISION_LOG, andere Domänen, package.json, CI, push
+
+### Nächster sinnvoller Schritt (Hinweis Supervisor)
+Öffentliche Kita-Hub CSV-Lücken schließen falls nötig, oder Lagebild Zeitreihen-Blatt im Steuerungs-CSV, oder Druck-Meta Status/Meldebasis print-only schärfen.
+
+---
+
 ## Iteration 2026-07-29 – US-KJ-008 Vorlage CSV Aggregate Status/Meldebasis freigabeunabhängig
 
 ### Was

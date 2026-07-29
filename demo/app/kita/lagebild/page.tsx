@@ -79,7 +79,7 @@ export default function KitaLagebildPage() {
           <span className="badge badge-primary">US-KJ-006</span>
           <span>
             Versorgungslagebild · Engpass · Handlungsfelder · Detail Meldelücke-Filter ·
-            Druckansicht · Jugendamt-intern
+            Druck und CSV (Status/Meldebasis) · Jugendamt-intern
           </span>
         </div>
         <h1 style={{ marginBottom: '0.4rem' }}>Steuerungslagebild Kindertagesbetreuung</h1>
@@ -206,6 +206,10 @@ export default function KitaLagebildPage() {
         Bedarfsplanung und Transparenzbericht), keine automatische Handlungsempfehlung. Schnellfilter
         „Meldelücke“ in Engpass, Handlungsfeldern und Detailkarten ändern nur die Sichtbarkeit; bei
         aktivem Filter dokumentiert der Ausdruck den Filterstand (print-only-Hinweis je Abschnitt).
+        CSV-Export (US-KJ-005): freigabeunabhängig mit Lagebild-Status, Meldebasis-Session und
+        optionalem Export-Filter „Meldelücke“ (Blätter Versorgung, Engpass-Rangliste, Handlungsfelder,
+        Maßnahmen, Meldebasis-Stichprobe; Semikolon, UTF-8 BOM). Keine Kind- oder Personennamen
+        (DEC-004).
       </div>
 
       {/* Steuerungskette JA: Lagebild → Bedarfsplanung → Vorlage (+ Meldebasis) */}
@@ -291,7 +295,8 @@ export default function KitaLagebildPage() {
 
       <div className="no-print" style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)' }}>
         Steuerungskette Kommune {lb.kommuneBezeichnung}: Lagebild → Bedarfsplanung → Vorlage
-        (Planungslücken und Meldebasis). Öffentliche Aggregation ohne Einrichtungsdetail im{' '}
+        (Planungslücken und Meldebasis). Druck und CSV: Status/Meldebasis und optionaler
+        Meldelücke-Filter im Export. Öffentliche Aggregation ohne Einrichtungsdetail im{' '}
         <Link href="/kita" style={{ color: 'var(--color-primary)' }}>
           öffentlichen Bericht
         </Link>{' '}
