@@ -7,7 +7,11 @@
  *
  * Rang nach Wartelistendruck bleibt führend; Filter ändert nur Sichtbarkeit.
  * Residuale Planungslücke und Meldebeitrag bleiben Hinweis-only.
- * Nur Aggregate, keine Kind- oder Personennamen.
+ *
+ * Druck (US-KJ-005/006): Filter-Chips no-print; print-only Filterstand immer
+ * (Schnellfilter, sichtbare Karten, Meldebasis-Session, Stichprobenmonat) —
+ * Spiegel Engpass / Handlungsfelder / Explorer / Zeitreihe. Nur Aggregate,
+ * keine Kind- oder Personennamen.
  */
 
 import { useMemo, useState } from 'react';
@@ -301,8 +305,11 @@ export function KitaPlanungsraumDetailListe({
   sorted: PlanungsraumKennzahlen[];
   massnahmenByPR: Record<string, Kapazitaetsmassnahme[]>;
 }) {
-  const { byRaumId } = useMeldeeingangFuerBedarfsplanung();
+  const { byRaumId, basen, hydrated, base } = useMeldeeingangFuerBedarfsplanung();
   const [filter, setFilter] = useState<DetailSchnellfilter>('ALL');
+
+  const meldeMonatsLabel = base.monatsLabel || 'Demo-Stichprobe';
+  const meldeMonatsIso = base.monatsIso || '2024-10';
 
   const residualByRaumId = useMemo(
     () =>
@@ -330,6 +337,27 @@ export function KitaPlanungsraumDetailListe({
     return withRank;
   }, [sorted, byRaumId, filter]);
 
+  /** print-only Meldebasis-Session (Spiegel Engpass / Handlungsfelder / Explorer). */
+  const meldebasisDruckText = useMemo(() => {
+    if (!hydrated) {
+      return 'Meldebasis: Session noch nicht geladen (clientseitig)';
+    }
+    const scoped = basen.filter(b => sorted.some(pr => pr.id === b.planungsraumId));
+    const mitEintraegen = scoped.filter(b => b.erwartet > 0);
+    const luecken = scoped.filter(b => b.hatDatenluecke);
+    const voll = mitEintraegen.filter(b => !b.hatDatenluecke).length;
+    if (mitEintraegen.length === 0) {
+      return `Meldebasis ${meldeMonatsLabel}: keine Stichprobe für Detailkarten`;
+    }
+    if (luecken.length === 0) {
+      return `Meldebasis ${meldeMonatsLabel}: Stichprobe vollständig (${voll}/${mitEintraegen.length} Planungsräume mit Einträgen freigegeben)`;
+    }
+    const lueckenKurz = luecken
+      .map(b => `${b.planungsraumBezeichnung} (${b.freigegeben}/${b.erwartet})`)
+      .join(', ');
+    return `Meldebasis ${meldeMonatsLabel}: Lücken in ${lueckenKurz} · ${voll}/${mitEintraegen.length} Räume vollständig`;
+  }, [hydrated, basen, sorted, meldeMonatsLabel]);
+
   return (
     <section>
       <h2 style={{ marginBottom: '0.5rem' }}>Planungsraum-Detailansicht</h2>
@@ -337,7 +365,7 @@ export function KitaPlanungsraumDetailListe({
         Je Karte: Bedarfslücke, Maßnahmen, Meldebeitrag freigegebener Einrichtungen sowie residuale
         Planungslücke (Demo-Näherung) methodisch an Meldelücken — Hinweis only, keine Interpolation.
         Optional Schnellfilter „Meldelücke“ (wie Engpass-Rangliste / Handlungsfelder). Rangfolge
-        bleibt nach Wartelistendruck.
+        bleibt nach Wartelistendruck. Im Ausdruck: print-only Filterstand inkl. Meldebasis-Session.
       </p>
 
       {/* Schnellfilter: interaktiv / nicht drucken */}
@@ -375,21 +403,28 @@ export function KitaPlanungsraumDetailListe({
         </button>
       </div>
 
-      {filter === 'MELDELUECKE' && (
-        <p
-          className="print-only"
-          style={{
-            fontSize: '0.8rem',
-            color: 'var(--color-text-muted)',
-            margin: '0 0 0.65rem',
-            lineHeight: 1.5,
-          }}
-        >
-          Gefiltert: nur Planungsräume mit Meldelücke in der Detailansicht (Stand Ausdruck ·
-          Session-sensitiv). Original-Rang nach Wartelistendruck unverändert. Residual-Summenhinweis
-          bezieht sich weiterhin auf alle Räume.
-        </p>
-      )}
+      {/* print-only: Filterstand + Meldebasis-Session (immer; Spiegel Engpass/Handlungsfelder) */}
+      <div
+        className="print-only print-block"
+        style={{
+          marginBottom: '0.75rem',
+          padding: '0.65rem 0.9rem',
+          border: '1px solid var(--color-border)',
+          borderRadius: 'var(--radius)',
+          fontSize: '0.8rem',
+          background: 'var(--color-neutral-light)',
+          lineHeight: 1.5,
+        }}
+        role="note"
+      >
+        <strong>Druckfilter Planungsraum-Detail: </strong>
+        {filter === 'MELDELUECKE'
+          ? `Schnellfilter Meldelücke · ${rows.length} von ${sorted.length} Raum${sorted.length === 1 ? '' : 'e'} mit unvollständiger Meldebasis (Original-Rang nach Wartelistendruck; Residual-Summenhinweis weiter über alle Räume)`
+          : `Alle Räume (${sorted.length} Detailkarten, kein Schnellfilter; ${lueckenCount} mit Meldelücke in der Stichprobe)`}
+        . {meldebasisDruckText}. Rangfolge und Kennzahlen unverändert; Filter ändert nur
+        Sichtbarkeit — keine Interpolation, keine Umbewertung nach Meldeschwere. Stichprobenmonat:{' '}
+        {meldeMonatsLabel} ({meldeMonatsIso}).
+      </div>
 
       {/* Summenhinweis: immer über alle Räume (Methodik), unabhängig vom Sichtfilter */}
       <KitaLagebildResidualSummenHinweis residualByRaumId={residualByRaumId} />
