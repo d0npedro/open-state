@@ -3,9 +3,87 @@
  *
  * Fiktive Aggregate für Musterstadt. Keine Kind- oder Personennamen.
  * Eine bewusst ausgewiesene Datenlücke demonstriert AK 5.
+ * Datenbasis: freigegebene Tagesstände (US-KJ-001) – explizit gelistet.
  */
 
-import type { KitaMonatsbericht } from '@/types/kitaMonatsbericht';
+import type {
+  KitaMonatsbericht,
+  MonatsberichtTagesstandQuelle,
+} from '@/types/kitaMonatsbericht';
+
+const FEHLENDER_TAG = '2024-10-14';
+
+/**
+ * Betriebstage Okt 2024 (Mo–Fr) mit fiktiven Aggregaten.
+ * 2024-10-14 fehlt bewusst (Lücke). Schlüssel-Unterschreitung an 4 freigegebenen Tagen
+ * (passt zu gesamt.tagePersonalschluesselUnterschritten = 4).
+ */
+function buildOktober2024Quellen(): MonatsberichtTagesstandQuelle[] {
+  const unterschrittenTage = new Set([
+    '2024-10-07', // Nestgruppe A
+    '2024-10-16', // Elementar Sonne
+    '2024-10-22', // Elementar Sonne
+    '2024-10-29', // Elementar Sonne
+  ]);
+
+  const quellen: MonatsberichtTagesstandQuelle[] = [];
+  // Deterministische Pseudo-Variation ohne Zufall
+  const anwesendBasis = [
+    52, 54, 51, 55, 53, 50, 56, 54, 52, 55, 53, 51, 54, 52, 50, 55, 53, 56, 54, 52, 51, 53,
+  ];
+  const personalBasis = [
+    58, 60, 57, 61, 59, 56, 62, 60, 58, 61, 59, 57, 60, 58, 56, 61, 59, 62, 60, 58, 57, 59,
+  ];
+
+  let freigegebenIdx = 0;
+  for (let day = 1; day <= 31; day++) {
+    const iso = `2024-10-${String(day).padStart(2, '0')}`;
+    const d = new Date(`${iso}T12:00:00`);
+    const weekday = d.getDay(); // 0 So … 6 Sa
+    if (weekday === 0 || weekday === 6) continue;
+
+    const label = d.toLocaleDateString('de-DE', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+    });
+
+    if (iso === FEHLENDER_TAG) {
+      quellen.push({
+        tagesstandId: null,
+        datumIso: iso,
+        datumLabel: label,
+        status: 'FEHLT',
+        anwesendGesamt: null,
+        personalIstStundenGesamt: null,
+        personalschluesselUnterschritten: null,
+        freigegebenAm: null,
+        freigegebenDurchRolle: null,
+      });
+      continue;
+    }
+
+    const anwesend = anwesendBasis[freigegebenIdx] ?? 52;
+    const personal = personalBasis[freigegebenIdx] ?? 58;
+    freigegebenIdx += 1;
+
+    quellen.push({
+      tagesstandId: `TS-EINR-DEMO-01-${iso}`,
+      datumIso: iso,
+      datumLabel: label,
+      status: 'FREIGEGEBEN',
+      anwesendGesamt: anwesend,
+      personalIstStundenGesamt: personal,
+      personalschluesselUnterschritten: unterschrittenTage.has(iso),
+      freigegebenAm: `${label}, 16:15`,
+      freigegebenDurchRolle: 'Kita-Leitung (Demo)',
+    });
+  }
+
+  return quellen;
+}
+
+const tagesstandQuellen = buildOktober2024Quellen();
 
 export const demoKitaMonatsbericht: KitaMonatsbericht = {
   id: 'MB-EINR-DEMO-01-2024-10',
@@ -20,7 +98,8 @@ export const demoKitaMonatsbericht: KitaMonatsbericht = {
   status: 'LUECKENHAFT',
   betriebstageImMonat: 23,
   erfassteTagesstaende: 22,
-  fehlendeTage: ['2024-10-14'],
+  fehlendeTage: [FEHLENDER_TAG],
+  tagesstandQuellen,
   gruppen: [
     {
       gruppeId: 'GR-01',
@@ -109,6 +188,6 @@ export const demoKitaMonatsbericht: KitaMonatsbericht = {
     personalschluesselDefinition:
       'Tag zählt als Unterschreitung, wenn das Verhältnis anwesende Fachkraft-Stunden zu anwesenden Kindern den landesrechtlichen Mindestschlüssel unterschreitet. Keine automatische Meldung an das Jugendamt (US-KJ-004).',
     datenquelle:
-      'Freigegebene Tagesstände der Einrichtung (US-KJ-001). Fehlende Tage werden als Lücke ausgewiesen und nicht interpoliert.',
+      'Nur freigegebene Tagesstände der Einrichtung (US-KJ-001). Jeder Betriebstag der Datenbasis ist unten ausgewiesen. Fehlende Tage werden als Lücke markiert und nicht interpoliert. Nicht freigegebene Entwürfe fließen nicht ein.',
   },
 };

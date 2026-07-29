@@ -10,7 +10,12 @@
 
 import Link from 'next/link';
 import { demoKitaMonatsbericht } from '@/data/mockKitaMonatsbericht';
-import type { KitaMonatsbericht, MonatsberichtStatus } from '@/types/kitaMonatsbericht';
+import type {
+  KitaMonatsbericht,
+  MonatsberichtStatus,
+  MonatsberichtTagesstandQuelle,
+  MonatsberichtTagesstandQuellenStatus,
+} from '@/types/kitaMonatsbericht';
 
 function fmtPct(n: number) {
   return `${n.toFixed(1).replace('.', ',')} %`;
@@ -33,13 +38,13 @@ function statusMeta(s: MonatsberichtStatus): { label: string; color: string; hin
       return {
         label: 'Vollständig',
         color: 'var(--color-success)',
-        hint: 'Alle Betriebstage mit Tagesstand erfasst.',
+        hint: 'Alle Betriebstage mit freigegebenem Tagesstand (US-KJ-001).',
       };
     case 'LUECKENHAFT':
       return {
         label: 'Lückenhaft',
         color: 'var(--color-warning)',
-        hint: 'Mindestens ein Tagesstand fehlt – Werte basieren nur auf erfassten Tagen.',
+        hint: 'Mindestens ein freigegebener Tagesstand fehlt – Werte basieren nur auf freigegebenen Tagen.',
       };
     case 'VORSCHAU':
       return {
@@ -47,6 +52,19 @@ function statusMeta(s: MonatsberichtStatus): { label: string; color: string; hin
         color: 'var(--color-primary)',
         hint: 'Monat noch nicht abgeschlossen.',
       };
+  }
+}
+
+function quellenStatusMeta(
+  s: MonatsberichtTagesstandQuellenStatus
+): { label: string; color: string } {
+  switch (s) {
+    case 'FREIGEGEBEN':
+      return { label: 'Freigegeben', color: 'var(--color-success)' };
+    case 'FEHLT':
+      return { label: 'Fehlt', color: 'var(--color-danger)' };
+    case 'IN_ERFASSUNG':
+      return { label: 'In Erfassung (nicht einbezogen)', color: 'var(--color-warning)' };
   }
 }
 
@@ -93,16 +111,48 @@ function downloadCsv(b: KitaMonatsbericht) {
     ges.tagePersonalschluesselUnterschrittenVorjahr,
   ].join(';');
 
+  const quellenHeader = [
+    'Datum',
+    'Status',
+    'Tagesstand_ID',
+    'Anwesend_Gesamt',
+    'Personal_Ist_Stunden',
+    'Schluessel_unterschritten',
+    'Freigegeben_am',
+    'Freigegeben_durch_Rolle',
+  ].join(';');
+
+  const quellenRows = b.tagesstandQuellen.map((q: MonatsberichtTagesstandQuelle) =>
+    [
+      q.datumIso,
+      q.status,
+      q.tagesstandId ?? '',
+      q.anwesendGesamt ?? '',
+      q.personalIstStundenGesamt ?? '',
+      q.personalschluesselUnterschritten === null
+        ? ''
+        : q.personalschluesselUnterschritten
+          ? 'ja'
+          : 'nein',
+      q.freigegebenAm ?? '',
+      q.freigegebenDurchRolle ?? '',
+    ].join(';')
+  );
+
   const csv = [
     `# Monatsbericht ${b.einrichtungBezeichnung}`,
     `# Monat: ${b.monatsLabel} | Status: ${b.status}`,
-    `# Erfasste Tagesstände: ${b.erfassteTagesstaende}/${b.betriebstageImMonat}`,
+    `# Freigegebene Tagesstände (US-KJ-001): ${b.erfassteTagesstaende}/${b.betriebstageImMonat}`,
     `# Fehlende Tage: ${b.fehlendeTage.length ? b.fehlendeTage.join(', ') : 'keine'}`,
     `# Keine personenbezogenen Daten`,
     '',
     header,
     ...rows,
     summe,
+    '',
+    '# Datenbasis: freigegebene Tagesstände je Betriebstag',
+    quellenHeader,
+    ...quellenRows,
   ].join('\n');
 
   const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
@@ -118,6 +168,11 @@ export default function KitaMonatsberichtPage() {
   const b = demoKitaMonatsbericht;
   const st = statusMeta(b.status);
   const luecke = b.fehlendeTage.length > 0;
+  const freigegebenCount = b.tagesstandQuellen.filter(q => q.status === 'FREIGEGEBEN').length;
+  const fehltCount = b.tagesstandQuellen.filter(q => q.status === 'FEHLT').length;
+  const schluesselTage = b.tagesstandQuellen.filter(
+    q => q.status === 'FREIGEGEBEN' && q.personalschluesselUnterschritten
+  ).length;
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1.75rem' }}>
@@ -160,9 +215,9 @@ export default function KitaMonatsberichtPage() {
         </div>
         <div style={{ color: 'var(--color-border)' }}>|</div>
         <div>
-          <span style={{ color: 'var(--color-text-muted)' }}>Tagesstände:</span>{' '}
+          <span style={{ color: 'var(--color-text-muted)' }}>Freigegebene Tagesstände:</span>{' '}
           <strong>
-            {b.erfassteTagesstaende}/{b.betriebstageImMonat}
+            {freigegebenCount}/{b.betriebstageImMonat}
           </strong>
         </div>
         <div style={{ color: 'var(--color-border)' }}>|</div>
@@ -194,7 +249,7 @@ export default function KitaMonatsberichtPage() {
 
       <div className="notice-box notice-box-neutral" role="note">
         <div style={{ fontSize: '0.875rem' }}>
-          <strong>Datenschutz:</strong> Nur Aggregatwerte je Gruppe. Keine Kindnamen, keine
+          <strong>Datenschutz:</strong> Nur Aggregatwerte je Gruppe und Tag. Keine Kindnamen, keine
           Personalnamen. Keine automatische Übermittlung an Träger oder Jugendamt (US-KJ-004).
         </div>
       </div>
@@ -217,10 +272,166 @@ export default function KitaMonatsberichtPage() {
         >
           Drucken / PDF
         </button>
+        <Link href="/kita/tagesstand" className="btn btn-secondary" style={{ fontSize: '0.875rem' }}>
+          Tagesstand erfassen (US-KJ-001)
+        </Link>
         <Link href="/kita/einrichtung" className="btn btn-secondary" style={{ fontSize: '0.875rem' }}>
           Zum Belegungsstand
         </Link>
       </div>
+
+      {/* Datenbasis: freigegebene Tagesstände (US-KJ-001 → US-KJ-003) */}
+      <section aria-labelledby="datenbasis-heading">
+        <h2 id="datenbasis-heading" style={{ marginBottom: '0.5rem' }}>
+          Datenbasis: freigegebene Tagesstände
+        </h2>
+        <p style={{ margin: '0 0 1rem', fontSize: '0.875rem', color: 'var(--color-text-muted)' }}>
+          Kennzahlen dieses Monatsberichts basieren ausschließlich auf freigegebenen Tagesständen
+          (US-KJ-001). Entwürfe und nicht freigegebene Erfassungen fließen nicht ein. Fehlende Tage
+          werden als Lücke ausgewiesen und nicht interpoliert.
+        </p>
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
+            gap: '0.75rem',
+            marginBottom: '1rem',
+          }}
+        >
+          <div className="card" style={{ borderTop: '3px solid var(--color-success)' }}>
+            <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>
+              Freigegeben
+            </div>
+            <div style={{ fontSize: '1.35rem', fontWeight: 700 }}>{freigegebenCount}</div>
+          </div>
+          <div
+            className="card"
+            style={{
+              borderTop: `3px solid ${fehltCount > 0 ? 'var(--color-danger)' : 'var(--color-success)'}`,
+            }}
+          >
+            <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>Fehlt</div>
+            <div
+              style={{
+                fontSize: '1.35rem',
+                fontWeight: 700,
+                color: fehltCount > 0 ? 'var(--color-danger)' : 'var(--color-text)',
+              }}
+            >
+              {fehltCount}
+            </div>
+          </div>
+          <div className="card" style={{ borderTop: '3px solid var(--color-warning)' }}>
+            <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>
+              Tage Schlüssel ↓
+            </div>
+            <div style={{ fontSize: '1.35rem', fontWeight: 700 }}>{schluesselTage}</div>
+            <div style={{ fontSize: '0.7rem', color: 'var(--color-text-muted)', marginTop: '0.25rem' }}>
+              aus freigegebenen Ständen (keine Auto-Meldung)
+            </div>
+          </div>
+          <div className="card" style={{ borderTop: '3px solid var(--color-primary)' }}>
+            <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>
+              Betriebstage
+            </div>
+            <div style={{ fontSize: '1.35rem', fontWeight: 700 }}>{b.betriebstageImMonat}</div>
+          </div>
+        </div>
+        <div style={{ overflowX: 'auto' }}>
+          <table
+            style={{
+              width: '100%',
+              borderCollapse: 'collapse',
+              fontSize: '0.85rem',
+              minWidth: '620px',
+            }}
+          >
+            <thead>
+              <tr style={{ borderBottom: '2px solid var(--color-border)', textAlign: 'left' }}>
+                <th style={{ padding: '0.55rem 0.45rem' }}>Datum</th>
+                <th style={{ padding: '0.55rem 0.45rem' }}>Status</th>
+                <th style={{ padding: '0.55rem 0.45rem' }}>Anwesend (Σ)</th>
+                <th style={{ padding: '0.55rem 0.45rem' }}>Personal Ist-h (Σ)</th>
+                <th style={{ padding: '0.55rem 0.45rem' }}>Schlüssel</th>
+                <th style={{ padding: '0.55rem 0.45rem' }}>Freigabe</th>
+              </tr>
+            </thead>
+            <tbody>
+              {b.tagesstandQuellen.map(q => {
+                const qs = quellenStatusMeta(q.status);
+                const fehlt = q.status === 'FEHLT';
+                return (
+                  <tr
+                    key={q.datumIso}
+                    style={{
+                      borderBottom: '1px solid var(--color-border)',
+                      background: fehlt ? 'rgba(185, 28, 28, 0.04)' : undefined,
+                    }}
+                  >
+                    <td style={{ padding: '0.55rem 0.45rem' }}>
+                      <strong>{q.datumLabel}</strong>
+                      {q.tagesstandId && (
+                        <div
+                          style={{
+                            fontSize: '0.7rem',
+                            fontFamily: 'monospace',
+                            color: 'var(--color-text-muted)',
+                          }}
+                        >
+                          {q.tagesstandId}
+                        </div>
+                      )}
+                    </td>
+                    <td style={{ padding: '0.55rem 0.45rem' }}>
+                      <strong style={{ color: qs.color }}>{qs.label}</strong>
+                    </td>
+                    <td style={{ padding: '0.55rem 0.45rem' }}>
+                      {q.anwesendGesamt === null ? '—' : q.anwesendGesamt}
+                    </td>
+                    <td style={{ padding: '0.55rem 0.45rem' }}>
+                      {q.personalIstStundenGesamt === null
+                        ? '—'
+                        : q.personalIstStundenGesamt.toLocaleString('de-DE')}
+                    </td>
+                    <td style={{ padding: '0.55rem 0.45rem' }}>
+                      {q.personalschluesselUnterschritten === null ? (
+                        '—'
+                      ) : q.personalschluesselUnterschritten ? (
+                        <span style={{ color: 'var(--color-warning)', fontWeight: 600 }}>
+                          unterschritten
+                        </span>
+                      ) : (
+                        <span style={{ color: 'var(--color-success)' }}>ok</span>
+                      )}
+                    </td>
+                    <td style={{ padding: '0.55rem 0.45rem', fontSize: '0.8rem' }}>
+                      {fehlt ? (
+                        <span style={{ color: 'var(--color-danger)' }}>
+                          Kein freigegebener Stand – fließt nicht ein
+                        </span>
+                      ) : (
+                        <>
+                          <div>{q.freigegebenAm}</div>
+                          <div style={{ color: 'var(--color-text-muted)' }}>
+                            {q.freigegebenDurchRolle}
+                          </div>
+                        </>
+                      )}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+        <p style={{ margin: '0.75rem 0 0', fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>
+          Erfassung und Freigabe je Tag:{' '}
+          <Link href="/kita/tagesstand" style={{ color: 'var(--color-primary)' }}>
+            /kita/tagesstand
+          </Link>{' '}
+          (Demo-Stichtag; Monatsreihe hier fiktiv für Oktober 2024).
+        </p>
+      </section>
 
       {/* Gesamt */}
       <section>
@@ -449,7 +660,12 @@ export default function KitaMonatsberichtPage() {
       </section>
 
       <div style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)' }}>
-        Belegungsstand live:{' '}
+        Tagesstand-Erfassung (Quelle):{' '}
+        <Link href="/kita/tagesstand" style={{ color: 'var(--color-primary)' }}>
+          /kita/tagesstand
+        </Link>
+        {' · '}
+        Belegungsstand:{' '}
         <Link href="/kita/einrichtung" style={{ color: 'var(--color-primary)' }}>
           /kita/einrichtung
         </Link>

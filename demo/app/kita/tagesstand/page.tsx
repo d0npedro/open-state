@@ -311,6 +311,13 @@ export default function KitaTagesstandPage() {
             </li>
             <li>Nachträgliche Änderung in dieser Demo gesperrt (Revisionssicherheit, AK 5).</li>
             <li>
+              Freigegebene Aggregate fließen als Datenbasis in den{' '}
+              <Link href="/kita/monatsbericht" style={{ color: 'var(--color-primary)' }}>
+                Monatsbericht (US-KJ-003)
+              </Link>{' '}
+              ein – nicht freigegebene Stände und Lücken werden dort sichtbar ausgewiesen.
+            </li>
+            <li>
               Keine automatische Meldung an das Jugendamt – Monatsmeldung bleibt eigener Schritt (
               <Link href="/kita/meldung" style={{ color: 'var(--color-primary)' }}>
                 US-KJ-004
@@ -631,7 +638,7 @@ export default function KitaTagesstandPage() {
         </Link>
         {' · '}
         <Link href="/kita/monatsbericht" style={{ color: 'var(--color-primary)' }}>
-          Monatsbericht (US-KJ-003)
+          Monatsbericht – Datenbasis (US-KJ-003)
         </Link>
         {' · '}
         <Link href="/kita/meldung" style={{ color: 'var(--color-primary)' }}>

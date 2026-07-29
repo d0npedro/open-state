@@ -3,9 +3,36 @@
  *
  * Nur Aggregate: keine Kind- oder Personennamen.
  * Vorjahresvergleich und Datenlücken sind Teil der Methodik-Transparenz.
+ * Datenbasis: freigegebene Tagesstände (US-KJ-001) – sichtbar, nicht still angenommen.
  */
 
 export type MonatsberichtStatus = 'VOLLSTAENDIG' | 'LUECKENHAFT' | 'VORSCHAU';
+
+/** Status eines Betriebstags in der Monats-Datenbasis (keine Personenbezüge) */
+export type MonatsberichtTagesstandQuellenStatus =
+  | 'FREIGEGEBEN'
+  | 'FEHLT'
+  | 'IN_ERFASSUNG';
+
+/**
+ * Ein Betriebstag als Quelle des Monatsberichts.
+ * Nur Tages-Aggregate und Freigabe-Metadaten – keine Kind-/Personennamen.
+ */
+export interface MonatsberichtTagesstandQuelle {
+  /** Leer wenn FEHLT */
+  tagesstandId: string | null;
+  datumIso: string;
+  datumLabel: string;
+  status: MonatsberichtTagesstandQuellenStatus;
+  /** Summe anwesende Kinder (offene Gruppen) – nur bei FREIGEGEBEN */
+  anwesendGesamt: number | null;
+  /** Summe Ist-Fachkraft-Stunden – nur bei FREIGEGEBEN */
+  personalIstStundenGesamt: number | null;
+  /** Mindestens eine Gruppe mit Schlüssel-Unterschreitung am Tag */
+  personalschluesselUnterschritten: boolean | null;
+  freigegebenAm: string | null;
+  freigegebenDurchRolle: string | null;
+}
 
 export interface GruppeMonatsKennzahlen {
   gruppeId: string;
@@ -40,6 +67,11 @@ export interface KitaMonatsbericht {
   erfassteTagesstaende: number;
   /** ISO-Daten fehlender Tagesstände – nicht still aufgefüllt */
   fehlendeTage: string[];
+  /**
+   * Explizite Datenbasis: freigegebene Tagesstände (US-KJ-001).
+   * Länge = betriebstageImMonat; FEHLT-Einträge = fehlendeTage.
+   */
+  tagesstandQuellen: MonatsberichtTagesstandQuelle[];
   gruppen: GruppeMonatsKennzahlen[];
   gesamt: {
     anwesenheitsquoteProzent: number;
