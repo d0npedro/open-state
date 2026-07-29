@@ -48,6 +48,15 @@ const ereignisIcon: Partial<Record<EreignisTyp, IconName>> = {
   WIDERSPRUCH_EINGEREICHT:'send',
 };
 
+/** Dokumentbezeichnung aus Upload-Ereignis (Beschreibung endet typisch auf „ hochgeladen“). */
+function dokumentBezeichnungAusUpload(beschreibung: string): string {
+  const suffix = ' hochgeladen';
+  if (beschreibung.endsWith(suffix)) {
+    return beschreibung.slice(0, -suffix.length).trim();
+  }
+  return beschreibung.trim();
+}
+
 export default function VerlaufPage() {
   const { fall } = useDemoState();
   const { timeline } = fall;
@@ -174,9 +183,60 @@ export default function VerlaufPage() {
                 <p style={{ fontWeight: 600, color: 'var(--color-text)', margin: '0 0 0.25rem', fontSize: '0.925rem' }}>
                   {e.beschreibung}
                 </p>
-                {/* UX: Antworttext als Quittungsblock (wie /fall/rueckfragen), nicht als
-                    eine gekürzte Fließtext-Zeile — Bürger:innen müssen den Wortlaut lesen können. */}
-                {e.typ === 'RUECKFRAGE_BEANTWORTET' && e.details ? (
+                {/* UX: Upload-Ereignisse heben die Dokumentbezeichnung hervor (Q-105 / US-AV-007) —
+                    Bürger:innen sehen sofort, welches Dokument eingereicht wurde. */}
+                {e.typ === 'DOKUMENT_EINGEREICHT' ? (
+                  <div
+                    data-testid="timeline-upload-block"
+                    style={{
+                      marginTop: '0.5rem',
+                      background: 'var(--color-primary-light, #eef4fb)',
+                      border: '1px solid var(--color-primary)',
+                      borderLeft: '4px solid var(--color-primary)',
+                      borderRadius: 'var(--radius)',
+                      padding: '0.75rem 0.9rem',
+                    }}
+                  >
+                    <div
+                      style={{
+                        fontSize: '0.72rem',
+                        fontWeight: 700,
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.05em',
+                        color: 'var(--color-text-muted)',
+                        marginBottom: '0.35rem',
+                      }}
+                    >
+                      Eingereichtes Dokument
+                    </div>
+                    <p
+                      data-testid="timeline-upload-name"
+                      style={{
+                        margin: 0,
+                        fontSize: '0.95rem',
+                        fontWeight: 700,
+                        lineHeight: 1.4,
+                        color: 'var(--color-primary)',
+                      }}
+                    >
+                      {dokumentBezeichnungAusUpload(e.beschreibung)}
+                    </p>
+                    {e.details ? (
+                      <p
+                        style={{
+                          margin: '0.4rem 0 0',
+                          fontSize: '0.85rem',
+                          lineHeight: 1.5,
+                          color: 'var(--color-neutral)',
+                        }}
+                      >
+                        {e.details}
+                      </p>
+                    ) : null}
+                  </div>
+                ) : e.typ === 'RUECKFRAGE_BEANTWORTET' && e.details ? (
+                  /* UX: Antworttext als Quittungsblock (wie /fall/rueckfragen), nicht als
+                      eine gekürzte Fließtext-Zeile — Bürger:innen müssen den Wortlaut lesen können. */
                   <div
                     data-testid="timeline-antwort-block"
                     style={{

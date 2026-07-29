@@ -6,6 +6,38 @@ Scope: nur `demo/app/fall/**`, DemoStateContext, fairness/rules, mockFall, e2e u
 
 ---
 
+## 2026-07-29 – Iteration 9: Verlauf Upload-Dokumentbezeichnung (Q-105)
+
+### Was
+Upload-Ereignisse im Verlauf heben die Dokumentbezeichnung hervor (US-AV-007 / Q-105):
+
+1. **`timeline-upload-block`** für `DOKUMENT_EINGEREICHT` — Label „Eingereichtes Dokument“, Bezeichnung prominent (`timeline-upload-name`).
+2. Ableitung aus Beschreibung (`… hochgeladen`); gilt für Mock- und Session-Uploads.
+3. Demo-Timeline-Details enthalten Bezeichnung + Dokument-ID.
+4. E2E: 2 Mock-Blöcke; Session-Upload per Tab-Nav (kein `page.goto`, DEC-012).
+
+### Dateien
+- `demo/app/fall/verlauf/page.tsx`
+- `demo/context/DemoStateContext.tsx`
+- `demo/e2e/us-av-007-verlauf.spec.ts`
+- `docs/loops/av-JOURNAL.md`
+
+### Story-IDs
+- US-AV-007 (Historie nachvollziehen)
+- US-AV-003 (Unterlagen / Upload)
+
+### Build
+`npm run lint` + `npm run build` + `npm run test:e2e:av` (PW_E2E_CI=1) → **128 passed**, Exit 0
+
+### Vorschlag Queue-ID
+- Q-105 (AV Verlauf: Upload-Ereignisse mit Dokumentbezeichnung hervorheben)
+
+### Nächster sinnvoller AV-Schritt (Vorschlag)
+- Fairness-Signal UNTERLAGE mit berechneter Dokumenten-Frist (falls noch Lücken)
+- Übersicht: Upload-Quittung / nächste offene Unterlage nach Session-Upload
+
+---
+
 ## 2026-07-29 – Iteration 8: Übersicht Termin-Kachel Status live (Q-104)
 
 ### Was
