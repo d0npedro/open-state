@@ -1,6 +1,6 @@
 # BUILD_STATE.md – Aktueller Projektstand
 
-Zuletzt aktualisiert: nach Supervisor-Merge 2026-07-29 (UG Q-098 Unterlagen-CTA, Kita Q-094 Bedarfsplanung-Meldebasis, Q-099 Meldeeingang↔Monatsbericht-Vorschau)
+Zuletzt aktualisiert: nach Supervisor-Merge 2026-07-29 (AV Q-092 Termin-Bestätigung session-lokal; Docs-Sync Q-100–Q-103)
 
 Dieser Stand beschreibt, was tatsächlich existiert und funktioniert.
 Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
@@ -15,7 +15,7 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | Build-Status | ✓ Erfolgreich (27 statische Seiten) |
 | Deployment | Vercel, aus `demo/`-Verzeichnis |
 | Lokaler Start | `cd demo && npm install && npm run dev` |
-| Letzte Build-Prüfung | nach Merge loop/ug + loop/kita — lint+build grün |
+| Letzte Build-Prüfung | nach Merge loop/av (Q-092) — lint+build grün |
 
 ---
 
@@ -27,20 +27,20 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | `/fall` | Fallübersicht, Status, Fairness-Summary, Fristen-Countdown offener Unterlagen | US-AV-001, US-AV-002 | ✓ |
 | `/fall/dokumente` | Dokumentenanforderungen + Frist-Resttage | US-AV-003 | ✓ |
 | `/fall/rueckfragen` | Rückfragen mit Fairness-Hinweis | US-AV-004 | ✓ |
-| `/fall/termine` | Termine; Nav-Badge nur unbestätigt/bald fällig | US-AV-005 | ✓ |
+| `/fall/termine` | Termine; session-lokale Bestätigung; Nav-Badge nur unbestätigt/bald fällig | US-AV-005 | ✓ |
 | `/fall/bescheide` | Bescheide mit Fairness-Hinweisen | US-AV-006 | ✓ |
 | `/fall/verlauf` | Timeline mit Fairness-Hinweis; Antwort-Quittungsblock mit vollem Text | US-AV-007 | ✓ |
 | `/fall/hinweise` | Vollständige Fairness-Hinweisseite | US-AV-008 | ✓ |
 | `/stories` | Story Coverage Dashboard | – | ✓ |
 | `/feedback` | Feedback → GitHub Issues | – | ✓ |
-| `/gruendung` … | Unternehmensgründung (Übersicht Fairness-Kurzblock, Hinweise-CTAs RQ/BG/Unterlagen, Behörden-/Dokument-Anker, …) | US-UG-001–006 | ✓ |
+| `/gruendung` … | Unternehmensgründung (Übersicht Fairness-Kurzblock, Hinweise-CTAs RQ/BG/Unterlagen/Steuernummer, Verlauf Stelle+Ereignistyp-Filter, …) | US-UG-001–006 | ✓ |
 | `/kita` | Öffentlicher Transparenzbericht + Planungsraum-Filter | US-KJ-009, US-KJ-010 | ✓ |
 | `/kita/lagebild` | Jugendamt-Steuerungsansicht + Meldeeingang + Meldebeitrag + Monatsbericht-Vorschau-Kopplung | US-KJ-005, US-KJ-006 | ✓ |
-| `/kita/bedarfsplanung` | Bedarfsplanungsentwurf (§ 80 SGB VIII) + Meldebasis aus Meldeeingang | US-KJ-007 | ✓ |
+| `/kita/bedarfsplanung` | Bedarfsplanungsentwurf (§ 80 SGB VIII) + Meldebasis + Residual↔Meldelücke (Hinweis-only) | US-KJ-007 | ✓ |
 | `/kita/vorlage` | Politische Gremienvorlage + Freigabe | US-KJ-008 | ✓ |
 | `/kita/einrichtung` | Belegungsstand Einrichtung (aggregiert) | US-KJ-002 | ✓ |
 | `/kita/tagesstand` | Tagesstand erfassen (Aggregate, Freigabe) | US-KJ-001 | ✓ |
-| `/kita/monatsbericht` | Monatsbericht + Vorschau laufender Monat (gemischte Quellen FREIGEGEBEN/FEHLT/IN_ERFASSUNG) | US-KJ-003 | ✓ |
+| `/kita/monatsbericht` | Monatsbericht + Vorschau laufender Monat + Rücklink Lagebild-Anker | US-KJ-003 | ✓ |
 | `/kita/meldung` | Monatsmeldung prüfen, korrigieren, freigeben | US-KJ-004 | ✓ |
 
 ---
@@ -127,6 +127,11 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 **Q-094 erledigt:** Kita Bedarfsplanung Meldebasis/Datenlücke Südost aus Meldeeingang (Session-Freigabe schließt Lücke).
 **Q-098 erledigt:** UG Hinweise CTA „Zu den Unterlagen“ aus HINWEIS-Unterlagen-Signal (`#dok-…`).
 **Q-099 erledigt:** Kita Lagebild Meldeeingang mit Monatsbericht-Vorschau gekoppelt (methodische Trennung).
+**Q-092 erledigt:** AV Termin-Bestätigung session-lokal (`confirmTermin`); Tab-Badge entfällt live.
+**Q-100 erledigt:** UG Hinweise CTA Steuernummer → Finanzamt-Behördenkarte.
+**Q-101 erledigt:** UG Verlauf-Filter nach Ereignistyp (Vorgang/Dokumente/Rückfragen/Bescheide), kombiniert mit Stellen-Filter.
+**Q-102 erledigt:** Kita Monatsbericht-Vorschau Rücklink zum Lagebild (`#kita-monatsbericht-vorschau`).
+**Q-103 erledigt:** Kita Bedarfsplanung Residual ↔ Meldelücke Hinweis-only (Südost).
 
 ---
 
@@ -187,6 +192,9 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | ~~Bedarfsplanung ohne Meldebasis-Lücke~~ | ~~Südost-Datenlücke nicht aus Meldeeingang abgeleitet~~ | Q-094 ✓ |
 | ~~UG Hinweise ohne Unterlagen-CTA~~ | ~~Fehlende Unterlagen nur Text, kein Sprung zu Dokumenten~~ | Q-098 ✓ |
 | ~~Meldeeingang ohne Vorschau-Kopplung~~ | ~~Laufender Monat und Abschlussmeldung getrennt unklar~~ | Q-099 ✓ |
+| ~~Termin-Bestätigung nur statisch~~ | ~~Badge entfällt nicht nach Demo-Aktion~~ | Q-092 ✓ |
+| ~~UG Verlauf ohne Ereignistyp-Filter~~ | ~~Nur Stelle filterbar~~ | Q-101 ✓ |
+| ~~Monatsbericht-Vorschau ohne Rücklink~~ | ~~Lagebild-Kontext einseitig~~ | Q-102 ✓ |
 | DSFA für Kita-Domäne noch ausstehend | Konzeptlücke — extern abhängig | — |
 
 ---

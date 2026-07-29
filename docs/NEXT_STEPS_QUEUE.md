@@ -108,7 +108,7 @@ Story-Dokumentation ist kein Pflicht-Vorläufer für Mock-Daten und Typen.
 | Q-086 | AV Fristen-Countdown auf Übersicht für offene Dokumente (analog RQ-Frist) | DEMO | S | Q-072 | DONE |
 | Q-089 | AV Tab-Badge „Termine“ nur bei unbestätigt / bald fällig | DEMO | S | Q-081 | DONE |
 | Q-095 | AV Verlauf: Antworttext als lesbarer Quittungsblock (kein 80-Zeichen-Kürzel) | DEMO | S | Q-085 | DONE |
-| Q-092 | AV Termin-Bestätigung session-lokal (Badge entfällt live) | DEMO | S | Q-089 | OFFEN |
+| Q-092 | AV Termin-Bestätigung session-lokal (Badge entfällt live) | DEMO | S | Q-089 | DONE |
 
 ---
 
@@ -121,6 +121,8 @@ Story-Dokumentation ist kein Pflicht-Vorläufer für Mock-Daten und Typen.
 | Q-093 | UG Hinweise: CTA „Frage beantworten“ aus RELEVANT-Signal (Anker `#rq-…`) | DEMO | S | Q-090 | DONE |
 | Q-096 | UG Hinweise: CTA „Zur Behördenkarte“ aus RELEVANT-BG-Anmeldung (`#beh-…`) | DEMO | S | Q-093 | DONE |
 | Q-098 | UG Hinweise: CTA „Zu den Unterlagen“ aus HINWEIS-Unterlagen-Signal (`#dok-…`) | DEMO | S | Q-096 | DONE |
+| Q-100 | UG Hinweise: CTA Steuernummer → Finanzamt-Behördenkarte (`#beh-…`) | DEMO | S | Q-098 | DONE |
+| Q-101 | UG Verlauf: Filter nach Ereignistyp (Vorgang/Dokumente/Rückfragen/Bescheide) | DEMO | S | Q-082 | DONE |
 
 ---
 
@@ -133,6 +135,8 @@ Story-Dokumentation ist kein Pflicht-Vorläufer für Mock-Daten und Typen.
 | Q-097 | Kita Monatsbericht: Vorschau laufender Monat mit gemischten Tagesstand-Quellen | DEMO | S | Q-079 | DONE |
 | Q-094 | Kita Bedarfsplanung: Datenlücke Südost aus Meldeeingang ableiten | DEMO | S | Q-091 | DONE |
 | Q-099 | Kita Lagebild: Meldeeingang mit Monatsbericht-Vorschau koppeln (Sonnenwinkel) | DEMO | S | Q-097 | DONE |
+| Q-102 | Kita Monatsbericht: Rücklink Vorschau → Lagebild (`#kita-monatsbericht-vorschau`) | DEMO | S | Q-099 | DONE |
+| Q-103 | Kita Bedarfsplanung: Residual ↔ Meldelücke Hinweis-only (Südost) | DEMO | S | Q-094 | DONE |
 
 ---
 
