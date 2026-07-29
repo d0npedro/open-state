@@ -82,6 +82,19 @@ test.describe('UG – Übersicht', () => {
     await expect(page.getByTestId('uebersicht-behoerde-BEH-01')).toBeVisible();
   });
 
+  test('Fairness-Kurzblock mit Link zu Hinweise', async ({ page }) => {
+    const block = page.getByTestId('uebersicht-fairness-kurzblock');
+    await expect(block).toBeVisible();
+    await expect(block.getByRole('heading', { name: 'Hinweise zu Ihrem Verfahren' })).toBeVisible();
+    await expect(block.getByText(/Rückfrage offen/i).first()).toBeVisible();
+    const link = page.getByTestId('uebersicht-fairness-hinweise-link');
+    await expect(link).toBeVisible();
+    await expect(link).toHaveAttribute('href', '/gruendung/hinweise');
+    await link.click();
+    await expect(page).toHaveURL('/gruendung/hinweise');
+    await expect(page.getByRole('heading', { name: 'Hinweise zur Verfahrenslage' })).toBeVisible();
+  });
+
   test('Tab "Übersicht" ist aktiv hervorgehoben', async ({ page }) => {
     const activeTab = page.locator('.tab-nav-item.active');
     await expect(activeTab).toContainText('Übersicht');
