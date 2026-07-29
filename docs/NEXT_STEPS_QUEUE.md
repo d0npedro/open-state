@@ -191,6 +191,7 @@ Story-Dokumentation ist kein Pflicht-Vorläufer für Mock-Daten und Typen.
 | Q-154 | UG RQ-CTA-Hilfstext: Frist und Konsequenz (Übersicht Fairness + Hinweise) | DEMO | S | Q-151 | DONE `6d3a25f` |
 | Q-155 | Kita Monatsbericht: CSV Vorschau-Modus-Metadaten (Status/Tagesstand-Quellen, US-KJ-003) | DEMO | S | Q-144 | DONE `560930e` |
 | Q-156 | Kita Meldung: CSV Aggregate freigabeunabhängig (Kennzahlen + Korrekturprotokoll, US-KJ-004, DEC-004) | DEMO | S | Q-149 | DONE `17ef33b` |
+| Q-157 | Kita Einrichtung: CSV Status/Datenbasis-Metakopf (aktuell/veraltet, Summen, Prozessbezug, US-KJ-002) | DEMO | S | Q-152 | DONE `20c9483` |
 
 ---
 
@@ -352,3 +353,5 @@ Diese Punkte wurden in früheren Iterationen abgeschlossen und sind produktionsr
 | Q-154 UG RQ-CTA-Hilfstext Frist/Konsequenz | Übersicht + Hinweise Fairness-CTA | `6d3a25f` → main |
 | Q-155 Kita Monatsbericht CSV Vorschau-Metadaten | Demo-Modus/Status/Tagesstand-Quellen (US-KJ-003) | `560930e` → main |
 | Q-156 Kita Meldung CSV Aggregate freigabeunabhängig | Kennzahlen + Korrekturen, DEC-004 (US-KJ-004) | `17ef33b` → main |
+| Q-157 Kita Einrichtung CSV Status/Datenbasis-Metakopf | Belegungsstand-CSV Status/Summen/Prozessbezug (US-KJ-002) | `20c9483` → main |
+| Q-157 Kita Einrichtung CSV Status/Datenbasis-Metakopf | Status/Summen/Prozessbezug, DEC-004 (US-KJ-002) | `20c9483` → main |
