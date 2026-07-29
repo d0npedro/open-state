@@ -2,14 +2,15 @@
 
 | Feld | Wert |
 |------|------|
-| last_checked | 2026-07-29T10:12:30Z |
-| last_run_id | 30442557748 |
+| last_checked | 2026-07-29T10:15:30Z |
+| last_run_id | 30442777719 |
 | last_status | success |
-| last_sha | 8a4d620 |
+| last_sha | 5772335 |
 | fix_attempts | 0 |
 
 ## Log
 
+- Build `30442777657` + E2E `30442777719` **success** (SHA 5772335 docs ci-watcher HEAD; tree includes `814603f` Merge loop/kita + `3d0f954` Merge loop/ug — code path: Kita Meldeeingang/Monatsbericht CSV Aggregate + Lagebild + UG Session-Antwort Verlauf/RQ). Catch-up this tick: origin/main..main was 6 → lint+build grün (`NEXT_DIST_DIR=.next-ci-watcher`); concurrent push already synced → origin/main..main = 0. Local E2E port-3010 race (concurrent playwright). Watched tip E2E to green. No fix. fix_attempts=0.
 - E2E `30442557748` **success** (SHA 8a4d620 docs ci-watcher HEAD). E2E `30442365717` **success** (SHA 9bdc452 docs). E2E `30442150914` **success** (SHA 7c8fc06 docs). Build `30441945089` + E2E `30441945078` **success** (SHA 2190a70 Merge loop/kita — latest code path: AV RQ-Signal live + UG Fairness-Tiefenlink/BG-Demo + Kita Regionenvergleich + Meldeeingang Druck-Meta). Catch-up: origin/main..main = 0. Watched docs E2E to green. No fix. fix_attempts=0.
 - E2E `30442365717` **success** (SHA 9bdc452 docs ci-watcher HEAD). E2E `30442150914` **success** (SHA 7c8fc06 docs). E2E `30442086406` **success** (SHA d0da64a docs supervisor Q-180–Q-184). Build `30441945089` + E2E `30441945078` **success** (SHA 2190a70 Merge loop/kita — latest code path: AV RQ-Signal live + UG Fairness-Tiefenlink/BG-Demo + Kita Regionenvergleich + Meldeeingang Druck-Meta). Catch-up: origin/main..main = 0. Watched docs E2E to green. No fix. fix_attempts=0.
 - E2E `30442150914` **success** (SHA 7c8fc06 docs ci-watcher HEAD). E2E `30442086406` **success** (SHA d0da64a docs supervisor Q-180–Q-184). Build `30441945089` + E2E `30441945078` **success** (SHA 2190a70 Merge loop/kita — latest code path: AV RQ-Signal live + UG Fairness-Tiefenlink/BG-Demo + Kita Regionenvergleich + Meldeeingang Druck-Meta). Catch-up: origin/main..main = 0 (prior concurrent catch-up already pushed). Local lint grün; shared `.next` race → isolated rebuild `NEXT_DIST_DIR=.next-ci-watcher` grün. Watched docs E2E to green. No fix. fix_attempts=0.
