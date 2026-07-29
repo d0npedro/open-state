@@ -197,6 +197,7 @@ export function DemoStateProvider({ children }: { children: React.ReactNode }) {
 
     for (const id of uploadedIds) {
       const dok = demoFall.dokumente.find(d => d.id === id);
+      // beschreibung endet auf „ hochgeladen“ → Verlauf hebt Bezeichnung hervor (Q-105)
       extraEvents.push({
         id: `E-DEMO-DOK-${id}`,
         typ: 'DOKUMENT_EINGEREICHT',
@@ -206,7 +207,7 @@ export function DemoStateProvider({ children }: { children: React.ReactNode }) {
           ? `${dok.bezeichnung} hochgeladen`
           : `Dokument ${id} hochgeladen`,
         details: dok
-          ? `Dokument ${dok.id} eingereicht (Demo-Interaktion, keine echte Datei).`
+          ? `${dok.bezeichnung} · ${dok.id} eingereicht (Demo-Interaktion, keine echte Datei).`
           : `Dokument ${id} eingereicht (Demo-Interaktion).`,
       });
     }

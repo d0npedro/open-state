@@ -148,3 +148,44 @@ test.describe('US-AV-007 – Antworttext in Timeline lesbar', () => {
   });
 
 });
+
+/**
+ * US-AV-007 / Q-105 – Upload-Ereignisse mit Dokumentbezeichnung hervorheben
+ */
+test.describe('US-AV-007 – Upload-Ereignisse mit Dokumentbezeichnung', () => {
+
+  test('Mock-Uploads zeigen hervorgehobene Dokumentbezeichnung im Verlauf', async ({ page }) => {
+    await page.goto('/fall/verlauf');
+    const blocks = page.getByTestId('timeline-upload-block');
+    // Mock: Personalausweis + Arbeitgeberbescheinigung
+    await expect(blocks).toHaveCount(2);
+    await expect(blocks.first()).toContainText('Eingereichtes Dokument');
+    const names = page.getByTestId('timeline-upload-name');
+    await expect(names).toHaveCount(2);
+    await expect(page.getByTestId('timeline-upload-name').filter({ hasText: 'Personalausweis' })).toBeVisible();
+    await expect(page.getByTestId('timeline-upload-name').filter({ hasText: 'Arbeitgeberbescheinigung' })).toBeVisible();
+  });
+
+  test('Session-Upload erscheint im Verlauf mit Dokumentbezeichnung (kein page.goto)', async ({ page }) => {
+    await page.goto('/fall/dokumente');
+    // Erstes ausstehendes Dokument (Einkommensteuerbescheid)
+    await page.getByRole('button', { name: /Als hochgeladen markieren/i }).first().click();
+    // Session: Upload-Button für dieses Dokument verschwindet / Status wechselt
+    await expect(page.getByText(/Eingereicht am/i).first()).toBeVisible();
+
+    const { goFallTab } = await import('./helpers/sessionNav');
+    await goFallTab(page, 'Verlauf', /\/fall\/verlauf/);
+
+    // Demo-Session-Banner + Upload-Block mit voller Bezeichnung (kein page.goto, DEC-012)
+    await expect(page.getByText(/neues Ereignis/i).first()).toBeVisible();
+    const sessionBlock = page.getByTestId('timeline-upload-block').filter({
+      hasText: 'Einkommensteuerbescheid letztes Jahr',
+    });
+    await expect(sessionBlock).toBeVisible();
+    await expect(sessionBlock).toContainText('Eingereichtes Dokument');
+    await expect(sessionBlock.getByTestId('timeline-upload-name')).toHaveText(
+      'Einkommensteuerbescheid letztes Jahr'
+    );
+  });
+
+});
