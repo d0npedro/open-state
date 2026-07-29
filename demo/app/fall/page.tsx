@@ -547,7 +547,11 @@ export default function FallPage() {
               </div>
             ))}
           </div>
-          <Link href="/fall/hinweise" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.375rem', marginTop: '0.875rem', fontSize: '0.875rem', color: 'var(--color-primary)' }}>
+          <Link
+            href="/fall/hinweise"
+            data-testid="uebersicht-fairness-hinweise-link"
+            style={{ display: 'inline-flex', alignItems: 'center', gap: '0.375rem', marginTop: '0.875rem', fontSize: '0.875rem', color: 'var(--color-primary)' }}
+          >
             Alle Details ansehen <Icon name="arrow-right" size={14} />
           </Link>
         </div>

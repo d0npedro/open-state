@@ -6,6 +6,41 @@ Scope: nur `demo/app/fall/**`, DemoStateContext, fairness/rules, mockFall, e2e u
 
 ---
 
+## 2026-07-29 – Iteration 13: Hinweise UNTERLAGE live + Frist + CTA
+
+### Was
+Hinweise-Seite (`/fall/hinweise`, US-AV-008) spiegelt Session-Uploads live und macht die Dokumenten-Frist im UNTERLAGE-Signal prüfbar:
+
+1. **UNTERLAGE-Karte** mit `hinweise-signal-unterlagen` / `-titel` / `-erklaerung` (Frist noch 9 Tage, nächste Einreichungsfrist).
+2. **CTA** „Unterlagen hochladen“ → `/fall/dokumente` (`hinweise-unterlagen-cta` + Hint mit Fristtext).
+3. **RQ-CTA** „Frage beantworten“ → `/fall/rueckfragen`.
+4. **Signal-Zähler** + Reaktions-Banner auch bei Upload (nicht nur RQ); Session-Upload-Text.
+5. Session-Nav-Links: `dok-hinweise-link`, `uebersicht-fairness-hinweise-link` (kein `page.goto` nach Interaktion, DEC-012).
+6. E2E: Initial-Frist, Teil-Upload (1 offen + Frist + Formular SG1), Voll-Upload (Signal entfällt).
+
+### Dateien
+- `demo/app/fall/hinweise/page.tsx`
+- `demo/app/fall/dokumente/page.tsx`
+- `demo/app/fall/page.tsx`
+- `demo/e2e/us-av-003-dokumente.spec.ts`
+- `docs/loops/av-JOURNAL.md`
+
+### Story-IDs
+- US-AV-008 (Verfahrenslage / Fairness-Signale)
+- US-AV-003 (Unterlagen / UNTERLAGE live)
+
+### Build
+`npm run lint` + `npm run build` + `npm run test:e2e:av` (PW_E2E_CI=1) → **135 passed**, Exit 0
+
+### Vorschlag Queue-ID
+- Q-167 (AV Hinweise: UNTERLAGE-Signal live nach Session-Upload inkl. Fristhinweis + CTA)
+
+### Nächster sinnvoller AV-Schritt (Vorschlag)
+- Hinweise: RQ-Signal Fristhinweis + Session-Antwort E2E (Parität UNTERLAGE)
+- Hinweise: nach Voll-Upload verbleibende Bescheid-Signale mit testids
+
+---
+
 ## 2026-07-29 – Iteration 12: Dokumente lokale Upload-Quittung pro Karte
 
 ### Was
