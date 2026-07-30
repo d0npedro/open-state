@@ -71,6 +71,22 @@ test.describe('UG – Übersicht', () => {
     await expect(page.locator('#dok-DOK-03')).toBeVisible();
   });
 
+  test('Fristen-Countdown offener Rückfragen auf Übersicht (Q-210)', async ({ page }) => {
+    // RQ-01: Frist 2024-12-10 · FIKTIVES_HEUTE_GRUENDUNG 2024-12-07 → noch 3 Tage (Parität Q-208)
+    const block = page.getByTestId('rq-fristen-uebersicht');
+    await expect(block).toBeVisible();
+    await expect(block.getByRole('heading', { name: /Fristen offener Rückfragen/i })).toBeVisible();
+    await expect(page.getByTestId('rq-frist-RQ-01')).toBeVisible();
+    await expect(page.getByTestId('rq-frist-RQ-01')).toContainText(/Finanzamt|Kleinunternehmer/i);
+    await expect(page.getByTestId('rq-frist-countdown-RQ-01')).toContainText(/noch 3 Tage/i);
+    await expect(page.getByTestId('kachel-fragen')).toContainText(/noch 3 Tage/i);
+    const cta = page.getByTestId('rq-fristen-cta');
+    await expect(cta).toHaveAttribute('href', '/gruendung/rueckfragen#rq-RQ-01');
+    await cta.click();
+    await expect(page).toHaveURL(/\/gruendung\/rueckfragen#rq-RQ-01/);
+    await expect(page.locator('#rq-RQ-01')).toBeVisible();
+  });
+
   test('Beteiligte Behörden-Übersicht sichtbar', async ({ page }) => {
     await expect(page.getByText('Gewerbeamt Musterstadt').first()).toBeVisible();
     await expect(page.getByText('Finanzamt Musterstadt').first()).toBeVisible();
