@@ -5,10 +5,12 @@ import Link from 'next/link';
 import { useGruendungState } from '@/context/GruendungStateContext';
 import {
   berechneFairnessSignaleGruendung,
+  FIKTIVES_HEUTE_GRUENDUNG,
   fairnessSignalVerlaufZiel,
   fairnessSignalZiel,
   type FairnessSignalZiel,
 } from '@/lib/fairness/gruendung-rules';
+import { berechneFristTage } from '@/lib/fairness/rules';
 import { demoGruendungsAkte } from '@/data/mockGruendungsfall';
 import { FairnessPanel } from '@/components/fairness/FairnessPanel';
 import { Icon } from '@/components/Icon';
@@ -18,6 +20,13 @@ import type { GruendungsAkte } from '@/types/gruendung';
 
 /** Initiale Signale aus dem unveränderten Mock – Vergleichsbasis für Reaktions-Banner */
 const INITIAL_SIGNALE = berechneFairnessSignaleGruendung(demoGruendungsAkte);
+
+/** Countdown-Label analog Dokumente/Übersicht (Demo-Stichtag FIKTIVES_HEUTE_GRUENDUNG). */
+function fristRestLabel(tage: number): string {
+  if (tage < 0) return `${Math.abs(tage)} Tage überschritten`;
+  if (tage === 0) return 'heute fällig';
+  return `noch ${tage} Tag${tage === 1 ? '' : 'e'}`;
+}
 
 /**
  * Stabile data-testid-Namen der Hinweise-CTAs (E2E-Kompatibilität).
@@ -159,15 +168,44 @@ function FairnessSignalCta({
       };
   const hintText = ziel ? unterlagenHintErweiterung(ziel, akte) : '';
 
+  // Q-218: RQ-Countdown-Chip am CTA (Parität AV Q-214)
+  const rqId = ziel?.testKey.startsWith('rq-') ? ziel.testKey.slice(3) : undefined;
+  const rq =
+    rqId != null
+      ? akte.rueckfragen.find(r => r.id === rqId && !r.beantwortet)
+      : undefined;
+  const rqRest =
+    rq != null ? berechneFristTage(rq.fristDatum, FIKTIVES_HEUTE_GRUENDUNG) : null;
+  const rqRestLabel = rqRest !== null ? fristRestLabel(rqRest) : null;
+  const rqKritisch = rqRest !== null && rqRest <= 3;
+  const rqChipClass =
+    rqRest !== null && (rqRest < 0 || rqKritisch)
+      ? 'status-chip-danger'
+      : 'status-chip-warning';
+
   return (
     <div style={ctaWrapStyle(signal.prioritaet)} data-testid={ids.wrap}>
-      {hintText && (
-        <p
-          style={{ margin: 0, fontSize: '0.875rem', lineHeight: 1.45 }}
-          data-testid={ids.hint}
-        >
-          {hintText}
-        </p>
+      {(hintText || rqRestLabel) && (
+        <div style={{ flex: 1, minWidth: '12rem' }}>
+          {hintText && (
+            <p
+              style={{ margin: 0, fontSize: '0.875rem', lineHeight: 1.45 }}
+              data-testid={ids.hint}
+            >
+              {hintText}
+            </p>
+          )}
+          {rqRestLabel && rqId && (
+            <span
+              className={`status-chip ${rqChipClass}`}
+              style={{ marginTop: '0.5rem', fontSize: '0.75rem', display: 'inline-flex' }}
+              data-testid={`hinweise-rq-countdown-${rqId}`}
+            >
+              <Icon name="clock" size={13} />
+              {rqRestLabel}
+            </span>
+          )}
+        </div>
       )}
       <div
         style={{

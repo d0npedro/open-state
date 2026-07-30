@@ -1191,6 +1191,22 @@ test.describe('UG – Hinweise zur Verfahrenslage', () => {
     await expect(hint).toContainText(/Rückfragen/i);
   });
 
+  test('Hinweise: RQ-Countdown-Chip am CTA (Q-218)', async ({ page }) => {
+    // US-UG-004: Parität AV Q-214 — Chip + Tiefenlink #rq-…
+    // RQ-01 Frist 2024-12-10 · FIKTIVES_HEUTE_GRUENDUNG 2024-12-07 → noch 3 Tage
+    const wrap = page.getByTestId('hinweise-rq-cta-wrap-RQ-01');
+    await expect(wrap).toBeVisible();
+    await expect(page.getByTestId('hinweise-rq-cta-hint-RQ-01')).toContainText(
+      /10\.12\.2024|noch 3 Tage/i
+    );
+    const chip = page.getByTestId('hinweise-rq-countdown-RQ-01');
+    await expect(chip).toBeVisible();
+    await expect(chip).toContainText(/noch 3 Tage/i);
+    await page.getByTestId('hinweise-rq-cta-RQ-01').click();
+    await expect(page).toHaveURL(/\/gruendung\/rueckfragen#rq-RQ-01/);
+    await expect(page.locator('#rq-RQ-01')).toBeVisible();
+  });
+
   test('CTA aus RELEVANT-Signal führt zur Rückfrage-Karte', async ({ page }) => {
     await page.getByTestId('hinweise-rq-cta-RQ-01').click();
     await expect(page).toHaveURL(/\/gruendung\/rueckfragen#rq-RQ-01/);
