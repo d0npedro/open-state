@@ -252,6 +252,58 @@ test.describe('US-AV-007/008 – Fairness-Tiefenlink zum Verlauf', () => {
     await expect(page.getByTestId('verlauf-ereignis-E-010')).toBeVisible();
   });
 
+  test('Übersicht BESCHEID: Zum Bescheid + Verlauf-Tiefenlink (Q-202)', async ({ page }) => {
+    // US-AV-006/007: Parität Hinweise Q-201 — vorläufiger Bescheid auf Übersicht
+    await page.goto('/fall');
+    const block = page.getByTestId('uebersicht-fairness-FH-BESCHEID-VORLAEUFIG');
+    await expect(block).toBeVisible();
+    await expect(block).toContainText(/Vorläufiger Bescheid/i);
+
+    const besCta = page.getByTestId('uebersicht-fairness-bes-cta-FH-BESCHEID-VORLAEUFIG');
+    await expect(besCta).toBeVisible();
+    await expect(besCta).toHaveAttribute('href', '/fall/bescheide#bes-BSC-001');
+
+    const verlauf = page.getByTestId('uebersicht-fairness-verlauf-FH-BESCHEID-VORLAEUFIG');
+    await expect(verlauf).toBeVisible();
+    await expect(verlauf).toHaveAttribute('href', '/fall/verlauf#ere-E-007');
+    await expect(verlauf).toContainText(/Im Verlauf ansehen/i);
+
+    await verlauf.click();
+    await expect(page).toHaveURL(/\/fall\/verlauf#ere-E-007/);
+    const card = page.getByTestId('verlauf-ereignis-E-007');
+    await expect(card).toBeVisible();
+    await expect(card).toHaveAttribute('aria-current', 'location');
+    await expect(card).toContainText(/zugestellt|Bescheid/i);
+  });
+
+  test('Übersicht BESCHEID: Zum Bescheid führt zu #bes-BSC-001', async ({ page }) => {
+    await page.goto('/fall');
+    await page.getByTestId('uebersicht-fairness-bes-cta-FH-BESCHEID-VORLAEUFIG').click();
+    await expect(page).toHaveURL(/\/fall\/bescheide#bes-BSC-001/);
+    await expect(page.locator('#bes-BSC-001')).toBeVisible();
+    await expect(page.getByTestId('bescheid-karte-BSC-001')).toContainText(
+      /Vorläufiger Leistungsbescheid/i
+    );
+  });
+
+  test('Übersicht BESCHEID-Begründung: Unterlagen-CTA', async ({ page }) => {
+    await page.goto('/fall');
+    const block = page.getByTestId('uebersicht-fairness-FH-BSC-001-BEGRUENDUNG');
+    await expect(block).toBeVisible();
+    await expect(page.getByTestId('uebersicht-fairness-bes-cta-FH-BSC-001-BEGRUENDUNG')).toHaveAttribute(
+      'href',
+      '/fall/bescheide#bes-BSC-001'
+    );
+    await expect(page.getByTestId('uebersicht-fairness-unterlagen-cta-FH-BSC-001-BEGRUENDUNG')).toHaveAttribute(
+      'href',
+      '/fall/dokumente'
+    );
+    await expect(page.getByTestId('uebersicht-fairness-verlauf-FH-BSC-001-BEGRUENDUNG')).toHaveAttribute(
+      'href',
+      '/fall/verlauf#ere-E-007'
+    );
+  });
+
   test('Ereignis-Anker #ere-E-010 für Fairness-Tiefenlink', async ({ page }) => {
     // Direkter Anker-Load (wie Browser nach Fairness-Klick mit Full-Navigation)
     await page.goto('/fall/verlauf#ere-E-010');

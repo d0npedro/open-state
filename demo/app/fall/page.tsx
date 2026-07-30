@@ -757,7 +757,8 @@ export default function FallPage() {
         </div>
       )}
 
-      {/* ─── 5. FAIRNESS-HINWEISE (inline, kein separater Klick nötig) */}
+      {/* ─── 5. FAIRNESS-HINWEISE (inline, kein separater Klick nötig)
+          Q-202: BESCHEID-Signale mit Zum-Bescheid-CTA + Verlauf (Parität Hinweise Q-201). */}
       {fairnessSignale.length > 0 && (
         <div className="card">
           <h2 style={{ fontSize: '1rem', marginBottom: '1rem' }}>
@@ -766,10 +767,23 @@ export default function FallPage() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
             {fairnessSignale.map(sig => {
               const verlaufZiel = fairnessSignalVerlaufZiel(sig, fall);
+              const isBescheid =
+                sig.typ === 'BESCHEID_VORLAEUFIG' ||
+                sig.typ === 'BESCHEID_BEGRUENDUNG_ERWEITERBAR';
+              const isBegruendung = sig.typ === 'BESCHEID_BEGRUENDUNG_ERWEITERBAR';
+              const besId = isBescheid
+                ? fall.bescheide.find(b => sig.bezug.includes(b.id))?.id ??
+                  fall.bescheide[0]?.id
+                : undefined;
+              // BESCHEID: signal-scoped testid (zwei Signale → gleiches E-007)
+              const verlaufTestId = isBescheid
+                ? `uebersicht-fairness-verlauf-${sig.id}`
+                : `uebersicht-fairness-verlauf-${verlaufZiel?.ereignisId ?? 'none'}`;
               return (
                 <div
                   key={sig.id}
                   className={`notice-box ${sig.prioritaet === 'RELEVANT' ? 'notice-box-warn' : sig.prioritaet === 'HINWEIS' ? 'notice-box-info' : 'notice-box-neutral'}`}
+                  data-testid={`uebersicht-fairness-${sig.id}`}
                 >
                   <Icon name="info" size={16} style={{ flexShrink: 0, marginTop: '2px' }} />
                   <div>
@@ -780,25 +794,73 @@ export default function FallPage() {
                         → {sig.naechsterSchritt}
                       </div>
                     )}
-                    {verlaufZiel && (
-                      <div style={{ marginTop: '0.65rem' }}>
-                        <Link
-                          href={verlaufZiel.href}
-                          data-testid={`uebersicht-fairness-verlauf-${verlaufZiel.ereignisId}`}
-                          style={{
-                            display: 'inline-flex',
-                            alignItems: 'center',
-                            gap: '0.3rem',
-                            fontSize: '0.8rem',
-                            fontWeight: 600,
-                            color: 'var(--color-text-muted)',
-                            textDecoration: 'none',
-                          }}
-                          aria-label={verlaufZiel.ariaLabel ?? verlaufZiel.cta}
-                        >
-                          <Icon name="clock" size={13} />
-                          {verlaufZiel.cta} →
-                        </Link>
+                    {(verlaufZiel || isBescheid) && (
+                      <div
+                        style={{
+                          marginTop: '0.65rem',
+                          display: 'flex',
+                          flexWrap: 'wrap',
+                          alignItems: 'center',
+                          gap: '0.5rem 0.75rem',
+                        }}
+                      >
+                        {besId && (
+                          <Link
+                            href={`/fall/bescheide#bes-${besId}`}
+                            data-testid={`uebersicht-fairness-bes-cta-${sig.id}`}
+                            style={{
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              gap: '0.3rem',
+                              fontSize: '0.8rem',
+                              fontWeight: 600,
+                              color: 'var(--color-primary)',
+                              textDecoration: 'none',
+                            }}
+                            aria-label="Zum Bescheid"
+                          >
+                            <Icon name="scroll" size={13} />
+                            Zum Bescheid →
+                          </Link>
+                        )}
+                        {isBegruendung && (
+                          <Link
+                            href="/fall/dokumente"
+                            data-testid={`uebersicht-fairness-unterlagen-cta-${sig.id}`}
+                            style={{
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              gap: '0.3rem',
+                              fontSize: '0.8rem',
+                              fontWeight: 600,
+                              color: 'var(--color-primary)',
+                              textDecoration: 'none',
+                            }}
+                            aria-label="Zu den ausstehenden Unterlagen"
+                          >
+                            <Icon name="upload" size={13} />
+                            Unterlagen →
+                          </Link>
+                        )}
+                        {verlaufZiel && (
+                          <Link
+                            href={verlaufZiel.href}
+                            data-testid={verlaufTestId}
+                            style={{
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              gap: '0.3rem',
+                              fontSize: '0.8rem',
+                              fontWeight: 600,
+                              color: 'var(--color-text-muted)',
+                              textDecoration: 'none',
+                            }}
+                            aria-label={verlaufZiel.ariaLabel ?? verlaufZiel.cta}
+                          >
+                            <Icon name="clock" size={13} />
+                            {verlaufZiel.cta} →
+                          </Link>
+                        )}
                       </div>
                     )}
                   </div>
