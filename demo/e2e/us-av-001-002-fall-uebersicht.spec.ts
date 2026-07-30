@@ -172,6 +172,23 @@ test.describe('US-AV-002 – Status einsehen', () => {
     await expect(page.locator('#rq-RQ-001')).toBeVisible();
   });
 
+  test('Übersicht Fairness: RQ-Countdown-Chip + CTA (Q-215)', async ({ page }) => {
+    // US-AV-004/008: Parität Hinweise Q-214 + Widerspruch Fairness Q-206
+    // RQ-001 Frist 2024-11-26 · FIKTIVES_HEUTE 2024-11-24 → noch 2 Tage
+    await page.goto('/fall');
+    const block = page.getByTestId('uebersicht-fairness-FH-RQ-001-FRIST');
+    await expect(block).toBeVisible();
+    await expect(block).toContainText(/noch 2 Tage/i);
+    const chip = page.getByTestId('uebersicht-fairness-rq-countdown-FH-RQ-001-FRIST');
+    await expect(chip).toBeVisible();
+    await expect(chip).toContainText(/noch 2 Tage/i);
+    const rqCta = page.getByTestId('uebersicht-fairness-rq-cta-FH-RQ-001-FRIST');
+    await expect(rqCta).toHaveAttribute('href', '/fall/rueckfragen#rq-RQ-001');
+    await rqCta.click();
+    await expect(page).toHaveURL(/\/fall\/rueckfragen#rq-RQ-001/);
+    await expect(page.locator('#rq-RQ-001')).toBeVisible();
+  });
+
   test('Widerspruchsfrist-Countdown auf Übersicht (Q-204)', async ({ page }) => {
     // Ablauf 2024-12-16 · FIKTIVES_HEUTE 2024-11-24 → noch 22 Tage (Parität Bescheid Q-203)
     const block = page.getByTestId('widerspruch-frist-uebersicht');
