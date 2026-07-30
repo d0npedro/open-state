@@ -257,6 +257,8 @@ Story-Dokumentation ist kein Pflicht-Vorläufer für Mock-Daten und Typen.
 | Q-220 | UG Übersicht Fairness: RQ-Countdown-Chip + CTA `#rq-…` (US-UG-004, Parität Hinweise Q-218 / AV Q-215) | DEMO | S | Q-218 | DONE |
 | Q-221 | UG Übersicht Fairness: UNTERLAGE-Countdown-Chip + CTA `#dok-…` (US-UG-003, Parität Hinweise Q-219 / AV Q-217) | DEMO | S | Q-219 | DONE |
 | Q-222 | AV Hinweise: UNTERLAGE-CTA nach Teil-Upload live auf nächste offene Unterlage `#dok-…` (US-AV-003/008, Parität Übersicht Q-194) | DEMO | S | Q-216 | DONE |
+| Q-223 | AV Übersicht Fairness: UNTERLAGE-CTA nach Teil-Upload live auf nächste offene Unterlage `#dok-…` + Hint (US-AV-003/007/008, Parität Hinweise Q-222) | DEMO | S | Q-217 | DONE |
+| Q-224 | UG Hinweise: UNTERLAGE-CTA `data-next-dok-id` + Hint mit nächster offener Bezeichnung (US-UG-003, Parität AV Hinweise Q-222) | DEMO | S | Q-219 | OFFEN |
 
 ---
 
@@ -484,3 +486,4 @@ Diese Punkte wurden in früheren Iterationen abgeschlossen und sind produktionsr
 | Q-220 UG Übersicht Fairness RQ-Countdown | uebersicht-fairness-rq-countdown + CTA `#rq-…` | local |
 | Q-221 UG Übersicht Fairness UNTERLAGE-Countdown | uebersicht-fairness-unterlage-countdown + CTA `#dok-…` | local |
 | Q-222 AV Hinweise UNTERLAGE CTA live nächste Unterlage | Teil-Upload → `#dok-DOK-004` + Hint (US-AV-003/008) | local |
+| Q-223 AV Übersicht Fairness UNTERLAGE CTA live nächste Unterlage | Teil-Upload → `#dok-DOK-004` + Hint (US-AV-003/007/008) | local |

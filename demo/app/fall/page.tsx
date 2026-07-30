@@ -1000,7 +1000,8 @@ export default function FallPage() {
           Q-202: BESCHEID-Signale mit Zum-Bescheid-CTA + Verlauf (Parität Hinweise Q-201).
           Q-206: Widerspruchsfrist-Chip am BESCHEID_VORLAEUFIG (Parität Hinweise Q-205).
           Q-215: RQ-Countdown-Chip + CTA `#rq-…` am RUECKFRAGE-Signal (Parität Hinweise Q-214).
-          Q-217: UNTERLAGE-Countdown-Chip + CTA `#dok-…` (Parität Hinweise Q-216 / RQ Q-215). */}
+          Q-217: UNTERLAGE-Countdown-Chip + CTA `#dok-…` (Parität Hinweise Q-216 / RQ Q-215).
+          Q-223: UNTERLAGE-CTA nach Teil-Upload live auf nächste offene Unterlage (Parität Hinweise Q-222). */}
       {fairnessSignale.length > 0 && (
         <div className="card">
           <h2 style={{ fontSize: '1rem', marginBottom: '1rem' }}>
@@ -1024,17 +1025,34 @@ export default function FallPage() {
                 ? fall.rueckfragen.find(r => !r.beantwortet && sig.id.includes(r.id)) ??
                   fall.rueckfragen.find(r => !r.beantwortet)
                 : undefined;
-              // Nächste offene Unterlage mit Frist (Parität Hinweise Q-216)
-              const naechsteUnterlage = isUnterlage
-                ? fall.dokumente
-                    .filter(d => d.status === 'ANGEFORDERT' || d.status === 'ABGELEHNT')
-                    .filter(d => d.fristDatum && d.frist)
-                    .map(d => ({
-                      dok: d,
-                      resttage: berechneFristTage(d.fristDatum as string, FIKTIVES_HEUTE),
-                    }))
-                    .sort((a, b) => a.resttage - b.resttage)[0]
-                : undefined;
+              // Nächste offene Unterlage: session-sensitiv, nach Resttagen (Q-217/Q-223, Parität Hinweise Q-222)
+              let naechsteUnterlage:
+                | { dok: (typeof fall.dokumente)[number]; resttage: number | null }
+                | undefined;
+              if (isUnterlage) {
+                const offeneDok = fall.dokumente.filter(
+                  d => d.status === 'ANGEFORDERT' || d.status === 'ABGELEHNT'
+                );
+                const dokMitFrist = offeneDok
+                  .filter(d => d.fristDatum && d.frist)
+                  .map(d => ({
+                    dok: d,
+                    resttage: berechneFristTage(d.fristDatum as string, FIKTIVES_HEUTE) as number | null,
+                  }))
+                  .sort(
+                    (a, b) =>
+                      (a.resttage as number) - (b.resttage as number) ||
+                      a.dok.id.localeCompare(b.dok.id, 'de')
+                  );
+                naechsteUnterlage =
+                  dokMitFrist[0] ??
+                  (offeneDok[0] ? { dok: offeneDok[0], resttage: null } : undefined);
+              }
+              const offeneUnterlagenAnzahl = isUnterlage
+                ? fall.dokumente.filter(
+                    d => d.status === 'ANGEFORDERT' || d.status === 'ABGELEHNT'
+                  ).length
+                : 0;
               // BESCHEID: signal-scoped testid (zwei Signale → gleiches E-007)
               const verlaufTestId = isBescheid
                 ? `uebersicht-fairness-verlauf-${sig.id}`
@@ -1061,17 +1079,31 @@ export default function FallPage() {
                   ? 'status-chip-danger'
                   : 'status-chip-warning';
               // UNTERLAGE-Countdown (Q-217, Parität Hinweise Q-216)
-              const uRest = naechsteUnterlage?.resttage ?? null;
+              const uRest =
+                naechsteUnterlage && typeof naechsteUnterlage.resttage === 'number'
+                  ? naechsteUnterlage.resttage
+                  : null;
               const uKritisch = uRest !== null && uRest <= 5;
               const uChipClass =
                 uRest !== null && (uRest < 0 || uKritisch)
                   ? 'status-chip-danger'
                   : 'status-chip-warning';
+              const unterlageDokHref = naechsteUnterlage
+                ? `/fall/dokumente#dok-${naechsteUnterlage.dok.id}`
+                : '/fall/dokumente';
+              // Kurz-Hint: nächste offene Karte nach Teil-Upload (Q-223, Parität Hinweise Q-222)
+              const unterlageNextHint =
+                isUnterlage && naechsteUnterlage
+                  ? offeneUnterlagenAnzahl === 1
+                    ? `Nächste Unterlage: „${naechsteUnterlage.dok.bezeichnung}"`
+                    : `${offeneUnterlagenAnzahl} Unterlagen offen — nächste: „${naechsteUnterlage.dok.bezeichnung}"`
+                  : null;
               return (
                 <div
                   key={sig.id}
                   className={`notice-box ${sig.prioritaet === 'RELEVANT' ? 'notice-box-warn' : sig.prioritaet === 'HINWEIS' ? 'notice-box-info' : 'notice-box-neutral'}`}
                   data-testid={`uebersicht-fairness-${sig.id}`}
+                  data-next-dok-id={isUnterlage ? naechsteUnterlage?.dok.id : undefined}
                 >
                   <Icon name="info" size={16} style={{ flexShrink: 0, marginTop: '2px' }} />
                   <div>
@@ -1081,6 +1113,19 @@ export default function FallPage() {
                       <div style={{ marginTop: '0.5rem', fontWeight: 600, fontSize: '0.875rem' }}>
                         → {sig.naechsterSchritt}
                       </div>
+                    )}
+                    {unterlageNextHint && (
+                      <p
+                        style={{
+                          margin: '0.45rem 0 0',
+                          fontSize: '0.8rem',
+                          fontWeight: 600,
+                          color: 'var(--color-text)',
+                        }}
+                        data-testid={`uebersicht-fairness-unterlage-hint-${sig.id}`}
+                      >
+                        {unterlageNextHint}
+                      </p>
                     )}
                     {wRest !== null && (
                       <span
@@ -1179,9 +1224,9 @@ export default function FallPage() {
                             Frage beantworten →
                           </Link>
                         )}
-                        {isUnterlage && naechsteUnterlage && (
+                        {isUnterlage && (
                           <Link
-                            href={`/fall/dokumente#dok-${naechsteUnterlage.dok.id}`}
+                            href={unterlageDokHref}
                             data-testid={`uebersicht-fairness-unterlage-cta-${sig.id}`}
                             style={{
                               display: 'inline-flex',
@@ -1192,7 +1237,11 @@ export default function FallPage() {
                               color: 'var(--color-primary)',
                               textDecoration: 'none',
                             }}
-                            aria-label="Zu den ausstehenden Unterlagen"
+                            aria-label={
+                              naechsteUnterlage
+                                ? `Zur Unterlage ${naechsteUnterlage.dok.bezeichnung}`
+                                : 'Zu den ausstehenden Unterlagen'
+                            }
                           >
                             <Icon name="upload" size={13} />
                             Unterlagen hochladen →

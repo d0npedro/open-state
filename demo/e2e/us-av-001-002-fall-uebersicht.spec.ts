@@ -196,16 +196,58 @@ test.describe('US-AV-002 – Status einsehen', () => {
     const block = page.getByTestId('uebersicht-fairness-FH-UNTERLAGEN-FEHLEND');
     await expect(block).toBeVisible();
     await expect(block).toContainText(/noch 9 Tage/i);
+    await expect(block).toHaveAttribute('data-next-dok-id', 'DOK-003');
     const chip = page.getByTestId(
       'uebersicht-fairness-unterlage-countdown-FH-UNTERLAGEN-FEHLEND'
     );
     await expect(chip).toBeVisible();
     await expect(chip).toContainText(/noch 9 Tage/i);
+    await expect(
+      page.getByTestId('uebersicht-fairness-unterlage-hint-FH-UNTERLAGEN-FEHLEND')
+    ).toContainText(/Einkommensteuerbescheid|2 Unterlagen offen/i);
     const dokCta = page.getByTestId('uebersicht-fairness-unterlage-cta-FH-UNTERLAGEN-FEHLEND');
     await expect(dokCta).toHaveAttribute('href', '/fall/dokumente#dok-DOK-003');
     await dokCta.click();
     await expect(page).toHaveURL(/\/fall\/dokumente#dok-DOK-003/);
     await expect(page.locator('#dok-DOK-003')).toBeVisible();
+  });
+
+  test('Übersicht Fairness: nach Teil-Upload CTA-Tiefenlink auf nächste Unterlage (Q-223)', async ({
+    page,
+  }) => {
+    // US-AV-003/007/008: Fairness-CTA #dok-… folgt live dem nächsten offenen Dokument
+    // (Parität Hinweise Q-222 / Upload-Quittung Q-194)
+    // Initial DOK-003+DOK-004 → nach Upload DOK-003 bleibt DOK-004 (SG1)
+    const { goFallTab } = await import('./helpers/sessionNav');
+
+    await goFallTab(page, 'Fragen', /\/fall\/rueckfragen/);
+    await page.getByRole('button', { name: /Jetzt beantworten|Rückfrage beantworten/i }).click();
+    await page.getByTestId('rq-antwort-absenden').click();
+
+    await goFallTab(page, 'Unterlagen', /\/fall\/dokumente/);
+    await page.getByRole('button', { name: /Als hochgeladen markieren/i }).first().click();
+    await expect(page.getByTestId('dok-upload-quittung-DOK-003')).toBeVisible();
+
+    await goFallTab(page, 'Übersicht', /\/fall$/);
+
+    const block = page.getByTestId('uebersicht-fairness-FH-UNTERLAGEN-FEHLEND');
+    await expect(block).toBeVisible();
+    await expect(block).toHaveAttribute('data-next-dok-id', 'DOK-004');
+    await expect(
+      page.getByTestId('uebersicht-fairness-unterlage-hint-FH-UNTERLAGEN-FEHLEND')
+    ).toContainText(/Formular SG1|Noch 1 Unterlage/i);
+    await expect(
+      page.getByTestId('uebersicht-fairness-unterlage-countdown-FH-UNTERLAGEN-FEHLEND')
+    ).toContainText(/noch 9 Tage/i);
+
+    const cta = page.getByTestId('uebersicht-fairness-unterlage-cta-FH-UNTERLAGEN-FEHLEND');
+    await expect(cta).toHaveAttribute('href', '/fall/dokumente#dok-DOK-004');
+    await cta.click();
+    await expect(page).toHaveURL(/\/fall\/dokumente#dok-DOK-004/);
+    await expect(page.locator('#dok-DOK-004')).toBeVisible();
+    await expect(page.getByTestId('dok-karte-DOK-004')).toContainText(
+      /Formular SG1|Wird noch benötigt/i
+    );
   });
 
   test('Widerspruchsfrist-Countdown auf Übersicht (Q-204)', async ({ page }) => {
