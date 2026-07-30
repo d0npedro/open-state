@@ -515,6 +515,25 @@ test.describe('UG – Übersicht', () => {
     await expect(page.locator('#rq-RQ-01')).toBeVisible();
   });
 
+  test('Übersicht Fairness: UNTERLAGE-Countdown-Chip + CTA (Q-221)', async ({ page }) => {
+    // US-UG-003: Parität Hinweise Q-219 + AV Übersicht Q-217
+    // DOK-03 Frist 2024-12-15 · FIKTIVES_HEUTE_GRUENDUNG 2024-12-07 → noch 8 Tage
+    await page.goto('/gruendung');
+    const block = page.getByTestId('uebersicht-fairness-UG-UNTERLAGEN-FEHLEND');
+    await expect(block).toBeVisible();
+    await expect(block).toContainText(/noch 8 Tage/i);
+    const chip = page.getByTestId(
+      'uebersicht-fairness-unterlage-countdown-UG-UNTERLAGEN-FEHLEND'
+    );
+    await expect(chip).toBeVisible();
+    await expect(chip).toContainText(/noch 8 Tage/i);
+    const dokCta = page.getByTestId('uebersicht-fairness-cta-dok-DOK-03');
+    await expect(dokCta).toHaveAttribute('href', '/gruendung/dokumente#dok-DOK-03');
+    await dokCta.click();
+    await expect(page).toHaveURL(/\/gruendung\/dokumente#dok-DOK-03/);
+    await expect(page.locator('#dok-DOK-03')).toBeVisible();
+  });
+
   test('Fairness-CTA Rückfrage führt zur Rückfragen-Karte', async ({ page }) => {
     await page.getByTestId('uebersicht-fairness-cta-rq-RQ-01').click();
     await expect(page).toHaveURL(/\/gruendung\/rueckfragen#rq-RQ-01/);

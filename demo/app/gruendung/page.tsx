@@ -911,6 +911,27 @@ export default function GruendungPage() {
                 rqRest !== null && (rqRest < 0 || rqKritisch)
                   ? 'status-chip-danger'
                   : 'status-chip-warning';
+              // Q-221: UNTERLAGE-Countdown-Chip (Parität Hinweise Q-219 / AV Übersicht Q-217)
+              const isUnterlageCta = ziel?.testKey.startsWith('dok-') === true;
+              const naechsteUnterlage = isUnterlageCta
+                ? akte.dokumente
+                    .filter(d => d.status === 'ANGEFORDERT' || d.status === 'ABGELEHNT')
+                    .filter(d => d.fristDatum && d.frist)
+                    .map(d => ({
+                      dok: d,
+                      resttage: berechneFristTage(
+                        d.fristDatum as string,
+                        FIKTIVES_HEUTE_GRUENDUNG
+                      ),
+                    }))
+                    .sort((a, b) => a.resttage - b.resttage)[0]
+                : undefined;
+              const dokRest = naechsteUnterlage?.resttage ?? null;
+              const dokKritisch = dokRest !== null && dokRest <= 3;
+              const dokChipClass =
+                dokRest !== null && (dokRest < 0 || dokKritisch)
+                  ? 'status-chip-danger'
+                  : 'status-chip-warning';
               return (
                 <div
                   key={sig.id}
@@ -935,6 +956,16 @@ export default function GruendungPage() {
                       >
                         <Icon name="clock" size={13} />
                         {fristRestLabel(rqRest)}
+                      </span>
+                    )}
+                    {dokRest !== null && (
+                      <span
+                        className={`status-chip ${dokChipClass}`}
+                        style={{ marginTop: '0.5rem', fontSize: '0.75rem', display: 'inline-flex' }}
+                        data-testid={`uebersicht-fairness-unterlage-countdown-${sig.id}`}
+                      >
+                        <Icon name="clock" size={13} />
+                        {fristRestLabel(dokRest)}
                       </span>
                     )}
                     {(ziel || verlaufZiel) && (
