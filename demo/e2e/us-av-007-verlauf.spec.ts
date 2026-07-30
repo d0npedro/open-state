@@ -263,6 +263,60 @@ test.describe('US-AV-007/008 – Fairness-Tiefenlink zum Verlauf', () => {
     await expect(card).toHaveAttribute('aria-current', 'location');
   });
 
+  test('Hinweise BESCHEID: Zum Bescheid + Verlauf-Tiefenlink E-007 (Q-201)', async ({ page }) => {
+    // US-AV-006/007/008: BESCHEID_VORLAEUFIG → #bes-BSC-001 und #ere-E-007
+    await page.goto('/fall/hinweise');
+    const wrap = page.getByTestId('hinweise-bescheid-cta-wrap-FH-BESCHEID-VORLAEUFIG');
+    await expect(wrap).toBeVisible();
+    await expect(page.getByTestId('hinweise-bescheid-cta-hint-FH-BESCHEID-VORLAEUFIG')).toContainText(
+      /Vorläufiger Bescheid|Widerspruchsfrist/i
+    );
+
+    const besCta = page.getByTestId('hinweise-bescheid-cta-FH-BESCHEID-VORLAEUFIG');
+    await expect(besCta).toBeVisible();
+    await expect(besCta).toHaveAttribute('href', '/fall/bescheide#bes-BSC-001');
+
+    const verlauf = wrap.getByTestId('hinweise-verlauf-cta-E-007');
+    await expect(verlauf).toBeVisible();
+    await expect(verlauf).toHaveAttribute('href', '/fall/verlauf#ere-E-007');
+    await expect(verlauf).toContainText(/Im Verlauf ansehen/i);
+
+    await verlauf.click();
+    await expect(page).toHaveURL(/\/fall\/verlauf#ere-E-007/);
+    const card = page.getByTestId('verlauf-ereignis-E-007');
+    await expect(card).toBeVisible();
+    await expect(card).toHaveAttribute('aria-current', 'location');
+    await expect(card).toContainText(/zugestellt|Bescheid/i);
+  });
+
+  test('Hinweise BESCHEID: Zum Bescheid führt zum Anker #bes-BSC-001', async ({ page }) => {
+    await page.goto('/fall/hinweise');
+    await page.getByTestId('hinweise-bescheid-cta-FH-BESCHEID-VORLAEUFIG').click();
+    await expect(page).toHaveURL(/\/fall\/bescheide#bes-BSC-001/);
+    await expect(page.locator('#bes-BSC-001')).toBeVisible();
+    await expect(page.getByTestId('bescheid-karte-BSC-001')).toContainText(
+      /Vorläufiger Leistungsbescheid/i
+    );
+  });
+
+  test('Hinweise BESCHEID-Begründung: Unterlagen-CTA und Verlauf', async ({ page }) => {
+    await page.goto('/fall/hinweise');
+    const wrap = page.getByTestId('hinweise-bescheid-cta-wrap-FH-BSC-001-BEGRUENDUNG');
+    await expect(wrap).toBeVisible();
+    await expect(page.getByTestId('hinweise-bescheid-unterlagen-cta-FH-BSC-001-BEGRUENDUNG')).toHaveAttribute(
+      'href',
+      '/fall/dokumente'
+    );
+    await expect(page.getByTestId('hinweise-bescheid-cta-FH-BSC-001-BEGRUENDUNG')).toHaveAttribute(
+      'href',
+      '/fall/bescheide#bes-BSC-001'
+    );
+    await expect(wrap.getByTestId('hinweise-verlauf-cta-E-007')).toHaveAttribute(
+      'href',
+      '/fall/verlauf#ere-E-007'
+    );
+  });
+
 });
 
 /**

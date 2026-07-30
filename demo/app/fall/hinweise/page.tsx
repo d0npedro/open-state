@@ -53,8 +53,8 @@ function ctaWrapStyle(prioritaet: FairnessSignal['prioritaet']): CSSProperties {
 
 /**
  * Handlungs-CTA je Signaltyp (AV).
- * Primär: handlungsbezogen (Rückfrage/Unterlagen).
- * Sekundär: Fairness → Verlauf-Tiefenlink (Q-191, Parität UG Q-181).
+ * Primär: handlungsbezogen (Rückfrage/Unterlagen/Bescheid).
+ * Sekundär: Fairness → Verlauf-Tiefenlink (Q-191/Q-201, Parität UG Q-181).
  */
 function SignalCta({ signal, fall }: { signal: FairnessSignal; fall: Fall }) {
   const verlaufZiel = fairnessSignalVerlaufZiel(signal, fall);
@@ -136,6 +136,78 @@ function SignalCta({ signal, fall }: { signal: FairnessSignal; fall: Fall }) {
             <Icon name="upload" size={15} />
             Unterlagen hochladen
           </Link>
+          {verlaufZiel && (
+            <Link
+              href={verlaufZiel.href}
+              className="btn btn-secondary"
+              style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', flexShrink: 0 }}
+              data-testid={`hinweise-verlauf-cta-${verlaufZiel.ereignisId}`}
+              aria-label={verlaufZiel.ariaLabel ?? verlaufZiel.cta}
+            >
+              <Icon name="clock" size={15} />
+              {verlaufZiel.cta}
+            </Link>
+          )}
+        </div>
+      </div>
+    );
+  }
+
+  // Vorläufiger Bescheid / erweiterbare Begründung (Q-201, Parität Bescheide Q-200)
+  if (
+    signal.typ === 'BESCHEID_VORLAEUFIG' ||
+    signal.typ === 'BESCHEID_BEGRUENDUNG_ERWEITERBAR'
+  ) {
+    const besId =
+      fall.bescheide.find(b => signal.bezug.includes(b.id))?.id ??
+      fall.bescheide[0]?.id;
+    const isBegruendung = signal.typ === 'BESCHEID_BEGRUENDUNG_ERWEITERBAR';
+    return (
+      <div
+        style={ctaWrapStyle(signal.prioritaet)}
+        data-testid={`hinweise-bescheid-cta-wrap-${signal.id}`}
+      >
+        <p
+          style={{ margin: 0, fontSize: '0.875rem', lineHeight: 1.45 }}
+          data-testid={`hinweise-bescheid-cta-hint-${signal.id}`}
+        >
+          {isBegruendung
+            ? 'Die Bescheidbegründung verweist auf ausstehende Angaben. Bescheid lesen und fehlende Unterlagen einreichen.'
+            : 'Vorläufiger Bescheid mit laufender Widerspruchsfrist. Details und Widerspruch im Bereich „Bescheid“.'}
+        </p>
+        <div
+          style={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            alignItems: 'center',
+            gap: '0.5rem 0.75rem',
+            flexShrink: 0,
+          }}
+        >
+          {besId && (
+            <Link
+              href={`/fall/bescheide#bes-${besId}`}
+              className="btn btn-primary"
+              style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', flexShrink: 0 }}
+              data-testid={`hinweise-bescheid-cta-${signal.id}`}
+              aria-label="Zum Bescheid"
+            >
+              <Icon name="scroll" size={15} />
+              Zum Bescheid
+            </Link>
+          )}
+          {isBegruendung && (
+            <Link
+              href="/fall/dokumente"
+              className="btn btn-secondary"
+              style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', flexShrink: 0 }}
+              data-testid={`hinweise-bescheid-unterlagen-cta-${signal.id}`}
+              aria-label="Zu den ausstehenden Unterlagen"
+            >
+              <Icon name="upload" size={15} />
+              Unterlagen
+            </Link>
+          )}
           {verlaufZiel && (
             <Link
               href={verlaufZiel.href}
