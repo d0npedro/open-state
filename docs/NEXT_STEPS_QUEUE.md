@@ -253,6 +253,7 @@ Story-Dokumentation ist kein Pflicht-Vorläufer für Mock-Daten und Typen.
 | Q-216 | AV Hinweise: UNTERLAGE-Countdown-Chip am CTA + Tiefenlink `#dok-…` (US-AV-003/008, Parität RQ Q-214) | DEMO | S | Q-214 | DONE |
 | Q-217 | AV Übersicht Fairness: UNTERLAGE-Countdown-Chip + CTA `#dok-…` (US-AV-003/007/008, Parität Hinweise Q-216 / RQ Q-215) | DEMO | S | Q-216 | DONE |
 | Q-218 | UG Hinweise: RQ-Countdown-Chip am CTA (US-UG-004, Parität AV Q-214) | DEMO | S | Q-211 | DONE |
+| Q-219 | UG Hinweise: UNTERLAGE-Countdown-Chip am CTA (US-UG-003, Parität AV Q-216) | DEMO | S | Q-218 | DONE |
 
 ---
 
@@ -476,3 +477,4 @@ Diese Punkte wurden in früheren Iterationen abgeschlossen und sind produktionsr
 | Q-216 AV Hinweise UNTERLAGE-Countdown-Chip | hinweise-unterlagen-countdown + CTA `#dok-…` | local |
 | Q-217 AV Übersicht Fairness UNTERLAGE-Countdown | uebersicht-fairness-unterlage-countdown + CTA `#dok-…` | local |
 | Q-218 UG Hinweise RQ-Countdown-Chip | hinweise-rq-countdown-RQ-01 (US-UG-004) | local |
+| Q-219 UG Hinweise UNTERLAGE-Countdown-Chip | hinweise-unterlagen-countdown (US-UG-003) | local |

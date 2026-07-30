@@ -1308,6 +1308,20 @@ test.describe('UG – Hinweise zur Verfahrenslage', () => {
     await expect(page.getByTestId('hinweise-unterlagen-cta-hint')).toContainText(/Unterlagen/i);
   });
 
+  test('Hinweise: UNTERLAGE-Countdown-Chip am CTA (Q-219)', async ({ page }) => {
+    // US-UG-003: Parität AV Q-216 — Chip + Tiefenlink #dok-…
+    // DOK-03 Frist 2024-12-15 · FIKTIVES_HEUTE_GRUENDUNG 2024-12-07 → noch 8 Tage
+    const wrap = page.getByTestId('hinweise-unterlagen-cta-wrap');
+    await expect(wrap).toBeVisible();
+    await expect(page.getByTestId('hinweise-unterlagen-cta-hint')).toContainText(/Unterlagen/i);
+    const chip = page.getByTestId('hinweise-unterlagen-countdown');
+    await expect(chip).toBeVisible();
+    await expect(chip).toContainText(/noch 8 Tage/i);
+    await page.getByTestId('hinweise-unterlagen-cta').click();
+    await expect(page).toHaveURL(/\/gruendung\/dokumente#dok-DOK-03/);
+    await expect(page.locator('#dok-DOK-03')).toBeVisible();
+  });
+
   test('CTA aus Unterlagen-Signal führt zur Dokumentenkarte', async ({ page }) => {
     await page.getByTestId('hinweise-unterlagen-cta').click();
     await expect(page).toHaveURL(/\/gruendung\/dokumente#dok-DOK-03/);

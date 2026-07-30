@@ -183,9 +183,29 @@ function FairnessSignalCta({
       ? 'status-chip-danger'
       : 'status-chip-warning';
 
+  // Q-219: UNTERLAGE-Countdown-Chip am CTA (Parität AV Q-216)
+  const isUnterlageCta = ziel?.testKey.startsWith('dok-') === true;
+  const naechsteUnterlage = isUnterlageCta
+    ? akte.dokumente
+        .filter(d => d.status === 'ANGEFORDERT' || d.status === 'ABGELEHNT')
+        .filter(d => d.fristDatum && d.frist)
+        .map(d => ({
+          dok: d,
+          resttage: berechneFristTage(d.fristDatum as string, FIKTIVES_HEUTE_GRUENDUNG),
+        }))
+        .sort((a, b) => a.resttage - b.resttage)[0]
+    : undefined;
+  const dokRest = naechsteUnterlage?.resttage ?? null;
+  const dokRestLabel = dokRest !== null ? fristRestLabel(dokRest) : null;
+  const dokKritisch = dokRest !== null && dokRest <= 3;
+  const dokChipClass =
+    dokRest !== null && (dokRest < 0 || dokKritisch)
+      ? 'status-chip-danger'
+      : 'status-chip-warning';
+
   return (
     <div style={ctaWrapStyle(signal.prioritaet)} data-testid={ids.wrap}>
-      {(hintText || rqRestLabel) && (
+      {(hintText || rqRestLabel || dokRestLabel) && (
         <div style={{ flex: 1, minWidth: '12rem' }}>
           {hintText && (
             <p
@@ -203,6 +223,16 @@ function FairnessSignalCta({
             >
               <Icon name="clock" size={13} />
               {rqRestLabel}
+            </span>
+          )}
+          {dokRestLabel && (
+            <span
+              className={`status-chip ${dokChipClass}`}
+              style={{ marginTop: '0.5rem', fontSize: '0.75rem', display: 'inline-flex' }}
+              data-testid="hinweise-unterlagen-countdown"
+            >
+              <Icon name="clock" size={13} />
+              {dokRestLabel}
             </span>
           )}
         </div>
