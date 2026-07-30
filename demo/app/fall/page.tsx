@@ -879,7 +879,8 @@ export default function FallPage() {
       })()}
 
       {/* ─── 5. FAIRNESS-HINWEISE (inline, kein separater Klick nötig)
-          Q-202: BESCHEID-Signale mit Zum-Bescheid-CTA + Verlauf (Parität Hinweise Q-201). */}
+          Q-202: BESCHEID-Signale mit Zum-Bescheid-CTA + Verlauf (Parität Hinweise Q-201).
+          Q-206: Widerspruchsfrist-Chip am BESCHEID_VORLAEUFIG (Parität Hinweise Q-205). */}
       {fairnessSignale.length > 0 && (
         <div className="card">
           <h2 style={{ fontSize: '1rem', marginBottom: '1rem' }}>
@@ -892,6 +893,7 @@ export default function FallPage() {
                 sig.typ === 'BESCHEID_VORLAEUFIG' ||
                 sig.typ === 'BESCHEID_BEGRUENDUNG_ERWEITERBAR';
               const isBegruendung = sig.typ === 'BESCHEID_BEGRUENDUNG_ERWEITERBAR';
+              const isVorlaeufig = sig.typ === 'BESCHEID_VORLAEUFIG';
               const besId = isBescheid
                 ? fall.bescheide.find(b => sig.bezug.includes(b.id))?.id ??
                   fall.bescheide[0]?.id
@@ -900,6 +902,17 @@ export default function FallPage() {
               const verlaufTestId = isBescheid
                 ? `uebersicht-fairness-verlauf-${sig.id}`
                 : `uebersicht-fairness-verlauf-${verlaufZiel?.ereignisId ?? 'none'}`;
+              // Countdown nur am vorläufigen Bescheid (Parität Q-205)
+              const wRest =
+                isVorlaeufig && widerspruchFrist ? widerspruchFrist.resttage : null;
+              const wKritisch = wRest !== null && wRest <= 5;
+              const wBald = wRest !== null && wRest <= 14;
+              const wChipClass =
+                wRest !== null && (wRest < 0 || wKritisch)
+                  ? 'status-chip-danger'
+                  : wBald
+                    ? 'status-chip-warning'
+                    : 'status-chip-primary';
               return (
                 <div
                   key={sig.id}
@@ -914,6 +927,16 @@ export default function FallPage() {
                       <div style={{ marginTop: '0.5rem', fontWeight: 600, fontSize: '0.875rem' }}>
                         → {sig.naechsterSchritt}
                       </div>
+                    )}
+                    {wRest !== null && (
+                      <span
+                        className={`status-chip ${wChipClass}`}
+                        style={{ marginTop: '0.5rem', fontSize: '0.75rem', display: 'inline-flex' }}
+                        data-testid={`uebersicht-fairness-widerspruch-countdown-${sig.id}`}
+                      >
+                        <Icon name="clock" size={13} />
+                        {fristRestLabel(wRest)}
+                      </span>
                     )}
                     {(verlaufZiel || isBescheid) && (
                       <div

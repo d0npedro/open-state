@@ -1,6 +1,6 @@
 # BUILD_STATE.md – Aktueller Projektstand
 
-Zuletzt aktualisiert: nach Q-205 AV Hinweise Widerspruchsfrist-Countdown-Chip (US-AV-006/008)
+Zuletzt aktualisiert: nach Q-206 AV Übersicht Fairness Widerspruchsfrist-Chip (US-AV-006/007)
 
 Dieser Stand beschreibt, was tatsächlich existiert und funktioniert.
 Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
@@ -24,7 +24,7 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | Route | Inhalt | Story-IDs | Status |
 |-------|--------|-----------|--------|
 | `/` | Landing Page | – | ✓ |
-| `/fall` | Fallübersicht, Status, Fairness-Summary inkl. BESCHEID-CTAs Zum Bescheid/Verlauf, Fristen-Countdown offener Unterlagen, Widerspruchsfrist-Kurzblock + Bescheid-Kachel Countdown, Upload-/Termin-/RQ-Quittungen mit Verlauf-Tiefenlinks, Termin-Kachel Status live | US-AV-001–007 | ✓ |
+| `/fall` | Fallübersicht, Status, Fairness-Summary inkl. BESCHEID-CTAs Zum Bescheid/Verlauf + Widerspruch-Countdown-Chip, Fristen-Countdown offener Unterlagen, Widerspruchsfrist-Kurzblock + Bescheid-Kachel Countdown, Upload-/Termin-/RQ-Quittungen mit Verlauf-Tiefenlinks, Termin-Kachel Status live | US-AV-001–007 | ✓ |
 | `/fall/dokumente` | Dokumentenanforderungen + Frist-Resttage + lokale Upload-Quittung pro Karte nach Session-Markierung + Verlauf-Tiefenlink `#ere-E-DEMO-DOK-…` | US-AV-003, US-AV-007 | ✓ |
 | `/fall/rueckfragen` | Rückfragen mit Fairness-Hinweis; Antwort-Quittung + Verlauf-Tiefenlink Session-Antwort | US-AV-004 | ✓ |
 | `/fall/termine` | Termine; session-lokale Bestätigung mit Quittung + Verlauf-Tiefenlink `#ere-E-DEMO-TERM-…`; Nav-Badge nur unbestätigt/bald fällig | US-AV-005, US-AV-007 | ✓ |
@@ -158,6 +158,7 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | AV Widerspruchsfrist-Countdown | `/fall/bescheide` + `widerspruchsfristAblaufDatum` + Fairness-Text | ✓ Resttage ggü. FIKTIVES_HEUTE (22 Tage Mock); ISO-Ablauf in Typen (Q-203, US-AV-006 AC3) |
 | AV Übersicht Widerspruchsfrist | `/fall` Kurzblock + Kachel `kachel-bescheid` | ✓ Countdown 22 Tage + CTA `#bes-BSC-001` (Q-204, US-AV-006 AC3, Parität Q-086) |
 | AV Hinweise Widerspruchsfrist-Chip | `/fall/hinweise` BESCHEID_VORLAEUFIG-CTA | ✓ Resttage-Chip + Hinweistext mit Ablaufdatum (Q-205, US-AV-006/008, Parität Q-203/Q-204) |
+| AV Übersicht Fairness Widerspruch-Chip | `/fall` Fairness BESCHEID_VORLAEUFIG | ✓ Countdown-Chip 22 Tage im Fairness-Block (Q-206, US-AV-006/007, Parität Q-205) |
 | AV Session-Antwort Verlauf | `/fall/rueckfragen` + `/fall/verlauf` | ✓ RQ-Quittung Tiefenlink `#ere-E-DEMO-RQ-…` + Badge „Ihre Antwort“ / Session-Upload-Badge (Q-192, US-AV-007/004) |
 | AV Dokumente Upload-Quittung Verlauf | `/fall/dokumente` + `demoDokUploadEreignisId` + Verlauf | ✓ Sekundär-CTA „Im Verlauf ansehen“ → `#ere-E-DEMO-DOK-…`; Session-Upload-Badge (Q-193, US-AV-003/007) |
 | AV Übersicht Upload-Quittung Verlauf | `/fall` Upload-Quittung + `#dok-…` auf Dokumentenkarten | ✓ Pro Session-Upload „Im Verlauf ansehen“; nächste Unterlage → `#dok-…` (Q-194, US-AV-001/003/007) |

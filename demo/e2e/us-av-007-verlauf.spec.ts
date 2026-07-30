@@ -276,6 +276,21 @@ test.describe('US-AV-007/008 – Fairness-Tiefenlink zum Verlauf', () => {
     await expect(card).toContainText(/zugestellt|Bescheid/i);
   });
 
+  test('Übersicht BESCHEID: Widerspruchsfrist-Countdown-Chip (Q-206)', async ({ page }) => {
+    // US-AV-006 AC3: Parität Hinweise Q-205 — Chip im Fairness-Block (nicht nur Kurzblock Q-204)
+    // Ablauf 2024-12-16 · FIKTIVES_HEUTE 2024-11-24 → noch 22 Tage
+    await page.goto('/fall');
+    const block = page.getByTestId('uebersicht-fairness-FH-BESCHEID-VORLAEUFIG');
+    await expect(block).toBeVisible();
+    const chip = page.getByTestId(
+      'uebersicht-fairness-widerspruch-countdown-FH-BESCHEID-VORLAEUFIG'
+    );
+    await expect(chip).toBeVisible();
+    await expect(chip).toContainText(/noch 22 Tage/i);
+    // Fairness-Text enthält Resttage aus Regelwerk (Q-203)
+    await expect(block).toContainText(/noch 22 Tage/i);
+  });
+
   test('Übersicht BESCHEID: Zum Bescheid führt zu #bes-BSC-001', async ({ page }) => {
     await page.goto('/fall');
     await page.getByTestId('uebersicht-fairness-bes-cta-FH-BESCHEID-VORLAEUFIG').click();
