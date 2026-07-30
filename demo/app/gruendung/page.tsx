@@ -895,6 +895,22 @@ export default function GruendungPage() {
             {fairnessSignale.map(sig => {
               const ziel = fairnessSignalZiel(sig, akte);
               const verlaufZiel = fairnessSignalVerlaufZiel(sig, akte);
+              // Q-220: RQ-Countdown-Chip (Parität Hinweise Q-218 / AV Übersicht Q-215)
+              const rqId =
+                ziel?.testKey.startsWith('rq-') ? ziel.testKey.slice(3) : undefined;
+              const rq =
+                rqId != null
+                  ? akte.rueckfragen.find(r => r.id === rqId && !r.beantwortet)
+                  : undefined;
+              const rqRest =
+                rq != null
+                  ? berechneFristTage(rq.fristDatum, FIKTIVES_HEUTE_GRUENDUNG)
+                  : null;
+              const rqKritisch = rqRest !== null && rqRest <= 3;
+              const rqChipClass =
+                rqRest !== null && (rqRest < 0 || rqKritisch)
+                  ? 'status-chip-danger'
+                  : 'status-chip-warning';
               return (
                 <div
                   key={sig.id}
@@ -910,6 +926,16 @@ export default function GruendungPage() {
                       <div style={{ marginTop: '0.5rem', fontWeight: 600, fontSize: '0.875rem' }}>
                         → {sig.naechsterSchritt}
                       </div>
+                    )}
+                    {rqRest !== null && (
+                      <span
+                        className={`status-chip ${rqChipClass}`}
+                        style={{ marginTop: '0.5rem', fontSize: '0.75rem', display: 'inline-flex' }}
+                        data-testid={`uebersicht-fairness-rq-countdown-${sig.id}`}
+                      >
+                        <Icon name="clock" size={13} />
+                        {fristRestLabel(rqRest)}
+                      </span>
                     )}
                     {(ziel || verlaufZiel) && (
                       <div style={{ marginTop: '0.65rem' }}>

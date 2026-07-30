@@ -498,6 +498,23 @@ test.describe('UG – Übersicht', () => {
     await expect(betriebsHint).toContainText(/offene Rückfrage des Finanzamts klären/i);
   });
 
+  test('Übersicht Fairness: RQ-Countdown-Chip + CTA (Q-220)', async ({ page }) => {
+    // US-UG-004: Parität Hinweise Q-218 + AV Übersicht Q-215
+    // RQ-01 Frist 2024-12-10 · FIKTIVES_HEUTE_GRUENDUNG 2024-12-07 → noch 3 Tage
+    await page.goto('/gruendung');
+    const block = page.getByTestId('uebersicht-fairness-UG-RQ-RQ-01-FRIST');
+    await expect(block).toBeVisible();
+    await expect(block).toContainText(/noch 3 Tage/i);
+    const chip = page.getByTestId('uebersicht-fairness-rq-countdown-UG-RQ-RQ-01-FRIST');
+    await expect(chip).toBeVisible();
+    await expect(chip).toContainText(/noch 3 Tage/i);
+    const rqCta = page.getByTestId('uebersicht-fairness-cta-rq-RQ-01');
+    await expect(rqCta).toHaveAttribute('href', '/gruendung/rueckfragen#rq-RQ-01');
+    await rqCta.click();
+    await expect(page).toHaveURL(/\/gruendung\/rueckfragen#rq-RQ-01/);
+    await expect(page.locator('#rq-RQ-01')).toBeVisible();
+  });
+
   test('Fairness-CTA Rückfrage führt zur Rückfragen-Karte', async ({ page }) => {
     await page.getByTestId('uebersicht-fairness-cta-rq-RQ-01').click();
     await expect(page).toHaveURL(/\/gruendung\/rueckfragen#rq-RQ-01/);
