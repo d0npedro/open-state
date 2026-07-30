@@ -306,6 +306,42 @@ test.describe('US-AV-003 – Unterlagen nachreichen', () => {
     await expect(page.getByTestId('hinweise-rq-cta')).toHaveCount(0);
   });
 
+  test('Hinweise: nach Teil-Upload CTA-Tiefenlink auf nächste offene Unterlage (Q-222)', async ({
+    page,
+  }) => {
+    // US-AV-003/008: CTA #dok-… folgt live dem nächsten offenen Dokument (Parität Übersicht Q-194)
+    // Initial DOK-003+DOK-004 → nach Upload DOK-003 bleibt DOK-004 (SG1)
+    const { goFallTab } = await import('./helpers/sessionNav');
+
+    await goFallTab(page, 'Fragen', /\/fall\/rueckfragen/);
+    await page.getByRole('button', { name: /Jetzt beantworten|Rückfrage beantworten/i }).click();
+    await page.getByTestId('rq-antwort-absenden').click();
+
+    await goFallTab(page, 'Unterlagen', /\/fall\/dokumente/);
+    // Erstes offenes = DOK-003 (Einkommensteuerbescheid)
+    await page.getByRole('button', { name: /Als hochgeladen markieren/i }).first().click();
+    await expect(page.getByTestId('dok-upload-quittung-DOK-003')).toBeVisible();
+
+    await page.getByTestId('dok-hinweise-link').click();
+    await expect(page).toHaveURL(/\/fall\/hinweise/);
+
+    const wrap = page.getByTestId('hinweise-unterlagen-cta-wrap');
+    await expect(wrap).toBeVisible();
+    await expect(wrap).toHaveAttribute('data-next-dok-id', 'DOK-004');
+    await expect(page.getByTestId('hinweise-unterlagen-cta-hint')).toContainText(
+      /Noch 1 Unterlage|Formular SG1/i
+    );
+    await expect(page.getByTestId('hinweise-unterlagen-countdown-FH-UNTERLAGEN-FEHLEND')).toContainText(
+      /noch 9 Tage/i
+    );
+    const cta = page.getByTestId('hinweise-unterlagen-cta');
+    await expect(cta).toHaveAttribute('href', '/fall/dokumente#dok-DOK-004');
+    await cta.click();
+    await expect(page).toHaveURL(/\/fall\/dokumente#dok-DOK-004/);
+    await expect(page.locator('#dok-DOK-004')).toBeVisible();
+    await expect(page.getByTestId('dok-karte-DOK-004')).toContainText(/Formular SG1|Wird noch benötigt/i);
+  });
+
   test('Hinweise: nach allen Session-Uploads entfällt UNTERLAGE-Signal', async ({ page }) => {
     const { goFallTab } = await import('./helpers/sessionNav');
 

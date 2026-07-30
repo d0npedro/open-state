@@ -148,7 +148,7 @@ function SignalCta({ signal, fall }: { signal: FairnessSignal; fall: Fall }) {
     );
   }
 
-  // Fehlende Unterlagen mit Frist (Q-216: Countdown-Chip Parität RQ Q-214)
+  // Fehlende Unterlagen mit Frist (Q-216 Countdown; Q-222: Tiefenlink live auf nächste offene Karte)
   if (signal.typ === 'UNTERLAGE_FEHLT_BLOCKIERT') {
     const offeneDok = fall.dokumente.filter(
       d => d.status === 'ANGEFORDERT' || d.status === 'ABGELEHNT'
@@ -159,9 +159,16 @@ function SignalCta({ signal, fall }: { signal: FairnessSignal; fall: Fall }) {
         dok: d,
         resttage: berechneFristTage(d.fristDatum as string, FIKTIVES_HEUTE),
       }))
-      .sort((a, b) => a.resttage - b.resttage);
-    const naechste = dokMitFrist[0];
-    const resttage = naechste?.resttage ?? null;
+      .sort(
+        (a, b) =>
+          a.resttage - b.resttage || a.dok.id.localeCompare(b.dok.id, 'de')
+      );
+    // Nächste offene Karte: zuerst nach Resttagen, sonst erste offene (session-sensitiv)
+    const naechste =
+      dokMitFrist[0] ??
+      (offeneDok[0] ? { dok: offeneDok[0], resttage: null as number | null } : undefined);
+    const resttage =
+      naechste && typeof naechste.resttage === 'number' ? naechste.resttage : null;
     const restLabel = resttage !== null ? fristRestLabel(resttage) : null;
     const kritisch = resttage !== null && resttage <= 5;
     const chipClass =
@@ -171,19 +178,30 @@ function SignalCta({ signal, fall }: { signal: FairnessSignal; fall: Fall }) {
     const dokHref = naechste
       ? `/fall/dokumente#dok-${naechste.dok.id}`
       : '/fall/dokumente';
+    const offeneAnzahl = offeneDok.length;
+    const hintText =
+      restLabel && naechste
+        ? offeneAnzahl === 1
+          ? `Noch 1 Unterlage („${naechste.dok.bezeichnung}") — einreichen bis ${naechste.dok.frist} (${restLabel}).`
+          : `${offeneAnzahl} Unterlagen offen — nächste: „${naechste.dok.bezeichnung}" bis ${naechste.dok.frist} (${restLabel}). Unterlagen im Bereich „Unterlagen“ hochladen.`
+        : naechste && offeneAnzahl === 1
+          ? `Noch 1 Unterlage („${naechste.dok.bezeichnung}"). Unterlagen im Bereich „Unterlagen“ hochladen.`
+          : signal.titel.includes('Frist')
+            ? `${signal.titel}. Unterlagen im Bereich „Unterlagen“ hochladen.`
+            : 'Ausstehende Unterlagen im Bereich „Unterlagen“ hochladen.';
 
     return (
-      <div style={ctaWrapStyle(signal.prioritaet)} data-testid="hinweise-unterlagen-cta-wrap">
+      <div
+        style={ctaWrapStyle(signal.prioritaet)}
+        data-testid="hinweise-unterlagen-cta-wrap"
+        data-next-dok-id={naechste?.dok.id}
+      >
         <div style={{ flex: 1, minWidth: '12rem' }}>
           <p
             style={{ margin: 0, fontSize: '0.875rem', lineHeight: 1.45 }}
             data-testid="hinweise-unterlagen-cta-hint"
           >
-            {restLabel && naechste
-              ? `Offene Unterlagen — einreichen bis ${naechste.dok.frist} (${restLabel}). Unterlagen im Bereich „Unterlagen“ hochladen.`
-              : signal.titel.includes('Frist')
-                ? `${signal.titel}. Unterlagen im Bereich „Unterlagen“ hochladen.`
-                : 'Ausstehende Unterlagen im Bereich „Unterlagen“ hochladen.'}
+            {hintText}
           </p>
           {restLabel && resttage !== null && (
             <span
@@ -210,7 +228,11 @@ function SignalCta({ signal, fall }: { signal: FairnessSignal; fall: Fall }) {
             className="btn btn-primary"
             style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', flexShrink: 0 }}
             data-testid="hinweise-unterlagen-cta"
-            aria-label="Zu den ausstehenden Unterlagen"
+            aria-label={
+              naechste
+                ? `Zur Unterlage ${naechste.dok.bezeichnung}`
+                : 'Zu den ausstehenden Unterlagen'
+            }
           >
             <Icon name="upload" size={15} />
             Unterlagen hochladen
