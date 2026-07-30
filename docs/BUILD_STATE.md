@@ -1,6 +1,6 @@
 # BUILD_STATE.md – Aktueller Projektstand
 
-Zuletzt aktualisiert: nach Q-202 AV Übersicht BESCHEID-Fairness-CTAs (US-AV-006/007, Parität Q-201)
+Zuletzt aktualisiert: nach Q-203 AV Widerspruchsfrist-Countdown (US-AV-006 AC3)
 
 Dieser Stand beschreibt, was tatsächlich existiert und funktioniert.
 Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
@@ -28,7 +28,7 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | `/fall/dokumente` | Dokumentenanforderungen + Frist-Resttage + lokale Upload-Quittung pro Karte nach Session-Markierung + Verlauf-Tiefenlink `#ere-E-DEMO-DOK-…` | US-AV-003, US-AV-007 | ✓ |
 | `/fall/rueckfragen` | Rückfragen mit Fairness-Hinweis; Antwort-Quittung + Verlauf-Tiefenlink Session-Antwort | US-AV-004 | ✓ |
 | `/fall/termine` | Termine; session-lokale Bestätigung mit Quittung + Verlauf-Tiefenlink `#ere-E-DEMO-TERM-…`; Nav-Badge nur unbestätigt/bald fällig | US-AV-005, US-AV-007 | ✓ |
-| `/fall/bescheide` | Bescheide mit Fairness-Hinweisen + CTAs „Zum Bescheid“ `#bes-…` + „Im Verlauf ansehen“ `#ere-E-007`; Karten-Anker + Zustellungs-Tiefenlink | US-AV-006, US-AV-007 | ✓ |
+| `/fall/bescheide` | Bescheide mit Fairness-Hinweisen + CTAs „Zum Bescheid“ `#bes-…` + „Im Verlauf ansehen“ `#ere-E-007`; Widerspruchsfrist-Countdown ggü. FIKTIVES_HEUTE; Karten-Anker + Zustellungs-Tiefenlink | US-AV-006, US-AV-007 | ✓ |
 | `/fall/verlauf` | Timeline mit Fairness-Hinweis; Antwort-Quittungsblock; Upload-Blöcke mit Dokumentbezeichnung; Anker `#ere-…` + Hash-Hervorhebung; Session-Antwort/Upload-Badge | US-AV-007 | ✓ |
 | `/fall/hinweise` | Vollständige Fairness-Hinweisseite; UNTERLAGE- und RQ-Signal live inkl. Fristhinweis + CTA; BESCHEID-CTAs Zum Bescheid + Verlauf `#ere-E-007`; Verlauf-Sekundärlink; Session-Antwort entfallen Signale | US-AV-006, US-AV-008 | ✓ |
 | `/stories` | Story Coverage Dashboard | – | ✓ |
@@ -155,6 +155,7 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | AV Bescheide Fairness Verlauf + Anker | `/fall/bescheide` + `fairnessSignalVerlaufZiel` BESCHEID_* | ✓ CTAs Zum Bescheid `#bes-…` + Verlauf E-007; Karten-Zustellungs-Link (Q-200, US-AV-006/007) |
 | AV Hinweise BESCHEID-CTAs | `/fall/hinweise` SignalCta BESCHEID_* | ✓ Zum Bescheid `#bes-…` + Verlauf E-007; Begründung zusätzlich Unterlagen (Q-201, US-AV-006/008) |
 | AV Übersicht BESCHEID-CTAs | `/fall` Fairness-Block BESCHEID_* | ✓ Zum Bescheid `#bes-…` + Verlauf E-007; Begründung + Unterlagen (Q-202, US-AV-006/007) |
+| AV Widerspruchsfrist-Countdown | `/fall/bescheide` + `widerspruchsfristAblaufDatum` + Fairness-Text | ✓ Resttage ggü. FIKTIVES_HEUTE (22 Tage Mock); ISO-Ablauf in Typen (Q-203, US-AV-006 AC3) |
 | AV Session-Antwort Verlauf | `/fall/rueckfragen` + `/fall/verlauf` | ✓ RQ-Quittung Tiefenlink `#ere-E-DEMO-RQ-…` + Badge „Ihre Antwort“ / Session-Upload-Badge (Q-192, US-AV-007/004) |
 | AV Dokumente Upload-Quittung Verlauf | `/fall/dokumente` + `demoDokUploadEreignisId` + Verlauf | ✓ Sekundär-CTA „Im Verlauf ansehen“ → `#ere-E-DEMO-DOK-…`; Session-Upload-Badge (Q-193, US-AV-003/007) |
 | AV Übersicht Upload-Quittung Verlauf | `/fall` Upload-Quittung + `#dok-…` auf Dokumentenkarten | ✓ Pro Session-Upload „Im Verlauf ansehen“; nächste Unterlage → `#dok-…` (Q-194, US-AV-001/003/007) |

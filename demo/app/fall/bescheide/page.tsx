@@ -9,9 +9,18 @@ import Link from 'next/link';
 import { useDemoState } from '@/context/DemoStateContext';
 import {
   berechneFairnessSignale,
+  berechneFristTage,
+  FIKTIVES_HEUTE,
   fairnessSignalVerlaufZiel,
 } from '@/lib/fairness/rules';
 import { Icon } from '@/components/Icon';
+
+/** Countdown-Label analog Dokumente/RQ (Demo-Stichtag FIKTIVES_HEUTE). */
+function fristRestLabel(tage: number): string {
+  if (tage < 0) return `${Math.abs(tage)} Tage überschritten`;
+  if (tage === 0) return 'heute fällig';
+  return `noch ${tage} Tag${tage === 1 ? '' : 'e'}`;
+}
 
 export default function BescheidePage() {
   const { fall } = useDemoState();
@@ -215,22 +224,69 @@ export default function BescheidePage() {
 
           {/* ─── Widerspruchsfrist ────────────────────────────────────
               UX-Grund: Fristversäumnis ist irreversibel → muss sehr
-              prominent sein. Orange-Box mit Countdown-Hinweis.        */}
-          <div style={{
-            background: 'var(--color-warning-light)',
-            border: '2px solid #fcd34d',
-            borderRadius: 'var(--radius-lg)',
-            padding: '1.125rem 1.375rem',
-          }}>
+              prominent sein. Orange-Box + berechneter Countdown (Q-203). */}
+          {(() => {
+            const resttage = b.widerspruchsfristAblaufDatum
+              ? berechneFristTage(b.widerspruchsfristAblaufDatum, FIKTIVES_HEUTE)
+              : null;
+            // ≤14 Tage: erhöhte Aufmerksamkeit; ≤5 Tage: kritisch (analog Dokumente)
+            const kritisch = resttage !== null && resttage <= 5;
+            const chipClass =
+              resttage !== null && resttage < 0
+                ? 'status-chip-danger'
+                : kritisch
+                  ? 'status-chip-danger'
+                  : resttage !== null && resttage <= 14
+                    ? 'status-chip-warning'
+                    : 'status-chip-primary';
+            return (
+          <div
+            style={{
+              background: 'var(--color-warning-light)',
+              border: '2px solid #fcd34d',
+              borderRadius: 'var(--radius-lg)',
+              padding: '1.125rem 1.375rem',
+            }}
+            data-testid={`bescheid-widerspruch-${b.id}`}
+          >
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.75rem' }}>
               <Icon name="alert" size={18} style={{ color: 'var(--color-warning)', flexShrink: 0 }} />
               <strong style={{ color: 'var(--color-warning)' }}>Widerspruchsfrist beachten</strong>
             </div>
-            <p style={{ fontSize: '0.925rem', color: 'var(--color-text)', marginBottom: '1rem', lineHeight: 1.55 }}>
+            <p style={{ fontSize: '0.925rem', color: 'var(--color-text)', marginBottom: '0.75rem', lineHeight: 1.55 }}>
               Sie haben das Recht, Widerspruch einzulegen — bis zum{' '}
-              <strong>{b.widerspruchsfristAblauf}</strong>{' '}
+              <strong data-testid={`bescheid-widerspruch-datum-${b.id}`}>{b.widerspruchsfristAblauf}</strong>
+              {' '}
               ({b.widerspruchsfristTage} Monat nach Zustellung).
             </p>
+            {resttage !== null && (
+              <div
+                style={{
+                  display: 'flex',
+                  flexWrap: 'wrap',
+                  alignItems: 'center',
+                  gap: '0.5rem 1rem',
+                  marginBottom: '1rem',
+                  fontWeight: 600,
+                  fontSize: '0.875rem',
+                  color: kritisch || resttage < 0 ? 'var(--color-danger)' : 'var(--color-warning)',
+                }}
+                data-testid={`bescheid-widerspruch-countdown-zeile-${b.id}`}
+              >
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <Icon name="calendar" size={15} />
+                  Fristende: {b.widerspruchsfristAblauf}
+                </span>
+                <span
+                  className={`status-chip ${chipClass}`}
+                  style={{ fontSize: '0.75rem' }}
+                  data-testid={`bescheid-widerspruch-countdown-${b.id}`}
+                >
+                  <Icon name="clock" size={13} />
+                  {fristRestLabel(resttage)}
+                </span>
+              </div>
+            )}
             <p style={{ fontSize: '0.875rem', color: 'var(--color-text-muted)', marginBottom: '1rem' }}>
               Wenn Sie mit der Entscheidung nicht einverstanden sind, können Sie schriftlich Widerspruch einlegen.
               Wir empfehlen, sich dafür beraten zu lassen.
@@ -244,6 +300,8 @@ export default function BescheidePage() {
               Widerspruch einlegen
             </button>
           </div>
+            );
+          })()}
 
           {/* Audit: Zustellung im Verlauf nachvollziehbar (Q-200) */}
           <div style={{ marginTop: '1rem' }}>

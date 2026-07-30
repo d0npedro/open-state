@@ -57,8 +57,12 @@ export interface Bescheid {
   entscheidung: string;
   begruendung: string;
   rechtsgrundlage: string;
+  /** Gesetzliche Widerspruchsfrist in Monaten (i. d. R. 1) — Anzeige-Hinweis, nicht Countdown */
   widerspruchsfristTage: number;
+  /** Anzeige-Datum Ablauf (z. B. „16. Dezember 2024“) */
   widerspruchsfristAblauf: string;
+  /** ISO-Ablaufdatum (YYYY-MM-DD) für Countdown ggü. FIKTIVES_HEUTE (US-AV-006 AC3) */
+  widerspruchsfristAblaufDatum: string;
 }
 
 export interface TimelineEreignis {

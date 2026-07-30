@@ -85,7 +85,9 @@ export const demoFall: Fall = {
       begruendung: 'Anwartschaftszeit vorläufig bestätigt. Bemessungsgrundlage noch offen (fehlende Unterlagen).',
       rechtsgrundlage: '§ 137 Abs. 1 SGB III, § 164 SGB III (Vorbehalt der Nachprüfung)',
       widerspruchsfristTage: 1,
-      widerspruchsfristAblauf: '16. Dezember 2024'
+      widerspruchsfristAblauf: '16. Dezember 2024',
+      // ISO für Countdown: Zustellung 15.11. + 1 Monat → 16.12.; FIKTIVES_HEUTE 24.11. → 22 Resttage
+      widerspruchsfristAblaufDatum: '2024-12-16',
     }
   ],
   timeline: [

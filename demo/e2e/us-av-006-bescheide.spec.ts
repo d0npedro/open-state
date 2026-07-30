@@ -66,10 +66,23 @@ test.describe('US-AV-006 – Bescheid verstehen', () => {
 
   test('AC3: Widerspruchsfrist-Abschnitt ist vorhanden und prominent', async ({ page }) => {
     await expect(page.getByText('Widerspruchsfrist beachten')).toBeVisible();
+    await expect(page.getByTestId('bescheid-widerspruch-BSC-001')).toBeVisible();
   });
 
   test('AC3: Widerspruchsfrist als konkretes Datum angezeigt', async ({ page }) => {
-    await expect(page.getByText('16. Dezember 2024').first()).toBeVisible();
+    await expect(page.getByTestId('bescheid-widerspruch-datum-BSC-001')).toContainText(
+      '16. Dezember 2024'
+    );
+  });
+
+  test('AC3: Widerspruchsfrist-Countdown ggü. FIKTIVES_HEUTE (Q-203)', async ({ page }) => {
+    // Ablauf 2024-12-16 · FIKTIVES_HEUTE 2024-11-24 → noch 22 Tage (Parität RQ/Unterlagen)
+    const countdown = page.getByTestId('bescheid-widerspruch-countdown-BSC-001');
+    await expect(countdown).toBeVisible();
+    await expect(countdown).toContainText(/noch 22 Tage/i);
+    await expect(page.getByTestId('bescheid-widerspruch-countdown-zeile-BSC-001')).toContainText(
+      /Fristende/i
+    );
   });
 
   test('AC5: Widerspruch-Button ist sichtbar', async ({ page }) => {

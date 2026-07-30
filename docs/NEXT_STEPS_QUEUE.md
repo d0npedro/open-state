@@ -237,6 +237,7 @@ Story-Dokumentation ist kein Pflicht-Vorläufer für Mock-Daten und Typen.
 | Q-200 | AV Bescheide: Fairness-CTAs mit Verlauf-Tiefenlink + Bescheid-Anker `#bes-…` (US-AV-006/007) | DEMO | S | Q-191 | DONE |
 | Q-201 | AV Hinweise: BESCHEID-Signale mit CTA Zum Bescheid + Verlauf-Tiefenlink (US-AV-006/007/008, Parität Q-200) | DEMO | S | Q-200 | DONE |
 | Q-202 | AV Übersicht: BESCHEID-Fairness-CTAs Zum Bescheid + Verlauf (US-AV-006/007, Parität Hinweise Q-201) | DEMO | S | Q-201 | DONE |
+| Q-203 | AV Bescheide: Widerspruchsfrist-Countdown ggü. FIKTIVES_HEUTE + ISO-Ablaufdatum (US-AV-006 AC3, Parität RQ/Unterlagen) | DEMO | S | Q-200 | DONE |
 
 ---
 
@@ -444,3 +445,4 @@ Diese Punkte wurden in früheren Iterationen abgeschlossen und sind produktionsr
 | Q-200 AV Bescheide Fairness Verlauf + Anker | Bescheide → `#ere-E-007` + `#bes-BSC-…` (US-AV-006/007) | local |
 | Q-201 AV Hinweise BESCHEID-CTAs | Hinweise → `#bes-…` + `#ere-E-007` + Unterlagen bei Begründung (US-AV-006/008) | local |
 | Q-202 AV Übersicht BESCHEID-CTAs | Übersicht Fairness → `#bes-…` + `#ere-E-007` + Unterlagen (US-AV-006/007) | local |
+| Q-203 AV Widerspruchsfrist-Countdown | Bescheid ISO-Ablauf + Resttage ggü. FIKTIVES_HEUTE (US-AV-006 AC3) | local |

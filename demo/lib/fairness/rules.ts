@@ -216,6 +216,19 @@ export function berechneFairnessSignale(fall: Fall): FairnessSignal[] {
   );
   if (vorlaeufigeBesch.length > 0) {
     const b = vorlaeufigeBesch[0];
+    // Countdown ggü. FIKTIVES_HEUTE (US-AV-006 AC3 / Q-203) – analog RQ/Unterlagen
+    const widerspruchRest =
+      b.widerspruchsfristAblaufDatum
+        ? berechneFristTage(b.widerspruchsfristAblaufDatum, FIKTIVES_HEUTE)
+        : null;
+    const widerspruchRestLabel =
+      widerspruchRest === null
+        ? null
+        : widerspruchRest < 0
+          ? `${Math.abs(widerspruchRest)} Tage überschritten`
+          : widerspruchRest === 0
+            ? 'heute fällig'
+            : `noch ${widerspruchRest} Tag${widerspruchRest === 1 ? '' : 'e'}`;
     signale.push({
       id: 'FH-BESCHEID-VORLAEUFIG',
       typ: 'BESCHEID_VORLAEUFIG',
@@ -227,7 +240,9 @@ export function berechneFairnessSignale(fall: Fall): FairnessSignal[] {
         'Der vorläufige Bescheid kann nachträglich durch einen endgültigen Bescheid ersetzt werden. ' +
         'Die Widerspruchsfrist läuft bereits ab Zustellung des vorläufigen Bescheids.',
       naechsterSchritt:
-        `Widerspruchsfrist im Blick behalten (Ablauf: ${b.widerspruchsfristAblauf}). ` +
+        `Widerspruchsfrist im Blick behalten (Ablauf: ${b.widerspruchsfristAblauf}` +
+        (widerspruchRestLabel ? `, ${widerspruchRestLabel}` : '') +
+        '). ' +
         'Alle angeforderten Unterlagen einreichen, damit die Bemessungsgrundlage abgeschlossen werden kann.',
       bezug: `Bescheid ${b.id}, Rechtsgrundlage: ${b.rechtsgrundlage}`,
       prioritaet: 'HINWEIS',
