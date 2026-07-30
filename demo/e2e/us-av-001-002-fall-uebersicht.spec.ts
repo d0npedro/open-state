@@ -155,6 +155,26 @@ test.describe('US-AV-002 – Status einsehen', () => {
     await expect(page.getByRole('link', { name: /Unterlagen/i }).first()).toContainText(/noch 9 Tage/i);
   });
 
+  test('Widerspruchsfrist-Countdown auf Übersicht (Q-204)', async ({ page }) => {
+    // Ablauf 2024-12-16 · FIKTIVES_HEUTE 2024-11-24 → noch 22 Tage (Parität Bescheid Q-203)
+    const block = page.getByTestId('widerspruch-frist-uebersicht');
+    await expect(block).toBeVisible();
+    await expect(block.getByRole('heading', { name: /Widerspruchsfrist/i })).toBeVisible();
+    await expect(page.getByTestId('widerspruch-frist-BSC-001')).toContainText(/16\. Dezember 2024/i);
+    await expect(page.getByTestId('widerspruch-frist-countdown-BSC-001')).toContainText(/noch 22 Tage/i);
+
+    const kachel = page.getByTestId('kachel-bescheid');
+    await expect(kachel).toBeVisible();
+    await expect(kachel).toHaveAttribute('href', '/fall/bescheide');
+    await expect(page.getByTestId('kachel-bescheid-countdown')).toContainText(/noch 22 Tage/i);
+
+    const cta = page.getByTestId('widerspruch-frist-bes-cta');
+    await expect(cta).toHaveAttribute('href', '/fall/bescheide#bes-BSC-001');
+    await cta.click();
+    await expect(page).toHaveURL(/\/fall\/bescheide#bes-BSC-001/);
+    await expect(page.locator('#bes-BSC-001')).toBeVisible();
+  });
+
   test('Tab-Badge Fragen entfällt nach Beantworten (Client-Navigation)', async ({ page }) => {
     await page.locator('.tab-nav-item').filter({ hasText: 'Fragen' }).click();
     await expect(page).toHaveURL(/\/fall\/rueckfragen/);

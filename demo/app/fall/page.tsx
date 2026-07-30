@@ -127,6 +127,17 @@ export default function FallPage() {
       : naechsterTermin?.status === 'AUSSTEHEND'
         ? 'Ausstehend'
         : null;
+  /** Widerspruchsfrist des neuesten Bescheids (Q-204 / US-AV-006 AC3, Parität Q-203). */
+  const widerspruchFrist = (() => {
+    const b = fall.bescheide[0];
+    if (!b?.widerspruchsfristAblaufDatum) return null;
+    return {
+      id: b.id,
+      typ: b.typ,
+      ablauf: b.widerspruchsfristAblauf,
+      resttage: berechneFristTage(b.widerspruchsfristAblaufDatum, FIKTIVES_HEUTE),
+    };
+  })();
   const wartetAufBehoerde = !hatOffeneAufgaben && fall.status === 'IN_PRUEFUNG';
 
   return (
@@ -625,6 +636,23 @@ export default function FallPage() {
             statusLabel: terminStatusLabel,
           },
           {
+            label: 'Bescheid',
+            icon: 'scroll' as const,
+            val: widerspruchFrist
+              ? `${fristRestLabel(widerspruchFrist.resttage)} · Widerspruch`
+              : fall.bescheide.length > 0
+                ? 'Zugestellt'
+                : 'Noch keiner',
+            // Countdown-Hinweis bei laufender Frist (nicht erst auf /bescheide)
+            urgent: widerspruchFrist !== null && widerspruchFrist.resttage <= 14,
+            href: '/fall/bescheide',
+            testId: 'kachel-bescheid' as string | undefined,
+            statusTestId: 'kachel-bescheid-countdown' as string | undefined,
+            statusLabel: widerspruchFrist
+              ? fristRestLabel(widerspruchFrist.resttage)
+              : null,
+          },
+          {
             label: 'Letzte Aktivität',
             icon: 'clock' as const,
             val: fall.letzteAktivitaet,
@@ -756,6 +784,99 @@ export default function FallPage() {
           </Link>
         </div>
       )}
+
+      {/* ─── 4c. WIDERSPRUCHSFRIST (Countdown, Parität Bescheid Q-203) ─
+          UX-Grund: Fristversäumnis ist irreversibel — sichtbar auf der
+          Übersicht, nicht erst unter „Bescheid“. US-AV-006 AC3 / Q-204. */}
+      {widerspruchFrist && (() => {
+        const kritisch = widerspruchFrist.resttage <= 5;
+        const bald = widerspruchFrist.resttage <= 14;
+        const chipClass =
+          widerspruchFrist.resttage < 0 || kritisch
+            ? 'status-chip-danger'
+            : bald
+              ? 'status-chip-warning'
+              : 'status-chip-primary';
+        const farbe =
+          widerspruchFrist.resttage < 0 || kritisch
+            ? 'var(--color-danger)'
+            : bald
+              ? 'var(--color-warning)'
+              : 'var(--color-primary)';
+        return (
+          <div className="card" data-testid="widerspruch-frist-uebersicht">
+            <h2 style={{ fontSize: '1rem', marginBottom: '0.75rem' }}>
+              Widerspruchsfrist
+            </h2>
+            <p style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)', margin: '0 0 1rem' }}>
+              Berechnet gegen Demo-Stichtag {FIKTIVES_HEUTE.split('-').reverse().join('.')}.
+              {' '}Recht auf Widerspruch bis zum angegebenen Datum.
+            </p>
+            <div
+              data-testid={`widerspruch-frist-${widerspruchFrist.id}`}
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'flex-start',
+                gap: '1rem',
+                flexWrap: 'wrap',
+                padding: '0.875rem 1rem',
+                borderRadius: 'var(--radius)',
+                background:
+                  kritisch || widerspruchFrist.resttage < 0
+                    ? 'var(--color-danger-light)'
+                    : bald
+                      ? 'var(--color-warning-light)'
+                      : 'var(--color-primary-light, var(--color-neutral-light))',
+                borderLeft: `4px solid ${farbe}`,
+              }}
+            >
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div style={{ fontWeight: 700, fontSize: '0.95rem', color: 'var(--color-text)' }}>
+                  {widerspruchFrist.typ}
+                </div>
+                <div
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.375rem',
+                    marginTop: '0.35rem',
+                    fontSize: '0.875rem',
+                    fontWeight: 600,
+                    color: farbe,
+                  }}
+                >
+                  <Icon name="calendar" size={15} />
+                  Widerspruch bis {widerspruchFrist.ablauf}
+                </div>
+              </div>
+              <span
+                className={`status-chip ${chipClass}`}
+                data-testid={`widerspruch-frist-countdown-${widerspruchFrist.id}`}
+                style={{ fontSize: '0.8rem', flexShrink: 0 }}
+              >
+                <Icon name="clock" size={14} />
+                {fristRestLabel(widerspruchFrist.resttage)}
+              </span>
+            </div>
+            <Link
+              href={`/fall/bescheide#bes-${widerspruchFrist.id}`}
+              data-testid="widerspruch-frist-bes-cta"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.375rem',
+                marginTop: '1rem',
+                fontSize: '0.875rem',
+                color: 'var(--color-primary)',
+                fontWeight: 600,
+              }}
+            >
+              Zum Bescheid <Icon name="arrow-right" size={14} />
+            </Link>
+          </div>
+        );
+      })()}
 
       {/* ─── 5. FAIRNESS-HINWEISE (inline, kein separater Klick nötig)
           Q-202: BESCHEID-Signale mit Zum-Bescheid-CTA + Verlauf (Parität Hinweise Q-201). */}
