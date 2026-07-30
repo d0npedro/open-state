@@ -1,6 +1,6 @@
 # BUILD_STATE.md – Aktueller Projektstand
 
-Zuletzt aktualisiert: nach Q-212 AV Übersicht Fristen-Countdown offener Rückfragen (US-AV-004)
+Zuletzt aktualisiert: nach Q-213 AV Rückfragen Frist-Countdown-Chip pro Karte (US-AV-004)
 
 Dieser Stand beschreibt, was tatsächlich existiert und funktioniert.
 Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
@@ -26,7 +26,7 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | `/` | Landing Page | – | ✓ |
 | `/fall` | Fallübersicht, Status, Fairness-Summary inkl. BESCHEID-CTAs Zum Bescheid/Verlauf + Widerspruch-Countdown-Chip, Fristen-Countdown offener Unterlagen, Widerspruchsfrist-Kurzblock + Bescheid-Kachel Countdown, Upload-/Termin-/RQ-Quittungen mit Verlauf-Tiefenlinks, Termin-Kachel Status live | US-AV-001–007 | ✓ |
 | `/fall/dokumente` | Dokumentenanforderungen + Frist-Resttage + lokale Upload-Quittung pro Karte nach Session-Markierung + Verlauf-Tiefenlink `#ere-E-DEMO-DOK-…` | US-AV-003, US-AV-007 | ✓ |
-| `/fall/rueckfragen` | Rückfragen mit Fairness-Hinweis; Anker `#rq-…`; Antwort-Quittung + Verlauf-Tiefenlink Session-Antwort | US-AV-004 | ✓ |
+| `/fall/rueckfragen` | Rückfragen mit Fairness-Hinweis; Anker `#rq-…`; Frist-Countdown-Chip pro offener Karte; Antwort-Quittung + Verlauf-Tiefenlink Session-Antwort | US-AV-004 | ✓ |
 | `/fall/termine` | Termine; session-lokale Bestätigung mit Quittung + Verlauf-Tiefenlink `#ere-E-DEMO-TERM-…`; Nav-Badge nur unbestätigt/bald fällig | US-AV-005, US-AV-007 | ✓ |
 | `/fall/bescheide` | Bescheide mit Fairness-Hinweisen + CTAs „Zum Bescheid“ `#bes-…` + „Im Verlauf ansehen“ `#ere-E-007` + Widerspruch-Countdown-Chip am Fairness-Panel; Widerspruchsfrist-Countdown ggü. FIKTIVES_HEUTE; Karten-Anker + Zustellungs-Tiefenlink | US-AV-006, US-AV-007 | ✓ |
 | `/fall/verlauf` | Timeline mit Fairness-Hinweis; Antwort-Quittungsblock; Upload-Blöcke mit Dokumentbezeichnung; Anker `#ere-…` + Hash-Hervorhebung; Session-Antwort/Upload-Badge | US-AV-007 | ✓ |
@@ -165,6 +165,7 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | UG Übersicht Fristen Rückfragen | `/gruendung` rq-fristen + Kachel Fragen | ✓ Countdown RQ-01 (3 Tage) + CTA `#rq-…` (Q-210, US-UG-004, Parität Q-208) |
 | UG Rückfragen Frist-Countdown-Chip | `/gruendung/rueckfragen` pro offener Karte | ✓ status-chip Resttage + testids (Q-211, US-UG-004, Parität Q-209) |
 | AV Übersicht Fristen Rückfragen | `/fall` rq-fristen + Kachel Fragen + `#rq-…` | ✓ Countdown RQ-001 (2 Tage) + Anker auf Karten (Q-212, US-AV-004, Parität UG Q-210) |
+| AV Rückfragen Frist-Countdown-Chip | `/fall/rueckfragen` pro offener Karte | ✓ status-chip Resttage + testids `rq-seite-countdown` (Q-213, US-AV-004, Parität UG Q-211) |
 | AV Session-Antwort Verlauf | `/fall/rueckfragen` + `/fall/verlauf` | ✓ RQ-Quittung Tiefenlink `#ere-E-DEMO-RQ-…` + Badge „Ihre Antwort“ / Session-Upload-Badge (Q-192, US-AV-007/004) |
 | AV Dokumente Upload-Quittung Verlauf | `/fall/dokumente` + `demoDokUploadEreignisId` + Verlauf | ✓ Sekundär-CTA „Im Verlauf ansehen“ → `#ere-E-DEMO-DOK-…`; Session-Upload-Badge (Q-193, US-AV-003/007) |
 | AV Übersicht Upload-Quittung Verlauf | `/fall` Upload-Quittung + `#dok-…` auf Dokumentenkarten | ✓ Pro Session-Upload „Im Verlauf ansehen“; nächste Unterlage → `#dok-…` (Q-194, US-AV-001/003/007) |

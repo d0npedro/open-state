@@ -22,6 +22,13 @@ type RueckfrageMitAntwort = Rueckfrage & {
   beantwortetAm?: string;
 };
 
+/** Countdown-Label analog Dokumente/Übersicht (Demo-Stichtag FIKTIVES_HEUTE). */
+function fristRestLabel(tage: number): string {
+  if (tage < 0) return `${Math.abs(tage)} Tage überschritten`;
+  if (tage === 0) return 'heute fällig';
+  return `noch ${tage} Tag${tage === 1 ? '' : 'e'}`;
+}
+
 const DEMO_BEISPIELANTWORT =
   'Das Datum der Beschäftigungsaufnahme war der 1. März 2022 (Beispielantwort in der Demo).';
 
@@ -221,15 +228,32 @@ export default function RueckfragenPage() {
                 flexDirection: 'column',
                 gap: '0.875rem',
               }}>
+                {/* Frist + Countdown-Chip (Q-213, Parität UG Q-211 / Dokumente dok-seite-countdown) */}
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
-                  <div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: 700, color: fristKritisch ? 'var(--color-danger)' : 'var(--color-warning)', fontSize: '0.95rem' }}>
-                      <Icon name="calendar" size={16} />
-                      Frist: {rq.frist}
-                    </div>
-                    <div style={{ fontSize: '0.875rem', color: fristKritisch ? 'var(--color-danger)' : 'var(--color-warning)', marginTop: '0.25rem' }}>
-                      Noch {resttage} Tag{resttage !== 1 ? 'e' : ''} verbleibend
-                    </div>
+                  <div
+                    style={{
+                      display: 'flex',
+                      flexWrap: 'wrap',
+                      alignItems: 'center',
+                      gap: '0.5rem 1rem',
+                      color: fristKritisch ? 'var(--color-danger)' : 'var(--color-warning)',
+                      fontWeight: 600,
+                      fontSize: '0.875rem',
+                    }}
+                    data-testid={`rq-seite-frist-${rq.id}`}
+                  >
+                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}>
+                      <Icon name="calendar" size={15} />
+                      Antworten bis: {rq.frist}
+                    </span>
+                    <span
+                      className={`status-chip ${fristKritisch ? 'status-chip-danger' : 'status-chip-warning'}`}
+                      style={{ fontSize: '0.75rem' }}
+                      data-testid={`rq-seite-countdown-${rq.id}`}
+                    >
+                      <Icon name="clock" size={13} />
+                      {fristRestLabel(resttage)}
+                    </span>
                   </div>
                   {!isConfirming && (
                     <button

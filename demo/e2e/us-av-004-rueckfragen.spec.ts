@@ -48,11 +48,21 @@ test.describe('US-AV-004 – Rückfrage verstehen (Anzeige)', () => {
   test('AC1c: Frist als konkretes Datum sichtbar', async ({ page }) => {
     // Datum erscheint in Karten-Frist und Live-Fairness-Signal — mind. ein Treffer
     await expect(page.getByText(/26\.\s*November 2024/).first()).toBeVisible();
-    await expect(page.getByText(/^Frist:/)).toContainText(/26\.\s*November 2024/);
+    await expect(page.getByTestId('rq-seite-frist-RQ-001')).toContainText(/26\.\s*November 2024/);
   });
 
   test('AC1c: Anzahl verbleibender Tage sichtbar', async ({ page }) => {
-    await expect(page.getByText(/Tag/).first()).toBeVisible();
+    await expect(page.getByTestId('rq-seite-countdown-RQ-001')).toContainText(/Tag/i);
+  });
+
+  test('Frist-Countdown-Chip pro Rückfragekarte (Q-213)', async ({ page }) => {
+    // RQ-001: fristDatum 2024-11-26 · FIKTIVES_HEUTE 2024-11-24 → noch 2 Tage
+    // Parität UG Q-211 / Dokumente dok-seite-countdown / Übersicht Q-212
+    await expect(page.getByTestId('rq-seite-frist-RQ-001')).toBeVisible();
+    await expect(page.getByTestId('rq-seite-frist-RQ-001')).toContainText(/Antworten bis/i);
+    await expect(page.getByTestId('rq-seite-frist-RQ-001')).toContainText(/26\.\s*November 2024/);
+    await expect(page.getByTestId('rq-seite-countdown-RQ-001')).toContainText(/noch 2 Tage/i);
+    await expect(page.getByTestId('rueckfrage-karte-RQ-001')).toBeVisible();
   });
 
   test('AC1d: Konsequenz bei Nichtantwort sichtbar', async ({ page }) => {

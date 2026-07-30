@@ -247,6 +247,7 @@ Story-Dokumentation ist kein Pflicht-Vorläufer für Mock-Daten und Typen.
 | Q-210 | UG Übersicht: Fristen-Countdown offener Rückfragen + Kachel-Resttage (US-UG-004, Parität Unterlagen Q-208) | DEMO | S | Q-208 | DONE |
 | Q-211 | UG Rückfragen: Frist-Countdown-Chip pro offener Karte (US-UG-004, Parität Dokumente Q-209) | DEMO | S | Q-210 | DONE |
 | Q-212 | AV Übersicht: Fristen-Countdown offener Rückfragen + Kachel-Resttage + `#rq-…`-Anker (US-AV-004, Parität UG Q-210) | DEMO | S | Q-086 | DONE |
+| Q-213 | AV Rückfragen: Frist-Countdown-Chip pro offener Karte (US-AV-004, Parität UG Q-211) | DEMO | S | Q-212 | DONE |
 
 ---
 
@@ -464,3 +465,4 @@ Diese Punkte wurden in früheren Iterationen abgeschlossen und sind produktionsr
 | Q-210 UG Übersicht Fristen Rückfragen | rq-fristen-uebersicht + Kachel Countdown RQ-01 (US-UG-004) | local |
 | Q-211 UG Rückfragen Frist-Countdown-Chip | rq-seite-countdown pro offener Karte (US-UG-004) | local |
 | Q-212 AV Übersicht Fristen Rückfragen | rq-fristen-uebersicht + Kachel + `#rq-RQ-001` (US-AV-004) | local |
+| Q-213 AV Rückfragen Frist-Countdown-Chip | rq-seite-countdown pro offener Karte (US-AV-004) | local |
