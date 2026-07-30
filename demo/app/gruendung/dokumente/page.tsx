@@ -5,9 +5,20 @@ import {
   demoDokUploadEreignisId,
   useGruendungState,
 } from '@/context/GruendungStateContext';
-import { berechneFairnessSignaleGruendung } from '@/lib/fairness/gruendung-rules';
+import {
+  berechneFairnessSignaleGruendung,
+  FIKTIVES_HEUTE_GRUENDUNG,
+} from '@/lib/fairness/gruendung-rules';
+import { berechneFristTage } from '@/lib/fairness/rules';
 import { Icon } from '@/components/Icon';
 import type { DokumentStatusUG } from '@/types/gruendung';
+
+/** Countdown-Label analog AV-Dokumente (Demo-Stichtag FIKTIVES_HEUTE_GRUENDUNG). */
+function fristRestLabel(tage: number): string {
+  if (tage < 0) return `${Math.abs(tage)} Tage überschritten`;
+  if (tage === 0) return 'heute fällig';
+  return `noch ${tage} Tag${tage === 1 ? '' : 'e'}`;
+}
 
 const statusChip: Record<DokumentStatusUG, { label: string; css: string; icon: 'alert' | 'refresh' | 'check-circle' | 'x-circle' | 'upload' }> = {
   ANGEFORDERT: { label: 'Wird noch benötigt', css: 'status-chip-warning', icon: 'alert'        },
@@ -159,14 +170,55 @@ export default function DokumentePage() {
               </div>
             )}
 
+            {/* Frist + Countdown (Q-209, Parität AV / Übersicht Q-208) */}
+            {dok.frist && isAusstehend && (() => {
+              const resttage = dok.fristDatum
+                ? berechneFristTage(dok.fristDatum, FIKTIVES_HEUTE_GRUENDUNG)
+                : null;
+              const kritisch = resttage !== null && resttage <= 5;
+              const farbe = kritisch ? 'var(--color-danger)' : 'var(--color-warning)';
+              return (
+                <div
+                  style={{
+                    display: 'flex',
+                    flexWrap: 'wrap',
+                    alignItems: 'center',
+                    gap: '0.5rem 1rem',
+                    marginBottom: '0.875rem',
+                    color: farbe,
+                    fontWeight: 600,
+                    fontSize: '0.875rem',
+                  }}
+                  data-testid={`dok-seite-frist-${dok.id}`}
+                >
+                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}>
+                    <Icon name="calendar" size={15} />
+                    Einreichen bis: {dok.frist}
+                  </span>
+                  {resttage !== null && (
+                    <span
+                      className={`status-chip ${kritisch ? 'status-chip-danger' : 'status-chip-warning'}`}
+                      style={{ fontSize: '0.75rem' }}
+                      data-testid={`dok-seite-countdown-${dok.id}`}
+                    >
+                      <Icon name="clock" size={13} />
+                      {fristRestLabel(resttage)}
+                    </span>
+                  )}
+                </div>
+              );
+            })()}
+
             {/* Mock-Einreichungszeile nur ohne Session-Upload (Quittung ersetzt sie). */}
-            <div style={{ display: 'flex', gap: '1.5rem', fontSize: '0.875rem', flexWrap: 'wrap', marginBottom: isAusstehend || istSessionUpload ? '1rem' : 0 }}>
-              {dok.frist && isAusstehend && (
-                <span style={{ color: 'var(--color-warning)', fontWeight: 600 }}>
-                  <Icon name="calendar" size={13} style={{ verticalAlign: 'middle', marginRight: '0.25rem' }} />
-                  Frist: {dok.frist}
-                </span>
-              )}
+            <div
+              style={{
+                display: 'flex',
+                gap: '1.5rem',
+                fontSize: '0.875rem',
+                flexWrap: 'wrap',
+                marginBottom: isAusstehend || istSessionUpload ? '1rem' : 0,
+              }}
+            >
               {dok.hochgeladenAm && !istSessionUpload && (
                 <span style={{ color: 'var(--color-text-muted)' }}>Hochgeladen: {dok.hochgeladenAm}</span>
               )}

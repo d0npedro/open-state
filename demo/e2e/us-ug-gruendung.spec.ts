@@ -874,6 +874,16 @@ test.describe('UG – Unterlagen', () => {
     );
   });
 
+  test('Frist-Countdown pro Dokumentenkarte (Q-209)', async ({ page }) => {
+    // US-UG-003: Parität AV-Dokumente + Übersicht Q-208
+    // DOK-03: fristDatum 2024-12-15 · FIKTIVES_HEUTE_GRUENDUNG 2024-12-07 → noch 8 Tage
+    await expect(page.getByTestId('dok-seite-frist-DOK-03')).toBeVisible();
+    await expect(page.getByTestId('dok-seite-frist-DOK-03')).toContainText(/15\.12\.2024|15\.12\./i);
+    await expect(page.getByTestId('dok-seite-countdown-DOK-03')).toContainText(/noch 8 Tage/i);
+    // Nicht-ausstehende Karten ohne Countdown-Chip
+    await expect(page.getByTestId('dok-seite-countdown-DOK-04')).toHaveCount(0);
+  });
+
   test('Ohne Session-Upload keine lokale Upload-Quittung', async ({ page }) => {
     await expect(page.getByTestId('dok-upload-quittung-DOK-03')).toHaveCount(0);
     await expect(page.getByTestId('dokument-karte-DOK-03')).toBeVisible();
