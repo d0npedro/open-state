@@ -321,7 +321,7 @@ test.describe('US-AV-007/008 – Fairness-Tiefenlink zum Verlauf', () => {
     const wrap = page.getByTestId('hinweise-bescheid-cta-wrap-FH-BESCHEID-VORLAEUFIG');
     await expect(wrap).toBeVisible();
     await expect(page.getByTestId('hinweise-bescheid-cta-hint-FH-BESCHEID-VORLAEUFIG')).toContainText(
-      /Vorläufiger Bescheid|Widerspruchsfrist/i
+      /Vorläufiger Bescheid|Widerspruchsfrist|Widerspruch/i
     );
 
     const besCta = page.getByTestId('hinweise-bescheid-cta-FH-BESCHEID-VORLAEUFIG');
@@ -339,6 +339,20 @@ test.describe('US-AV-007/008 – Fairness-Tiefenlink zum Verlauf', () => {
     await expect(card).toBeVisible();
     await expect(card).toHaveAttribute('aria-current', 'location');
     await expect(card).toContainText(/zugestellt|Bescheid/i);
+  });
+
+  test('Hinweise BESCHEID: Widerspruchsfrist-Countdown-Chip (Q-205)', async ({ page }) => {
+    // US-AV-006 AC3 / US-AV-008: Parität Bescheid Q-203 + Übersicht Q-204
+    // Ablauf 2024-12-16 · FIKTIVES_HEUTE 2024-11-24 → noch 22 Tage
+    await page.goto('/fall/hinweise');
+    const wrap = page.getByTestId('hinweise-bescheid-cta-wrap-FH-BESCHEID-VORLAEUFIG');
+    await expect(wrap).toBeVisible();
+    await expect(page.getByTestId('hinweise-bescheid-cta-hint-FH-BESCHEID-VORLAEUFIG')).toContainText(
+      /16\. Dezember 2024|noch 22 Tage/i
+    );
+    const chip = page.getByTestId('hinweise-widerspruch-countdown-FH-BESCHEID-VORLAEUFIG');
+    await expect(chip).toBeVisible();
+    await expect(chip).toContainText(/noch 22 Tage/i);
   });
 
   test('Hinweise BESCHEID: Zum Bescheid führt zum Anker #bes-BSC-001', async ({ page }) => {

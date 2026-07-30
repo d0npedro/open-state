@@ -239,6 +239,7 @@ Story-Dokumentation ist kein Pflicht-Vorläufer für Mock-Daten und Typen.
 | Q-202 | AV Übersicht: BESCHEID-Fairness-CTAs Zum Bescheid + Verlauf (US-AV-006/007, Parität Hinweise Q-201) | DEMO | S | Q-201 | DONE |
 | Q-203 | AV Bescheide: Widerspruchsfrist-Countdown ggü. FIKTIVES_HEUTE + ISO-Ablaufdatum (US-AV-006 AC3, Parität RQ/Unterlagen) | DEMO | S | Q-200 | DONE |
 | Q-204 | AV Übersicht: Widerspruchsfrist-Kurzblock + Bescheid-Kachel mit Countdown (US-AV-006 AC3, Parität Q-203/Q-086) | DEMO | S | Q-203 | DONE |
+| Q-205 | AV Hinweise: Widerspruchsfrist-Countdown-Chip am BESCHEID_VORLAEUFIG-CTA (US-AV-006/008, Parität Q-203/Q-204) | DEMO | S | Q-204 | DONE |
 
 ---
 
@@ -448,3 +449,4 @@ Diese Punkte wurden in früheren Iterationen abgeschlossen und sind produktionsr
 | Q-202 AV Übersicht BESCHEID-CTAs | Übersicht Fairness → `#bes-…` + `#ere-E-007` + Unterlagen (US-AV-006/007) | local |
 | Q-203 AV Widerspruchsfrist-Countdown | Bescheid ISO-Ablauf + Resttage ggü. FIKTIVES_HEUTE (US-AV-006 AC3) | local |
 | Q-204 AV Übersicht Widerspruchsfrist | Kurzblock + Bescheid-Kachel Countdown → `#bes-…` (US-AV-006) | local |
+| Q-205 AV Hinweise Widerspruchsfrist-Chip | BESCHEID_VORLAEUFIG-CTA Resttage ggü. FIKTIVES_HEUTE (US-AV-006/008) | local |

@@ -3,12 +3,24 @@
 import type { CSSProperties } from 'react';
 import Link from 'next/link';
 import { useDemoState } from '@/context/DemoStateContext';
-import { berechneFairnessSignale, fairnessSignalVerlaufZiel } from '@/lib/fairness/rules';
+import {
+  berechneFairnessSignale,
+  berechneFristTage,
+  FIKTIVES_HEUTE,
+  fairnessSignalVerlaufZiel,
+} from '@/lib/fairness/rules';
 import { demoFall } from '@/data/mockFall';
 import { FairnessPanel } from '@/components/fairness/FairnessPanel';
 import { Icon } from '@/components/Icon';
 import type { FairnessSignal } from '@/types/fairness';
 import type { Fall } from '@/types';
+
+/** Countdown-Label analog Bescheid/Übersicht (Demo-Stichtag FIKTIVES_HEUTE). */
+function fristRestLabel(tage: number): string {
+  if (tage < 0) return `${Math.abs(tage)} Tage überschritten`;
+  if (tage === 0) return 'heute fällig';
+  return `noch ${tage} Tag${tage === 1 ? '' : 'e'}`;
+}
 
 /** Initiale Signale aus dem unveränderten Mock – dienen als Vergleichsbasis */
 const INITIAL_SIGNALE = berechneFairnessSignale(demoFall);
@@ -154,27 +166,55 @@ function SignalCta({ signal, fall }: { signal: FairnessSignal; fall: Fall }) {
   }
 
   // Vorläufiger Bescheid / erweiterbare Begründung (Q-201, Parität Bescheide Q-200)
+  // Q-205: Widerspruchsfrist-Countdown-Chip (Parität Q-203/Q-204, US-AV-006 AC3)
   if (
     signal.typ === 'BESCHEID_VORLAEUFIG' ||
     signal.typ === 'BESCHEID_BEGRUENDUNG_ERWEITERBAR'
   ) {
-    const besId =
-      fall.bescheide.find(b => signal.bezug.includes(b.id))?.id ??
-      fall.bescheide[0]?.id;
+    const bescheid =
+      fall.bescheide.find(b => signal.bezug.includes(b.id)) ?? fall.bescheide[0];
+    const besId = bescheid?.id;
     const isBegruendung = signal.typ === 'BESCHEID_BEGRUENDUNG_ERWEITERBAR';
+    const resttage =
+      !isBegruendung && bescheid?.widerspruchsfristAblaufDatum
+        ? berechneFristTage(bescheid.widerspruchsfristAblaufDatum, FIKTIVES_HEUTE)
+        : null;
+    const restLabel = resttage !== null ? fristRestLabel(resttage) : null;
+    const kritisch = resttage !== null && resttage <= 5;
+    const bald = resttage !== null && resttage <= 14;
+    const chipClass =
+      resttage !== null && (resttage < 0 || kritisch)
+        ? 'status-chip-danger'
+        : bald
+          ? 'status-chip-warning'
+          : 'status-chip-primary';
     return (
       <div
         style={ctaWrapStyle(signal.prioritaet)}
         data-testid={`hinweise-bescheid-cta-wrap-${signal.id}`}
       >
-        <p
-          style={{ margin: 0, fontSize: '0.875rem', lineHeight: 1.45 }}
-          data-testid={`hinweise-bescheid-cta-hint-${signal.id}`}
-        >
-          {isBegruendung
-            ? 'Die Bescheidbegründung verweist auf ausstehende Angaben. Bescheid lesen und fehlende Unterlagen einreichen.'
-            : 'Vorläufiger Bescheid mit laufender Widerspruchsfrist. Details und Widerspruch im Bereich „Bescheid“.'}
-        </p>
+        <div style={{ flex: 1, minWidth: '12rem' }}>
+          <p
+            style={{ margin: 0, fontSize: '0.875rem', lineHeight: 1.45 }}
+            data-testid={`hinweise-bescheid-cta-hint-${signal.id}`}
+          >
+            {isBegruendung
+              ? 'Die Bescheidbegründung verweist auf ausstehende Angaben. Bescheid lesen und fehlende Unterlagen einreichen.'
+              : restLabel && bescheid
+                ? `Vorläufiger Bescheid — Widerspruch bis ${bescheid.widerspruchsfristAblauf} (${restLabel}). Details im Bereich „Bescheid“.`
+                : 'Vorläufiger Bescheid mit laufender Widerspruchsfrist. Details und Widerspruch im Bereich „Bescheid“.'}
+          </p>
+          {restLabel && resttage !== null && (
+            <span
+              className={`status-chip ${chipClass}`}
+              style={{ marginTop: '0.5rem', fontSize: '0.75rem', display: 'inline-flex' }}
+              data-testid={`hinweise-widerspruch-countdown-${signal.id}`}
+            >
+              <Icon name="clock" size={13} />
+              {restLabel}
+            </span>
+          )}
+        </div>
         <div
           style={{
             display: 'flex',
