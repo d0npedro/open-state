@@ -242,6 +242,7 @@ Story-Dokumentation ist kein Pflicht-Vorläufer für Mock-Daten und Typen.
 | Q-205 | AV Hinweise: Widerspruchsfrist-Countdown-Chip am BESCHEID_VORLAEUFIG-CTA (US-AV-006/008, Parität Q-203/Q-204) | DEMO | S | Q-204 | DONE |
 | Q-206 | AV Übersicht Fairness: Widerspruchsfrist-Countdown-Chip am BESCHEID_VORLAEUFIG (US-AV-006/007, Parität Hinweise Q-205) | DEMO | S | Q-205 | DONE |
 | Q-207 | AV Bescheide Fairness: Widerspruchsfrist-Countdown-Chip am BESCHEID_VORLAEUFIG (US-AV-006/007, Parität Q-205/Q-206) | DEMO | S | Q-206 | DONE |
+| Q-208 | UG Übersicht: Fristen-Countdown offener Unterlagen + Kachel-Resttage (US-UG-001/003, Parität AV Q-086) | DEMO | S | Q-195 | DONE |
 
 ---
 
@@ -454,3 +455,4 @@ Diese Punkte wurden in früheren Iterationen abgeschlossen und sind produktionsr
 | Q-205 AV Hinweise Widerspruchsfrist-Chip | BESCHEID_VORLAEUFIG-CTA Resttage ggü. FIKTIVES_HEUTE (US-AV-006/008) | local |
 | Q-206 AV Übersicht Fairness Widerspruch-Chip | Fairness-Block BESCHEID_VORLAEUFIG Resttage-Chip (US-AV-006/007) | local |
 | Q-207 AV Bescheide Fairness Widerspruch-Chip | Fairness-Panel BESCHEID_VORLAEUFIG Resttage-Chip (US-AV-006/007) | local |
+| Q-208 UG Übersicht Fristen Unterlagen | dok-fristen-uebersicht + Kachel Countdown DOK-03 (US-UG-001/003) | local |

@@ -53,6 +53,17 @@ export default function GruendungPage() {
     d => d.status === 'ANGEFORDERT' || d.status === 'ABGELEHNT'
   );
   const ausstehendeDoks = ausstehendeDokumente.length;
+  /** Offene Dokumente mit ISO-Frist, sortiert nach Dringlichkeit (Q-208, Parität AV Q-086). */
+  const dokFristen = ausstehendeDokumente
+    .filter(d => d.fristDatum && d.frist)
+    .map(d => ({
+      id: d.id,
+      bezeichnung: d.bezeichnung,
+      frist: d.frist as string,
+      resttage: berechneFristTage(d.fristDatum as string, FIKTIVES_HEUTE_GRUENDUNG),
+    }))
+    .sort((a, b) => a.resttage - b.resttage);
+  const naechsteDokFrist = dokFristen[0];
   /** Session-Uploads für Quittung auf der Übersicht (US-UG-001/003, Parität AV Q-161). */
   const sessionUploads = sessionUploadedIds
     .map(id => akte.dokumente.find(d => d.id === id))
@@ -522,13 +533,20 @@ export default function GruendungPage() {
             href: '/gruendung/behoerden',
             urgent: false,
             icon: 'building' as IconName,
+            testId: undefined as string | undefined,
           },
           {
             label: 'Unterlagen',
-            val: `${ausstehendeDoks} ausstehend`,
+            val:
+              ausstehendeDoks > 0
+                ? naechsteDokFrist
+                  ? `${ausstehendeDoks} ausstehend · ${fristRestLabel(naechsteDokFrist.resttage)}`
+                  : `${ausstehendeDoks} ausstehend`
+                : 'Alles eingereicht',
             href: '/gruendung/dokumente',
             urgent: ausstehendeDoks > 0,
             icon: 'file' as IconName,
+            testId: 'kachel-unterlagen' as string | undefined,
           },
           {
             label: 'Offene Fragen',
@@ -536,6 +554,7 @@ export default function GruendungPage() {
             href: '/gruendung/rueckfragen',
             urgent: offeneRueckfragen > 0,
             icon: 'chat' as IconName,
+            testId: undefined as string | undefined,
           },
           {
             label: 'Verlauf',
@@ -543,13 +562,20 @@ export default function GruendungPage() {
             href: '/gruendung/verlauf',
             urgent: false,
             icon: 'clock' as IconName,
+            testId: undefined as string | undefined,
           },
         ].map(k => (
-          <Link key={k.label} href={k.href} className="card" style={{
-            display: 'flex', flexDirection: 'column', gap: '0.375rem', textDecoration: 'none',
-            borderLeft: k.urgent ? '4px solid var(--color-warning)' : undefined,
-            background: k.urgent ? 'var(--color-warning-light)' : undefined,
-          }}>
+          <Link
+            key={k.label}
+            href={k.href}
+            className="card"
+            data-testid={k.testId}
+            style={{
+              display: 'flex', flexDirection: 'column', gap: '0.375rem', textDecoration: 'none',
+              borderLeft: k.urgent ? '4px solid var(--color-warning)' : undefined,
+              background: k.urgent ? 'var(--color-warning-light)' : undefined,
+            }}
+          >
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: k.urgent ? 'var(--color-warning)' : 'var(--color-text-muted)', fontSize: '0.8rem', fontWeight: 600 }}>
               <Icon name={k.icon} size={14} />
               {k.label}
@@ -559,6 +585,106 @@ export default function GruendungPage() {
           </Link>
         ))}
       </div>
+
+      {/* ─── Fristen offener Unterlagen (Q-208, Parität AV Q-086) ─
+          UX: Countdown auf der Übersicht, nicht erst unter Dokumente. */}
+      {dokFristen.length > 0 && (
+        <div className="card" data-testid="dok-fristen-uebersicht">
+          <h2 style={{ fontSize: '1rem', marginBottom: '0.75rem' }}>
+            Fristen offener Unterlagen
+          </h2>
+          <p style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)', margin: '0 0 1rem' }}>
+            Berechnet gegen Demo-Stichtag{' '}
+            {FIKTIVES_HEUTE_GRUENDUNG.split('-').reverse().join('.')}. Keine automatische Mahnung.
+          </p>
+          <ul
+            style={{
+              listStyle: 'none',
+              margin: 0,
+              padding: 0,
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '0.75rem',
+            }}
+          >
+            {dokFristen.map(dok => {
+              const kritisch = dok.resttage <= 5;
+              return (
+                <li
+                  key={dok.id}
+                  data-testid={`dok-frist-${dok.id}`}
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'flex-start',
+                    gap: '1rem',
+                    flexWrap: 'wrap',
+                    padding: '0.875rem 1rem',
+                    borderRadius: 'var(--radius)',
+                    background: kritisch
+                      ? 'var(--color-danger-light)'
+                      : 'var(--color-warning-light)',
+                    borderLeft: `4px solid ${kritisch ? 'var(--color-danger)' : 'var(--color-warning)'}`,
+                  }}
+                >
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div
+                      style={{
+                        fontWeight: 700,
+                        fontSize: '0.95rem',
+                        color: 'var(--color-text)',
+                      }}
+                    >
+                      {dok.bezeichnung}
+                    </div>
+                    <div
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '0.375rem',
+                        marginTop: '0.35rem',
+                        fontSize: '0.875rem',
+                        fontWeight: 600,
+                        color: kritisch ? 'var(--color-danger)' : 'var(--color-warning)',
+                      }}
+                    >
+                      <Icon name="calendar" size={15} />
+                      Einreichen bis {dok.frist}
+                    </div>
+                  </div>
+                  <span
+                    className={`status-chip ${kritisch ? 'status-chip-danger' : 'status-chip-warning'}`}
+                    data-testid={`dok-frist-countdown-${dok.id}`}
+                    style={{ fontSize: '0.8rem', flexShrink: 0 }}
+                  >
+                    <Icon name="clock" size={14} />
+                    {fristRestLabel(dok.resttage)}
+                  </span>
+                </li>
+              );
+            })}
+          </ul>
+          <Link
+            href={
+              naechsteDokFrist
+                ? `/gruendung/dokumente#dok-${naechsteDokFrist.id}`
+                : '/gruendung/dokumente'
+            }
+            data-testid="dok-fristen-cta"
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.375rem',
+              marginTop: '1rem',
+              fontSize: '0.875rem',
+              color: 'var(--color-primary)',
+              fontWeight: 600,
+            }}
+          >
+            Unterlagen hochladen <Icon name="arrow-right" size={14} />
+          </Link>
+        </div>
+      )}
 
       {/* ─── Beteiligte Behörden ─────────────────────────────────── */}
       <div className="card">

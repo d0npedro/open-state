@@ -56,6 +56,21 @@ test.describe('UG – Übersicht', () => {
     await expect(page.getByRole('link', { name: /Verlauf/i }).first()).toBeVisible();
   });
 
+  test('Fristen-Countdown offener Unterlagen auf Übersicht (Q-208)', async ({ page }) => {
+    // DOK-03: Frist 2024-12-15 · FIKTIVES_HEUTE_GRUENDUNG 2024-12-07 → noch 8 Tage (Parität AV Q-086)
+    const block = page.getByTestId('dok-fristen-uebersicht');
+    await expect(block).toBeVisible();
+    await expect(block.getByRole('heading', { name: /Fristen offener Unterlagen/i })).toBeVisible();
+    await expect(page.getByTestId('dok-frist-DOK-03')).toBeVisible();
+    await expect(page.getByTestId('dok-frist-countdown-DOK-03')).toContainText(/noch 8 Tage/i);
+    await expect(page.getByTestId('kachel-unterlagen')).toContainText(/noch 8 Tage/i);
+    const cta = page.getByTestId('dok-fristen-cta');
+    await expect(cta).toHaveAttribute('href', '/gruendung/dokumente#dok-DOK-03');
+    await cta.click();
+    await expect(page).toHaveURL(/\/gruendung\/dokumente#dok-DOK-03/);
+    await expect(page.locator('#dok-DOK-03')).toBeVisible();
+  });
+
   test('Beteiligte Behörden-Übersicht sichtbar', async ({ page }) => {
     await expect(page.getByText('Gewerbeamt Musterstadt').first()).toBeVisible();
     await expect(page.getByText('Finanzamt Musterstadt').first()).toBeVisible();
