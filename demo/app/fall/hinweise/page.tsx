@@ -148,17 +148,54 @@ function SignalCta({ signal, fall }: { signal: FairnessSignal; fall: Fall }) {
     );
   }
 
+  // Fehlende Unterlagen mit Frist (Q-216: Countdown-Chip Parität RQ Q-214)
   if (signal.typ === 'UNTERLAGE_FEHLT_BLOCKIERT') {
+    const offeneDok = fall.dokumente.filter(
+      d => d.status === 'ANGEFORDERT' || d.status === 'ABGELEHNT'
+    );
+    const dokMitFrist = offeneDok
+      .filter(d => d.fristDatum && d.frist)
+      .map(d => ({
+        dok: d,
+        resttage: berechneFristTage(d.fristDatum as string, FIKTIVES_HEUTE),
+      }))
+      .sort((a, b) => a.resttage - b.resttage);
+    const naechste = dokMitFrist[0];
+    const resttage = naechste?.resttage ?? null;
+    const restLabel = resttage !== null ? fristRestLabel(resttage) : null;
+    const kritisch = resttage !== null && resttage <= 5;
+    const chipClass =
+      resttage !== null && (resttage < 0 || kritisch)
+        ? 'status-chip-danger'
+        : 'status-chip-warning';
+    const dokHref = naechste
+      ? `/fall/dokumente#dok-${naechste.dok.id}`
+      : '/fall/dokumente';
+
     return (
       <div style={ctaWrapStyle(signal.prioritaet)} data-testid="hinweise-unterlagen-cta-wrap">
-        <p
-          style={{ margin: 0, fontSize: '0.875rem', lineHeight: 1.45 }}
-          data-testid="hinweise-unterlagen-cta-hint"
-        >
-          {signal.titel.includes('Frist')
-            ? `${signal.titel}. Unterlagen im Bereich „Unterlagen“ hochladen.`
-            : 'Ausstehende Unterlagen im Bereich „Unterlagen“ hochladen.'}
-        </p>
+        <div style={{ flex: 1, minWidth: '12rem' }}>
+          <p
+            style={{ margin: 0, fontSize: '0.875rem', lineHeight: 1.45 }}
+            data-testid="hinweise-unterlagen-cta-hint"
+          >
+            {restLabel && naechste
+              ? `Offene Unterlagen — einreichen bis ${naechste.dok.frist} (${restLabel}). Unterlagen im Bereich „Unterlagen“ hochladen.`
+              : signal.titel.includes('Frist')
+                ? `${signal.titel}. Unterlagen im Bereich „Unterlagen“ hochladen.`
+                : 'Ausstehende Unterlagen im Bereich „Unterlagen“ hochladen.'}
+          </p>
+          {restLabel && resttage !== null && (
+            <span
+              className={`status-chip ${chipClass}`}
+              style={{ marginTop: '0.5rem', fontSize: '0.75rem', display: 'inline-flex' }}
+              data-testid={`hinweise-unterlagen-countdown-${signal.id}`}
+            >
+              <Icon name="clock" size={13} />
+              {restLabel}
+            </span>
+          )}
+        </div>
         <div
           style={{
             display: 'flex',
@@ -169,7 +206,7 @@ function SignalCta({ signal, fall }: { signal: FairnessSignal; fall: Fall }) {
           }}
         >
           <Link
-            href="/fall/dokumente"
+            href={dokHref}
             className="btn btn-primary"
             style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', flexShrink: 0 }}
             data-testid="hinweise-unterlagen-cta"

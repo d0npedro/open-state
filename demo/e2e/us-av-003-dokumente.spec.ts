@@ -241,8 +241,31 @@ test.describe('US-AV-003 – Unterlagen nachreichen', () => {
       /Nächste Einreichungsfrist:\s*3\.\s*Dezember 2024\s*\(noch 9 Tage/i
     );
     await expect(page.getByTestId('hinweise-unterlagen-cta')).toBeVisible();
-    await expect(page.getByTestId('hinweise-unterlagen-cta')).toHaveAttribute('href', '/fall/dokumente');
-    await expect(page.getByTestId('hinweise-unterlagen-cta-hint')).toContainText(/Frist|Unterlagen/i);
+    // Nächste Frist DOK-003 (gleich DOK-004) → Tiefenlink zur ersten Karte
+    await expect(page.getByTestId('hinweise-unterlagen-cta')).toHaveAttribute(
+      'href',
+      '/fall/dokumente#dok-DOK-003'
+    );
+    await expect(page.getByTestId('hinweise-unterlagen-cta-hint')).toContainText(
+      /noch 9 Tage|3\.\s*Dezember 2024|Unterlagen/i
+    );
+  });
+
+  test('Hinweise: UNTERLAGE-Countdown-Chip am CTA (Q-216)', async ({ page }) => {
+    // US-AV-003/008: Parität RQ Q-214 — Chip + Tiefenlink #dok-…
+    // DOK-003/004 Frist 2024-12-03 · FIKTIVES_HEUTE 2024-11-24 → noch 9 Tage
+    await page.goto('/fall/hinweise');
+    const wrap = page.getByTestId('hinweise-unterlagen-cta-wrap');
+    await expect(wrap).toBeVisible();
+    await expect(page.getByTestId('hinweise-unterlagen-cta-hint')).toContainText(
+      /3\.\s*Dezember 2024|noch 9 Tage/i
+    );
+    const chip = page.getByTestId('hinweise-unterlagen-countdown-FH-UNTERLAGEN-FEHLEND');
+    await expect(chip).toBeVisible();
+    await expect(chip).toContainText(/noch 9 Tage/i);
+    await page.getByTestId('hinweise-unterlagen-cta').click();
+    await expect(page).toHaveURL(/\/fall\/dokumente#dok-DOK-003/);
+    await expect(page.locator('#dok-DOK-003')).toBeVisible();
   });
 
   test('Hinweise: Session-Teil-Upload aktualisiert UNTERLAGE-Count und behält Frist', async ({ page }) => {
