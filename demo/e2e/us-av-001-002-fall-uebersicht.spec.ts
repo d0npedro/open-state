@@ -155,6 +155,23 @@ test.describe('US-AV-002 – Status einsehen', () => {
     await expect(page.getByRole('link', { name: /Unterlagen/i }).first()).toContainText(/noch 9 Tage/i);
   });
 
+  test('Fristen-Countdown offener Rückfragen auf Übersicht (Q-212)', async ({ page }) => {
+    // RQ-001: Frist 2024-11-26 · FIKTIVES_HEUTE 2024-11-24 → noch 2 Tage (Parität UG Q-210)
+    const block = page.getByTestId('rq-fristen-uebersicht');
+    await expect(block).toBeVisible();
+    await expect(block.getByRole('heading', { name: /Fristen offener Rückfragen/i })).toBeVisible();
+    await expect(page.getByTestId('rq-frist-RQ-001')).toBeVisible();
+    await expect(page.getByTestId('rq-frist-RQ-001')).toContainText(/Arbeitgeberbescheinigung|Beschäftigungsaufnahme/i);
+    await expect(page.getByTestId('rq-frist-countdown-RQ-001')).toContainText(/noch 2 Tage/i);
+    await expect(page.getByTestId('kachel-fragen')).toContainText(/noch 2 Tage/i);
+    await expect(page.getByTestId('kachel-fragen-countdown')).toContainText(/noch 2 Tage/i);
+    const cta = page.getByTestId('rq-fristen-cta');
+    await expect(cta).toHaveAttribute('href', '/fall/rueckfragen#rq-RQ-001');
+    await cta.click();
+    await expect(page).toHaveURL(/\/fall\/rueckfragen#rq-RQ-001/);
+    await expect(page.locator('#rq-RQ-001')).toBeVisible();
+  });
+
   test('Widerspruchsfrist-Countdown auf Übersicht (Q-204)', async ({ page }) => {
     // Ablauf 2024-12-16 · FIKTIVES_HEUTE 2024-11-24 → noch 22 Tage (Parität Bescheid Q-203)
     const block = page.getByTestId('widerspruch-frist-uebersicht');

@@ -89,7 +89,8 @@ export default function FallPage() {
   const fortschrittProzent = Math.round(((currentIndex + 1) / statusFlow.length) * 100);
   const fairnessSignale = berechneFairnessSignale(fall);
   const hatOffeneAufgaben = fall.offeneAufgaben.length > 0;
-  const offeneRueckfragen = fall.rueckfragen.filter(r => !r.beantwortet).length;
+  const offeneRueckfragenListe = fall.rueckfragen.filter(r => !r.beantwortet);
+  const offeneRueckfragen = offeneRueckfragenListe.length;
   // ANGEFORDERT + ABGELEHNT blockieren den Fortschritt (parität zu /fall/dokumente)
   const ausstehendeDokumente = fall.dokumente.filter(
     d => d.status === 'ANGEFORDERT' || d.status === 'ABGELEHNT'
@@ -106,6 +107,17 @@ export default function FallPage() {
     }))
     .sort((a, b) => a.resttage - b.resttage);
   const naechsteDokFrist = dokFristen[0];
+  /** Offene Rückfragen mit Frist (Q-212, Parität UG Q-210). */
+  const rqFristen = offeneRueckfragenListe
+    .filter(r => r.fristDatum && r.frist)
+    .map(r => ({
+      id: r.id,
+      kurz: r.text.length > 90 ? `${r.text.slice(0, 87).trim()}…` : r.text,
+      frist: r.frist as string,
+      resttage: berechneFristTage(r.fristDatum as string, FIKTIVES_HEUTE),
+    }))
+    .sort((a, b) => a.resttage - b.resttage);
+  const naechsteRqFrist = rqFristen[0];
   /** Session-Uploads für Quittung auf der Übersicht (US-AV-003 / US-AV-002). */
   const sessionUploads = sessionUploadedIds
     .map(id => fall.dokumente.find(d => d.id === id))
@@ -613,12 +625,19 @@ export default function FallPage() {
           {
             label: 'Fragen',
             icon: 'chat' as const,
-            val: offeneRueckfragen > 0 ? `${offeneRueckfragen} offen` : 'Keine offenen Fragen',
+            val:
+              offeneRueckfragen > 0
+                ? naechsteRqFrist
+                  ? `${offeneRueckfragen} offen · ${fristRestLabel(naechsteRqFrist.resttage)}`
+                  : `${offeneRueckfragen} offen`
+                : 'Keine offenen Fragen',
             urgent: offeneRueckfragen > 0,
             href: '/fall/rueckfragen',
-            testId: undefined as string | undefined,
-            statusTestId: undefined as string | undefined,
-            statusLabel: null as string | null,
+            testId: 'kachel-fragen' as string | undefined,
+            statusTestId: 'kachel-fragen-countdown' as string | undefined,
+            statusLabel: naechsteRqFrist
+              ? fristRestLabel(naechsteRqFrist.resttage)
+              : null,
           },
           {
             label: 'Nächster Termin',
@@ -781,6 +800,105 @@ export default function FallPage() {
             }}
           >
             Unterlagen hochladen <Icon name="arrow-right" size={14} />
+          </Link>
+        </div>
+      )}
+
+      {/* ─── 4b2. FRISTEN OFFENER RÜCKFRAGEN (Q-212, Parität UG Q-210) ─ */}
+      {rqFristen.length > 0 && (
+        <div className="card" data-testid="rq-fristen-uebersicht">
+          <h2 style={{ fontSize: '1rem', marginBottom: '0.75rem' }}>
+            Fristen offener Rückfragen
+          </h2>
+          <p style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)', margin: '0 0 1rem' }}>
+            Berechnet gegen Demo-Stichtag {FIKTIVES_HEUTE.split('-').reverse().join('.')}.
+            {' '}Keine automatische Mahnung.
+          </p>
+          <ul
+            style={{
+              listStyle: 'none',
+              margin: 0,
+              padding: 0,
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '0.75rem',
+            }}
+          >
+            {rqFristen.map(rq => {
+              const kritisch = rq.resttage <= 5;
+              return (
+                <li
+                  key={rq.id}
+                  data-testid={`rq-frist-${rq.id}`}
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'flex-start',
+                    gap: '1rem',
+                    flexWrap: 'wrap',
+                    padding: '0.875rem 1rem',
+                    borderRadius: 'var(--radius)',
+                    background: kritisch
+                      ? 'var(--color-danger-light)'
+                      : 'var(--color-warning-light)',
+                    borderLeft: `4px solid ${kritisch ? 'var(--color-danger)' : 'var(--color-warning)'}`,
+                  }}
+                >
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div
+                      style={{
+                        fontWeight: 700,
+                        fontSize: '0.95rem',
+                        color: 'var(--color-text)',
+                      }}
+                    >
+                      {rq.kurz}
+                    </div>
+                    <div
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '0.375rem',
+                        marginTop: '0.35rem',
+                        fontSize: '0.875rem',
+                        fontWeight: 600,
+                        color: kritisch ? 'var(--color-danger)' : 'var(--color-warning)',
+                      }}
+                    >
+                      <Icon name="calendar" size={15} />
+                      Antworten bis {rq.frist}
+                    </div>
+                  </div>
+                  <span
+                    className={`status-chip ${kritisch ? 'status-chip-danger' : 'status-chip-warning'}`}
+                    data-testid={`rq-frist-countdown-${rq.id}`}
+                    style={{ fontSize: '0.8rem', flexShrink: 0 }}
+                  >
+                    <Icon name="clock" size={14} />
+                    {fristRestLabel(rq.resttage)}
+                  </span>
+                </li>
+              );
+            })}
+          </ul>
+          <Link
+            href={
+              naechsteRqFrist
+                ? `/fall/rueckfragen#rq-${naechsteRqFrist.id}`
+                : '/fall/rueckfragen'
+            }
+            data-testid="rq-fristen-cta"
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.375rem',
+              marginTop: '1rem',
+              fontSize: '0.875rem',
+              color: 'var(--color-primary)',
+              fontWeight: 600,
+            }}
+          >
+            Frage beantworten <Icon name="arrow-right" size={14} />
           </Link>
         </div>
       )}

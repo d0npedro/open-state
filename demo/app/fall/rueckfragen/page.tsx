@@ -107,11 +107,14 @@ export default function RueckfragenPage() {
         return (
           <div
             key={rq.id}
+            id={`rq-${rq.id}`}
             className="card"
+            data-testid={`rueckfrage-karte-${rq.id}`}
             style={{
               borderLeft: rq.beantwortet
                 ? '5px solid var(--color-success)'
                 : '5px solid var(--color-warning)',
+              scrollMarginTop: '5rem',
             }}
           >
             {/* Status-Header */}
