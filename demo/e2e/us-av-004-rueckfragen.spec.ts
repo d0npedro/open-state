@@ -210,8 +210,30 @@ test.describe('US-AV-008 – Hinweise RQ-Frist live (Parität UNTERLAGE)', () =>
       /Antwortfrist endet am\s*26\.\s*November 2024\s*\(noch 2 Tage\)/i
     );
     await expect(page.getByTestId('hinweise-rq-cta')).toBeVisible();
-    await expect(page.getByTestId('hinweise-rq-cta')).toHaveAttribute('href', '/fall/rueckfragen');
-    await expect(page.getByTestId('hinweise-rq-cta-hint')).toContainText(/Frist noch 2 Tage/i);
+    await expect(page.getByTestId('hinweise-rq-cta')).toHaveAttribute(
+      'href',
+      '/fall/rueckfragen#rq-RQ-001'
+    );
+    await expect(page.getByTestId('hinweise-rq-cta-hint')).toContainText(
+      /noch 2 Tage|26\.\s*November 2024/i
+    );
+  });
+
+  test('Hinweise: RQ-Countdown-Chip am CTA (Q-214)', async ({ page }) => {
+    // US-AV-004/008: Parität Widerspruch Q-205 + Karte Q-213
+    // RQ-001 Frist 2024-11-26 · FIKTIVES_HEUTE 2024-11-24 → noch 2 Tage
+    await page.goto('/fall/hinweise');
+    const wrap = page.getByTestId('hinweise-rq-cta-wrap');
+    await expect(wrap).toBeVisible();
+    await expect(page.getByTestId('hinweise-rq-cta-hint')).toContainText(
+      /26\.\s*November 2024|noch 2 Tage/i
+    );
+    const chip = page.getByTestId('hinweise-rq-countdown-FH-RQ-001-FRIST');
+    await expect(chip).toBeVisible();
+    await expect(chip).toContainText(/noch 2 Tage/i);
+    await page.getByTestId('hinweise-rq-cta').click();
+    await expect(page).toHaveURL(/\/fall\/rueckfragen#rq-RQ-001/);
+    await expect(page.locator('#rq-RQ-001')).toBeVisible();
   });
 
   test('Rückfragen-Seite: Live-Signal mit Frist und Link zur Verfahrenslage', async ({ page }) => {

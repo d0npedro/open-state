@@ -71,17 +71,47 @@ function ctaWrapStyle(prioritaet: FairnessSignal['prioritaet']): CSSProperties {
 function SignalCta({ signal, fall }: { signal: FairnessSignal; fall: Fall }) {
   const verlaufZiel = fairnessSignalVerlaufZiel(signal, fall);
 
+  // Offene Rückfrage mit Frist (Q-214: Countdown-Chip Parität Widerspruch Q-205)
   if (signal.typ === 'RUECKFRAGE_OFFEN_FRIST_RELEVANT') {
+    const rq =
+      fall.rueckfragen.find(r => !r.beantwortet && signal.id.includes(r.id)) ??
+      fall.rueckfragen.find(r => !r.beantwortet);
+    const resttage =
+      rq?.fristDatum != null
+        ? berechneFristTage(rq.fristDatum, FIKTIVES_HEUTE)
+        : null;
+    const restLabel = resttage !== null ? fristRestLabel(resttage) : null;
+    const kritisch = resttage !== null && resttage <= 5;
+    const chipClass =
+      resttage !== null && (resttage < 0 || kritisch)
+        ? 'status-chip-danger'
+        : 'status-chip-warning';
+    const rqHref = rq ? `/fall/rueckfragen#rq-${rq.id}` : '/fall/rueckfragen';
+
     return (
       <div style={ctaWrapStyle(signal.prioritaet)} data-testid="hinweise-rq-cta-wrap">
-        <p
-          style={{ margin: 0, fontSize: '0.875rem', lineHeight: 1.45 }}
-          data-testid="hinweise-rq-cta-hint"
-        >
-          {signal.titel.includes('Frist')
-            ? `${signal.titel}. Antwort im Bereich „Fragen“ einreichen.`
-            : 'Offene Rückfrage mit nahender Antwortfrist. Antwort im Bereich „Fragen“ einreichen.'}
-        </p>
+        <div style={{ flex: 1, minWidth: '12rem' }}>
+          <p
+            style={{ margin: 0, fontSize: '0.875rem', lineHeight: 1.45 }}
+            data-testid="hinweise-rq-cta-hint"
+          >
+            {restLabel && rq
+              ? `Offene Rückfrage — antworten bis ${rq.frist} (${restLabel}). Antwort im Bereich „Fragen“ einreichen.`
+              : signal.titel.includes('Frist')
+                ? `${signal.titel}. Antwort im Bereich „Fragen“ einreichen.`
+                : 'Offene Rückfrage mit nahender Antwortfrist. Antwort im Bereich „Fragen“ einreichen.'}
+          </p>
+          {restLabel && resttage !== null && (
+            <span
+              className={`status-chip ${chipClass}`}
+              style={{ marginTop: '0.5rem', fontSize: '0.75rem', display: 'inline-flex' }}
+              data-testid={`hinweise-rq-countdown-${signal.id}`}
+            >
+              <Icon name="clock" size={13} />
+              {restLabel}
+            </span>
+          )}
+        </div>
         <div
           style={{
             display: 'flex',
@@ -92,7 +122,7 @@ function SignalCta({ signal, fall }: { signal: FairnessSignal; fall: Fall }) {
           }}
         >
           <Link
-            href="/fall/rueckfragen"
+            href={rqHref}
             className="btn btn-primary"
             style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', flexShrink: 0 }}
             data-testid="hinweise-rq-cta"
