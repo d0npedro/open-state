@@ -234,6 +234,7 @@ Story-Dokumentation ist kein Pflicht-Vorläufer für Mock-Daten und Typen.
 | Q-197 | AV Übersicht: Termin-Bestätigung Quittung + Verlauf-Tiefenlink (US-AV-005/007, Parität Upload Q-194) | DEMO | S | Q-196 | DONE |
 | Q-198 | AV Übersicht: RQ-Antwort-Quittung + Verlauf-Tiefenlink (US-AV-004/007, Parität Termin Q-197) | DEMO | S | Q-197 | DONE |
 | Q-199 | UG Übersicht: RQ-Antwort-Quittung + Verlauf-Tiefenlink (US-UG-004/005, Parität AV Q-198) | DEMO | S | Q-198 | DONE |
+| Q-200 | AV Bescheide: Fairness-CTAs mit Verlauf-Tiefenlink + Bescheid-Anker `#bes-…` (US-AV-006/007) | DEMO | S | Q-191 | DONE |
 
 ---
 
@@ -438,3 +439,4 @@ Diese Punkte wurden in früheren Iterationen abgeschlossen und sind produktionsr
 | Q-197 AV Übersicht Termin-Quittung Verlauf | Übersicht → `#ere-E-DEMO-TERM-…` + CTA Termine (US-AV-005/007) | local |
 | Q-198 AV Übersicht RQ-Quittung Verlauf | Übersicht → `#ere-E-DEMO-RQ-…` + CTA Fragen/Unterlagen (US-AV-004/007) | local |
 | Q-199 UG Übersicht RQ-Quittung Verlauf | Übersicht → `#ere-UG-DEMO-RQ-…` + CTA Fragen/Unterlagen (US-UG-004/005) | local |
+| Q-200 AV Bescheide Fairness Verlauf + Anker | Bescheide → `#ere-E-007` + `#bes-BSC-…` (US-AV-006/007) | local |

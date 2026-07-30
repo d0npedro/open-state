@@ -3,9 +3,14 @@
 // Dual-Layer Prinzip: Erst die menschliche Erklärung (groß, klar),
 // dann die rechtliche Fassung (optional, für wer sie braucht).
 // Widerspruchsfrist: klar hervorgehoben, mit Countdown-Hinweis.
+// Q-200: Fairness-CTAs mit Verlauf-Tiefenlink + Bescheid-Anker (US-AV-006/007).
 
+import Link from 'next/link';
 import { useDemoState } from '@/context/DemoStateContext';
-import { berechneFairnessSignale } from '@/lib/fairness/rules';
+import {
+  berechneFairnessSignale,
+  fairnessSignalVerlaufZiel,
+} from '@/lib/fairness/rules';
 import { Icon } from '@/components/Icon';
 
 export default function BescheidePage() {
@@ -14,6 +19,7 @@ export default function BescheidePage() {
   const bescheidSignale = berechneFairnessSignale(fall).filter(
     s => s.typ === 'BESCHEID_VORLAEUFIG' || s.typ === 'BESCHEID_BEGRUENDUNG_ERWEITERBAR'
   );
+  const ersterBescheidId = bescheide[0]?.id;
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
@@ -26,29 +32,101 @@ export default function BescheidePage() {
         </p>
       </div>
 
-      {/* Fairness-Hinweise für Bescheide (z.B. vorläufig) */}
+      {/* Fairness-Hinweise für Bescheide + Verlauf-Tiefenlink (Q-200) */}
       {bescheidSignale.length > 0 && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-          {bescheidSignale.map(sig => (
-            <div key={sig.id} className="notice-box notice-box-warn">
-              <Icon name="alert" size={16} style={{ flexShrink: 0, marginTop: '2px' }} />
-              <div>
-                <strong style={{ display: 'block', marginBottom: '0.25rem' }}>{sig.titel}</strong>
-                <span style={{ fontSize: '0.875rem' }}>{sig.erklaerung}</span>
-                {sig.naechsterSchritt && (
-                  <div style={{ marginTop: '0.375rem', fontWeight: 600, fontSize: '0.875rem' }}>
-                    → {sig.naechsterSchritt}
+          {bescheidSignale.map(sig => {
+            const verlaufZiel = fairnessSignalVerlaufZiel(sig, fall);
+            return (
+              <div
+                key={sig.id}
+                className="notice-box notice-box-warn"
+                role="status"
+                data-testid={`bescheid-fairness-${sig.id}`}
+              >
+                <Icon name="alert" size={16} style={{ flexShrink: 0, marginTop: '2px' }} />
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', flex: 1 }}>
+                  <div>
+                    <strong
+                      style={{ display: 'block', marginBottom: '0.25rem' }}
+                      data-testid={`bescheid-fairness-titel-${sig.id}`}
+                    >
+                      {sig.titel}
+                    </strong>
+                    <span
+                      style={{ fontSize: '0.875rem' }}
+                      data-testid={`bescheid-fairness-erklaerung-${sig.id}`}
+                    >
+                      {sig.erklaerung}
+                    </span>
+                    {sig.naechsterSchritt && (
+                      <div
+                        style={{ marginTop: '0.375rem', fontWeight: 600, fontSize: '0.875rem' }}
+                        data-testid={`bescheid-fairness-naechster-${sig.id}`}
+                      >
+                        → {sig.naechsterSchritt}
+                      </div>
+                    )}
                   </div>
-                )}
+                  <div
+                    style={{
+                      display: 'flex',
+                      flexWrap: 'wrap',
+                      alignItems: 'center',
+                      gap: '0.5rem 0.75rem',
+                    }}
+                  >
+                    {ersterBescheidId && (
+                      <Link
+                        href={`#bes-${ersterBescheidId}`}
+                        className="btn btn-primary btn-inline"
+                        style={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '0.4rem',
+                          minHeight: 44,
+                        }}
+                        data-testid={`bescheid-fairness-bes-cta-${sig.id}`}
+                        aria-label="Zum Bescheid springen"
+                      >
+                        <Icon name="scroll" size={15} />
+                        Zum Bescheid
+                      </Link>
+                    )}
+                    {verlaufZiel && (
+                      <Link
+                        href={verlaufZiel.href}
+                        className="btn btn-secondary btn-inline"
+                        style={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '0.4rem',
+                          minHeight: 44,
+                        }}
+                        data-testid={`bescheid-verlauf-cta-${verlaufZiel.ereignisId}`}
+                        aria-label={verlaufZiel.ariaLabel ?? verlaufZiel.cta}
+                      >
+                        <Icon name="clock" size={15} />
+                        {verlaufZiel.cta}
+                      </Link>
+                    )}
+                  </div>
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
 
       {/* ─── Bescheide ───────────────────────────────────────────── */}
       {bescheide.map(b => (
-        <div key={b.id} className="card">
+        <div
+          key={b.id}
+          id={`bes-${b.id}`}
+          className="card"
+          data-testid={`bescheid-karte-${b.id}`}
+          style={{ scrollMarginTop: '5rem' }}
+        >
 
           {/* Header */}
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '1rem', flexWrap: 'wrap', marginBottom: '1.25rem' }}>
@@ -165,6 +243,25 @@ export default function BescheidePage() {
               <Icon name="send" size={16} />
               Widerspruch einlegen
             </button>
+          </div>
+
+          {/* Audit: Zustellung im Verlauf nachvollziehbar (Q-200) */}
+          <div style={{ marginTop: '1rem' }}>
+            <Link
+              href="/fall/verlauf#ere-E-007"
+              className="btn btn-secondary btn-inline"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.4rem',
+                minHeight: 44,
+              }}
+              data-testid={`bescheid-karte-verlauf-${b.id}`}
+              aria-label={`${b.typ} im Verlauf ansehen`}
+            >
+              <Icon name="clock" size={16} />
+              Zustellung im Verlauf ansehen
+            </Link>
           </div>
         </div>
       ))}

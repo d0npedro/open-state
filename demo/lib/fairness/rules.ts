@@ -358,5 +358,24 @@ export function fairnessSignalVerlaufZiel(
     };
   }
 
+  // Vorläufiger / unvollständige Begründung im Bescheid → Zustellung im Verlauf (Q-200)
+  // Mock: E-007 BESCHEID_ZUGESTELLT (Fallback: E-006 BESCHEID_ERSTELLT)
+  if (
+    signal.typ === 'BESCHEID_VORLAEUFIG' ||
+    signal.typ === 'BESCHEID_BEGRUENDUNG_ERWEITERBAR'
+  ) {
+    const e =
+      letztesTimelineEreignis(fall, 'BESCHEID_ZUGESTELLT') ??
+      letztesTimelineEreignis(fall, 'BESCHEID_ERSTELLT');
+    if (!e) return null;
+    return {
+      href: `/fall/verlauf#ere-${e.id}`,
+      cta: 'Im Verlauf ansehen',
+      testKey: `verlauf-${e.id}`,
+      ereignisId: e.id,
+      ariaLabel: 'Bescheid im Verlauf ansehen',
+    };
+  }
+
   return null;
 }

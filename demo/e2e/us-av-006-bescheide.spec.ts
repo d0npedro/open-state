@@ -93,6 +93,47 @@ test.describe('US-AV-006 – Bescheid verstehen', () => {
     ).toBeVisible();
   });
 
+  test('Q-200: Fairness-Signal mit Verlauf-Tiefenlink und Bescheid-Anker', async ({ page }) => {
+    // US-AV-006/007: Fairness → #ere-E-007; Anker #bes-BSC-001
+    const fairness = page.getByTestId('bescheid-fairness-FH-BESCHEID-VORLAEUFIG');
+    await expect(fairness).toBeVisible();
+    await expect(page.getByTestId('bescheid-fairness-titel-FH-BESCHEID-VORLAEUFIG')).toContainText(
+      /Vorläufiger Bescheid/i
+    );
+
+    const besCta = page.getByTestId('bescheid-fairness-bes-cta-FH-BESCHEID-VORLAEUFIG');
+    await expect(besCta).toBeVisible();
+    await expect(besCta).toHaveAttribute('href', '#bes-BSC-001');
+
+    // Zwei Fairness-Signale (vorläufig + Begründung) teilen denselben Verlauf-Anker E-007
+    const verlaufCta = fairness.getByTestId('bescheid-verlauf-cta-E-007');
+    await expect(verlaufCta).toBeVisible();
+    await expect(verlaufCta).toHaveAttribute('href', '/fall/verlauf#ere-E-007');
+    await expect(verlaufCta).toContainText(/Im Verlauf ansehen/i);
+    await expect(page.getByTestId('bescheid-verlauf-cta-E-007')).toHaveCount(2);
+
+    await verlaufCta.click();
+    await expect(page).toHaveURL(/\/fall\/verlauf#ere-E-007/);
+    const card = page.getByTestId('verlauf-ereignis-E-007');
+    await expect(card).toBeVisible();
+    await expect(card).toHaveAttribute('aria-current', 'location');
+    await expect(card).toContainText(/zugestellt|Bescheid/i);
+  });
+
+  test('Q-200: Bescheid-Karte Anker und Zustellungs-Tiefenlink', async ({ page }) => {
+    await expect(page.locator('#bes-BSC-001')).toBeVisible();
+    await expect(page.getByTestId('bescheid-karte-BSC-001')).toBeVisible();
+
+    const karteLink = page.getByTestId('bescheid-karte-verlauf-BSC-001');
+    await expect(karteLink).toBeVisible();
+    await expect(karteLink).toHaveAttribute('href', '/fall/verlauf#ere-E-007');
+    await expect(karteLink).toContainText(/Zustellung im Verlauf ansehen/i);
+
+    await karteLink.click();
+    await expect(page).toHaveURL(/\/fall\/verlauf#ere-E-007/);
+    await expect(page.getByTestId('verlauf-ereignis-E-007')).toBeVisible();
+  });
+
   test('Aktiver Tab "Bescheid" ist hervorgehoben', async ({ page }) => {
     const activeTab = page.locator('.tab-nav-item.active');
     await expect(activeTab).toContainText('Bescheid');
