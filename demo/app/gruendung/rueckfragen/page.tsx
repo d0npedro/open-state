@@ -10,6 +10,13 @@ import { berechneFristTage } from '@/lib/fairness/rules';
 import { FIKTIVES_HEUTE_GRUENDUNG } from '@/lib/fairness/gruendung-rules';
 import { Icon } from '@/components/Icon';
 
+/** Countdown-Label analog Dokumente/Übersicht (Demo-Stichtag FIKTIVES_HEUTE_GRUENDUNG). */
+function fristRestLabel(tage: number): string {
+  if (tage < 0) return `${Math.abs(tage)} Tage überschritten`;
+  if (tage === 0) return 'heute fällig';
+  return `noch ${tage} Tag${tage === 1 ? '' : 'e'}`;
+}
+
 export default function RueckfragenPage() {
   const { akte, answerRueckfrage } = useGruendungState();
   const offeneAnzahl = akte.rueckfragen.filter(r => !r.beantwortet).length;
@@ -170,28 +177,31 @@ export default function RueckfragenPage() {
                   gap: '0.875rem',
                 }}
               >
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '0.75rem' }}>
-                  <div>
-                    <div style={{
-                      display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: 700,
-                      color: fristKritisch ? 'var(--color-danger)' : 'var(--color-warning)',
-                      fontSize: '0.95rem',
-                    }}>
-                      <Icon name="calendar" size={16} />
-                      Frist: {rq.frist}
-                    </div>
-                    <div style={{
-                      fontSize: '0.875rem',
-                      color: fristKritisch ? 'var(--color-danger)' : 'var(--color-warning)',
-                      marginTop: '0.25rem',
-                    }}>
-                      {resttage < 0
-                        ? `${Math.abs(resttage)} Tag${Math.abs(resttage) === 1 ? '' : 'e'} überschritten`
-                        : resttage === 0
-                          ? 'Heute fällig'
-                          : `Noch ${resttage} Tag${resttage === 1 ? '' : 'e'} verbleibend`}
-                    </div>
-                  </div>
+                {/* Frist + Countdown-Chip (Q-211, Parität Dokumente Q-209 / Übersicht Q-210) */}
+                <div
+                  style={{
+                    display: 'flex',
+                    flexWrap: 'wrap',
+                    alignItems: 'center',
+                    gap: '0.5rem 1rem',
+                    color: fristKritisch ? 'var(--color-danger)' : 'var(--color-warning)',
+                    fontWeight: 600,
+                    fontSize: '0.875rem',
+                  }}
+                  data-testid={`rq-seite-frist-${rq.id}`}
+                >
+                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}>
+                    <Icon name="calendar" size={15} />
+                    Antworten bis: {rq.frist}
+                  </span>
+                  <span
+                    className={`status-chip ${fristKritisch ? 'status-chip-danger' : 'status-chip-warning'}`}
+                    style={{ fontSize: '0.75rem' }}
+                    data-testid={`rq-seite-countdown-${rq.id}`}
+                  >
+                    <Icon name="clock" size={13} />
+                    {fristRestLabel(resttage)}
+                  </span>
                 </div>
 
                 <div>

@@ -976,6 +976,14 @@ test.describe('UG – Rückfragen (Anzeige)', () => {
     await expect(page.getByText('10.12.2024')).toBeVisible();
   });
 
+  test('Frist-Countdown-Chip pro Rückfragekarte (Q-211)', async ({ page }) => {
+    // RQ-01: fristDatum 2024-12-10 · FIKTIVES_HEUTE_GRUENDUNG 2024-12-07 → noch 3 Tage
+    // Parität Dokumente Q-209 / Übersicht Q-210
+    await expect(page.getByTestId('rq-seite-frist-RQ-01')).toBeVisible();
+    await expect(page.getByTestId('rq-seite-frist-RQ-01')).toContainText(/10\.12\.2024/);
+    await expect(page.getByTestId('rq-seite-countdown-RQ-01')).toContainText(/noch 3 Tage/i);
+  });
+
   test('Zeitstempel "Gefragt am" sichtbar', async ({ page }) => {
     await expect(page.getByText(/Gefragt am 15.11.2024/)).toBeVisible();
   });
@@ -988,7 +996,7 @@ test.describe('UG – Rückfragen (Anzeige)', () => {
 
   test('Antwort-Formular mit Label und Fristcountdown sichtbar', async ({ page }) => {
     await expect(page.getByLabel(/Ihre Antwort an/i)).toBeVisible();
-    await expect(page.getByText(/Noch \d+ Tag/)).toBeVisible();
+    await expect(page.getByTestId('rq-seite-countdown-RQ-01')).toContainText(/noch 3 Tage/i);
   });
 
   test('Kein interner Code sichtbar', async ({ page }) => {

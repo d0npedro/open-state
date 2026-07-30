@@ -1,6 +1,6 @@
 # BUILD_STATE.md – Aktueller Projektstand
 
-Zuletzt aktualisiert: nach Q-210 UG Übersicht Fristen-Countdown offener Rückfragen (US-UG-004)
+Zuletzt aktualisiert: nach Q-211 UG Rückfragen Frist-Countdown-Chip (US-UG-004)
 
 Dieser Stand beschreibt, was tatsächlich existiert und funktioniert.
 Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
@@ -163,6 +163,7 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | UG Übersicht Fristen Unterlagen | `/gruendung` dok-fristen + Kachel | ✓ Countdown DOK-03 (8 Tage) ggü. FIKTIVES_HEUTE_GRUENDUNG + CTA `#dok-…` (Q-208, US-UG-001/003, Parität AV Q-086) |
 | UG Dokumente Frist-Countdown | `/gruendung/dokumente` pro offener Karte | ✓ Resttage-Chip ggü. FIKTIVES_HEUTE_GRUENDUNG (Q-209, US-UG-003, Parität AV) |
 | UG Übersicht Fristen Rückfragen | `/gruendung` rq-fristen + Kachel Fragen | ✓ Countdown RQ-01 (3 Tage) + CTA `#rq-…` (Q-210, US-UG-004, Parität Q-208) |
+| UG Rückfragen Frist-Countdown-Chip | `/gruendung/rueckfragen` pro offener Karte | ✓ status-chip Resttage + testids (Q-211, US-UG-004, Parität Q-209) |
 | AV Session-Antwort Verlauf | `/fall/rueckfragen` + `/fall/verlauf` | ✓ RQ-Quittung Tiefenlink `#ere-E-DEMO-RQ-…` + Badge „Ihre Antwort“ / Session-Upload-Badge (Q-192, US-AV-007/004) |
 | AV Dokumente Upload-Quittung Verlauf | `/fall/dokumente` + `demoDokUploadEreignisId` + Verlauf | ✓ Sekundär-CTA „Im Verlauf ansehen“ → `#ere-E-DEMO-DOK-…`; Session-Upload-Badge (Q-193, US-AV-003/007) |
 | AV Übersicht Upload-Quittung Verlauf | `/fall` Upload-Quittung + `#dok-…` auf Dokumentenkarten | ✓ Pro Session-Upload „Im Verlauf ansehen“; nächste Unterlage → `#dok-…` (Q-194, US-AV-001/003/007) |
