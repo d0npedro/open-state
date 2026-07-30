@@ -133,6 +133,24 @@ test.describe('US-AV-006 – Bescheid verstehen', () => {
     await expect(card).toContainText(/zugestellt|Bescheid/i);
   });
 
+  test('Q-207: Fairness BESCHEID_VORLAEUFIG Widerspruchsfrist-Countdown-Chip', async ({ page }) => {
+    // US-AV-006: Parität Übersicht Q-206 / Hinweise Q-205 — Chip im Fairness-Panel
+    // Ablauf 2024-12-16 · FIKTIVES_HEUTE 2024-11-24 → noch 22 Tage
+    const chip = page.getByTestId(
+      'bescheid-fairness-widerspruch-countdown-FH-BESCHEID-VORLAEUFIG'
+    );
+    await expect(chip).toBeVisible();
+    await expect(chip).toContainText(/noch 22 Tage/i);
+    // Regelwerk-Text im naechsterSchritt (Q-203) + Chip konsistent
+    await expect(
+      page.getByTestId('bescheid-fairness-naechster-FH-BESCHEID-VORLAEUFIG')
+    ).toContainText(/noch 22 Tage/i);
+    // Begründung-Signal ohne eigenen Widerspruch-Chip
+    await expect(
+      page.getByTestId('bescheid-fairness-widerspruch-countdown-FH-BSC-001-BEGRUENDUNG')
+    ).toHaveCount(0);
+  });
+
   test('Q-200: Bescheid-Karte Anker und Zustellungs-Tiefenlink', async ({ page }) => {
     await expect(page.locator('#bes-BSC-001')).toBeVisible();
     await expect(page.getByTestId('bescheid-karte-BSC-001')).toBeVisible();

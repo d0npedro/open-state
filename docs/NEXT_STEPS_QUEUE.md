@@ -241,6 +241,7 @@ Story-Dokumentation ist kein Pflicht-Vorläufer für Mock-Daten und Typen.
 | Q-204 | AV Übersicht: Widerspruchsfrist-Kurzblock + Bescheid-Kachel mit Countdown (US-AV-006 AC3, Parität Q-203/Q-086) | DEMO | S | Q-203 | DONE |
 | Q-205 | AV Hinweise: Widerspruchsfrist-Countdown-Chip am BESCHEID_VORLAEUFIG-CTA (US-AV-006/008, Parität Q-203/Q-204) | DEMO | S | Q-204 | DONE |
 | Q-206 | AV Übersicht Fairness: Widerspruchsfrist-Countdown-Chip am BESCHEID_VORLAEUFIG (US-AV-006/007, Parität Hinweise Q-205) | DEMO | S | Q-205 | DONE |
+| Q-207 | AV Bescheide Fairness: Widerspruchsfrist-Countdown-Chip am BESCHEID_VORLAEUFIG (US-AV-006/007, Parität Q-205/Q-206) | DEMO | S | Q-206 | DONE |
 
 ---
 
@@ -452,3 +453,4 @@ Diese Punkte wurden in früheren Iterationen abgeschlossen und sind produktionsr
 | Q-204 AV Übersicht Widerspruchsfrist | Kurzblock + Bescheid-Kachel Countdown → `#bes-…` (US-AV-006) | local |
 | Q-205 AV Hinweise Widerspruchsfrist-Chip | BESCHEID_VORLAEUFIG-CTA Resttage ggü. FIKTIVES_HEUTE (US-AV-006/008) | local |
 | Q-206 AV Übersicht Fairness Widerspruch-Chip | Fairness-Block BESCHEID_VORLAEUFIG Resttage-Chip (US-AV-006/007) | local |
+| Q-207 AV Bescheide Fairness Widerspruch-Chip | Fairness-Panel BESCHEID_VORLAEUFIG Resttage-Chip (US-AV-006/007) | local |

@@ -4,6 +4,7 @@
 // dann die rechtliche Fassung (optional, für wer sie braucht).
 // Widerspruchsfrist: klar hervorgehoben, mit Countdown-Hinweis.
 // Q-200: Fairness-CTAs mit Verlauf-Tiefenlink + Bescheid-Anker (US-AV-006/007).
+// Q-207: Widerspruchsfrist-Chip am Fairness BESCHEID_VORLAEUFIG (Parität Q-205/Q-206).
 
 import Link from 'next/link';
 import { useDemoState } from '@/context/DemoStateContext';
@@ -29,6 +30,11 @@ export default function BescheidePage() {
     s => s.typ === 'BESCHEID_VORLAEUFIG' || s.typ === 'BESCHEID_BEGRUENDUNG_ERWEITERBAR'
   );
   const ersterBescheidId = bescheide[0]?.id;
+  /** Widerspruchsfrist für Fairness-Chip (Parität Übersicht/Hinweise Q-206/Q-205). */
+  const widerspruchRest =
+    bescheide[0]?.widerspruchsfristAblaufDatum
+      ? berechneFristTage(bescheide[0].widerspruchsfristAblaufDatum, FIKTIVES_HEUTE)
+      : null;
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
@@ -41,11 +47,22 @@ export default function BescheidePage() {
         </p>
       </div>
 
-      {/* Fairness-Hinweise für Bescheide + Verlauf-Tiefenlink (Q-200) */}
+      {/* Fairness-Hinweise für Bescheide + Verlauf-Tiefenlink (Q-200)
+          + Widerspruch-Chip am vorläufigen Bescheid (Q-207) */}
       {bescheidSignale.length > 0 && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
           {bescheidSignale.map(sig => {
             const verlaufZiel = fairnessSignalVerlaufZiel(sig, fall);
+            const isVorlaeufig = sig.typ === 'BESCHEID_VORLAEUFIG';
+            const resttage = isVorlaeufig ? widerspruchRest : null;
+            const kritisch = resttage !== null && resttage <= 5;
+            const bald = resttage !== null && resttage <= 14;
+            const chipClass =
+              resttage !== null && (resttage < 0 || kritisch)
+                ? 'status-chip-danger'
+                : bald
+                  ? 'status-chip-warning'
+                  : 'status-chip-primary';
             return (
               <div
                 key={sig.id}
@@ -75,6 +92,16 @@ export default function BescheidePage() {
                       >
                         → {sig.naechsterSchritt}
                       </div>
+                    )}
+                    {resttage !== null && (
+                      <span
+                        className={`status-chip ${chipClass}`}
+                        style={{ marginTop: '0.5rem', fontSize: '0.75rem', display: 'inline-flex' }}
+                        data-testid={`bescheid-fairness-widerspruch-countdown-${sig.id}`}
+                      >
+                        <Icon name="clock" size={13} />
+                        {fristRestLabel(resttage)}
+                      </span>
                     )}
                   </div>
                   <div
