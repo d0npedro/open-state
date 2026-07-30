@@ -1,6 +1,6 @@
 # BUILD_STATE.md – Aktueller Projektstand
 
-Zuletzt aktualisiert: nach Q-216 AV Hinweise UNTERLAGE-Countdown-Chip am CTA (US-AV-003/008)
+Zuletzt aktualisiert: nach Q-217 AV Übersicht Fairness UNTERLAGE-Countdown-Chip (US-AV-003/007/008)
 
 Dieser Stand beschreibt, was tatsächlich existiert und funktioniert.
 Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
@@ -169,6 +169,7 @@ Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
 | AV Hinweise RQ-Countdown-Chip | `/fall/hinweise` RQ-CTA | ✓ Countdown-Chip 2 Tage + CTA `#rq-RQ-001` (Q-214, US-AV-004/008, Parität Widerspruch Q-205) |
 | AV Übersicht Fairness RQ-Countdown | `/fall` Fairness RUECKFRAGE | ✓ Countdown-Chip 2 Tage + CTA `#rq-RQ-001` (Q-215, US-AV-004/007/008, Parität Q-214/Q-206) |
 | AV Hinweise UNTERLAGE-Countdown-Chip | `/fall/hinweise` UNTERLAGE-CTA | ✓ Countdown-Chip 9 Tage + CTA `#dok-DOK-003` (Q-216, US-AV-003/008, Parität RQ Q-214) |
+| AV Übersicht Fairness UNTERLAGE-Countdown | `/fall` Fairness UNTERLAGE | ✓ Countdown-Chip 9 Tage + CTA `#dok-DOK-003` (Q-217, US-AV-003/007/008, Parität Q-216/Q-215) |
 | AV Session-Antwort Verlauf | `/fall/rueckfragen` + `/fall/verlauf` | ✓ RQ-Quittung Tiefenlink `#ere-E-DEMO-RQ-…` + Badge „Ihre Antwort“ / Session-Upload-Badge (Q-192, US-AV-007/004) |
 | AV Dokumente Upload-Quittung Verlauf | `/fall/dokumente` + `demoDokUploadEreignisId` + Verlauf | ✓ Sekundär-CTA „Im Verlauf ansehen“ → `#ere-E-DEMO-DOK-…`; Session-Upload-Badge (Q-193, US-AV-003/007) |
 | AV Übersicht Upload-Quittung Verlauf | `/fall` Upload-Quittung + `#dok-…` auf Dokumentenkarten | ✓ Pro Session-Upload „Im Verlauf ansehen“; nächste Unterlage → `#dok-…` (Q-194, US-AV-001/003/007) |

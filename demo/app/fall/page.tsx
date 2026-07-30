@@ -999,7 +999,8 @@ export default function FallPage() {
       {/* ─── 5. FAIRNESS-HINWEISE (inline, kein separater Klick nötig)
           Q-202: BESCHEID-Signale mit Zum-Bescheid-CTA + Verlauf (Parität Hinweise Q-201).
           Q-206: Widerspruchsfrist-Chip am BESCHEID_VORLAEUFIG (Parität Hinweise Q-205).
-          Q-215: RQ-Countdown-Chip + CTA `#rq-…` am RUECKFRAGE-Signal (Parität Hinweise Q-214). */}
+          Q-215: RQ-Countdown-Chip + CTA `#rq-…` am RUECKFRAGE-Signal (Parität Hinweise Q-214).
+          Q-217: UNTERLAGE-Countdown-Chip + CTA `#dok-…` (Parität Hinweise Q-216 / RQ Q-215). */}
       {fairnessSignale.length > 0 && (
         <div className="card">
           <h2 style={{ fontSize: '1rem', marginBottom: '1rem' }}>
@@ -1014,6 +1015,7 @@ export default function FallPage() {
               const isBegruendung = sig.typ === 'BESCHEID_BEGRUENDUNG_ERWEITERBAR';
               const isVorlaeufig = sig.typ === 'BESCHEID_VORLAEUFIG';
               const isRq = sig.typ === 'RUECKFRAGE_OFFEN_FRIST_RELEVANT';
+              const isUnterlage = sig.typ === 'UNTERLAGE_FEHLT_BLOCKIERT';
               const besId = isBescheid
                 ? fall.bescheide.find(b => sig.bezug.includes(b.id))?.id ??
                   fall.bescheide[0]?.id
@@ -1021,6 +1023,17 @@ export default function FallPage() {
               const rq = isRq
                 ? fall.rueckfragen.find(r => !r.beantwortet && sig.id.includes(r.id)) ??
                   fall.rueckfragen.find(r => !r.beantwortet)
+                : undefined;
+              // Nächste offene Unterlage mit Frist (Parität Hinweise Q-216)
+              const naechsteUnterlage = isUnterlage
+                ? fall.dokumente
+                    .filter(d => d.status === 'ANGEFORDERT' || d.status === 'ABGELEHNT')
+                    .filter(d => d.fristDatum && d.frist)
+                    .map(d => ({
+                      dok: d,
+                      resttage: berechneFristTage(d.fristDatum as string, FIKTIVES_HEUTE),
+                    }))
+                    .sort((a, b) => a.resttage - b.resttage)[0]
                 : undefined;
               // BESCHEID: signal-scoped testid (zwei Signale → gleiches E-007)
               const verlaufTestId = isBescheid
@@ -1045,6 +1058,13 @@ export default function FallPage() {
               const rqKritisch = rqRest !== null && rqRest <= 5;
               const rqChipClass =
                 rqRest !== null && (rqRest < 0 || rqKritisch)
+                  ? 'status-chip-danger'
+                  : 'status-chip-warning';
+              // UNTERLAGE-Countdown (Q-217, Parität Hinweise Q-216)
+              const uRest = naechsteUnterlage?.resttage ?? null;
+              const uKritisch = uRest !== null && uRest <= 5;
+              const uChipClass =
+                uRest !== null && (uRest < 0 || uKritisch)
                   ? 'status-chip-danger'
                   : 'status-chip-warning';
               return (
@@ -1082,7 +1102,17 @@ export default function FallPage() {
                         {fristRestLabel(rqRest)}
                       </span>
                     )}
-                    {(verlaufZiel || isBescheid || isRq) && (
+                    {uRest !== null && (
+                      <span
+                        className={`status-chip ${uChipClass}`}
+                        style={{ marginTop: '0.5rem', fontSize: '0.75rem', display: 'inline-flex' }}
+                        data-testid={`uebersicht-fairness-unterlage-countdown-${sig.id}`}
+                      >
+                        <Icon name="clock" size={13} />
+                        {fristRestLabel(uRest)}
+                      </span>
+                    )}
+                    {(verlaufZiel || isBescheid || isRq || isUnterlage) && (
                       <div
                         style={{
                           marginTop: '0.65rem',
@@ -1147,6 +1177,25 @@ export default function FallPage() {
                           >
                             <Icon name="chat" size={13} />
                             Frage beantworten →
+                          </Link>
+                        )}
+                        {isUnterlage && naechsteUnterlage && (
+                          <Link
+                            href={`/fall/dokumente#dok-${naechsteUnterlage.dok.id}`}
+                            data-testid={`uebersicht-fairness-unterlage-cta-${sig.id}`}
+                            style={{
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              gap: '0.3rem',
+                              fontSize: '0.8rem',
+                              fontWeight: 600,
+                              color: 'var(--color-primary)',
+                              textDecoration: 'none',
+                            }}
+                            aria-label="Zu den ausstehenden Unterlagen"
+                          >
+                            <Icon name="upload" size={13} />
+                            Unterlagen hochladen →
                           </Link>
                         )}
                         {verlaufZiel && (
