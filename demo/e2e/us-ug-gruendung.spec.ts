@@ -717,6 +717,33 @@ test.describe('UG – Tab-Navigation', () => {
 
 });
 
+// ─── Skip-Link (Q-472) ────────────────────────────────────────────────────────
+
+test.describe('UG Skip-Link – Übersicht und Hinweise (Q-472)', () => {
+  test('Skip-Link Fokus auf /gruendung und /gruendung/hinweise', async ({ page }) => {
+    // WCAG 2.4.1: Root-SkipLink + UG-Layout main#main-content (tabIndex=-1)
+    // Parität Q-451 (Fall) / Q-471 (Kita) — kein Session-State
+    async function assertSkipToMain(route: string, h1: RegExp) {
+      await page.goto(route);
+      await expect(page.getByRole('heading', { level: 1, name: h1 }).first()).toBeVisible();
+
+      const main = page.locator('main#main-content');
+      await expect(main).toBeVisible();
+      await expect(page.getByRole('main')).toHaveCount(1);
+
+      await page.keyboard.press('Tab');
+      const skip = page.getByRole('link', { name: /Zum Inhalt springen/i });
+      await expect(skip).toBeFocused();
+      await expect(skip).toHaveAttribute('href', '#main-content');
+      await skip.press('Enter');
+      await expect(main).toBeFocused();
+    }
+
+    await assertSkipToMain('/gruendung', /IT-Beratung und Softwareentwicklung/i);
+    await assertSkipToMain('/gruendung/hinweise', /Hinweise zur Verfahrenslage/i);
+  });
+});
+
 // ─── Behörden ─────────────────────────────────────────────────────────────────
 
 test.describe('UG – Behörden & Verfahrensschritte', () => {

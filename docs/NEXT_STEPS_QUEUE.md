@@ -96,7 +96,7 @@ Autonomer Multi-Domain-Loop: [`docs/delivery/AUTONOMOUS_LOOP.md`](delivery/AUTON
 |----|--------|---------|-----|---------|--------------|--------|
 | Q-470 | ug | E2E: Session-Reset DemoSessionBar nach RQ-Antwort stellt Fairness-RQ-Signal wieder her (Parität Q-462) | DEMO | S | Q-441 | DONE |
 | Q-471 | kita | E2E Skip-Link: Fokus auf `main#main-content` für Kita-Kernrouten (`/kita`, `/kita/lagebild`) | DEMO | S | Q-401 | DONE |
-| Q-472 | ug | E2E Skip-Link: Fokus `main#main-content` für `/gruendung` und `/gruendung/hinweise` (Parität Q-451) | DEMO | S | Q-451 | OFFEN |
+| Q-472 | ug | E2E Skip-Link: Fokus `main#main-content` für `/gruendung` und `/gruendung/hinweise` (Parität Q-451) | DEMO | S | Q-451 | DONE |
 
 ---
 
@@ -104,6 +104,7 @@ Autonomer Multi-Domain-Loop: [`docs/delivery/AUTONOMOUS_LOOP.md`](delivery/AUTON
 
 | ID | Kurz | Status |
 |----|------|--------|
+| Q-472 | UG Skip-Link /gruendung und /gruendung/hinweise | DONE |
 | Q-471 | Kita Skip-Link /kita und /kita/lagebild | DONE |
 | Q-470 | UG Session-Reset nach RQ stellt Fairness-RQ wieder her | DONE |
 | Q-462 | AV Session-Reset nach RQ stellt Fairness-RQ wieder her | DONE |
@@ -113,7 +114,6 @@ Autonomer Multi-Domain-Loop: [`docs/delivery/AUTONOMOUS_LOOP.md`](delivery/AUTON
 | Q-451 | Skip-Link Fokus Root/Fall/Hinweise E2E | DONE |
 | Q-450 | Landing Deep-Link-Smoke Primär+Sekundär | DONE |
 | Q-442 | Kita E2E Session-Reset DemoSessionBar Lagebild | DONE |
-| Q-441 | UG E2E BG-Happy-Path Hinweise→Markierung | DONE |
 
 ---
 
