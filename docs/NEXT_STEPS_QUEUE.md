@@ -72,7 +72,15 @@ Autonomer Multi-Domain-Loop: [`docs/delivery/AUTONOMOUS_LOOP.md`](delivery/AUTON
 |----|--------|---------|-----|---------|--------------|--------|
 | Q-440 | av | E2E: Fairness-Leerzustand nach Erledigung offener Aktionen (keine hängenden Signale; Session-konsistent, DEC-012) | DEMO | M | Q-420 | DONE |
 | Q-441 | ug | E2E: Behörden-BG-Happy-Path (Markierung/Flow ohne page.goto nach Interaktion) | DEMO | M | Q-421 | DONE |
-| Q-442 | kita | E2E: Session-Reset über DemoSessionBar nach Meldefreigabe (State weg, Lagebild ohne freigegebene Session-Meldung) | DEMO | S | Q-412 | OFFEN |
+| Q-442 | kita | E2E: Session-Reset über DemoSessionBar nach Meldefreigabe (State weg, Lagebild ohne freigegebene Session-Meldung) | DEMO | S | Q-412 | DONE |
+
+### Loop-Katalog (Auffüllung nach Q-442)
+
+| ID | Domäne | Schritt | Typ | Aufwand | Abhängigkeit | Status |
+|----|--------|---------|-----|---------|--------------|--------|
+| Q-450 | cross | E2E Landing: Domänen-Karten + Sekundärlinks Hinweise/Lagebild erreichbar (Deep-Link-Smoke) | DEMO | S | Q-410 | OFFEN |
+| Q-451 | av | E2E Skip-Link: Fokus auf `#main-content` / `main` nach Tastatur-Aktivierung (Root/Fall) | DEMO | S | Q-420 | OFFEN |
+| Q-452 | ug | E2E a11y: Behördenkarten und BG-Demo-Button haben zugängliche Namen/Labels | DEMO | S | Q-441 | OFFEN |
 
 ---
 
@@ -80,6 +88,7 @@ Autonomer Multi-Domain-Loop: [`docs/delivery/AUTONOMOUS_LOOP.md`](delivery/AUTON
 
 | ID | Kurz | Status |
 |----|------|--------|
+| Q-442 | Kita E2E Session-Reset DemoSessionBar Lagebild | DONE |
 | Q-441 | UG E2E BG-Happy-Path Hinweise→Markierung | DONE |
 | Q-440 | AV E2E Fairness-Leerzustand nach Aktionen | DONE |
 | Q-432 | TRACEABILITY_MATRIX Stub + SSOT storyRegistry | DONE |
@@ -89,7 +98,6 @@ Autonomer Multi-Domain-Loop: [`docs/delivery/AUTONOMOUS_LOOP.md`](delivery/AUTON
 | Q-412 | Kita DemoSessionBar bei Meldefreigabe | DONE |
 | Q-411 | /stories Zur-Demo-CTA pro Story mit Route | DONE |
 | Q-422 | Kita E2E Transparenz Filter+CSV labeled | DONE |
-| Q-421 | UG E2E RQ+Upload+BG ohne Action-Banner | DONE |
 
 ---
 

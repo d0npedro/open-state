@@ -105,6 +105,64 @@ test.describe('Kita Meldekette – Freigabe → Meldeeingang (Q-402)', () => {
     await expect(page.getByText(/Neu im Meldeeingang \(Demo-Session\)/)).toHaveCount(0);
   });
 
+  test('Q-442: Session-Reset auf Lagebild entfernt freigegebene Session-Meldung', async ({
+    page,
+  }) => {
+    // Happy-Path: Freigabe → Client-Nav Lagebild (Session sichtbar) → DemoSessionBar Reset
+    // → kein Session-Meldeeingang, Sonnenwinkel wieder Lücke (localStorage leer)
+    await page.getByRole('button', { name: /Zur Freigabe/i }).click();
+    await page
+      .getByRole('checkbox', {
+        name: /Ich habe den Meldeinhalt geprüft und gebe die Monatsmeldung/i,
+      })
+      .check();
+    await page.getByRole('button', { name: /Jetzt freigeben und übermitteln/i }).click();
+    await expect(page.getByText(/Freigabe protokolliert/i)).toBeVisible();
+
+    const freigabeId = await page.evaluate(key => {
+      const raw = localStorage.getItem(key);
+      return raw ? (JSON.parse(raw) as { freigabeId: string }).freigabeId : null;
+    }, SESSION_KEY);
+    expect(freigabeId).toBeTruthy();
+
+    // DEC-012: Client-Nav nach Interaktion
+    await goKitaNav(page, /Steuerungslagebild/i, /\/kita\/lagebild/);
+
+    const sessionBanner = page
+      .getByRole('status')
+      .filter({ hasText: /Freigabe von\s+Kita Sonnenwinkel ist im Lagebild angekommen/i })
+      .first();
+    await expect(sessionBanner).toBeVisible();
+    await expect(sessionBanner).toContainText(freigabeId!);
+
+    const sessionBar = page.getByRole('region', { name: /Demo-Session/i });
+    await expect(sessionBar).toBeVisible();
+    // Kita-Reset löst reload aus (clear localStorage + Remount)
+    await Promise.all([
+      page.waitForLoadState('networkidle'),
+      sessionBar.getByRole('button', { name: /Demo zurücksetzen/i }).click(),
+    ]);
+
+    await expect(page).toHaveURL(/\/kita\/lagebild/);
+    await expect(page.getByRole('region', { name: /Demo-Session/i })).toHaveCount(0);
+    const storedAfter = await page.evaluate(key => localStorage.getItem(key), SESSION_KEY);
+    expect(storedAfter).toBeNull();
+
+    await expect(
+      page
+        .getByRole('status')
+        .filter({ hasText: /Freigabe von\s+Kita Sonnenwinkel ist im Lagebild angekommen/i })
+    ).toHaveCount(0);
+    await expect(page.getByText(/Neu im Meldeeingang \(Demo-Session\)/)).toHaveCount(0);
+    if (freigabeId) {
+      await expect(page.getByText(freigabeId)).toHaveCount(0);
+    }
+    // Ausgangsstand: Sonnenwinkel wieder als offene Meldelücke
+    await expect(
+      page.locator('.notice-box-warn').getByText(/Kita Sonnenwinkel/)
+    ).toBeVisible();
+  });
+
   test('Ohne Freigabe: Sonnenwinkel bleibt Lücke im Meldeeingang', async ({ page }) => {
     await goKitaNav(page, /Steuerungslagebild/i, /\/kita\/lagebild/);
     await expect(page.getByText(/Neu im Meldeeingang \(Demo-Session\)/)).toHaveCount(0);
