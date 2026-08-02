@@ -251,12 +251,17 @@ export function berechneFairnessSignale(fall: Fall): FairnessSignal[] {
 
   // ─── Signal 5: Begründung im Bescheid könnte vollständiger sein ──────────
   // Regel: Wenn die Begründung eines Bescheids auf ausstehende Informationen
-  //        verweist, ist das für die Nachvollziehbarkeit relevant.
+  //        verweist UND noch Unterlagen fehlen, ist das für die Nachvollziehbarkeit
+  //        relevant. Nach Session-Upload aller ANGEFORDERT/ABGELEHNT-Unterlagen
+  //        entfällt das Signal (Q-440, konsistent mit UNTERLAGE_FEHLT_BLOCKIERT).
+  const unterlagenNochOffen = fall.dokumente.some(
+    d => d.status === 'ANGEFORDERT' || d.status === 'ABGELEHNT'
+  );
   for (const b of fall.bescheide) {
     const hatOffeneBegr =
       b.begruendung.toLowerCase().includes('offen') ||
       b.begruendung.toLowerCase().includes('fehlende');
-    if (hatOffeneBegr) {
+    if (hatOffeneBegr && unterlagenNochOffen) {
       signale.push({
         id: `FH-${b.id}-BEGRUENDUNG`,
         typ: 'BESCHEID_BEGRUENDUNG_ERWEITERBAR',

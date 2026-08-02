@@ -70,7 +70,7 @@ Autonomer Multi-Domain-Loop: [`docs/delivery/AUTONOMOUS_LOOP.md`](delivery/AUTON
 
 | ID | Domäne | Schritt | Typ | Aufwand | Abhängigkeit | Status |
 |----|--------|---------|-----|---------|--------------|--------|
-| Q-440 | av | E2E: Fairness-Leerzustand nach Erledigung offener Aktionen (keine hängenden Signale; Session-konsistent, DEC-012) | DEMO | M | Q-420 | OFFEN |
+| Q-440 | av | E2E: Fairness-Leerzustand nach Erledigung offener Aktionen (keine hängenden Signale; Session-konsistent, DEC-012) | DEMO | M | Q-420 | DONE |
 | Q-441 | ug | E2E: Behörden-BG-Happy-Path (Markierung/Flow ohne page.goto nach Interaktion) | DEMO | M | Q-421 | OFFEN |
 | Q-442 | kita | E2E: Session-Reset über DemoSessionBar nach Meldefreigabe (State weg, Lagebild ohne freigegebene Session-Meldung) | DEMO | S | Q-412 | OFFEN |
 
@@ -80,6 +80,7 @@ Autonomer Multi-Domain-Loop: [`docs/delivery/AUTONOMOUS_LOOP.md`](delivery/AUTON
 
 | ID | Kurz | Status |
 |----|------|--------|
+| Q-440 | AV E2E Fairness-Leerzustand nach Aktionen | DONE |
 | Q-432 | TRACEABILITY_MATRIX Stub + SSOT storyRegistry | DONE |
 | Q-431 | Kita README Related-Links 13/14 + ADR KiJuP | DONE |
 | Q-430 | Domain-README-Schablone alle 3 Domains | DONE |
@@ -89,7 +90,6 @@ Autonomer Multi-Domain-Loop: [`docs/delivery/AUTONOMOUS_LOOP.md`](delivery/AUTON
 | Q-422 | Kita E2E Transparenz Filter+CSV labeled | DONE |
 | Q-421 | UG E2E RQ+Upload+BG ohne Action-Banner | DONE |
 | Q-420 | A11y Skip-Link + main-Landmark (Root/Domains) | DONE |
-| Q-410 | Landing Sekundärlinks Hinweise/Lagebild intern | DONE |
 
 ---
 

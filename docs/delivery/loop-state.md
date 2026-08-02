@@ -5,13 +5,13 @@ Regeln: `docs/delivery/AUTONOMOUS_LOOP.md`.
 
 | Feld | Wert |
 |------|------|
-| `next_domain` | `av` |
-| `last_domain` | `cross` |
-| `last_queue_id` | `Q-432` |
-| `last_commit` | b9c115e |
-| `fires_total` | 12 |
+| `next_domain` | `ug` |
+| `last_domain` | `av` |
+| `last_queue_id` | `Q-440` |
+| `last_commit` | pending |
+| `fires_total` | 13 |
 | `consecutive_idle` | 0 |
-| `updated` | 2026-08-03 (Q-432 TRACEABILITY_MATRIX SSOT-Stub) |
+| `updated` | 2026-08-03 (Q-440 AV Fairness-Leerzustand E2E) |
 
 ## Domänen-Reihenfolge
 

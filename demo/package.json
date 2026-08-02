@@ -10,7 +10,7 @@
     "registry:export": "node scripts/export-story-registry.mjs",
     "test:e2e": "playwright test",
     "test:e2e:ci": "playwright test --project=chromium --workers=1 --retries=2",
-    "test:e2e:av": "playwright test --project=chromium e2e/us-av-001-002-fall-uebersicht.spec.ts e2e/us-av-003-dokumente.spec.ts e2e/us-av-004-rueckfragen.spec.ts e2e/us-av-005-termine.spec.ts e2e/us-av-006-bescheide.spec.ts e2e/us-av-007-verlauf.spec.ts e2e/navigation-und-landing.spec.ts",
+    "test:e2e:av": "playwright test --project=chromium e2e/us-av-001-002-fall-uebersicht.spec.ts e2e/us-av-003-dokumente.spec.ts e2e/us-av-004-rueckfragen.spec.ts e2e/us-av-005-termine.spec.ts e2e/us-av-006-bescheide.spec.ts e2e/us-av-007-verlauf.spec.ts e2e/us-av-008-fairness-leerzustand.spec.ts e2e/navigation-und-landing.spec.ts",
     "test:e2e:ug": "playwright test --project=chromium e2e/us-ug-gruendung.spec.ts",
     "test:e2e:kita": "playwright test --project=chromium e2e/us-kj-kita-smoke.spec.ts e2e/us-kj-004-005-meldekette.spec.ts e2e/us-kj-009-transparenz-filter-csv.spec.ts",
     "test:e2e:ui": "playwright test --ui",
