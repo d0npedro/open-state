@@ -1,7 +1,7 @@
 /**
- * Kita E2E-Smoke (Q-401) + Skip-Link (Q-471)
+ * Kita E2E-Smoke (Q-401, Q-481) + Skip-Link (Q-471)
  *
- * Kernrouten erreichbar, h1, DEC-004-Hinweis wo sichtbar.
+ * Kern- und Erweiterungsrouten erreichbar, h1, DEC-004-Hinweis wo sichtbar.
  * Skip-Link → main#main-content auf Transparenz + Lagebild.
  * Keine Session-Interaktion → page.goto je Test ok (DEC-012 gilt bei Session-Flows).
  */
@@ -32,6 +32,34 @@ const KERNROUTEN = [
     h1: /Tagesstand erfassen/i,
     dec004: true,
     label: 'Tagesstand',
+  },
+] as const;
+
+/** Q-481: Bedarfsplanung, Vorlage, Monatsbericht, Meldung */
+const ERWEITERTE_ROUTEN = [
+  {
+    path: '/kita/bedarfsplanung',
+    h1: /Bedarfsplanungsentwurf/i,
+    dec004: true,
+    label: 'Bedarfsplanung',
+  },
+  {
+    path: '/kita/vorlage',
+    h1: /Politische Vorlage/i,
+    dec004: true,
+    label: 'Gremienvorlage',
+  },
+  {
+    path: '/kita/monatsbericht',
+    h1: /Monatsbericht Oktober 2024/i,
+    dec004: true,
+    label: 'Monatsbericht',
+  },
+  {
+    path: '/kita/meldung',
+    h1: /Monatsmeldung prüfen und freigeben/i,
+    dec004: true,
+    label: 'Meldung freigeben',
   },
 ] as const;
 
@@ -74,6 +102,44 @@ test.describe('Kita E2E-Smoke – Kernrouten (Q-401)', () => {
     await page.getByRole('link', { name: /^Tagesstand/i }).first().click();
     await expect(page).toHaveURL('/kita/tagesstand');
     await expect(page.getByRole('heading', { level: 1, name: /Tagesstand erfassen/i })).toBeVisible();
+  });
+});
+
+test.describe('Kita E2E-Smoke – Erweiterungsrouten (Q-481)', () => {
+  for (const route of ERWEITERTE_ROUTEN) {
+    test(`${route.label}: erreichbar, h1, DEC-004`, async ({ page }) => {
+      await page.goto(route.path);
+      await expect(page).toHaveURL(route.path);
+      await expect(page.getByRole('heading', { level: 1, name: route.h1 }).first()).toBeVisible();
+      if (route.dec004) {
+        await expect(page.getByText(/DEC-004/).first()).toBeVisible();
+      }
+      await expect(page.getByText(/Kindertagesbetreuung/).first()).toBeVisible();
+      await expect(page.getByRole('link', { name: /Transparenzbericht/i }).first()).toBeVisible();
+    });
+  }
+
+  test('Tab-Navigation Erweiterungsrouten (Client-Nav)', async ({ page }) => {
+    await page.goto('/kita/bedarfsplanung');
+    await expect(
+      page.getByRole('heading', { level: 1, name: /Bedarfsplanungsentwurf/i })
+    ).toBeVisible();
+
+    await page.getByRole('link', { name: /Gremienvorlage/i }).first().click();
+    await expect(page).toHaveURL('/kita/vorlage');
+    await expect(page.getByRole('heading', { level: 1, name: /Politische Vorlage/i })).toBeVisible();
+
+    await page.getByRole('link', { name: /^Monatsbericht/i }).first().click();
+    await expect(page).toHaveURL('/kita/monatsbericht');
+    await expect(
+      page.getByRole('heading', { level: 1, name: /Monatsbericht Oktober 2024/i })
+    ).toBeVisible();
+
+    await page.getByRole('link', { name: /Meldung freigeben/i }).first().click();
+    await expect(page).toHaveURL('/kita/meldung');
+    await expect(
+      page.getByRole('heading', { level: 1, name: /Monatsmeldung prüfen und freigeben/i })
+    ).toBeVisible();
   });
 });
 
