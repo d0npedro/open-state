@@ -4,6 +4,10 @@ Branch: `loop/av`
 Worktree: `D:\Projects\open-state-loop-av`  
 Scope: nur `demo/app/fall/**`, DemoStateContext, fairness/rules, mockFall, e2e us-av-*, dieses Journal.
 
+**Rotation (Q-303):** Aktives Journal max. 15 Iterationen (neueste zuerst).  
+Archiv: [`archive/journals/`](../../archive/journals/) (Index: [`README.md`](../../archive/journals/README.md)).  
+Historie: alle 14 Iterationen noch aktiv (unter Schwelle).
+
 ---
 
 ## 2026-07-29 – Iteration 14: Hinweise RQ-Signal Frist live + Session-Antwort

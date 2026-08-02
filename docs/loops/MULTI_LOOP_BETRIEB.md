@@ -17,6 +17,13 @@ Parallele Entwicklungs-Streams mit getrennten Worktrees und einem Supervisor, de
 | Supervisor | `main` | `D:\Projects\openState` | Merges, Queue/BUILD_STATE, storyRegistry, **push origin main** |
 | CI-Watcher | `main` | `D:\Projects\openState` | GitHub Actions Build (und ggf. E2E) nach Push beobachten, bei Fail **fixen + pushen** |
 
+## Journal-Rotation (Q-303)
+
+- Aktives Domain-Journal: max. **15** Iterationen (neueste zuerst), ideal ≤ ~350 Zeilen.
+- Ältere Einträge → `archive/journals/` (Index: `archive/journals/README.md`); **nicht löschen**.
+- Domain-Loops schreiben nur ins **aktive** Journal; Archiv-Rotation bei Bedarf Supervisor/CHORE.
+- Pro Iteration kurz: Was / Dateien / Story / Build / nächster Hinweis (kein Feature-Roman).
+
 ## Verbote für Domain-Streams
 
 - Kein Edit an `docs/NEXT_STEPS_QUEUE.md`, `docs/BUILD_STATE.md`, `demo/data/storyRegistry.ts`

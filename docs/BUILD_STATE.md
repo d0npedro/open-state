@@ -1,6 +1,6 @@
 # BUILD_STATE.md – Aktueller Projektstand
 
-Zuletzt aktualisiert: nach Q-302 BUILD_STATE auf Ist-Stand gehärtet (Phase 0.3)
+Zuletzt aktualisiert: nach Q-303 Domain-Journal-Rotation → `archive/journals/` (Phase 0.4)
 
 Dieser Stand beschreibt, was **tatsächlich existiert und funktioniert** — nicht die Feature-Historie.
 Geplante Schritte → `docs/NEXT_STEPS_QUEUE.md`.  
@@ -156,8 +156,9 @@ Vorlagen/Prinzipien: `docs/stories/STORY_TEMPLATE.md`, `FRONTEND_TRACEABILITY_PR
 | `docs/delivery/queue-archive/` | DONE-Historie | ✓ Q-001–Q-300 |
 | `docs/BUILD_STATE.md` | Dieser Ist-Stand | ✓ gehärtet (Q-302) |
 | `docs/DECISION_LOG.md` | Architektur-/Prozess-DEC | ✓ DEC-011 aktiv |
-| `docs/REPO_REFACTORING_PLAN.md` | Phasen 0–4 + Anti-Growth | ✓ Phase 0.1–0.3 DONE |
+| `docs/REPO_REFACTORING_PLAN.md` | Phasen 0–4 + Anti-Growth | ✓ Phase 0.1–0.4 DONE |
 | `archive/rewrites/` | Historische Root-Summaries | ✓ (Q-300) |
+| `archive/journals/` | Rotierte Domain-Journals (≤15 aktiv) | ✓ (Q-303); Index README |
 
 ---
 
@@ -167,7 +168,6 @@ Keine durchgestrichenen Erledigungen. Abgeschlossenes steht in git / queue-archi
 
 | Lücke | Auswirkung | Queue |
 |-------|------------|-------|
-| Domain-Journals zu lang (v. a. Kita) | Multi-Loop schwer lesbar | Q-303 |
 | Drei überlappende Deploy-Docs | Unklare führende Quelle | Q-304 |
 | Story-Registry doppelt (`.ts` + `.json`) | Drift-Risiko | Q-305 |
 | Keine schlanke `docs/README` Map of Content | Einstieg in Wissensschicht unklar | Q-306 |

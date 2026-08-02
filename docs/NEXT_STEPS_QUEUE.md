@@ -42,7 +42,7 @@ Plan: [`docs/REPO_REFACTORING_PLAN.md`](REPO_REFACTORING_PLAN.md).
 | Q-300 | Phase 0.1: `archive/rewrites/` + Root-`REPO_*` dorthin; README-Hinweis | DOCS | S | Q-299 | DONE |
 | Q-301 | Phase 0.2: `NEXT_STEPS_QUEUE.md` splitten — aktive Queue vs. `docs/delivery/queue-archive/` | DOCS | M | Q-300 | DONE |
 | Q-302 | Phase 0.3: `BUILD_STATE.md` auf Ist-Stand härten (kurze Routen-/Logik-Tabellen, keine Q-xxx-Chronik, nur echte Lücken) | DOCS | M | Q-301 | DONE |
-| Q-303 | Phase 0.4: Domain-Journals rotieren (aktiv ≤15 Iterationen; Rest → `archive/journals/`) | DOCS | S | Q-300 | OFFEN |
+| Q-303 | Phase 0.4: Domain-Journals rotieren (aktiv ≤15 Iterationen; Rest → `archive/journals/`) | DOCS | S | Q-300 | DONE |
 | Q-304 | Phase 0.5: Deploy-Docs auf eine Führungsdatei zusammenführen; Stub-Verweise für die übrigen | DOCS | S | Q-300 | OFFEN |
 | Q-305 | Phase 1.1: Story-Registry Single Source (`storyRegistry.ts` führend; JSON generieren oder Docs entkoppeln) | CHORE | M | Q-302 | OFFEN |
 | Q-306 | Phase 2: `docs/README.md` Map of Content + Root-README straffen | DOCS | M | Q-302 | OFFEN |
@@ -67,6 +67,7 @@ Nur Orientierung; Details und ältere IDs → [Archiv](delivery/queue-archive/DO
 
 | ID | Kurz | Status |
 |----|------|--------|
+| Q-303 | Journal-Rotation ≤15 aktiv → `archive/journals/` | DONE |
 | Q-302 | BUILD_STATE Ist-Stand (Routen/Logik kurz, nur echte Lücken) | DONE |
 | Q-301 | Queue-Split aktiv vs. `docs/delivery/queue-archive/` | DONE |
 | Q-300 | Rewrite-Summaries → `archive/rewrites/` | DONE |
@@ -76,7 +77,6 @@ Nur Orientierung; Details und ältere IDs → [Archiv](delivery/queue-archive/DO
 | Q-221 | UG Übersicht Fairness UNTERLAGE-Countdown-Chip | DONE |
 | Q-220 | UG Übersicht Fairness RQ-Countdown-Chip | DONE |
 | Q-219 | UG Hinweise UNTERLAGE-Countdown-Chip | DONE |
-| Q-218 | UG Hinweise RQ-Countdown-Chip | DONE |
 
 ---
 
