@@ -15,7 +15,7 @@ Ein Bürger oder eine Prüfinstanz soll in der Lage sein, bei jeder sichtbaren F
 Alle Story-Metadaten werden aus einer zentralen maschinenlesbaren Quelle geladen:
 
 ```
-docs/stories/story_registry.json
+demo/data/storyRegistry.ts  (führend; JSON-Export: docs/stories/story_registry.json)
 ```
 
 Diese Datei enthält je Story:
@@ -133,7 +133,7 @@ Layout:
   - Keine Suchfunktion (Anzahl überschaubar)
 
 Datenfluss:
-  story_registry.json → StoryCoverageScreen → StorySummaryCard[] + StoryBadge
+  storyRegistry.ts → StoryCoverageScreen → StorySummaryCard[] + StoryBadge
 ```
 
 ---

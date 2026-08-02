@@ -153,7 +153,8 @@ Der Coverage Screen zeigt was dokumentiert und was implementiert ist. Er macht k
 
 ## Datenquelle
 
-Der Coverage Screen bezieht alle Daten aus `docs/stories/story_registry.json`. Diese Datei wird bei Statusänderungen manuell aktualisiert.
+Der Coverage Screen bezieht alle Daten aus `demo/data/storyRegistry.ts` (führend, Q-305).  
+`docs/stories/story_registry.json` ist ein generierter Export (`npm run registry:export` im Ordner `demo/`) und wird nicht manuell gepflegt.
 
 In einer produktiven Umgebung würde die Datenquelle automatisiert aus dem Projektsystem befüllt. Im aktuellen Projektstadium ist die manuelle Aktualisierung der registry ausreichend.
 

@@ -110,7 +110,7 @@ Diese Story-IDs dienen als Ankerpunkte in der gesamten Entwicklungsdokumentation
 
 Übersicht aller Stories und ihr Implementierungsstand:
 → [docs/stories/TRACEABILITY_MATRIX.md](stories/TRACEABILITY_MATRIX.md)
-→ [docs/stories/story_registry.json](stories/story_registry.json) (maschinenlesbar)
+→ `demo/data/storyRegistry.ts` (führend) · [story_registry.json](stories/story_registry.json) (generierter Export)
 
 ---
 

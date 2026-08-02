@@ -205,14 +205,14 @@ StoryCoverageScreen
 
 ---
 
-## Datenfluss: story_registry.json → UI
+## Datenfluss: storyRegistry.ts → UI
 
 ```
-story_registry.json
+demo/data/storyRegistry.ts   (führend, manuell)
+    ↓  optional: npm run registry:export
+docs/stories/story_registry.json   (generiert)
     ↓
-[Ladevorgang: statisch oder via API-Endpunkt /api/v1/stories]
-    ↓
-StoryRegistryEntry[]
+StoryRegistryEntry[]  (Import im Demo-UI aus .ts)
     ↓
 StoryCoverageScreen (Props: registry)
     ↓
@@ -222,7 +222,7 @@ je Entry:
         → CoverageBar (Props: fulfilled, total, status)
 ```
 
-Im aktuellen Projektstadium wird `story_registry.json` als statische Datei geladen. In einer späteren Ausbaustufe kann die Registry über eine API dynamisch befüllt werden, z.B. aus einem angebundenen Issue-Tracking-System.
+Im aktuellen Demo-Stadium lädt `/stories` die Registry aus `storyRegistry.ts`. Das JSON ist ein Docs-/Tool-Export (Q-305).
 
 ---
 

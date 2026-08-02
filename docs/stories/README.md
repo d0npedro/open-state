@@ -80,7 +80,7 @@ docs/stories/
 ├── STORY_TEMPLATE.md                  ← Vorlage für neue Stories
 ├── TRACEABILITY_MATRIX.md             ← Übersicht aller Stories
 ├── FRONTEND_TRACEABILITY_PRINCIPLES.md ← Wie Story-IDs in der UI auftauchen
-├── story_registry.json                ← Maschinenlesbare Story-Übersicht
+├── story_registry.json                ← GENERIERT aus demo/data/storyRegistry.ts (nicht manuell)
 │
 ├── arbeitsverwaltung/
 │   ├── README.md
@@ -105,6 +105,20 @@ docs/stories/
 
 Weitere Domänen folgen demselben Muster unter `docs/stories/[domäne]/`.
 
+
+---
+
+## Story-Registry (Single Source of Truth, Q-305)
+
+| Rolle | Pfad |
+|-------|------|
+| **Führend (manuell pflegen)** | `demo/data/storyRegistry.ts` |
+| **Abgeleitet (nicht manuell editieren)** | `docs/stories/story_registry.json` |
+| Generator | `cd demo && npm run registry:export` |
+
+Die Demo-UI (`/stories`) liest **nur** `storyRegistry.ts`. Das JSON ist für Docs/Tools/externe Leser und wird aus dem TS exportiert (`stories[]` + Meta-Felder `_generated`, `_source`, …).
+
+Nach Änderung an Status, Route oder Kriterien: TS anpassen, dann `npm run registry:export` im Ordner `demo/`.
 
 ---
 

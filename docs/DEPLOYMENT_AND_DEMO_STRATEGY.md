@@ -111,7 +111,7 @@ Aktueller Detailstand: [`BUILD_STATE.md`](BUILD_STATE.md).
 
 - Fall-/Domänendaten: `demo/data/mock*.ts`
 - Story-Metadaten (führend): `demo/data/storyRegistry.ts`  
-  (`docs/stories/story_registry.json` ist abgeleitet/historisch; Drift-Vermeidung → Queue Q-305)
+  (`docs/stories/story_registry.json` wird generiert: `cd demo && npm run registry:export`, Q-305)
 
 ---
 

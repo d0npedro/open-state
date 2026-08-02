@@ -1,6 +1,6 @@
 # Repo-Refactoring-Plan – Open State
 
-**Status:** Analyse abgeschlossen; Phase 0 komplett (Q-299–Q-304); Phase 1+ offen  
+**Status:** Analyse abgeschlossen; Phase 0 komplett; Phase 1.1 DONE (Q-305); Phase 2–4 offen  
 **Datum:** 2026-08-02  
 **Anlass:** Organisches Wachstum (133 Markdown-Dateien, ~Q-224 Queue-Schritte, Multi-Loop-Journals) hat den mentalen und navigierbaren Overhead für Menschen und Agenten unnötig erhöht.  
 **Ziel:** Kein weiterer Feature-Zuwachs in dieser Phase — strukturelle Klärung, damit Weiterentwicklung günstiger und klarer wird.
@@ -187,7 +187,7 @@ open-state/
 
 | # | Maßnahme | Betroffene Pfade | Nutzen | Risiko / nicht löschen |
 |---|----------|------------------|--------|------------------------|
-| 1.1 | Story-Registry: **eine Quelle** — `storyRegistry.ts` führend; `story_registry.json` per Script generieren *oder* Docs so umschreiben, dass JSON entfällt | `demo/data/storyRegistry.ts`, `docs/stories/story_registry.json`, DEMO_*-Docs | Kein Sync-Drift | JSON behalten bis Generator/CI steht |
+| 1.1 | Story-Registry: **eine Quelle** — `storyRegistry.ts` führend; `story_registry.json` per Script generieren *oder* Docs so umschreiben, dass JSON entfällt | `demo/data/storyRegistry.ts`, `docs/stories/story_registry.json`, DEMO_*-Docs | Kein Sync-Drift | **DONE Q-305** — `npm run registry:export`; Docs/CONTRIBUTING/CLAUDE auf SSOT |
 | 1.2 | Jugendamt/KiJuP an Kita-Domäne andocken: `docs/13_*`, `docs/14_*` nach `docs/domains/kita_…/related/` oder klare Cross-Links + README-Hierarchie | `docs/13_*`, `docs/14_*`, Kita-Domain-README | Ein Domänen-Einstieg | Dateien verschieben mit Redirect-Hinweis in Stub |
 | 1.3 | `app-design/11_Kita_…` gegen Domain-Docs abgleichen: veraltetes markieren oder auf Domain verweisen | `app-design/11_*`, Domain | Weniger Konzept-Duplikat | UI-Flow-Details behalten wenn einzigartig |
 | 1.4 | Architektur-Startregel in `architecture/README.md` (neu): arc42 = primär, `05_` = Diagramme/Stack | `architecture/` | Weniger „wo fange ich an?“ | Beide Inhalte behalten |

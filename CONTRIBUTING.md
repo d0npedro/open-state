@@ -61,7 +61,7 @@ Agenten und automatisierte Iterationen folgen zusätzlich `AGENTS.md` und `docs/
 2. Problem, Rolle, Nutzen und grobe Akzeptanzkriterien skizzieren.
 3. Domänenkürzel: `AV` (Arbeitsverwaltung), `UG` (Unternehmensgründung), `KJ` (Kita/Jugendamt).
 4. Nach fachlicher Klärung: Story-Datei unter `docs/stories/<domäne>/` nach `STORY_TEMPLATE.md`.
-5. Eintrag in `docs/stories/story_registry.json` und bei Demo-Implementierung in `demo/data/storyRegistry.ts`.
+5. Eintrag in **`demo/data/storyRegistry.ts`** (führende Registry). Danach optional `cd demo && npm run registry:export` für `docs/stories/story_registry.json` (generiert, nicht manuell pflegen).
 
 Lebenszyklus: `ENTWURF → BEREIT → IN_ENTWICKLUNG → DEMONSTRIERBAR → ABGESCHLOSSEN`
 

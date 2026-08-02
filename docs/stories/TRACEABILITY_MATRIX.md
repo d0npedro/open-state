@@ -53,5 +53,5 @@ Diese Matrix gibt einen vollständigen Überblick über alle dokumentierten User
 ---
 
 *Zuletzt aktualisiert: Q-010 – UG Stories US-UG-001–006*
-*Pfad zur maschinenlesbaren Variante: [story_registry.json](story_registry.json)*
+*Maschinenlesbar: [story_registry.json](story_registry.json) (generiert aus `demo/data/storyRegistry.ts`, Q-305)*
 

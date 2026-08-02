@@ -1,6 +1,6 @@
 # BUILD_STATE.md – Aktueller Projektstand
 
-Zuletzt aktualisiert: nach Q-304 Deploy-Docs Single Source (Phase 0.5)
+Zuletzt aktualisiert: nach Q-305 Story-Registry Single Source (`storyRegistry.ts` + Export)
 
 Dieser Stand beschreibt, was **tatsächlich existiert und funktioniert** — nicht die Feature-Historie.
 Geplante Schritte → `docs/NEXT_STEPS_QUEUE.md`.  
@@ -81,7 +81,7 @@ Keine Q-xxx-Chronik. Pfade = Einstieg für Code-Lesen.
 | AV Mock-Fall | `demo/data/mockFall.ts` | ALG-I-Fall: Status, Unterlagen, RQ, Termine, Bescheid, Timeline |
 | UG Mock-Fall | `demo/data/mockGruendungsfall.ts` | Gründungsakte: Behörden, VS, Unterlagen, RQ, Verlauf |
 | Kita Mock | `demo/data/mockKitaLagebild.ts`, `mockKitaMeldeeingang.ts`, … | Planungsräume, Kennzahlen, Meldeeingang, Zeitreihe |
-| Story-Registry | `demo/data/storyRegistry.ts` | AV + UG + KJ → Screens/Status (führend; JSON ggf. driftig → Q-305) |
+| Story-Registry | `demo/data/storyRegistry.ts` | AV + UG + KJ → Screens/Status; JSON via `npm run registry:export` (Q-305) |
 | Fairness AV | `demo/lib/fairness/rules.ts`, `types/fairness.ts` | Regelbasiert (kein ML); Fristen als ISO + Delta zu fiktivem Heute; Verlauf-Tiefenlinks |
 | Fairness UG | `demo/lib/fairness/gruendung-rules.ts` | Signale + CTA-Routing (`fairnessSignalZiel`, `naechsterSchrittZiel`, …) |
 | Fairness UI | `demo/components/fairness/FairnessPanel.tsx` | Darstellung Signale/CTAs |
@@ -169,7 +169,6 @@ Keine durchgestrichenen Erledigungen. Abgeschlossenes steht in git / queue-archi
 
 | Lücke | Auswirkung | Queue |
 |-------|------------|-------|
-| Story-Registry doppelt (`.ts` + `.json`) | Drift-Risiko | Q-305 |
 | Keine schlanke `docs/README` Map of Content | Einstieg in Wissensschicht unklar | Q-306 |
 | Anti-Growth noch nicht in AGENTS/DELIVERY/DEC verankert | Risiko erneuten Aufblähens | Q-307 |
 | UG Hinweise: UNTERLAGE-CTA Parität `data-next-dok-id` + Hint | Kleine UX-Parität zu AV | Q-224 (pausiert, DEC-011) |

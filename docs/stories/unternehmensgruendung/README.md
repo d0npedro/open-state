@@ -78,4 +78,4 @@ Eine vollständige Übersicht über die Struktur und Priorisierung der Stories b
 *Verweise:*
 *Domänendokumentation: [docs/domains/unternehmensgruendung/](../../domains/unternehmensgruendung/README.md)*
 *Gesamt-Traceability: [docs/stories/TRACEABILITY_MATRIX.md](../TRACEABILITY_MATRIX.md)*
-*Story-Registry: [docs/stories/story_registry.json](../story_registry.json)*
+*Story-Registry (führend): `demo/data/storyRegistry.ts` · Export: [story_registry.json](../story_registry.json)*

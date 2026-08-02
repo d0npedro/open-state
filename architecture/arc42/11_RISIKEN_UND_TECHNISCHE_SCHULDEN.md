@@ -36,9 +36,11 @@ ALLEGRO (BA), XMeld-Implementierungen der Einwohnermeldeämter und kommunale Job
 
 Die gesamte arc42-Dokumentation, das Story-System und die Architektur sind konzeptionell ausgearbeitet. Es gibt noch keine klickbare Demo oder Pilotimplementierung. Das ist das größte operative Risiko: Konzepte, die nicht mit echten Nutzern und echten Behördensystemen getestet wurden, können strukturelle Annahmen enthalten, die sich in der Praxis als falsch erweisen. Ein Demo-Branch ist geplant, aber noch nicht vorhanden.
 
-### story_registry.json muss manuell gepflegt werden – Risiko: Drift
+### Story-Registry: Drift zwischen Demo und Docs (gemildert Q-305)
 
-Die maschinenlesbare Story-Registry und die TRACEABILITY_MATRIX werden manuell gepflegt. Wenn Implementierungen von Stories abweichen und die Dokumentation nicht aktualisiert wird, entsteht ein Drift zwischen dokumentiertem und tatsächlichem Stand. Mitigation: CI/CD-Prüfung der Story-Referenzen in Code und Commits. Noch nicht implementiert.
+**Führend:** `demo/data/storyRegistry.ts` (einzige manuelle Pflege).  
+**Abgeleitet:** `docs/stories/story_registry.json` via `cd demo && npm run registry:export`.  
+Rest-Risiko: Export wird nach TS-Änderung vergessen; TRACEABILITY_MATRIX bleibt manuell. Mitigation langfristig: CI-Check „export fresh“.
 
 ### Audit-Log Immutabilität muss technisch gesichert werden
 

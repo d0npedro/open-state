@@ -105,11 +105,11 @@ Every UI feature must trace back to a documented User Story. Story IDs follow th
 Story lifecycle: `ENTWURF → BEREIT → IN_ENTWICKLUNG → DEMONSTRIERBAR → ABGESCHLOSSEN`
 
 - Story templates: `docs/stories/STORY_TEMPLATE.md`
-- Story registry: `docs/stories/story_registry.json`
+- Story registry (führend): `demo/data/storyRegistry.ts` — JSON abgeleitet: `docs/stories/story_registry.json` via `cd demo && npm run registry:export` (Q-305)
 - Traceability principles: `docs/stories/FRONTEND_TRACEABILITY_PRINCIPLES.md`
 - Domain stories: `docs/stories/arbeitsverwaltung/`
 
-When adding UI, annotate components with story IDs and register them in `demo/data/storyRegistry.ts`.
+When adding UI, annotate components with story IDs and register them in `demo/data/storyRegistry.ts` only; regenerate JSON if docs consumers need it.
 
 ## Transparency-First Design Pattern
 

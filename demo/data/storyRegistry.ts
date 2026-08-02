@@ -1,3 +1,11 @@
+/**
+ * Story-Registry – Single Source of Truth (Q-305).
+ *
+ * Manuell pflegen. Für docs/stories/story_registry.json:
+ *   cd demo && npm run registry:export
+ *
+ * Demo-UI (/stories) importiert diese Datei direkt.
+ */
 import { StoryRegistryEntry } from '@/types';
 
 export const storyRegistry: StoryRegistryEntry[] = [
