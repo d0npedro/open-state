@@ -1,6 +1,6 @@
 # BUILD_STATE.md – Aktueller Projektstand
 
-Zuletzt aktualisiert: nach Q-305 Story-Registry Single Source (`storyRegistry.ts` + Export)
+Zuletzt aktualisiert: nach Q-306 docs/README Map of Content + Root-README straffen
 
 Dieser Stand beschreibt, was **tatsächlich existiert und funktioniert** — nicht die Feature-Historie.
 Geplante Schritte → `docs/NEXT_STEPS_QUEUE.md`.  
@@ -156,7 +156,8 @@ Vorlagen/Prinzipien: `docs/stories/STORY_TEMPLATE.md`, `FRONTEND_TRACEABILITY_PR
 | `docs/delivery/queue-archive/` | DONE-Historie | ✓ Q-001–Q-300 |
 | `docs/BUILD_STATE.md` | Dieser Ist-Stand | ✓ gehärtet (Q-302) |
 | `docs/DECISION_LOG.md` | Architektur-/Prozess-DEC | ✓ DEC-011 aktiv |
-| `docs/REPO_REFACTORING_PLAN.md` | Phasen 0–4 + Anti-Growth | ✓ Phase 0.1–0.5 DONE (Prio-0-Phase-0 komplett) |
+| `docs/REPO_REFACTORING_PLAN.md` | Phasen 0–4 + Anti-Growth | ✓ Phase 0 + 1.1 + 2.1/2.2 (Q-306 Map of Content) |
+| `docs/README.md` | Map of Content / Wissens-Navigation | ✓ (Q-306) |
 | `docs/DEPLOYMENT_AND_DEMO_STRATEGY.md` | Demo-Setup + Vercel + Branches | ✓ führend (Q-304); Setup/Playbook = Stubs |
 | `archive/rewrites/` | Historische Root-Summaries | ✓ (Q-300) |
 | `archive/journals/` | Rotierte Domain-Journals (≤15 aktiv) | ✓ (Q-303); Index README |
@@ -169,7 +170,6 @@ Keine durchgestrichenen Erledigungen. Abgeschlossenes steht in git / queue-archi
 
 | Lücke | Auswirkung | Queue |
 |-------|------------|-------|
-| Keine schlanke `docs/README` Map of Content | Einstieg in Wissensschicht unklar | Q-306 |
 | Anti-Growth noch nicht in AGENTS/DELIVERY/DEC verankert | Risiko erneuten Aufblähens | Q-307 |
 | UG Hinweise: UNTERLAGE-CTA Parität `data-next-dok-id` + Hint | Kleine UX-Parität zu AV | Q-224 (pausiert, DEC-011) |
 | Kein echtes Backend / keine Behörden-Adapter | Demo-only | bewusst Phase 0 |

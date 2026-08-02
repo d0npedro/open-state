@@ -1,7 +1,6 @@
 # Open State – Staatliche Verwaltung. Transparent. Zuverlässig. Digital.
 
-**Automatisierung und Vereinfachung des deutschen Verwaltungsapparats**
-Eine einzige, staatlich betriebene App für alle Behördenvorgänge – 95 % davon vollautomatisch, in unter 3 Minuten.
+**Konzept- und Architekturprojekt** für eine bürgernahe, nachvollziehbare digitale Verwaltungsinfrastruktur — mit klickbarer Demo (Mock-Daten, Phase 0).
 
 ![License](https://img.shields.io/badge/License-MIT-blue)
 ![Status](https://img.shields.io/badge/Status-Konzept%20%26%20Architektur-informational)
@@ -10,166 +9,84 @@ Eine einzige, staatlich betriebene App für alle Behördenvorgänge – 95 % dav
 
 ## Vision
 
-Der Staat trägt Verantwortung. Für jeden Bürger – unabhängig von Bildungsstand, Region oder digitalem Vorwissen.
+Der Staat trägt Verantwortung — für jeden Bürger, unabhängig von Bildungsstand, Region oder digitalem Vorwissen.
 
-Open State macht diese Verantwortung sichtbar: durch klare Prozesse, nachvollziehbare Entscheidungen, sichere Daten und staatliche Dienste, die zu den Menschen kommen – nicht umgekehrt.
-
-Wohnsitz anmelden, Gewerbe starten, Rechtsstreit per KI-Analyse klären, Sozialleistungen beantragen – alles per Smartphone, ohne Warteschlange, ohne Medienbruch, ohne Formular-Chaos.
-
----
-
-## Leitbild
+Open State macht diese Verantwortung sichtbar: klare Prozesse, nachvollziehbare Entscheidungen, sichere Daten, Dienste, die zu den Menschen kommen.
 
 > **„Effizienz ist kein Selbstzweck. Sie ist Ausdruck von Respekt gegenüber jedem Bürger und verantwortungsvoller Umgang mit Steuergeld."**
 
-Open State ist kein Startup-Produkt, das den Staat „disrupten" will.
-Es ist ein transparentes Betriebs- und Vertrauensmodell für einen handlungsfähigen, gerechten, nachvollziehbaren und digital kompetenten Staat.
+Open State ist kein Startup-Produkt. Es ist ein transparentes Betriebs- und Vertrauensmodell für einen handlungsfähigen, gerechten und digital kompetenten Staat.
 
-Open State ist **pro Leistung, pro Gründung, pro Verantwortung.** Wer wirtschaftlich aktiv ist, Verantwortung übernimmt oder gründet, soll vom Staat unterstützt werden – durch klare Prozesse, verlässliche Fristen und eine Verwaltung, die koordiniert statt bremst. Deutschland soll als Standort wieder verständlich, planbar und handlungsfähig wirken – nicht durch Slogans, sondern durch tatsächlich funktionierende staatliche Infrastruktur.
-
----
-
-## Kerndomänen
-
-Open State ist in fachliche Domänen strukturiert. Jede Domäne deckt einen zusammenhängenden Bereich staatlicher Aufgaben ab.
-
-| Domäne | Beschreibung | Link |
-|--------|-------------|------|
-| **Arbeitsverwaltung** | Arbeitslosmeldung, Leistungsantrag, Fallakte, Bescheidtransparenz, Vermittlung | [docs/domains/arbeitsverwaltung/](docs/domains/arbeitsverwaltung/README.md) |
-| **Kita-Betrieb & Jugendamt-Steuerung** | Operative Entlastung von Kitas, laufende Steuerungsdaten für das Jugendamt, öffentliche Transparenzberichte zur Kindertagesbetreuung | [docs/domains/kita_betrieb_und_jugendamt_steuerung/](docs/domains/kita_betrieb_und_jugendamt_steuerung/README.md) |
-| **Wohnsitzmanagement** | An-, Um-, Abmeldung, Automatische Behördeninformation | (Modul 1.2 im Blueprint) |
-| **Steuern** | AutoFill-Steuererklärung via ELSTER | (Modul 1.3 im Blueprint) |
-| **Rechtsstreit & Bußgeld** | CaseMatch-Analyse, Widerspruchsverwaltung | (Modul 2.2 im Blueprint) |
-| **Sozialleistungen** | Bürgergeld, Wohngeld, Elterngeld, BAföG | (Modul 2.3 im Blueprint) |
-| **Jugendhilfe** | HzE, Unterhaltsvorschuss, KiJuP-Integration | [docs/13_Jugendamt_Module.md](docs/13_Jugendamt_Module.md) |
-| **Unternehmensgründung** | Gewerbeanmeldung, Gründungsakte, Statusverfolgung, koordinierte Behördenkommunikation | [docs/domains/unternehmensgruendung/](docs/domains/unternehmensgruendung/README.md) |
-| **Verfahrensfairness Engine** | Domänenübergreifende Querschnittskomponente: Konsistenzprüfung, Begründungsqualität, Erklärbarkeit | [docs/engines/verfahrensfairness/](docs/engines/verfahrensfairness/README.md) |
+**Kernprinzipien:** Datensouveränität · KI nur als Assistenz · Open Source Kern · WCAG 2.1 AA · DSGVO by Design · keine Werbefinanzierung
 
 ---
 
-## Projektdokumentation
+## Kerndomänen (mit Demo)
 
-| Modul | Dokument | Link |
-|-------|---------|------|
-| 01 | Master-Blueprint (Vision, Architektur, Kernmodule) | [docs/01_Master_Blueprint.md](docs/01_Master_Blueprint.md) |
-| 02 | Internationale Vergleichsstudie (Estland, Singapur, Dänemark) | [docs/02_Vergleich_Best_Practices.md](docs/02_Vergleich_Best_Practices.md) |
-| 03 | Rechtliche Machbarkeitsstudie & Gesetzgebungsvorschläge | [legal/03_Rechtliche_Machbarkeitsstudie.md](legal/03_Rechtliche_Machbarkeitsstudie.md) |
-| 04 | Transparenz- & Haftungskonzept | [transparency/04_Transparenz_Haftung.md](transparency/04_Transparenz_Haftung.md) |
-| 05 | Systemarchitektur (Mermaid-Diagramme) | [architecture/05_Systemarchitektur.md](architecture/05_Systemarchitektur.md) |
-| 06 | CaseMatch AI – Prompt-Engineering & RAG-Pipeline | [ai-models/06_CaseMatch_Engine.md](ai-models/06_CaseMatch_Engine.md) |
-| 07 | UI/UX & vollständige User-Flows | [app-design/07_UI_UX_User_Flows.md](app-design/07_UI_UX_User_Flows.md) |
-| 08 | Prototyp-Prompts & Figma-Struktur | [app-design/08_Prototyp_Prompts.md](app-design/08_Prototyp_Prompts.md) |
-| 09 | Finanzierungs- & Effizienzmodell | [roadmap/09_Monetarisierung_Finanzmodell.md](roadmap/09_Monetarisierung_Finanzmodell.md) |
-| 10 | Pilot- & Rollout-Strategie | [roadmap/10_Pilot_Rollout.md](roadmap/10_Pilot_Rollout.md) |
-| 11 | Entwickler-Handover (technische Gesamtdokumentation) | [docs/11_Entwickler_Handover.md](docs/11_Entwickler_Handover.md) |
-| 12 | Öffentlichkeits- & Politik-Pitch | [docs/12_Politik_Pitch.md](docs/12_Politik_Pitch.md) |
-| 13 | Jugendamt-Modul (HzE, Beratung, Unterhaltsvorschuss) | [docs/13_Jugendamt_Module.md](docs/13_Jugendamt_Module.md) |
-| 14 | KiJuP-Integration (Referenzquelle & lokale Fachverfahren) | [docs/14_KiJuP_Integration.md](docs/14_KiJuP_Integration.md) |
-| D1 | **Domäne: Arbeitsverwaltung** (vollständige Domänendokumentation) | [docs/domains/arbeitsverwaltung/](docs/domains/arbeitsverwaltung/README.md) |
-| D2 | **Domäne: Unternehmensgründung** (vollständige Domänendokumentation) | [docs/domains/unternehmensgruendung/](docs/domains/unternehmensgruendung/README.md) |
-| D3 | **Domäne: Kita-Betrieb & Jugendamt-Steuerung** (operative Entlastung, Steuerung, öffentliche Berichtsschicht) | [docs/domains/kita_betrieb_und_jugendamt_steuerung/](docs/domains/kita_betrieb_und_jugendamt_steuerung/README.md) |
-| E1 | **Verfahrensfairness Engine** (Konzept, Funktionsweise, Signale, Transparenz) | [docs/engines/verfahrensfairness/](docs/engines/verfahrensfairness/README.md) |
-| L | Leitbild: Staat und Vertrauen | [docs/LEITBILD_STAAT_UND_VERTRAUEN.md](docs/LEITBILD_STAAT_UND_VERTRAUEN.md) |
+| Domäne | Demo | Fachkonzept |
+|--------|------|-------------|
+| **Arbeitsverwaltung** | `/fall/*` | [docs/domains/arbeitsverwaltung/](docs/domains/arbeitsverwaltung/README.md) |
+| **Unternehmensgründung** | `/gruendung/*` | [docs/domains/unternehmensgruendung/](docs/domains/unternehmensgruendung/README.md) |
+| **Kita-Betrieb & Jugendamt** | `/kita/*` | [docs/domains/kita_betrieb_und_jugendamt_steuerung/](docs/domains/kita_betrieb_und_jugendamt_steuerung/README.md) |
+| **Verfahrensfairness** (Querschnitt) | Signale in AV/UG | [docs/engines/verfahrensfairness/](docs/engines/verfahrensfairness/README.md) |
+
+Weitere geplante Domänen (ohne Demo): Wohnsitz, Steuern, Rechtsstreit, Sozialleistungen — siehe [Master-Blueprint](docs/01_Master_Blueprint.md).
 
 ---
 
-## Kernprinzipien (nicht verhandelbar)
+## Demo starten
 
-- **Datensouveränität beim Bürger** – Zero-Knowledge-Architektur, vollständiges Audit-Log
-- **KI nur als Assistenz, nie als Entscheider** – jede Empfehlung ist erklärbar und anfechtbar
-- **Open Source für alle Kernkomponenten** – keine verdeckten Algorithmen
-- **Barrierefreiheit als Mindeststandard** – WCAG 2.1 AA, Einfache Sprache, 12 Sprachen
-- **DSGVO by Design & by Default** – keine nachträgliche Compliance
-- **Keine Werbefinanzierung** – staatliche Infrastruktur finanziert sich durch fiskalische Einsparungen
+```bash
+cd demo && npm install && npm run dev
+# → http://localhost:3000
+```
 
----
-
-## Operative Entlastung, Steuerung und öffentliche Transparenz
-
-Open State unterstützt nicht nur einzelne Bürgervorgänge, sondern verbindet operative Facharbeit, Verwaltungssteuerung und öffentliche Transparenzberichte als zusammenhängendes System.
-
-Das Prinzip:
-> Fachkräfte arbeiten für ihren eigenen Betrieb – nicht als Datenzulieferer.
-> Steuerungsdaten entstehen als sinnvolle Ableitung. Öffentliche Berichte entstehen durch aktive Freigabe.
-
-Diese Logik ist modellhaft ausgearbeitet für den Bereich **Kita-Betrieb & Jugendamt-Steuerung**:
-Einrichtungen werden im Alltag entlastet. Das Jugendamt erhält laufende Lagebilder für Bedarfsplanung und politische Vorlagen. Ein freigegebener Teil wird als öffentlicher Transparenzbericht zugänglich – mit nachvollziehbarer Methodik, sichtbaren Engpässen und ohne Weichzeichnung.
-
-→ [Domäne: Kita-Betrieb & Jugendamt-Steuerung](docs/domains/kita_betrieb_und_jugendamt_steuerung/README.md)
+| Ressource | Link |
+|-----------|------|
+| Deployment, Branches, Vercel | [docs/DEPLOYMENT_AND_DEMO_STRATEGY.md](docs/DEPLOYMENT_AND_DEMO_STRATEGY.md) |
+| Aktueller Demo-Stand (Routen) | [docs/BUILD_STATE.md](docs/BUILD_STATE.md) |
+| Stories / Coverage | [docs/stories/README.md](docs/stories/README.md) · Route `/stories` |
 
 ---
 
-## Architekturdokumentation
+## Dokumentation finden
 
-Open State folgt der arc42-Architekturvorlage als strukturierte Dokumentation. Die arc42-Dokumentation übersetzt die User Stories und Domänenanforderungen in eine nachvollziehbare Systemarchitektur.
+**Map of Content (vollständig):** → **[docs/README.md](docs/README.md)**
 
-→ [Architekturdokumentation (arc42)](architecture/arc42/README.md)
+Kurz:
+
+| Bedarf | Einstieg |
+|--------|----------|
+| Architektur (arc42) | [architecture/arc42/](architecture/arc42/README.md) |
+| Stories & Traceability | [docs/stories/](docs/stories/README.md) |
+| Recht / Transparenz | [legal/](legal/) · [transparency/](transparency/) |
+| Mitwirken | [CONTRIBUTING.md](CONTRIBUTING.md) |
+
+Nummerierte Module 01–15 und alle Querschnittspfade: in der [Map of Content](docs/README.md).
 
 ---
 
-## Entwicklungsansatz
-
-Open State wird anhand nachvollziehbarer User Stories entwickelt. Jede sichtbare Funktion führt auf ein konkretes Problem und definierte Akzeptanzkriterien zurück.
-
-→ [Story-System und Traceability](docs/stories/README.md)
-
----
-
-## Repo-internes Delivery-System
-
-Das Repository enthält ein internes Betriebssystem für kontrollierte, schrittweise Weiterentwicklung.
-Es besteht aus fünf Steuerdateien:
+## Delivery (Weiterentwicklung im Repo)
 
 | Datei | Zweck |
 |-------|-------|
-| [`AGENTS.md`](AGENTS.md) | Verbindliche Arbeitsanweisung für jeden Entwicklungslauf |
-| [`docs/DELIVERY_SYSTEM.md`](docs/DELIVERY_SYSTEM.md) | 12-Schritte-Ablauf jeder Iteration |
-| [`docs/NEXT_STEPS_QUEUE.md`](docs/NEXT_STEPS_QUEUE.md) | Priorisierte Aufgabenliste |
-| [`docs/BUILD_STATE.md`](docs/BUILD_STATE.md) | Tatsächlicher Projektstand |
-| [`docs/DECISION_LOG.md`](docs/DECISION_LOG.md) | Begründete Architektur- und Strategieentscheidungen |
+| [AGENTS.md](AGENTS.md) | Verbindlicher Iterationsablauf |
+| [docs/NEXT_STEPS_QUEUE.md](docs/NEXT_STEPS_QUEUE.md) | Offene Schritte |
+| [docs/BUILD_STATE.md](docs/BUILD_STATE.md) | Ist-Stand |
+| [docs/DECISION_LOG.md](docs/DECISION_LOG.md) | Entscheidungen |
+| [docs/DELIVERY_SYSTEM.md](docs/DELIVERY_SYSTEM.md) | 12-Schritte-Detail |
 
-Der Minimalbefehl für eine vollständige Iteration lautet: **„Entwickle weiter"** (commit, kein push).
-Mit **„Entwickle weiter und pushe"** wird nach dem Commit auch gepusht.
-Push ist bewusst opt-in und erfordert eine ausdrückliche Nutzeranweisung.
+Befehl: **„Entwickle weiter"** → ein Queue-Schritt, Commit, kein Push (Push nur auf ausdrückliche Anweisung).
 
-**Strukturelles Refactoring (Priorität 0):** Analyse, Zielstruktur und Phasenplan unter
-[`docs/REPO_REFACTORING_PLAN.md`](docs/REPO_REFACTORING_PLAN.md) (DEC-011).
-Fokus: Historie archivieren, Delivery verschlanken, Navigation klären — nicht Feature-Zuwachs.
-
-**Historische Umschreibungen:** Abgeschlossene Rewrite-/Konsolidierungs-Summaries liegen unter
-[`archive/rewrites/`](archive/rewrites/README.md) (kein Pflichtlesen; aktueller Stand bleibt `BUILD_STATE` / Queue).
+Strukturelles Aufräumen (DEC-011): [docs/REPO_REFACTORING_PLAN.md](docs/REPO_REFACTORING_PLAN.md) · Historie: [archive/](archive/)
 
 ---
 
-## Demo & Deployment
+## Mitmachen
 
-Eine laufende Demo wird über den `demo`-Branch bereitgestellt. Feature-Branches erhalten automatische Preview-Deployments. `main` bleibt stabiler Referenzstand ohne unkontrollierte Production-Deploys.
-
-→ [Deployment- und Demo-Strategie](docs/DEPLOYMENT_AND_DEMO_STRATEGY.md) (führend; Setup + Vercel + Branches)
-
----
-
-## Demo
-
-Klickbare Demo-Domänen: Arbeitsverwaltung (`/fall`), Unternehmensgründung (`/gruendung`), Kita/Jugendamt (`/kita`), plus Story Coverage und Feedback.
-
-Jede sichtbare Funktion ist auf eine User Story zurückführbar. Footer: Build-Version, Commit-SHA, Umgebung.
-
-**Lokal starten:**
-```bash
-cd demo && npm install && npm run dev
-```
-
-→ [Demo & Deployment (alles an einem Ort)](docs/DEPLOYMENT_AND_DEMO_STRATEGY.md)  
-→ [Feedback zur Demo](/feedback) (im laufenden Demonstrator)
-
----
-
-## Mitmachen / Beitragen
-
-- Issues & Pull Requests willkommen
-- Fachliche Einschätzungen, Rechtshinweise, UX-Feedback: Issue öffnen mit Label `feedback`
-- Technische Beiträge: Label `dev`
+- Issues & Pull Requests willkommen  
+- Fach / Recht / UX: Label `feedback` · Technik: Label `dev`  
+- Demo-Feedback im laufenden Demonstrator: `/feedback`
 
 ---
 

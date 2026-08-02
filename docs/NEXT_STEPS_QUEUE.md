@@ -45,7 +45,7 @@ Plan: [`docs/REPO_REFACTORING_PLAN.md`](REPO_REFACTORING_PLAN.md).
 | Q-303 | Phase 0.4: Domain-Journals rotieren (aktiv ≤15 Iterationen; Rest → `archive/journals/`) | DOCS | S | Q-300 | DONE |
 | Q-304 | Phase 0.5: Deploy-Docs auf eine Führungsdatei zusammenführen; Stub-Verweise für die übrigen | DOCS | S | Q-300 | DONE |
 | Q-305 | Phase 1.1: Story-Registry Single Source (`storyRegistry.ts` führend; JSON generieren oder Docs entkoppeln) | CHORE | M | Q-302 | DONE |
-| Q-306 | Phase 2: `docs/README.md` Map of Content + Root-README straffen | DOCS | M | Q-302 | OFFEN |
+| Q-306 | Phase 2: `docs/README.md` Map of Content + Root-README straffen | DOCS | M | Q-302 | DONE |
 | Q-307 | Phase 3–4: Anti-Growth-Regeln in AGENTS.md, DELIVERY_SYSTEM.md, DECISION_LOG verankern | DOCS | S | Q-302 | OFFEN |
 
 ---
@@ -67,6 +67,7 @@ Nur Orientierung; Details und ältere IDs → [Archiv](delivery/queue-archive/DO
 
 | ID | Kurz | Status |
 |----|------|--------|
+| Q-306 | docs/README Map of Content + Root-README straffen | DONE |
 | Q-305 | storyRegistry.ts SSOT + `npm run registry:export` → JSON | DONE |
 | Q-304 | Deploy-Docs → `DEPLOYMENT_AND_DEMO_STRATEGY.md` führend; Stubs | DONE |
 | Q-303 | Journal-Rotation ≤15 aktiv → `archive/journals/` | DONE |
@@ -76,7 +77,6 @@ Nur Orientierung; Details und ältere IDs → [Archiv](delivery/queue-archive/DO
 | Q-299 | Refactoring-Plan + Priorität-0-Queue | DONE |
 | Q-223 | AV Übersicht Fairness UNTERLAGE-CTA live nächste Unterlage | DONE |
 | Q-222 | AV Hinweise UNTERLAGE-CTA live nächste Unterlage | DONE |
-| Q-221 | UG Übersicht Fairness UNTERLAGE-Countdown-Chip | DONE |
 
 ---
 

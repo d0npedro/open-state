@@ -1,6 +1,6 @@
 # Repo-Refactoring-Plan – Open State
 
-**Status:** Analyse abgeschlossen; Phase 0 komplett; Phase 1.1 DONE (Q-305); Phase 2–4 offen  
+**Status:** Analyse abgeschlossen; Phase 0 + 1.1 + 2.1/2.2 DONE (Q-299–Q-306); Phase 3–4 offen (Q-307)  
 **Datum:** 2026-08-02  
 **Anlass:** Organisches Wachstum (133 Markdown-Dateien, ~Q-224 Queue-Schritte, Multi-Loop-Journals) hat den mentalen und navigierbaren Overhead für Menschen und Agenten unnötig erhöht.  
 **Ziel:** Kein weiterer Feature-Zuwachs in dieser Phase — strukturelle Klärung, damit Weiterentwicklung günstiger und klarer wird.
@@ -204,8 +204,8 @@ open-state/
 
 | # | Maßnahme | Betroffene Pfade | Nutzen | Risiko |
 |---|----------|------------------|--------|--------|
-| 2.1 | `docs/README.md` als Map of Content (Rollen: Bürger-Demo, Domänen-Fach, Architektur, Agent, Contributor) | neu `docs/README.md`, `README.md` | Navigations-Hub | Links pflegen |
-| 2.2 | README Root straffen: Vision + Domänen-Tabelle + Demo + Verweis docs/README + Delivery (5 Steuerdateien) — Modul-01–15-Tabelle in docs/README auslagern | `README.md` | 10-KB-Root lesbarer | Modul-Links nicht verlieren |
+| 2.1 | `docs/README.md` als Map of Content (Rollen: Bürger-Demo, Domänen-Fach, Architektur, Agent, Contributor) | neu `docs/README.md`, `README.md` | Navigations-Hub | **DONE Q-306** |
+| 2.2 | README Root straffen: Vision + Domänen-Tabelle + Demo + Verweis docs/README + Delivery (5 Steuerdateien) — Modul-01–15-Tabelle in docs/README auslagern | `README.md` | 10-KB-Root lesbarer | **DONE Q-306** — Module 01–15 in docs/README |
 | 2.3 | Einheitliche Domain-README-Schablone: Problem, Demo-Routen, Stories, API, offene Grenzen, verwandte Docs | `docs/domains/*/README.md` | Neue Domäne andocken = Vorlage kopieren | Inhalt pro Domäne anpassen |
 | 2.4 | Nummerierung 01–15: **nicht umbenennen in Phase 2 erzwingen** (Link-Breaks). Stattdessen stabile Aliase in docs/README. Optional später `vision/`-Rename in eigenem Commit | nummerierte MD | Navigation ohne Mass-Rename-Risiko | Rename nur mit Link-Check-Skript |
 | 2.5 | Traceability: `TRACEABILITY_MATRIX.md` vs. `/stories` UI — Matrix schlank halten oder aus Registry generieren | `docs/stories/*` | Weniger manuelle Matrix-Pflege | |
