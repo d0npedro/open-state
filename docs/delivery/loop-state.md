@@ -8,7 +8,7 @@ Regeln: `docs/delivery/AUTONOMOUS_LOOP.md`.
 | `next_domain` | `ug` |
 | `last_domain` | `av` |
 | `last_queue_id` | `Q-451` |
-| `last_commit` | pending |
+| `last_commit` | 48847c8 |
 | `fires_total` | 17 |
 | `consecutive_idle` | 0 |
 | `updated` | 2026-08-03 (Q-451 Skip-Link E2E Root/Fall) |
