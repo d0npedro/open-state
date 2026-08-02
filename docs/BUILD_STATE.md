@@ -1,6 +1,6 @@
 # BUILD_STATE.md – Aktueller Projektstand
 
-Zuletzt aktualisiert: nach Q-412 Kita DemoSessionBar bei Meldefreigabe
+Zuletzt aktualisiert: nach Q-403 E2E-Zähler / Prüfstand (chromium-Inventory)
 
 Dieser Stand beschreibt, was **tatsächlich existiert und funktioniert** — nicht die Feature-Historie.
 Geplante Schritte → `docs/NEXT_STEPS_QUEUE.md`.  
@@ -18,7 +18,8 @@ Detailhistorie → `git log` / `docs/delivery/queue-archive/`.
 | Build-Status | ✓ 27 statische Seiten |
 | Deployment | Vercel, aus `demo/` |
 | Lokaler Start | `cd demo && npm install && npm run dev` |
-| Letzte bekannte Prüfung | lint+build 27 Seiten; `test:e2e:kita` inkl. Filter/CSV (Q-422, 3 Specs) + Smoke+Meldekette |
+| Letzte bekannte Prüfung | lint+build 27 Seiten (2026-08-03); E2E chromium **333** Tests in **12** Specs (`npx playwright test --project=chromium --list`) |
+| E2E-Skripte | `test:e2e:ci` (chromium, workers=1); Domains: `test:e2e:av` · `test:e2e:ug` · `test:e2e:kita` (Smoke+Meldekette+Filter/CSV); zusätzlich `stories-zur-demo.spec.ts` in Gesamt-Suite |
 | Daten | durchgängig Mock; kein Backend, keine Behörden-Anbindung |
 
 ---
@@ -153,9 +154,9 @@ Vorlagen/Prinzipien: `docs/stories/STORY_TEMPLATE.md`, `FRONTEND_TRACEABILITY_PR
 |-------|-------|--------|
 | `AGENTS.md` | Iterationsablauf | ✓ |
 | `docs/DELIVERY_SYSTEM.md` | 12-Schritte-Detail | ✓ (queue-archive verlinkt) |
-| `docs/NEXT_STEPS_QUEUE.md` | Aktive Arbeitsliste | ✓ Multi-Domain Q-401+ OFFEN |
-| `docs/delivery/AUTONOMOUS_LOOP.md` | Autonomer 12m-Loop (Rotation, Katalog, Prompt) | ✓ (Q-400) |
-| `docs/delivery/loop-state.md` | next_domain / idle-Zähler | ✓ (Q-400) |
+| `docs/NEXT_STEPS_QUEUE.md` | Aktive Arbeitsliste | ✓ Q-4xx; Rest DOCS (Q-430+) |
+| `docs/delivery/AUTONOMOUS_LOOP.md` | Autonomer Loop (Rotation, Katalog, Prompt) | ✓ |
+| `docs/delivery/loop-state.md` | next_domain / idle-Zähler | ✓ |
 | `.grok/workflows/autonomous-develop.rhai` | Ein-Fire-Workflow | ✓ (Q-400) |
 | `docs/delivery/queue-archive/` | DONE-Historie | ✓ Q-001–Q-300 |
 | `docs/BUILD_STATE.md` | Dieser Ist-Stand | ✓ gehärtet (Q-302) |
@@ -175,10 +176,10 @@ Keine durchgestrichenen Erledigungen. Abgeschlossenes steht in git / queue-archi
 
 | Lücke | Auswirkung | Queue |
 |-------|------------|-------|
-
 | Kein echtes Backend / keine Behörden-Adapter | Demo-only | bewusst Phase 0 |
 | Open-Data-Lizenz Kita final (BL) | Demo nutzt vorläufigen Hinweis | fachlich offen, nicht blockierend |
 | DSFA / produktive Datenschutz-Nachweise | Konzeptphase | bewusst offen |
+| `test:e2e:ci` Gesamt-Lauf hier nicht frisch grün vermessen | Inventory 333; CI-Lauf separat (Supervisor/`test:e2e:ci`) | Betriebs-Hinweis |
 
 ---
 

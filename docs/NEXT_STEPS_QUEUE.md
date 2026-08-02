@@ -40,7 +40,7 @@ Autonomer Multi-Domain-Loop: [`docs/delivery/AUTONOMOUS_LOOP.md`](delivery/AUTON
 | Q-400 | cross | Autonomer Multi-Domain-Loop: `AUTONOMOUS_LOOP.md`, `loop-state.md`, Queue-Katalog, Workflow `.grok/workflows/autonomous-develop.rhai` | CHORE | M | – | DONE |
 | Q-401 | kita | E2E-Smoke Kita: Landing/Transparenz, Lagebild, Einrichtung, Tagesstand — Kernrouten erreichbar, h1, DEC-004-Hinweis wo relevant | DEMO | M | Q-400 | DONE |
 | Q-402 | kita | E2E Meldekette: Session-Freigabe Meldung → Meldeeingang Lagebild sichtbar (kein page.goto nach Interaktion; Client-Nav) | DEMO | M | Q-401 | DONE |
-| Q-403 | cross | BUILD_STATE: E2E-Zähler und letzte Prüfung auf aktuellen Stand (316 / ca5ccf9-Ära) bringen | DOCS | S | Q-400 | OFFEN |
+| Q-403 | cross | BUILD_STATE: E2E-Zähler und letzte Prüfung auf aktuellen Stand (316 / ca5ccf9-Ära) bringen | DOCS | S | Q-400 | DONE |
 
 ### Cross-Domain Demo-Wert
 
@@ -72,6 +72,7 @@ Autonomer Multi-Domain-Loop: [`docs/delivery/AUTONOMOUS_LOOP.md`](delivery/AUTON
 
 | ID | Kurz | Status |
 |----|------|--------|
+| Q-403 | BUILD_STATE E2E-Zähler 333/12 Specs | DONE |
 | Q-412 | Kita DemoSessionBar bei Meldefreigabe | DONE |
 | Q-411 | /stories Zur-Demo-CTA pro Story mit Route | DONE |
 | Q-422 | Kita E2E Transparenz Filter+CSV labeled | DONE |
@@ -81,7 +82,6 @@ Autonomer Multi-Domain-Loop: [`docs/delivery/AUTONOMOUS_LOOP.md`](delivery/AUTON
 | Q-402 | Kita Meldekette E2E Freigabe→Lagebild (DEC-012) | DONE |
 | Q-401 | Kita E2E-Smoke Kernrouten + `test:e2e:kita` | DONE |
 | Q-400 | Autonomer Multi-Domain-Loop + Workflow | DONE |
-| Q-224 | UG Hinweise UNTERLAGE data-next-dok-id | DONE |
 
 ---
 

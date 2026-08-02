@@ -5,13 +5,13 @@ Regeln: `docs/delivery/AUTONOMOUS_LOOP.md`.
 
 | Feld | Wert |
 |------|------|
-| `next_domain` | `cross` |
-| `last_domain` | `kita` |
-| `last_queue_id` | `Q-412` |
-| `last_commit` | 29dae8c |
-| `fires_total` | 8 |
+| `next_domain` | `av` |
+| `last_domain` | `cross` |
+| `last_queue_id` | `Q-403` |
+| `last_commit` | 27f62e0 |
+| `fires_total` | 9 |
 | `consecutive_idle` | 0 |
-| `updated` | 2026-08-02 (Q-412 Kita DemoSessionBar) |
+| `updated` | 2026-08-03 (Q-403 BUILD_STATE E2E-Zähler) |
 
 ## Domänen-Reihenfolge
 
