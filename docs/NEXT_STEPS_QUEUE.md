@@ -106,12 +106,21 @@ Autonomer Multi-Domain-Loop: [`docs/delivery/AUTONOMOUS_LOOP.md`](delivery/AUTON
 | Q-481 | kita | E2E-Smoke: Bedarfsplanung, Gremienvorlage, Monatsbericht, Meldung – h1/Kernroute erreichbar | DEMO | S | Q-401 | DONE |
 | Q-482 | av | E2E Keyboard-Smoke: Fall-Tabs per Tastatur erreichbar und aktivierbar (Fokus sichtbar) | DEMO | S | Q-420 | DONE |
 
+### Loop-Katalog (Auffüllung nach Q-482)
+
+| ID | Domäne | Schritt | Typ | Aufwand | Abhängigkeit | Status |
+|----|--------|---------|-----|---------|--------------|--------|
+| Q-490 | ug | a11y + E2E: UG-Tabs `role=tablist/tab` + Keyboard-Smoke Enter-Navigation (Parität Q-482) | DEMO | S | Q-472 | DONE |
+| Q-491 | kita | a11y + E2E: Tagesstand Druck-Button mit zugänglichem Namen (Parität CSV/Einrichtung) | DEMO | S | Q-480 | OFFEN |
+| Q-492 | cross | E2E a11y: ThemeSwitcher hat zugänglichen Namen und ändert `data-theme` | DEMO | S | – | OFFEN |
+
 ---
 
 ## Kürzlicher DONE-Tail (letzte ~10)
 
 | ID | Kurz | Status |
 |----|------|--------|
+| Q-490 | UG Tabs role=tab + Keyboard-Smoke Enter | DONE |
 | Q-482 | AV Keyboard-Smoke Fall-Tabs Enter-Navigation | DONE |
 | Q-481 | Kita E2E-Smoke Bedarfsplanung/Vorlage/Monatsbericht/Meldung | DONE |
 | Q-480 | Kita Einrichtung Druck/CSV a11y Labels | DONE |
@@ -121,7 +130,6 @@ Autonomer Multi-Domain-Loop: [`docs/delivery/AUTONOMOUS_LOOP.md`](delivery/AUTON
 | Q-462 | AV Session-Reset nach RQ stellt Fairness-RQ wieder her | DONE |
 | Q-461 | Skip-Link /stories und /feedback E2E | DONE |
 | Q-460 | Kita Lagebild Druck/CSV a11y Labels | DONE |
-| Q-452 | UG a11y Behördenkarten + BG-Button Labels | DONE |
 
 ---
 

@@ -744,6 +744,54 @@ test.describe('UG Skip-Link – Übersicht und Hinweise (Q-472)', () => {
   });
 });
 
+// ─── Keyboard-Smoke Tabs (Q-490) ──────────────────────────────────────────────
+
+test.describe('UG Keyboard-Smoke – Tabs (Q-490)', () => {
+  test('Tabs per Tastatur fokussierbar und mit Enter aktivierbar', async ({ page }) => {
+    // Parität AV Q-482: role=tablist/tab, Fokus sichtbar, Enter-Navigation
+    await page.goto('/gruendung');
+
+    const tablist = page.getByRole('tablist');
+    await expect(tablist).toBeVisible();
+    const tabs = tablist.getByRole('tab');
+    await expect(tabs).toHaveCount(6);
+
+    const uebersicht = tablist.getByRole('tab', { name: /^Übersicht$/i });
+    await uebersicht.focus();
+    await expect(uebersicht).toBeFocused();
+    await expect(page.locator(':focus')).toBeVisible();
+    await expect(uebersicht).toHaveAttribute('aria-selected', 'true');
+
+    await page.keyboard.press('Tab');
+    const behoerden = tablist.getByRole('tab', { name: /^Behörden$/i });
+    await expect(behoerden).toBeFocused();
+    await expect(page.locator(':focus')).toBeVisible();
+
+    await page.keyboard.press('Enter');
+    await expect(page).toHaveURL(/\/gruendung\/behoerden/);
+    await expect(behoerden).toHaveAttribute('aria-selected', 'true');
+    await expect(
+      page.getByRole('heading', { name: 'Behörden & Verfahrensschritte' })
+    ).toBeVisible();
+
+    const fragen = page.getByRole('tablist').getByRole('tab', { name: /^Fragen$/i });
+    await fragen.focus();
+    await expect(fragen).toBeFocused();
+    await page.keyboard.press('Enter');
+    await expect(page).toHaveURL(/\/gruendung\/rueckfragen/);
+    await expect(fragen).toHaveAttribute('aria-selected', 'true');
+    await expect(page.getByRole('heading', { name: /Rückfragen der Behörden/i })).toBeVisible();
+
+    const hinweise = page.getByRole('tablist').getByRole('tab', { name: /^Hinweise$/i });
+    await hinweise.focus();
+    await expect(hinweise).toBeFocused();
+    await page.keyboard.press('Enter');
+    await expect(page).toHaveURL(/\/gruendung\/hinweise/);
+    await expect(hinweise).toHaveAttribute('aria-selected', 'true');
+    await expect(page.getByRole('heading', { name: /Hinweise zur Verfahrenslage/i })).toBeVisible();
+  });
+});
+
 // ─── Behörden ─────────────────────────────────────────────────────────────────
 
 test.describe('UG – Behörden & Verfahrensschritte', () => {

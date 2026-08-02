@@ -33,13 +33,20 @@ export default function GruendungLayout({ children }: { children: React.ReactNod
 
         <nav aria-label="Bereichsnavigation" style={{ background: 'white', borderBottom: '2px solid var(--color-border)', position: 'sticky', top: 0, zIndex: 10 }}>
           <div className="container">
-            <div style={{ display: 'flex', gap: 0, overflowX: 'auto' }}>
+            <div className="tab-nav" role="tablist" style={{ display: 'flex', gap: 0, overflowX: 'auto' }}>
               {tabs.map(tab => {
                 const isActive = tab.href === '/gruendung'
                   ? pathname === '/gruendung'
                   : pathname.startsWith(tab.href);
                 return (
-                  <Link key={tab.href} href={tab.href} className={`tab-nav-item${isActive ? ' active' : ''}`}>
+                  <Link
+                    key={tab.href}
+                    href={tab.href}
+                    role="tab"
+                    aria-selected={isActive}
+                    aria-label={tab.label}
+                    className={`tab-nav-item${isActive ? ' active' : ''}`}
+                  >
                     <Icon name={tab.icon} size={16} />
                     {tab.label}
                   </Link>

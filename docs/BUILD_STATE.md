@@ -1,6 +1,6 @@
 # BUILD_STATE.md – Aktueller Projektstand
 
-Zuletzt aktualisiert: nach Q-482 AV Keyboard-Smoke Fall-Tabs
+Zuletzt aktualisiert: nach Q-490 UG Tabs role=tab + Keyboard-Smoke
 
 Dieser Stand beschreibt, was **tatsächlich existiert und funktioniert** — nicht die Feature-Historie.
 Geplante Schritte → `docs/NEXT_STEPS_QUEUE.md`.  
@@ -18,8 +18,8 @@ Detailhistorie → `git log` / `docs/delivery/queue-archive/`.
 | Build-Status | ✓ 27 statische Seiten |
 | Deployment | Vercel, aus `demo/` |
 | Lokaler Start | `cd demo && npm install && npm run dev` |
-| Letzte bekannte Prüfung | lint 2026-08-03; E2E chromium **354** Tests (+ AV Keyboard-Smoke Fall-Tabs Q-482) |
-| E2E-Skripte | `test:e2e:ci` (chromium, workers=1); Domains: `test:e2e:av` (+ Keyboard-Tabs Q-482) · `test:e2e:ug` · `test:e2e:kita`; Skip-Link; Session-Reset RQ; `stories-zur-demo.spec.ts` |
+| Letzte bekannte Prüfung | lint 2026-08-03; E2E chromium **355** Tests (+ UG Keyboard-Tabs Q-490) |
+| E2E-Skripte | `test:e2e:ci` (chromium, workers=1); Domains: `test:e2e:av` · `test:e2e:ug` (+ Keyboard-Tabs Q-490) · `test:e2e:kita`; Skip-Link; Session-Reset RQ; `stories-zur-demo.spec.ts` |
 | Daten | durchgängig Mock; kein Backend, keine Behörden-Anbindung |
 
 ---

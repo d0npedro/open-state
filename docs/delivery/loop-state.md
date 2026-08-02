@@ -5,13 +5,13 @@ Regeln: `docs/delivery/AUTONOMOUS_LOOP.md`.
 
 | Feld | Wert |
 |------|------|
-| `next_domain` | `ug` |
-| `last_domain` | `av` |
-| `last_queue_id` | `Q-482` |
-| `last_commit` | 52715db |
-| `fires_total` | 27 |
+| `next_domain` | `kita` |
+| `last_domain` | `ug` |
+| `last_queue_id` | `Q-490` |
+| `last_commit` | pending |
+| `fires_total` | 28 |
 | `consecutive_idle` | 0 |
-| `updated` | 2026-08-03 (Q-482 AV Keyboard-Smoke Fall-Tabs) |
+| `updated` | 2026-08-03 (Q-490 UG Keyboard-Smoke Tabs) |
 
 ## Domänen-Reihenfolge
 
