@@ -132,6 +132,10 @@ Der Minimalbefehl für eine vollständige Iteration lautet: **„Entwickle weite
 Mit **„Entwickle weiter und pushe"** wird nach dem Commit auch gepusht.
 Push ist bewusst opt-in und erfordert eine ausdrückliche Nutzeranweisung.
 
+**Strukturelles Refactoring (Priorität 0):** Analyse, Zielstruktur und Phasenplan unter
+[`docs/REPO_REFACTORING_PLAN.md`](docs/REPO_REFACTORING_PLAN.md) (DEC-011).
+Fokus: Historie archivieren, Delivery verschlanken, Navigation klären — nicht Feature-Zuwachs.
+
 ---
 
 ## Demo & Deployment

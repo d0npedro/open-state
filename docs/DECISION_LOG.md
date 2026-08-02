@@ -159,6 +159,26 @@ sind in `AGENTS.md` (Push-Regel) und `docs/DELIVERY_SYSTEM.md` (Steuerbefehle) d
 
 ---
 
+## DEC-011: Strukturelles Repo-Refactoring vor weiterem Feature-Feinschliff
+
+**Entscheidung:** Das Repository priorisiert vorübergehend strukturelle Klärung (Archivierung, Delivery-Verschlankung, Navigation, Anti-Growth-Regeln) gegenüber weiterem Demo-Micro-Feinschliff (CTA-Paritäten, print-only-Meta, Countdown-Chips o. Ä.).
+
+**Begründung:**
+- Queue und BUILD_STATE sind zum Changelog mutiert (~183 DONE vs. wenige OFFEN; BUILD_STATE ~47 KB)
+- Root enthält historische Rewrite-Summaries, die den Einstieg verdecken
+- Doppelte Quellen (Story-Registry, Deploy-Docs) erzeugen Pflege- und Driftkosten
+- Ohne Deckel skaliert der Overhead mit jeder Iteration und jeder neuen Domäne
+
+**Alternativen erwogen:**
+- Weiter feature-first und „irgendwann aufräumen“ — verworfen, weil die Kosten pro Iteration bereits spürbar steigen
+- Big-Bang-Umbau aller Pfade — verworfen wegen Link- und Agenten-Risiko
+
+**Vorgehen:** Inkrementell gemäß `docs/REPO_REFACTORING_PLAN.md` (Phasen 0–4). Historie archivieren, nicht löschen. Demo und Domänensubstanz unangetastet.
+
+**Status:** Aktiv. Queue-IDs Q-299+ (Priorität 0). Aufheben erst nach Phase 0–3 bzw. explizitem DEC.
+
+---
+
 ## DEC-011: Agenten-Betriebssystem als Steuerungsebene
 
 **Entscheidung:** Das Repository erhält ein eigenes Betriebssystem für kontrollierte Weiterentwicklung: AGENTS.md, DELIVERY_SYSTEM.md, NEXT_STEPS_QUEUE.md, BUILD_STATE.md, DECISION_LOG.md.
