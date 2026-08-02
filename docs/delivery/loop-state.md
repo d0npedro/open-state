@@ -7,11 +7,11 @@ Regeln: `docs/delivery/AUTONOMOUS_LOOP.md`.
 |------|------|
 | `next_domain` | `av` |
 | `last_domain` | `cross` |
-| `last_queue_id` | `Q-403` |
-| `last_commit` | 27f62e0 |
-| `fires_total` | 9 |
+| `last_queue_id` | `Q-430` |
+| `last_commit` | 568597d |
+| `fires_total` | 10 |
 | `consecutive_idle` | 0 |
-| `updated` | 2026-08-03 (Q-403 BUILD_STATE E2E-Zähler) |
+| `updated` | 2026-08-03 (Q-430 Domain-README-Schablone) |
 
 ## Domänen-Reihenfolge
 

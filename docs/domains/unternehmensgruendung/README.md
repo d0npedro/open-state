@@ -1,78 +1,86 @@
 # Domäne: Unternehmensgründung
 
-**Open State – Gründung als Verwaltungsaufgabe mit Qualitätsanspruch**
+**Status:** Konzeptphase · Demo demonstrierbar  
+**SSOT Stories:** [`demo/data/storyRegistry.ts`](../../../demo/data/storyRegistry.ts) · Dashboard [`/stories`](../../../demo/app/stories/page.tsx)
+
+Einheitliche Andock-Schablone (Q-430): Problem · Demo-Routen · Stories · API · Grenzen.
 
 ---
 
-## Kernthese
+## Problem
 
-Ein guter Staat behandelt Unternehmensgründung als volkswirtschaftlich wertvollen Akt. Er schafft nicht Privilegien für Gründer, sondern beseitigt strukturelle Hindernisse, die aus schlechter Verwaltungsorganisation entstehen – nicht aus legitimen regulatorischen Anforderungen.
+Gründerinnen und Gründer koordinieren heute oft selbst Gewerbeamt, Finanzamt, IHK und weitere Stellen. Anforderungen sind pauschal, Status unklar, Dokumente werden mehrfach angefordert — Friktion entsteht aus Organisationsmängeln, nicht aus legitimer Regulierung.
 
-Gründerinnen und Gründer sind keine Bittsteller. Sie übernehmen wirtschaftliche Verantwortung, schaffen Arbeitsplätze und steuerliche Basis und sind auf klare, planbare staatliche Prozesse angewiesen. Wenn der Staat ihnen unnötige Friktion aufbürdet, ist das kein Naturzustand – es ist ein struktureller Mangel, der behoben werden kann.
+**Zielbild (kurz):** Eine digitale Gründungsakte mit klaren Anforderungen, Behördensicht, Fristen und erklärbaren Schritten — ohne die föderale Rechtslage zu ersetzen.
 
----
-
-## Zielbild
-
-Das Zielbild der Domäne Unternehmensgründung ist kein Utopia. Es ist ein beschreibbarer Qualitätsstandard:
-
-- Jede Gründerin und jeder Gründer weiß, welche Anforderungen für ihren konkreten Fall gelten – nicht pauschal, nicht interpretationsbedürftig.
-- Der Verfahrensstatus ist jederzeit einsehbar – nicht durch Rückfragen, sondern durch digitale Statustransparenz.
-- Behörden koordinieren untereinander, wo das rechtlich möglich ist – Gründer müssen nicht Koordinator zwischen Gewerbeamt, Finanzamt und IHK/HWK sein.
-- Dokumente, die einmal eingereicht und geprüft wurden, werden nicht erneut angefordert.
-- Rückfragen werden gestellt, bevor Fristen versäumt werden, nicht danach.
-- Entscheidungen werden begründet, Ablehnungen erklärbar gemacht.
+Detail: [01_PROBLEMRAUM_UND_ZIELBILD.md](01_PROBLEMRAUM_UND_ZIELBILD.md)
 
 ---
 
-## Nutzen
+## Demo-Routen
 
-### Für Gründerinnen und Gründer
-- Planbarkeit: klare Anforderungen, verlässliche Fristen
-- Weniger Zeitaufwand für administrative Vorgänge
-- Verständliche Kommunikation statt Behördendeutsch
-- Digitale Gründungsakte als Gesamtübersicht
+| Route | Inhalt | Stories |
+|-------|--------|---------|
+| `/gruendung` | Übersicht, nächster Schritt, Session-Quittungen | US-UG-001 |
+| `/gruendung/behoerden` | Behördenkarten, VS-Status, BG-Demo | US-UG-002 |
+| `/gruendung/dokumente` | Unterlagen, Upload session-lokal | US-UG-003 |
+| `/gruendung/rueckfragen` | Rückfragen, Antwort-Demo | US-UG-004 |
+| `/gruendung/verlauf` | Verlauf mit Filtern | US-UG-005 |
+| `/gruendung/hinweise` | Fairness UG, CTAs | US-UG-006 |
 
-### Für den Staat
-- Weniger Rückfragen, weniger Nachbearbeitungen
-- Geringere Fehlerquoten durch vollständigere Ersteinreichungen
-- Frühere steuerliche und sozialversicherungsrechtliche Erfassung von Gründungen
-- Bessere Datengrundlage für wirtschaftspolitische Analyse
-
-### Für die Wirtschaft
-- Kürzere Zeit zwischen Entscheidung zur Gründung und Aufnahme des Betriebs
-- Stärkere Bindung leistungsbereiter Menschen an den Standort Deutschland
-- Weniger Abschreckungseffekte für Solo-Selbstständige und kleine Gründungen
+Einstieg Demo: Landing → „Gründungsakte öffnen“. Mock: `demo/data/mockGruendungsfall.ts`.
 
 ---
 
-## Domänenprinzipien
+## Stories
 
-**Anforderungsklarheit:** Jede Anforderung, die an eine Gründerin oder einen Gründer gestellt wird, muss konkret, verständlich und dem konkreten Gründungsvorhaben zugeordnet sein. Pauschallisten werden nicht akzeptiert.
+| ID | Titel | Route |
+|----|-------|-------|
+| US-UG-001 | Gründungsstatus einsehen | `/gruendung` |
+| US-UG-002 | Beteiligte Behörden einsehen | `/gruendung/behoerden` |
+| US-UG-003 | Unterlagen nachreichen | `/gruendung/dokumente` |
+| US-UG-004 | Rückfrage verstehen und beantworten | `/gruendung/rueckfragen` |
+| US-UG-005 | Verfahrensverlauf nachvollziehen | `/gruendung/verlauf` |
+| US-UG-006 | Nächste Schritte und Pflichten verstehen | `/gruendung/hinweise` |
 
-**Statustransparenz:** Der Verfahrensstand ist jederzeit einsehbar. Bürger fragen nicht beim Gewerbeamt an, um zu wissen, ob ihr Antrag bearbeitet wurde.
-
-**Einmaligkeit der Dateneingabe:** Daten, die einmal eingegeben und validiert wurden, werden im Rahmen des rechtlich zulässigen Datenteilens nicht erneut abgefragt.
-
-**Koordination statt Eskalation:** Wenn mehrere Behörden beteiligt sind, koordiniert das System – nicht der Gründer.
-
-**Erklärbarkeit:** Entscheidungen werden begründet. Ablehnungen enthalten konkrete Hinweise, was fehlt oder was geändert werden muss.
-
-**Föderale Realität:** Die Domäne akzeptiert die föderale Struktur als rechtliche Realität. Sie arbeitet mit dieser Struktur, nicht gegen sie – und markiert offen, wo Abstimmung zwischen föderalen Ebenen noch aussteht.
+Story-Dateien: [`docs/stories/`](../../stories/) (Registry-Einträge `US-UG-*`)
 
 ---
 
-## Dokumentenübersicht
+## API
+
+| Artefakt | Rolle |
+|----------|--------|
+| — | Noch keine dedizierte OpenAPI-Datei unter `docs/api/` (bewusst Konzeptphase) |
+| [04_FALLAKTE_UND_STATUSMODELL.md](04_FALLAKTE_UND_STATUSMODELL.md) | Fallakte, Status, Ereignisse |
+| Datenmodell-Gedanke | analog AV; Demo-Typen: `demo/types/gruendung.ts` |
+
+---
+
+## Grenzen
+
+- Demo-only: Mock, kein Backend, keine echten Behördenadapter
+- Föderale Zuständigkeiten und Rechtsformen bleiben Realität; System koordiniert, ersetzt Recht nicht
+- BG-Anmeldung u. a. außerhalb Open State (Demo-Markierung)
+- Detail: [06_RECHTLICHE_OFFENHEIT_UND_GRENZEN.md](06_RECHTLICHE_OFFENHEIT_UND_GRENZEN.md)
+
+---
+
+## Dokumentenübersicht (Fachkonzept)
 
 | Dokument | Inhalt |
 |----------|--------|
-| [01_PROBLEMRAUM_UND_ZIELBILD.md](01_PROBLEMRAUM_UND_ZIELBILD.md) | Ist-Probleme, Zielbild, Zielkennzahlen |
-| [02_BENUTZERROLLEN_UND_AKTEURE.md](02_BENUTZERROLLEN_UND_AKTEURE.md) | Rollen, Sichtrechte, Zuständigkeiten |
-| [03_KERNPROZESSE.md](03_KERNPROZESSE.md) | Prozessabläufe mit User-Flows |
-| [04_FALLAKTE_UND_STATUSMODELL.md](04_FALLAKTE_UND_STATUSMODELL.md) | Digitale Gründungsakte, Statusmodell, Ereignistypen |
-| [05_WIRTSCHAFTLICHER_NUTZEN_UND_STAATLICHER_MEHRWERT.md](05_WIRTSCHAFTLICHER_NUTZEN_UND_STAATLICHER_MEHRWERT.md) | Nutzenargumentation, Effizienzlogik |
-| [06_RECHTLICHE_OFFENHEIT_UND_GRENZEN.md](06_RECHTLICHE_OFFENHEIT_UND_GRENZEN.md) | Föderale Grenzen, Rechtsformen, offene Prüfpunkte |
+| [01_PROBLEMRAUM_UND_ZIELBILD.md](01_PROBLEMRAUM_UND_ZIELBILD.md) | Problem und Zielbild |
+| [02_BENUTZERROLLEN_UND_AKTEURE.md](02_BENUTZERROLLEN_UND_AKTEURE.md) | Rollen |
+| [03_KERNPROZESSE.md](03_KERNPROZESSE.md) | Prozesse |
+| [04_FALLAKTE_UND_STATUSMODELL.md](04_FALLAKTE_UND_STATUSMODELL.md) | Akte und Status |
+| [05_WIRTSCHAFTLICHER_NUTZEN_UND_STAATLICHER_MEHRWERT.md](05_WIRTSCHAFTLICHER_NUTZEN_UND_STAATLICHER_MEHRWERT.md) | Nutzenargumentation |
+| [06_RECHTLICHE_OFFENHEIT_UND_GRENZEN.md](06_RECHTLICHE_OFFENHEIT_UND_GRENZEN.md) | Rechtliche Grenzen |
 
 ---
 
-*Diese Domäne ist Teil des Open State-Projekts und unterliegt dessen Kernprinzipien: Keine KI-Letztentscheidung, vollständige Erklärbarkeit, menschliche Verantwortung, Datensouveränität beim Bürger.*
+## Weiterführend
+
+- Architektur: [`architecture/05_Systemarchitektur.md`](../../../architecture/05_Systemarchitektur.md)
+- Leitbild: [`docs/LEITBILD_STAAT_UND_VERTRAUEN.md`](../../LEITBILD_STAAT_UND_VERTRAUEN.md)
+- Fairness UG: `demo/lib/fairness/gruendung-rules.ts`

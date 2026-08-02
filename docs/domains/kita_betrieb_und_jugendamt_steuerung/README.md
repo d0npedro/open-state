@@ -1,100 +1,98 @@
-# Open State – Domäne: Kita-Betrieb & Jugendamt-Steuerung
+# Domäne: Kita-Betrieb & Jugendamt-Steuerung
 
-**Bereich:** Kindertagesbetreuung · Betriebsunterstützung · Bedarfsplanung · Berichtswesen · Öffentliche Transparenz
-**Status:** Konzeptioneller Ausgangszustand
+**Status:** Konzeptphase · Demo demonstrierbar  
+**SSOT Stories:** [`demo/data/storyRegistry.ts`](../../../demo/data/storyRegistry.ts) · Dashboard [`/stories`](../../../demo/app/stories/page.tsx)
 
----
-
-## Zielbild
-
-Kitas sind operative Einrichtungen mit intensiver Alltagsverwaltung: Belegungsführung, Personalplanung, Ausfallkommunikation, Meldepflichten, Dokumentationspflichten. Diese Arbeit wird heute weitgehend manuell, fragmentiert und ohne systemischen Steuerungsnutzen geleistet.
-
-Open State überträgt den Grundsatz operativer Entlastung auf diesen Bereich:
-
-> Einrichtungen arbeiten für ihren eigenen Betrieb – nicht als Datenzulieferer für Behörden.
-> Steuerungsdaten entstehen als sinnvolle Ableitung aus guter Betriebsführung.
-
-Das Jugendamt erhält dadurch laufend aktuelle, strukturierte Lagebilder – ohne Zusatzaufwand für Einrichtungen. Politische Gremien erhalten vorbereitete Berichtsvorlagen. Ein freigegebener Teil dieser Daten wird öffentlich als Transparenzbericht zugänglich gemacht.
+Einheitliche Andock-Schablone (Q-430): Problem · Demo-Routen · Stories · API · Grenzen.
 
 ---
 
-## Drei Schichten – klar getrennt
+## Problem
 
-```
-┌─────────────────────────────────────────────────────────┐
-│  TRANSPARENZSCHICHT   (öffentlich, freigegeben)         │
-│  Aggregierte Kennzahlen · Trends · Methodik sichtbar    │
-├─────────────────────────────────────────────────────────┤
-│  STEUERUNGSSCHICHT    (intern, Jugendamt & Politik)     │
-│  Lagebilder · Bedarfsplanung · Politische Vorlagen      │
-├─────────────────────────────────────────────────────────┤
-│  BETRIEBSSCHICHT      (einrichtungsintern, Kita)        │
-│  Belegung · Personal · Anwesenheit · Meldungen          │
-└─────────────────────────────────────────────────────────┘
-```
+Kitas führen Betrieb (Belegung, Personal, Anwesenheit) oft in Excel/Papier. Meldungen an das Jugendamt sind manuell und verzögert. Steuerung und Öffentlichkeit fehlen belastbare, freigegebene Aggregate — ohne Kind- oder Personendaten in die Breite zu tragen.
 
-Jede Schicht hat eigene Sichtbarkeitsregeln, Zugriffsrechte und Aggregationsstufen.
-Der Übergang zwischen Schichten ist aktiv freizugeben – kein automatischer Durchgriff.
+**Zielbild (kurz):** Betriebsdaten nutzen der Einrichtung selbst; freigegebene Aggregate speisen JA-Lagebild und öffentlichen Transparenzbericht. Kein automatischer Durchgriff auf Rohdaten.
+
+Detail: [01_PROBLEMRAUM_UND_ZIELBILD.md](01_PROBLEMRAUM_UND_ZIELBILD.md)
+
+**Schichten:** Betrieb (Einrichtung) → Steuerung (JA) → Transparenz (öffentlich, freigegeben).
 
 ---
 
-## Kernprobleme, die diese Domäne löst
+## Demo-Routen
 
-| Problem | Folge heute | Ziel mit Open State |
-|---------|------------|---------------------|
-| Belegungsverwaltung in Excel/Papier | Fehleranfällig, nicht aggregierbar | Strukturierte, maschinenlesbare Belegungsführung |
-| Meldungen manuell je Behörde | Mehrfacheingaben, Inkonsistenz | Einmal erfassen, strukturiert weitergeben |
-| Jugendamt fragt Daten manuell ab | Zeitverzug, Vollständigkeit unklar | Laufende, automatisch erzeugte Lagebilder |
-| Bedarfsplanung auf Basis veralteter Zahlen | Fehlinvestition, Unterversorgung | Aktuelle Grundlage für Planung |
-| Öffentlichkeit hat keinen Einblick | Vertrauensverlust, keine Prüfbarkeit | Transparenzberichte mit nachvollziehbarer Methodik |
-| Personalausfälle nicht systemisch sichtbar | Reaktives Handeln | Lagebilder mit Ausfallsituation je Region |
+| Route | Schicht | Stories |
+|-------|---------|---------|
+| `/kita` | Transparenz (öffentlich) | US-KJ-009, 010 |
+| `/kita/lagebild` | Steuerung JA | US-KJ-005, 006, 010 |
+| `/kita/bedarfsplanung` | Steuerung | US-KJ-007 |
+| `/kita/vorlage` | Steuerung / Gremien | US-KJ-008 |
+| `/kita/einrichtung` | Betrieb | US-KJ-002 |
+| `/kita/tagesstand` | Betrieb | US-KJ-001 |
+| `/kita/monatsbericht` | Betrieb | US-KJ-003 |
+| `/kita/meldung` | Betrieb → Freigabe | US-KJ-004 |
 
----
-
-## Kernprinzipien dieser Domäne
-
-1. **Operative Entlastung zuerst** – Kitas profitieren selbst davon, Daten zu pflegen
-2. **Keine Doppelerfassung** – was für den eigenen Betrieb erfasst wird, dient als Basis für Berichte
-3. **Menschliche Freigabe** – kein automatischer Durchgriff auf operative Rohdaten; Steuerungs- und Transparenzdaten werden aktiv freigegeben
-4. **Datenschutz als Designprinzip** – keine personenbezogenen Daten in aggregierten Berichten; Kindeswohl hat höchste Priorität
-5. **Nachvollziehbare Methodik** – jede Kennzahl ist definiert, jede Berechnungsgrundlage ist einsehbar
-6. **Kein automatisierter Planungsentscheid** – Bedarfsplanung ist Vorschlag, Entscheidung liegt bei Menschen
+Einstieg: Landing → Transparenzbericht; intern Lagebild. Mocks: `demo/data/mockKita*.ts`.  
+Session: Meldefreigabe → Meldeeingang (localStorage); `DemoSessionBar` im Kita-Layout (Q-412).
 
 ---
 
-## Beteiligte Rollen
+## Stories
 
-| Rolle | Ebene | Funktion |
-|-------|-------|---------|
-| Kita-Leitung | Einrichtung | Betriebsführung, Freigabe von Meldungen |
-| Fachkraft / Verwaltung Kita | Einrichtung | Tageserfassung, Anwesenheit, Dokumente |
-| Jugendamtsleitung | Behörde | Strategische Steuerung, Genehmigungen |
-| Sachgebiet Planung/Berichtswesen | Behörde | Lagebilder, Bedarfsplanung, politische Vorlagen |
-| Politische Gremien | Steuerung | Entscheidung auf Basis von Vorlagen |
-| Öffentlichkeit / Bürger | Extern | Einsicht in Transparenzberichte |
+| ID | Titel | Route |
+|----|-------|-------|
+| US-KJ-001 | Tagesstand erfassen | `/kita/tagesstand` |
+| US-KJ-002 | Belegungsstand einsehen | `/kita/einrichtung` |
+| US-KJ-003 | Monatsbericht abrufen | `/kita/monatsbericht` |
+| US-KJ-004 | Meldung prüfen und freigeben | `/kita/meldung` |
+| US-KJ-005 | Versorgungslagebild | `/kita/lagebild` |
+| US-KJ-006 | Engpass-Regionen | `/kita/lagebild` |
+| US-KJ-007 | Bedarfsplanung | `/kita/bedarfsplanung` |
+| US-KJ-008 | Politische Vorlage | `/kita/vorlage` |
+| US-KJ-009 | Öffentlicher Transparenzbericht | `/kita` |
+| US-KJ-010 | Kennzahlen / Vergleich | `/kita`, `/kita/lagebild` |
+
+Story-Dateien: [`docs/stories/kita_betrieb_und_jugendamt_steuerung/`](../../stories/kita_betrieb_und_jugendamt_steuerung/)  
+Related (ohne Duplikat): Q-431 — Jugendamt-Module / KiJuP-Links.
 
 ---
 
-## Dokumentenübersicht
+## API
+
+| Artefakt | Rolle |
+|----------|--------|
+| [`docs/api/kita-meldung-api.yaml`](../../api/kita-meldung-api.yaml) | API-Skizze Meldung |
+| [`docs/api/kita-betriebsdaten-aggregation-vertrag.md`](../../api/kita-betriebsdaten-aggregation-vertrag.md) | Aggregationsvertrag Betrieb → Steuerung/Öffentlichkeit |
+| [06_DATENMODELL_UND_KENNZAHLENLOGIK.md](06_DATENMODELL_UND_KENNZAHLENLOGIK.md) | Kennzahlenlogik |
+
+---
+
+## Grenzen
+
+- Demo-only: Mock, kein Backend, keine produktive Jugendamts-Anbindung
+- DEC-004: keine Kind-/Personennamen in Aggregaten und Exporten
+- Open-Data-Lizenz final (Bundesland) fachlich offen; Demo mit vorläufigem Hinweis
+- Kein automatisierter Planungsentscheid; Freigabe durch Menschen
+- Detail: [07_RECHTLICHE_UND_DATENSCHUTZ_GRENZEN.md](07_RECHTLICHE_UND_DATENSCHUTZ_GRENZEN.md)
+
+---
+
+## Dokumentenübersicht (Fachkonzept)
 
 | Datei | Inhalt |
 |-------|--------|
-| [01_PROBLEMRAUM_UND_ZIELBILD.md](01_PROBLEMRAUM_UND_ZIELBILD.md) | Ist-Zustand, Problemtiefe, angestrebtes Zielbild |
-| [02_BENUTZERROLLEN_UND_AKTEURE.md](02_BENUTZERROLLEN_UND_AKTEURE.md) | Alle Rollen, Rechte, Zugriffsebenen |
-| [03_OPERATIVE_PROZESSE_IN_DER_KITA.md](03_OPERATIVE_PROZESSE_IN_DER_KITA.md) | Belegung, Personal, Meldungen, Auswertungen |
-| [04_JUGENDAMT_STEUERUNG_UND_BERICHTSWESEN.md](04_JUGENDAMT_STEUERUNG_UND_BERICHTSWESEN.md) | Lagebilder, Bedarfsplanung, politische Vorlagen |
-| [05_OEFFENTLICHE_TRANSPARENZBERICHTE.md](05_OEFFENTLICHE_TRANSPARENZBERICHTE.md) | Was öffentlich wird, Methodik, Analysefunktionen |
-| [06_DATENMODELL_UND_KENNZAHLENLOGIK.md](06_DATENMODELL_UND_KENNZAHLENLOGIK.md) | Entitäten, Kennzahlen, Berechnungslogik |
-| [07_RECHTLICHE_UND_DATENSCHUTZ_GRENZEN.md](07_RECHTLICHE_UND_DATENSCHUTZ_GRENZEN.md) | Datenschutz, Kindeswohl, Rechtsgrundlagen |
+| [01_PROBLEMRAUM_UND_ZIELBILD.md](01_PROBLEMRAUM_UND_ZIELBILD.md) | Problem und Zielbild |
+| [02_BENUTZERROLLEN_UND_AKTEURE.md](02_BENUTZERROLLEN_UND_AKTEURE.md) | Rollen |
+| [03_OPERATIVE_PROZESSE_IN_DER_KITA.md](03_OPERATIVE_PROZESSE_IN_DER_KITA.md) | Betrieb |
+| [04_JUGENDAMT_STEUERUNG_UND_BERICHTSWESEN.md](04_JUGENDAMT_STEUERUNG_UND_BERICHTSWESEN.md) | Steuerung |
+| [05_OEFFENTLICHE_TRANSPARENZBERICHTE.md](05_OEFFENTLICHE_TRANSPARENZBERICHTE.md) | Öffentlichkeit |
+| [06_DATENMODELL_UND_KENNZAHLENLOGIK.md](06_DATENMODELL_UND_KENNZAHLENLOGIK.md) | Daten / Kennzahlen |
+| [07_RECHTLICHE_UND_DATENSCHUTZ_GRENZEN.md](07_RECHTLICHE_UND_DATENSCHUTZ_GRENZEN.md) | Recht / Datenschutz |
 
 ---
 
-## User Stories dieser Domäne
+## Weiterführend
 
-→ [Story-Übersicht Kita-Betrieb & Jugendamt-Steuerung](../../../docs/stories/kita_betrieb_und_jugendamt_steuerung/STORY_MAP.md)
-
----
-
-*Diese Domäne ist Teil von Open State – dem transparenten Betriebs- und Vertrauensmodell für staatliches Handeln.*
-*Verweis auf Gesamtarchitektur: [architecture/05_Systemarchitektur.md](../../../architecture/05_Systemarchitektur.md)*
-*Verweis auf Leitbild: [docs/LEITBILD_STAAT_UND_VERTRAUEN.md](../../LEITBILD_STAAT_UND_VERTRAUEN.md)*
+- Architektur: [`architecture/05_Systemarchitektur.md`](../../../architecture/05_Systemarchitektur.md)
+- Leitbild: [`docs/LEITBILD_STAAT_UND_VERTRAUEN.md`](../../LEITBILD_STAAT_UND_VERTRAUEN.md)
+- Demo-Ist: [`docs/BUILD_STATE.md`](../../BUILD_STATE.md) (Kita-Routen)

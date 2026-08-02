@@ -1,6 +1,6 @@
 # BUILD_STATE.md – Aktueller Projektstand
 
-Zuletzt aktualisiert: nach Q-403 E2E-Zähler / Prüfstand (chromium-Inventory)
+Zuletzt aktualisiert: nach Q-430 Domain-README-Schablone (AV/UG/Kita)
 
 Dieser Stand beschreibt, was **tatsächlich existiert und funktioniert** — nicht die Feature-Historie.
 Geplante Schritte → `docs/NEXT_STEPS_QUEUE.md`.  
@@ -134,9 +134,9 @@ Vorlagen/Prinzipien: `docs/stories/STORY_TEMPLATE.md`, `FRONTEND_TRACEABILITY_PR
 
 | Domäne | Pfad | Status |
 |--------|------|--------|
-| Arbeitsverwaltung | `docs/domains/arbeitsverwaltung/` | ✓ Fachkonzept + Stories |
-| Unternehmensgründung | `docs/domains/unternehmensgruendung/` | ✓ Fachkonzept + Stories |
-| Kita / JA-Steuerung | `docs/domains/kita_betrieb_und_jugendamt_steuerung/` | ✓ Fachkonzept + Stories |
+| Arbeitsverwaltung | `docs/domains/arbeitsverwaltung/` | ✓ README-Schablone + Fachkonzept + Stories |
+| Unternehmensgründung | `docs/domains/unternehmensgruendung/` | ✓ README-Schablone + Fachkonzept + Stories |
+| Kita / JA-Steuerung | `docs/domains/kita_betrieb_und_jugendamt_steuerung/` | ✓ README-Schablone + Fachkonzept + Stories |
 
 ### Querschnitt
 
