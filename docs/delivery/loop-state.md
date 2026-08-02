@@ -8,7 +8,7 @@ Regeln: `docs/delivery/AUTONOMOUS_LOOP.md`.
 | `next_domain` | `av` |
 | `last_domain` | `cross` |
 | `last_queue_id` | `Q-432` |
-| `last_commit` | pending |
+| `last_commit` | b9c115e |
 | `fires_total` | 12 |
 | `consecutive_idle` | 0 |
 | `updated` | 2026-08-03 (Q-432 TRACEABILITY_MATRIX SSOT-Stub) |
