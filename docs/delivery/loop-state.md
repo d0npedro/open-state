@@ -5,13 +5,13 @@ Regeln: `docs/delivery/AUTONOMOUS_LOOP.md`.
 
 | Feld | Wert |
 |------|------|
-| `next_domain` | `ug` |
-| `last_domain` | `av` |
-| `last_queue_id` | `Q-420` |
-| `last_commit` | 6c9df57 |
-| `fires_total` | 4 |
+| `next_domain` | `kita` |
+| `last_domain` | `ug` |
+| `last_queue_id` | `Q-421` |
+| `last_commit` | 5c51da2 |
+| `fires_total` | 5 |
 | `consecutive_idle` | 0 |
-| `updated` | 2026-08-02 (Q-420 Skip-Link + main) |
+| `updated` | 2026-08-02 (Q-421 UG Action-Banner Regression) |
 
 ## Domänen-Reihenfolge
 

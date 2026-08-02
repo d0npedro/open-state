@@ -392,6 +392,42 @@ test.describe('UG – Übersicht', () => {
     await expect(betriebsSignal).not.toContainText(/zuerst Rückfrage Finanzamt beantworten/i);
   });
 
+  test('Q-421: Nach RQ+Upload+BG kein hängender Action-Banner auf Übersicht', async ({ page }) => {
+    // Regression: erledigte RQ/Unterlage/BG dürfen keinen „Jetzt handeln“-Banner zurücklassen.
+    // Fairness-CTAs (z. B. Steuernummer) bleiben erlaubt — kein page.goto (DEC-012).
+    const { goUgTab } = await import('./helpers/sessionNav');
+
+    await goUgTab(page, 'Fragen', /\/gruendung\/rueckfragen/);
+    await page.getByRole('button', { name: /Rückfrage beantworten/i }).click();
+    await expect(page.getByText(/die Behörde wurde informiert|beantwortet/i).first()).toBeVisible();
+
+    await goUgTab(page, 'Unterlagen', /\/gruendung\/dokumente/);
+    await page.getByRole('button', { name: /Als hochgeladen markieren/i }).click();
+    await expect(page.getByTestId('dok-upload-quittung-DOK-03')).toBeVisible();
+
+    await goUgTab(page, 'Behörden', /\/gruendung\/behoerden/);
+    await page.getByTestId('behoerde-bg-erledigt-btn').click();
+    await expect(page.getByTestId('behoerde-bg-erledigt-quittung')).toBeVisible();
+
+    await goUgTab(page, 'Übersicht', /\/gruendung$/);
+
+    // Kein Action-Banner für offene Rückfrage
+    await expect(page.locator('.action-banner')).toHaveCount(0);
+    await expect(page.getByText(/Jetzt handeln/i)).toHaveCount(0);
+    await expect(page.getByRole('link', { name: /Frage jetzt beantworten/i })).toHaveCount(0);
+
+    // Erledigte Handlungsstränge nicht mehr als offene Aufgaben
+    await expect(page.getByTestId('uebersicht-aufgabe-link-rq-RQ-01')).toHaveCount(0);
+    await expect(page.getByTestId('uebersicht-aufgabe-link-dok-DOK-03')).toHaveCount(0);
+    await expect(page.getByTestId('uebersicht-aufgabe-link-beh-BEH-04')).toHaveCount(0);
+
+    // Status-Ruhe: Antwort erwartet → wird bearbeitet; Quittungen sichtbar
+    await expect(page.getByText('Ihre Antwort wird erwartet')).not.toBeVisible();
+    await expect(page.getByText('Wird bearbeitet').first()).toBeVisible();
+    await expect(page.getByTestId('rq-quittung')).toBeVisible();
+    await expect(page.getByTestId('upload-quittung')).toBeVisible();
+  });
+
   test('Fairness-Kurzblock mit Link zu Hinweise', async ({ page }) => {
     const block = page.getByTestId('uebersicht-fairness-kurzblock');
     await expect(block).toBeVisible();

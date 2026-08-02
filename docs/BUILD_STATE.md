@@ -1,6 +1,6 @@
 # BUILD_STATE.md – Aktueller Projektstand
 
-Zuletzt aktualisiert: nach Q-420 A11y Skip-Link + `main#main-content`
+Zuletzt aktualisiert: nach Q-421 UG E2E Ruhezustand nach RQ+Upload+BG
 
 Dieser Stand beschreibt, was **tatsächlich existiert und funktioniert** — nicht die Feature-Historie.
 Geplante Schritte → `docs/NEXT_STEPS_QUEUE.md`.  
