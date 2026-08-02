@@ -103,9 +103,12 @@ DONE-Tail auf ca. die letzten ~10 Einträge begrenzen; ältere DONE → bei Meil
 
 ### Schritt 9 – BUILD_STATE.md aktualisieren
 
-Neue Zeilen oder Änderungen dort, wo sich der Zustand verändert hat.
-Kein vollständiges Neuschreiben — nur das Delta.
-Datum / letzten Commit-Bezug aktualisieren.
+**Nur Delta (DEC-013 / Anti-Growth):**
+1. Kopfzeile „Zuletzt aktualisiert“
+2. Betroffene Route- oder Logik-Zeile **kurz** anpassen (kein Feature-Roman)
+3. Echte neue Lücke ergänzen bzw. erledigte Lücke **entfernen** (nicht durchstreichen)
+
+Kein „Q-xxx erledigt“-Anhang. Kein vollständiges Neuschreiben. Detailhistorie = `git log`.
 
 ---
 
@@ -219,6 +222,34 @@ Wenn ein Schritt zu groß wirkt:
 - Aufteilen
 - Ersten Teilschritt ausführen
 - Queue mit den neuen Teilschritten aktualisieren
+
+---
+
+## Anti-Growth-Regeln (DEC-013)
+
+Verbindlich für jeden Iterationslauf. Kurz in `AGENTS.md`, Begründung in `DECISION_LOG.md` (DEC-013), ausformulierte Policy in `docs/REPO_REFACTORING_PLAN.md` §4.
+
+| # | Regel |
+|---|--------|
+| A1 | Keine neuen Root-`REPO_REWRITE_SUMMARY_*.md` → `archive/rewrites/` oder DEC |
+| A2 | Domain-Journals: max. 15 aktive Iterationen; Rest → `archive/journals/` |
+| A3 | Aktive Queue: DONE-Tail ≤ ~10; ältere DONE → `docs/delivery/queue-archive/` |
+| B4 | BUILD_STATE = Ist, nicht Verlauf; Richtgröße kompakt (~15–20 KB) |
+| B5 | Queue = Arbeitsliste, kein Changelog |
+| B6 | DECISION_LOG nur echte Entscheidungen (Trade-offs), keine Feature-Notizen |
+| C7 | Neues Top-Level-Doc/Ordner nur mit DEC + `docs/README.md`-Eintrag |
+| C8 | Eine führende Quelle pro Thema; zweite Datei Stub oder generiert |
+| C9 | Keine neuen nummerierten Module `16_…` unter `docs/` |
+| D10 | Neue Domäne = `docs/domains/` + `docs/stories/` + optional Demo-Slice |
+| D11 | Story-Registry: nur `storyRegistry.ts` manuell; `npm run registry:export` |
+| D12 | Nach DEMO-stabil (Kriterien DEC-013): kein Micro-Feinschliff ohne Produktlücke/Bug |
+| E13 | Pro Iteration minimale Steuerdatei-Edits (Queue + knappes BUILD_STATE) |
+| E14 | Kein Rewrite-Summary als Iterations-Abschlussritual |
+| E15 | Analyse-only → ein Doc unter `docs/`, nicht Root-Summary-Sammlung |
+
+**Queue-Gestaltung:** Micro-Paritäten (z. B. Countdown-Chips AV↔UG) bündeln oder als benannte Serie mit klarem Stopp — nicht 20 Einzel-Q à 15 Min ohne Nutzengrenze.
+
+**Pflichtlektüre pro Lauf:** aktive Queue + kurzes BUILD_STATE + relevante DEC — nicht Archiv, nicht Journals (außer Multi-Loop).
 
 ---
 

@@ -89,10 +89,29 @@ Wenn der Nutzer **regelmäßiges Pushen** oder **Dauerbetrieb mit Remote-Sync** 
 
 | Datei | Zweck |
 |-------|-------|
-| `docs/BUILD_STATE.md` | Was existiert tatsächlich? Was fehlt? |
-| `docs/NEXT_STEPS_QUEUE.md` | Was ist als Nächstes sinnvoll? |
+| `docs/BUILD_STATE.md` | Was existiert tatsächlich? Was fehlt? (kompakt; kein Changelog) |
+| `docs/NEXT_STEPS_QUEUE.md` | Aktive Arbeitsliste (`OFFEN` / `IN_ARBEIT` / `BLOCKIERT` + DONE-Tail) |
 | `docs/DECISION_LOG.md` | Welche Entscheidungen sind bereits getroffen? |
 | `CLAUDE.md` | Technische Projektführung, Build-Befehle, Dateistruktur |
+
+**Nicht** in jedem Lauf lesen: `docs/delivery/queue-archive/`, `archive/`, Domain-Journals.  
+Journals nur im Multi-Loop (`docs/loops/*-JOURNAL.md`, Rotation ≤15).
+
+---
+
+## Anti-Growth (verbindlich, DEC-013)
+
+Kurzform. Details und Begründung: `docs/DECISION_LOG.md` (DEC-013), Volltext-Policy: `docs/REPO_REFACTORING_PLAN.md` §4.
+
+1. **Queue** = Arbeitsliste, kein Changelog. DONE-Tail ≤ ~10; Rest → `docs/delivery/queue-archive/`.
+2. **BUILD_STATE** = Ist-Stand. Pro Iteration max. Kopfzeile + betroffene Kurzzeile + echte Lücke; kein „Q-xxx erledigt“-Anhang.
+3. **Keine** neuen `REPO_REWRITE_SUMMARY_*.md` im Root → `archive/rewrites/` oder DEC-Eintrag.
+4. **Journals** ≤ 15 Iterationen aktiv; älteres → `archive/journals/`.
+5. **Story-Registry:** nur `demo/data/storyRegistry.ts` manuell; JSON via `npm run registry:export`.
+6. **Eine führende Quelle pro Thema;** zweites Dokument nur Stub oder generiert.
+7. **Keine neuen Top-Level-Docs/Ordner** ohne DEC + Eintrag in `docs/README.md`. Kein `16_*.md` unter `docs/`.
+8. **Micro-Paritäten bündeln** oder als bewusste Queue-Serie; nach „DEMO-stabil“ (DEC-013) kein Endlos-Feinschliff ohne Produktlücke/Bug.
+9. **Pro Iteration** nur nötige Steuerdateien (typisch: Queue + knappes BUILD_STATE-Delta + Commit).
 
 ---
 

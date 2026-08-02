@@ -70,13 +70,13 @@ Verwandt (noch nicht unter `domains/`):
 
 | Datei | Zweck |
 |-------|-------|
-| [`../AGENTS.md`](../AGENTS.md) | Iterationspflicht |
-| [`DELIVERY_SYSTEM.md`](DELIVERY_SYSTEM.md) | 12-Schritte-Ablauf |
+| [`../AGENTS.md`](../AGENTS.md) | Iterationspflicht + Anti-Growth-Kurzform (DEC-013) |
+| [`DELIVERY_SYSTEM.md`](DELIVERY_SYSTEM.md) | 12-Schritte-Ablauf + Anti-Growth-Tabelle |
 | [`NEXT_STEPS_QUEUE.md`](NEXT_STEPS_QUEUE.md) | Aktive Arbeitsliste |
 | [`delivery/queue-archive/`](delivery/queue-archive/README.md) | DONE-Historie |
 | [`BUILD_STATE.md`](BUILD_STATE.md) | Ist-Stand (kompakt) |
-| [`DECISION_LOG.md`](DECISION_LOG.md) | Entscheidungen (DEC-*) |
-| [`REPO_REFACTORING_PLAN.md`](REPO_REFACTORING_PLAN.md) | Strukturelles Aufräumen (DEC-011) |
+| [`DECISION_LOG.md`](DECISION_LOG.md) | Entscheidungen (u. a. DEC-013 Anti-Growth) |
+| [`REPO_REFACTORING_PLAN.md`](REPO_REFACTORING_PLAN.md) | Refactoring-Plan + Policy §4 (Q-299–Q-307) |
 | [`loops/MULTI_LOOP_BETRIEB.md`](loops/MULTI_LOOP_BETRIEB.md) | Parallele Domain-Loops |
 
 ---

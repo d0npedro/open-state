@@ -1,6 +1,6 @@
 # BUILD_STATE.md – Aktueller Projektstand
 
-Zuletzt aktualisiert: nach Q-306 docs/README Map of Content + Root-README straffen
+Zuletzt aktualisiert: nach Q-307 Anti-Growth verankert (DEC-013); DEC-011 strukturelle Pause beendet
 
 Dieser Stand beschreibt, was **tatsächlich existiert und funktioniert** — nicht die Feature-Historie.
 Geplante Schritte → `docs/NEXT_STEPS_QUEUE.md`.  
@@ -156,8 +156,9 @@ Vorlagen/Prinzipien: `docs/stories/STORY_TEMPLATE.md`, `FRONTEND_TRACEABILITY_PR
 | `docs/delivery/queue-archive/` | DONE-Historie | ✓ Q-001–Q-300 |
 | `docs/BUILD_STATE.md` | Dieser Ist-Stand | ✓ gehärtet (Q-302) |
 | `docs/DECISION_LOG.md` | Architektur-/Prozess-DEC | ✓ DEC-011 aktiv |
-| `docs/REPO_REFACTORING_PLAN.md` | Phasen 0–4 + Anti-Growth | ✓ Phase 0 + 1.1 + 2.1/2.2 (Q-306 Map of Content) |
+| `docs/REPO_REFACTORING_PLAN.md` | Phasen 0–4 + Anti-Growth | ✓ Kern Q-299–Q-307; Policy in DEC-013 |
 | `docs/README.md` | Map of Content / Wissens-Navigation | ✓ (Q-306) |
+| Anti-Growth | `AGENTS.md` · `DELIVERY_SYSTEM` · DEC-013 · CONTRIBUTING | ✓ (Q-307) |
 | `docs/DEPLOYMENT_AND_DEMO_STRATEGY.md` | Demo-Setup + Vercel + Branches | ✓ führend (Q-304); Setup/Playbook = Stubs |
 | `archive/rewrites/` | Historische Root-Summaries | ✓ (Q-300) |
 | `archive/journals/` | Rotierte Domain-Journals (≤15 aktiv) | ✓ (Q-303); Index README |
@@ -170,8 +171,7 @@ Keine durchgestrichenen Erledigungen. Abgeschlossenes steht in git / queue-archi
 
 | Lücke | Auswirkung | Queue |
 |-------|------------|-------|
-| Anti-Growth noch nicht in AGENTS/DELIVERY/DEC verankert | Risiko erneuten Aufblähens | Q-307 |
-| UG Hinweise: UNTERLAGE-CTA Parität `data-next-dok-id` + Hint | Kleine UX-Parität zu AV | Q-224 (pausiert, DEC-011) |
+| UG Hinweise: UNTERLAGE-CTA Parität `data-next-dok-id` + Hint | Kleine UX-Parität zu AV | Q-224 |
 | Kein echtes Backend / keine Behörden-Adapter | Demo-only | bewusst Phase 0 |
 | Open-Data-Lizenz Kita final (BL) | Demo nutzt vorläufigen Hinweis | fachlich offen, nicht blockierend |
 | DSFA / produktive Datenschutz-Nachweise | Konzeptphase | bewusst offen |

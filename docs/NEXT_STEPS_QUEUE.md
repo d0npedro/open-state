@@ -21,10 +21,11 @@ Befehl: „Entwickle weiter" → obersten `OFFEN`-Eintrag nehmen und umsetzen.
 
 ## Priorisierungslogik
 
-1. **Priorität 0 (strukturelles Refactoring)** vor Feature-Feinschliff, solange DEC-011 aktiv
+1. Technische Korrektheit und Build-Stabilität vor neuen Seitengleisen
 2. Sichtbarer Produktwert vor Dokumentationspflege
 3. Klickbare Demo vor zusätzlicher Story-Verwaltung
-4. Technische Korrektheit und Build-Stabilität vor neuen Seitengleisen
+4. Anti-Growth (DEC-013): Queue/BUILD_STATE schlank; kein Endlos-Feinschliff nach DEMO-stabil
+5. ~~Priorität 0 Refactoring (DEC-011)~~ — Q-299–Q-307 erledigt; Anti-Growth dauerhaft DEC-013
 
 ---
 
@@ -46,14 +47,15 @@ Plan: [`docs/REPO_REFACTORING_PLAN.md`](REPO_REFACTORING_PLAN.md).
 | Q-304 | Phase 0.5: Deploy-Docs auf eine Führungsdatei zusammenführen; Stub-Verweise für die übrigen | DOCS | S | Q-300 | DONE |
 | Q-305 | Phase 1.1: Story-Registry Single Source (`storyRegistry.ts` führend; JSON generieren oder Docs entkoppeln) | CHORE | M | Q-302 | DONE |
 | Q-306 | Phase 2: `docs/README.md` Map of Content + Root-README straffen | DOCS | M | Q-302 | DONE |
-| Q-307 | Phase 3–4: Anti-Growth-Regeln in AGENTS.md, DELIVERY_SYSTEM.md, DECISION_LOG verankern | DOCS | S | Q-302 | OFFEN |
+| Q-307 | Phase 3–4: Anti-Growth-Regeln in AGENTS.md, DELIVERY_SYSTEM.md, DECISION_LOG verankern | DOCS | S | Q-302 | DONE |
 
 ---
 
-### Feature-Backlog (pausiert unter DEC-011)
+### Feature-Backlog
 
-Nach Abschluss von Priorität 0 bzw. bei expliziter Feature-Freigabe fortsetzen.
-Vollständige DONE-Feature-Historie: → [queue-archive](delivery/queue-archive/DONE_Q001-Q300.md).
+Strukturelle Priorität 0 (Q-299–Q-307) erledigt; DEC-011-Pause aufgehoben.  
+Weiter nach Priorisierungslogik oben; Anti-Growth DEC-013 gilt.  
+DONE-Feature-Historie: → [queue-archive](delivery/queue-archive/DONE_Q001-Q300.md).
 
 | ID | Schritt | Typ | Aufwand | Abhängigkeit | Status |
 |----|---------|-----|---------|--------------|--------|
@@ -67,6 +69,7 @@ Nur Orientierung; Details und ältere IDs → [Archiv](delivery/queue-archive/DO
 
 | ID | Kurz | Status |
 |----|------|--------|
+| Q-307 | Anti-Growth in AGENTS/DELIVERY/DEC-013 + CONTRIBUTING | DONE |
 | Q-306 | docs/README Map of Content + Root-README straffen | DONE |
 | Q-305 | storyRegistry.ts SSOT + `npm run registry:export` → JSON | DONE |
 | Q-304 | Deploy-Docs → `DEPLOYMENT_AND_DEMO_STRATEGY.md` führend; Stubs | DONE |
@@ -76,7 +79,6 @@ Nur Orientierung; Details und ältere IDs → [Archiv](delivery/queue-archive/DO
 | Q-300 | Rewrite-Summaries → `archive/rewrites/` | DONE |
 | Q-299 | Refactoring-Plan + Priorität-0-Queue | DONE |
 | Q-223 | AV Übersicht Fairness UNTERLAGE-CTA live nächste Unterlage | DONE |
-| Q-222 | AV Hinweise UNTERLAGE-CTA live nächste Unterlage | DONE |
 
 ---
 

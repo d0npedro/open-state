@@ -175,11 +175,14 @@ sind in `AGENTS.md` (Push-Regel) und `docs/DELIVERY_SYSTEM.md` (Steuerbefehle) d
 
 **Vorgehen:** Inkrementell gemäß `docs/REPO_REFACTORING_PLAN.md` (Phasen 0–4). Historie archivieren, nicht löschen. Demo und Domänensubstanz unangetastet.
 
-**Status:** Aktiv. Queue-IDs Q-299+ (Priorität 0). Aufheben erst nach Phase 0–3 bzw. explizitem DEC.
+**Status:** **Erledigt (strukturelle Priorität).** Q-299–Q-307 umgesetzt (Phase 0–4 Kern).  
+Feature-Backlog (z. B. Q-224) darf wieder nach normaler Priorisierung laufen.  
+Anti-Growth gilt dauerhaft als **DEC-013** (nicht befristet).
 
 ---
 
-## DEC-011: Agenten-Betriebssystem als Steuerungsebene
+## DEC-011b: Agenten-Betriebssystem als Steuerungsebene
+*(historisch ebenfalls als DEC-011 geführt; ID hier DEC-011b zur Eindeutigkeit)*
 
 **Entscheidung:** Das Repository erhält ein eigenes Betriebssystem für kontrollierte Weiterentwicklung: AGENTS.md, DELIVERY_SYSTEM.md, NEXT_STEPS_QUEUE.md, BUILD_STATE.md, DECISION_LOG.md.
 
@@ -200,6 +203,44 @@ sind in `AGENTS.md` (Push-Regel) und `docs/DELIVERY_SYSTEM.md` (Steuerbefehle) d
 **Begründung:** `page.goto()` remountet das Layout und löscht Session-State. Das erzeugte wiederkehrende CI-E2E-Rots, obwohl `npm run build` grün war. Whack-a-Mole-Locator-Fixes ohne Prozess-Regel reichten nicht.
 
 **Status:** Gilt für Multi-Loop-Dauerbetrieb und manuelle Iterationen.
+
+---
+
+## DEC-013: Anti-Growth-Policy für Dokumentation und Delivery
+
+**Entscheidung:** Das Repository unterliegt dauerhaften Wachstumsgrenzen für Docs und Delivery-Artefakte. Agenten und Contributoren halten Queue, BUILD_STATE, Journals und Root schlank. Volltext: `docs/REPO_REFACTORING_PLAN.md` §4; Kurzform: `AGENTS.md` (Anti-Growth); Ablauf: `docs/DELIVERY_SYSTEM.md` (Anti-Growth-Regeln).
+
+**Begründung:**
+- Ohne Deckel mutieren Queue/BUILD_STATE zu Changelogs und Journals zu Romanen (Diagnose Q-299)
+- Jede Micro-Iteration multiplizierte Pflege an 2–4 Stellen
+- Strukturelles Aufräumen (Q-300–Q-306) wirkt nur, wenn Regeln im Agenten-Pfad verankert sind
+
+**Alternativen erwogen:**
+- Nur „Aufräumen bei Bedarf“ — verworfen, historisch wirkungslos
+- Harte CI-Fails bei Dateigröße — optional später (soft); zuerst Prozessregeln
+
+### Kernregeln (verbindlich)
+
+| Bereich | Regel |
+|---------|--------|
+| Historie | Rewrites nur unter `archive/rewrites/`; Journals ≤15 aktiv; DONE-Queue-Archiv |
+| State | BUILD_STATE = Ist; Queue = Arbeit; DECISION_LOG = Entscheidungen |
+| Docs | Eine führende Quelle; Top-Level nur mit DEC + `docs/README.md`; kein `16_*.md` |
+| Demo/Stories | `storyRegistry.ts` SSOT; Feinschliff nach DEMO-stabil begrenzen |
+| Agenten | Minimale Steuerdatei-Edits; keine Root-Summary-Rituale |
+
+### Domäne „DEMO-stabil“ (Definition of Done)
+
+Eine Demo-Domäne gilt als **DEMO-stabil**, wenn:
+
+1. Kernrouten der Stories sind klickbar und in `BUILD_STATE` gelistet  
+2. Stories im Scope sind mindestens `DEMONSTRIERBAR` in `storyRegistry.ts`  
+3. Session-Interaktionen (soweit fachlich vorgesehen) und Fairness-Kern greifen live  
+4. Domain-E2E-Smoke bzw. `test:e2e:ci` im Supervisor-Pfad grün (wo etabliert)  
+
+Danach: Queue-Einträge nur noch für **Bugs**, **echte Produktlücken** oder **explizite Priorität** — nicht für endlose CTA-/print-only-Parität ohne Nutzenbegründung.
+
+**Status:** Gilt ab Q-307. Ergänzt DEC-011 (Refactoring-Welle abgeschlossen); ersetzt sie nicht rückwirkend.
 
 ---
 

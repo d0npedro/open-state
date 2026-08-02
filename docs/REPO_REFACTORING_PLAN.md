@@ -1,6 +1,6 @@
 # Repo-Refactoring-Plan – Open State
 
-**Status:** Analyse abgeschlossen; Phase 0 + 1.1 + 2.1/2.2 DONE (Q-299–Q-306); Phase 3–4 offen (Q-307)  
+**Status:** Analyse + Umsetzung Kernpfad DONE (Q-299–Q-307). Anti-Growth dauerhaft DEC-013. Optional später: CI soft-checks, Domain-README-Schablonen.  
 **Datum:** 2026-08-02  
 **Anlass:** Organisches Wachstum (133 Markdown-Dateien, ~Q-224 Queue-Schritte, Multi-Loop-Journals) hat den mentalen und navigierbaren Overhead für Menschen und Agenten unnötig erhöht.  
 **Ziel:** Kein weiterer Feature-Zuwachs in dieser Phase — strukturelle Klärung, damit Weiterentwicklung günstiger und klarer wird.
@@ -220,12 +220,12 @@ open-state/
 
 | # | Maßnahme | Betroffene Pfade | Nutzen | Risiko |
 |---|----------|------------------|--------|--------|
-| 3.1 | `AGENTS.md` / `DELIVERY_SYSTEM.md`: Pflichtlektüre auf **aktive Queue + kurzes BUILD_STATE + DECISION_LOG** begrenzen; Journals nur bei Multi-Loop | AGENTS, DELIVERY_SYSTEM | Weniger Token/Zeit pro Iteration | Multi-Loop-Regeln in `MULTI_LOOP_BETRIEB.md` belassen |
-| 3.2 | BUILD_STATE-Update-Regel: pro Iteration max. (a) Kopfzeile „zuletzt“, (b) betroffene Route/Logik-Zelle kürzen/aktualisieren, (c) echte neue Lücke — **kein** „Q-xxx erledigt“-Anhang | BUILD_STATE, DELIVERY_SYSTEM | Verhindert erneutes Aufblähen | |
-| 3.3 | Queue-Regel: Micro-Paritäten bündeln („UG/AV Countdown-Parität Serie“) statt 20 Einzelschritte à 15 Min, **oder** Feinschliff-Budget pro Domäne | NEXT_STEPS_QUEUE, DEC-NEU | Verhindert Q-400-Syndrom | Fachliche Kleinschritte weiter erlaubt, aber bewusst |
-| 3.4 | Journal-Format: max. 8–12 Zeilen pro Iteration; Felder Was/Dateien/Story/Build/Nächster Hinweis — keine Nacherzählung der gesamten Feature-Liste | `docs/loops/*` | Journal bleibt Signal, nicht Roman | |
-| 3.5 | Optional: `docs/delivery/` physisch bündeln (Move BUILD_STATE, QUEUE, …) + Stub am alten Pfad | docs/* | Klarer Delivery-Ordner | Agenten/CI/Docs-Links aktualisieren |
-| 3.6 | Definition of Done „Domäne DEMO-stabil“: Kriterien in DECISION_LOG (Routen, Stories DEMONSTRIERBAR, E2E-Smoke, Fairness-Kern) — danach nur noch Bugs/echte Lücken | DECISION_LOG | Stoppt Endlos-Feinschliff | |
+| 3.1 | `AGENTS.md` / `DELIVERY_SYSTEM.md`: Pflichtlektüre auf **aktive Queue + kurzes BUILD_STATE + DECISION_LOG** begrenzen; Journals nur bei Multi-Loop | AGENTS, DELIVERY_SYSTEM | Weniger Token/Zeit pro Iteration | **DONE Q-307** |
+| 3.2 | BUILD_STATE-Update-Regel: pro Iteration max. (a) Kopfzeile „zuletzt“, (b) betroffene Route/Logik-Zelle kürzen/aktualisieren, (c) echte neue Lücke — **kein** „Q-xxx erledigt“-Anhang | BUILD_STATE, DELIVERY_SYSTEM | Verhindert erneutes Aufblähen | **DONE Q-307** (DELIVERY Schritt 9) |
+| 3.3 | Queue-Regel: Micro-Paritäten bündeln („UG/AV Countdown-Parität Serie“) statt 20 Einzelschritte à 15 Min, **oder** Feinschliff-Budget pro Domäne | NEXT_STEPS_QUEUE, DEC-NEU | Verhindert Q-400-Syndrom | **DONE Q-307** (DELIVERY + DEC-013) |
+| 3.4 | Journal-Format: max. 8–12 Zeilen pro Iteration; Felder Was/Dateien/Story/Build/Nächster Hinweis — keine Nacherzählung der gesamten Feature-Liste | `docs/loops/*` | Journal bleibt Signal, nicht Roman | **DONE Q-303/Q-307** (Rotation + MULTI_LOOP) |
+| 3.5 | Optional: `docs/delivery/` physisch bündeln (Move BUILD_STATE, QUEUE, …) + Stub am alten Pfad | docs/* | Klarer Delivery-Ordner | offen (optional) |
+| 3.6 | Definition of Done „Domäne DEMO-stabil“: Kriterien in DECISION_LOG (Routen, Stories DEMONSTRIERBAR, E2E-Smoke, Fairness-Kern) — danach nur noch Bugs/echte Lücken | DECISION_LOG | Stoppt Endlos-Feinschliff | **DONE Q-307** (DEC-013) |
 
 **Erwarteter Nutzen Phase 3:** Delivery skaliert mit Domänenanzahl, nicht mit Micro-CTA-Anzahl.
 
@@ -242,9 +242,9 @@ open-state/
 
 | # | Maßnahme | Nutzen |
 |---|----------|--------|
-| 4.1 | Anti-Growth-Regeln committen und in Agenten-Pflichtlektüre aufnehmen | Automatische Einhaltung in Loops |
-| 4.2 | CI oder Pre-Commit-Hinweis (optional, soft): Warnung wenn BUILD_STATE > N KB oder Queue > M OFFEN+DONE gemischt | Frühes Signal |
-| 4.3 | Quartals-Review „Docs Health“ als fester Queue-Typ CHORE | Bewusste Entschlackung |
+| 4.1 | Anti-Growth-Regeln committen und in Agenten-Pflichtlektüre aufnehmen | **DONE Q-307** — AGENTS + DELIVERY + DEC-013 + CONTRIBUTING |
+| 4.2 | CI oder Pre-Commit-Hinweis (optional, soft): Warnung wenn BUILD_STATE > N KB oder Queue > M OFFEN+DONE gemischt | offen (optional) |
+| 4.3 | Quartals-Review „Docs Health“ als fester Queue-Typ CHORE | offen (optional) |
 
 ---
 

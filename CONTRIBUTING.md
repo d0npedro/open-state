@@ -12,6 +12,7 @@ Danke für dein Interesse. Open State ist ein Konzept- und Architekturprojekt mi
 4. **KI nur Assistenz** – keine autonome Verwaltungsentscheidung.
 5. **Sachton** – keine Startup- oder Marketing-Rhetorik; staatliche Infrastruktur.
 6. **Datenschutz** – Kindeswohl und Personenbezug haben Vorrang (besonders Kita-Domäne).
+7. **Anti-Growth (DEC-013)** – Queue/BUILD_STATE schlank halten; Story-Registry nur in `demo/data/storyRegistry.ts`; keine Root-Rewrite-Summaries; Navigation: `docs/README.md`. Details: `AGENTS.md` / `docs/DECISION_LOG.md`.
 
 ---
 
