@@ -52,7 +52,7 @@ export default function GruendungLayout({ children }: { children: React.ReactNod
         {/* Q-075: Session-Leiste nach Demo-Interaktionen */}
         <UgDemoSessionBar />
 
-        <main style={{ padding: '2rem 0' }}>
+        <main id="main-content" tabIndex={-1} style={{ padding: '2rem 0' }}>
           <div className="container">
             {children}
           </div>

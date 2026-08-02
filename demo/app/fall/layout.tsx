@@ -140,8 +140,8 @@ export default function FallLayout({ children }: { children: React.ReactNode }) 
         {/* Q-075: Session-Leiste nach Demo-Interaktionen */}
         <AvDemoSessionBar />
 
-        {/* Inhalt */}
-        <main style={{ padding: '1.75rem 0 4rem', flex: 1 }}>
+        {/* Inhalt – id/tabIndex für Skip-Link (Q-420) */}
+        <main id="main-content" tabIndex={-1} style={{ padding: '1.75rem 0 4rem', flex: 1 }}>
           <div className="container">
             {children}
           </div>

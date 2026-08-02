@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import './globals.css';
 import { BuildInfo } from '@/components/BuildInfo';
+import { SkipLink } from '@/components/SkipLink';
 import { ThemeProvider } from '@/design-system/provider/ThemeProvider';
 import { ThemeSwitcher } from '@/components/ThemeSwitcher';
 
@@ -19,6 +20,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body>
         <ThemeProvider>
+          {/* Q-420: Skip-Link vor Header/Nav (WCAG 2.4.1) */}
+          <SkipLink />
           {children}
           <footer style={{
             borderTop: '1px solid var(--color-border)',

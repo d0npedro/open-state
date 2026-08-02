@@ -54,7 +54,7 @@ Autonomer Multi-Domain-Loop: [`docs/delivery/AUTONOMOUS_LOOP.md`](delivery/AUTON
 
 | ID | Domäne | Schritt | Typ | Aufwand | Abhängigkeit | Status |
 |----|--------|---------|-----|---------|--------------|--------|
-| Q-420 | av | A11y: Skip-Link + `main`-Landmark im Fall-Layout (bzw. Root-Layout), E2E-Smoke Fokus | DEMO | S | – | OFFEN |
+| Q-420 | av | A11y: Skip-Link + `main`-Landmark im Fall-Layout (bzw. Root-Layout), E2E-Smoke Fokus | DEMO | S | – | DONE |
 | Q-421 | ug | E2E: nach RQ+Upload+BG Ruhezustand/Übersicht ohne hängende Action-Banner (Regression) | DEMO | S | – | OFFEN |
 | Q-422 | kita | E2E: öffentlicher Bericht Filter Planungsraum + CSV-Download-Button erreichbar/labeled | DEMO | S | Q-401 | OFFEN |
 
@@ -72,6 +72,7 @@ Autonomer Multi-Domain-Loop: [`docs/delivery/AUTONOMOUS_LOOP.md`](delivery/AUTON
 
 | ID | Kurz | Status |
 |----|------|--------|
+| Q-420 | A11y Skip-Link + main-Landmark (Root/Domains) | DONE |
 | Q-410 | Landing Sekundärlinks Hinweise/Lagebild intern | DONE |
 | Q-402 | Kita Meldekette E2E Freigabe→Lagebild (DEC-012) | DONE |
 | Q-401 | Kita E2E-Smoke Kernrouten + `test:e2e:kita` | DONE |
@@ -81,7 +82,6 @@ Autonomer Multi-Domain-Loop: [`docs/delivery/AUTONOMOUS_LOOP.md`](delivery/AUTON
 | Q-306 | docs/README + Root straffen | DONE |
 | Q-305 | storyRegistry SSOT | DONE |
 | Q-304 | Deploy-Docs SSOT | DONE |
-| Q-303 | Journal-Rotation | DONE |
 
 ---
 

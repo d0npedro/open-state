@@ -1,5 +1,48 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+/* ─── Skip-Link (Q-420 / WCAG 2.4.1) ────────────────────────────────
+   Visuell verborgen bis Tastatur-Fokus; dann oben fixiert und gut lesbar. */
+.skip-link {
+  position: absolute;
+  left: 0.75rem;
+  top: 0.75rem;
+  z-index: 10000;
+  padding: 0.65rem 1rem;
+  background: var(--color-primary, #003F8C);
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.95rem;
+  border-radius: var(--radius, 6px);
+  text-decoration: none;
+  box-shadow: var(--shadow, 0 2px 8px rgba(0,0,0,0.1));
+  /* Off-screen until focused */
+  clip: rect(0, 0, 0, 0);
+  clip-path: inset(50%);
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.skip-link:focus,
+.skip-link:focus-visible {
+  clip: auto;
+  clip-path: none;
+  width: auto;
+  height: auto;
+  overflow: visible;
+  outline: 3px solid var(--color-focus-outline, #003F8C);
+  outline-offset: 3px;
+}
+
+/* Skip-Ziel: Fokus-Ring am main nach Ansprung */
+#main-content:focus {
+  outline: none;
+}
+#main-content:focus-visible {
+  outline: 2px solid var(--color-focus-outline, #003F8C);
+  outline-offset: 2px;
+}
+
 /* ═══════════════════════════════════════════════════════════════════
    DESIGN SYSTEM – SEMANTIC TOKEN LAYER
    Alle Komponenten verwenden ausschließlich diese CSS-Variablen.

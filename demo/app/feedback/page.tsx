@@ -39,7 +39,7 @@ export default function FeedbackPage() {
           <span style={{ fontWeight: 600 }}>Feedback zur Demo</span>
         </div>
       </header>
-      <main style={{ padding: '2rem 0' }}>
+      <main id="main-content" tabIndex={-1} style={{ padding: '2rem 0' }}>
         <div className="container" style={{ maxWidth: '680px', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
           <div>
             <h1 style={{ marginBottom: '0.5rem' }}>Feedback zur Demo</h1>

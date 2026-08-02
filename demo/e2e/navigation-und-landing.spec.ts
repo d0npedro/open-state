@@ -152,6 +152,25 @@ test.describe('Accessibility – Grundlegende Checks', () => {
     }
   });
 
+  test('Skip-Link und main-Landmark im Fall-Bereich (Q-420)', async ({ page }) => {
+    await page.goto('/fall');
+
+    const main = page.locator('main#main-content');
+    await expect(main).toBeVisible();
+    await expect(page.getByRole('main')).toHaveCount(1);
+
+    // Erster Tab: Skip-Link (visuell erst bei Fokus)
+    await page.keyboard.press('Tab');
+    const skip = page.getByRole('link', { name: /Zum Inhalt springen/i });
+    await expect(skip).toBeFocused();
+    await expect(skip).toHaveAttribute('href', '#main-content');
+    await expect(skip).toBeVisible();
+
+    // Aktivierung: Fokus landet auf #main-content
+    await skip.press('Enter');
+    await expect(main).toBeFocused();
+  });
+
   test('Focus-Sichtbarkeit: Erstes fokussierbares Element hat outline', async ({ page }) => {
     await page.goto('/fall');
     await page.keyboard.press('Tab');

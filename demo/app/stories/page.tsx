@@ -52,7 +52,7 @@ export default function StoriesPage() {
           <span style={{ fontWeight: 600 }}>Story Coverage</span>
         </div>
       </header>
-      <main style={{ padding: '2rem 0' }}>
+      <main id="main-content" tabIndex={-1} style={{ padding: '2rem 0' }}>
         <div className="container" style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
 
           {/* Summary */}

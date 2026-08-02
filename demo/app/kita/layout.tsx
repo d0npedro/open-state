@@ -45,7 +45,7 @@ export default function KitaLayout({ children }: { children: React.ReactNode }) 
           </div>
         </div>
       </nav>
-      <main style={{ padding: '2rem 0' }}>
+      <main id="main-content" tabIndex={-1} style={{ padding: '2rem 0' }}>
         <div className="container">
           {children}
         </div>

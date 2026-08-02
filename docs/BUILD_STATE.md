@@ -1,6 +1,6 @@
 # BUILD_STATE.md – Aktueller Projektstand
 
-Zuletzt aktualisiert: nach Q-410 Landing-Sekundärlinks Hinweise / Kita-Lagebild intern
+Zuletzt aktualisiert: nach Q-420 A11y Skip-Link + `main#main-content`
 
 Dieser Stand beschreibt, was **tatsächlich existiert und funktioniert** — nicht die Feature-Historie.
 Geplante Schritte → `docs/NEXT_STEPS_QUEUE.md`.  

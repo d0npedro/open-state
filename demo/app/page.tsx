@@ -78,7 +78,7 @@ const prinzipien = [
 
 export default function Home() {
   return (
-    <main style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+    <main id="main-content" tabIndex={-1} style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
 
       {/* ─── Kopfzeile ─────────────────────────────────────────────── */}
       <header style={{ background: 'var(--color-primary)', color: 'white', padding: '1rem 0' }}>
