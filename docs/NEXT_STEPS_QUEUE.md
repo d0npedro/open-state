@@ -98,12 +98,21 @@ Autonomer Multi-Domain-Loop: [`docs/delivery/AUTONOMOUS_LOOP.md`](delivery/AUTON
 | Q-471 | kita | E2E Skip-Link: Fokus auf `main#main-content` für Kita-Kernrouten (`/kita`, `/kita/lagebild`) | DEMO | S | Q-401 | DONE |
 | Q-472 | ug | E2E Skip-Link: Fokus `main#main-content` für `/gruendung` und `/gruendung/hinweise` (Parität Q-451) | DEMO | S | Q-451 | DONE |
 
+### Loop-Katalog (Auffüllung nach Q-472)
+
+| ID | Domäne | Schritt | Typ | Aufwand | Abhängigkeit | Status |
+|----|--------|---------|-----|---------|--------------|--------|
+| Q-480 | kita | a11y + E2E: Einrichtung Belegungsstand Druck/CSV-Buttons mit zugänglichem Namen (Parität Lagebild Q-460) | DEMO | S | Q-401 | DONE |
+| Q-481 | kita | E2E-Smoke: Bedarfsplanung, Gremienvorlage, Monatsbericht, Meldung – h1/Kernroute erreichbar | DEMO | S | Q-401 | OFFEN |
+| Q-482 | av | E2E Keyboard-Smoke: Fall-Tabs per Tastatur erreichbar und aktivierbar (Fokus sichtbar) | DEMO | S | Q-420 | OFFEN |
+
 ---
 
 ## Kürzlicher DONE-Tail (letzte ~10)
 
 | ID | Kurz | Status |
 |----|------|--------|
+| Q-480 | Kita Einrichtung Druck/CSV a11y Labels | DONE |
 | Q-472 | UG Skip-Link /gruendung und /gruendung/hinweise | DONE |
 | Q-471 | Kita Skip-Link /kita und /kita/lagebild | DONE |
 | Q-470 | UG Session-Reset nach RQ stellt Fairness-RQ wieder her | DONE |
@@ -113,7 +122,6 @@ Autonomer Multi-Domain-Loop: [`docs/delivery/AUTONOMOUS_LOOP.md`](delivery/AUTON
 | Q-452 | UG a11y Behördenkarten + BG-Button Labels | DONE |
 | Q-451 | Skip-Link Fokus Root/Fall/Hinweise E2E | DONE |
 | Q-450 | Landing Deep-Link-Smoke Primär+Sekundär | DONE |
-| Q-442 | Kita E2E Session-Reset DemoSessionBar Lagebild | DONE |
 
 ---
 

@@ -216,6 +216,8 @@ export default function KitaEinrichtungBelegungPage() {
             className="btn btn-secondary"
             onClick={() => window.print()}
             style={{ fontSize: '0.875rem' }}
+            aria-label="Belegungsstand drucken oder als PDF speichern (keine Kind- oder Personennamen)"
+            data-testid="kita-einrichtung-druck"
           >
             Drucken / als PDF speichern
           </button>
@@ -224,6 +226,8 @@ export default function KitaEinrichtungBelegungPage() {
             className="btn btn-secondary"
             onClick={downloadCsv}
             style={{ fontSize: '0.875rem' }}
+            aria-label="Belegungsstand-Aggregate als CSV herunterladen (keine Kind- oder Personennamen)"
+            data-testid="kita-einrichtung-csv-download"
           >
             CSV exportieren
           </button>
