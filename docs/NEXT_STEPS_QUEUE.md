@@ -64,7 +64,15 @@ Autonomer Multi-Domain-Loop: [`docs/delivery/AUTONOMOUS_LOOP.md`](delivery/AUTON
 |----|--------|---------|-----|---------|--------------|--------|
 | Q-430 | cross | Domain-README-Schablone (Problem, Demo-Routen, Stories, API, Grenzen) auf alle 3 Domains anwenden | DOCS | M | – | DONE |
 | Q-431 | kita | Kita-Domain-README: Related-Links Jugendamt-Module + KiJuP (13/14) ohne Inhaltsduplikat | DOCS | S | Q-430 | DONE |
-| Q-432 | cross | TRACEABILITY_MATRIX: auf SSOT `storyRegistry.ts` ausrichten (generieren oder schlanker Stub + Verweis) | DOCS | M | – | OFFEN |
+| Q-432 | cross | TRACEABILITY_MATRIX: auf SSOT `storyRegistry.ts` ausrichten (generieren oder schlanker Stub + Verweis) | DOCS | M | – | DONE |
+
+### Loop-Katalog (nach Queue-Leere, max. 3)
+
+| ID | Domäne | Schritt | Typ | Aufwand | Abhängigkeit | Status |
+|----|--------|---------|-----|---------|--------------|--------|
+| Q-440 | av | E2E: Fairness-Leerzustand nach Erledigung offener Aktionen (keine hängenden Signale; Session-konsistent, DEC-012) | DEMO | M | Q-420 | OFFEN |
+| Q-441 | ug | E2E: Behörden-BG-Happy-Path (Markierung/Flow ohne page.goto nach Interaktion) | DEMO | M | Q-421 | OFFEN |
+| Q-442 | kita | E2E: Session-Reset über DemoSessionBar nach Meldefreigabe (State weg, Lagebild ohne freigegebene Session-Meldung) | DEMO | S | Q-412 | OFFEN |
 
 ---
 
@@ -72,6 +80,7 @@ Autonomer Multi-Domain-Loop: [`docs/delivery/AUTONOMOUS_LOOP.md`](delivery/AUTON
 
 | ID | Kurz | Status |
 |----|------|--------|
+| Q-432 | TRACEABILITY_MATRIX Stub + SSOT storyRegistry | DONE |
 | Q-431 | Kita README Related-Links 13/14 + ADR KiJuP | DONE |
 | Q-430 | Domain-README-Schablone alle 3 Domains | DONE |
 | Q-403 | BUILD_STATE E2E-Zähler 333/12 Specs | DONE |
@@ -81,7 +90,6 @@ Autonomer Multi-Domain-Loop: [`docs/delivery/AUTONOMOUS_LOOP.md`](delivery/AUTON
 | Q-421 | UG E2E RQ+Upload+BG ohne Action-Banner | DONE |
 | Q-420 | A11y Skip-Link + main-Landmark (Root/Domains) | DONE |
 | Q-410 | Landing Sekundärlinks Hinweise/Lagebild intern | DONE |
-| Q-402 | Kita Meldekette E2E Freigabe→Lagebild (DEC-012) | DONE |
 
 ---
 

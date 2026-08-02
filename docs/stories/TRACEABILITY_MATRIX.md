@@ -1,57 +1,64 @@
 # Traceability Matrix – Open State Stories
 
-Diese Matrix gibt einen vollständigen Überblick über alle dokumentierten User Stories. Sie verbindet fachliche Anforderungen mit UI-Screens, Rollen und technischen Referenzen.
+**Status:** Stub (Q-432) · **kein** paralleler Story-Katalog
+
+Die früher manuell gepflegte Vollmatrix (Status, Routes, API-Hinweise) war gegenüber der Registry veraltet (z. B. `ENTWURF` statt `DEMONSTRIERBAR`, fehlende KJ-Stories).  
+Gemäß SSOT und Anti-Growth (DEC-013) gibt es **eine** führende Quelle.
 
 ---
 
-## Arbeitsverwaltung (AV)
+## Single Source of Truth
 
-| Story-ID | Domäne | Kurztitel | Primäre Rolle | UI-Screen | Status | AK-Anzahl | Transparenzbezug | Technische Referenz |
-|----------|--------|-----------|---------------|-----------|--------|-----------|-----------------|---------------------|
-| US-AV-001 | Arbeitsverwaltung | Fall anlegen | Bürger | Fallanlage / Arbeitslosmeldung | ENTWURF | 6 | Eingangsbestätigung und Fallnummer sofort sichtbar | `POST /api/v1/cases`, eID-Adapter, CaseService |
-| US-AV-002 | Arbeitsverwaltung | Status einsehen | Bürger | Fallstatus-Übersicht | ENTWURF | 6 | Statuserklärung in Klartext, letzter Aktualisierungszeitpunkt | `GET /api/v1/cases/{id}/status`, CaseStatusService |
-| US-AV-003 | Arbeitsverwaltung | Unterlagen nachreichen | Bürger | Dokumenten-Upload | ENTWURF | 6 | Upload-Zeitstempel und Dokumentenstatus nachverfolgbar | `POST /api/v1/cases/{id}/documents`, DocumentService |
-| US-AV-004 | Arbeitsverwaltung | Rückfrage verstehen | Bürger | Rückfragen-Ansicht | ENTWURF | 6 | Rückfrage mit Begründung, Frist und Konsequenz | `GET /api/v1/cases/{id}/inquiries`, InquiryService |
-| US-AV-005 | Arbeitsverwaltung | Termin einsehen und verstehen | Bürger | Termin-Übersicht | ENTWURF | 5 | Terminzweck in Klarsprache, Vorbereitungshinweise | `GET /api/v1/cases/{id}/appointments`, AppointmentService |
-| US-AV-006 | Arbeitsverwaltung | Bescheid verstehen | Bürger | Bescheid-Ansicht | ENTWURF | 6 | Zwei-Schichten-Darstellung (juristisch + erklärt) | `GET /api/v1/cases/{id}/notices`, NoticeService, ExplanationLayer |
-| US-AV-007 | Arbeitsverwaltung | Historie nachvollziehen | Bürger | Fall-Timeline | ENTWURF | 6 | Vollständige Timeline aller Ereignisse mit Zeitstempel und Urheber | `GET /api/v1/cases/{id}/history`, AuditLogService |
-| US-AV-008 | Arbeitsverwaltung | Verfahrenslage verstehen | Bürger | `/fall/hinweise` | ENTWURF | 5 | Regelbasierte Hinweise aus Falldaten, keine Personenbewertung | `berechneFairnessSignale`, FairnessPanel |
+| Schicht | Pfad | Rolle |
+|---------|------|--------|
+| **Führend (manuell)** | [`demo/data/storyRegistry.ts`](../../demo/data/storyRegistry.ts) | IDs, Status, Route, Screen, AK-Zähler, Transparenzfokus, Story-Datei |
+| **Abgeleitet (generiert)** | [`story_registry.json`](story_registry.json) | Maschinenlesbar für Docs/Tools — **nicht** manuell editieren |
+| **Live-UI** | Demo-Route [`/stories`](../../demo/app/stories/page.tsx) | Coverage, „Zur Demo“-CTA aus Registry |
 
----
+```bash
+# Registry → JSON neu erzeugen
+cd demo && npm run registry:export
+```
 
-## Unternehmensgründung (UG)
+Story-Dateien und Prinzipien:
 
-| Story-ID | Domäne | Kurztitel | Primäre Rolle | UI-Screen | Status | AK-Anzahl | Transparenzbezug | Technische Referenz |
-|----------|--------|-----------|---------------|-----------|--------|-----------|-----------------|---------------------|
-| US-UG-001 | Unternehmensgründung | Gründungsstatus einsehen | Gründerin / Gründer | `/gruendung` | ENTWURF | 6 | Klartext-Status, Fortschritt, nächster Schritt | `GET /api/v1/gruendung/{id}`, mockGruendungsfall |
-| US-UG-002 | Unternehmensgründung | Beteiligte Behörden einsehen | Gründerin / Gründer | `/gruendung/behoerden` | ENTWURF | 5 | Rolle, Status und Kontakt je Behörde | `GET /api/v1/gruendung/{id}/behoerden` |
-| US-UG-003 | Unternehmensgründung | Unterlagen nachreichen | Gründerin / Gründer | `/gruendung/dokumente` | ENTWURF | 6 | Anforderung mit Begründung und Dokumentenstatus | `GET/POST /api/v1/gruendung/{id}/dokumente` |
-| US-UG-004 | Unternehmensgründung | Rückfrage verstehen und beantworten | Gründerin / Gründer | `/gruendung/rueckfragen` | ENTWURF | 6 | Begründung, Frist und Konsequenz je Rückfrage | `GET/POST .../rueckfragen`, GruendungStateContext |
-| US-UG-005 | Unternehmensgründung | Verfahrensverlauf nachvollziehen | Gründerin / Gründer | `/gruendung/verlauf` | ENTWURF | 5 | Chronologische Timeline mit Urheber | `GET /api/v1/gruendung/{id}/verlauf` |
-| US-UG-006 | Unternehmensgründung | Nächste Schritte und Pflichten verstehen | Gründerin / Gründer | `/gruendung`, `/gruendung/hinweise` | ENTWURF | 5 | Fallbezogene Handlungshinweise mit Begründung | offeneAufgaben, Fairness-Signale |
+- Vorlagen: [STORY_TEMPLATE.md](STORY_TEMPLATE.md) · [README.md](README.md)
+- UI-Anbindung: [FRONTEND_TRACEABILITY_PRINCIPLES.md](FRONTEND_TRACEABILITY_PRINCIPLES.md)
+- Domain-Ordner: [arbeitsverwaltung/](arbeitsverwaltung/) · [unternehmensgruendung/](unternehmensgruendung/) · [kita_betrieb_und_jugendamt_steuerung/](kita_betrieb_und_jugendamt_steuerung/)
 
 ---
 
-## Hinweise zur Verwendung
+## Domänen-Überblick (Stand laut Registry-Konzept)
 
-- **AK-Anzahl**: Gibt an, wie viele nummerierte Akzeptanzkriterien in der Story definiert sind. Alle müssen erfüllt sein, bevor eine Story als DEMONSTRIERBAR gilt.
-- **Transparenzbezug**: Beschreibt den spezifischen Aspekt der Nachvollziehbarkeit, den diese Story für den Bürger herstellt.
-- **Technische Referenz**: Gibt API-Endpunkte und interne Services als Orientierung an. Die Endpunkte sind konzeptionell; die finale Spezifikation liegt in der API-Dokumentation.
-- **Status**: Entspricht dem Status-Schema aus `docs/stories/README.md`.
+Zahlen und Status **immer** aus `storyRegistry.ts` / Export lesen — diese Tabelle ist nur Navigation, keine zweite Wahrheit.
+
+| Domäne | ID-Präfix | Story-Docs | Demo-Routen (Einstieg) |
+|--------|-----------|------------|-------------------------|
+| Arbeitsverwaltung | `US-AV-*` | [arbeitsverwaltung/](arbeitsverwaltung/) | `/fall` |
+| Unternehmensgründung | `US-UG-*` | [unternehmensgruendung/](unternehmensgruendung/) | `/gruendung` |
+| Kita / JA-Steuerung | `US-KJ-*` | [kita_betrieb_und_jugendamt_steuerung/](kita_betrieb_und_jugendamt_steuerung/) | `/kita` |
+
+Ist-Zähler und Coverage: Demo `/stories` oder `_count` in `story_registry.json` (nach `registry:export`).
 
 ---
 
-## Geplante Domänen (noch ohne Story-Dateien in docs/stories)
+## Geplante Domänen (ohne Registry-Einträge)
 
 | Domäne | Kürzel | Status |
 |--------|--------|--------|
 | Sozialleistungen | SL | Ausstehend |
-| Jugendhilfe | JH | Ausstehend (KJ-Stories existieren unter kita_betrieb_und_jugendamt_steuerung) |
 | Wohnsitzmanagement | WM | Ausstehend |
 | Rechtsstreit / Bußgeld | RB | Ausstehend |
 
+Jugendhilfe-Fallmodule jenseits Kita-Betrieb/Steuerung: Konzept in `docs/13_Jugendamt_Module.md` — **nicht** als `US-KJ`/`US-JH` in der Demo-Registry, solange keine Stories + Screens existieren.
+
 ---
 
-*Zuletzt aktualisiert: Q-010 – UG Stories US-UG-001–006*
-*Maschinenlesbar: [story_registry.json](story_registry.json) (generiert aus `demo/data/storyRegistry.ts`, Q-305)*
+## Pflege-Regeln
 
+1. Neue Story → Datei unter `docs/stories/…` **und** Eintrag in `storyRegistry.ts`.
+2. Danach `npm run registry:export` (wenn Docs/JSON-Konsumenten den Export brauchen).
+3. **Keine** Story-Zeilen in dieser Datei duplizieren.
+4. Traceability in der UI: siehe FRONTEND_TRACEABILITY_PRINCIPLES.
+
+*Zuletzt ausgerichtet: Q-432 · SSOT `demo/data/storyRegistry.ts`*

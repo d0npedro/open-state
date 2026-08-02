@@ -78,7 +78,7 @@ Der Übergang von DEMONSTRIERBAR zu ABGESCHLOSSEN erfordert eine explizite Entsc
 docs/stories/
 ├── README.md                          ← dieses Dokument
 ├── STORY_TEMPLATE.md                  ← Vorlage für neue Stories
-├── TRACEABILITY_MATRIX.md             ← Übersicht aller Stories
+├── TRACEABILITY_MATRIX.md             ← Stub + Verweis auf SSOT storyRegistry.ts (Q-432)
 ├── FRONTEND_TRACEABILITY_PRINCIPLES.md ← Wie Story-IDs in der UI auftauchen
 ├── story_registry.json                ← GENERIERT aus demo/data/storyRegistry.ts (nicht manuell)
 │
