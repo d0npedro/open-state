@@ -163,19 +163,27 @@ export function fairnessSignalZiel(
     };
   }
 
-  // Fehlende Unterlagen
+  // Fehlende Unterlagen (nächste nach Resttagen / ID — Parität AV, Q-224)
   if (signal.typ === 'UG_UNTERLAGE_FEHLT' || signal.id === 'UG-UNTERLAGEN-FEHLEND') {
-    const dok = akte.dokumente.find(
+    const offene = akte.dokumente.filter(
       d => d.status === 'ANGEFORDERT' || d.status === 'ABGELEHNT'
     );
-    if (!dok) return null;
+    if (offene.length === 0) return null;
+    const mitFrist = offene
+      .filter(d => d.fristDatum)
+      .map(d => ({
+        dok: d,
+        rest: berechneFristTage(d.fristDatum as string, FIKTIVES_HEUTE_GRUENDUNG),
+      }))
+      .sort((a, b) => a.rest - b.rest || a.dok.id.localeCompare(b.dok.id, 'de'));
+    const dok = mitFrist[0]?.dok ?? offene[0];
     return {
       href: `/gruendung/dokumente#dok-${dok.id}`,
       cta: 'Zu den Unterlagen',
       icon: 'file',
       testKey: `dok-${dok.id}`,
       hint: unterlagenCtaHilfstext(hatOffeneRueckfrage(akte)),
-      ariaLabel: 'Zu den ausstehenden Unterlagen',
+      ariaLabel: `Zur Unterlage ${dok.bezeichnung}`,
     };
   }
 

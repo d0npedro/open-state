@@ -1358,6 +1358,22 @@ test.describe('UG – Hinweise zur Verfahrenslage', () => {
     await expect(page.locator('#dok-DOK-03')).toBeVisible();
   });
 
+  test('Hinweise: UNTERLAGE-CTA data-next-dok-id + nächste Bezeichnung (Q-224)', async ({
+    page,
+  }) => {
+    // US-UG-003: Parität AV Hinweise Q-222 — live nächste offene Karte
+    // Mock: nur DOK-03 ANGEFORDERT (Qualifikation)
+    const wrap = page.getByTestId('hinweise-unterlagen-cta-wrap');
+    await expect(wrap).toBeVisible();
+    await expect(wrap).toHaveAttribute('data-next-dok-id', 'DOK-03');
+    const hint = page.getByTestId('hinweise-unterlagen-cta-hint');
+    await expect(hint).toContainText(/Qualifikation/i);
+    await expect(hint).toContainText(/Nächste|offene Unterlage|Unterlagen/i);
+    const cta = page.getByTestId('hinweise-unterlagen-cta');
+    await expect(cta).toHaveAttribute('href', '/gruendung/dokumente#dok-DOK-03');
+    await expect(cta).toHaveAttribute('aria-label', /Qualifikation/i);
+  });
+
   test('CTA aus Unterlagen-Signal führt zur Dokumentenkarte', async ({ page }) => {
     await page.getByTestId('hinweise-unterlagen-cta').click();
     await expect(page).toHaveURL(/\/gruendung\/dokumente#dok-DOK-03/);

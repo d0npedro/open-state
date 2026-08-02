@@ -134,18 +134,57 @@ function ctaWrapStyle(prioritaet: FairnessSignal['prioritaet']): CSSProperties {
 }
 
 /**
- * Optionaler Zusatz für Unterlagen-Hilfstext bei mehreren offenen Dokumenten
- * (nur Darstellung – Routing und Basistext aus gruendung-rules).
+ * Nächste offene Unterlage (session-sensitiv über akte): zuerst Resttage, dann ID.
+ * Parität AV Hinweise Q-222.
  */
-function unterlagenHintErweiterung(ziel: FairnessSignalZiel, akte: GruendungsAkte): string {
-  if (!ziel.testKey.startsWith('dok-') || !ziel.hint) return ziel.hint ?? '';
-  const fehlende = akte.dokumente.filter(
+function naechsteOffeneUnterlage(akte: GruendungsAkte) {
+  const offeneDok = akte.dokumente.filter(
     d => d.status === 'ANGEFORDERT' || d.status === 'ABGELEHNT'
   );
-  if (fehlende.length > 1) {
-    return `${ziel.hint} ${fehlende.length} Dokumente stehen aus.`;
-  }
-  return ziel.hint;
+  const dokMitFrist = offeneDok
+    .filter(d => d.fristDatum && d.frist)
+    .map(d => ({
+      dok: d,
+      resttage: berechneFristTage(d.fristDatum as string, FIKTIVES_HEUTE_GRUENDUNG) as number,
+    }))
+    .sort(
+      (a, b) => a.resttage - b.resttage || a.dok.id.localeCompare(b.dok.id, 'de')
+    );
+  const naechste =
+    dokMitFrist[0] ??
+    (offeneDok[0] ? { dok: offeneDok[0], resttage: null as number | null } : undefined);
+  return { offeneDok, naechste, offeneAnzahl: offeneDok.length };
+}
+
+/**
+ * Hilfstext UNTERLAGE-CTA: Basis aus gruendung-rules (RQ-Priorität) + nächste Bezeichnung (Q-224).
+ */
+function unterlagenCtaHintText(
+  basisHint: string | undefined,
+  naechste: { dok: { bezeichnung: string; frist?: string }; resttage: number | null } | undefined,
+  offeneAnzahl: number
+): string {
+  const restLabel =
+    naechste && typeof naechste.resttage === 'number' ? fristRestLabel(naechste.resttage) : null;
+  const basis = basisHint?.trim() ?? '';
+  if (!naechste) return basis;
+
+  const bez = naechste.dok.bezeichnung;
+  const fristTeil =
+    restLabel && naechste.dok.frist
+      ? ` bis ${naechste.dok.frist} (${restLabel})`
+      : restLabel
+        ? ` (${restLabel})`
+        : '';
+
+  const naechsteSatz =
+    offeneAnzahl === 1
+      ? `Nächste (einzige) offene Unterlage: „${bez}"${fristTeil}.`
+      : `${offeneAnzahl} Unterlagen offen — nächste: „${bez}"${fristTeil}.`;
+
+  if (!basis) return naechsteSatz;
+  // RQ-/Session-Basistext behalten, Bezeichnung anhängen (E2E + Klarheit)
+  return `${basis} ${naechsteSatz}`;
 }
 
 function FairnessSignalCta({
@@ -166,7 +205,6 @@ function FairnessSignalCta({
         cta: `hinweise-cta-${signal.id}`,
         hint: `hinweise-cta-hint-${signal.id}`,
       };
-  const hintText = ziel ? unterlagenHintErweiterung(ziel, akte) : '';
 
   // Q-218: RQ-Countdown-Chip am CTA (Parität AV Q-214)
   const rqId = ziel?.testKey.startsWith('rq-') ? ziel.testKey.slice(3) : undefined;
@@ -183,19 +221,15 @@ function FairnessSignalCta({
       ? 'status-chip-danger'
       : 'status-chip-warning';
 
-  // Q-219: UNTERLAGE-Countdown-Chip am CTA (Parität AV Q-216)
+  // Q-219 Countdown + Q-224 data-next-dok-id / Bezeichnung / live Tiefenlink (Parität AV Q-222)
   const isUnterlageCta = ziel?.testKey.startsWith('dok-') === true;
-  const naechsteUnterlage = isUnterlageCta
-    ? akte.dokumente
-        .filter(d => d.status === 'ANGEFORDERT' || d.status === 'ABGELEHNT')
-        .filter(d => d.fristDatum && d.frist)
-        .map(d => ({
-          dok: d,
-          resttage: berechneFristTage(d.fristDatum as string, FIKTIVES_HEUTE_GRUENDUNG),
-        }))
-        .sort((a, b) => a.resttage - b.resttage)[0]
-    : undefined;
-  const dokRest = naechsteUnterlage?.resttage ?? null;
+  const { naechste: naechsteUnterlage, offeneAnzahl } = isUnterlageCta
+    ? naechsteOffeneUnterlage(akte)
+    : { naechste: undefined, offeneAnzahl: 0 };
+  const dokRest =
+    naechsteUnterlage && typeof naechsteUnterlage.resttage === 'number'
+      ? naechsteUnterlage.resttage
+      : null;
   const dokRestLabel = dokRest !== null ? fristRestLabel(dokRest) : null;
   const dokKritisch = dokRest !== null && dokRest <= 3;
   const dokChipClass =
@@ -203,8 +237,25 @@ function FairnessSignalCta({
       ? 'status-chip-danger'
       : 'status-chip-warning';
 
+  const hintText = isUnterlageCta
+    ? unterlagenCtaHintText(ziel?.hint, naechsteUnterlage, offeneAnzahl)
+    : (ziel?.hint ?? '');
+
+  const ctaHref =
+    isUnterlageCta && naechsteUnterlage
+      ? `/gruendung/dokumente#dok-${naechsteUnterlage.dok.id}`
+      : ziel?.href;
+  const ctaAria =
+    isUnterlageCta && naechsteUnterlage
+      ? `Zur Unterlage ${naechsteUnterlage.dok.bezeichnung}`
+      : (ziel?.ariaLabel ?? ziel?.cta);
+
   return (
-    <div style={ctaWrapStyle(signal.prioritaet)} data-testid={ids.wrap}>
+    <div
+      style={ctaWrapStyle(signal.prioritaet)}
+      data-testid={ids.wrap}
+      data-next-dok-id={isUnterlageCta ? naechsteUnterlage?.dok.id : undefined}
+    >
       {(hintText || rqRestLabel || dokRestLabel) && (
         <div style={{ flex: 1, minWidth: '12rem' }}>
           {hintText && (
@@ -246,13 +297,13 @@ function FairnessSignalCta({
           flexShrink: 0,
         }}
       >
-        {ziel && (
+        {ziel && ctaHref && (
           <Link
-            href={ziel.href}
+            href={ctaHref}
             className="btn btn-primary"
             style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', flexShrink: 0 }}
             data-testid={ids.cta}
-            aria-label={ziel.ariaLabel ?? ziel.cta}
+            aria-label={ctaAria}
           >
             <Icon name={ziel.icon as IconName} size={15} />
             {ziel.cta}

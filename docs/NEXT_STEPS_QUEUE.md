@@ -59,7 +59,7 @@ DONE-Feature-Historie: → [queue-archive](delivery/queue-archive/DONE_Q001-Q300
 
 | ID | Schritt | Typ | Aufwand | Abhängigkeit | Status |
 |----|---------|-----|---------|--------------|--------|
-| Q-224 | UG Hinweise: UNTERLAGE-CTA `data-next-dok-id` + Hint mit nächster offener Bezeichnung (US-UG-003, Parität AV Hinweise Q-222) | DEMO | S | Q-219 | OFFEN |
+| Q-224 | UG Hinweise: UNTERLAGE-CTA `data-next-dok-id` + Hint mit nächster offener Bezeichnung (US-UG-003, Parität AV Hinweise Q-222) | DEMO | S | Q-219 | DONE |
 
 ---
 
@@ -69,6 +69,7 @@ Nur Orientierung; Details und ältere IDs → [Archiv](delivery/queue-archive/DO
 
 | ID | Kurz | Status |
 |----|------|--------|
+| Q-224 | UG Hinweise UNTERLAGE `data-next-dok-id` + Bezeichnung (Parität AV Q-222) | DONE |
 | Q-307 | Anti-Growth in AGENTS/DELIVERY/DEC-013 + CONTRIBUTING | DONE |
 | Q-306 | docs/README Map of Content + Root-README straffen | DONE |
 | Q-305 | storyRegistry.ts SSOT + `npm run registry:export` → JSON | DONE |

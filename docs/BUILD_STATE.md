@@ -1,6 +1,6 @@
 # BUILD_STATE.md – Aktueller Projektstand
 
-Zuletzt aktualisiert: nach Q-307 Anti-Growth verankert (DEC-013); DEC-011 strukturelle Pause beendet
+Zuletzt aktualisiert: nach Q-224 UG Hinweise UNTERLAGE-CTA data-next-dok-id + nächste Bezeichnung
 
 Dieser Stand beschreibt, was **tatsächlich existiert und funktioniert** — nicht die Feature-Historie.
 Geplante Schritte → `docs/NEXT_STEPS_QUEUE.md`.  
@@ -55,7 +55,7 @@ Eine Zeile pro Route: Zweck + Story-Bezug. Feinschliff-Details stehen im Code.
 | `/gruendung/rueckfragen` | Rückfragen + Antwort + Verlauf-Tiefenlink | US-UG-004 | ✓ |
 | `/gruendung/behoerden` | Behördenkarten; VS-Status live nach RQ; BG-Demo-Markierung | US-UG-002 | ✓ |
 | `/gruendung/verlauf` | Verlauf mit Stelle- + Typ-Filter; Session-Badges; Anker | US-UG-005 | ✓ |
-| `/gruendung/hinweise` | Fairness UG; CTAs RQ/Unterlagen/BG/Steuernummer/Betriebsdatum/Behörden | US-UG-006 | ✓ |
+| `/gruendung/hinweise` | Fairness UG; CTAs RQ/Unterlagen/BG/…; UNTERLAGE-CTA `data-next-dok-id` + nächste Bezeichnung live | US-UG-003, 006 | ✓ |
 
 ### Kita / Jugendamt (`/kita/*`)
 
@@ -171,7 +171,6 @@ Keine durchgestrichenen Erledigungen. Abgeschlossenes steht in git / queue-archi
 
 | Lücke | Auswirkung | Queue |
 |-------|------------|-------|
-| UG Hinweise: UNTERLAGE-CTA Parität `data-next-dok-id` + Hint | Kleine UX-Parität zu AV | Q-224 |
 | Kein echtes Backend / keine Behörden-Adapter | Demo-only | bewusst Phase 0 |
 | Open-Data-Lizenz Kita final (BL) | Demo nutzt vorläufigen Hinweis | fachlich offen, nicht blockierend |
 | DSFA / produktive Datenschutz-Nachweise | Konzeptphase | bewusst offen |
