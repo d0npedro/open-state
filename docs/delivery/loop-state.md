@@ -8,7 +8,7 @@ Regeln: `docs/delivery/AUTONOMOUS_LOOP.md`.
 | `next_domain` | `av` |
 | `last_domain` | `cross` |
 | `last_queue_id` | `Q-450` |
-| `last_commit` | pending |
+| `last_commit` | 4a0f480 |
 | `fires_total` | 16 |
 | `consecutive_idle` | 0 |
 | `updated` | 2026-08-03 (Q-450 Landing Deep-Link-Smoke) |
