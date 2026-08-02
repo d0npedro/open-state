@@ -1,6 +1,6 @@
 # BUILD_STATE.md – Aktueller Projektstand
 
-Zuletzt aktualisiert: nach Q-421 UG E2E Ruhezustand nach RQ+Upload+BG
+Zuletzt aktualisiert: nach Q-422 Kita E2E Transparenz Filter+CSV
 
 Dieser Stand beschreibt, was **tatsächlich existiert und funktioniert** — nicht die Feature-Historie.
 Geplante Schritte → `docs/NEXT_STEPS_QUEUE.md`.  
@@ -18,7 +18,7 @@ Detailhistorie → `git log` / `docs/delivery/queue-archive/`.
 | Build-Status | ✓ 27 statische Seiten |
 | Deployment | Vercel, aus `demo/` |
 | Lokaler Start | `cd demo && npm install && npm run dev` |
-| Letzte bekannte Prüfung | lint+build 27 Seiten; `test:e2e:kita` 8 passed (Smoke+Meldekette Q-401/402) |
+| Letzte bekannte Prüfung | lint+build 27 Seiten; `test:e2e:kita` inkl. Filter/CSV (Q-422, 3 Specs) + Smoke+Meldekette |
 | Daten | durchgängig Mock; kein Backend, keine Behörden-Anbindung |
 
 ---
@@ -175,7 +175,7 @@ Keine durchgestrichenen Erledigungen. Abgeschlossenes steht in git / queue-archi
 
 | Lücke | Auswirkung | Queue |
 |-------|------------|-------|
-| Kita-E2E: Filter/CSV öffentlicher Bericht noch ohne Spec | CI deckt Planungsraum-Filter + CSV-Label nicht ab | Q-422 |
+
 | Kein echtes Backend / keine Behörden-Adapter | Demo-only | bewusst Phase 0 |
 | Open-Data-Lizenz Kita final (BL) | Demo nutzt vorläufigen Hinweis | fachlich offen, nicht blockierend |
 | DSFA / produktive Datenschutz-Nachweise | Konzeptphase | bewusst offen |
