@@ -80,12 +80,15 @@ export default function BehoerdenPage() {
           beh.typ === 'BERUFSGENOSSENSCHAFT' &&
           (sessionBgErledigt || beh.status === 'ABGESCHLOSSEN');
 
+        const titleId = `beh-title-${beh.id}`;
+
         return (
           <div
             key={beh.id}
             id={`beh-${beh.id}`}
             className="card"
             data-testid={`behoerde-karte-${beh.id}`}
+            aria-labelledby={titleId}
             style={{
               borderLeft: `4px solid ${beh.status === 'ABGESCHLOSSEN' ? 'var(--color-success)' : beh.status === 'RUECKFRAGE_OFFEN' ? 'var(--color-warning)' : beh.status === 'IN_BEARBEITUNG' ? 'var(--color-primary)' : 'var(--color-border)'}`,
               scrollMarginTop: '5rem',
@@ -94,7 +97,7 @@ export default function BehoerdenPage() {
             {/* Behörde-Kopf */}
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '0.75rem', marginBottom: '1rem' }}>
               <div>
-                <h2 style={{ marginBottom: '0.2rem', fontSize: '1.1rem' }}>{beh.bezeichnung}</h2>
+                <h2 id={titleId} style={{ marginBottom: '0.2rem', fontSize: '1.1rem' }}>{beh.bezeichnung}</h2>
                 <p style={{ fontSize: '0.875rem', color: 'var(--color-text-muted)', margin: '0 0 0.4rem' }}>{beh.zustaendigeStelle}</p>
                 <p style={{ fontSize: '0.875rem', margin: 0, lineHeight: 1.5 }}>{beh.rolle}</p>
               </div>

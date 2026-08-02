@@ -736,6 +736,54 @@ test.describe('UG – Behörden & Verfahrensschritte', () => {
     await expect(page.getByText(/BG ETEM/).first()).toBeVisible();
   });
 
+  test('Q-452: Behördenkarten und BG-Demo-Button zugängliche Namen/Labels', async ({ page }) => {
+    // Karten: aria-labelledby → h2; BG-Button: sichtbarer Name + aria-label
+    const cards = page.locator('[data-testid^="behoerde-karte-"]');
+    await expect(cards).toHaveCount(4);
+
+    const expectedTitles = [
+      /Gewerbeamt/i,
+      /Finanzamt/i,
+      /IHK/i,
+      /Berufsgenossenschaft|BG ETEM/i,
+    ];
+
+    for (let i = 0; i < 4; i++) {
+      const card = cards.nth(i);
+      await expect(card).toBeVisible();
+      const labelledBy = await card.getAttribute('aria-labelledby');
+      expect(labelledBy).toBeTruthy();
+      const heading = page.locator(`#${labelledBy}`);
+      await expect(heading).toBeVisible();
+      await expect(heading).toHaveRole('heading', { level: 2 });
+      const title = (await heading.textContent())?.trim() ?? '';
+      expect(title.length).toBeGreaterThan(2);
+      expect(expectedTitles.some(re => re.test(title))).toBeTruthy();
+    }
+
+    // Explizite h2-Rollen für Screenreader-Navigation
+    await expect(page.getByRole('heading', { level: 2, name: /Gewerbeamt/i })).toBeVisible();
+    await expect(page.getByRole('heading', { level: 2, name: /Finanzamt/i })).toBeVisible();
+    await expect(page.getByRole('heading', { level: 2, name: /IHK/i })).toBeVisible();
+    await expect(
+      page.getByRole('heading', { level: 2, name: /Berufsgenossenschaft|BG ETEM/i })
+    ).toBeVisible();
+
+    const bgBtn = page.getByTestId('behoerde-bg-erledigt-btn');
+    await expect(bgBtn).toBeVisible();
+    await expect(bgBtn).toHaveAttribute(
+      'aria-label',
+      /BG-Anmeldung in der Demo als erledigt markieren/i
+    );
+    // Zugänglicher Name (aria-label hat Vorrang) und findbar per role
+    await expect(bgBtn).toHaveAccessibleName(/BG-Anmeldung in der Demo als erledigt markieren/i);
+    await expect(
+      page.getByRole('button', { name: /BG-Anmeldung in der Demo als erledigt markieren/i })
+    ).toBeVisible();
+    // Sichtbarer Button-Text bleibt verständlich
+    await expect(bgBtn).toContainText(/Anmeldung als erledigt markieren/i);
+  });
+
   test('Verfahrensschritte mit Rechtsgrundlagen sichtbar', async ({ page }) => {
     await expect(page.getByText('Gewerbeanmeldung einreichen')).toBeVisible();
     await expect(page.getByText(/§ 14 GewO/).first()).toBeVisible();
