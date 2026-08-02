@@ -1,6 +1,6 @@
 # Repo-Refactoring-Plan – Open State
 
-**Status:** Analyse abgeschlossen; Phase 0.1–0.2 umgesetzt (Q-299–Q-301)  
+**Status:** Analyse abgeschlossen; Phase 0.1–0.3 umgesetzt (Q-299–Q-302)  
 **Datum:** 2026-08-02  
 **Anlass:** Organisches Wachstum (133 Markdown-Dateien, ~Q-224 Queue-Schritte, Multi-Loop-Journals) hat den mentalen und navigierbaren Overhead für Menschen und Agenten unnötig erhöht.  
 **Ziel:** Kein weiterer Feature-Zuwachs in dieser Phase — strukturelle Klärung, damit Weiterentwicklung günstiger und klarer wird.
@@ -173,7 +173,7 @@ open-state/
 |---|----------|------------------|--------|------------------------|
 | 0.1 | `archive/rewrites/` anlegen; alle `REPO_REWRITE_SUMMARY*.md` + `REPO_CONSOLIDATION_SUMMARY.md` dorthin verschieben; Root-README um einen Satz „Historische Umschreibungen → archive/“ ergänzen | Root `REPO_*.md` → `archive/rewrites/` | Root: 19 → ~7 MD-Dateien; klarer Einstieg | **DONE Q-300** — nur verschieben, nicht löschen; relative Links in Summaries egal (Historie) |
 | 0.2 | `NEXT_STEPS_QUEUE.md` spalten: aktive Queue (OFFEN/IN_ARBEIT/BLOCKIERT + max. letzte ~10 DONE) vs. `docs/delivery/queue-archive/DONE_Q001-Q300.md` | `docs/NEXT_STEPS_QUEUE.md`, neu `docs/delivery/queue-archive/` | Agenten lesen Minuten statt Scrollen | **DONE Q-301** — Historie mit Commit-Hashes in Archiv |
-| 0.3 | `BUILD_STATE.md` härten: Routen-Tabelle auf **1 Zeile pro Route** (Status + Story-IDs + 1 Satz); Logik-Tabelle ohne Q-xxx-Chronik; „Bekannte Lücken“ nur echte Offenpunkte; Changelog-Abschnitte → Archive oder streichen | `docs/BUILD_STATE.md` | Ist-Stand in <5 Min lesbar | Inhaltliche Fakten in Code/Stories bleiben Quelle |
+| 0.3 | `BUILD_STATE.md` härten: Routen-Tabelle auf **1 Zeile pro Route** (Status + Story-IDs + 1 Satz); Logik-Tabelle ohne Q-xxx-Chronik; „Bekannte Lücken“ nur echte Offenpunkte; Changelog-Abschnitte → Archive oder streichen | `docs/BUILD_STATE.md` | Ist-Stand in <5 Min lesbar | **DONE Q-302** — ~49 KB → ~10 KB; Pflege-Regel im Dokument |
 | 0.4 | Journal-Rotation: pro Domain-Journal nur die letzten N Iterationen (z. B. 15) im aktiven File; Rest nach `archive/journals/` | `docs/loops/*-JOURNAL.md` | Multi-Loop bleibt nutzbar ohne 88-KB-Datei | Keine Löschung; Index-README in archive/journals |
 | 0.5 | Doppel-Deployment: führende Datei festlegen (`DEPLOYMENT_AND_DEMO_STRATEGY.md` oder neu `ops/DEMO_AND_DEPLOYMENT.md`); die anderen zwei auf Stub mit Verweis reduzieren | 3 Deploy-Docs | Eine Wahrheit | Inhalt mergen, nicht droppen |
 
