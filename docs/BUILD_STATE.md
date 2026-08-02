@@ -1,6 +1,6 @@
 # BUILD_STATE.md – Aktueller Projektstand
 
-Zuletzt aktualisiert: nach Q-299 Repo-Refactoring-Plan (`docs/REPO_REFACTORING_PLAN.md`)
+Zuletzt aktualisiert: nach Q-300 Rewrite-Summaries nach `archive/rewrites/` (Phase 0.1)
 
 Dieser Stand beschreibt, was tatsächlich existiert und funktioniert.
 Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
@@ -375,10 +375,11 @@ Strukturelles Aufräumen (Priorität 0): → `docs/REPO_REFACTORING_PLAN.md`.
 |-------|--------|
 | `AGENTS.md` | ✓ |
 | `docs/DELIVERY_SYSTEM.md` | ✓ |
-| `docs/NEXT_STEPS_QUEUE.md` | ✓ (Priorität 0: strukturelles Refactoring Q-300+) |
+| `docs/NEXT_STEPS_QUEUE.md` | ✓ (Priorität 0: nächster Schritt Q-301 Queue-Split) |
 | `docs/BUILD_STATE.md` | ✓ (diese Datei; Härten geplant Q-302) |
 | `docs/DECISION_LOG.md` | ✓ (DEC-011 strukturelles Refactoring) |
 | `docs/REPO_REFACTORING_PLAN.md` | ✓ Analyse + Phasenplan (Q-299) |
+| `archive/rewrites/` | ✓ Historische REPO_* Summaries (Q-300); Index `archive/rewrites/README.md` |
 
 ---
 
@@ -386,7 +387,7 @@ Strukturelles Aufräumen (Priorität 0): → `docs/REPO_REFACTORING_PLAN.md`.
 
 | Lücke | Demo-Auswirkung | Queue-ID |
 |-------|----------------|----------|
-| Repo-Struktur / Delivery aufgebläht (Queue-Archiv, BUILD_STATE-Chronik, Root-Rewrite-Summaries, Journal-Länge) | Hohe kognitive Last; teure Iterationen | Q-300–Q-307 (Plan Q-299 ✓) |
+| Repo-Struktur / Delivery aufgebläht (Queue-Archiv, BUILD_STATE-Chronik, Journal-Länge; Root-Rewrite-Summaries erledigt Q-300) | Hohe kognitive Last; teure Iterationen | Q-301–Q-307 (Plan Q-299 ✓, Archive Q-300 ✓) |
 | ~~Fairness-Fristen sind statische Zahlen~~ | ~~Glaubwürdigkeitsproblem~~ | Q-004 ✓ |
 | ~~Demo vollständig statisch~~ | ~~Demo wirkt wie Slideshow~~ | Q-031 ✓ |
 | ~~Dokument-Upload ohne State~~ | ~~Upload-Alert nur, kein Fairness-Effekt~~ | Q-071 ✓ |

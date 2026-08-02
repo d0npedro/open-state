@@ -36,7 +36,7 @@ Plan: [`docs/REPO_REFACTORING_PLAN.md`](REPO_REFACTORING_PLAN.md).
 | ID | Schritt | Typ | Aufwand | Abhängigkeit | Status |
 |----|---------|-----|---------|--------------|--------|
 | Q-299 | Fundierte Refactoring-Analyse + priorisierter Plan (`docs/REPO_REFACTORING_PLAN.md`): Diagnose, Zielstruktur, Phasen 0–4, Anti-Growth-Policy | DOCS | M | – | DONE |
-| Q-300 | Phase 0.1: `archive/rewrites/` anlegen; alle Root-`REPO_REWRITE_SUMMARY*.md` + `REPO_CONSOLIDATION_SUMMARY.md` dorthin verschieben; README-Hinweis Historie | DOCS | S | Q-299 | OFFEN |
+| Q-300 | Phase 0.1: `archive/rewrites/` anlegen; alle Root-`REPO_REWRITE_SUMMARY*.md` + `REPO_CONSOLIDATION_SUMMARY.md` dorthin verschieben; README-Hinweis Historie | DOCS | S | Q-299 | DONE |
 | Q-301 | Phase 0.2: `NEXT_STEPS_QUEUE.md` splitten — aktive Queue vs. `docs/delivery/queue-archive/` (DONE-Historie) | DOCS | M | Q-300 | OFFEN |
 | Q-302 | Phase 0.3: `BUILD_STATE.md` auf Ist-Stand härten (kurze Routen-/Logik-Tabellen, keine Q-xxx-Chronik, nur echte Lücken) | DOCS | M | Q-301 | OFFEN |
 | Q-303 | Phase 0.4: Domain-Journals rotieren (aktiv ≤15 Iterationen; Rest → `archive/journals/`) | DOCS | S | Q-300 | OFFEN |

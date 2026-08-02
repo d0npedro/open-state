@@ -136,6 +136,9 @@ Push ist bewusst opt-in und erfordert eine ausdrückliche Nutzeranweisung.
 [`docs/REPO_REFACTORING_PLAN.md`](docs/REPO_REFACTORING_PLAN.md) (DEC-011).
 Fokus: Historie archivieren, Delivery verschlanken, Navigation klären — nicht Feature-Zuwachs.
 
+**Historische Umschreibungen:** Abgeschlossene Rewrite-/Konsolidierungs-Summaries liegen unter
+[`archive/rewrites/`](archive/rewrites/README.md) (kein Pflichtlesen; aktueller Stand bleibt `BUILD_STATE` / Queue).
+
 ---
 
 ## Demo & Deployment

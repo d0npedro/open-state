@@ -105,9 +105,11 @@ Datum / letzten Commit-Bezug aktualisieren.
 
 ### Schritt 10 – Summary-Datei (optional, bei größeren Änderungen)
 
-Bei größeren Themenblöcken: `REPO_REWRITE_SUMMARY_<THEMA>.md` anlegen oder ergänzen.
+Bei größeren Themenblöcken: kurzen Eintrag im `DECISION_LOG.md` **oder**
+eine Datei unter `archive/rewrites/` (nicht im Repo-Root).
 Inhalt: was wurde gemacht, welche Dateien, welche Logik, offene Punkte.
-Nicht bei jedem kleinen Schritt nötig.
+Nicht bei jedem kleinen Schritt nötig. Keine neuen `REPO_REWRITE_SUMMARY_*.md` im Root
+(Historie: `archive/rewrites/`, siehe Q-300 / Anti-Growth-Policy).
 
 ---
 
