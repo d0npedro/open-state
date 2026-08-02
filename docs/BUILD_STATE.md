@@ -1,6 +1,6 @@
 # BUILD_STATE.md – Aktueller Projektstand
 
-Zuletzt aktualisiert: nach Q-491 Kita Tagesstand Druck/CSV a11y
+Zuletzt aktualisiert: nach Q-492 ThemeSwitcher a11y data-theme
 
 Dieser Stand beschreibt, was **tatsächlich existiert und funktioniert** — nicht die Feature-Historie.
 Geplante Schritte → `docs/NEXT_STEPS_QUEUE.md`.  
@@ -18,8 +18,8 @@ Detailhistorie → `git log` / `docs/delivery/queue-archive/`.
 | Build-Status | ✓ 27 statische Seiten |
 | Deployment | Vercel, aus `demo/` |
 | Lokaler Start | `cd demo && npm install && npm run dev` |
-| Letzte bekannte Prüfung | lint 2026-08-03; E2E chromium **357** Tests (+ Tagesstand Druck/CSV a11y Q-491) |
-| E2E-Skripte | `test:e2e:ci` (chromium, workers=1); Domains: `test:e2e:av` · `test:e2e:ug` · `test:e2e:kita` (+ Tagesstand-Export a11y Q-491); Skip-Link; Session-Reset RQ; `stories-zur-demo.spec.ts` |
+| Letzte bekannte Prüfung | lint 2026-08-03; E2E chromium **358** Tests (+ ThemeSwitcher a11y Q-492) |
+| E2E-Skripte | `test:e2e:ci` (chromium, workers=1); Domains: `test:e2e:av` · `test:e2e:ug` · `test:e2e:kita`; ThemeSwitcher Q-492; Skip-Link; Session-Reset RQ; `stories-zur-demo.spec.ts` |
 | Daten | durchgängig Mock; kein Backend, keine Behörden-Anbindung |
 
 ---

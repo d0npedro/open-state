@@ -331,3 +331,35 @@ test.describe('Accessibility – Grundlegende Checks', () => {
   });
 
 });
+
+test.describe('ThemeSwitcher a11y (Q-492)', () => {
+  test('zugänglicher Name und data-theme-Wechsel ohne Fachlogik-Eingriff', async ({ page }) => {
+    // Footer ThemeSwitcher: aria-label, Dialog, data-theme + localStorage (DEC-010)
+    await page.goto('/');
+
+    const trigger = page.getByRole('button', { name: /Darstellung ändern/i });
+    await expect(trigger).toBeVisible();
+    await expect(trigger).toBeEnabled();
+    await expect(trigger).toHaveAccessibleName(/Darstellung ändern/i);
+    await expect(trigger).toHaveAttribute('aria-haspopup', 'dialog');
+
+    // Default-Theme
+    await expect(page.locator('html')).toHaveAttribute('data-theme', 'civic-neutral');
+
+    await trigger.click();
+    await expect(trigger).toHaveAttribute('aria-expanded', 'true');
+    const dialog = page.getByRole('dialog', { name: /Darstellungseinstellungen/i });
+    await expect(dialog).toBeVisible();
+
+    // Theme wechseln (visuell only)
+    await dialog.getByRole('radio', { name: /Citizen Warm/i }).check();
+    await expect(page.locator('html')).toHaveAttribute('data-theme', 'citizen-warm');
+
+    const stored = await page.evaluate(() => localStorage.getItem('os-theme'));
+    expect(stored).toBe('citizen-warm');
+
+    // Density-Optionen ebenfalls labeled (exakter Label-Start, nicht Theme-Beschreibung)
+    await expect(dialog.getByRole('radio', { name: /^Kompakt\b/i })).toBeVisible();
+    await expect(dialog.getByText(/Keine Auswirkung auf Fachlogik/i)).toBeVisible();
+  });
+});
