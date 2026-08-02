@@ -63,7 +63,7 @@ Autonomer Multi-Domain-Loop: [`docs/delivery/AUTONOMOUS_LOOP.md`](delivery/AUTON
 | ID | Domäne | Schritt | Typ | Aufwand | Abhängigkeit | Status |
 |----|--------|---------|-----|---------|--------------|--------|
 | Q-430 | cross | Domain-README-Schablone (Problem, Demo-Routen, Stories, API, Grenzen) auf alle 3 Domains anwenden | DOCS | M | – | DONE |
-| Q-431 | kita | Kita-Domain-README: Related-Links Jugendamt-Module + KiJuP (13/14) ohne Inhaltsduplikat | DOCS | S | Q-430 | OFFEN |
+| Q-431 | kita | Kita-Domain-README: Related-Links Jugendamt-Module + KiJuP (13/14) ohne Inhaltsduplikat | DOCS | S | Q-430 | DONE |
 | Q-432 | cross | TRACEABILITY_MATRIX: auf SSOT `storyRegistry.ts` ausrichten (generieren oder schlanker Stub + Verweis) | DOCS | M | – | OFFEN |
 
 ---
@@ -72,6 +72,7 @@ Autonomer Multi-Domain-Loop: [`docs/delivery/AUTONOMOUS_LOOP.md`](delivery/AUTON
 
 | ID | Kurz | Status |
 |----|------|--------|
+| Q-431 | Kita README Related-Links 13/14 + ADR KiJuP | DONE |
 | Q-430 | Domain-README-Schablone alle 3 Domains | DONE |
 | Q-403 | BUILD_STATE E2E-Zähler 333/12 Specs | DONE |
 | Q-412 | Kita DemoSessionBar bei Meldefreigabe | DONE |
@@ -81,7 +82,6 @@ Autonomer Multi-Domain-Loop: [`docs/delivery/AUTONOMOUS_LOOP.md`](delivery/AUTON
 | Q-420 | A11y Skip-Link + main-Landmark (Root/Domains) | DONE |
 | Q-410 | Landing Sekundärlinks Hinweise/Lagebild intern | DONE |
 | Q-402 | Kita Meldekette E2E Freigabe→Lagebild (DEC-012) | DONE |
-| Q-401 | Kita E2E-Smoke Kernrouten + `test:e2e:kita` | DONE |
 
 ---
 

@@ -52,8 +52,7 @@ Session: Meldefreigabe → Meldeeingang (localStorage); `DemoSessionBar` im Kita
 | US-KJ-009 | Öffentlicher Transparenzbericht | `/kita` |
 | US-KJ-010 | Kennzahlen / Vergleich | `/kita`, `/kita/lagebild` |
 
-Story-Dateien: [`docs/stories/kita_betrieb_und_jugendamt_steuerung/`](../../stories/kita_betrieb_und_jugendamt_steuerung/)  
-Related (ohne Duplikat): Q-431 — Jugendamt-Module / KiJuP-Links.
+Story-Dateien: [`docs/stories/kita_betrieb_und_jugendamt_steuerung/`](../../stories/kita_betrieb_und_jugendamt_steuerung/)
 
 ---
 
@@ -88,6 +87,21 @@ Related (ohne Duplikat): Q-431 — Jugendamt-Module / KiJuP-Links.
 | [05_OEFFENTLICHE_TRANSPARENZBERICHTE.md](05_OEFFENTLICHE_TRANSPARENZBERICHTE.md) | Öffentlichkeit |
 | [06_DATENMODELL_UND_KENNZAHLENLOGIK.md](06_DATENMODELL_UND_KENNZAHLENLOGIK.md) | Daten / Kennzahlen |
 | [07_RECHTLICHE_UND_DATENSCHUTZ_GRENZEN.md](07_RECHTLICHE_UND_DATENSCHUTZ_GRENZEN.md) | Recht / Datenschutz |
+
+---
+
+## Related (Querschnitt, ohne Inhaltsduplikat)
+
+Diese Domäne deckt **Kita-Betrieb, JA-Steuerung und öffentliche Aggregate** ab (Demo `/kita/*`).  
+Breitere Jugendhilfe-Module und Fachverfahrens-Integration leben in eigenen SSOT-Dokumenten — hier nur Verweis:
+
+| Dokument | Rolle | Abgrenzung zur Domäne |
+|----------|--------|------------------------|
+| [`docs/13_Jugendamt_Module.md`](../../13_Jugendamt_Module.md) | Konzept-Überblick weiterer JA-Prozesse (HzE, Beratung, UVG, § 8a u. a.) | **Nicht** Demo-Umfang dieser Domäne; kein Ersatz für 01–07 hier |
+| [`docs/14_KiJuP_Integration.md`](../../14_KiJuP_Integration.md) | Integrationsarchitektur KiJuP-online (read-only Referenz) vs. lokale Fachverfahren | **Keine** operative Kita-Meldung; keine Kinddaten an KiJuP |
+| [`docs/adr/2026-03-09-kijup-reference-source.md`](../../adr/2026-03-09-kijup-reference-source.md) | ADR: KiJuP nur Referenzquelle | Entscheidungsstand; Details in 14 |
+
+Inhalte von 13/14 hier **nicht** wiederholen. Fachkonzept Betrieb/Steuerung/Transparenz bleibt in den Dateien 01–07 dieses Ordners.
 
 ---
 
