@@ -1,6 +1,6 @@
 # BUILD_STATE.md – Aktueller Projektstand
 
-Zuletzt aktualisiert: nach Q-400 Autonomer Multi-Domain-Loop (`docs/delivery/AUTONOMOUS_LOOP.md`)
+Zuletzt aktualisiert: nach Q-401 Kita E2E-Smoke (`demo/e2e/us-kj-kita-smoke.spec.ts`, `npm run test:e2e:kita`)
 
 Dieser Stand beschreibt, was **tatsächlich existiert und funktioniert** — nicht die Feature-Historie.
 Geplante Schritte → `docs/NEXT_STEPS_QUEUE.md`.  
@@ -18,7 +18,7 @@ Detailhistorie → `git log` / `docs/delivery/queue-archive/`.
 | Build-Status | ✓ 27 statische Seiten |
 | Deployment | Vercel, aus `demo/` |
 | Lokaler Start | `cd demo && npm install && npm run dev` |
-| Letzte bekannte Prüfung | lint+build 27 Seiten; `test:e2e:ci` 270 passed (Stand vor Prio-0-Refactoring) |
+| Letzte bekannte Prüfung | lint+build 27 Seiten; Kita-Smoke `test:e2e:kita` 6 passed (Q-401); `test:e2e:ci` historisch 270 (vor Prio-0) |
 | Daten | durchgängig Mock; kein Backend, keine Behörden-Anbindung |
 
 ---
@@ -175,7 +175,7 @@ Keine durchgestrichenen Erledigungen. Abgeschlossenes steht in git / queue-archi
 
 | Lücke | Auswirkung | Queue |
 |-------|------------|-------|
-| Keine Kita-E2E-Specs (nur AV/UG/Landing) | CI deckt Kita-Routen nicht ab | Q-401, Q-402, Q-422 |
+| Kita-E2E nur Smoke (Kernrouten); Meldekette/Filter noch offen | CI deckt Meldesession und Filter/CSV nicht ab | Q-402, Q-422 |
 | Kein echtes Backend / keine Behörden-Adapter | Demo-only | bewusst Phase 0 |
 | Open-Data-Lizenz Kita final (BL) | Demo nutzt vorläufigen Hinweis | fachlich offen, nicht blockierend |
 | DSFA / produktive Datenschutz-Nachweise | Konzeptphase | bewusst offen |
