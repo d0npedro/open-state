@@ -124,15 +124,39 @@ export default function StoriesPage() {
                               </div>
                             </div>
                           </div>
-                          {/* Coverage bar */}
+                          {/* Coverage bar + Zur-Demo-CTA (Q-411, Route aus storyRegistry) */}
                           <div>
                             <div style={{ height: '6px', background: 'var(--color-border)', borderRadius: '3px', overflow: 'hidden' }}>
                               <div style={{ height: '100%', width: `${pct}%`, background: pct === 100 ? 'var(--color-success)' : pct > 50 ? 'var(--color-primary)' : 'var(--color-warning)', borderRadius: '3px', transition: 'width 0.3s' }} />
                             </div>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '0.4rem' }}>
+                            <div
+                              style={{
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                                alignItems: 'center',
+                                gap: '0.75rem',
+                                flexWrap: 'wrap',
+                                marginTop: '0.65rem',
+                              }}
+                            >
                               <span style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>{pct}% abgedeckt</span>
-                              {story.route && (
-                                <Link href={story.route} style={{ fontSize: '0.75rem', color: 'var(--color-primary)' }}>Demo ansehen →</Link>
+                              {story.route ? (
+                                <Link
+                                  href={story.route}
+                                  className="btn btn-secondary"
+                                  data-testid={`story-demo-cta-${story.id}`}
+                                  style={{ fontSize: '0.85rem', padding: '0.4rem 0.9rem' }}
+                                  aria-label={`Zur Demo: ${story.title}`}
+                                >
+                                  Zur Demo
+                                </Link>
+                              ) : (
+                                <span
+                                  style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}
+                                  data-testid={`story-demo-cta-missing-${story.id}`}
+                                >
+                                  Noch kein Demo-Screen
+                                </span>
                               )}
                             </div>
                           </div>

@@ -1,6 +1,6 @@
 # BUILD_STATE.md – Aktueller Projektstand
 
-Zuletzt aktualisiert: nach Q-422 Kita E2E Transparenz Filter+CSV
+Zuletzt aktualisiert: nach Q-411 `/stories` Zur-Demo-CTA
 
 Dieser Stand beschreibt, was **tatsächlich existiert und funktioniert** — nicht die Feature-Historie.
 Geplante Schritte → `docs/NEXT_STEPS_QUEUE.md`.  
@@ -32,7 +32,7 @@ Eine Zeile pro Route: Zweck + Story-Bezug. Feinschliff-Details stehen im Code.
 | Route | Inhalt (Ist) | Stories | Status |
 |-------|--------------|---------|--------|
 | `/` | Landing: Domänen-Karten + Sekundärlinks (AV/UG Hinweise, Kita Lagebild intern) | – | ✓ |
-| `/stories` | Story-Coverage-Dashboard (AV/UG/KJ) | – | ✓ |
+| `/stories` | Story-Coverage: pro Story mit `route` CTA „Zur Demo“ (storyRegistry) | – | ✓ |
 | `/feedback` | Feedback → GitHub Issues | – | ✓ |
 
 ### Arbeitsverwaltung (`/fall/*`)
