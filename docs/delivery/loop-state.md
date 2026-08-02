@@ -8,7 +8,7 @@ Regeln: `docs/delivery/AUTONOMOUS_LOOP.md`.
 | `next_domain` | `kita` |
 | `last_domain` | `ug` |
 | `last_queue_id` | `Q-472` |
-| `last_commit` | pending |
+| `last_commit` | 9cfecc7 |
 | `fires_total` | 24 |
 | `consecutive_idle` | 0 |
 | `updated` | 2026-08-03 (Q-472 UG Skip-Link) |
