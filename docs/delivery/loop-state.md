@@ -8,7 +8,7 @@ Regeln: `docs/delivery/AUTONOMOUS_LOOP.md`.
 | `next_domain` | `cross` |
 | `last_domain` | `kita` |
 | `last_queue_id` | `Q-431` |
-| `last_commit` | 0306734 |
+| `last_commit` | f3c8bb4 |
 | `fires_total` | 11 |
 | `consecutive_idle` | 0 |
 | `updated` | 2026-08-03 (Q-431 Kita README Related 13/14) |
