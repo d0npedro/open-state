@@ -1,30 +1,31 @@
-# Deployment- und Demo-Strategie
+# Deployment- und Demo-Strategie (führend)
 
-**Zweck:** Beschreibt, wie das Open State Repository öffentlich zugänglich gemacht wird – als laufende Demo, nachvollziehbar, kontrolliert und ohne unkontrollierte Produktionsdeployments.
+**Status:** Single Source of Truth für Demo-Setup, Branch-Modell und Vercel (Q-304)  
+**Frühere Parallel-Docs** (jetzt Stubs): [`DEMO_APP_SETUP.md`](DEMO_APP_SETUP.md), [`DEMO_DEPLOYMENT_PLAYBOOK.md`](DEMO_DEPLOYMENT_PLAYBOOK.md)
+
+**Zweck:** Open State öffentlich als laufende Demo zugänglich machen – nachvollziehbar, kontrolliert, ohne unkontrollierte Production-Deploys von `main`.
 
 ---
 
-## 1. Warum eine laufende Demo wertvoll ist
+## 1. Warum eine laufende Demo
 
-Open State ist ein Konzept- und Architekturdokument. Ohne eine sichtbare, lauffähige Demonstration bleibt es abstrakt – für politische Entscheidungsträger, Fachleute und die Öffentlichkeit gleichermaßen.
+Open State ist Konzept- und Architekturarbeit. Ohne klickbare Demo bleibt der Stand abstrakt.
 
 Eine laufende Demo:
-- macht den Entwicklungsstand unmittelbar prüfbar
-- schafft Vertrauen durch Transparenz: was behauptet wird, ist auch sichtbar
-- ermöglicht konkretes Feedback statt abstrakter Kritik
-- zeigt, dass offene Entwicklung und Zuverlässigkeit kein Widerspruch sind
+- macht den Entwicklungsstand prüfbar
+- schafft Vertrauen durch Transparenz
+- ermöglicht konkretes Feedback
+- zeigt, dass offene Entwicklung und Sorgfalt vereinbar sind
 
 ---
 
-## 2. Warum nicht jeder Commit direkt auf Produktion geht
+## 2. Warum nicht jeder Commit auf Production
 
-Staatliche Infrastruktur – auch im Demo-Stadium – trägt eine Sorgfaltspflicht.
+- Öffentlich sichtbare Regressionen vermeiden
+- Unvollständige Inhalte nicht unkontrolliert freigeben
+- Qualität vor Geschwindigkeit auch im Repository
 
-- Ungeplante Regressionsfehler wären öffentlich sichtbar
-- Unbewertete Inhaltsänderungen könnten missverständlich oder unvollständig wirken
-- Der Grundsatz „Qualität vor Geschwindigkeit" gilt auch für das Repository selbst
-
-Deshalb gilt: **Jede Änderung ist sichtbar und nachvollziehbar – aber nicht jede Änderung ist sofort öffentlich.**
+**Jede Änderung ist sichtbar (Git) – nicht jede ist sofort die öffentliche Demo.**
 
 ---
 
@@ -38,104 +39,147 @@ main ─────────────────────────
   └── feature/* ─────────────────────── Arbeitszweige / Preview
 ```
 
-### Bedeutung der Branches
-
 | Branch | Zweck | Deployment |
 |--------|-------|------------|
-| `main` | Stabiler, geprüfter Hauptstand | Kein automatisches Deployment – kontrollierter stabiler Stand |
-| `demo` | Öffentliche Demo – aktuellster freigegebener Stand | Automatisches Deployment auf Demo-URL (z. B. Vercel) |
-| `feature/*` | Arbeitszweige, experimentelle Ergänzungen | Preview-Deployment pro Branch (temporäre URL) |
+| `main` | Stabiler, geprüfter Hauptstand | Kein automatisches Production-Deploy |
+| `demo` | Freigegebener Demo-Stand | Production (z. B. Vercel) |
+| `feature/*` | Experiment / Review | Preview-URL (temporär) |
+
+### Entwicklungsablauf
+
+```
+feature/*  →  PR → main  →  bewusste Entscheidung: demofähig?
+                              Ja → Merge/Sync nach demo → Production
+                              Nein → bleibt in main
+```
+
+Preview-URLs: nur per Link, nicht als permanente Außenkommunikation.
 
 ---
 
-## 4. Workflow
+## 4. Lokal starten
 
-### Normaler Entwicklungsablauf
+Voraussetzungen: Node.js 18+ oder 20+, npm.
 
-```
-feature/neue-funktion  →  PR in main  →  Review  →  Merge in main
-                                                         │
-                                                         ▼
-                                              Bewusste Entscheidung:
-                                         Ist dieser Stand demofähig?
-                                                    │
-                                          ┌─────────┴─────────┐
-                                          │ Ja                │ Nein
-                                          ▼                   ▼
-                                  Merge in demo           bleibt in main
-                                  → Demo-Deploy           bis nächster
-                                                          stabiler Stand
+```bash
+cd demo
+npm install
+npm run dev
+# → http://localhost:3000
 ```
 
-### Feature-Preview
+Production-Build prüfen:
 
-Jeder `feature/*`-Branch erhält automatisch eine temporäre Preview-URL. Diese ist:
-- nur über direkten Link erreichbar (keine Indexierung)
-- nützlich für Review und Feedback vor dem Merge
-- nach Merge oder Schließung des Branches deaktiviert
-
----
-
-## 5. Transparenzvorteil dieses Modells
-
-| Aspekt | Ergebnis |
-|--------|----------|
-| Entwicklung ist sichtbar | Feature-Branches öffentlich zugänglich per Preview |
-| Fortschritt ist prüfbar | main-History im Git-Log vollständig nachvollziehbar |
-| Demo ist nutzbar | demo-Branch immer lauffähig und erreichbar |
-| Stabilität bleibt erhalten | main nicht durch unkontrollierte Änderungen überschrieben |
-| Keine Blackbox | Jeder Commit dokumentiert: Was wurde geändert? Warum? |
-
----
-
-## 6. Vercel-Konfiguration (Empfehlung)
-
-Für ein statisches Dokumentations-/Demo-Deployment auf Vercel gilt:
-
-```
-Branch         → Vercel-Target
-──────────────────────────────────────────────────────
-demo           → https://open-state-demo.vercel.app  (Production)
-feature/*      → https://open-state-[branch].vercel.app  (Preview)
-main           → kein automatisches Deployment (oder separates Staging)
+```bash
+cd demo
+npm run lint
+npm run build
 ```
 
-**Wichtig:** `main` sollte kein automatisches Production-Deployment auslösen. Der `demo`-Branch ist die öffentlich sichtbare Oberfläche.
+E2E (CI-äquivalent, vor Push relevant):
 
-### Beispiel vercel.json (Grundkonfiguration)
-
-```json
-{
-  "github": {
-    "autoJobCancelation": true
-  },
-  "buildCommand": null,
-  "outputDirectory": ".",
-  "cleanUrls": true
-}
+```bash
+cd demo
+npm run test:e2e:ci
 ```
 
 ---
 
-## 7. Was diese Strategie bewusst nicht tut
+## 5. Demo-App (Ist)
 
-- Keine automatischen Produktions-Deployments von `main`
-- Kein Deployment ohne vorherige Prüfung
-- Kein Einsatz von Preview-URLs als permanente Links in Außenkommunikation
-- Keine Zeitangaben für Deployment-Zyklen
+| Eigenschaft | Wert |
+|-------------|------|
+| Pfad | `demo/` (Next.js 14 App Router) |
+| Daten | Mock only; keine echten Personen-/Behördendaten |
+| Auth / Backend | keines |
+| Root auf Vercel | **`demo`** (nicht Repo-Root) |
+
+### Wichtige Routen (Überblick)
+
+| Route | Inhalt |
+|-------|--------|
+| `/` | Landing (alle Domänen) |
+| `/fall/*` | Arbeitsverwaltung (Vertical Slice + Fairness) |
+| `/gruendung/*` | Unternehmensgründung |
+| `/kita/*` | Kita Transparenz + JA-Steuerung |
+| `/stories` | Story Coverage |
+| `/feedback` | Feedback → GitHub Issue |
+
+Aktueller Detailstand: [`BUILD_STATE.md`](BUILD_STATE.md).
+
+### Mock & Stories
+
+- Fall-/Domänendaten: `demo/data/mock*.ts`
+- Story-Metadaten (führend): `demo/data/storyRegistry.ts`  
+  (`docs/stories/story_registry.json` ist abgeleitet/historisch; Drift-Vermeidung → Queue Q-305)
 
 ---
 
-## 8. Beziehung zur Kernidentität von Open State
+## 6. Vercel
 
-Diese Strategie spiegelt die Grundprinzipien des Projekts:
+### Projekt einrichten
 
-> **Transparenz:** Wer den Stand sehen will, kann ihn sehen – nachvollziehbar, dokumentiert.
->
-> **Verlässlichkeit:** Was als stabil gilt, ist stabil. Was in Entwicklung ist, ist als solches erkennbar.
->
-> **Kontrolle:** Kein Deploy ohne Entscheidung. Keine Entscheidung ohne Dokumentation.
+1. Vercel-Projekt aus dem GitHub-Repo
+2. **Root Directory:** `demo`
+3. Framework: Next.js (auto)
+4. Keine Secrets nötig (Demo ohne Backend)
+5. Config im App-Ordner: `demo/vercel.json`
+
+### Environment Variables
+
+| Variable | Beispiel | Beschreibung |
+|----------|----------|--------------|
+| `NEXT_PUBLIC_APP_ENV` | `demo` / `preview` / `local` | Umgebungskennung im UI |
+| `NEXT_PUBLIC_DEMO_VERSION` | `0.1.0` | Angezeigte Version (auch Default in `next.config.mjs`) |
+| `VERCEL_GIT_COMMIT_SHA` | (auto) | Vercel setzt; App kürzt auf 7 Zeichen → `NEXT_PUBLIC_COMMIT_SHA` |
+
+Lokal optional in `demo/.env.local`.
+
+### Branch → Target
+
+| Branch | Target |
+|--------|--------|
+| `demo` | Production (öffentliche Demo-URL) |
+| `feature/*` | Preview |
+| `main` | **kein** auto Production (optional separates Staging) |
+
+`main` darf Production nicht unkontrolliert überschreiben.
+
+### Build-Transparenz
+
+`demo/components/BuildInfo.tsx` im Footer: Umgebung, Demo-Version, Commit-SHA (7), Demonstrator-Hinweis.  
+Env-Mapping: `demo/next.config.mjs`.
 
 ---
 
-*Kein Terminversprechen. Keine Versionsnummern mit Daten. Jeder Stand spricht für sich.*
+## 7. Feedback-Kanal
+
+Route `/feedback`: vorausgefüllter GitHub-Issue-Link (Version, SHA, Leitfragen, Screen).  
+Label: `demo-feedback`.
+
+---
+
+## 8. Was diese Strategie bewusst nicht tut
+
+- Kein Auto-Production von `main`
+- Kein Deploy ohne vorherige Prüfung (lokal lint/build; bei Push-Pflicht auch E2E wo AGENTS/Supervisor greifen)
+- Keine Preview-URLs als permanente Außenlinks
+- Keine Termin- oder Release-Versprechen
+
+---
+
+## 9. Offene Punkte (spätere Integration, nicht Demo-Blocker)
+
+- eID (BSI TR-03130), BA-/Behörden-Adapter, echter Upload, persistente Fallakte
+- DSFA (Art. 35 DSGVO) vor Pilotbetrieb
+- Finale Open-Data-Lizenz für Kita-Aggregate (Demo: vorläufiger Hinweis)
+
+---
+
+## 10. Prinzipien
+
+> **Transparenz:** Stand ist sichtbar und dokumentiert.  
+> **Verlässlichkeit:** Was als Demo gilt, ist demofähig.  
+> **Kontrolle:** Kein Deploy ohne Entscheidung.
+
+*Kein Terminversprechen. Jeder Stand spricht für sich.*

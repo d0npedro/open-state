@@ -145,23 +145,22 @@ Fokus: Historie archivieren, Delivery verschlanken, Navigation klären — nicht
 
 Eine laufende Demo wird über den `demo`-Branch bereitgestellt. Feature-Branches erhalten automatische Preview-Deployments. `main` bleibt stabiler Referenzstand ohne unkontrollierte Production-Deploys.
 
-→ [Deployment- und Demo-Strategie](docs/DEPLOYMENT_AND_DEMO_STRATEGY.md)
+→ [Deployment- und Demo-Strategie](docs/DEPLOYMENT_AND_DEMO_STRATEGY.md) (führend; Setup + Vercel + Branches)
 
 ---
 
 ## Demo
 
-Die erste klickbare Demo zeigt den Vertical Slice der Domäne Arbeitsverwaltung: Fallübersicht, Status, Dokumente, Rückfragen, Termine, Bescheidtransparenz, Verlauf und Story Coverage.
+Klickbare Demo-Domänen: Arbeitsverwaltung (`/fall`), Unternehmensgründung (`/gruendung`), Kita/Jugendamt (`/kita`), plus Story Coverage und Feedback.
 
-Jede Funktion ist auf eine User Story zurückführbar. Der aktuelle Demo-Stand zeigt Build-Version, Commit-SHA und Umgebungskennung transparent im Footer.
+Jede sichtbare Funktion ist auf eine User Story zurückführbar. Footer: Build-Version, Commit-SHA, Umgebung.
 
 **Lokal starten:**
 ```bash
 cd demo && npm install && npm run dev
 ```
 
-→ [Demo-Routen und Setup](docs/DEMO_APP_SETUP.md)
-→ [Deployment Playbook](docs/DEMO_DEPLOYMENT_PLAYBOOK.md)
+→ [Demo & Deployment (alles an einem Ort)](docs/DEPLOYMENT_AND_DEMO_STRATEGY.md)  
 → [Feedback zur Demo](/feedback) (im laufenden Demonstrator)
 
 ---
