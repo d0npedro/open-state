@@ -1,6 +1,6 @@
 # BUILD_STATE.md – Aktueller Projektstand
 
-Zuletzt aktualisiert: nach Q-402 Kita Meldekette E2E (`us-kj-004-005-meldekette.spec.ts`)
+Zuletzt aktualisiert: nach Q-410 Landing-Sekundärlinks Hinweise / Kita-Lagebild intern
 
 Dieser Stand beschreibt, was **tatsächlich existiert und funktioniert** — nicht die Feature-Historie.
 Geplante Schritte → `docs/NEXT_STEPS_QUEUE.md`.  
@@ -31,7 +31,7 @@ Eine Zeile pro Route: Zweck + Story-Bezug. Feinschliff-Details stehen im Code.
 
 | Route | Inhalt (Ist) | Stories | Status |
 |-------|--------------|---------|--------|
-| `/` | Landing: alle Demo-Domänen | – | ✓ |
+| `/` | Landing: Domänen-Karten + Sekundärlinks (AV/UG Hinweise, Kita Lagebild intern) | – | ✓ |
 | `/stories` | Story-Coverage-Dashboard (AV/UG/KJ) | – | ✓ |
 | `/feedback` | Feedback → GitHub Issues | – | ✓ |
 

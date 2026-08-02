@@ -46,7 +46,7 @@ Autonomer Multi-Domain-Loop: [`docs/delivery/AUTONOMOUS_LOOP.md`](delivery/AUTON
 
 | ID | Domäne | Schritt | Typ | Aufwand | Abhängigkeit | Status |
 |----|--------|---------|-----|---------|--------------|--------|
-| Q-410 | cross | Landing: pro Domänen-Karte optionaler Sekundärlink „Steuerung/Hinweise“ wo sinnvoll (Kita→Lagebild intern kennzeichnen; AV/UG Hinweise) — ohne Developer-Jargon | DEMO | S | – | OFFEN |
+| Q-410 | cross | Landing: pro Domänen-Karte optionaler Sekundärlink „Steuerung/Hinweise“ wo sinnvoll (Kita→Lagebild intern kennzeichnen; AV/UG Hinweise) — ohne Developer-Jargon | DEMO | S | – | DONE |
 | Q-411 | cross | `/stories`: pro Story mit Screen „Zur Demo“-CTA (Route aus storyRegistry) | DEMO | M | – | OFFEN |
 | Q-412 | kita | Kita-Layouts: DemoSessionBar wenn Session-State (Meldefreigabe o. Ä.) aktiv — Parität AV/UG Reset-Hinweis | DEMO | M | Q-402 | OFFEN |
 
@@ -72,6 +72,7 @@ Autonomer Multi-Domain-Loop: [`docs/delivery/AUTONOMOUS_LOOP.md`](delivery/AUTON
 
 | ID | Kurz | Status |
 |----|------|--------|
+| Q-410 | Landing Sekundärlinks Hinweise/Lagebild intern | DONE |
 | Q-402 | Kita Meldekette E2E Freigabe→Lagebild (DEC-012) | DONE |
 | Q-401 | Kita E2E-Smoke Kernrouten + `test:e2e:kita` | DONE |
 | Q-400 | Autonomer Multi-Domain-Loop + Workflow | DONE |
@@ -81,7 +82,6 @@ Autonomer Multi-Domain-Loop: [`docs/delivery/AUTONOMOUS_LOOP.md`](delivery/AUTON
 | Q-305 | storyRegistry SSOT | DONE |
 | Q-304 | Deploy-Docs SSOT | DONE |
 | Q-303 | Journal-Rotation | DONE |
-| Q-302 | BUILD_STATE härten | DONE |
 
 ---
 

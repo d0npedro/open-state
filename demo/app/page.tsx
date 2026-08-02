@@ -15,6 +15,9 @@ const domains = [
     beschreibung: 'Sie haben Ihren Job verloren und möchten Unterstützung beantragen? Hier sehen Sie Ihren Antragsstatus, offene Aufgaben und alle Bescheide — in verständlicher Sprache.',
     href: '/fall',
     cta: 'Antrag öffnen',
+    /** Sekundär: Fairness/Verfahrenslage (US-AV-008), bürgernahe Bezeichnung */
+    secondaryHref: '/fall/hinweise',
+    secondaryCta: 'Hinweise zum Verfahren',
     farbe: '#003F8C',
     randfarbe: '#003F8C',
   },
@@ -27,6 +30,8 @@ const domains = [
     beschreibung: 'Sie möchten ein Unternehmen gründen? Alle notwendigen Behördenschritte — Gewerbeamt, Finanzamt, IHK — an einem Ort, mit Fristen und klaren Erklärungen.',
     href: '/gruendung',
     cta: 'Gründungsakte öffnen',
+    secondaryHref: '/gruendung/hinweise',
+    secondaryCta: 'Hinweise zum Verfahren',
     farbe: '#1a6335',
     randfarbe: '#1a6335',
   },
@@ -39,6 +44,9 @@ const domains = [
     beschreibung: 'Öffentlicher Transparenzbericht zu Kita-Plätzen: Versorgungsquoten, Wartezeiten und Kapazitäten — ohne Anmeldung, offen für alle Bürgerinnen und Bürger.',
     href: '/kita',
     cta: 'Transparenzbericht öffnen',
+    /** Internes JA-Lagebild — klar als intern/Demo kennzeichnen */
+    secondaryHref: '/kita/lagebild',
+    secondaryCta: 'Steuerungslagebild (intern)',
     farbe: '#6b21a8',
     randfarbe: '#6b21a8',
   },
@@ -133,15 +141,32 @@ export default function Home() {
                   {d.beschreibung}
                 </p>
 
-                {/* CTA — Großer, klarer Button */}
-                <Link
-                  href={d.href}
-                  className="btn btn-primary btn-full"
-                  style={{ background: d.farbe, marginTop: 'auto' }}
-                >
-                  {d.cta}
-                  <Icon name="arrow-right" size={18} />
-                </Link>
+                {/* Primär-CTA + optionaler Sekundärlink (Hinweise / interne Steuerung) */}
+                <div style={{ marginTop: 'auto', display: 'flex', flexDirection: 'column', gap: '0.65rem' }}>
+                  <Link
+                    href={d.href}
+                    className="btn btn-primary btn-full"
+                    style={{ background: d.farbe }}
+                  >
+                    {d.cta}
+                    <Icon name="arrow-right" size={18} />
+                  </Link>
+                  {d.secondaryHref && d.secondaryCta && (
+                    <Link
+                      href={d.secondaryHref}
+                      style={{
+                        fontSize: '0.875rem',
+                        color: d.farbe,
+                        textAlign: 'center',
+                        textDecoration: 'underline',
+                        textUnderlineOffset: '0.15em',
+                        fontWeight: 600,
+                      }}
+                    >
+                      {d.secondaryCta}
+                    </Link>
+                  )}
+                </div>
               </div>
             ))}
           </div>

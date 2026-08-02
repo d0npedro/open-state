@@ -36,6 +36,23 @@ test.describe('Startseite', () => {
     ).toBeVisible();
   });
 
+  test('Sekundärlinks Hinweise / Steuerungslage (Q-410)', async ({ page }) => {
+    // AV + UG: bürgernahe Verfahrenshinweise; Kita: intern gekennzeichnet
+    const avHint = page.getByRole('link', { name: /^Hinweise zum Verfahren$/i }).first();
+    await expect(avHint).toHaveAttribute('href', '/fall/hinweise');
+    await expect(
+      page.getByRole('link', { name: /^Hinweise zum Verfahren$/i }).nth(1)
+    ).toHaveAttribute('href', '/gruendung/hinweise');
+    const kitaIntern = page.getByRole('link', { name: /Steuerungslagebild \(intern\)/i });
+    await expect(kitaIntern).toBeVisible();
+    await expect(kitaIntern).toHaveAttribute('href', '/kita/lagebild');
+    await kitaIntern.click();
+    await expect(page).toHaveURL('/kita/lagebild');
+    await expect(
+      page.getByRole('heading', { level: 1, name: /Steuerungslagebild Kindertagesbetreuung/i })
+    ).toBeVisible();
+  });
+
   test('Demo-Hinweis ist sichtbar', async ({ page }) => {
     await expect(page.getByText(/Alle Daten sind fiktiv/).first()).toBeVisible();
   });
