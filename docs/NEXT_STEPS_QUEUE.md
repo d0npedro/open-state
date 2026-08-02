@@ -90,12 +90,21 @@ Autonomer Multi-Domain-Loop: [`docs/delivery/AUTONOMOUS_LOOP.md`](delivery/AUTON
 | Q-461 | cross | E2E Skip-Link auf `/stories` und `/feedback` (main-Fokus) | DEMO | S | Q-451 | DONE |
 | Q-462 | av | E2E: Session-Reset DemoSessionBar nach RQ-Antwort leert Fairness-RQ-Signal | DEMO | S | Q-440 | DONE |
 
+### Loop-Katalog (Auffüllung nach Q-462)
+
+| ID | Domäne | Schritt | Typ | Aufwand | Abhängigkeit | Status |
+|----|--------|---------|-----|---------|--------------|--------|
+| Q-470 | ug | E2E: Session-Reset DemoSessionBar nach RQ-Antwort stellt Fairness-RQ-Signal wieder her (Parität Q-462) | DEMO | S | Q-441 | DONE |
+| Q-471 | kita | E2E Skip-Link: Fokus auf `main#main-content` für Kita-Kernrouten (`/kita`, `/kita/lagebild`) | DEMO | S | Q-401 | OFFEN |
+| Q-472 | ug | E2E Skip-Link: Fokus `main#main-content` für `/gruendung` und `/gruendung/hinweise` (Parität Q-451) | DEMO | S | Q-451 | OFFEN |
+
 ---
 
 ## Kürzlicher DONE-Tail (letzte ~10)
 
 | ID | Kurz | Status |
 |----|------|--------|
+| Q-470 | UG Session-Reset nach RQ stellt Fairness-RQ wieder her | DONE |
 | Q-462 | AV Session-Reset nach RQ stellt Fairness-RQ wieder her | DONE |
 | Q-461 | Skip-Link /stories und /feedback E2E | DONE |
 | Q-460 | Kita Lagebild Druck/CSV a11y Labels | DONE |
@@ -105,7 +114,6 @@ Autonomer Multi-Domain-Loop: [`docs/delivery/AUTONOMOUS_LOOP.md`](delivery/AUTON
 | Q-442 | Kita E2E Session-Reset DemoSessionBar Lagebild | DONE |
 | Q-441 | UG E2E BG-Happy-Path Hinweise→Markierung | DONE |
 | Q-440 | AV E2E Fairness-Leerzustand nach Aktionen | DONE |
-| Q-432 | TRACEABILITY_MATRIX Stub + SSOT storyRegistry | DONE |
 
 ---
 

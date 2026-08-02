@@ -1755,6 +1755,70 @@ test.describe('UG – Hinweise zur Verfahrenslage', () => {
     await expect(hint).not.toContainText(/Offene Rückfragen zuerst klären/i);
   });
 
+  test('Q-470: DemoSessionBar-Reset nach RQ stellt Fairness-RQ-Signal wieder her', async ({
+    page,
+  }) => {
+    // Parität AV Q-462: Session-Antwort → Signal weg → Reset → Mock/RQ-Signal zurück
+    // Kein page.goto nach Interaktion (DEC-012)
+    const { goUgTab } = await import('./helpers/sessionNav');
+
+    // 1) Ausgang: offenes RQ-Signal auf Hinweise
+    await expect(page.getByTestId('hinweise-rq-cta-RQ-01')).toBeVisible();
+    await expect(
+      page.locator('[data-signal-typ="UG_RUECKFRAGE_OFFEN_FRIST_RELEVANT"]')
+    ).toHaveCount(1);
+    await expect(page.getByRole('region', { name: /Demo-Session/i })).toHaveCount(0);
+
+    // 2) RQ beantworten (UG: ein Klick) → Session-Bar an
+    await goUgTab(page, 'Fragen', /\/gruendung\/rueckfragen/);
+    await page.getByRole('button', { name: /Rückfrage beantworten/i }).click();
+    await expect(page.getByText(/die Behörde wurde informiert|beantwortet/i).first()).toBeVisible();
+    await expect(page.getByText('Alle Fragen sind beantwortet')).toBeVisible();
+
+    const sessionBar = page.getByRole('region', { name: /Demo-Session/i });
+    await expect(sessionBar).toBeVisible();
+    await expect(sessionBar.getByRole('button', { name: /Demo zurücksetzen/i })).toBeVisible();
+
+    // 3) Session-Nav → Hinweise: RQ-CTA/Signal entfallen, Regelwerk-Reaktion
+    await goUgTab(page, 'Hinweise', /\/gruendung\/hinweise/);
+    await expect(page.getByTestId('hinweise-rq-cta-RQ-01')).toHaveCount(0);
+    await expect(
+      page.locator('[data-signal-typ="UG_RUECKFRAGE_OFFEN_FRIST_RELEVANT"]')
+    ).toHaveCount(0);
+    await expect(page.getByTestId('hinweise-regelwerk-reaktion')).toBeVisible();
+    await expect(page.getByTestId('hinweise-signal-geloest')).toBeVisible();
+    await expect(page.getByRole('region', { name: /Demo-Session/i })).toBeVisible();
+
+    // 4) Demo zurücksetzen (UG-Reset remountet nicht)
+    await page
+      .getByRole('region', { name: /Demo-Session/i })
+      .getByRole('button', { name: /Demo zurücksetzen/i })
+      .click();
+
+    await expect(page.getByRole('region', { name: /Demo-Session/i })).toHaveCount(0);
+    await expect(page.getByTestId('hinweise-signal-geloest')).toHaveCount(0);
+
+    // Fairness-RQ wieder Ausgangs-Mock
+    await expect(page.getByTestId('hinweise-rq-cta-RQ-01')).toBeVisible();
+    await expect(page.getByTestId('hinweise-rq-cta-RQ-01')).toHaveAttribute(
+      'href',
+      '/gruendung/rueckfragen#rq-RQ-01'
+    );
+    await expect(
+      page.locator('[data-signal-typ="UG_RUECKFRAGE_OFFEN_FRIST_RELEVANT"]')
+    ).toHaveCount(1);
+    await expect(page.getByTestId('hinweise-relevant-UG-RQ-RQ-01-FRIST')).toBeVisible();
+    await expect(page.getByTestId('hinweise-relevant-UG-RQ-RQ-01-FRIST')).toContainText(
+      /Rückfrage offen/i
+    );
+
+    // 5) Rückfragen-Seite konsistent (Session-Nav)
+    await goUgTab(page, 'Fragen', /\/gruendung\/rueckfragen/);
+    await expect(page.getByRole('button', { name: /Rückfrage beantworten/i })).toBeVisible();
+    await expect(page.getByText('Alle Fragen sind beantwortet')).toHaveCount(0);
+    await expect(page.getByRole('region', { name: /Demo-Session/i })).toHaveCount(0);
+  });
+
 });
 
 // ─── Verlauf ──────────────────────────────────────────────────────────────────

@@ -5,13 +5,13 @@ Regeln: `docs/delivery/AUTONOMOUS_LOOP.md`.
 
 | Feld | Wert |
 |------|------|
-| `next_domain` | `ug` |
-| `last_domain` | `av` |
-| `last_queue_id` | `Q-462` |
-| `last_commit` | 0dc3ab7 |
-| `fires_total` | 21 |
+| `next_domain` | `kita` |
+| `last_domain` | `ug` |
+| `last_queue_id` | `Q-470` |
+| `last_commit` | pending |
+| `fires_total` | 22 |
 | `consecutive_idle` | 0 |
-| `updated` | 2026-08-03 (Q-462 AV Session-Reset Fairness-RQ) |
+| `updated` | 2026-08-03 (Q-470 UG Session-Reset Fairness-RQ) |
 
 ## Domänen-Reihenfolge
 
