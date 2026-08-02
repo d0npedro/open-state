@@ -1,6 +1,6 @@
 # BUILD_STATE.md – Aktueller Projektstand
 
-Zuletzt aktualisiert: nach Q-300 Rewrite-Summaries nach `archive/rewrites/` (Phase 0.1)
+Zuletzt aktualisiert: nach Q-301 Queue-Split aktiv vs. `docs/delivery/queue-archive/` (Phase 0.2)
 
 Dieser Stand beschreibt, was tatsächlich existiert und funktioniert.
 Nicht was geplant ist. Für geplante Schritte → `NEXT_STEPS_QUEUE.md`.
@@ -375,10 +375,11 @@ Strukturelles Aufräumen (Priorität 0): → `docs/REPO_REFACTORING_PLAN.md`.
 |-------|--------|
 | `AGENTS.md` | ✓ |
 | `docs/DELIVERY_SYSTEM.md` | ✓ |
-| `docs/NEXT_STEPS_QUEUE.md` | ✓ (Priorität 0: nächster Schritt Q-301 Queue-Split) |
+| `docs/NEXT_STEPS_QUEUE.md` | ✓ schlanke Arbeitsliste (Q-301); nächster OFFEN Q-302 BUILD_STATE härten |
+| `docs/delivery/queue-archive/` | ✓ DONE-Historie Q-001–Q-300; Index `README.md` (Q-301) |
 | `docs/BUILD_STATE.md` | ✓ (diese Datei; Härten geplant Q-302) |
 | `docs/DECISION_LOG.md` | ✓ (DEC-011 strukturelles Refactoring) |
-| `docs/REPO_REFACTORING_PLAN.md` | ✓ Analyse + Phasenplan (Q-299) |
+| `docs/REPO_REFACTORING_PLAN.md` | ✓ Analyse + Phasenplan (Q-299); Phase 0.1–0.2 DONE |
 | `archive/rewrites/` | ✓ Historische REPO_* Summaries (Q-300); Index `archive/rewrites/README.md` |
 
 ---
@@ -387,7 +388,7 @@ Strukturelles Aufräumen (Priorität 0): → `docs/REPO_REFACTORING_PLAN.md`.
 
 | Lücke | Demo-Auswirkung | Queue-ID |
 |-------|----------------|----------|
-| Repo-Struktur / Delivery aufgebläht (Queue-Archiv, BUILD_STATE-Chronik, Journal-Länge; Root-Rewrite-Summaries erledigt Q-300) | Hohe kognitive Last; teure Iterationen | Q-301–Q-307 (Plan Q-299 ✓, Archive Q-300 ✓) |
+| Repo-Struktur / Delivery teilweise entlastet; BUILD_STATE-Chronik, Journal-Länge, Deploy-Docs-Duplikate offen | Hohe kognitive Last bei BUILD_STATE/Journals | Q-302–Q-307 (Plan Q-299 ✓, rewrites Q-300 ✓, Queue-Split Q-301 ✓) |
 | ~~Fairness-Fristen sind statische Zahlen~~ | ~~Glaubwürdigkeitsproblem~~ | Q-004 ✓ |
 | ~~Demo vollständig statisch~~ | ~~Demo wirkt wie Slideshow~~ | Q-031 ✓ |
 | ~~Dokument-Upload ohne State~~ | ~~Upload-Alert nur, kein Fairness-Effekt~~ | Q-071 ✓ |

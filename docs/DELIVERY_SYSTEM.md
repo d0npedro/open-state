@@ -33,12 +33,16 @@ Verstehen:
 
 ### Schritt 3 – NEXT_STEPS_QUEUE.md lesen
 
-→ `docs/NEXT_STEPS_QUEUE.md`
+→ `docs/NEXT_STEPS_QUEUE.md` (aktive Arbeitsliste: `OFFEN` / `IN_ARBEIT` / `BLOCKIERT` + kurzer DONE-Tail)
 
 Den obersten Eintrag mit Status `OFFEN` identifizieren.
 Prüfen: Ist dieser Schritt jetzt implementierbar? Gibt es fehlende Abhängigkeiten?
 
 Wenn nicht implementierbar → nächsten offenen Schritt wählen, Grund für Überspringen notieren.
+
+**DONE-Historie:** nicht in der aktiven Queue nachschlagen — → `docs/delivery/queue-archive/`
+(Index: `docs/delivery/queue-archive/README.md`). Agenten lesen das Archiv nur bei Bedarf
+(Commit-Hash, Abhängigkeitskette), nicht in jedem Lauf.
 
 ---
 
@@ -90,8 +94,10 @@ Kein Massen-Rewrite nicht betroffener Dokumentation.
 ### Schritt 8 – NEXT_STEPS_QUEUE.md aktualisieren
 
 Abgeschlossenen Schritt auf `DONE` setzen.
-Commit-Hash eintragen.
+Commit-Hash eintragen (im DONE-Tail oder in der Status-Zelle).
 Falls sich neue Folgeschritte ergeben haben → ergänzen.
+DONE-Tail auf ca. die letzten ~10 Einträge begrenzen; ältere DONE → bei Meilenstein nach
+`docs/delivery/queue-archive/` auslagern (nicht löschen).
 
 ---
 
