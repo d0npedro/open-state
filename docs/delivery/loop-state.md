@@ -8,7 +8,7 @@ Regeln: `docs/delivery/AUTONOMOUS_LOOP.md`.
 | `next_domain` | `av` |
 | `last_domain` | `cross` |
 | `last_queue_id` | `Q-461` |
-| `last_commit` | pending |
+| `last_commit` | a316a43 |
 | `fires_total` | 20 |
 | `consecutive_idle` | 0 |
 | `updated` | 2026-08-03 (Q-461 Skip-Link stories/feedback) |
