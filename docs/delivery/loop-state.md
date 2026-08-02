@@ -5,13 +5,13 @@ Regeln: `docs/delivery/AUTONOMOUS_LOOP.md`.
 
 | Feld | Wert |
 |------|------|
-| `next_domain` | `kita` |
-| `last_domain` | `ug` |
-| `last_queue_id` | `Q-490` |
-| `last_commit` | 2bafd23 |
-| `fires_total` | 28 |
+| `next_domain` | `cross` |
+| `last_domain` | `kita` |
+| `last_queue_id` | `Q-491` |
+| `last_commit` | pending |
+| `fires_total` | 29 |
 | `consecutive_idle` | 0 |
-| `updated` | 2026-08-03 (Q-490 UG Keyboard-Smoke Tabs) |
+| `updated` | 2026-08-03 (Q-491 Kita Tagesstand Export a11y) |
 
 ## Domänen-Reihenfolge
 

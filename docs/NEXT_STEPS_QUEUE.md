@@ -111,7 +111,7 @@ Autonomer Multi-Domain-Loop: [`docs/delivery/AUTONOMOUS_LOOP.md`](delivery/AUTON
 | ID | Domäne | Schritt | Typ | Aufwand | Abhängigkeit | Status |
 |----|--------|---------|-----|---------|--------------|--------|
 | Q-490 | ug | a11y + E2E: UG-Tabs `role=tablist/tab` + Keyboard-Smoke Enter-Navigation (Parität Q-482) | DEMO | S | Q-472 | DONE |
-| Q-491 | kita | a11y + E2E: Tagesstand Druck-Button mit zugänglichem Namen (Parität CSV/Einrichtung) | DEMO | S | Q-480 | OFFEN |
+| Q-491 | kita | a11y + E2E: Tagesstand Druck-Button mit zugänglichem Namen (Parität CSV/Einrichtung) | DEMO | S | Q-480 | DONE |
 | Q-492 | cross | E2E a11y: ThemeSwitcher hat zugänglichen Namen und ändert `data-theme` | DEMO | S | – | OFFEN |
 
 ---
@@ -120,6 +120,7 @@ Autonomer Multi-Domain-Loop: [`docs/delivery/AUTONOMOUS_LOOP.md`](delivery/AUTON
 
 | ID | Kurz | Status |
 |----|------|--------|
+| Q-491 | Kita Tagesstand Druck/CSV a11y Labels | DONE |
 | Q-490 | UG Tabs role=tab + Keyboard-Smoke Enter | DONE |
 | Q-482 | AV Keyboard-Smoke Fall-Tabs Enter-Navigation | DONE |
 | Q-481 | Kita E2E-Smoke Bedarfsplanung/Vorlage/Monatsbericht/Meldung | DONE |
@@ -129,7 +130,6 @@ Autonomer Multi-Domain-Loop: [`docs/delivery/AUTONOMOUS_LOOP.md`](delivery/AUTON
 | Q-470 | UG Session-Reset nach RQ stellt Fairness-RQ wieder her | DONE |
 | Q-462 | AV Session-Reset nach RQ stellt Fairness-RQ wieder her | DONE |
 | Q-461 | Skip-Link /stories und /feedback E2E | DONE |
-| Q-460 | Kita Lagebild Druck/CSV a11y Labels | DONE |
 
 ---
 

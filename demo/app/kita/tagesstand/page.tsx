@@ -431,6 +431,7 @@ export default function KitaTagesstandPage() {
             }
             style={{ fontSize: '0.875rem' }}
             aria-label="Tagesstand-Aggregate als CSV herunterladen (keine Kind- oder Personennamen)"
+            data-testid="kita-tagesstand-csv-download"
           >
             CSV exportieren
           </button>
@@ -439,6 +440,8 @@ export default function KitaTagesstandPage() {
             className="btn btn-secondary"
             onClick={() => window.print()}
             style={{ fontSize: '0.875rem' }}
+            aria-label="Tagesstand drucken oder als PDF speichern (keine Kind- oder Personennamen)"
+            data-testid="kita-tagesstand-druck"
           >
             Drucken / als PDF speichern
           </button>
