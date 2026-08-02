@@ -8,7 +8,7 @@ Regeln: `docs/delivery/AUTONOMOUS_LOOP.md`.
 | `next_domain` | `kita` |
 | `last_domain` | `ug` |
 | `last_queue_id` | `Q-452` |
-| `last_commit` | pending |
+| `last_commit` | fd81efc |
 | `fires_total` | 18 |
 | `consecutive_idle` | 0 |
 | `updated` | 2026-08-03 (Q-452 UG Behörden a11y Labels) |
