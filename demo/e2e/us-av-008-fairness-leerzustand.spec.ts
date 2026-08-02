@@ -1,11 +1,16 @@
 /**
  * US-AV-008 / Q-440 – Fairness nach Erledigung offener Aktionen
+ * US-AV-008 / Q-462 – Session-Reset nach RQ-Antwort stellt Fairness-RQ wieder her
  *
  * Nach Session-Antwort auf Rückfrage + Upload aller offenen Unterlagen:
  * - keine hängenden Aktions-Signale (RQ, Unterlagen, Fall pausiert)
  * - keine RELEVANT-Sektion / keine Aktions-CTAs
  * - Regelwerk-Reaktion sichtbar
  * - Session-Nav (kein page.goto nach Interaktion, DEC-012)
+ *
+ * Nach nur RQ-Antwort + DemoSessionBar-Reset:
+ * - Session-Delta (Antwort, „gelöst“) weg
+ * - Fairness-RQ-Signal wieder Ausgangs-Mock (offen mit Frist)
  *
  * Hinweis: BESCHEID_VORLAEUFIG kann bleiben (Sachlage, keine Bürger-Aktion in der Demo).
  */
@@ -19,12 +24,16 @@ const AKTIONS_TYPEN = [
   'FALL_PAUSIERT',
 ] as const;
 
+async function rueckfrageBeantworten(page: import('@playwright/test').Page) {
+  await page.getByRole('button', { name: /Jetzt beantworten|Rückfrage beantworten/i }).click();
+  await page.getByTestId('rq-antwort-absenden').click();
+}
+
 async function erledigeOffeneAktionen(page: import('@playwright/test').Page) {
   await page.goto('/fall/rueckfragen');
   await expect(page.getByTestId('fairness-signal-rueckfrage')).toBeVisible();
 
-  await page.getByRole('button', { name: /Jetzt beantworten|Rückfrage beantworten/i }).click();
-  await page.getByTestId('rq-antwort-absenden').click();
+  await rueckfrageBeantworten(page);
   await expect(page.getByTestId('fairness-signal-rueckfrage')).toHaveCount(0);
 
   await goFallTab(page, 'Unterlagen', /\/fall\/dokumente/);
@@ -79,5 +88,61 @@ test.describe('US-AV-008 – Fairness-Leerzustand nach offenen Aktionen (Q-440)'
       const typ = await remaining.nth(i).getAttribute('data-signal-typ');
       expect(typ?.startsWith('BESCHEID_')).toBeTruthy();
     }
+  });
+});
+
+test.describe('US-AV-008 – Session-Reset nach RQ-Antwort (Q-462)', () => {
+  test('DemoSessionBar-Reset leert Session-Delta und stellt Fairness-RQ-Signal wieder her', async ({
+    page,
+  }) => {
+    // 1) Ausgang: offenes RQ-Signal
+    await page.goto('/fall/rueckfragen');
+    await expect(page.getByTestId('fairness-signal-rueckfrage')).toBeVisible();
+    await expect(page.getByRole('region', { name: /Demo-Session/i })).toHaveCount(0);
+
+    // 2) RQ beantworten → Signal weg, Session-Bar an
+    await rueckfrageBeantworten(page);
+    await expect(page.getByTestId('fairness-signal-rueckfrage')).toHaveCount(0);
+    await expect(page.getByText('Alle Fragen sind beantwortet')).toBeVisible();
+
+    const sessionBar = page.getByRole('region', { name: /Demo-Session/i });
+    await expect(sessionBar).toBeVisible();
+    await expect(sessionBar.getByRole('button', { name: /Demo zurücksetzen/i })).toBeVisible();
+
+    // 3) Session-Nav → Hinweise: RQ-Signal entfallen, Regelwerk-Reaktion sichtbar
+    await goFallTab(page, 'Übersicht', /\/fall$/);
+    await page.getByTestId('uebersicht-fairness-hinweise-link').click();
+    await expect(page).toHaveURL(/\/fall\/hinweise/);
+
+    await expect(page.getByTestId('hinweise-signal-rueckfrage')).toHaveCount(0);
+    await expect(page.getByTestId('hinweise-rq-cta')).toHaveCount(0);
+    await expect(page.getByTestId('hinweise-regelwerk-reaktion')).toBeVisible();
+    await expect(page.getByTestId('hinweise-signal-geloest')).toBeVisible();
+    await expect(page.getByRole('region', { name: /Demo-Session/i })).toBeVisible();
+
+    // 4) Demo zurücksetzen (kein page.goto; AV-Reset remountet nicht)
+    await page
+      .getByRole('region', { name: /Demo-Session/i })
+      .getByRole('button', { name: /Demo zurücksetzen/i })
+      .click();
+
+    // Session-Bar weg; Session-Delta (Antwort / „gelöst“) geleert
+    await expect(page.getByRole('region', { name: /Demo-Session/i })).toHaveCount(0);
+    await expect(page.getByTestId('hinweise-signal-geloest')).toHaveCount(0);
+
+    // Fairness-RQ-Signal wieder Ausgangs-Mock (offen mit Frist)
+    await expect(page.getByTestId('hinweise-signal-rueckfrage')).toBeVisible();
+    await expect(page.getByTestId('hinweise-signal-rueckfrage-titel')).toContainText(
+      /Rückfrage offen – Frist noch 2 Tage/i
+    );
+    await expect(page.getByTestId('hinweise-rq-cta')).toBeVisible();
+    await expect(page.locator('[data-signal-typ="RUECKFRAGE_OFFEN_FRIST_RELEVANT"]')).toHaveCount(1);
+
+    // 5) Auch auf Rückfragen-Seite konsistent (Session-Nav, DEC-012)
+    await goFallTab(page, 'Fragen', /\/fall\/rueckfragen/);
+    await expect(page.getByTestId('fairness-signal-rueckfrage')).toBeVisible();
+    await expect(page.getByRole('button', { name: /Rückfrage beantworten/i })).toBeVisible();
+    await expect(page.getByText('Alle Fragen sind beantwortet')).toHaveCount(0);
+    await expect(page.getByRole('region', { name: /Demo-Session/i })).toHaveCount(0);
   });
 });

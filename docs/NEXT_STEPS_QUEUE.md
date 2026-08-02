@@ -88,7 +88,7 @@ Autonomer Multi-Domain-Loop: [`docs/delivery/AUTONOMOUS_LOOP.md`](delivery/AUTON
 |----|--------|---------|-----|---------|--------------|--------|
 | Q-460 | kita | E2E a11y: Lagebild Druck/CSV-Buttons mit zugänglichem Namen (labeled) | DEMO | S | Q-422 | DONE |
 | Q-461 | cross | E2E Skip-Link auf `/stories` und `/feedback` (main-Fokus) | DEMO | S | Q-451 | DONE |
-| Q-462 | av | E2E: Session-Reset DemoSessionBar nach RQ-Antwort leert Fairness-RQ-Signal | DEMO | S | Q-440 | OFFEN |
+| Q-462 | av | E2E: Session-Reset DemoSessionBar nach RQ-Antwort leert Fairness-RQ-Signal | DEMO | S | Q-440 | DONE |
 
 ---
 
@@ -96,6 +96,7 @@ Autonomer Multi-Domain-Loop: [`docs/delivery/AUTONOMOUS_LOOP.md`](delivery/AUTON
 
 | ID | Kurz | Status |
 |----|------|--------|
+| Q-462 | AV Session-Reset nach RQ stellt Fairness-RQ wieder her | DONE |
 | Q-461 | Skip-Link /stories und /feedback E2E | DONE |
 | Q-460 | Kita Lagebild Druck/CSV a11y Labels | DONE |
 | Q-452 | UG a11y Behördenkarten + BG-Button Labels | DONE |
@@ -105,7 +106,6 @@ Autonomer Multi-Domain-Loop: [`docs/delivery/AUTONOMOUS_LOOP.md`](delivery/AUTON
 | Q-441 | UG E2E BG-Happy-Path Hinweise→Markierung | DONE |
 | Q-440 | AV E2E Fairness-Leerzustand nach Aktionen | DONE |
 | Q-432 | TRACEABILITY_MATRIX Stub + SSOT storyRegistry | DONE |
-| Q-431 | Kita README Related-Links 13/14 + ADR KiJuP | DONE |
 
 ---
 
