@@ -8,7 +8,7 @@ Regeln: `docs/delivery/AUTONOMOUS_LOOP.md`.
 | `next_domain` | `ug` |
 | `last_domain` | `av` |
 | `last_queue_id` | `Q-440` |
-| `last_commit` | pending |
+| `last_commit` | c10ca31 |
 | `fires_total` | 13 |
 | `consecutive_idle` | 0 |
 | `updated` | 2026-08-03 (Q-440 AV Fairness-Leerzustand E2E) |
