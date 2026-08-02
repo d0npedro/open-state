@@ -8,7 +8,7 @@ Regeln: `docs/delivery/AUTONOMOUS_LOOP.md`.
 | `next_domain` | `kita` |
 | `last_domain` | `ug` |
 | `last_queue_id` | `Q-441` |
-| `last_commit` | pending |
+| `last_commit` | 154e4f1 |
 | `fires_total` | 14 |
 | `consecutive_idle` | 0 |
 | `updated` | 2026-08-03 (Q-441 UG BG-Happy-Path E2E) |
