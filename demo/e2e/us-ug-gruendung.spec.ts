@@ -1618,6 +1618,49 @@ test.describe('UG – Hinweise zur Verfahrenslage', () => {
     await expect(betriebsHint).not.toContainText(/offene Rückfrage des Finanzamts klären/i);
   });
 
+  test('Q-441: BG-Happy-Path Hinweise-CTA → Markierung → Mehrflächen (DEC-012)', async ({ page }) => {
+    // Happy-Path: Fairness-CTA → Behördenkarte → Demo-Markierung → Session bleibt
+    // auf Hinweise / Verlauf / Übersicht sichtbar erledigt (kein page.goto nach Interaktion)
+    // Signal-Prefix: RELEVANT oder HINWEIS je nach Frist (data-signal-id ist stabil)
+    const { goUgTab } = await import('./helpers/sessionNav');
+    const bgSignal = page.locator('[data-signal-id="UG-BG-ANMELDUNG"]');
+
+    await expect(bgSignal).toBeVisible();
+    await expect(page.getByTestId('hinweise-bg-cta-BEH-04')).toBeVisible();
+    await page.getByTestId('hinweise-bg-cta-BEH-04').click();
+    await expect(page).toHaveURL(/\/gruendung\/behoerden#beh-BEH-04/);
+    await expect(page.getByTestId('behoerde-karte-BEH-04')).toBeVisible();
+    await expect(page.getByTestId('behoerde-bg-demo-aktion')).toBeVisible();
+
+    await page.getByTestId('behoerde-bg-erledigt-btn').click();
+    await expect(page.getByTestId('behoerde-bg-erledigt-quittung')).toBeVisible();
+    await expect(page.getByTestId('behoerde-karte-BEH-04')).toContainText(/Abgeschlossen/i);
+    await expect(page.getByTestId('behoerde-schritt-VS-07')).toContainText(/Erledigt/i);
+    await expect(page.getByTestId('behoerde-bg-demo-aktion')).toHaveCount(0);
+
+    // Hinweise: BG-Signal und -CTA entfallen
+    await goUgTab(page, 'Hinweise', /\/gruendung\/hinweise/);
+    await expect(page.locator('[data-signal-id="UG-BG-ANMELDUNG"]')).toHaveCount(0);
+    await expect(page.getByTestId('hinweise-bg-cta-BEH-04')).toHaveCount(0);
+    await expect(page.getByTestId('hinweise-regelwerk-reaktion')).toBeVisible();
+    await expect(page.getByTestId('hinweise-signal-geloest')).toBeVisible();
+
+    // Verlauf: Session-Ereignis der Markierung
+    await goUgTab(page, 'Verlauf', /\/gruendung\/verlauf/);
+    await expect(page.getByText(/BG-Anmeldung als erledigt markiert/i).first()).toBeVisible();
+
+    // Übersicht: keine BG-Aufgabe / kein BG-Fairness-CTA
+    await goUgTab(page, 'Übersicht', /\/gruendung$/);
+    await expect(page.getByTestId('uebersicht-aufgabe-link-beh-BEH-04')).toHaveCount(0);
+    await expect(page.getByTestId('uebersicht-fairness-cta-beh-BEH-04')).toHaveCount(0);
+    await expect(page.getByTestId('uebersicht-fairness-UG-BG-ANMELDUNG')).toHaveCount(0);
+
+    // Behörden: Quittung bleibt nach Tab-Runde (Session)
+    await goUgTab(page, 'Behörden', /\/gruendung\/behoerden/);
+    await expect(page.getByTestId('behoerde-bg-erledigt-quittung')).toBeVisible();
+    await expect(page.getByTestId('behoerde-karte-BEH-04')).toContainText(/Abgeschlossen/i);
+  });
+
   test('INFO-Parallele-Behörden-Signal hat CTA „Zu den Behörden“', async ({ page }) => {
     const cta = page.getByTestId('hinweise-parallele-behoerden-cta');
     await expect(cta).toBeVisible();
