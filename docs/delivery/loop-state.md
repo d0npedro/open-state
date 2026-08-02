@@ -7,11 +7,11 @@ Regeln: `docs/delivery/AUTONOMOUS_LOOP.md`.
 |------|------|
 | `next_domain` | `cross` |
 | `last_domain` | `kita` |
-| `last_queue_id` | `Q-401` |
-| `last_commit` | b2f5b7b |
-| `fires_total` | 1 |
+| `last_queue_id` | `Q-402` |
+| `last_commit` | a10df8a |
+| `fires_total` | 2 |
 | `consecutive_idle` | 0 |
-| `updated` | 2026-08-02 (Q-401 Kita E2E-Smoke) |
+| `updated` | 2026-08-02 (Q-402 Kita Meldekette E2E) |
 
 ## Domänen-Reihenfolge
 

@@ -25,3 +25,14 @@ export async function goUgTab(page: Page, label: string | RegExp, urlPart: strin
   await clickDomainTab(page, label);
   await expect(page).toHaveURL(urlPart);
 }
+
+/**
+ * Kita: Client-Nav über die Domain-Header-Links (kein `.tab-nav-item`).
+ * Nach Session-Interaktion (localStorage-Meldefreigabe) statt page.goto verwenden.
+ */
+export async function goKitaNav(page: Page, label: string | RegExp, urlPart: string | RegExp) {
+  const link = page.locator('nav a').filter({ hasText: label }).first();
+  await expect(link).toBeVisible();
+  await link.click();
+  await expect(page).toHaveURL(urlPart);
+}
