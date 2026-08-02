@@ -4,7 +4,8 @@ Jeder Schritt ist einzeln umsetzbar.
 Abhängigkeiten sind notiert.
 Status: `OFFEN` | `IN_ARBEIT` | `DONE` | `BLOCKIERT`
 
-Befehl: „Entwickle weiter" → obersten `OFFEN`-Eintrag nehmen und umsetzen.
+Befehl: „Entwickle weiter" → obersten `OFFEN`-Eintrag nehmen und umsetzen.  
+Autonomer Multi-Domain-Loop: [`docs/delivery/AUTONOMOUS_LOOP.md`](delivery/AUTONOMOUS_LOOP.md) · State: [`loop-state.md`](delivery/loop-state.md)
 
 **DONE-Historie (Q-001–Q-300):** [`docs/delivery/queue-archive/DONE_Q001-Q300.md`](delivery/queue-archive/DONE_Q001-Q300.md)  
 **Archiv-Index:** [`docs/delivery/queue-archive/README.md`](delivery/queue-archive/README.md)
@@ -15,71 +16,72 @@ Befehl: „Entwickle weiter" → obersten `OFFEN`-Eintrag nehmen und umsetzen.
 
 - **Typ:** `DEMO` = UI/Code in demo/ | `DOCS` = Dokumentation | `ARCH` = Architektur | `CHORE` = Infrastruktur
 - **Aufwand:** S (< 1h) / M (1–3h) / L (3h+)
+- **Domäne:** `av` | `ug` | `kita` | `cross` (für Loop-Rotation)
 - **Abhängigkeit:** welche Schritt-ID muss vorher DONE sein
 
 ---
 
 ## Priorisierungslogik
 
-1. Technische Korrektheit und Build-Stabilität vor neuen Seitengleisen
-2. Sichtbarer Produktwert vor Dokumentationspflege
-3. Klickbare Demo vor zusätzlicher Story-Verwaltung
-4. Anti-Growth (DEC-013): Queue/BUILD_STATE schlank; kein Endlos-Feinschliff nach DEMO-stabil
-5. ~~Priorität 0 Refactoring (DEC-011)~~ — Q-299–Q-307 erledigt; Anti-Growth dauerhaft DEC-013
+1. Technische Korrektheit / E2E-Lücken vor Kosmetik
+2. Sichtbarer Produktwert vor reiner Dokumentationspflege
+3. Domänen-Rotation (loop-state): Lücken in untertesteten Bereichen (aktuell Kita-E2E) bevorzugen
+4. Anti-Growth (DEC-013): kein Micro-Feinschliff nach DEMO-stabil; Queue/BUILD_STATE schlank
+5. Autonomer Loop darf Queue aus Katalog auffüllen (max. 3), wenn leer — siehe AUTONOMOUS_LOOP.md
 
 ---
 
 ## Queue (aktiv)
 
-### Priorität 0 – Strukturelles Repo-Refactoring (Navigation & Delivery)
+### Autonomie-Betrieb & Qualität
 
-Kein Feature-Zuwachs in dieser Spur. Ziel: kognitive Last senken, Historie archivieren,
-Delivery-Dateien wieder zu Arbeitswerkzeugen machen.
-Plan: [`docs/REPO_REFACTORING_PLAN.md`](REPO_REFACTORING_PLAN.md).
+| ID | Domäne | Schritt | Typ | Aufwand | Abhängigkeit | Status |
+|----|--------|---------|-----|---------|--------------|--------|
+| Q-400 | cross | Autonomer Multi-Domain-Loop: `AUTONOMOUS_LOOP.md`, `loop-state.md`, Queue-Katalog, Workflow `.grok/workflows/autonomous-develop.rhai` | CHORE | M | – | DONE |
+| Q-401 | kita | E2E-Smoke Kita: Landing/Transparenz, Lagebild, Einrichtung, Tagesstand — Kernrouten erreichbar, h1, DEC-004-Hinweis wo relevant | DEMO | M | Q-400 | OFFEN |
+| Q-402 | kita | E2E Meldekette: Session-Freigabe Meldung → Meldeeingang Lagebild sichtbar (kein page.goto nach Interaktion; Client-Nav) | DEMO | M | Q-401 | OFFEN |
+| Q-403 | cross | BUILD_STATE: E2E-Zähler und letzte Prüfung auf aktuellen Stand (316 / ca5ccf9-Ära) bringen | DOCS | S | Q-400 | OFFEN |
 
-| ID | Schritt | Typ | Aufwand | Abhängigkeit | Status |
-|----|---------|-----|---------|--------------|--------|
-| Q-299 | Fundierte Refactoring-Analyse + priorisierter Plan (`docs/REPO_REFACTORING_PLAN.md`) | DOCS | M | – | DONE |
-| Q-300 | Phase 0.1: `archive/rewrites/` + Root-`REPO_*` dorthin; README-Hinweis | DOCS | S | Q-299 | DONE |
-| Q-301 | Phase 0.2: `NEXT_STEPS_QUEUE.md` splitten — aktive Queue vs. `docs/delivery/queue-archive/` | DOCS | M | Q-300 | DONE |
-| Q-302 | Phase 0.3: `BUILD_STATE.md` auf Ist-Stand härten (kurze Routen-/Logik-Tabellen, keine Q-xxx-Chronik, nur echte Lücken) | DOCS | M | Q-301 | DONE |
-| Q-303 | Phase 0.4: Domain-Journals rotieren (aktiv ≤15 Iterationen; Rest → `archive/journals/`) | DOCS | S | Q-300 | DONE |
-| Q-304 | Phase 0.5: Deploy-Docs auf eine Führungsdatei zusammenführen; Stub-Verweise für die übrigen | DOCS | S | Q-300 | DONE |
-| Q-305 | Phase 1.1: Story-Registry Single Source (`storyRegistry.ts` führend; JSON generieren oder Docs entkoppeln) | CHORE | M | Q-302 | DONE |
-| Q-306 | Phase 2: `docs/README.md` Map of Content + Root-README straffen | DOCS | M | Q-302 | DONE |
-| Q-307 | Phase 3–4: Anti-Growth-Regeln in AGENTS.md, DELIVERY_SYSTEM.md, DECISION_LOG verankern | DOCS | S | Q-302 | DONE |
+### Cross-Domain Demo-Wert
 
----
+| ID | Domäne | Schritt | Typ | Aufwand | Abhängigkeit | Status |
+|----|--------|---------|-----|---------|--------------|--------|
+| Q-410 | cross | Landing: pro Domänen-Karte optionaler Sekundärlink „Steuerung/Hinweise“ wo sinnvoll (Kita→Lagebild intern kennzeichnen; AV/UG Hinweise) — ohne Developer-Jargon | DEMO | S | – | OFFEN |
+| Q-411 | cross | `/stories`: pro Story mit Screen „Zur Demo“-CTA (Route aus storyRegistry) | DEMO | M | – | OFFEN |
+| Q-412 | kita | Kita-Layouts: DemoSessionBar wenn Session-State (Meldefreigabe o. Ä.) aktiv — Parität AV/UG Reset-Hinweis | DEMO | M | Q-402 | OFFEN |
 
-### Feature-Backlog
+### Domänen-Qualität (nicht Micro-CTA)
 
-Strukturelle Priorität 0 (Q-299–Q-307) erledigt; DEC-011-Pause aufgehoben.  
-Weiter nach Priorisierungslogik oben; Anti-Growth DEC-013 gilt.  
-DONE-Feature-Historie: → [queue-archive](delivery/queue-archive/DONE_Q001-Q300.md).
+| ID | Domäne | Schritt | Typ | Aufwand | Abhängigkeit | Status |
+|----|--------|---------|-----|---------|--------------|--------|
+| Q-420 | av | A11y: Skip-Link + `main`-Landmark im Fall-Layout (bzw. Root-Layout), E2E-Smoke Fokus | DEMO | S | – | OFFEN |
+| Q-421 | ug | E2E: nach RQ+Upload+BG Ruhezustand/Übersicht ohne hängende Action-Banner (Regression) | DEMO | S | – | OFFEN |
+| Q-422 | kita | E2E: öffentlicher Bericht Filter Planungsraum + CSV-Download-Button erreichbar/labeled | DEMO | S | Q-401 | OFFEN |
 
-| ID | Schritt | Typ | Aufwand | Abhängigkeit | Status |
-|----|---------|-----|---------|--------------|--------|
-| Q-224 | UG Hinweise: UNTERLAGE-CTA `data-next-dok-id` + Hint mit nächster offener Bezeichnung (US-UG-003, Parität AV Hinweise Q-222) | DEMO | S | Q-219 | DONE |
+### Docs & Andockung
+
+| ID | Domäne | Schritt | Typ | Aufwand | Abhängigkeit | Status |
+|----|--------|---------|-----|---------|--------------|--------|
+| Q-430 | cross | Domain-README-Schablone (Problem, Demo-Routen, Stories, API, Grenzen) auf alle 3 Domains anwenden | DOCS | M | – | OFFEN |
+| Q-431 | kita | Kita-Domain-README: Related-Links Jugendamt-Module + KiJuP (13/14) ohne Inhaltsduplikat | DOCS | S | Q-430 | OFFEN |
+| Q-432 | cross | TRACEABILITY_MATRIX: auf SSOT `storyRegistry.ts` ausrichten (generieren oder schlanker Stub + Verweis) | DOCS | M | – | OFFEN |
 
 ---
 
 ## Kürzlicher DONE-Tail (letzte ~10)
 
-Nur Orientierung; Details und ältere IDs → [Archiv](delivery/queue-archive/DONE_Q001-Q300.md).
-
 | ID | Kurz | Status |
 |----|------|--------|
-| Q-224 | UG Hinweise UNTERLAGE `data-next-dok-id` + Bezeichnung (Parität AV Q-222) | DONE |
-| Q-307 | Anti-Growth in AGENTS/DELIVERY/DEC-013 + CONTRIBUTING | DONE |
-| Q-306 | docs/README Map of Content + Root-README straffen | DONE |
-| Q-305 | storyRegistry.ts SSOT + `npm run registry:export` → JSON | DONE |
-| Q-304 | Deploy-Docs → `DEPLOYMENT_AND_DEMO_STRATEGY.md` führend; Stubs | DONE |
-| Q-303 | Journal-Rotation ≤15 aktiv → `archive/journals/` | DONE |
-| Q-302 | BUILD_STATE Ist-Stand (Routen/Logik kurz, nur echte Lücken) | DONE |
-| Q-301 | Queue-Split aktiv vs. `docs/delivery/queue-archive/` | DONE |
-| Q-300 | Rewrite-Summaries → `archive/rewrites/` | DONE |
-| Q-299 | Refactoring-Plan + Priorität-0-Queue | DONE |
-| Q-223 | AV Übersicht Fairness UNTERLAGE-CTA live nächste Unterlage | DONE |
+| Q-400 | Autonomer Multi-Domain-Loop + Workflow | DONE |
+| Q-224 | UG Hinweise UNTERLAGE data-next-dok-id | DONE |
+| Q-307 | Anti-Growth DEC-013 | DONE |
+| Q-306 | docs/README + Root straffen | DONE |
+| Q-305 | storyRegistry SSOT | DONE |
+| Q-304 | Deploy-Docs SSOT | DONE |
+| Q-303 | Journal-Rotation | DONE |
+| Q-302 | BUILD_STATE härten | DONE |
+| Q-301 | Queue-Split | DONE |
+| Q-300 | archive/rewrites | DONE |
 
 ---
 
@@ -87,18 +89,16 @@ Nur Orientierung; Details und ältere IDs → [Archiv](delivery/queue-archive/DO
 
 | Baustein | Status |
 |---------|--------|
-| Demo-Routen AV `/fall/*`, UG `/gruendung/*`, Kita `/kita/*` | ✓ klickbar |
-| `/feedback` → GitHub Issues | ✓ |
-| BuildInfo-Footer (Env / Version / Commit-SHA) | ✓ |
-| Vercel-Deployment aus `demo/` | ✓ |
-| Theme-Architektur (4 Themes, Density) | ✓ |
-| Fairness-Regeln AV + UG session-sensitiv | ✓ |
-| Story-Registry AV + UG + KJ auf `/stories` | ✓ |
+| Demo-Routen AV `/fall/*`, UG `/gruendung/*`, Kita `/kita/*` | ✓ klickbar, DEMO-stabil Kern |
+| Fairness AV + UG session-sensitiv | ✓ |
+| Story-Registry SSOT + `/stories` | ✓ |
+| Theme-System | ✓ |
+| Build/Deploy demo/ | ✓ |
+| Strukturelles Refactoring Prio 0 | ✓ Q-299–307 |
 
 ---
 
 ## Archiv-Pflege
 
-- Neue DONE-Einträge: in aktiver Queue Status → `DONE`; Tail auf ~10 halten.
-- Bei Meilenstein (z. B. Phase 0 komplett): überschüssige DONE-Zeilen nach `docs/delivery/queue-archive/` auslagern.
-- Queue bleibt Arbeitsliste, kein Changelog (Anti-Growth §4).
+- DONE-Tail ≤ ~10; Rest → `docs/delivery/queue-archive/`
+- Queue = Arbeitsliste (Anti-Growth §4 / DEC-013)

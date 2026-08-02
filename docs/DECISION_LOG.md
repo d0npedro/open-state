@@ -238,6 +238,21 @@ Eine Demo-Domäne gilt als **DEMO-stabil**, wenn:
 3. Session-Interaktionen (soweit fachlich vorgesehen) und Fairness-Kern greifen live  
 4. Domain-E2E-Smoke bzw. `test:e2e:ci` im Supervisor-Pfad grün (wo etabliert)  
 
+---
+
+## DEC-014: Autonomer Multi-Domain-Weiterentwicklungs-Loop
+
+**Entscheidung:** Weiterentwicklung im Dauerbetrieb folgt einem dokumentierten Multi-Domain-Loop mit Domänen-Rotation (`av` → `ug` → `kita` → `cross`), Queue-Auffüllung aus Katalog (wenn leer), und expliziten Verboten gegen Micro-Feinschliff. Umsetzung: `docs/delivery/AUTONOMOUS_LOOP.md`, `loop-state.md`, Queue ab Q-400, Workflow `autonomous-develop`.
+
+**Begründung:**
+- Queue war nach Q-224 leer — ohne Katalog stoppt Autonomie oder driftet in sinnlose Paritäts-CTAs
+- Kita hat Demo-Routen, aber keine E2E-Specs — Rotationsmodell priorisiert untertestete Bereiche
+- 12-Minuten-Cadence gibt Raum für lint/build/Teil-E2E ohne Fire-Überlappung
+
+**Grenzen:** Kein Push im Loop. Stop nach 3× idle/blocked. DEC-012/013 bleiben bindend.
+
+**Status:** Aktiv (Q-400). 
+
 Danach: Queue-Einträge nur noch für **Bugs**, **echte Produktlücken** oder **explizite Priorität** — nicht für endlose CTA-/print-only-Parität ohne Nutzenbegründung.
 
 **Status:** Gilt ab Q-307. Ergänzt DEC-011 (Refactoring-Welle abgeschlossen); ersetzt sie nicht rückwirkend.

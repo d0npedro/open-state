@@ -1,9 +1,10 @@
 # BUILD_STATE.md – Aktueller Projektstand
 
-Zuletzt aktualisiert: nach Q-224 UG Hinweise UNTERLAGE-CTA data-next-dok-id + nächste Bezeichnung
+Zuletzt aktualisiert: nach Q-400 Autonomer Multi-Domain-Loop (`docs/delivery/AUTONOMOUS_LOOP.md`)
 
 Dieser Stand beschreibt, was **tatsächlich existiert und funktioniert** — nicht die Feature-Historie.
 Geplante Schritte → `docs/NEXT_STEPS_QUEUE.md`.  
+Autonomer Loop → `docs/delivery/AUTONOMOUS_LOOP.md` + `loop-state.md`.  
 Strukturelles Aufräumen → `docs/REPO_REFACTORING_PLAN.md`.  
 Detailhistorie → `git log` / `docs/delivery/queue-archive/`.
 
@@ -152,16 +153,19 @@ Vorlagen/Prinzipien: `docs/stories/STORY_TEMPLATE.md`, `FRONTEND_TRACEABILITY_PR
 |-------|-------|--------|
 | `AGENTS.md` | Iterationsablauf | ✓ |
 | `docs/DELIVERY_SYSTEM.md` | 12-Schritte-Detail | ✓ (queue-archive verlinkt) |
-| `docs/NEXT_STEPS_QUEUE.md` | Aktive Arbeitsliste | ✓ schlank (Q-301) |
+| `docs/NEXT_STEPS_QUEUE.md` | Aktive Arbeitsliste | ✓ Multi-Domain Q-401+ OFFEN |
+| `docs/delivery/AUTONOMOUS_LOOP.md` | Autonomer 12m-Loop (Rotation, Katalog, Prompt) | ✓ (Q-400) |
+| `docs/delivery/loop-state.md` | next_domain / idle-Zähler | ✓ (Q-400) |
+| `.grok/workflows/autonomous-develop.rhai` | Ein-Fire-Workflow | ✓ (Q-400) |
 | `docs/delivery/queue-archive/` | DONE-Historie | ✓ Q-001–Q-300 |
 | `docs/BUILD_STATE.md` | Dieser Ist-Stand | ✓ gehärtet (Q-302) |
-| `docs/DECISION_LOG.md` | Architektur-/Prozess-DEC | ✓ DEC-011 aktiv |
-| `docs/REPO_REFACTORING_PLAN.md` | Phasen 0–4 + Anti-Growth | ✓ Kern Q-299–Q-307; Policy in DEC-013 |
+| `docs/DECISION_LOG.md` | Architektur-/Prozess-DEC | ✓ DEC-013 Anti-Growth |
+| `docs/REPO_REFACTORING_PLAN.md` | Phasen 0–4 + Anti-Growth | ✓ Kern Q-299–Q-307 |
 | `docs/README.md` | Map of Content / Wissens-Navigation | ✓ (Q-306) |
 | Anti-Growth | `AGENTS.md` · `DELIVERY_SYSTEM` · DEC-013 · CONTRIBUTING | ✓ (Q-307) |
-| `docs/DEPLOYMENT_AND_DEMO_STRATEGY.md` | Demo-Setup + Vercel + Branches | ✓ führend (Q-304); Setup/Playbook = Stubs |
+| `docs/DEPLOYMENT_AND_DEMO_STRATEGY.md` | Demo-Setup + Vercel + Branches | ✓ führend (Q-304) |
 | `archive/rewrites/` | Historische Root-Summaries | ✓ (Q-300) |
-| `archive/journals/` | Rotierte Domain-Journals (≤15 aktiv) | ✓ (Q-303); Index README |
+| `archive/journals/` | Rotierte Domain-Journals (≤15 aktiv) | ✓ (Q-303) |
 
 ---
 
@@ -171,6 +175,7 @@ Keine durchgestrichenen Erledigungen. Abgeschlossenes steht in git / queue-archi
 
 | Lücke | Auswirkung | Queue |
 |-------|------------|-------|
+| Keine Kita-E2E-Specs (nur AV/UG/Landing) | CI deckt Kita-Routen nicht ab | Q-401, Q-402, Q-422 |
 | Kein echtes Backend / keine Behörden-Adapter | Demo-only | bewusst Phase 0 |
 | Open-Data-Lizenz Kita final (BL) | Demo nutzt vorläufigen Hinweis | fachlich offen, nicht blockierend |
 | DSFA / produktive Datenschutz-Nachweise | Konzeptphase | bewusst offen |
