@@ -8,7 +8,7 @@ Regeln: `docs/delivery/AUTONOMOUS_LOOP.md`.
 | `next_domain` | `cross` |
 | `last_domain` | `kita` |
 | `last_queue_id` | `Q-442` |
-| `last_commit` | pending |
+| `last_commit` | 4d6e90f |
 | `fires_total` | 15 |
 | `consecutive_idle` | 0 |
 | `updated` | 2026-08-03 (Q-442 Kita Session-Reset E2E) |
