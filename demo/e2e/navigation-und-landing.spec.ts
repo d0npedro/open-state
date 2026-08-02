@@ -217,6 +217,27 @@ test.describe('Accessibility – Grundlegende Checks', () => {
     await expect(main).toBeFocused();
   });
 
+  test('Q-451: Skip-Link Fokus Root und Fall nach Tastatur-Aktivierung', async ({ page }) => {
+    // WCAG 2.4.1: Skip-Link → main#main-content (tabIndex=-1) erhält Fokus
+    async function assertSkipToMain(route: string) {
+      await page.goto(route);
+      const main = page.locator('main#main-content');
+      await expect(main).toBeVisible();
+      await expect(page.getByRole('main')).toHaveCount(1);
+
+      await page.keyboard.press('Tab');
+      const skip = page.getByRole('link', { name: /Zum Inhalt springen/i });
+      await expect(skip).toBeFocused();
+      await expect(skip).toHaveAttribute('href', '#main-content');
+      await skip.press('Enter');
+      await expect(main).toBeFocused();
+    }
+
+    await assertSkipToMain('/');
+    await assertSkipToMain('/fall');
+    await assertSkipToMain('/fall/hinweise');
+  });
+
   test('Focus-Sichtbarkeit: Erstes fokussierbares Element hat outline', async ({ page }) => {
     await page.goto('/fall');
     await page.keyboard.press('Tab');

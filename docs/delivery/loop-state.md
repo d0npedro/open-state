@@ -5,13 +5,13 @@ Regeln: `docs/delivery/AUTONOMOUS_LOOP.md`.
 
 | Feld | Wert |
 |------|------|
-| `next_domain` | `av` |
-| `last_domain` | `cross` |
-| `last_queue_id` | `Q-450` |
-| `last_commit` | 4a0f480 |
-| `fires_total` | 16 |
+| `next_domain` | `ug` |
+| `last_domain` | `av` |
+| `last_queue_id` | `Q-451` |
+| `last_commit` | pending |
+| `fires_total` | 17 |
 | `consecutive_idle` | 0 |
-| `updated` | 2026-08-03 (Q-450 Landing Deep-Link-Smoke) |
+| `updated` | 2026-08-03 (Q-451 Skip-Link E2E Root/Fall) |
 
 ## Domänen-Reihenfolge
 
