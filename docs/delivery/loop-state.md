@@ -8,7 +8,7 @@ Regeln: `docs/delivery/AUTONOMOUS_LOOP.md`.
 | `next_domain` | `kita` |
 | `last_domain` | `ug` |
 | `last_queue_id` | `Q-470` |
-| `last_commit` | pending |
+| `last_commit` | a4c0854 |
 | `fires_total` | 22 |
 | `consecutive_idle` | 0 |
 | `updated` | 2026-08-03 (Q-470 UG Session-Reset Fairness-RQ) |
