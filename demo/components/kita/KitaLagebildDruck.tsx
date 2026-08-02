@@ -858,6 +858,7 @@ export function KitaLagebildDruck() {
             className="btn btn-secondary"
             onClick={() => window.print()}
             style={{ fontSize: '0.875rem' }}
+            aria-label="Steuerungslagebild drucken oder als PDF speichern (keine Kind- oder Personennamen)"
           >
             Drucken / als PDF speichern
           </button>
@@ -877,6 +878,7 @@ export function KitaLagebildDruck() {
               })
             }
             aria-label="Steuerungslagebild-Aggregate als CSV herunterladen (keine Kind- oder Personennamen)"
+            data-testid="kita-lagebild-csv-download"
           >
             CSV exportieren
           </button>
