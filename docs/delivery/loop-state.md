@@ -8,7 +8,7 @@ Regeln: `docs/delivery/AUTONOMOUS_LOOP.md`.
 | `next_domain` | `av` |
 | `last_domain` | `cross` |
 | `last_queue_id` | `Q-492` |
-| `last_commit` | pending |
+| `last_commit` | 430d9a9 |
 | `fires_total` | 30 |
 | `consecutive_idle` | 0 |
 | `updated` | 2026-08-03 (Q-492 ThemeSwitcher a11y) |
