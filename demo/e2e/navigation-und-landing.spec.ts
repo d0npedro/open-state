@@ -53,6 +53,52 @@ test.describe('Startseite', () => {
     ).toBeVisible();
   });
 
+  test('Q-450: Landing Deep-Link-Smoke Primär- und Sekundärrouten', async ({ page }) => {
+    // Alle Domänen-Karten: Einstieg + Sekundärlink erreichbar, h1 sichtbar
+    // Keine Session-Interaktion → page.goto zwischen Sprüngen ok (kein DEC-012-Konflikt)
+
+    // AV Primär
+    await page.getByRole('link', { name: /Antrag öffnen/i }).click();
+    await expect(page).toHaveURL('/fall');
+    await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
+    await page.goto('/');
+
+    // AV Sekundär Hinweise
+    await page.getByRole('link', { name: /^Hinweise zum Verfahren$/i }).first().click();
+    await expect(page).toHaveURL('/fall/hinweise');
+    await expect(
+      page.getByRole('heading', { level: 1, name: /Hinweise zur Verfahrenslage/i })
+    ).toBeVisible();
+    await page.goto('/');
+
+    // UG Primär
+    await page.getByRole('link', { name: /Gründungsakte öffnen/i }).click();
+    await expect(page).toHaveURL('/gruendung');
+    await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
+    await page.goto('/');
+
+    // UG Sekundär Hinweise
+    await page.getByRole('link', { name: /^Hinweise zum Verfahren$/i }).nth(1).click();
+    await expect(page).toHaveURL('/gruendung/hinweise');
+    await expect(
+      page.getByRole('heading', { level: 1, name: /Hinweise zur Verfahrenslage/i })
+    ).toBeVisible();
+    await page.goto('/');
+
+    // Kita Primär Transparenz
+    await page.getByRole('link', { name: /Transparenzbericht öffnen/i }).click();
+    await expect(page).toHaveURL('/kita');
+    await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
+    await page.goto('/');
+
+    // Kita Sekundär Lagebild intern
+    await page.getByRole('link', { name: /Steuerungslagebild \(intern\)/i }).click();
+    await expect(page).toHaveURL('/kita/lagebild');
+    await expect(
+      page.getByRole('heading', { level: 1, name: /Steuerungslagebild Kindertagesbetreuung/i })
+    ).toBeVisible();
+  });
+
   test('Demo-Hinweis ist sichtbar', async ({ page }) => {
     await expect(page.getByText(/Alle Daten sind fiktiv/).first()).toBeVisible();
   });

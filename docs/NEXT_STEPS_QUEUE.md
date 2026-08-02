@@ -78,7 +78,7 @@ Autonomer Multi-Domain-Loop: [`docs/delivery/AUTONOMOUS_LOOP.md`](delivery/AUTON
 
 | ID | Domäne | Schritt | Typ | Aufwand | Abhängigkeit | Status |
 |----|--------|---------|-----|---------|--------------|--------|
-| Q-450 | cross | E2E Landing: Domänen-Karten + Sekundärlinks Hinweise/Lagebild erreichbar (Deep-Link-Smoke) | DEMO | S | Q-410 | OFFEN |
+| Q-450 | cross | E2E Landing: Domänen-Karten + Sekundärlinks Hinweise/Lagebild erreichbar (Deep-Link-Smoke) | DEMO | S | Q-410 | DONE |
 | Q-451 | av | E2E Skip-Link: Fokus auf `#main-content` / `main` nach Tastatur-Aktivierung (Root/Fall) | DEMO | S | Q-420 | OFFEN |
 | Q-452 | ug | E2E a11y: Behördenkarten und BG-Demo-Button haben zugängliche Namen/Labels | DEMO | S | Q-441 | OFFEN |
 
@@ -88,6 +88,7 @@ Autonomer Multi-Domain-Loop: [`docs/delivery/AUTONOMOUS_LOOP.md`](delivery/AUTON
 
 | ID | Kurz | Status |
 |----|------|--------|
+| Q-450 | Landing Deep-Link-Smoke Primär+Sekundär | DONE |
 | Q-442 | Kita E2E Session-Reset DemoSessionBar Lagebild | DONE |
 | Q-441 | UG E2E BG-Happy-Path Hinweise→Markierung | DONE |
 | Q-440 | AV E2E Fairness-Leerzustand nach Aktionen | DONE |
@@ -97,7 +98,6 @@ Autonomer Multi-Domain-Loop: [`docs/delivery/AUTONOMOUS_LOOP.md`](delivery/AUTON
 | Q-403 | BUILD_STATE E2E-Zähler 333/12 Specs | DONE |
 | Q-412 | Kita DemoSessionBar bei Meldefreigabe | DONE |
 | Q-411 | /stories Zur-Demo-CTA pro Story mit Route | DONE |
-| Q-422 | Kita E2E Transparenz Filter+CSV labeled | DONE |
 
 ---
 
