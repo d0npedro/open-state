@@ -5,13 +5,13 @@ Regeln: `docs/delivery/AUTONOMOUS_LOOP.md`.
 
 | Feld | Wert |
 |------|------|
-| `next_domain` | `cross` |
-| `last_domain` | `kita` |
-| `last_queue_id` | `Q-481` |
-| `last_commit` | 7117fb9 |
-| `fires_total` | 26 |
+| `next_domain` | `ug` |
+| `last_domain` | `av` |
+| `last_queue_id` | `Q-482` |
+| `last_commit` | pending |
+| `fires_total` | 27 |
 | `consecutive_idle` | 0 |
-| `updated` | 2026-08-03 (Q-481 Kita Erweiterungsrouten-Smoke) |
+| `updated` | 2026-08-03 (Q-482 AV Keyboard-Smoke Fall-Tabs) |
 
 ## Domänen-Reihenfolge
 

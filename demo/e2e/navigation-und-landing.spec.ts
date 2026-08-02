@@ -185,6 +185,51 @@ test.describe('Tab-Navigation im Fall-Bereich', () => {
     }
   });
 
+  test('Q-482: Fall-Tabs per Tastatur fokussierbar und mit Enter aktivierbar', async ({ page }) => {
+    // Keyboard-Smoke: role=tab in Bereichsnavigation; Enter aktiviert (Links)
+    // Tab-Reihenfolge innerhalb tablist; Fokus sichtbar (globals.css :focus-visible)
+    await page.goto('/fall');
+
+    const tablist = page.getByRole('tablist');
+    await expect(tablist).toBeVisible();
+    const tabs = tablist.getByRole('tab');
+    await expect(tabs).toHaveCount(6);
+
+    // Startfokus auf Übersicht, dann Tastatur → nächster Tab (Unterlagen)
+    const uebersicht = tablist.getByRole('tab', { name: /^Übersicht$/i });
+    await uebersicht.focus();
+    await expect(uebersicht).toBeFocused();
+    await expect(page.locator(':focus')).toBeVisible();
+
+    await page.keyboard.press('Tab');
+    const unterlagen = tablist.getByRole('tab', { name: /Unterlagen/i });
+    await expect(unterlagen).toBeFocused();
+    await expect(page.locator(':focus')).toBeVisible();
+
+    // Enter aktiviert Navigation
+    await page.keyboard.press('Enter');
+    await expect(page).toHaveURL(/\/fall\/dokumente/);
+    await expect(unterlagen).toHaveAttribute('aria-selected', 'true');
+    await expect(page.getByRole('heading', { level: 1 }).first()).toBeVisible();
+
+    // Weiterer Tab: Fragen per Fokus + Enter
+    const fragen = page.getByRole('tablist').getByRole('tab', { name: /Fragen/i });
+    await fragen.focus();
+    await expect(fragen).toBeFocused();
+    await page.keyboard.press('Enter');
+    await expect(page).toHaveURL(/\/fall\/rueckfragen/);
+    await expect(fragen).toHaveAttribute('aria-selected', 'true');
+    await expect(page.getByRole('heading', { level: 1, name: /Rückfragen/i })).toBeVisible();
+
+    // Verlauf per Tastatur
+    const verlauf = page.getByRole('tablist').getByRole('tab', { name: /Verlauf/i });
+    await verlauf.focus();
+    await expect(verlauf).toBeFocused();
+    await page.keyboard.press('Enter');
+    await expect(page).toHaveURL(/\/fall\/verlauf/);
+    await expect(verlauf).toHaveAttribute('aria-selected', 'true');
+  });
+
 });
 
 test.describe('Accessibility – Grundlegende Checks', () => {

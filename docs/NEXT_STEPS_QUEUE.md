@@ -104,7 +104,7 @@ Autonomer Multi-Domain-Loop: [`docs/delivery/AUTONOMOUS_LOOP.md`](delivery/AUTON
 |----|--------|---------|-----|---------|--------------|--------|
 | Q-480 | kita | a11y + E2E: Einrichtung Belegungsstand Druck/CSV-Buttons mit zugänglichem Namen (Parität Lagebild Q-460) | DEMO | S | Q-401 | DONE |
 | Q-481 | kita | E2E-Smoke: Bedarfsplanung, Gremienvorlage, Monatsbericht, Meldung – h1/Kernroute erreichbar | DEMO | S | Q-401 | DONE |
-| Q-482 | av | E2E Keyboard-Smoke: Fall-Tabs per Tastatur erreichbar und aktivierbar (Fokus sichtbar) | DEMO | S | Q-420 | OFFEN |
+| Q-482 | av | E2E Keyboard-Smoke: Fall-Tabs per Tastatur erreichbar und aktivierbar (Fokus sichtbar) | DEMO | S | Q-420 | DONE |
 
 ---
 
@@ -112,6 +112,7 @@ Autonomer Multi-Domain-Loop: [`docs/delivery/AUTONOMOUS_LOOP.md`](delivery/AUTON
 
 | ID | Kurz | Status |
 |----|------|--------|
+| Q-482 | AV Keyboard-Smoke Fall-Tabs Enter-Navigation | DONE |
 | Q-481 | Kita E2E-Smoke Bedarfsplanung/Vorlage/Monatsbericht/Meldung | DONE |
 | Q-480 | Kita Einrichtung Druck/CSV a11y Labels | DONE |
 | Q-472 | UG Skip-Link /gruendung und /gruendung/hinweise | DONE |
@@ -121,7 +122,6 @@ Autonomer Multi-Domain-Loop: [`docs/delivery/AUTONOMOUS_LOOP.md`](delivery/AUTON
 | Q-461 | Skip-Link /stories und /feedback E2E | DONE |
 | Q-460 | Kita Lagebild Druck/CSV a11y Labels | DONE |
 | Q-452 | UG a11y Behördenkarten + BG-Button Labels | DONE |
-| Q-451 | Skip-Link Fokus Root/Fall/Hinweise E2E | DONE |
 
 ---
 
