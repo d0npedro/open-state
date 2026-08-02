@@ -8,7 +8,7 @@ Regeln: `docs/delivery/AUTONOMOUS_LOOP.md`.
 | `next_domain` | `cross` |
 | `last_domain` | `kita` |
 | `last_queue_id` | `Q-480` |
-| `last_commit` | pending |
+| `last_commit` | 89ef49d |
 | `fires_total` | 25 |
 | `consecutive_idle` | 0 |
 | `updated` | 2026-08-03 (Q-480 Kita Einrichtung Export a11y) |
