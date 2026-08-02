@@ -21,7 +21,11 @@ import type {
   MeldungStatus,
 } from '@/types/kitaMeldung';
 import type { MeldeeingangSessionFreigabe } from '@/types/kitaMeldeeingang';
-import { MELDEEINGANG_SESSION_KEY } from '@/types/kitaMeldeeingang';
+import {
+  clearKitaMeldeSession,
+  MELDEEINGANG_SESSION_KEY,
+  notifyKitaMeldeSessionChange,
+} from '@/types/kitaMeldeeingang';
 
 type UiPhase = 'PRUEFUNG' | 'KORREKTUR' | 'BESTAETIGUNG' | 'FREIGEGEBEN';
 
@@ -337,6 +341,7 @@ export default function KitaMeldungPage() {
         sessionWrittenAt: new Date().toISOString(),
       };
       localStorage.setItem(MELDEEINGANG_SESSION_KEY, JSON.stringify(session));
+      notifyKitaMeldeSessionChange();
     } catch {
       // localStorage nicht verfügbar – Lagebild bleibt beim Mock-Ausgangszustand
     }
@@ -351,11 +356,7 @@ export default function KitaMeldungPage() {
     setFreigabe(null);
     setFreigabeFehler(null);
     setKorrekturFehler(null);
-    try {
-      localStorage.removeItem(MELDEEINGANG_SESSION_KEY);
-    } catch {
-      // ignore
-    }
+    clearKitaMeldeSession();
   }
 
   const readOnly = freigegeben || phase === 'FREIGEGEBEN';

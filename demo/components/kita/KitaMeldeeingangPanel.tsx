@@ -23,6 +23,7 @@ import type {
   MeldeeingangStatus,
 } from '@/types/kitaMeldeeingang';
 import {
+  KITA_MELDE_SESSION_EVENT,
   MELDEEINGANG_SESSION_KEY,
   kennzahlenToKurz,
 } from '@/types/kitaMeldeeingang';
@@ -341,11 +342,16 @@ export function KitaMeldeeingangPanel() {
     function onFocus() {
       refreshSession();
     }
+    function onSessionEvent() {
+      refreshSession();
+    }
     window.addEventListener('storage', onStorage);
     window.addEventListener('focus', onFocus);
+    window.addEventListener(KITA_MELDE_SESSION_EVENT, onSessionEvent);
     return () => {
       window.removeEventListener('storage', onStorage);
       window.removeEventListener('focus', onFocus);
+      window.removeEventListener(KITA_MELDE_SESSION_EVENT, onSessionEvent);
     };
   }, [refreshSession]);
 

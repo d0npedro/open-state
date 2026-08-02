@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import type { Metadata } from 'next';
 import { DomainNav } from '@/components/DomainNav';
+import { KitaDemoSessionBar } from '@/components/DemoSessionBar';
 
 export const metadata: Metadata = {
   title: 'Kindertagesbetreuung – Open State',
@@ -45,6 +46,8 @@ export default function KitaLayout({ children }: { children: React.ReactNode }) 
           </div>
         </div>
       </nav>
+      {/* Q-412: Session-Leiste bei Meldefreigabe (Parität AV/UG) */}
+      <KitaDemoSessionBar />
       <main id="main-content" tabIndex={-1} style={{ padding: '2rem 0' }}>
         <div className="container">
           {children}

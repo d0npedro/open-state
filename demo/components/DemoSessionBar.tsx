@@ -1,13 +1,20 @@
 'use client';
 
 /**
- * Zeigt nach Demo-Interaktionen (Rückfrage, Upload) eine Leiste zum Zurücksetzen.
- * Nur sichtbar, wenn die Session vom Ausgangs-Mock abweicht (Q-075).
+ * Zeigt nach Demo-Interaktionen (Rückfrage, Upload, Kita-Meldefreigabe) eine Leiste zum Zurücksetzen.
+ * Nur sichtbar, wenn die Session vom Ausgangs-Mock abweicht (Q-075 / Q-412).
  */
 
+import { useCallback, useEffect, useState } from 'react';
 import { useDemoState } from '@/context/DemoStateContext';
 import { useGruendungState } from '@/context/GruendungStateContext';
 import { Icon } from '@/components/Icon';
+import {
+  clearKitaMeldeSession,
+  KITA_MELDE_SESSION_EVENT,
+  MELDEEINGANG_SESSION_KEY,
+  readKitaMeldeSessionFreigabe,
+} from '@/types/kitaMeldeeingang';
 
 function SessionBarShell({
   visible,
@@ -85,6 +92,53 @@ export function UgDemoSessionBar() {
       visible={hasSessionChanges}
       onReset={resetSession}
       label="Aktenstatus, Unterlagen, Verlauf und Hinweise weichen vom Ausgangsfall ab"
+    />
+  );
+}
+
+/**
+ * Kita-Domäne: Session über localStorage (Meldefreigabe US-KJ-004 → Lagebild).
+ * Parität AV/UG: Hinweis + „Demo zurücksetzen“ (Q-412).
+ */
+export function KitaDemoSessionBar() {
+  const [hasSession, setHasSession] = useState(false);
+
+  const refresh = useCallback(() => {
+    setHasSession(Boolean(readKitaMeldeSessionFreigabe()));
+  }, []);
+
+  useEffect(() => {
+    refresh();
+    function onStorage(ev: StorageEvent) {
+      if (ev.key === MELDEEINGANG_SESSION_KEY || ev.key === null) refresh();
+    }
+    function onSessionEvent() {
+      refresh();
+    }
+    function onFocus() {
+      refresh();
+    }
+    window.addEventListener('storage', onStorage);
+    window.addEventListener(KITA_MELDE_SESSION_EVENT, onSessionEvent);
+    window.addEventListener('focus', onFocus);
+    return () => {
+      window.removeEventListener('storage', onStorage);
+      window.removeEventListener(KITA_MELDE_SESSION_EVENT, onSessionEvent);
+      window.removeEventListener('focus', onFocus);
+    };
+  }, [refresh]);
+
+  function handleReset() {
+    clearKitaMeldeSession();
+    // Remount aller Kita-Seiten inkl. React-State der Meldungsseite
+    window.location.reload();
+  }
+
+  return (
+    <SessionBarShell
+      visible={hasSession}
+      onReset={handleReset}
+      label="Meldefreigabe und Meldeeingang weichen vom Ausgangsstand ab"
     />
   );
 }

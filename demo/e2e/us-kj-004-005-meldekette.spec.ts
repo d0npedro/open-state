@@ -42,7 +42,10 @@ test.describe('Kita Meldekette – Freigabe → Meldeeingang (Q-402)', () => {
 
     // Erfolg: Freigabe protokolliert (screen); print-only-Doppel vermeiden
     await expect(page.getByText(/Freigabe protokolliert/i)).toBeVisible();
-    await expect(page.getByRole('button', { name: /Demo zurücksetzen/i })).toBeVisible();
+    // Seite + SessionBar (Q-412) haben beide „Demo zurücksetzen“
+    await expect(
+      page.getByRole('region', { name: /Demo-Session/i }).getByRole('button', { name: /Demo zurücksetzen/i })
+    ).toBeVisible();
 
     const stored = await page.evaluate(key => localStorage.getItem(key), SESSION_KEY);
     expect(stored).toBeTruthy();
@@ -70,6 +73,36 @@ test.describe('Kita Meldekette – Freigabe → Meldeeingang (Q-402)', () => {
     if (await lueckenBox.count()) {
       await expect(lueckenBox.getByText(/Kita Sonnenwinkel/)).toHaveCount(0);
     }
+
+    // Q-412: SessionBar nach Meldefreigabe (Parität AV/UG)
+    const sessionBar = page.getByRole('region', { name: /Demo-Session/i });
+    await expect(sessionBar).toBeVisible();
+    await expect(sessionBar.getByRole('button', { name: /Demo zurücksetzen/i })).toBeVisible();
+  });
+
+  test('Q-412: Demo zurücksetzen entfernt Session-Eingang', async ({ page }) => {
+    const { goKitaNav } = await import('./helpers/sessionNav');
+
+    await page.getByRole('button', { name: /Zur Freigabe/i }).click();
+    await page
+      .getByRole('checkbox', {
+        name: /Ich habe den Meldeinhalt geprüft und gebe die Monatsmeldung/i,
+      })
+      .check();
+    await page.getByRole('button', { name: /Jetzt freigeben und übermitteln/i }).click();
+    await expect(page.getByText(/Freigabe protokolliert/i)).toBeVisible();
+
+    const sessionBar = page.getByRole('region', { name: /Demo-Session/i });
+    await expect(sessionBar).toBeVisible();
+    await sessionBar.getByRole('button', { name: /Demo zurücksetzen/i }).click();
+
+    // Reload nach Reset – SessionBar und Meldeeingang-Session weg
+    await expect(page.getByRole('region', { name: /Demo-Session/i })).toHaveCount(0);
+    const storedAfter = await page.evaluate(key => localStorage.getItem(key), SESSION_KEY);
+    expect(storedAfter).toBeNull();
+
+    await goKitaNav(page, /Steuerungslagebild/i, /\/kita\/lagebild/);
+    await expect(page.getByText(/Neu im Meldeeingang \(Demo-Session\)/)).toHaveCount(0);
   });
 
   test('Ohne Freigabe: Sonnenwinkel bleibt Lücke im Meldeeingang', async ({ page }) => {

@@ -73,6 +73,43 @@ export interface MeldeeingangSessionFreigabe {
 /** localStorage-Schlüssel für Demo-Kopplung Meldung → Lagebild */
 export const MELDEEINGANG_SESSION_KEY = 'os-kita-meldeeingang-session';
 
+/**
+ * Same-tab-Event nach Write/Clear von MELDEEINGANG_SESSION_KEY
+ * (StorageEvent feuer nur tab-übergreifend).
+ */
+export const KITA_MELDE_SESSION_EVENT = 'os-kita-meldeeingang-session-change';
+
+/** Benachrichtigt Layout-SessionBar und Meldeeingang-Hooks in derselben Tab-Session. */
+export function notifyKitaMeldeSessionChange(): void {
+  if (typeof window === 'undefined') return;
+  window.dispatchEvent(new Event(KITA_MELDE_SESSION_EVENT));
+}
+
+/** Liest Demo-Session-Freigabe aus localStorage (null wenn leer/ungültig). */
+export function readKitaMeldeSessionFreigabe(): MeldeeingangSessionFreigabe | null {
+  if (typeof window === 'undefined') return null;
+  try {
+    const raw = localStorage.getItem(MELDEEINGANG_SESSION_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw) as MeldeeingangSessionFreigabe;
+    if (!parsed?.meldungId || !parsed?.freigabeId || !parsed?.kennzahlen) return null;
+    return parsed;
+  } catch {
+    return null;
+  }
+}
+
+/** Entfernt Session-Freigabe und benachrichtigt Listener (Q-412). */
+export function clearKitaMeldeSession(): void {
+  if (typeof window === 'undefined') return;
+  try {
+    localStorage.removeItem(MELDEEINGANG_SESSION_KEY);
+  } catch {
+    // ignore
+  }
+  notifyKitaMeldeSessionChange();
+}
+
 export function meldungStatusToEingang(
   status: MeldungStatus,
   meldefrist: string,

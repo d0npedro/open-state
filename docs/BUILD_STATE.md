@@ -1,6 +1,6 @@
 # BUILD_STATE.md – Aktueller Projektstand
 
-Zuletzt aktualisiert: nach Q-411 `/stories` Zur-Demo-CTA
+Zuletzt aktualisiert: nach Q-412 Kita DemoSessionBar bei Meldefreigabe
 
 Dieser Stand beschreibt, was **tatsächlich existiert und funktioniert** — nicht die Feature-Historie.
 Geplante Schritte → `docs/NEXT_STEPS_QUEUE.md`.  
@@ -88,7 +88,7 @@ Keine Q-xxx-Chronik. Pfade = Einstieg für Code-Lesen.
 | Fairness UI | `demo/components/fairness/FairnessPanel.tsx` | Darstellung Signale/CTAs |
 | AV Session | `demo/context/DemoStateContext.tsx` | RQ beantworten, Upload, Termin bestätigen, Reset, Timeline-Events |
 | UG Session | `demo/context/GruendungStateContext.tsx` | RQ/Upload/BG/Reset; VS-Übergänge; Verlauf |
-| Session-UI | `demo/components/DemoSessionBar.tsx` | „Demo zurücksetzen“ nach Interaktion |
+| Session-UI | `demo/components/DemoSessionBar.tsx` | AV/UG/Kita „Demo zurücksetzen“ (Kita: Meldefreigabe localStorage, Q-412) |
 | Kita UI-Bausteine | `demo/components/kita/*` | Meldeeingang, Explorer, Zeitreihe, Vergleich, Druck/CSV, Engpass, … |
 | CSV-Lizenz (Demo) | `demo/lib/kita/kitaCsvLizenz.ts` | Meta-Hinweis vorläufig CC-BY-ähnlich |
 | BuildInfo | `demo/components/BuildInfo.tsx` | Env / Version / Commit-SHA im Footer |

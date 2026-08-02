@@ -48,7 +48,7 @@ Autonomer Multi-Domain-Loop: [`docs/delivery/AUTONOMOUS_LOOP.md`](delivery/AUTON
 |----|--------|---------|-----|---------|--------------|--------|
 | Q-410 | cross | Landing: pro Domänen-Karte optionaler Sekundärlink „Steuerung/Hinweise“ wo sinnvoll (Kita→Lagebild intern kennzeichnen; AV/UG Hinweise) — ohne Developer-Jargon | DEMO | S | – | DONE |
 | Q-411 | cross | `/stories`: pro Story mit Screen „Zur Demo“-CTA (Route aus storyRegistry) | DEMO | M | – | DONE |
-| Q-412 | kita | Kita-Layouts: DemoSessionBar wenn Session-State (Meldefreigabe o. Ä.) aktiv — Parität AV/UG Reset-Hinweis | DEMO | M | Q-402 | OFFEN |
+| Q-412 | kita | Kita-Layouts: DemoSessionBar wenn Session-State (Meldefreigabe o. Ä.) aktiv — Parität AV/UG Reset-Hinweis | DEMO | M | Q-402 | DONE |
 
 ### Domänen-Qualität (nicht Micro-CTA)
 
@@ -72,6 +72,7 @@ Autonomer Multi-Domain-Loop: [`docs/delivery/AUTONOMOUS_LOOP.md`](delivery/AUTON
 
 | ID | Kurz | Status |
 |----|------|--------|
+| Q-412 | Kita DemoSessionBar bei Meldefreigabe | DONE |
 | Q-411 | /stories Zur-Demo-CTA pro Story mit Route | DONE |
 | Q-422 | Kita E2E Transparenz Filter+CSV labeled | DONE |
 | Q-421 | UG E2E RQ+Upload+BG ohne Action-Banner | DONE |
@@ -81,7 +82,6 @@ Autonomer Multi-Domain-Loop: [`docs/delivery/AUTONOMOUS_LOOP.md`](delivery/AUTON
 | Q-401 | Kita E2E-Smoke Kernrouten + `test:e2e:kita` | DONE |
 | Q-400 | Autonomer Multi-Domain-Loop + Workflow | DONE |
 | Q-224 | UG Hinweise UNTERLAGE data-next-dok-id | DONE |
-| Q-307 | Anti-Growth DEC-013 | DONE |
 
 ---
 
