@@ -63,7 +63,7 @@ Autonomer Loop: [`docs/delivery/AUTONOMOUS_LOOP.md`](delivery/AUTONOMOUS_LOOP.md
 
 | ID | Domäne | Schritt | Typ | Aufwand | Abhängigkeit | Status |
 |----|--------|---------|-----|---------|--------------|--------|
-| Q-630 | arch | arc42 oder `05_Systemarchitektur`: Demo-Session-State + Fairness-Regeln als Ist-Hinweis (1 Abschnitt, Verweis auf Code) – nur wenn veraltet | ARCH | M | Q-611 | OFFEN |
+| Q-630 | arch | arc42 oder `05_Systemarchitektur`: Demo-Session-State + Fairness-Regeln als Ist-Hinweis (1 Abschnitt, Verweis auf Code) – nur wenn veraltet | ARCH | M | Q-611 | DONE |
 
 ---
 
@@ -82,6 +82,7 @@ Autonomer Loop: [`docs/delivery/AUTONOMOUS_LOOP.md`](delivery/AUTONOMOUS_LOOP.md
 
 | ID | Kurz | Status |
 |----|------|--------|
+| Q-630 | arc42 §8.10 + Systemarchitektur: Demo Session/Fairness Ist-Hinweis | DONE |
 | Q-622 | Kita Meldelücke: Ruhezustand nach Freigabe + Methodik im Meldeeingang | DONE |
 | Q-621 | UG Ruhezustand-Banner nach RQ/Unterlagen (BG- bzw. Steuernummer-CTA) | DONE |
 | Q-620 | AV US-AV-006: Widerspruch session-lokal (Quittung, Verlauf, Reset) statt alert | DONE |
@@ -91,7 +92,6 @@ Autonomer Loop: [`docs/delivery/AUTONOMOUS_LOOP.md`](delivery/AUTONOMOUS_LOOP.md
 | Q-602 | BUILD_STATE E2E-Baseline 378 / `a5a9a3e` | DONE |
 | Q-601 | Queue-Archiv Q-400–Q-542 auslagern | DONE |
 | Q-600 | Session-Handoff + Queue-Phase Q-600+ | DONE |
-| Q-604 | Loop-Katalog Anti-Skip-Link-Spam | DONE |
 
 ---
 

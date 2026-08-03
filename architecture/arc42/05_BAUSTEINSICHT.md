@@ -248,7 +248,7 @@ Einrichtung (operativ)  →  Freigabe  →  Jugendamt (Steuerung)  →  Freigabe
 
 **Datenschutz:** Keine personenbezogenen Kinder- oder Elterndaten in Steuerungs- oder Öffentlichkeitsschicht. Keine einrichtungsbezogene Qualitätsbewertung in öffentlichen Berichten. Aggregation und Freigabe sind Pflichtübergänge – kein direkter Durchgriff.
 
-**Demo-Bausteine:** `demo/data/mockKitaLagebild.ts`, `demo/types/kita.ts`, Routen `/kita` und `/kita/lagebild`.
+**Demo-Bausteine:** `demo/data/mockKitaLagebild.ts`, Meldeeingang/Meldung-Mocks, `demo/types/kita*.ts`; Routen `/kita`, `/kita/lagebild`, `/kita/meldung`, `/kita/tagesstand`, … (vollständige Liste: `docs/BUILD_STATE.md`). Session-Freigabe: localStorage Meldeeingang.
 
 ---
 
@@ -262,10 +262,12 @@ Einrichtung (operativ)  →  Freigabe  →  Jugendamt (Steuerung)  →  Freigabe
 | **Inputs** | Gründerangaben, Behördenstatus, Dokumentanforderungen, Rückfragen |
 | **Outputs** | Klartext-Status, Behördenübersicht, Handlungshinweise, Timeline |
 | **Abhängigkeiten** | Fallakten-Muster, Fairness-Regeln UG, Mock-Daten `mockGruendungsfall.ts` |
+| **Demo-Session** | `GruendungStateContext` (RQ/Upload/BG); Fairness: `gruendung-rules.ts` — siehe [§8.10](08_QUERSCHNITTSKONZEPTE.md#810-demo-ist-session-state-und-verfahrensfairness-phase-0) |
 
 ---
 
 *Verweis: [architecture/05_Systemarchitektur.md](../05_Systemarchitektur.md) – Vollständiges Mermaid-Gesamtdiagramm*
 *Verweis: [docs/engines/verfahrensfairness/](../../docs/engines/verfahrensfairness/README.md)*
 *Verweis: [docs/domains/kita_betrieb_und_jugendamt_steuerung/](../../docs/domains/kita_betrieb_und_jugendamt_steuerung/README.md)*
+*Verweis: Demo-Session/Fairness-Ist → [08_QUERSCHNITTSKONZEPTE §8.10](08_QUERSCHNITTSKONZEPTE.md#810-demo-ist-session-state-und-verfahrensfairness-phase-0) (Q-630)*
 

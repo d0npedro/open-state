@@ -4,6 +4,16 @@
 
 > **Hinweis:** Dieses Dokument enthält technische Detaildiagramme und Spezifikationen. Die strukturierte arc42-Gesamtsicht ist unter [architecture/arc42/](arc42/README.md) dokumentiert. Beide Dokumente ergänzen sich – arc42 führt die Architekturlogik, dieses Dokument liefert technische Details.
 
+### Phase-0-Demo (Ist-Hinweis, Q-630)
+
+Die **Zielarchitektur** unten (Microservices, Adapter, Datentresor) ist **Konzept**. Die lauffähige Demo ist eine **Next.js-App** unter `demo/` mit Mock-Daten und **clientseitigem Session-State** — ohne Backend und ohne Behördenanbindung.
+
+| Thema | Wo beschrieben | Code-Einstieg |
+|-------|----------------|---------------|
+| Session AV/UG/Kita | [arc42 §8.10](arc42/08_QUERSCHNITTSKONZEPTE.md#810-demo-ist-session-state-und-verfahrensfairness-phase-0) | `DemoStateContext`, `GruendungStateContext`, Kita Meldeeingang-`localStorage` |
+| Fairness-Signale AV/UG | dasselbe §8.10 + [VERFAHRENSFAIRNESS_IN_DER_DEMO](../docs/VERFAHRENSFAIRNESS_IN_DER_DEMO.md) | `demo/lib/fairness/rules.ts`, `gruendung-rules.ts` |
+| Demo-Routen / Build | [docs/BUILD_STATE.md](../docs/BUILD_STATE.md) | `demo/app/**` |
+
 ---
 
 ## 1. Architektur-Übersicht

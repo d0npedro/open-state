@@ -1,6 +1,6 @@
 # BUILD_STATE.md – Aktueller Projektstand
 
-Zuletzt aktualisiert: nach Q-622 Kita Meldelücke Ruhezustand/Methodik
+Zuletzt aktualisiert: nach Q-630 arc42 Demo Session/Fairness Ist
 
 Dieser Stand beschreibt, was **tatsächlich existiert und funktioniert** — nicht die Feature-Historie.
 Geplante Schritte → `docs/NEXT_STEPS_QUEUE.md`.  
@@ -148,8 +148,8 @@ Traceability-Matrix: Stub → SSOT `demo/data/storyRegistry.ts` / Export `story_
 | Thema | Pfad | Status |
 |-------|------|--------|
 | Verfahrensfairness | `docs/engines/verfahrensfairness/` | ✓ |
-| arc42 | `architecture/arc42/` | ✓ 12 Kapitel |
-| Systemarchitektur | `architecture/05_Systemarchitektur.md` | ✓ |
+| arc42 | `architecture/arc42/` | ✓ 12 Kapitel · §8.10 Demo Session/Fairness Ist (Q-630) |
+| Systemarchitektur | `architecture/05_Systemarchitektur.md` | ✓ Phase-0-Demo-Hinweis + Verweis §8.10 (Q-630) |
 | Master-Blueprint | `docs/01_Master_Blueprint.md` | ✓ |
 | API-Skizzen | `docs/api/` | ✓ AV + Kita YAML / Aggregationsvertrag |
 

@@ -178,8 +178,44 @@ Themes unterstützen WCAG-Ziele (Abschnitt 8.7), ersetzen aber keine semantische
 
 ---
 
+## 8.10 Demo-Ist: Session-State und Verfahrensfairness (Phase 0)
+
+**Stand:** Q-630 · Konzeptziel bleibt die Zielarchitektur (Microservices, Adapter); **dieser Abschnitt** beschreibt nur, was die **laufende Next.js-Demo** (`demo/`) heute technisch leistet. Kein Backend, keine Behörden-Adapter.
+
+### Session-State (clientseitig)
+
+| Domäne | Provider / Speicher | Session-Aktionen (Demo) | Reset |
+|--------|---------------------|-------------------------|--------|
+| Arbeitsverwaltung | `demo/context/DemoStateContext.tsx` (React Context) | RQ beantworten, Unterlage „hochladen“, Termin bestätigen, **Widerspruch** (US-AV-006) | DemoSessionBar → `resetSession` |
+| Unternehmensgründung | `demo/context/GruendungStateContext.tsx` | RQ, Upload, **BG-Anmeldung markieren** | DemoSessionBar |
+| Kita Meldekette | `localStorage` Schlüssel Meldeeingang (`types/kitaMeldeeingang`) | Monatsmeldung freigeben → Lagebild-Meldeeingang | DemoSessionBar / clear |
+
+**Laufzeitregeln der Demo**
+
+- State lebt im Domain-Layout-Provider bzw. im Browser; **kein Server**.
+- Interaktionen erzeugen **Timeline-/Verlauf-Ereignisse** (AV/UG) und aktualisieren Fairness-Signale **live**.
+- Nach Session-Interaktion: Navigation über **Client-Tabs/Links**, nicht `page.goto()` (DEC-012) — sonst remountet das Layout und Session-State geht verloren.
+- UI-Quittungen (RQ/Upload/Ruhezustand) und Session-Bar machen den Demo-Charakter sichtbar.
+
+### Verfahrensfairness (regelbasiert, kein ML)
+
+| | AV | UG |
+|--|----|----|
+| Berechnung | `berechneFairnessSignale` · `demo/lib/fairness/rules.ts` | `berechneFairnessSignaleGruendung` · `demo/lib/fairness/gruendung-rules.ts` |
+| Typen | `demo/types/fairness.ts` | dieselben Signal-Typen mit `UG_*`-Präfix |
+| Fiktives Heute | `FIKTIVES_HEUTE` (2024-11-24) | `FIKTIVES_HEUTE_GRUENDUNG` (2024-12-07) |
+| CTAs / Tiefenlinks | Handlungs-Anker + `fairnessSignalVerlaufZiel` → `/fall/verlauf#ere-…` | `fairnessSignalZiel` + Verlauf → `/gruendung/verlauf#ere-…` |
+| UI | Übersicht, Hinweise, Dokumente, RQ, Bescheide | Übersicht, Hinweise, Dokumente, Behörden |
+
+**Grenzen:** Hinweise treffen **keine** Entscheidungen; keine Fairness-Scores; Kita hat **keine** Fairness-Signalschicht analog AV/UG (Meldelücke/Methodik eigenständig).
+
+**Führende Demo-Doku (kein Doppelkatalog):** [`docs/VERFAHRENSFAIRNESS_IN_DER_DEMO.md`](../../docs/VERFAHRENSFAIRNESS_IN_DER_DEMO.md) · Engine-Konzept: [`docs/engines/verfahrensfairness/`](../../docs/engines/verfahrensfairness/) · Ist-Stand: [`docs/BUILD_STATE.md`](../../docs/BUILD_STATE.md)
+
+---
+
 *Verweis: [docs/stories/TRACEABILITY_MATRIX.md](../../docs/stories/TRACEABILITY_MATRIX.md)*
 *Verweis: [docs/engines/verfahrensfairness/04_TRANSPARENZ_UND_AUDITIERBARKEIT.md](../../docs/engines/verfahrensfairness/04_TRANSPARENZ_UND_AUDITIERBARKEIT.md)*
 *Verweis: [docs/LEITBILD_STAAT_UND_VERTRAUEN.md](../../docs/LEITBILD_STAAT_UND_VERTRAUEN.md)*
 *Verweis: [demo/design-system/README.md](../../demo/design-system/README.md)*
+*Verweis Q-630: Abschnitt 8.10 Demo-Ist Session/Fairness*
 

@@ -6,13 +6,13 @@ Session-Einstieg: `docs/delivery/SESSION_HANDOFF.md`.
 
 | Feld | Wert |
 |------|------|
-| `next_domain` | `cross` |
-| `last_domain` | `kita` |
-| `last_queue_id` | `Q-622` |
-| `last_commit` | 53d7aba |
-| `fires_total` | 52 |
+| `next_domain` | `av` |
+| `last_domain` | `cross` |
+| `last_queue_id` | `Q-630` |
+| `last_commit` | (pending) |
+| `fires_total` | 53 |
 | `consecutive_idle` | 0 |
-| `updated` | 2026-08-03 (Q-622 Kita Meldelücke; nächster OFFEN Q-630) |
+| `updated` | 2026-08-03 (Q-630 arc42 Session/Fairness Ist; Queue produktiv leer) |
 
 ## Domänen-Reihenfolge
 
