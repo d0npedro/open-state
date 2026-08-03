@@ -646,6 +646,7 @@ export default function KitaMeldungPage() {
             background: 'var(--color-success-light, #f0faf4)',
           }}
           role="status"
+          data-testid="meldung-freigabe-protokoll"
         >
           <strong style={{ color: 'var(--color-success)' }}>Freigabe protokolliert</strong>
           <dl
@@ -671,9 +672,41 @@ export default function KitaMeldungPage() {
               </span>
             </dd>
           </dl>
+          {/* Q-622: Leerzustand nach Session-Freigabe – Einrichtung hat nichts mehr freizugeben */}
+          <div
+            className="notice-box notice-box-success"
+            style={{ marginTop: '0.85rem' }}
+            role="status"
+            data-testid="meldung-freigabe-ruhezustand"
+          >
+            <strong style={{ display: 'block', marginBottom: '0.25rem' }}>
+              Keine weitere Freigabe-Handlung für diese Meldung
+            </strong>
+            <p style={{ margin: 0, fontSize: '0.875rem', lineHeight: 1.5 }}>
+              Die Monatsmeldung ist freigegeben und session-lokal an den Meldeeingang des
+              Jugendamts übermittelt. Für {base.einrichtungBezeichnung} entfällt die Meldelücke
+              in der Demo-Stichprobe.
+            </p>
+            <p
+              style={{
+                margin: '0.45rem 0 0',
+                fontSize: '0.8rem',
+                color: 'var(--color-text-muted)',
+                lineHeight: 1.45,
+              }}
+              data-testid="meldung-freigabe-methodik"
+            >
+              Methodik: Nur freigegebene Aggregate sind JA-sichtbar. Andere Einrichtungen können
+              weiterhin als Lücke ausgewiesen sein – ohne Interpolation (DEC-004).
+            </p>
+          </div>
           <p style={{ fontSize: '0.85rem', margin: '0.75rem 0 0', color: 'var(--color-text-muted)' }}>
             Freigegebene Aggregate sind im{' '}
-            <Link href="/kita/lagebild" style={{ color: 'var(--color-primary)' }}>
+            <Link
+              href="/kita/lagebild#meldeeingang"
+              style={{ color: 'var(--color-primary)' }}
+              data-testid="meldung-freigabe-lagebild-link"
+            >
               Steuerungslagebild (US-KJ-005)
             </Link>{' '}
             unter Meldeeingang &amp; Datenbasis sichtbar (Demo-Session, localStorage). Entwürfe

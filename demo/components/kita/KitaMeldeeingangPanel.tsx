@@ -527,7 +527,11 @@ export function KitaMeldeeingangPanel() {
       </div>
 
       {luecken.length > 0 && (
-        <div className="notice-box notice-box-warn" role="status">
+        <div
+          className="notice-box notice-box-warn"
+          role="status"
+          data-testid="meldeeingang-luecken-liste"
+        >
           <div style={{ fontSize: '0.875rem' }}>
             <strong>Fehlende / ausstehende Meldungen</strong>
             <ul style={{ margin: '0.5rem 0 0', paddingLeft: '1.25rem' }}>
@@ -551,6 +555,49 @@ export function KitaMeldeeingangPanel() {
                 </li>
               ))}
             </ul>
+            <p
+              style={{
+                margin: '0.65rem 0 0',
+                fontSize: '0.8rem',
+                color: 'var(--color-text-muted)',
+                lineHeight: 1.45,
+              }}
+              data-testid="meldeeingang-luecken-methodik"
+            >
+              Methodik: Fehlende Meldungen werden als Lücke ausgewiesen und nicht mit Schätzwerten
+              aufgefüllt. Nur freigegebene Aggregate fließen in die Aggregation ein (DEC-004).
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* Q-622: Leerzustand nach Session-Freigabe – Meldelücke dieser Einrichtung geschlossen */}
+      {hydrated && luecken.length === 0 && (
+        <div
+          className="notice-box notice-box-success"
+          role="status"
+          data-testid="meldeeingang-keine-luecken"
+        >
+          <div style={{ fontSize: '0.875rem' }}>
+            <strong style={{ color: 'var(--color-success)' }}>
+              Keine offenen Meldelücken in der Demo-Stichprobe
+            </strong>
+            <p style={{ margin: '0.4rem 0 0', lineHeight: 1.5 }}>
+              Alle Einrichtungen haben freigegebene Monatsmeldungen für {base.monatsLabel} geliefert.
+              Es bleibt keine Handlungsaufforderung „Meldung freigeben“ in dieser Stichprobe.
+            </p>
+            <p
+              style={{
+                margin: '0.5rem 0 0',
+                fontSize: '0.8rem',
+                color: 'var(--color-text-muted)',
+                lineHeight: 1.45,
+              }}
+              data-testid="meldeeingang-keine-luecken-methodik"
+            >
+              Methodik: Vollständigkeit bezieht sich nur auf freigegebene Aggregate der Demo-Stichprobe.
+              Keine Interpolation fehlender Einrichtungen; keine Kind- oder Personennamen (DEC-004).
+            </p>
           </div>
         </div>
       )}
@@ -564,6 +611,7 @@ export function KitaMeldeeingangPanel() {
             background: 'var(--color-success-light, #f0faf4)',
           }}
           role="status"
+          data-testid="meldeeingang-session-neu"
         >
           <strong style={{ color: 'var(--color-success)' }}>
             Neu im Meldeeingang (Demo-Session)
@@ -574,6 +622,21 @@ export function KitaMeldeeingangPanel() {
             <span style={{ fontFamily: 'monospace' }}>{session?.freigabeId}</span>
             {session?.freigegebenAm ? ` · ${session.freigegebenAm}` : ''}.
             Nur freigegebene Aggregate – keine Kind- oder Personennamen.
+          </p>
+          <p
+            style={{
+              fontSize: '0.8rem',
+              margin: '0.5rem 0 0',
+              color: 'var(--color-text-muted)',
+              lineHeight: 1.45,
+            }}
+            data-testid="meldeeingang-session-luecke-hinweis"
+          >
+            {luecken.length === 0
+              ? 'Meldelücke Kita Sonnenwinkel geschlossen – in der Demo-Stichprobe sind nun alle Einrichtungen freigegeben.'
+              : `Meldelücke Kita Sonnenwinkel geschlossen. Verbleibend: ${luecken.length} offene Meldung${
+                  luecken.length === 1 ? '' : 'en'
+                } anderer Einrichtungen (weiterhin als Lücke ausgewiesen, ohne Schätzung).`}
           </p>
         </div>
       )}

@@ -42,6 +42,14 @@ test.describe('Kita Meldekette – Freigabe → Meldeeingang (Q-402)', () => {
 
     // Erfolg: Freigabe protokolliert (screen); print-only-Doppel vermeiden
     await expect(page.getByText(/Freigabe protokolliert/i)).toBeVisible();
+    // Q-622: Leerzustand nach Freigabe + Methodik
+    await expect(page.getByTestId('meldung-freigabe-ruhezustand')).toBeVisible();
+    await expect(page.getByTestId('meldung-freigabe-ruhezustand')).toContainText(
+      /Keine weitere Freigabe-Handlung/i
+    );
+    await expect(page.getByTestId('meldung-freigabe-methodik')).toContainText(
+      /ohne Interpolation|DEC-004/i
+    );
     // Seite + SessionBar (Q-412) haben beide „Demo zurücksetzen“
     await expect(
       page.getByRole('region', { name: /Demo-Session/i }).getByRole('button', { name: /Demo zurücksetzen/i })
@@ -61,17 +69,26 @@ test.describe('Kita Meldekette – Freigabe → Meldeeingang (Q-402)', () => {
     ).toBeVisible();
 
     // Meldeeingang-Panel (u. a. Planungsraum-Meldebeitrag hat denselben Titel)
-    const sessionBanner = page
-      .getByRole('status')
-      .filter({ hasText: /Freigabe von\s+Kita Sonnenwinkel ist im Lagebild angekommen/i })
-      .first();
+    const sessionBanner = page.getByTestId('meldeeingang-session-neu');
     await expect(sessionBanner).toBeVisible();
     await expect(sessionBanner).toContainText(payload.freigabeId);
+    await expect(sessionBanner).toContainText(
+      /Freigabe von\s+Kita Sonnenwinkel ist im Lagebild angekommen/i
+    );
 
-    // Sonnenwinkel nicht mehr in der Lückenliste
-    const lueckenBox = page.locator('.notice-box-warn');
+    // Q-622: Session-Hinweis zur geschlossenen Meldelücke + Methodik
+    await expect(page.getByTestId('meldeeingang-session-luecke-hinweis')).toBeVisible();
+    await expect(page.getByTestId('meldeeingang-session-luecke-hinweis')).toContainText(
+      /Meldelücke Kita Sonnenwinkel geschlossen/i
+    );
+
+    // Sonnenwinkel nicht mehr in der Lückenliste; verbleibende Lücken mit Methodik
+    const lueckenBox = page.getByTestId('meldeeingang-luecken-liste');
     if (await lueckenBox.count()) {
       await expect(lueckenBox.getByText(/Kita Sonnenwinkel/)).toHaveCount(0);
+      await expect(page.getByTestId('meldeeingang-luecken-methodik')).toContainText(
+        /keine Interpolation|nicht mit Schätzwerten/i
+      );
     }
 
     // Q-412: SessionBar nach Meldefreigabe (Parität AV/UG)

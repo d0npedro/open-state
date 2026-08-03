@@ -1,6 +1,6 @@
 # BUILD_STATE.md – Aktueller Projektstand
 
-Zuletzt aktualisiert: nach Q-621 UG Ruhezustand-Banner
+Zuletzt aktualisiert: nach Q-622 Kita Meldelücke Ruhezustand/Methodik
 
 Dieser Stand beschreibt, was **tatsächlich existiert und funktioniert** — nicht die Feature-Historie.
 Geplante Schritte → `docs/NEXT_STEPS_QUEUE.md`.  
@@ -67,13 +67,13 @@ Eine Zeile pro Route: Zweck + Story-Bezug. Feinschliff-Details stehen im Code.
 | Route | Inhalt (Ist) | Stories | Status |
 |-------|--------------|---------|--------|
 | `/kita` | Öffentlicher Transparenzbericht: Filter, Zeitreihe, Regionenvergleich, CSV/Druck, Open-Data-Hinweis | US-KJ-009, 010 | ✓ |
-| `/kita/lagebild` | JA-Steuerung: Meldeeingang, Engpass, Handlungsfelder, Zeitreihe, Vergleich, CSV/Druck | US-KJ-005, 006, 010 | ✓ |
+| `/kita/lagebild` | JA-Steuerung: Meldeeingang (Lücken-Methodik, Session-Hinweis Q-622), Engpass, Zeitreihe, CSV/Druck | US-KJ-005, 006, 010 | ✓ |
 | `/kita/bedarfsplanung` | Bedarfsplanungsentwurf § 80 SGB VIII; Meldebasis; Freigabe-Demo | US-KJ-007 | ✓ |
 | `/kita/vorlage` | Politische Gremienvorlage; JA-Freigabe; CSV/Druck | US-KJ-008 | ✓ |
 | `/kita/einrichtung` | Belegungsstand aggregiert (keine Kinddaten); Prozesskette | US-KJ-002 | ✓ |
 | `/kita/tagesstand` | Tagesstand erfassen/freigeben (Aggregate, session-lokal) | US-KJ-001 | ✓ |
 | `/kita/monatsbericht` | Monatsbericht + Vorschau laufender Monat; Export | US-KJ-003 | ✓ |
-| `/kita/meldung` | Monatsmeldung prüfen/korrigieren/freigeben; Session → Meldeeingang | US-KJ-004 | ✓ |
+| `/kita/meldung` | Monatsmeldung freigeben; Session → Meldeeingang; **Ruhezustand + Methodik nach Freigabe** (Q-622) | US-KJ-004 | ✓ |
 
 ---
 

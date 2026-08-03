@@ -6,13 +6,13 @@ Session-Einstieg: `docs/delivery/SESSION_HANDOFF.md`.
 
 | Feld | Wert |
 |------|------|
-| `next_domain` | `kita` |
-| `last_domain` | `ug` |
-| `last_queue_id` | `Q-621` |
-| `last_commit` | 61b2553 |
-| `fires_total` | 51 |
+| `next_domain` | `cross` |
+| `last_domain` | `kita` |
+| `last_queue_id` | `Q-622` |
+| `last_commit` | (pending) |
+| `fires_total` | 52 |
 | `consecutive_idle` | 0 |
-| `updated` | 2026-08-03 (Q-621 UG Ruhezustand; nächster OFFEN Q-622) |
+| `updated` | 2026-08-03 (Q-622 Kita Meldelücke; nächster OFFEN Q-630) |
 
 ## Domänen-Reihenfolge
 
