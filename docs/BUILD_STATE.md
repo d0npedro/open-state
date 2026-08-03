@@ -1,6 +1,6 @@
 # BUILD_STATE.md – Aktueller Projektstand
 
-Zuletzt aktualisiert: nach Q-492 ThemeSwitcher a11y data-theme
+Zuletzt aktualisiert: nach Q-500 AV Session-Reset voller Ruhezustand
 
 Dieser Stand beschreibt, was **tatsächlich existiert und funktioniert** — nicht die Feature-Historie.
 Geplante Schritte → `docs/NEXT_STEPS_QUEUE.md`.  
@@ -18,8 +18,8 @@ Detailhistorie → `git log` / `docs/delivery/queue-archive/`.
 | Build-Status | ✓ 27 statische Seiten |
 | Deployment | Vercel, aus `demo/` |
 | Lokaler Start | `cd demo && npm install && npm run dev` |
-| Letzte bekannte Prüfung | lint 2026-08-03; E2E chromium **358** Tests (+ ThemeSwitcher a11y Q-492) |
-| E2E-Skripte | `test:e2e:ci` (chromium, workers=1); Domains: `test:e2e:av` · `test:e2e:ug` · `test:e2e:kita`; ThemeSwitcher Q-492; Skip-Link; Session-Reset RQ; `stories-zur-demo.spec.ts` |
+| Letzte bekannte Prüfung | lint 2026-08-03; E2E chromium **359** Tests (+ Session-Reset voller Ruhezustand Q-500) |
+| E2E-Skripte | `test:e2e:ci` (chromium, workers=1); Domains: `test:e2e:av` · `test:e2e:ug` · `test:e2e:kita`; ThemeSwitcher Q-492; Skip-Link; Session-Reset RQ + voller Ruhezustand Q-500; `stories-zur-demo.spec.ts` |
 | Daten | durchgängig Mock; kein Backend, keine Behörden-Anbindung |
 
 ---
@@ -155,7 +155,7 @@ Traceability-Matrix: Stub → SSOT `demo/data/storyRegistry.ts` / Export `story_
 |-------|-------|--------|
 | `AGENTS.md` | Iterationsablauf | ✓ |
 | `docs/DELIVERY_SYSTEM.md` | 12-Schritte-Detail | ✓ (queue-archive verlinkt) |
-| `docs/NEXT_STEPS_QUEUE.md` | Aktive Arbeitsliste | ✓ Q-462 OFFEN; Q-461 DONE |
+| `docs/NEXT_STEPS_QUEUE.md` | Aktive Arbeitsliste | ✓ Q-501/Q-502 OFFEN; Q-500 DONE |
 | `docs/delivery/AUTONOMOUS_LOOP.md` | Autonomer Loop (Rotation, Katalog, Prompt) | ✓ |
 | `docs/delivery/loop-state.md` | next_domain / idle-Zähler | ✓ |
 | `.grok/workflows/autonomous-develop.rhai` | Ein-Fire-Workflow | ✓ (Q-400) |

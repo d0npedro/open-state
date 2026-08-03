@@ -1,6 +1,7 @@
 /**
  * US-AV-008 / Q-440 – Fairness nach Erledigung offener Aktionen
  * US-AV-008 / Q-462 – Session-Reset nach RQ-Antwort stellt Fairness-RQ wieder her
+ * US-AV-008 / Q-500 – Session-Reset nach RQ+Upload+Termin stellt Tab-Badges und Aktions-Signale wieder her
  *
  * Nach Session-Antwort auf Rückfrage + Upload aller offenen Unterlagen:
  * - keine hängenden Aktions-Signale (RQ, Unterlagen, Fall pausiert)
@@ -11,6 +12,11 @@
  * Nach nur RQ-Antwort + DemoSessionBar-Reset:
  * - Session-Delta (Antwort, „gelöst“) weg
  * - Fairness-RQ-Signal wieder Ausgangs-Mock (offen mit Frist)
+ *
+ * Nach vollem Ruhezustand (RQ+Upload+Termin) + DemoSessionBar-Reset:
+ * - Tab-Badges Fragen/Unterlagen/Termine wieder Mock-Ausgang
+ * - Ruhezustand-Banner und Upload-Quittung weg
+ * - Fairness-Aktions-Signale (RQ, Unterlagen) wieder sichtbar
  *
  * Hinweis: BESCHEID_VORLAEUFIG kann bleiben (Sachlage, keine Bürger-Aktion in der Demo).
  */
@@ -144,5 +150,66 @@ test.describe('US-AV-008 – Session-Reset nach RQ-Antwort (Q-462)', () => {
     await expect(page.getByRole('button', { name: /Rückfrage beantworten/i })).toBeVisible();
     await expect(page.getByText('Alle Fragen sind beantwortet')).toHaveCount(0);
     await expect(page.getByRole('region', { name: /Demo-Session/i })).toHaveCount(0);
+  });
+});
+
+test.describe('US-AV-008 – Session-Reset nach vollem Ruhezustand (Q-500)', () => {
+  test('DemoSessionBar-Reset nach RQ+Upload+Termin stellt Badges und Aktions-Signale wieder her', async ({
+    page,
+  }) => {
+    // 1) Alle Bürger-Aktionen erledigen (Session-Nav, DEC-012)
+    await erledigeOffeneAktionen(page);
+
+    // 2) Übersicht: Ruhezustand, keine Handlungs-Badges
+    await goFallTab(page, 'Übersicht', /\/fall$/);
+    await expect(page.getByTestId('ruhezustand-banner')).toBeVisible();
+    await expect(page.getByText('Kein Handeln von Ihnen erforderlich')).toBeVisible();
+    await expect(page.getByTestId('tab-badge-fragen')).toHaveCount(0);
+    await expect(page.getByTestId('tab-badge-unterlagen')).toHaveCount(0);
+    await expect(page.getByTestId('tab-badge-termine')).toHaveCount(0);
+    await expect(page.getByTestId('upload-quittung')).toBeVisible();
+    await expect(page.getByTestId('upload-quittung-vollstaendig')).toBeVisible();
+
+    const sessionBar = page.getByRole('region', { name: /Demo-Session/i });
+    await expect(sessionBar).toBeVisible();
+    await expect(sessionBar.getByRole('button', { name: /Demo zurücksetzen/i })).toBeVisible();
+
+    // 3) Fairness-Hinweise: Aktions-Signale weg (Session-Nav)
+    await page.getByTestId('uebersicht-fairness-hinweise-link').click();
+    await expect(page).toHaveURL(/\/fall\/hinweise/);
+    await expect(page.getByTestId('hinweise-signal-rueckfrage')).toHaveCount(0);
+    await expect(page.getByTestId('hinweise-signal-unterlagen')).toHaveCount(0);
+    await expect(page.getByTestId('hinweise-regelwerk-reaktion')).toBeVisible();
+    await expect(page.getByTestId('hinweise-signal-geloest')).toBeVisible();
+
+    // 4) Demo zurücksetzen (kein page.goto)
+    await page
+      .getByRole('region', { name: /Demo-Session/i })
+      .getByRole('button', { name: /Demo zurücksetzen/i })
+      .click();
+
+    await expect(page.getByRole('region', { name: /Demo-Session/i })).toHaveCount(0);
+    await expect(page.getByTestId('hinweise-signal-geloest')).toHaveCount(0);
+    await expect(page.getByTestId('hinweise-signal-rueckfrage')).toBeVisible();
+    await expect(page.getByTestId('hinweise-signal-unterlagen')).toBeVisible();
+    await expect(page.getByTestId('hinweise-rq-cta')).toBeVisible();
+    await expect(page.locator('[data-signal-typ="RUECKFRAGE_OFFEN_FRIST_RELEVANT"]')).toHaveCount(1);
+    await expect(page.locator('[data-signal-typ="UNTERLAGE_FEHLT_BLOCKIERT"]')).toHaveCount(1);
+
+    // 5) Übersicht: Mock-Ausgang Badges + kein Ruhezustand (Session-Nav)
+    await goFallTab(page, 'Übersicht', /\/fall$/);
+    await expect(page.getByTestId('ruhezustand-banner')).toHaveCount(0);
+    await expect(page.getByTestId('upload-quittung')).toHaveCount(0);
+    await expect(page.getByTestId('tab-badge-fragen')).toHaveText('1');
+    await expect(page.getByTestId('tab-badge-unterlagen')).toHaveText('2');
+    await expect(page.getByTestId('tab-badge-termine')).toHaveText('1');
+    await expect(page.getByRole('tab', { name: /Fragen,\s*1 offen/i })).toBeVisible();
+    await expect(page.getByRole('tab', { name: /Unterlagen,\s*2 offen/i })).toBeVisible();
+    await expect(page.getByRole('tab', { name: /Termine,\s*1 offen/i })).toBeVisible();
+
+    // 6) Termine: wieder unbestätigt (kein page.goto)
+    await goFallTab(page, 'Termine', /\/fall\/termine/);
+    await expect(page.getByRole('button', { name: /Termin bestätigen|Bestätigen/i })).toBeVisible();
+    await expect(page.getByText(/Ausstehend/i).first()).toBeVisible();
   });
 });
