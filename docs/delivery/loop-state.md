@@ -9,7 +9,7 @@ Session-Einstieg: `docs/delivery/SESSION_HANDOFF.md`.
 | `next_domain` | `cross` |
 | `last_domain` | `kita` |
 | `last_queue_id` | `Q-622` |
-| `last_commit` | (pending) |
+| `last_commit` | 53d7aba |
 | `fires_total` | 52 |
 | `consecutive_idle` | 0 |
 | `updated` | 2026-08-03 (Q-622 Kita Meldelücke; nächster OFFEN Q-630) |
