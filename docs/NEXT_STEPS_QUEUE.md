@@ -122,12 +122,21 @@ Autonomer Multi-Domain-Loop: [`docs/delivery/AUTONOMOUS_LOOP.md`](delivery/AUTON
 | Q-501 | cross | E2E: ThemeSwitcher ändert `data-density` + localStorage (Parität Q-492 theme) | DEMO | S | Q-492 | DONE |
 | Q-502 | kita | E2E a11y: Bedarfsplanung Druck/CSV-Buttons mit zugänglichem Namen (Parität Lagebild Q-460) | DEMO | S | Q-481 | DONE |
 
+### Loop-Katalog (Auffüllung nach Q-502)
+
+| ID | Domäne | Schritt | Typ | Aufwand | Abhängigkeit | Status |
+|----|--------|---------|-----|---------|--------------|--------|
+| Q-510 | cross | a11y + E2E: BuildInfo im Footer mit zugänglichem Gruppennamen (Env, Version, Commit) | DEMO | S | – | DONE |
+| Q-511 | kita | a11y + E2E: Gremienvorlage Druck/CSV-Buttons mit zugänglichem Namen (Parität Bedarfsplanung Q-502) | DEMO | S | Q-481 | OFFEN |
+| Q-512 | kita | a11y + E2E: Monatsbericht Druck-Button mit zugänglichem Namen (Parität CSV/Tagesstand) | DEMO | S | Q-481 | OFFEN |
+
 ---
 
 ## Kürzlicher DONE-Tail (letzte ~10)
 
 | ID | Kurz | Status |
 |----|------|--------|
+| Q-510 | BuildInfo Footer a11y Env/Version/Commit | DONE |
 | Q-502 | Kita Bedarfsplanung Druck/CSV a11y Labels | DONE |
 | Q-501 | ThemeSwitcher data-density + localStorage os-density | DONE |
 | Q-500 | AV Session-Reset nach vollem Ruhezustand stellt Badges/Signale wieder her | DONE |
@@ -137,7 +146,6 @@ Autonomer Multi-Domain-Loop: [`docs/delivery/AUTONOMOUS_LOOP.md`](delivery/AUTON
 | Q-482 | AV Keyboard-Smoke Fall-Tabs Enter-Navigation | DONE |
 | Q-481 | Kita E2E-Smoke Bedarfsplanung/Vorlage/Monatsbericht/Meldung | DONE |
 | Q-480 | Kita Einrichtung Druck/CSV a11y Labels | DONE |
-| Q-472 | UG Skip-Link /gruendung und /gruendung/hinweise | DONE |
 
 ---
 

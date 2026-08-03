@@ -11,21 +11,33 @@ export function BuildInfo() {
   };
   const color = envColors[env] ?? '#4A5568';
 
+  const accessibleName = `Demo-Build: Umgebung ${env}, Version ${version}, Commit ${sha}`;
+
   return (
-    <div style={{
-      display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
-      fontSize: '0.72rem', color: 'rgba(255,255,255,0.65)',
-      fontFamily: 'monospace'
-    }}>
-      <span style={{
-        background: color, color: 'white', padding: '0.1rem 0.4rem',
-        borderRadius: '3px', fontSize: '0.65rem', fontWeight: 700,
-        textTransform: 'uppercase', letterSpacing: '0.05em'
-      }}>{env}</span>
-      <span>v{version}</span>
-      <span style={{ opacity: 0.6 }}>·</span>
-      <span title="Git Commit SHA">{sha}</span>
-      <span style={{ opacity: 0.6 }}>·</span>
+    <div
+      role="group"
+      aria-label={accessibleName}
+      data-testid="build-info"
+      style={{
+        display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
+        fontSize: '0.72rem', color: 'rgba(255,255,255,0.65)',
+        fontFamily: 'monospace'
+      }}
+    >
+      <span
+        data-testid="build-info-env"
+        style={{
+          background: color, color: 'white', padding: '0.1rem 0.4rem',
+          borderRadius: '3px', fontSize: '0.65rem', fontWeight: 700,
+          textTransform: 'uppercase', letterSpacing: '0.05em'
+        }}
+      >
+        {env}
+      </span>
+      <span data-testid="build-info-version">v{version}</span>
+      <span style={{ opacity: 0.6 }} aria-hidden="true">·</span>
+      <span data-testid="build-info-sha" title="Git Commit SHA">{sha}</span>
+      <span style={{ opacity: 0.6 }} aria-hidden="true">·</span>
       <span>Demonstrator</span>
     </div>
   );

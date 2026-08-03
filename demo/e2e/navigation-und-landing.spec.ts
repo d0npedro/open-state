@@ -400,3 +400,38 @@ test.describe('ThemeSwitcher density (Q-501)', () => {
     expect(await page.evaluate(() => localStorage.getItem('os-density'))).toBe('normal');
   });
 });
+
+test.describe('BuildInfo a11y (Q-510)', () => {
+  test('Footer-Build-Info hat zugänglichen Gruppennamen mit Env, Version und Commit', async ({
+    page,
+  }) => {
+    await page.goto('/');
+
+    const buildInfo = page.getByRole('group', { name: /Demo-Build:/i });
+    await expect(buildInfo).toBeVisible();
+    await expect(page.getByTestId('build-info')).toBeVisible();
+
+    // Accessible name enthält Umgebung, Version und Commit
+    await expect(buildInfo).toHaveAccessibleName(/Demo-Build:.*Umgebung/i);
+    await expect(buildInfo).toHaveAccessibleName(/Version/i);
+    await expect(buildInfo).toHaveAccessibleName(/Commit/i);
+
+    // Sichtbare Bausteine (Default local / 0.1.0 / dev im lokalen Build)
+    await expect(page.getByTestId('build-info-env')).toBeVisible();
+    await expect(page.getByTestId('build-info-version')).toContainText(/^v/);
+    await expect(page.getByTestId('build-info-sha')).toBeVisible();
+
+    const envText = (await page.getByTestId('build-info-env').textContent())?.trim() ?? '';
+    const versionText = (await page.getByTestId('build-info-version').textContent())?.trim() ?? '';
+    const shaText = (await page.getByTestId('build-info-sha').textContent())?.trim() ?? '';
+    expect(envText.length).toBeGreaterThan(0);
+    expect(versionText).toMatch(/^v.+/);
+    expect(shaText.length).toBeGreaterThan(0);
+
+    await expect(buildInfo).toHaveAccessibleName(new RegExp(envText, 'i'));
+    await expect(buildInfo).toHaveAccessibleName(
+      new RegExp(versionText.replace(/^v/, ''), 'i')
+    );
+    await expect(buildInfo).toHaveAccessibleName(new RegExp(shaText.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i'));
+  });
+});
