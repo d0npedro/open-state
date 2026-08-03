@@ -9,7 +9,7 @@ Session-Einstieg: `docs/delivery/SESSION_HANDOFF.md`.
 | `next_domain` | `cross` |
 | `last_domain` | `cross` |
 | `last_queue_id` | `Q-600` |
-| `last_commit` | (nach Commit) |
+| `last_commit` | 9be6c25 |
 | `fires_total` | 46 |
 | `consecutive_idle` | 0 |
 | `updated` | 2026-08-03 (Q-600 Session-Handoff; nächster OFFEN Q-601) |
