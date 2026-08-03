@@ -8,7 +8,7 @@ Regeln: `docs/delivery/AUTONOMOUS_LOOP.md`.
 | `next_domain` | `ug` |
 | `last_domain` | `av` |
 | `last_queue_id` | `Q-521` |
-| `last_commit` | pending |
+| `last_commit` | 03c1d56 |
 | `fires_total` | 38 |
 | `consecutive_idle` | 0 |
 | `updated` | 2026-08-03 (Q-521 AV Skip-Link Hinweise/Dokumente) |
