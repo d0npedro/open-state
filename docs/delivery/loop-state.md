@@ -8,7 +8,7 @@ Regeln: `docs/delivery/AUTONOMOUS_LOOP.md`.
 | `next_domain` | `ug` |
 | `last_domain` | `av` |
 | `last_queue_id` | `Q-532` |
-| `last_commit` | pending |
+| `last_commit` | e46c9f5 |
 | `fires_total` | 41 |
 | `consecutive_idle` | 0 |
 | `updated` | 2026-08-03 (Q-532 Skip-Link AV RQ/Termine) |
