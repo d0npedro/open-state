@@ -366,6 +366,8 @@ export default function BedarfsplanungPage() {
             className="btn btn-secondary"
             onClick={() => window.print()}
             style={{ fontSize: '0.875rem' }}
+            aria-label="Bedarfsplanung drucken oder als PDF speichern (keine Kind- oder Personennamen)"
+            data-testid="kita-bedarfsplanung-druck"
           >
             Drucken / als PDF speichern
           </button>
@@ -389,6 +391,7 @@ export default function BedarfsplanungPage() {
             }
             style={{ fontSize: '0.875rem' }}
             aria-label="Bedarfsplanungs-Aggregate als CSV herunterladen (keine Kind- oder Personennamen)"
+            data-testid="kita-bedarfsplanung-csv-download"
           >
             CSV exportieren
           </button>
