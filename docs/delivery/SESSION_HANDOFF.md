@@ -1,8 +1,8 @@
 # Session-Handoff – nächste Arbeitsphase
 
-**Stand:** 2026-08-03 · Q-610 Story-Registry Status-Audit erledigt  
+**Stand:** 2026-08-03 · Q-611 Fairness-Demo-Doku (AV+UG Ist) erledigt  
 **Phase:** Demo-Domänen AV/UG/KJ **DEMO-stabil**; Welle Q-400–Q-542 in [`queue-archive/DONE_Q400-Q542.md`](queue-archive/DONE_Q400-Q542.md).  
-**Nächster Einstieg:** oberster `OFFEN` in [`NEXT_STEPS_QUEUE.md`](../NEXT_STEPS_QUEUE.md) = **Q-611** (Fairness-Doku-Delta).
+**Nächster Einstieg:** oberster `OFFEN` in [`NEXT_STEPS_QUEUE.md`](../NEXT_STEPS_QUEUE.md) = **Q-612** (Stories-Routen / Zur-Demo).
 
 ---
 
@@ -40,8 +40,8 @@ Autonomie-Loop (optional): Prompt in `AUTONOMOUS_LOOP.md` §6, Intervall ≥5m; 
 
 | Prio | Fokus | Queue | Warum |
 |------|--------|-------|--------|
-| 1 | Story-Status / Traceability | Q-610 DONE · **Q-612** Routes | Registry vs. Realität |
-| 2 | Fairness-Doku-Delta | Q-611 | Code ↔ Docs |
+| 1 | Stories Routes / Zur Demo | **Q-612** | Registry-Routen Stichprobe |
+| 2 | Fairness-Doku-Delta | Q-611 DONE | Code ↔ Docs |
 | 3 | Ein Produkt-Hebel pro Domäne | Q-620–622 | Mehrwert, kein Skip-Link-Spam |
 
 Bereits vorbereitet (DONE): Q-600 Handoff, Q-601 Archiv, Q-602 E2E-Baseline 378, Q-603 gitignore, Q-604 Katalog-Härtung.

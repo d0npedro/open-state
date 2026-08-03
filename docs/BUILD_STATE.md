@@ -1,6 +1,6 @@
 # BUILD_STATE.md – Aktueller Projektstand
 
-Zuletzt aktualisiert: nach Q-610 Story-Registry Status-Audit
+Zuletzt aktualisiert: nach Q-611 Fairness-Demo-Doku Delta
 
 Dieser Stand beschreibt, was **tatsächlich existiert und funktioniert** — nicht die Feature-Historie.
 Geplante Schritte → `docs/NEXT_STEPS_QUEUE.md`.  
@@ -87,9 +87,10 @@ Keine Q-xxx-Chronik. Pfade = Einstieg für Code-Lesen.
 | UG Mock-Fall | `demo/data/mockGruendungsfall.ts` | Gründungsakte: Behörden, VS, Unterlagen, RQ, Verlauf |
 | Kita Mock | `demo/data/mockKitaLagebild.ts`, `mockKitaMeldeeingang.ts`, … | Planungsräume, Kennzahlen, Meldeeingang, Zeitreihe |
 | Story-Registry | `demo/data/storyRegistry.ts` | 24 Stories · 16 ABGESCHLOSSEN · 8 DEMONSTRIERBAR (offene AK); Export `registry:export` |
-| Fairness AV | `demo/lib/fairness/rules.ts`, `types/fairness.ts` | Regelbasiert (kein ML); Fristen als ISO + Delta zu fiktivem Heute; Verlauf-Tiefenlinks |
-| Fairness UG | `demo/lib/fairness/gruendung-rules.ts` | Signale + CTA-Routing (`fairnessSignalZiel`, `naechsterSchrittZiel`, …) |
-| Fairness UI | `demo/components/fairness/FairnessPanel.tsx` | Darstellung Signale/CTAs |
+| Fairness AV | `demo/lib/fairness/rules.ts`, `types/fairness.ts` | 5 Signal-Typen; ISO-Fristen vs. `FIKTIVES_HEUTE`; Verlauf-Tiefenlinks |
+| Fairness UG | `demo/lib/fairness/gruendung-rules.ts` | 6 Signal-Typen; CTA `fairnessSignalZiel` + Verlauf; session-sensitive Texte |
+| Fairness UI | `demo/components/fairness/FairnessPanel.tsx` | Panel/Summary; Domänen-Seiten mit eigenen CTA-Karten |
+| Fairness-Doku Demo | `docs/VERFAHRENSFAIRNESS_IN_DER_DEMO.md` | Ist: AV+UG Signale, CTAs, Session (Q-611); Konzept → engines/ |
 | AV Session | `demo/context/DemoStateContext.tsx` | RQ beantworten, Upload, Termin bestätigen, Reset, Timeline-Events |
 | UG Session | `demo/context/GruendungStateContext.tsx` | RQ/Upload/BG/Reset; VS-Übergänge; Verlauf |
 | Session-UI | `demo/components/DemoSessionBar.tsx` | AV/UG/Kita „Demo zurücksetzen“ (Kita: Meldefreigabe localStorage, Q-412) |
