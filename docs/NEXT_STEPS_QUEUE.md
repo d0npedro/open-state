@@ -130,12 +130,21 @@ Autonomer Multi-Domain-Loop: [`docs/delivery/AUTONOMOUS_LOOP.md`](delivery/AUTON
 | Q-511 | kita | a11y + E2E: Gremienvorlage Druck/CSV-Buttons mit zugänglichem Namen (Parität Bedarfsplanung Q-502) | DEMO | S | Q-481 | DONE |
 | Q-512 | kita | a11y + E2E: Monatsbericht Druck-Button mit zugänglichem Namen (Parität CSV/Tagesstand) | DEMO | S | Q-481 | DONE |
 
+### Loop-Katalog (Auffüllung nach Q-512)
+
+| ID | Domäne | Schritt | Typ | Aufwand | Abhängigkeit | Status |
+|----|--------|---------|-----|---------|--------------|--------|
+| Q-520 | cross | a11y + E2E: Footer-Nav + Feedback GitHub-Links mit neuem-Tab-Hinweis und korrektem Issue-URL-Muster | DEMO | S | Q-510 | DONE |
+| Q-521 | av | E2E Skip-Link: Fokus `main#main-content` für `/fall/hinweise` und `/fall/dokumente` (Parität Q-451) | DEMO | S | Q-451 | OFFEN |
+| Q-522 | kita | a11y + E2E: Monatsmeldung Druck/CSV-Buttons mit zugänglichem Namen (Parität Monatsbericht Q-512) | DEMO | S | Q-481 | OFFEN |
+
 ---
 
 ## Kürzlicher DONE-Tail (letzte ~10)
 
 | ID | Kurz | Status |
 |----|------|--------|
+| Q-520 | Footer/Feedback externe Links a11y + Issue-URL E2E | DONE |
 | Q-512 | Kita Monatsbericht Druck/CSV a11y Labels | DONE |
 | Q-511 | Kita Vorlage Druck/CSV a11y Labels | DONE |
 | Q-510 | BuildInfo Footer a11y Env/Version/Commit | DONE |
@@ -145,7 +154,6 @@ Autonomer Multi-Domain-Loop: [`docs/delivery/AUTONOMOUS_LOOP.md`](delivery/AUTON
 | Q-492 | ThemeSwitcher a11y + data-theme-Wechsel | DONE |
 | Q-491 | Kita Tagesstand Druck/CSV a11y Labels | DONE |
 | Q-490 | UG Tabs role=tab + Keyboard-Smoke Enter | DONE |
-| Q-482 | AV Keyboard-Smoke Fall-Tabs Enter-Navigation | DONE |
 
 ---
 

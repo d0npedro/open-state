@@ -435,3 +435,55 @@ test.describe('BuildInfo a11y (Q-510)', () => {
     await expect(buildInfo).toHaveAccessibleName(new RegExp(shaText.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i'));
   });
 });
+
+test.describe('Footer- und Feedback-Links a11y (Q-520)', () => {
+  test('Footer-Nav: interne Links + GitHub mit neuem-Tab-Hinweis', async ({ page }) => {
+    await page.goto('/');
+
+    const footerNav = page.getByRole('navigation', { name: /Fußzeilen-Navigation/i });
+    await expect(footerNav).toBeVisible();
+    await expect(page.getByTestId('footer-nav')).toBeVisible();
+
+    const stories = footerNav.getByRole('link', { name: /Story Coverage/i });
+    await expect(stories).toBeVisible();
+    await expect(stories).toHaveAttribute('href', '/stories');
+
+    const feedback = footerNav.getByRole('link', { name: /^Feedback$/i });
+    await expect(feedback).toBeVisible();
+    await expect(feedback).toHaveAttribute('href', '/feedback');
+
+    const github = footerNav.getByRole('link', { name: /GitHub-Repository.*neuem Tab/i });
+    await expect(github).toBeVisible();
+    await expect(github).toHaveAttribute('href', /github\.com\/d0npedro\/open-state/i);
+    await expect(github).toHaveAttribute('target', '_blank');
+    await expect(github).toHaveAttribute('rel', /noopener/i);
+    await expect(page.getByTestId('footer-github-link')).toHaveAccessibleName(
+      /öffnet in neuem Tab/i
+    );
+  });
+
+  test('Feedback: GitHub-Issue-CTA mit neuem-Tab-Hinweis und URL-Muster', async ({ page }) => {
+    await page.goto('/feedback');
+    await expect(page.getByRole('heading', { level: 1, name: /Feedback zur Demo/i })).toBeVisible();
+
+    const issueLink = page.getByTestId('feedback-github-issue-link');
+    await expect(issueLink).toBeVisible();
+    await expect(issueLink).toHaveAccessibleName(
+      /Feedback als GitHub Issue einreichen.*öffnet in neuem Tab/i
+    );
+    await expect(issueLink).toHaveAttribute('target', '_blank');
+    await expect(issueLink).toHaveAttribute('rel', /noopener/i);
+
+    const href = await issueLink.getAttribute('href');
+    expect(href).toBeTruthy();
+    expect(href!).toMatch(/github\.com\/d0npedro\/open-state\/issues\/new/i);
+    expect(href!).toMatch(/title=/i);
+    expect(href!).toMatch(/body=/i);
+    expect(href!).toMatch(/labels=demo-feedback/i);
+
+    // Sekundärer Repo-Link ebenfalls gekennzeichnet
+    await expect(
+      page.getByRole('link', { name: /GitHub-Repository.*neuem Tab/i }).first()
+    ).toBeVisible();
+  });
+});

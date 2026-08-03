@@ -34,12 +34,21 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               alignItems: 'center', flexWrap: 'wrap', gap: '0.5rem'
             }}>
               <BuildInfo />
-              <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem', fontSize: '0.8rem' }}>
+              <nav aria-label="Fußzeilen-Navigation" data-testid="footer-nav" style={{ display: 'flex', alignItems: 'center', gap: '1.25rem', fontSize: '0.8rem' }}>
                 <Link href="/stories" style={{ color: 'rgba(255,255,255,0.75)' }}>Story Coverage</Link>
                 <Link href="/feedback" style={{ color: 'rgba(255,255,255,0.75)' }}>Feedback</Link>
-                <a href="https://github.com/d0npedro/open-state" target="_blank" rel="noopener noreferrer" style={{ color: 'rgba(255,255,255,0.75)' }}>GitHub</a>
+                <a
+                  href="https://github.com/d0npedro/open-state"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="GitHub-Repository (öffnet in neuem Tab)"
+                  data-testid="footer-github-link"
+                  style={{ color: 'rgba(255,255,255,0.75)' }}
+                >
+                  GitHub
+                </a>
                 <ThemeSwitcher />
-              </div>
+              </nav>
             </div>
           </footer>
         </ThemeProvider>

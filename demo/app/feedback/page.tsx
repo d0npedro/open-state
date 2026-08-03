@@ -92,12 +92,22 @@ export default function FeedbackPage() {
               target="_blank"
               rel="noopener noreferrer"
               className="btn btn-primary"
+              aria-label="Feedback als GitHub Issue einreichen (öffnet in neuem Tab)"
+              data-testid="feedback-github-issue-link"
             >
               Feedback als GitHub Issue einreichen
             </a>
             <p style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', marginTop: '0.75rem' }}>
               Kein GitHub-Konto? Senden Sie eine E-Mail mit Ihren Anmerkungen direkt über das{' '}
-              <a href="https://github.com/d0npedro/open-state" target="_blank" rel="noopener noreferrer">GitHub-Repository</a>.
+              <a
+                href="https://github.com/d0npedro/open-state"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="GitHub-Repository (öffnet in neuem Tab)"
+              >
+                GitHub-Repository
+              </a>
+              .
             </p>
           </div>
         </div>
