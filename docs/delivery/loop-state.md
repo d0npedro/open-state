@@ -9,7 +9,7 @@ Session-Einstieg: `docs/delivery/SESSION_HANDOFF.md`.
 | `next_domain` | `av` |
 | `last_domain` | `cross` |
 | `last_queue_id` | `Q-641` |
-| `last_commit` | (nach Q-641 Commit) |
+| `last_commit` | 1b9a9a4 |
 | `fires_total` | 58 |
 | `consecutive_idle` | 0 |
 | `updated` | 2026-08-03 (Q-641 Push-ready; Welle Q-600–641 geschlossen; Scheduler aus) |
