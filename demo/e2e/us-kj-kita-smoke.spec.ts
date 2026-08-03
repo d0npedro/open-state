@@ -1,5 +1,5 @@
 /**
- * Kita E2E-Smoke (Q-401, Q-481) + Skip-Link (Q-471, Q-540, Q-541+)
+ * Kita E2E-Smoke (Q-401, Q-481) + Skip-Link (Q-471, Q-540–Q-542)
  *
  * Kern- und Erweiterungsrouten erreichbar, h1, DEC-004-Hinweis wo sichtbar.
  * Skip-Link → main#main-content auf Kern- und Erweiterungsrouten.
@@ -213,5 +213,29 @@ test.describe('Kita Skip-Link – Einrichtung und Tagesstand (Q-541)', () => {
 
     await assertSkipToMain('/kita/einrichtung', /Kita Sonnenwinkel/i);
     await assertSkipToMain('/kita/tagesstand', /Tagesstand erfassen/i);
+  });
+});
+
+test.describe('Kita Skip-Link – Monatsbericht und Meldung (Q-542)', () => {
+  test('Skip-Link Fokus auf /kita/monatsbericht und /kita/meldung', async ({ page }) => {
+    // WCAG 2.4.1: Root-SkipLink + Kita-Layout main#main-content (tabIndex=-1); Parität Q-471
+    async function assertSkipToMain(route: string, h1: RegExp) {
+      await page.goto(route);
+      await expect(page.getByRole('heading', { level: 1, name: h1 }).first()).toBeVisible();
+
+      const main = page.locator('main#main-content');
+      await expect(main).toBeVisible();
+      await expect(page.getByRole('main')).toHaveCount(1);
+
+      await page.keyboard.press('Tab');
+      const skip = page.getByRole('link', { name: /Zum Inhalt springen/i });
+      await expect(skip).toBeFocused();
+      await expect(skip).toHaveAttribute('href', '#main-content');
+      await skip.press('Enter');
+      await expect(main).toBeFocused();
+    }
+
+    await assertSkipToMain('/kita/monatsbericht', /Monatsbericht Oktober 2024/i);
+    await assertSkipToMain('/kita/meldung', /Monatsmeldung prüfen und freigeben/i);
   });
 });

@@ -7,11 +7,11 @@ Regeln: `docs/delivery/AUTONOMOUS_LOOP.md`.
 |------|------|
 | `next_domain` | `cross` |
 | `last_domain` | `kita` |
-| `last_queue_id` | `Q-541` |
-| `last_commit` | 40733ac |
-| `fires_total` | 44 |
+| `last_queue_id` | `Q-542` |
+| `last_commit` | (nach Commit) |
+| `fires_total` | 45 |
 | `consecutive_idle` | 0 |
-| `updated` | 2026-08-03 (Q-541 Skip-Link Kita Einrichtung/Tagesstand) |
+| `updated` | 2026-08-03 (Q-542 Skip-Link Kita Monatsbericht/Meldung; Queue leer) |
 
 ## Domänen-Reihenfolge
 
