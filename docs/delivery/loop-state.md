@@ -8,7 +8,7 @@ Regeln: `docs/delivery/AUTONOMOUS_LOOP.md`.
 | `next_domain` | `kita` |
 | `last_domain` | `cross` |
 | `last_queue_id` | `Q-501` |
-| `last_commit` | pending |
+| `last_commit` | cfa695a |
 | `fires_total` | 32 |
 | `consecutive_idle` | 0 |
 | `updated` | 2026-08-03 (Q-501 ThemeSwitcher data-density) |
