@@ -169,13 +169,16 @@ export default function VerlaufPage() {
           const dotColor = stelleColor[e.handelndeStelle] ?? 'var(--color-border)';
           const iconName = ereignisIcon[e.typ] ?? 'info';
           const isHashTarget = hashEreignisId === e.id;
-          /** Session-Demo-Ereignisse (Antwort, Upload, Termin) – optisch von Mock-Historie abheben (Q-192/Q-196). */
+          /** Session-Demo-Ereignisse (Antwort, Upload, Termin, Widerspruch) – optisch abheben. */
           const isSessionEvent = e.id.startsWith('E-DEMO-');
           const isSessionAntwort = e.typ === 'RUECKFRAGE_BEANTWORTET' && isSessionEvent;
           const isSessionUpload = e.typ === 'DOKUMENT_EINGEREICHT' && e.id.startsWith('E-DEMO-DOK-');
           const isSessionTermin =
             e.typ === 'STATUS_GEAENDERT' && e.id.startsWith('E-DEMO-TERM-');
-          const isSessionBuergerAktion = isSessionAntwort || isSessionUpload || isSessionTermin;
+          const isSessionWiderspruch =
+            e.typ === 'WIDERSPRUCH_EINGEREICHT' && e.id.startsWith('E-DEMO-WID-');
+          const isSessionBuergerAktion =
+            isSessionAntwort || isSessionUpload || isSessionTermin || isSessionWiderspruch;
 
           return (
             <div
@@ -208,6 +211,7 @@ export default function VerlaufPage() {
                 data-session-antwort={isSessionAntwort ? 'true' : undefined}
                 data-session-upload={isSessionUpload ? 'true' : undefined}
                 data-session-termin={isSessionTermin ? 'true' : undefined}
+                data-session-widerspruch={isSessionWiderspruch ? 'true' : undefined}
                 style={{
                   padding: '1rem 1.125rem',
                   scrollMarginTop: '5rem',
@@ -262,6 +266,15 @@ export default function VerlaufPage() {
                         data-testid={`verlauf-session-termin-badge-${e.id}`}
                       >
                         Ihre Bestätigung
+                      </span>
+                    )}
+                    {isSessionWiderspruch && (
+                      <span
+                        className="status-chip status-chip-success"
+                        style={{ fontSize: '0.7rem', padding: '0.1rem 0.45rem' }}
+                        data-testid={`verlauf-session-widerspruch-badge-${e.id}`}
+                      >
+                        Ihr Widerspruch
                       </span>
                     )}
                     {/* Wer hat gehandelt */}

@@ -1,6 +1,6 @@
 # BUILD_STATE.md – Aktueller Projektstand
 
-Zuletzt aktualisiert: nach Q-612 Stories Zur-Demo Routes/Stichproben
+Zuletzt aktualisiert: nach Q-620 AV Widerspruch Session-State
 
 Dieser Stand beschreibt, was **tatsächlich existiert und funktioniert** — nicht die Feature-Historie.
 Geplante Schritte → `docs/NEXT_STEPS_QUEUE.md`.  
@@ -47,7 +47,7 @@ Eine Zeile pro Route: Zweck + Story-Bezug. Feinschliff-Details stehen im Code.
 | `/fall/dokumente` | Unterlagen + Frist-Countdown + Upload-Quittung + Verlauf-Tiefenlink | US-AV-003, 007 | ✓ |
 | `/fall/rueckfragen` | Offene Fragen + Antwort-Dialog + Quittung + Verlauf-Tiefenlink | US-AV-004 | ✓ |
 | `/fall/termine` | Termine; session-lokale Bestätigung; Nav-Badge nur bei Handlungsbedarf | US-AV-005, 007 | ✓ |
-| `/fall/bescheide` | Bescheide + Fairness + Widerspruchsfrist-Countdown + Anker | US-AV-006, 007 | ✓ |
+| `/fall/bescheide` | Bescheide + Fairness + Widerspruchsfrist; Session-Widerspruch (Quittung, Verlauf `#ere-E-DEMO-WID-…`, Reset) | US-AV-006, 007 | ✓ |
 | `/fall/verlauf` | Timeline; Session-Badges; Anker `#ere-…` | US-AV-007 | ✓ |
 | `/fall/hinweise` | Fairness-Vollansicht; Signale live nach Session; CTAs inkl. Countdown-Chips | US-AV-006, 008 | ✓ |
 
@@ -91,7 +91,7 @@ Keine Q-xxx-Chronik. Pfade = Einstieg für Code-Lesen.
 | Fairness UG | `demo/lib/fairness/gruendung-rules.ts` | 6 Signal-Typen; CTA `fairnessSignalZiel` + Verlauf; session-sensitive Texte |
 | Fairness UI | `demo/components/fairness/FairnessPanel.tsx` | Panel/Summary; Domänen-Seiten mit eigenen CTA-Karten |
 | Fairness-Doku Demo | `docs/VERFAHRENSFAIRNESS_IN_DER_DEMO.md` | Ist: AV+UG Signale, CTAs, Session (Q-611); Konzept → engines/ |
-| AV Session | `demo/context/DemoStateContext.tsx` | RQ beantworten, Upload, Termin bestätigen, Reset, Timeline-Events |
+| AV Session | `demo/context/DemoStateContext.tsx` | RQ, Upload, Termin, **Widerspruch** (Q-620), Reset, Timeline-Events |
 | UG Session | `demo/context/GruendungStateContext.tsx` | RQ/Upload/BG/Reset; VS-Übergänge; Verlauf |
 | Session-UI | `demo/components/DemoSessionBar.tsx` | AV/UG/Kita „Demo zurücksetzen“ (Kita: Meldefreigabe localStorage, Q-412) |
 | Kita UI-Bausteine | `demo/components/kita/*` | Meldeeingang, Explorer, Zeitreihe, Vergleich, Druck/CSV, Engpass, … |

@@ -7,7 +7,10 @@
 // Q-207: Widerspruchsfrist-Chip am Fairness BESCHEID_VORLAEUFIG (Parität Q-205/Q-206).
 
 import Link from 'next/link';
-import { useDemoState } from '@/context/DemoStateContext';
+import {
+  demoWiderspruchEreignisId,
+  useDemoState,
+} from '@/context/DemoStateContext';
 import {
   berechneFairnessSignale,
   berechneFristTage,
@@ -23,8 +26,11 @@ function fristRestLabel(tage: number): string {
   return `noch ${tage} Tag${tage === 1 ? '' : 'e'}`;
 }
 
+/** Anzeige-Datum für Demo-Widerspruch-Quittung (parität DemoStateContext DEMO_AKTION_DATUM). */
+const DEMO_WID_DATUM_ANZEIGE = '24. November 2024';
+
 export default function BescheidePage() {
-  const { fall } = useDemoState();
+  const { fall, reicheWiderspruchEin, sessionWiderspruchBescheidIds } = useDemoState();
   const { bescheide } = fall;
   const bescheidSignale = berechneFairnessSignale(fall).filter(
     s => s.typ === 'BESCHEID_VORLAEUFIG' || s.typ === 'BESCHEID_BEGRUENDUNG_ERWEITERBAR'
@@ -316,16 +322,59 @@ export default function BescheidePage() {
             )}
             <p style={{ fontSize: '0.875rem', color: 'var(--color-text-muted)', marginBottom: '1rem' }}>
               Wenn Sie mit der Entscheidung nicht einverstanden sind, können Sie schriftlich Widerspruch einlegen.
-              Wir empfehlen, sich dafür beraten zu lassen.
+              Ein Widerspruch ist ein formeller Antrag auf erneute Prüfung durch die Behörde — keine Klage vor Gericht.
+              Wir empfehlen, sich dafür beraten zu lassen. In dieser Demo wird kein Formularinhalt gespeichert.
             </p>
-            <button
-              className="btn btn-secondary btn-inline"
-              style={{ borderColor: 'var(--color-warning)', color: 'var(--color-warning)' }}
-              onClick={() => alert('Demo: In der echten Anwendung würde hier das Widerspruchs-Formular geöffnet.')}
-            >
-              <Icon name="send" size={16} />
-              Widerspruch einlegen
-            </button>
+            {sessionWiderspruchBescheidIds.includes(b.id) ? (
+              <div
+                role="status"
+                data-testid={`bescheid-widerspruch-quittung-${b.id}`}
+                style={{
+                  background: 'var(--color-success-light)',
+                  border: '1px solid var(--color-success)',
+                  borderRadius: 'var(--radius)',
+                  padding: '0.875rem 1rem',
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.35rem' }}>
+                  <Icon name="check-circle" size={18} style={{ color: 'var(--color-success)', flexShrink: 0 }} />
+                  <strong style={{ color: 'var(--color-success)' }}>
+                    Ihr Widerspruch ist eingegangen
+                  </strong>
+                </div>
+                <p style={{ fontSize: '0.875rem', color: 'var(--color-text)', margin: '0 0 0.65rem', lineHeight: 1.5 }}>
+                  Demo-Session: Widerspruch zum {b.typ} am {DEMO_WID_DATUM_ANZEIGE} markiert.
+                  In der echten Anwendung folgen formelle Bestätigung und weitere Verfahrensschritte.
+                </p>
+                <Link
+                  href={`/fall/verlauf#ere-${demoWiderspruchEreignisId(b.id)}`}
+                  className="btn btn-secondary btn-inline"
+                  data-testid={`bescheid-widerspruch-verlauf-${b.id}`}
+                  style={{ fontSize: '0.85rem' }}
+                >
+                  Im Verlauf ansehen
+                </Link>
+              </div>
+            ) : resttage !== null && resttage < 0 ? (
+              <p
+                data-testid={`bescheid-widerspruch-frist-abgelaufen-${b.id}`}
+                style={{ fontSize: '0.875rem', color: 'var(--color-text-muted)', margin: 0, lineHeight: 1.5 }}
+              >
+                Die Widerspruchsfrist ist abgelaufen. Der Button ist nicht mehr verfügbar.
+                Mögliche weitere Rechtsmittel (z. B. Klage) erfordern rechtliche Beratung — diese Demo deckt das nicht ab.
+              </p>
+            ) : (
+              <button
+                type="button"
+                className="btn btn-secondary btn-inline"
+                style={{ borderColor: 'var(--color-warning)', color: 'var(--color-warning)' }}
+                data-testid={`bescheid-widerspruch-button-${b.id}`}
+                onClick={() => reicheWiderspruchEin(b.id)}
+              >
+                <Icon name="send" size={16} />
+                Widerspruch einlegen
+              </button>
+            )}
           </div>
             );
           })()}

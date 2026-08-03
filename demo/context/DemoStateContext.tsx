@@ -43,6 +43,14 @@ export function demoTerminBestaetigungEreignisId(terminId: string): string {
   return `E-DEMO-TERM-${terminId}`;
 }
 
+/**
+ * Verlauf-Anker-ID für den Demo-Widerspruch zu einem Bescheid (US-AV-006 / Q-620).
+ * Beispiel: BSC-001 → `E-DEMO-WID-BSC-001` (Hash `#ere-E-DEMO-WID-BSC-001`).
+ */
+export function demoWiderspruchEreignisId(bescheidId: string): string {
+  return `E-DEMO-WID-${bescheidId}`;
+}
+
 interface DemoStateContextValue {
   fall: Fall;
   /** Demo: markiert Rückfrage als beantwortet; optionaler Antworttext für Quittung/Verlauf. */
@@ -51,6 +59,11 @@ interface DemoStateContextValue {
   uploadDokument: (id: string) => void;
   /** Demo: bestätigt Termin session-lokal (AUSSTEHEND → BESTAETIGT; Tab-Badge entfällt). */
   confirmTermin: (id: string) => void;
+  /**
+   * Demo: markiert Widerspruch zu einem Bescheid als session-lokal eingegangen
+   * (kein echtes Formular; US-AV-006 UI-Zustand „Widerspruch eingereicht“).
+   */
+  reicheWiderspruchEin: (bescheidId: string) => void;
   /** Demo: setzt Session auf den Ausgangs-Mock zurück. */
   resetSession: () => void;
   /** True, sobald in dieser Session gehandelt wurde. */
@@ -61,6 +74,8 @@ interface DemoStateContextValue {
   sessionConfirmedTerminIds: string[];
   /** Rückfrage-IDs, die in dieser Session beantwortet wurden (Quittung + Verlauf-Tiefenlink). */
   sessionAnsweredRqIds: string[];
+  /** Bescheid-IDs mit session-lokal eingelegtem Widerspruch (Q-620). */
+  sessionWiderspruchBescheidIds: string[];
 }
 
 const DemoStateContext = createContext<DemoStateContextValue>({
@@ -68,11 +83,13 @@ const DemoStateContext = createContext<DemoStateContextValue>({
   answerRueckfrage: () => {},
   uploadDokument: () => {},
   confirmTermin: () => {},
+  reicheWiderspruchEin: () => {},
   resetSession: () => {},
   hasSessionChanges: false,
   sessionUploadedIds: [],
   sessionConfirmedTerminIds: [],
   sessionAnsweredRqIds: [],
+  sessionWiderspruchBescheidIds: [],
 });
 
 export function DemoStateProvider({ children }: { children: React.ReactNode }) {
@@ -82,6 +99,8 @@ export function DemoStateProvider({ children }: { children: React.ReactNode }) {
   const [uploadedIds, setUploadedIds] = useState<string[]>([]);
   /** Session-bestätigte Termine (Q-092 / US-AV-005). */
   const [confirmedTerminIds, setConfirmedTerminIds] = useState<string[]>([]);
+  /** Session-Widersprüche je Bescheid-ID (US-AV-006 / Q-620). */
+  const [widerspruchBescheidIds, setWiderspruchBescheidIds] = useState<string[]>([]);
 
   const answerRueckfrage = useCallback((id: string, antwortText?: string) => {
     setAnsweredIds(prev => (prev.includes(id) ? prev : [...prev, id]));
@@ -98,15 +117,25 @@ export function DemoStateProvider({ children }: { children: React.ReactNode }) {
     setConfirmedTerminIds(prev => (prev.includes(id) ? prev : [...prev, id]));
   }, []);
 
+  const reicheWiderspruchEin = useCallback((bescheidId: string) => {
+    setWiderspruchBescheidIds(prev =>
+      prev.includes(bescheidId) ? prev : [...prev, bescheidId]
+    );
+  }, []);
+
   const resetSession = useCallback(() => {
     setAnsweredIds([]);
     setAntwortTexte({});
     setUploadedIds([]);
     setConfirmedTerminIds([]);
+    setWiderspruchBescheidIds([]);
   }, []);
 
   const hasSessionChanges =
-    answeredIds.length > 0 || uploadedIds.length > 0 || confirmedTerminIds.length > 0;
+    answeredIds.length > 0 ||
+    uploadedIds.length > 0 ||
+    confirmedTerminIds.length > 0 ||
+    widerspruchBescheidIds.length > 0;
 
   const fall = useMemo((): Fall => {
     const updatedRueckfragen = demoFall.rueckfragen.map(rq => {
@@ -278,6 +307,23 @@ export function DemoStateProvider({ children }: { children: React.ReactNode }) {
       });
     }
 
+    for (const id of widerspruchBescheidIds) {
+      const bescheid = demoFall.bescheide.find(b => b.id === id);
+      extraEvents.push({
+        id: demoWiderspruchEreignisId(id),
+        typ: 'WIDERSPRUCH_EINGEREICHT',
+        zeitstempel: DEMO_AKTION_ZEIT,
+        handelndeStelle: 'BUERGER',
+        beschreibung: bescheid
+          ? `Widerspruch eingereicht: ${bescheid.typ}`
+          : `Widerspruch zu Bescheid ${id} eingereicht`,
+        details: bescheid
+          ? `Widerspruch zum ${bescheid.typ} (zugestellt ${bescheid.datum}) session-lokal markiert. ` +
+            `Demo speichert keinen Formularinhalt; Widerspruchsfrist war ${bescheid.widerspruchsfristAblauf}.`
+          : `Widerspruch zu ${id} (Demo-Session, kein echtes Verfahren).`,
+      });
+    }
+
     return {
       ...demoFall,
       rueckfragen: updatedRueckfragen,
@@ -289,11 +335,14 @@ export function DemoStateProvider({ children }: { children: React.ReactNode }) {
       offeneAufgaben,
       timeline: [...demoFall.timeline, ...extraEvents],
       letzteAktivitaet:
-        uploadedIds.length > 0 || answeredIds.length > 0 || confirmedTerminIds.length > 0
+        uploadedIds.length > 0 ||
+        answeredIds.length > 0 ||
+        confirmedTerminIds.length > 0 ||
+        widerspruchBescheidIds.length > 0
           ? DEMO_AKTION_DATUM
           : demoFall.letzteAktivitaet,
     };
-  }, [answeredIds, antwortTexte, uploadedIds, confirmedTerminIds]);
+  }, [answeredIds, antwortTexte, uploadedIds, confirmedTerminIds, widerspruchBescheidIds]);
 
   return (
     <DemoStateContext.Provider
@@ -302,11 +351,13 @@ export function DemoStateProvider({ children }: { children: React.ReactNode }) {
         answerRueckfrage,
         uploadDokument,
         confirmTermin,
+        reicheWiderspruchEin,
         resetSession,
         hasSessionChanges,
         sessionUploadedIds: uploadedIds,
         sessionConfirmedTerminIds: confirmedTerminIds,
         sessionAnsweredRqIds: answeredIds,
+        sessionWiderspruchBescheidIds: widerspruchBescheidIds,
       }}
     >
       {children}

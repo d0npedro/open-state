@@ -6,13 +6,13 @@ Session-Einstieg: `docs/delivery/SESSION_HANDOFF.md`.
 
 | Feld | Wert |
 |------|------|
-| `next_domain` | `av` |
-| `last_domain` | `cross` |
-| `last_queue_id` | `Q-612` |
-| `last_commit` | 075c723 |
-| `fires_total` | 49 |
+| `next_domain` | `ug` |
+| `last_domain` | `av` |
+| `last_queue_id` | `Q-620` |
+| `last_commit` | (pending) |
+| `fires_total` | 50 |
 | `consecutive_idle` | 0 |
-| `updated` | 2026-08-03 (Q-612 Stories Zur-Demo; nächster OFFEN Q-620) |
+| `updated` | 2026-08-03 (Q-620 AV Widerspruch Session; nächster OFFEN Q-621) |
 
 ## Domänen-Reihenfolge
 

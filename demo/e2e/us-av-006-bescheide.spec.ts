@@ -85,10 +85,59 @@ test.describe('US-AV-006 – Bescheid verstehen', () => {
     );
   });
 
-  test('AC5: Widerspruch-Button ist sichtbar', async ({ page }) => {
+  test('AC5: Widerspruch-Button ist sichtbar und erklärt den Schritt', async ({ page }) => {
+    await expect(page.getByTestId('bescheid-widerspruch-button-BSC-001')).toBeVisible();
     await expect(
       page.getByRole('button', { name: /Widerspruch einlegen/i })
     ).toBeVisible();
+    await expect(
+      page.getByText(/formeller Antrag auf erneute Prüfung/i)
+    ).toBeVisible();
+  });
+
+  test('Q-620: Widerspruch session-lokal – Quittung, kein alert, Verlauf-Tiefenlink', async ({
+    page,
+  }) => {
+    // US-AV-006 UI-Zustand „Widerspruch eingereicht“ (Demo-Session, kein Formular-Backend)
+    await expect(page.getByTestId('bescheid-widerspruch-button-BSC-001')).toBeVisible();
+    await expect(page.getByTestId('bescheid-widerspruch-quittung-BSC-001')).toHaveCount(0);
+
+    page.once('dialog', () => {
+      throw new Error('Unerwarteter alert bei Widerspruch (soll Session-State sein)');
+    });
+    await page.getByTestId('bescheid-widerspruch-button-BSC-001').click();
+
+    await expect(page.getByTestId('bescheid-widerspruch-quittung-BSC-001')).toBeVisible();
+    await expect(page.getByText(/Ihr Widerspruch ist eingegangen/i)).toBeVisible();
+    await expect(page.getByTestId('bescheid-widerspruch-button-BSC-001')).toHaveCount(0);
+
+    // Demo-Session-Bar (Reset möglich)
+    await expect(page.getByRole('region', { name: /Demo-Session/i })).toBeVisible();
+
+    const verlaufCta = page.getByTestId('bescheid-widerspruch-verlauf-BSC-001');
+    await expect(verlaufCta).toBeVisible();
+    await expect(verlaufCta).toHaveAttribute('href', '/fall/verlauf#ere-E-DEMO-WID-BSC-001');
+
+    // Session-Nav: CTA klicken (kein page.goto nach Interaktion, DEC-012)
+    await verlaufCta.click();
+    await expect(page).toHaveURL(/\/fall\/verlauf#ere-E-DEMO-WID-BSC-001/);
+    const card = page.getByTestId('verlauf-ereignis-E-DEMO-WID-BSC-001');
+    await expect(card).toBeVisible();
+    await expect(card).toContainText(/Widerspruch/i);
+  });
+
+  test('Q-620: Demo zurücksetzen stellt Widerspruch-Button wieder her', async ({ page }) => {
+    await page.getByTestId('bescheid-widerspruch-button-BSC-001').click();
+    await expect(page.getByTestId('bescheid-widerspruch-quittung-BSC-001')).toBeVisible();
+
+    await page
+      .getByRole('region', { name: /Demo-Session/i })
+      .getByRole('button', { name: /Demo zurücksetzen/i })
+      .click();
+
+    await expect(page.getByRole('region', { name: /Demo-Session/i })).toHaveCount(0);
+    await expect(page.getByTestId('bescheid-widerspruch-quittung-BSC-001')).toHaveCount(0);
+    await expect(page.getByTestId('bescheid-widerspruch-button-BSC-001')).toBeVisible();
   });
 
   test('AC6: Zustellungsdatum ist dokumentiert', async ({ page }) => {

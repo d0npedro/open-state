@@ -55,7 +55,7 @@ Autonomer Loop: [`docs/delivery/AUTONOMOUS_LOOP.md`](delivery/AUTONOMOUS_LOOP.md
 
 | ID | Domäne | Schritt | Typ | Aufwand | Abhängigkeit | Status |
 |----|--------|---------|-----|---------|--------------|--------|
-| Q-620 | av | Produktlücke wählen und schließen: z. B. Leerzustand/Ruhezustand-Text nach allen Session-Aktionen einmal zentral konsistent (nur wenn noch uneinheitlich) **oder** E2E-Lücke an US-AV-006 Widerspruch – vorher im Code prüfen, nicht spekulieren | DEMO | M | – | OFFEN |
+| Q-620 | av | Produktlücke wählen und schließen: z. B. Leerzustand/Ruhezustand-Text nach allen Session-Aktionen einmal zentral konsistent (nur wenn noch uneinheitlich) **oder** E2E-Lücke an US-AV-006 Widerspruch – vorher im Code prüfen, nicht spekulieren | DEMO | M | – | DONE |
 | Q-621 | ug | Analog AV: eine echte UG-Lücke (Ruhezustand/BG/Steuernummer-Hilfstext) **oder** Docs-Lücke Domain-README – Code-first, max. ein Paket | DEMO | M | – | OFFEN |
 | Q-622 | kita | Meldelücke/Methodik: ein Nutzer-sichtbarer Hebel (Hinweis-Text, Leerzustand nach Session-Freigabe) **oder** fehlender E2E nur bei realem Regressionsrisiko – kein neues Skip-Link-Paket | DEMO | M | – | OFFEN |
 
@@ -82,6 +82,7 @@ Autonomer Loop: [`docs/delivery/AUTONOMOUS_LOOP.md`](delivery/AUTONOMOUS_LOOP.md
 
 | ID | Kurz | Status |
 |----|------|--------|
+| Q-620 | AV US-AV-006: Widerspruch session-lokal (Quittung, Verlauf, Reset) statt alert | DONE |
 | Q-612 | Stories Zur-Demo: alle routes + Hash-Tiefenlinks KJ-006/010 + E2E AV/UG/KJ | DONE |
 | Q-611 | VERFAHRENSFAIRNESS_IN_DER_DEMO: AV+UG Signale/CTAs/Session Ist | DONE |
 | Q-610 | Story-Registry Status-Audit: 16× ABGESCHLOSSEN, 8× DEMONSTRIERBAR (offen AK) | DONE |
@@ -91,7 +92,6 @@ Autonomer Loop: [`docs/delivery/AUTONOMOUS_LOOP.md`](delivery/AUTONOMOUS_LOOP.md
 | Q-604 | Loop-Katalog Anti-Skip-Link-Spam | DONE |
 | Q-603 | demo/.gitignore Playwright/CI-Artefakte | DONE |
 | Q-542 | Kita Skip-Link Monatsbericht/Meldung | DONE |
-| Q-541 | Kita Skip-Link Einrichtung/Tagesstand | DONE |
 
 ---
 
