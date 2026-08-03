@@ -8,11 +8,11 @@ Session-Einstieg: `docs/delivery/SESSION_HANDOFF.md`.
 |------|------|
 | `next_domain` | `av` |
 | `last_domain` | `cross` |
-| `last_queue_id` | `Q-630` |
-| `last_commit` | d0800e5 |
-| `fires_total` | 53 |
+| `last_queue_id` | `Q-640` |
+| `last_commit` | (pending) |
+| `fires_total` | 54 |
 | `consecutive_idle` | 0 |
-| `updated` | 2026-08-03 (Q-630 arc42 Session/Fairness Ist; Queue produktiv leer) |
+| `updated` | 2026-08-03 (Q-640 E2E-Baseline 385; Queue leer) |
 
 ## Domänen-Reihenfolge
 

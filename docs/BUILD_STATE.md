@@ -1,6 +1,6 @@
 # BUILD_STATE.md – Aktueller Projektstand
 
-Zuletzt aktualisiert: nach Q-630 arc42 Demo Session/Fairness Ist
+Zuletzt aktualisiert: nach Q-640 E2E-Baseline 385
 
 Dieser Stand beschreibt, was **tatsächlich existiert und funktioniert** — nicht die Feature-Historie.
 Geplante Schritte → `docs/NEXT_STEPS_QUEUE.md`.  
@@ -19,10 +19,10 @@ Detailhistorie → `git log` / `docs/delivery/queue-archive/`.
 | Build-Status | ✓ 27 statische Seiten |
 | Deployment | Vercel, aus `demo/` |
 | Lokaler Start | `cd demo && npm install && npm run dev` |
-| Letzte bekannte Prüfung | lint + build + **`test:e2e:ci` 378 passed** (chromium) + GitHub Actions grün |
-| Prüf-Bezug (Code) | `a5a9a3e` (Push nach Q-542; spätere Commits bis Q-602 docs/chore-only) |
-| E2E-Baseline | zuletzt voll **378** (`a5a9a3e`); Q-612: `stories-zur-demo` **+4** Tests (AV/UG/KJ + Hash) lokal grün — nächster Full-CI-Lauf erwartet **382** |
-| E2E-Skripte | Domains: `test:e2e:av` · `test:e2e:ug` · `test:e2e:kita`; `stories-zur-demo.spec.ts` (Q-411/Q-530/Q-612: alle routes + Stichproben); Theme/BuildInfo/Skip-Link/Session-Reset |
+| Letzte bekannte Prüfung | lint + build + **`test:e2e:ci` 385 passed** (chromium, lokal Q-640) |
+| Prüf-Bezug (Code) | `d0800e5` (Q-630; Full-E2E auf Stand nach Q-612/Q-620–622) |
+| E2E-Baseline | **385** passed · `npm run test:e2e:ci` · workers=1 · chromium (Q-640) |
+| E2E-Skripte | Domains: `test:e2e:av` · `test:e2e:ug` · `test:e2e:kita`; `stories-zur-demo` Q-612; AV Widerspruch Q-620; UG Ruhezustand Q-621; Kita Meldekette Q-622; Theme/Skip-Link/Session-Reset |
 | Daten | durchgängig Mock; kein Backend, keine Behörden-Anbindung |
 
 ---
@@ -165,7 +165,7 @@ Traceability-Matrix: Stub → SSOT `demo/data/storyRegistry.ts` / Export `story_
 | `docs/delivery/loop-state.md` | next_domain / idle-Zähler | ✓ |
 | `.grok/workflows/autonomous-develop.rhai` | Ein-Fire-Workflow | ✓ (Q-400) |
 | `docs/delivery/queue-archive/` | DONE-Historie | ✓ Q-001–Q-300 · Q-400–Q-542 |
-| `docs/BUILD_STATE.md` | Dieser Ist-Stand | ✓ E2E-Baseline 378 / `a5a9a3e` (Q-602) |
+| `docs/BUILD_STATE.md` | Dieser Ist-Stand | ✓ E2E-Baseline **385** (Q-640) |
 | `docs/DECISION_LOG.md` | Architektur-/Prozess-DEC | ✓ DEC-013 Anti-Growth |
 | `docs/REPO_REFACTORING_PLAN.md` | Phasen 0–4 + Anti-Growth | ✓ Kern Q-299–Q-307 |
 | `docs/README.md` | Map of Content / Wissens-Navigation | ✓ (Q-306) |
@@ -185,7 +185,6 @@ Keine durchgestrichenen Erledigungen. Abgeschlossenes steht in git / queue-archi
 | Kein echtes Backend / keine Behörden-Adapter | Demo-only | bewusst Phase 0 |
 | Open-Data-Lizenz Kita final (BL) | Demo nutzt vorläufigen Hinweis | fachlich offen, nicht blockierend |
 | DSFA / produktive Datenschutz-Nachweise | Konzeptphase | bewusst offen |
-| Story-Status vs. Demo-Realität (DEMONSTRIERBAR vs. ABGESCHLOSSEN) | Traceability ehrlich halten | Q-610 |
 
 ---
 

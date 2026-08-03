@@ -65,6 +65,12 @@ Autonomer Loop: [`docs/delivery/AUTONOMOUS_LOOP.md`](delivery/AUTONOMOUS_LOOP.md
 |----|--------|---------|-----|---------|--------------|--------|
 | Q-630 | arch | arc42 oder `05_Systemarchitektur`: Demo-Session-State + Fairness-Regeln als Ist-Hinweis (1 Abschnitt, Verweis auf Code) – nur wenn veraltet | ARCH | M | Q-611 | DONE |
 
+### Nach Queue-Leere (Katalog AUTONOMOUS_LOOP §3)
+
+| ID | Domäne | Schritt | Typ | Aufwand | Abhängigkeit | Status |
+|----|--------|---------|-----|---------|--------------|--------|
+| Q-640 | cross | E2E-Baseline nach Q-612/Q-620–622 neu zählen (`test:e2e:ci`); BUILD_STATE Zähler + Prüf-Bezug sync; veraltete Lücke „Story-Status Q-610“ entfernen | CHORE | S | – | DONE |
+
 ---
 
 ## Abgeschlossene Wellen (Kurzverweis, nicht Arbeitsliste)
@@ -82,6 +88,7 @@ Autonomer Loop: [`docs/delivery/AUTONOMOUS_LOOP.md`](delivery/AUTONOMOUS_LOOP.md
 
 | ID | Kurz | Status |
 |----|------|--------|
+| Q-640 | E2E-Baseline **385** full `test:e2e:ci` + BUILD_STATE-Sync | DONE |
 | Q-630 | arc42 §8.10 + Systemarchitektur: Demo Session/Fairness Ist-Hinweis | DONE |
 | Q-622 | Kita Meldelücke: Ruhezustand nach Freigabe + Methodik im Meldeeingang | DONE |
 | Q-621 | UG Ruhezustand-Banner nach RQ/Unterlagen (BG- bzw. Steuernummer-CTA) | DONE |
@@ -91,7 +98,6 @@ Autonomer Loop: [`docs/delivery/AUTONOMOUS_LOOP.md`](delivery/AUTONOMOUS_LOOP.md
 | Q-610 | Story-Registry Status-Audit: 16× ABGESCHLOSSEN, 8× DEMONSTRIERBAR (offen AK) | DONE |
 | Q-602 | BUILD_STATE E2E-Baseline 378 / `a5a9a3e` | DONE |
 | Q-601 | Queue-Archiv Q-400–Q-542 auslagern | DONE |
-| Q-600 | Session-Handoff + Queue-Phase Q-600+ | DONE |
 
 ---
 

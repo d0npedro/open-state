@@ -1,8 +1,8 @@
 # Session-Handoff – nächste Arbeitsphase
 
-**Stand:** 2026-08-03 · Q-630 arc42 Demo Session/Fairness Ist erledigt  
-**Phase:** Demo-Domänen AV/UG/KJ **DEMO-stabil**; aktive Queue Q-600+ weitgehend DONE.  
-**Nächster Einstieg:** [`NEXT_STEPS_QUEUE.md`](../NEXT_STEPS_QUEUE.md) — **kein produktiver OFFEN** mehr; bei Bedarf Katalog `AUTONOMOUS_LOOP.md` (max. 3) oder idle.
+**Stand:** 2026-08-03 · Q-640 E2E-Baseline **385** synchronisiert  
+**Phase:** Demo-Domänen AV/UG/KJ **DEMO-stabil**; Queue Q-600–640 erledigt.  
+**Nächster Einstieg:** [`NEXT_STEPS_QUEUE.md`](../NEXT_STEPS_QUEUE.md) — **kein OFFEN**; Katalog nur bei echter Lücke, sonst idle.
 
 ---
 
@@ -12,7 +12,7 @@
 |---------|--------|
 | Repo-Struktur | archive/rewrites, queue-archive, BUILD_STATE gehärtet, Anti-Growth DEC-013/014 |
 | Demo AV/UG/KJ | Vertical Slices klickbar, Session-State, Fairness live |
-| E2E | `test:e2e:ci` **378** chromium (lokal + GitHub Actions grün nach Push) |
+| E2E | `test:e2e:ci` **385** chromium (lokal Q-640; Push/CI auf Anweisung) |
 | a11y | Skip-Link flächig, Druck/CSV-Labels Kita, ThemeSwitcher, BuildInfo, Stories-Landmarks |
 | Delivery | Autonomer Loop dokumentiert; Scheduler derzeit **nicht** aktiv |
 
@@ -40,9 +40,9 @@ Autonomie-Loop (optional): Prompt in `AUTONOMOUS_LOOP.md` §6, Intervall ≥5m; 
 
 | Prio | Fokus | Queue | Warum |
 |------|--------|-------|--------|
-| 1 | Queue Q-600+ | Q-610–622, Q-630 DONE | Produkt + Arch light |
-| 2 | Loop-Katalog | nur bei echter Lücke | max. 3 OFFEN, kein Skip-Link-Spam |
-| 3 | Push / CI | nur auf Anweisung | E2E-Baseline nach Full-Lauf sync |
+| 1 | Queue | **leer** (Q-640 Baseline 385) | Katalog nur bei Produktlücke |
+| 2 | Loop-Katalog | idle wenn nichts Sinnvolles | max. 3 OFFEN, DEC-013 |
+| 3 | Push / CI | nur auf Anweisung | Remote-Baseline ggf. nach Push |
 
 Bereits vorbereitet (DONE): Q-600 Handoff, Q-601 Archiv, Q-602 E2E-Baseline 378, Q-603 gitignore, Q-604 Katalog-Härtung.
 
