@@ -9,7 +9,7 @@ Session-Einstieg: `docs/delivery/SESSION_HANDOFF.md`.
 | `next_domain` | `av` |
 | `last_domain` | `cross` |
 | `last_queue_id` | `Q-611` |
-| `last_commit` | (pending) |
+| `last_commit` | 1535b93 |
 | `fires_total` | 48 |
 | `consecutive_idle` | 0 |
 | `updated` | 2026-08-03 (Q-611 Fairness-Demo-Doku; nächster OFFEN Q-612) |
