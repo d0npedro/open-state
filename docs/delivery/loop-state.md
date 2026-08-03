@@ -7,11 +7,11 @@ Regeln: `docs/delivery/AUTONOMOUS_LOOP.md`.
 |------|------|
 | `next_domain` | `cross` |
 | `last_domain` | `kita` |
-| `last_queue_id` | `Q-511` |
-| `last_commit` | c458b3b |
-| `fires_total` | 35 |
+| `last_queue_id` | `Q-512` |
+| `last_commit` | pending |
+| `fires_total` | 36 |
 | `consecutive_idle` | 0 |
-| `updated` | 2026-08-03 (Q-511 Vorlage Druck/CSV a11y) |
+| `updated` | 2026-08-03 (Q-512 Monatsbericht Druck/CSV a11y) |
 
 ## Domänen-Reihenfolge
 

@@ -347,6 +347,7 @@ export default function KitaMonatsberichtPage() {
                 ? 'Monatsbericht-Vorschau als CSV herunterladen (Aggregate, keine Kind- oder Personennamen)'
                 : 'Monatsbericht als CSV herunterladen (Aggregate, keine Kind- oder Personennamen)'
             }
+            data-testid="kita-monatsbericht-csv-download"
           >
             CSV exportieren
           </button>
@@ -355,6 +356,12 @@ export default function KitaMonatsberichtPage() {
             className="btn btn-secondary"
             onClick={() => window.print()}
             style={{ fontSize: '0.875rem' }}
+            aria-label={
+              istVorschau
+                ? 'Monatsbericht-Vorschau drucken oder als PDF speichern (keine Kind- oder Personennamen)'
+                : 'Monatsbericht drucken oder als PDF speichern (keine Kind- oder Personennamen)'
+            }
+            data-testid="kita-monatsbericht-druck"
           >
             Drucken / als PDF speichern
           </button>
@@ -580,6 +587,11 @@ export default function KitaMonatsberichtPage() {
           className="btn btn-secondary"
           onClick={() => downloadCsv(b)}
           style={{ fontSize: '0.875rem' }}
+          aria-label={
+            istVorschau
+              ? 'Monatsbericht-Vorschau als CSV herunterladen (Aggregate, keine Kind- oder Personennamen)'
+              : 'Monatsbericht als CSV herunterladen (Aggregate, keine Kind- oder Personennamen)'
+          }
         >
           CSV exportieren
         </button>
@@ -588,6 +600,11 @@ export default function KitaMonatsberichtPage() {
           className="btn btn-secondary"
           onClick={() => window.print()}
           style={{ fontSize: '0.875rem' }}
+          aria-label={
+            istVorschau
+              ? 'Monatsbericht-Vorschau drucken oder als PDF speichern (keine Kind- oder Personennamen)'
+              : 'Monatsbericht drucken oder als PDF speichern (keine Kind- oder Personennamen)'
+          }
         >
           Drucken / PDF
         </button>
