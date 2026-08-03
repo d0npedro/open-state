@@ -8,7 +8,7 @@ Regeln: `docs/delivery/AUTONOMOUS_LOOP.md`.
 | `next_domain` | `av` |
 | `last_domain` | `cross` |
 | `last_queue_id` | `Q-520` |
-| `last_commit` | pending |
+| `last_commit` | 8aafd3e |
 | `fires_total` | 37 |
 | `consecutive_idle` | 0 |
 | `updated` | 2026-08-03 (Q-520 Footer/Feedback externe Links a11y) |
