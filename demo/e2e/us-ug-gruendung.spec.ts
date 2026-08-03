@@ -744,6 +744,32 @@ test.describe('UG Skip-Link – Übersicht und Hinweise (Q-472)', () => {
   });
 });
 
+// ─── Skip-Link (Q-531) ────────────────────────────────────────────────────────
+
+test.describe('UG Skip-Link – Dokumente und Behörden (Q-531)', () => {
+  test('Skip-Link Fokus auf /gruendung/dokumente und /gruendung/behoerden', async ({ page }) => {
+    // WCAG 2.4.1: Root-SkipLink + UG-Layout main#main-content (tabIndex=-1); Parität Q-472
+    async function assertSkipToMain(route: string, h1: RegExp) {
+      await page.goto(route);
+      await expect(page.getByRole('heading', { level: 1, name: h1 }).first()).toBeVisible();
+
+      const main = page.locator('main#main-content');
+      await expect(main).toBeVisible();
+      await expect(page.getByRole('main')).toHaveCount(1);
+
+      await page.keyboard.press('Tab');
+      const skip = page.getByRole('link', { name: /Zum Inhalt springen/i });
+      await expect(skip).toBeFocused();
+      await expect(skip).toHaveAttribute('href', '#main-content');
+      await skip.press('Enter');
+      await expect(main).toBeFocused();
+    }
+
+    await assertSkipToMain('/gruendung/dokumente', /Ihre Unterlagen/i);
+    await assertSkipToMain('/gruendung/behoerden', /Behörden & Verfahrensschritte/i);
+  });
+});
+
 // ─── Keyboard-Smoke Tabs (Q-490) ──────────────────────────────────────────────
 
 test.describe('UG Keyboard-Smoke – Tabs (Q-490)', () => {

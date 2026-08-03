@@ -143,7 +143,7 @@ Autonomer Multi-Domain-Loop: [`docs/delivery/AUTONOMOUS_LOOP.md`](delivery/AUTON
 | ID | Domäne | Schritt | Typ | Aufwand | Abhängigkeit | Status |
 |----|--------|---------|-----|---------|--------------|--------|
 | Q-530 | cross | a11y + E2E: `/stories` Domain-Sektionen mit `aria-labelledby` (Landmark-Name) | DEMO | S | Q-411 | DONE |
-| Q-531 | ug | E2E Skip-Link: Fokus `main#main-content` für `/gruendung/dokumente` und `/gruendung/behoerden` (Parität Q-472) | DEMO | S | Q-472 | OFFEN |
+| Q-531 | ug | E2E Skip-Link: Fokus `main#main-content` für `/gruendung/dokumente` und `/gruendung/behoerden` (Parität Q-472) | DEMO | S | Q-472 | DONE |
 | Q-532 | av | E2E Skip-Link: Fokus `main#main-content` für `/fall/rueckfragen` und `/fall/termine` (Parität Q-521) | DEMO | S | Q-521 | DONE |
 
 ---
