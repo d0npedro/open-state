@@ -9,7 +9,7 @@ Session-Einstieg: `docs/delivery/SESSION_HANDOFF.md`.
 | `next_domain` | `ug` |
 | `last_domain` | `av` |
 | `last_queue_id` | `Q-620` |
-| `last_commit` | (pending) |
+| `last_commit` | 234b26e |
 | `fires_total` | 50 |
 | `consecutive_idle` | 0 |
 | `updated` | 2026-08-03 (Q-620 AV Widerspruch Session; nächster OFFEN Q-621) |
