@@ -8,7 +8,7 @@ Regeln: `docs/delivery/AUTONOMOUS_LOOP.md`.
 | `next_domain` | `av` |
 | `last_domain` | `cross` |
 | `last_queue_id` | `Q-510` |
-| `last_commit` | pending |
+| `last_commit` | 48fd83f |
 | `fires_total` | 34 |
 | `consecutive_idle` | 0 |
 | `updated` | 2026-08-03 (Q-510 BuildInfo a11y) |
