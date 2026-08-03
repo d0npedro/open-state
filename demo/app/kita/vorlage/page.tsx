@@ -563,6 +563,8 @@ export default function PolitischeVorlagePage() {
             className="btn btn-secondary"
             onClick={() => window.print()}
             style={{ fontSize: '0.875rem' }}
+            aria-label="Politische Vorlage drucken oder als PDF speichern (keine Kind- oder Personennamen)"
+            data-testid="kita-vorlage-druck"
           >
             Drucken / als PDF speichern
           </button>
@@ -592,6 +594,7 @@ export default function PolitischeVorlagePage() {
             }
             style={{ fontSize: '0.875rem' }}
             aria-label="Vorlage-Aggregate als CSV herunterladen (keine Kind- oder Personennamen)"
+            data-testid="kita-vorlage-csv-download"
           >
             CSV exportieren
           </button>

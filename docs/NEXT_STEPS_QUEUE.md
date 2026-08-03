@@ -127,7 +127,7 @@ Autonomer Multi-Domain-Loop: [`docs/delivery/AUTONOMOUS_LOOP.md`](delivery/AUTON
 | ID | Domäne | Schritt | Typ | Aufwand | Abhängigkeit | Status |
 |----|--------|---------|-----|---------|--------------|--------|
 | Q-510 | cross | a11y + E2E: BuildInfo im Footer mit zugänglichem Gruppennamen (Env, Version, Commit) | DEMO | S | – | DONE |
-| Q-511 | kita | a11y + E2E: Gremienvorlage Druck/CSV-Buttons mit zugänglichem Namen (Parität Bedarfsplanung Q-502) | DEMO | S | Q-481 | OFFEN |
+| Q-511 | kita | a11y + E2E: Gremienvorlage Druck/CSV-Buttons mit zugänglichem Namen (Parität Bedarfsplanung Q-502) | DEMO | S | Q-481 | DONE |
 | Q-512 | kita | a11y + E2E: Monatsbericht Druck-Button mit zugänglichem Namen (Parität CSV/Tagesstand) | DEMO | S | Q-481 | OFFEN |
 
 ---
@@ -136,6 +136,7 @@ Autonomer Multi-Domain-Loop: [`docs/delivery/AUTONOMOUS_LOOP.md`](delivery/AUTON
 
 | ID | Kurz | Status |
 |----|------|--------|
+| Q-511 | Kita Vorlage Druck/CSV a11y Labels | DONE |
 | Q-510 | BuildInfo Footer a11y Env/Version/Commit | DONE |
 | Q-502 | Kita Bedarfsplanung Druck/CSV a11y Labels | DONE |
 | Q-501 | ThemeSwitcher data-density + localStorage os-density | DONE |
@@ -145,7 +146,6 @@ Autonomer Multi-Domain-Loop: [`docs/delivery/AUTONOMOUS_LOOP.md`](delivery/AUTON
 | Q-490 | UG Tabs role=tab + Keyboard-Smoke Enter | DONE |
 | Q-482 | AV Keyboard-Smoke Fall-Tabs Enter-Navigation | DONE |
 | Q-481 | Kita E2E-Smoke Bedarfsplanung/Vorlage/Monatsbericht/Meldung | DONE |
-| Q-480 | Kita Einrichtung Druck/CSV a11y Labels | DONE |
 
 ---
 
