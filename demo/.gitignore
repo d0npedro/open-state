@@ -2,9 +2,13 @@ node_modules/
 .next/
 .next-e2e/
 .next-e2e-*/
+.next-ci-watcher/
 out/
 build/
 .env.local
 .env*.local
+
+playwright-report/
+test-results/
 
 .vercel

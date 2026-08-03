@@ -64,15 +64,21 @@ Nach DEMO-stabil nur: **Bugs**, **E2E-Lücken**, **echte Produktlücken**, **A11
 ## 3. Auffüll-Katalog (wenn Queue leer)
 
 Agent legt **max. 3** neue OFFEN-Zeilen an und setzt die erste um.  
-IDs: nächste freie ab `Q-450` (oder fortlaufend nach letztem Q-).
+IDs: fortlaufend nach letztem Q- (aktuell Phase ab **Q-600**).
 
-| Spur | Beispiel-Schritte (nicht alle auf einmal) |
-|------|-------------------------------------------|
-| **kita** | E2E Smoke Kernrouten; Meldekette Session→Lagebild; Session-Reset UI; a11y Druck/CSV-Buttons |
-| **av** | Keyboard-Smoke; Skip-Link; Fairness-Leerzustand nach allen Aktionen absichern (Test) |
-| **ug** | Behörden-BG-Happy-Path E2E; Ruhezustand nach Vollständigkeit; a11y Formular-Labels |
-| **cross** | Landing Deep-Links; `/stories` „Zur Demo“; Domain-README-Schablone; Registry-Export in Docs prüfen |
-| **chore** | BUILD_STATE E2E-Zähler; Queue-Archiv-Tail; flaky Spec fix |
+| Spur | Erlaubte Beispiele |
+|------|-------------------|
+| **kita** | echte Produktlücke Meldelücke/Methodik; Regression nur bei nachgewiesenem Risiko |
+| **av** / **ug** | eine sichtbare UX/Fairness-Inkonsistenz (Code-first prüfen); flaky E2E fixen |
+| **cross** | Story-Status ehrlich; Fairness-Doku-Delta; Queue-Archiv; BUILD_STATE-Sync |
+| **chore** | gitignore Artefakte; flaky Spec; CI-Repro |
+
+### Verboten beim Auffüllen (DEC-013)
+
+- Weitere **Skip-Link-Routen-Matrix** („noch zwei Unterseiten ohne eigenen Test“)
+- CTA-/Countdown-**Parität** AV↔UG ohne dokumentierte Nutzerlücke  
+- print-only Meta / CSV-Label-Spiegel ohne bug  
+- Neue Domäne ohne `docs/domains` + Stories-Paket  
 
 Wenn Katalog und Lückenliste in BUILD_STATE nichts hergeben:  
 Status `idle-no-work` · **nicht** künstliche Micro-Features erfinden · Scheduler darf weiterlaufen (nächster Fire prüft erneut).

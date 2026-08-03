@@ -5,10 +5,10 @@ Abhängigkeiten sind notiert.
 Status: `OFFEN` | `IN_ARBEIT` | `DONE` | `BLOCKIERT`
 
 Befehl: „Entwickle weiter" → obersten `OFFEN`-Eintrag nehmen und umsetzen.  
-Autonomer Multi-Domain-Loop: [`docs/delivery/AUTONOMOUS_LOOP.md`](delivery/AUTONOMOUS_LOOP.md) · State: [`loop-state.md`](delivery/loop-state.md)
+**Neue Session:** zuerst [`docs/delivery/SESSION_HANDOFF.md`](delivery/SESSION_HANDOFF.md).  
+Autonomer Loop: [`docs/delivery/AUTONOMOUS_LOOP.md`](delivery/AUTONOMOUS_LOOP.md) · State: [`loop-state.md`](delivery/loop-state.md)
 
-**DONE-Historie (Q-001–Q-300):** [`docs/delivery/queue-archive/DONE_Q001-Q300.md`](delivery/queue-archive/DONE_Q001-Q300.md)  
-**Archiv-Index:** [`docs/delivery/queue-archive/README.md`](delivery/queue-archive/README.md)
+**DONE-Historie:** [`queue-archive/`](delivery/queue-archive/) · Snapshot Q-001–Q-300 + (geplant) Q-400–Q-542  
 
 ---
 
@@ -23,17 +23,61 @@ Autonomer Multi-Domain-Loop: [`docs/delivery/AUTONOMOUS_LOOP.md`](delivery/AUTON
 
 ## Priorisierungslogik
 
-1. Technische Korrektheit / E2E-Lücken vor Kosmetik
-2. Sichtbarer Produktwert vor reiner Dokumentationspflege
-3. Domänen-Rotation (loop-state): Lücken in untertesteten Bereichen (aktuell Kita-E2E) bevorzugen
-4. Anti-Growth (DEC-013): kein Micro-Feinschliff nach DEMO-stabil; Queue/BUILD_STATE schlank
-5. Autonomer Loop darf Queue aus Katalog auffüllen (max. 3), wenn leer — siehe AUTONOMOUS_LOOP.md
+1. Technische Korrektheit und CI-Glaubwürdigkeit vor Kosmetik  
+2. Sichtbarer Produktwert vor reiner Test-Spiegelung  
+3. Anti-Growth (DEC-013): **kein** weiteres Skip-Link-/CTA-Routen-Matrix-Füllen ohne echte Produktlücke  
+4. Delivery schlank halten (Queue-Archiv, BUILD_STATE Ist)  
+5. Autonomer Loop: Katalog nur mit erlaubten Spuren (siehe AUTONOMOUS_LOOP §3)
 
 ---
 
 ## Queue (aktiv)
 
-### Autonomie-Betrieb & Qualität
+### Session-Handoff & Delivery (nächste Phase)
+
+| ID | Domäne | Schritt | Typ | Aufwand | Abhängigkeit | Status |
+|----|--------|---------|-----|---------|--------------|--------|
+| Q-600 | cross | Session-Handoff: `SESSION_HANDOFF.md`, Queue Q-600+, Katalog-Härtung, README-Verweis | CHORE | S | – | DONE |
+| Q-601 | cross | DONE-Blöcke Q-400–Q-542 aus aktiver Queue nach `docs/delivery/queue-archive/DONE_Q400-Q542.md` auslagern; aktive Queue nur OFFEN + kurzer Tail | DOCS | M | Q-600 | OFFEN |
+| Q-602 | cross | BUILD_STATE: Delivery-Zeilen und E2E-Zähler auf **378** / Push-Stand `a5a9a3e` synchronisieren; veraltete „Inventory 333“-Lücke entfernen | DOCS | S | Q-600 | OFFEN |
+| Q-603 | chore | `demo/.gitignore`: `.next-ci-watcher/`, `playwright-report/`, `test-results/` (Untracked-Rauschen) | CHORE | S | – | DONE |
+| Q-604 | cross | AUTONOMOUS_LOOP §3: verbotene Auffüll-Muster (Skip-Link-Routen-Matrix, CTA-Parität ohne Lücke) explizit; erlaubte Katalog-Beispiele aktualisieren | DOCS | S | Q-600 | DONE |
+
+### Produkt & Nachvollziehbarkeit
+
+| ID | Domäne | Schritt | Typ | Aufwand | Abhängigkeit | Status |
+|----|--------|---------|-----|---------|--------------|--------|
+| Q-610 | cross | Story-Registry: Status/AK gegen Demo-Realität prüfen; wo E2E+Screens vollständig → `ABGESCHLOSSEN` oder ehrlich `DEMONSTRIERBAR` belassen (kein Fake-Upgrade) | DEMO | M | Q-602 | OFFEN |
+| Q-611 | cross | `VERFAHRENSFAIRNESS_IN_DER_DEMO.md` an aktuelle AV/UG-Signale, CTAs und Session-Verhalten anbinden (nur Delta, keine Doppel-Doku) | DOCS | M | – | OFFEN |
+| Q-612 | cross | `/stories` + Registry: fehlende oder veraltete `route`-Felder und „Zur Demo“-Stichproben dokumentieren/fixen | DEMO | S | Q-610 | OFFEN |
+
+### Domänen – ein Hebel (nicht Micro-Parität)
+
+| ID | Domäne | Schritt | Typ | Aufwand | Abhängigkeit | Status |
+|----|--------|---------|-----|---------|--------------|--------|
+| Q-620 | av | Produktlücke wählen und schließen: z. B. Leerzustand/Ruhezustand-Text nach allen Session-Aktionen einmal zentral konsistent (nur wenn noch uneinheitlich) **oder** E2E-Lücke an US-AV-006 Widerspruch – vorher im Code prüfen, nicht spekulieren | DEMO | M | – | OFFEN |
+| Q-621 | ug | Analog AV: eine echte UG-Lücke (Ruhezustand/BG/Steuernummer-Hilfstext) **oder** Docs-Lücke Domain-README – Code-first, max. ein Paket | DEMO | M | – | OFFEN |
+| Q-622 | kita | Meldelücke/Methodik: ein Nutzer-sichtbarer Hebel (Hinweis-Text, Leerzustand nach Session-Freigabe) **oder** fehlender E2E nur bei realem Regressionsrisiko – kein neues Skip-Link-Paket | DEMO | M | – | OFFEN |
+
+### Architektur light (optional)
+
+| ID | Domäne | Schritt | Typ | Aufwand | Abhängigkeit | Status |
+|----|--------|---------|-----|---------|--------------|--------|
+| Q-630 | arch | arc42 oder `05_Systemarchitektur`: Demo-Session-State + Fairness-Regeln als Ist-Hinweis (1 Abschnitt, Verweis auf Code) – nur wenn veraltet | ARCH | M | Q-611 | OFFEN |
+
+---
+
+## Abgeschlossene Wellen (Kurzverweis, nicht Arbeitsliste)
+
+| Welle | IDs | Inhalt |
+|-------|-----|--------|
+| Prio-0 Struktur | Q-299–Q-307 | Refactoring-Plan, Archive, Queue-Split, Anti-Growth |
+| Autonomie + a11y/E2E | Q-400–Q-542 | Loop, Kita-E2E, Skip-Links, Labels, Stories-CTA, Themes |
+| Feature-Parität (alt) | bis Q-224 | AV/UG Countdown/CTA – in queue-archive |
+
+Details Q-400–Q-542 bleiben in der Datei unten bis **Q-601** auslagert; danach nur noch Archiv.
+
+### Autonomie-Betrieb & Qualität (historisch, bis Q-601 archivieren)
 
 | ID | Domäne | Schritt | Typ | Aufwand | Abhängigkeit | Status |
 |----|--------|---------|-----|---------|--------------|--------|
@@ -160,6 +204,9 @@ Autonomer Multi-Domain-Loop: [`docs/delivery/AUTONOMOUS_LOOP.md`](delivery/AUTON
 
 | ID | Kurz | Status |
 |----|------|--------|
+| Q-600 | Session-Handoff + Queue-Phase Q-600+ | DONE |
+| Q-604 | Loop-Katalog Anti-Skip-Link-Spam | DONE |
+| Q-603 | demo/.gitignore Playwright/CI-Artefakte | DONE |
 | Q-542 | Kita Skip-Link Monatsbericht/Meldung | DONE |
 | Q-541 | Kita Skip-Link Einrichtung/Tagesstand | DONE |
 | Q-540 | Kita Skip-Link Bedarfsplanung/Vorlage | DONE |

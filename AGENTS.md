@@ -32,6 +32,13 @@ Kein Schritt überspringen ohne dokumentierten Grund.
 
 ---
 
+## Neue Session / Handoff
+
+| Datei | Rolle |
+|-------|--------|
+| [`docs/delivery/SESSION_HANDOFF.md`](docs/delivery/SESSION_HANDOFF.md) | Einstieg, verbotene Drift, nächste Queue-Phase |
+| [`docs/NEXT_STEPS_QUEUE.md`](docs/NEXT_STEPS_QUEUE.md) | Aktive OFFEN (ab Q-601) |
+
 ## Autonomer Multi-Domain-Loop
 
 Für wiederkehrende Weiterentwicklung über **alle Domänen** (AV, UG, Kita, Cross):
@@ -42,8 +49,8 @@ Für wiederkehrende Weiterentwicklung über **alle Domänen** (AV, UG, Kita, Cro
 | [`docs/delivery/loop-state.md`](docs/delivery/loop-state.md) | `next_domain`, Idle-Zähler |
 | `.grok/workflows/autonomous-develop.rhai` | Ein Fire als Grok-Workflow |
 
-Cadence-Empfehlung: **12 Minuten**. Kein Push im Loop. DEC-012/013 beachten.  
-Wenn Queue leer: Katalog in AUTONOMOUS_LOOP (max. 3 neue OFFEN), keine Micro-CTA-Erfindung.
+Cadence-Empfehlung: **12 Minuten** (oder 5m). Kein Push im Loop. DEC-012/013 beachten.  
+Wenn Queue leer: Katalog in AUTONOMOUS_LOOP (max. 3 neue OFFEN) — **kein** Skip-Link-/CTA-Paritäts-Spam.
 
 ---
 

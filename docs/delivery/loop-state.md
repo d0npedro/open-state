@@ -1,17 +1,18 @@
 # loop-state – Autonomer Multi-Domain-Loop
 
 Maschinen- und agentenlesbarer Kurzstand. **Pro Fire aktualisieren.**  
-Regeln: `docs/delivery/AUTONOMOUS_LOOP.md`.
+Regeln: `docs/delivery/AUTONOMOUS_LOOP.md`.  
+Session-Einstieg: `docs/delivery/SESSION_HANDOFF.md`.
 
 | Feld | Wert |
 |------|------|
 | `next_domain` | `cross` |
-| `last_domain` | `kita` |
-| `last_queue_id` | `Q-542` |
-| `last_commit` | 6abdc4b |
-| `fires_total` | 45 |
+| `last_domain` | `cross` |
+| `last_queue_id` | `Q-600` |
+| `last_commit` | (nach Commit) |
+| `fires_total` | 46 |
 | `consecutive_idle` | 0 |
-| `updated` | 2026-08-03 (Q-542 Skip-Link Kita Monatsbericht/Meldung; Queue leer) |
+| `updated` | 2026-08-03 (Q-600 Session-Handoff; nächster OFFEN Q-601) |
 
 ## Domänen-Reihenfolge
 

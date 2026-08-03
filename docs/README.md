@@ -13,7 +13,8 @@ Root-README: Vision, Domänen, Demo-Start → [`../README.md`](../README.md)
 | **Domänen-Fach** | [`domains/`](domains/) je Domäne README | Stories unter [`stories/`](stories/) |
 | **Architektur** | [`../architecture/arc42/README.md`](../architecture/arc42/README.md) | [`../architecture/05_Systemarchitektur.md`](../architecture/05_Systemarchitektur.md) (Diagramme) |
 | **Agent / Iteration** | [`../AGENTS.md`](../AGENTS.md) · [`NEXT_STEPS_QUEUE.md`](NEXT_STEPS_QUEUE.md) · [`BUILD_STATE.md`](BUILD_STATE.md) · [`DECISION_LOG.md`](DECISION_LOG.md) | [`DELIVERY_SYSTEM.md`](DELIVERY_SYSTEM.md) |
-| **Autonomer Dauer-Loop** | [`delivery/AUTONOMOUS_LOOP.md`](delivery/AUTONOMOUS_LOOP.md) · [`delivery/loop-state.md`](delivery/loop-state.md) | Workflow `autonomous-develop` · Queue Q-401+ |
+| **Neue Session** | [`delivery/SESSION_HANDOFF.md`](delivery/SESSION_HANDOFF.md) | Queue Q-601+ |
+| **Autonomer Dauer-Loop** | [`delivery/AUTONOMOUS_LOOP.md`](delivery/AUTONOMOUS_LOOP.md) · [`delivery/loop-state.md`](delivery/loop-state.md) | Workflow `autonomous-develop` · **kein** Skip-Link-Katalog-Spam |
 | **Contributor** | [`../CONTRIBUTING.md`](../CONTRIBUTING.md) · [`stories/README.md`](stories/README.md) | Issue-Templates, Story-Template |
 
 ---
