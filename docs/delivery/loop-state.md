@@ -8,7 +8,7 @@ Regeln: `docs/delivery/AUTONOMOUS_LOOP.md`.
 | `next_domain` | `cross` |
 | `last_domain` | `kita` |
 | `last_queue_id` | `Q-540` |
-| `last_commit` | pending |
+| `last_commit` | 8be3d5f |
 | `fires_total` | 43 |
 | `consecutive_idle` | 0 |
 | `updated` | 2026-08-03 (Q-540 Skip-Link Kita Bedarfsplanung/Vorlage) |
