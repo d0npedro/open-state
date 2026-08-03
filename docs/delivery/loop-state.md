@@ -5,13 +5,13 @@ Regeln: `docs/delivery/AUTONOMOUS_LOOP.md`.
 
 | Feld | Wert |
 |------|------|
-| `next_domain` | `kita` |
-| `last_domain` | `ug` |
-| `last_queue_id` | `Q-531` |
-| `last_commit` | bded28e |
-| `fires_total` | 42 |
+| `next_domain` | `cross` |
+| `last_domain` | `kita` |
+| `last_queue_id` | `Q-540` |
+| `last_commit` | pending |
+| `fires_total` | 43 |
 | `consecutive_idle` | 0 |
-| `updated` | 2026-08-03 (Q-531 Skip-Link UG Dokumente/Behörden) |
+| `updated` | 2026-08-03 (Q-540 Skip-Link Kita Bedarfsplanung/Vorlage) |
 
 ## Domänen-Reihenfolge
 

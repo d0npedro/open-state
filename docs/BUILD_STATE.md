@@ -1,6 +1,6 @@
 # BUILD_STATE.md – Aktueller Projektstand
 
-Zuletzt aktualisiert: nach Q-531 Skip-Link UG Dokumente/Behörden
+Zuletzt aktualisiert: nach Q-540 Skip-Link Kita Bedarfsplanung/Vorlage
 
 Dieser Stand beschreibt, was **tatsächlich existiert und funktioniert** — nicht die Feature-Historie.
 Geplante Schritte → `docs/NEXT_STEPS_QUEUE.md`.  
@@ -18,8 +18,8 @@ Detailhistorie → `git log` / `docs/delivery/queue-archive/`.
 | Build-Status | ✓ 27 statische Seiten |
 | Deployment | Vercel, aus `demo/` |
 | Lokaler Start | `cd demo && npm install && npm run dev` |
-| Letzte bekannte Prüfung | lint 2026-08-03; E2E chromium **375** Tests (+ Skip-Link UG Dokumente/Behörden Q-531) |
-| E2E-Skripte | `test:e2e:ci` (chromium, workers=1); Domains: `test:e2e:av` · `test:e2e:ug` · `test:e2e:kita`; ThemeSwitcher Q-492/Q-501; BuildInfo Q-510; Footer/Feedback Q-520; Skip-Link Q-521/Q-532/Q-531; Stories Domain-Landmarks Q-530; Session-Reset Q-500; `stories-zur-demo.spec.ts` |
+| Letzte bekannte Prüfung | lint 2026-08-03; E2E chromium **376** Tests (+ Skip-Link Kita Bedarfsplanung/Vorlage Q-540) |
+| E2E-Skripte | `test:e2e:ci` (chromium, workers=1); Domains: `test:e2e:av` · `test:e2e:ug` · `test:e2e:kita`; ThemeSwitcher Q-492/Q-501; BuildInfo Q-510; Footer/Feedback Q-520; Skip-Link Q-521/Q-532/Q-531/Q-540; Stories Domain-Landmarks Q-530; Session-Reset Q-500; `stories-zur-demo.spec.ts` |
 | Daten | durchgängig Mock; kein Backend, keine Behörden-Anbindung |
 
 ---

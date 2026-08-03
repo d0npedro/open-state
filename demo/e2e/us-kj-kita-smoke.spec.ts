@@ -1,8 +1,8 @@
 /**
- * Kita E2E-Smoke (Q-401, Q-481) + Skip-Link (Q-471)
+ * Kita E2E-Smoke (Q-401, Q-481) + Skip-Link (Q-471, Q-540+)
  *
  * Kern- und Erweiterungsrouten erreichbar, h1, DEC-004-Hinweis wo sichtbar.
- * Skip-Link → main#main-content auf Transparenz + Lagebild.
+ * Skip-Link → main#main-content auf Kern- und Erweiterungsrouten.
  * Keine Session-Interaktion → page.goto je Test ok (DEC-012 gilt bei Session-Flows).
  */
 
@@ -165,5 +165,29 @@ test.describe('Kita Skip-Link – Kernrouten (Q-471)', () => {
 
     await assertSkipToMain('/kita', /Transparenzbericht Kindertagesbetreuung/i);
     await assertSkipToMain('/kita/lagebild', /Steuerungslagebild Kindertagesbetreuung/i);
+  });
+});
+
+test.describe('Kita Skip-Link – Bedarfsplanung und Vorlage (Q-540)', () => {
+  test('Skip-Link Fokus auf /kita/bedarfsplanung und /kita/vorlage', async ({ page }) => {
+    // WCAG 2.4.1: Root-SkipLink + Kita-Layout main#main-content (tabIndex=-1); Parität Q-471
+    async function assertSkipToMain(route: string, h1: RegExp) {
+      await page.goto(route);
+      await expect(page.getByRole('heading', { level: 1, name: h1 }).first()).toBeVisible();
+
+      const main = page.locator('main#main-content');
+      await expect(main).toBeVisible();
+      await expect(page.getByRole('main')).toHaveCount(1);
+
+      await page.keyboard.press('Tab');
+      const skip = page.getByRole('link', { name: /Zum Inhalt springen/i });
+      await expect(skip).toBeFocused();
+      await expect(skip).toHaveAttribute('href', '#main-content');
+      await skip.press('Enter');
+      await expect(main).toBeFocused();
+    }
+
+    await assertSkipToMain('/kita/bedarfsplanung', /Bedarfsplanungsentwurf/i);
+    await assertSkipToMain('/kita/vorlage', /Politische Vorlage/i);
   });
 });

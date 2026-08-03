@@ -146,12 +146,23 @@ Autonomer Multi-Domain-Loop: [`docs/delivery/AUTONOMOUS_LOOP.md`](delivery/AUTON
 | Q-531 | ug | E2E Skip-Link: Fokus `main#main-content` für `/gruendung/dokumente` und `/gruendung/behoerden` (Parität Q-472) | DEMO | S | Q-472 | DONE |
 | Q-532 | av | E2E Skip-Link: Fokus `main#main-content` für `/fall/rueckfragen` und `/fall/termine` (Parität Q-521) | DEMO | S | Q-521 | DONE |
 
+### Loop-Katalog (Auffüllung nach Q-532)
+
+| ID | Domäne | Schritt | Typ | Aufwand | Abhängigkeit | Status |
+|----|--------|---------|-----|---------|--------------|--------|
+| Q-540 | kita | E2E Skip-Link: Fokus `main#main-content` für `/kita/bedarfsplanung` und `/kita/vorlage` (Parität Q-471) | DEMO | S | Q-471 | DONE |
+| Q-541 | kita | E2E Skip-Link: Fokus `main#main-content` für `/kita/einrichtung` und `/kita/tagesstand` (Parität Q-471) | DEMO | S | Q-471 | OFFEN |
+| Q-542 | kita | E2E Skip-Link: Fokus `main#main-content` für `/kita/monatsbericht` und `/kita/meldung` (Parität Q-471) | DEMO | S | Q-471 | OFFEN |
+
 ---
 
 ## Kürzlicher DONE-Tail (letzte ~10)
 
 | ID | Kurz | Status |
 |----|------|--------|
+| Q-540 | Kita Skip-Link Bedarfsplanung/Vorlage | DONE |
+| Q-531 | UG Skip-Link Dokumente/Behörden | DONE |
+| Q-532 | AV Skip-Link Rückfragen/Termine | DONE |
 | Q-530 | Stories Domain-Sektionen aria-labelledby a11y | DONE |
 | Q-522 | Kita Monatsmeldung Druck/CSV a11y Labels | DONE |
 | Q-521 | AV Skip-Link /fall/hinweise und /fall/dokumente | DONE |
@@ -160,8 +171,6 @@ Autonomer Multi-Domain-Loop: [`docs/delivery/AUTONOMOUS_LOOP.md`](delivery/AUTON
 | Q-511 | Kita Vorlage Druck/CSV a11y Labels | DONE |
 | Q-510 | BuildInfo Footer a11y Env/Version/Commit | DONE |
 | Q-502 | Kita Bedarfsplanung Druck/CSV a11y Labels | DONE |
-| Q-501 | ThemeSwitcher data-density + localStorage os-density | DONE |
-| Q-500 | AV Session-Reset nach vollem Ruhezustand stellt Badges/Signale wieder her | DONE |
 
 ---
 
