@@ -9,7 +9,7 @@ Session-Einstieg: `docs/delivery/SESSION_HANDOFF.md`.
 | `next_domain` | `av` |
 | `last_domain` | `cross` |
 | `last_queue_id` | `Q-612` |
-| `last_commit` | (pending) |
+| `last_commit` | 075c723 |
 | `fires_total` | 49 |
 | `consecutive_idle` | 0 |
 | `updated` | 2026-08-03 (Q-612 Stories Zur-Demo; nächster OFFEN Q-620) |
