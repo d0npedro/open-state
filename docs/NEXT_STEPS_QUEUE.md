@@ -70,6 +70,7 @@ Autonomer Loop: [`docs/delivery/AUTONOMOUS_LOOP.md`](delivery/AUTONOMOUS_LOOP.md
 | ID | Domäne | Schritt | Typ | Aufwand | Abhängigkeit | Status |
 |----|--------|---------|-----|---------|--------------|--------|
 | Q-640 | cross | E2E-Baseline nach Q-612/Q-620–622 neu zählen (`test:e2e:ci`); BUILD_STATE Zähler + Prüf-Bezug sync; veraltete Lücke „Story-Status Q-610“ entfernen | CHORE | S | – | DONE |
+| Q-641 | cross | Push-Readiness: lint + build + full `test:e2e:ci` (385) auf HEAD; Handoff „Push-ready“; **kein** Push ohne Nutzer-Anweisung | CHORE | S | Q-640 | DONE |
 
 ---
 
@@ -88,6 +89,7 @@ Autonomer Loop: [`docs/delivery/AUTONOMOUS_LOOP.md`](delivery/AUTONOMOUS_LOOP.md
 
 | ID | Kurz | Status |
 |----|------|--------|
+| Q-641 | Push-ready: lint+build+e2e **385** · Handoff | DONE |
 | Q-640 | E2E-Baseline **385** full `test:e2e:ci` + BUILD_STATE-Sync | DONE |
 | Q-630 | arc42 §8.10 + Systemarchitektur: Demo Session/Fairness Ist-Hinweis | DONE |
 | Q-622 | Kita Meldelücke: Ruhezustand nach Freigabe + Methodik im Meldeeingang | DONE |

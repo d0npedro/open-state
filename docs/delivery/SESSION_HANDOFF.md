@@ -1,8 +1,26 @@
 # Session-Handoff – nächste Arbeitsphase
 
-**Stand:** 2026-08-03 · Q-640 E2E-Baseline **385** synchronisiert  
-**Phase:** Demo-Domänen AV/UG/KJ **DEMO-stabil**; Queue Q-600–640 erledigt.  
-**Nächster Einstieg:** [`NEXT_STEPS_QUEUE.md`](../NEXT_STEPS_QUEUE.md) — **kein OFFEN**; Katalog nur bei echter Lücke, sonst idle.
+**Stand:** 2026-08-03 · **Push-ready** (Q-641)  
+**Phase:** Demo-Domänen AV/UG/KJ **DEMO-stabil**; Queue Q-600–641 erledigt.  
+**Nächster Einstieg:** Push auf Anweisung **oder** neue Produktlücke in Queue; kein OFFEN.
+
+---
+
+## Push-Empfehlung (Q-641)
+
+**Jetzt ist ein guter Zeitpunkt zum Pushen** (lokal verifiziert, Welle geschlossen).
+
+| Check | Ergebnis |
+|-------|----------|
+| lint | ✓ grün |
+| build | ✓ 27 statische Seiten |
+| `test:e2e:ci` | ✓ **385** passed (chromium, workers=1) |
+| Queue | leer (kein halbfertiges OFFEN) |
+| Ahead of `origin/main` | ~22 Commits (Q-601 … Q-641) |
+| Working tree | clean nach Q-641-Commit |
+
+**Push nur auf ausdrückliche Anweisung** (z. B. „pushe“ / „committe und pushe“).  
+Empfohlener Ablauf: `cd demo && npm run lint && npm run build` (bereits grün) → `git push` (kein force).
 
 ---
 
@@ -11,10 +29,10 @@
 | Bereich | Stand |
 |---------|--------|
 | Repo-Struktur | archive/rewrites, queue-archive, BUILD_STATE gehärtet, Anti-Growth DEC-013/014 |
-| Demo AV/UG/KJ | Vertical Slices klickbar, Session-State, Fairness live |
-| E2E | `test:e2e:ci` **385** chromium (lokal Q-640; Push/CI auf Anweisung) |
+| Demo AV/UG/KJ | Vertical Slices klickbar, Session-State, Fairness live; AV Widerspruch, UG/Kita Ruhezustand |
+| E2E | `test:e2e:ci` **385** chromium (Q-640 + Re-Verify Q-641) |
 | a11y | Skip-Link flächig, Druck/CSV-Labels Kita, ThemeSwitcher, BuildInfo, Stories-Landmarks |
-| Delivery | Autonomer Loop dokumentiert; Scheduler derzeit **nicht** aktiv |
+| Delivery | Loop gestoppt nach idle×3; **Push-ready** dokumentiert |
 
 **Bewusste Stop-Empfehlung:** Keine weitere Skip-Link-Routen-Matrix ohne echte Produktlücke (DEC-013).
 
@@ -40,11 +58,11 @@ Autonomie-Loop (optional): Prompt in `AUTONOMOUS_LOOP.md` §6, Intervall ≥5m; 
 
 | Prio | Fokus | Queue | Warum |
 |------|--------|-------|--------|
-| 1 | Queue | **leer** (Q-640 Baseline 385) | Katalog nur bei Produktlücke |
-| 2 | Loop-Katalog | idle wenn nichts Sinnvolles | max. 3 OFFEN, DEC-013 |
-| 3 | Push / CI | nur auf Anweisung | Remote-Baseline ggf. nach Push |
+| 1 | **Push** | auf Anweisung | Q-641 verifiziert; Remote-Sync + CI |
+| 2 | Queue | **leer** | Katalog nur bei echter Produktlücke |
+| 3 | Loop | gestoppt | idle×3 korrekt (DEC-013) |
 
-Bereits vorbereitet (DONE): Q-600 Handoff, Q-601 Archiv, Q-602 E2E-Baseline 378, Q-603 gitignore, Q-604 Katalog-Härtung.
+Bereits vorbereitet (DONE): Q-600–Q-641 (Handoff, Archiv, Stories, Domänen-Hebel, arc42, E2E 385, Push-ready).
 
 Details und IDs: `docs/NEXT_STEPS_QUEUE.md`.
 

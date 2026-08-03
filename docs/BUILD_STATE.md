@@ -1,6 +1,6 @@
 # BUILD_STATE.md – Aktueller Projektstand
 
-Zuletzt aktualisiert: nach Q-640 E2E-Baseline 385
+Zuletzt aktualisiert: nach Q-641 Push-ready (lint+build+e2e 385)
 
 Dieser Stand beschreibt, was **tatsächlich existiert und funktioniert** — nicht die Feature-Historie.
 Geplante Schritte → `docs/NEXT_STEPS_QUEUE.md`.  
@@ -19,9 +19,9 @@ Detailhistorie → `git log` / `docs/delivery/queue-archive/`.
 | Build-Status | ✓ 27 statische Seiten |
 | Deployment | Vercel, aus `demo/` |
 | Lokaler Start | `cd demo && npm install && npm run dev` |
-| Letzte bekannte Prüfung | lint + build + **`test:e2e:ci` 385 passed** (chromium, lokal Q-640) |
-| Prüf-Bezug (Code) | `ee1ede9` (Q-640 Full-E2E 385) |
-| E2E-Baseline | **385** passed · `npm run test:e2e:ci` · workers=1 · chromium (Q-640) |
+| Letzte bekannte Prüfung | lint + build + **`test:e2e:ci` 385 passed** (chromium) · **Push-ready** |
+| Prüf-Bezug (Code) | HEAD nach Q-641 Re-Verify (Baseline-Zähler seit Q-640: **385**) |
+| E2E-Baseline | **385** passed · `npm run test:e2e:ci` · workers=1 · chromium |
 | E2E-Skripte | Domains: `test:e2e:av` · `test:e2e:ug` · `test:e2e:kita`; `stories-zur-demo` Q-612; AV Widerspruch Q-620; UG Ruhezustand Q-621; Kita Meldekette Q-622; Theme/Skip-Link/Session-Reset |
 | Daten | durchgängig Mock; kein Backend, keine Behörden-Anbindung |
 
