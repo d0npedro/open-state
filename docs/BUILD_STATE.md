@@ -1,6 +1,6 @@
 # BUILD_STATE.md – Aktueller Projektstand
 
-Zuletzt aktualisiert: nach Q-600 Session-Handoff (nächste Phase Q-601+)
+Zuletzt aktualisiert: nach Q-601 Queue-Archiv Q-400–Q-542
 
 Dieser Stand beschreibt, was **tatsächlich existiert und funktioniert** — nicht die Feature-Historie.
 Geplante Schritte → `docs/NEXT_STEPS_QUEUE.md`.  
@@ -156,12 +156,12 @@ Traceability-Matrix: Stub → SSOT `demo/data/storyRegistry.ts` / Export `story_
 |-------|-------|--------|
 | `AGENTS.md` | Iterationsablauf | ✓ |
 | `docs/DELIVERY_SYSTEM.md` | 12-Schritte-Detail | ✓ (queue-archive verlinkt) |
-| `docs/NEXT_STEPS_QUEUE.md` | Aktive Arbeitsliste | ✓ Phase Q-601+ OFFEN (Handoff Q-600) |
+| `docs/NEXT_STEPS_QUEUE.md` | Aktive Arbeitsliste | ✓ schlank (OFFEN + Tail; Historie archiviert) |
 | `docs/delivery/SESSION_HANDOFF.md` | Einstieg nächste Session | ✓ (Q-600) |
 | `docs/delivery/AUTONOMOUS_LOOP.md` | Autonomer Loop (Rotation, Katalog, Prompt) | ✓ Katalog gehärtet |
 | `docs/delivery/loop-state.md` | next_domain / idle-Zähler | ✓ |
 | `.grok/workflows/autonomous-develop.rhai` | Ein-Fire-Workflow | ✓ (Q-400) |
-| `docs/delivery/queue-archive/` | DONE-Historie | ✓ Q-001–Q-300 |
+| `docs/delivery/queue-archive/` | DONE-Historie | ✓ Q-001–Q-300 · Q-400–Q-542 |
 | `docs/BUILD_STATE.md` | Dieser Ist-Stand | ✓ gehärtet (Q-302) |
 | `docs/DECISION_LOG.md` | Architektur-/Prozess-DEC | ✓ DEC-013 Anti-Growth |
 | `docs/REPO_REFACTORING_PLAN.md` | Phasen 0–4 + Anti-Growth | ✓ Kern Q-299–Q-307 |
@@ -182,7 +182,7 @@ Keine durchgestrichenen Erledigungen. Abgeschlossenes steht in git / queue-archi
 | Kein echtes Backend / keine Behörden-Adapter | Demo-only | bewusst Phase 0 |
 | Open-Data-Lizenz Kita final (BL) | Demo nutzt vorläufigen Hinweis | fachlich offen, nicht blockierend |
 | DSFA / produktive Datenschutz-Nachweise | Konzeptphase | bewusst offen |
-| Aktive Queue noch mit DONE-Historie Q-400–Q-542 vermischt | kognitive Last | Q-601 |
+| BUILD_STATE Delivery/E2E-Zahlen ggf. noch inkonsistent zu 378 | Ist-Zahlen ehrlich halten | Q-602 |
 
 ---
 

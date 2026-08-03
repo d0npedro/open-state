@@ -1,8 +1,8 @@
 # Session-Handoff – nächste Arbeitsphase
 
-**Stand:** 2026-08-03 · HEAD `a5a9a3e` (sync mit `origin/main`)  
-**Phase:** Demo-Domänen AV/UG/KJ **DEMO-stabil**; Queue-Welle Q-400–Q-542 (Autonomie + a11y/E2E) **abgeschlossen**.  
-**Nächster Einstieg:** oberster `OFFEN` in [`NEXT_STEPS_QUEUE.md`](../NEXT_STEPS_QUEUE.md) = **Q-601** (Queue-Archiv Q-400–Q-542).
+**Stand:** 2026-08-03 · Queue-Archiv Q-601 erledigt  
+**Phase:** Demo-Domänen AV/UG/KJ **DEMO-stabil**; Welle Q-400–Q-542 in [`queue-archive/DONE_Q400-Q542.md`](queue-archive/DONE_Q400-Q542.md).  
+**Nächster Einstieg:** oberster `OFFEN` in [`NEXT_STEPS_QUEUE.md`](../NEXT_STEPS_QUEUE.md) = **Q-602** (BUILD_STATE E2E-Sync 378).
 
 ---
 
@@ -40,13 +40,12 @@ Autonomie-Loop (optional): Prompt in `AUTONOMOUS_LOOP.md` §6, Intervall ≥5m; 
 
 | Prio | Fokus | Queue | Warum |
 |------|--------|-------|--------|
-| 1 | Queue-Archiv Q-400–Q-542 | **Q-601** | Delivery wieder schlank |
-| 2 | BUILD_STATE-Sync (378 E2E) | **Q-602** | Ist-Zahlen ehrlich |
-| 3 | Story-Status / Traceability | Q-610–612 | Registry vs. Realität |
-| 4 | Fairness-Doku-Delta | Q-611 | Code ↔ Docs |
-| 5 | Ein Produkt-Hebel pro Domäne | Q-620–622 | Mehrwert, kein Skip-Link-Spam |
+| 1 | BUILD_STATE-Sync (378 E2E) | **Q-602** | Ist-Zahlen ehrlich |
+| 2 | Story-Status / Traceability | Q-610–612 | Registry vs. Realität |
+| 3 | Fairness-Doku-Delta | Q-611 | Code ↔ Docs |
+| 4 | Ein Produkt-Hebel pro Domäne | Q-620–622 | Mehrwert, kein Skip-Link-Spam |
 
-Bereits vorbereitet (DONE): Q-600 Handoff, Q-603 gitignore, Q-604 Katalog-Härtung.
+Bereits vorbereitet (DONE): Q-600 Handoff, Q-601 Archiv, Q-603 gitignore, Q-604 Katalog-Härtung.
 
 Details und IDs: `docs/NEXT_STEPS_QUEUE.md`.
 
