@@ -1,6 +1,6 @@
 # BUILD_STATE.md – Aktueller Projektstand
 
-Zuletzt aktualisiert: nach Q-520 Footer/Feedback externe Links a11y
+Zuletzt aktualisiert: nach Q-521 AV Skip-Link Hinweise/Dokumente
 
 Dieser Stand beschreibt, was **tatsächlich existiert und funktioniert** — nicht die Feature-Historie.
 Geplante Schritte → `docs/NEXT_STEPS_QUEUE.md`.  
@@ -18,8 +18,8 @@ Detailhistorie → `git log` / `docs/delivery/queue-archive/`.
 | Build-Status | ✓ 27 statische Seiten |
 | Deployment | Vercel, aus `demo/` |
 | Lokaler Start | `cd demo && npm install && npm run dev` |
-| Letzte bekannte Prüfung | lint 2026-08-03; E2E chromium **369** Tests (+ Footer/Feedback externe Links Q-520) |
-| E2E-Skripte | `test:e2e:ci` (chromium, workers=1); Domains: `test:e2e:av` · `test:e2e:ug` · `test:e2e:kita` (inkl. Export-a11y Q-502/Q-511/Q-512); ThemeSwitcher Q-492/Q-501; BuildInfo Q-510; Footer/Feedback extern Q-520; Skip-Link; Session-Reset Q-500; `stories-zur-demo.spec.ts` |
+| Letzte bekannte Prüfung | lint 2026-08-03; E2E chromium **370** Tests (+ AV Skip-Link Hinweise/Dokumente Q-521) |
+| E2E-Skripte | `test:e2e:ci` (chromium, workers=1); Domains: `test:e2e:av` · `test:e2e:ug` · `test:e2e:kita` (inkl. Export-a11y Q-502/Q-511/Q-512); ThemeSwitcher Q-492/Q-501; BuildInfo Q-510; Footer/Feedback extern Q-520; Skip-Link inkl. AV-Unterrouten Q-521; Session-Reset Q-500; `stories-zur-demo.spec.ts` |
 | Daten | durchgängig Mock; kein Backend, keine Behörden-Anbindung |
 
 ---
@@ -155,7 +155,7 @@ Traceability-Matrix: Stub → SSOT `demo/data/storyRegistry.ts` / Export `story_
 |-------|-------|--------|
 | `AGENTS.md` | Iterationsablauf | ✓ |
 | `docs/DELIVERY_SYSTEM.md` | 12-Schritte-Detail | ✓ (queue-archive verlinkt) |
-| `docs/NEXT_STEPS_QUEUE.md` | Aktive Arbeitsliste | ✓ Q-521/Q-522 OFFEN; Q-520 DONE |
+| `docs/NEXT_STEPS_QUEUE.md` | Aktive Arbeitsliste | ✓ Q-522 OFFEN; Q-521 DONE |
 | `docs/delivery/AUTONOMOUS_LOOP.md` | Autonomer Loop (Rotation, Katalog, Prompt) | ✓ |
 | `docs/delivery/loop-state.md` | next_domain / idle-Zähler | ✓ |
 | `.grok/workflows/autonomous-develop.rhai` | Ein-Fire-Workflow | ✓ (Q-400) |

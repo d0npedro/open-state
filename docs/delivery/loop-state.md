@@ -5,13 +5,13 @@ Regeln: `docs/delivery/AUTONOMOUS_LOOP.md`.
 
 | Feld | Wert |
 |------|------|
-| `next_domain` | `av` |
-| `last_domain` | `cross` |
-| `last_queue_id` | `Q-520` |
-| `last_commit` | 8aafd3e |
-| `fires_total` | 37 |
+| `next_domain` | `ug` |
+| `last_domain` | `av` |
+| `last_queue_id` | `Q-521` |
+| `last_commit` | pending |
+| `fires_total` | 38 |
 | `consecutive_idle` | 0 |
-| `updated` | 2026-08-03 (Q-520 Footer/Feedback externe Links a11y) |
+| `updated` | 2026-08-03 (Q-521 AV Skip-Link Hinweise/Dokumente) |
 
 ## Domänen-Reihenfolge
 

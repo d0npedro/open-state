@@ -135,7 +135,7 @@ Autonomer Multi-Domain-Loop: [`docs/delivery/AUTONOMOUS_LOOP.md`](delivery/AUTON
 | ID | Domäne | Schritt | Typ | Aufwand | Abhängigkeit | Status |
 |----|--------|---------|-----|---------|--------------|--------|
 | Q-520 | cross | a11y + E2E: Footer-Nav + Feedback GitHub-Links mit neuem-Tab-Hinweis und korrektem Issue-URL-Muster | DEMO | S | Q-510 | DONE |
-| Q-521 | av | E2E Skip-Link: Fokus `main#main-content` für `/fall/hinweise` und `/fall/dokumente` (Parität Q-451) | DEMO | S | Q-451 | OFFEN |
+| Q-521 | av | E2E Skip-Link: Fokus `main#main-content` für `/fall/hinweise` und `/fall/dokumente` (Parität Q-451) | DEMO | S | Q-451 | DONE |
 | Q-522 | kita | a11y + E2E: Monatsmeldung Druck/CSV-Buttons mit zugänglichem Namen (Parität Monatsbericht Q-512) | DEMO | S | Q-481 | OFFEN |
 
 ---
@@ -144,6 +144,7 @@ Autonomer Multi-Domain-Loop: [`docs/delivery/AUTONOMOUS_LOOP.md`](delivery/AUTON
 
 | ID | Kurz | Status |
 |----|------|--------|
+| Q-521 | AV Skip-Link /fall/hinweise und /fall/dokumente | DONE |
 | Q-520 | Footer/Feedback externe Links a11y + Issue-URL E2E | DONE |
 | Q-512 | Kita Monatsbericht Druck/CSV a11y Labels | DONE |
 | Q-511 | Kita Vorlage Druck/CSV a11y Labels | DONE |
@@ -153,7 +154,6 @@ Autonomer Multi-Domain-Loop: [`docs/delivery/AUTONOMOUS_LOOP.md`](delivery/AUTON
 | Q-500 | AV Session-Reset nach vollem Ruhezustand stellt Badges/Signale wieder her | DONE |
 | Q-492 | ThemeSwitcher a11y + data-theme-Wechsel | DONE |
 | Q-491 | Kita Tagesstand Druck/CSV a11y Labels | DONE |
-| Q-490 | UG Tabs role=tab + Keyboard-Smoke Enter | DONE |
 
 ---
 

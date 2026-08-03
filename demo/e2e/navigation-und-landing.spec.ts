@@ -280,7 +280,28 @@ test.describe('Accessibility – Grundlegende Checks', () => {
 
     await assertSkipToMain('/');
     await assertSkipToMain('/fall');
-    await assertSkipToMain('/fall/hinweise');
+  });
+
+  test('Q-521: Skip-Link Fokus auf /fall/hinweise und /fall/dokumente', async ({ page }) => {
+    // AV-Unterrouten teilen Fall-Layout main#main-content (tabIndex=-1); Parität Q-451
+    async function assertSkipToMain(route: string, h1: RegExp) {
+      await page.goto(route);
+      await expect(page.getByRole('heading', { level: 1, name: h1 })).toBeVisible();
+
+      const main = page.locator('main#main-content');
+      await expect(main).toBeVisible();
+      await expect(page.getByRole('main')).toHaveCount(1);
+
+      await page.keyboard.press('Tab');
+      const skip = page.getByRole('link', { name: /Zum Inhalt springen/i });
+      await expect(skip).toBeFocused();
+      await expect(skip).toHaveAttribute('href', '#main-content');
+      await skip.press('Enter');
+      await expect(main).toBeFocused();
+    }
+
+    await assertSkipToMain('/fall/hinweise', /Hinweise zur Verfahrenslage/i);
+    await assertSkipToMain('/fall/dokumente', /Ihre Unterlagen|Unterlagen/i);
   });
 
   test('Q-461: Skip-Link Fokus auf /stories und /feedback', async ({ page }) => {
