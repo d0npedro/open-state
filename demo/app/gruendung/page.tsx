@@ -44,7 +44,8 @@ const statusToChip: Record<string, { label: string; css: string; icon: IconName 
 };
 
 export default function GruendungPage() {
-  const { akte, sessionUploadedIds, sessionAnsweredRqIds } = useGruendungState();
+  const { akte, sessionUploadedIds, sessionAnsweredRqIds, sessionBgErledigt } =
+    useGruendungState();
   const chip = statusToChip[akte.status] ?? { label: akte.status, css: 'status-chip-neutral', icon: 'info' as IconName };
   const isRueckfrage = akte.status === 'RUECKFRAGE_AUSSTEHEND';
   const offeneRueckfragenListe = akte.rueckfragen.filter(r => !r.beantwortet);
@@ -54,6 +55,24 @@ export default function GruendungPage() {
     d => d.status === 'ANGEFORDERT' || d.status === 'ABGELEHNT'
   );
   const ausstehendeDoks = ausstehendeDokumente.length;
+  /**
+   * Ruhezustand (Q-621, Parität AV): keine Bürger-Handlung mehr (RQ/Unterlagen).
+   * BG/Steuernummer laufen parallel oder außerhalb — Banner erklärt den nächsten Orientierungspunkt.
+   */
+  const buergerAktionOffen =
+    offeneRueckfragen > 0 || ausstehendeDoks > 0 || isRueckfrage;
+  const wartetAufBehoerde =
+    !buergerAktionOffen &&
+    (akte.status === 'IN_BEARBEITUNG' || akte.status === 'RUECKFRAGE_BEANTWORTET');
+  const bgNochOffen =
+    !sessionBgErledigt &&
+    akte.beteiligteBehörden.some(
+      b => b.typ === 'BERUFSGENOSSENSCHAFT' && b.status === 'NICHT_GESTARTET'
+    );
+  const finanzamtId =
+    akte.beteiligteBehörden.find(b => b.typ === 'FINANZAMT')?.id ?? 'BEH-02';
+  const bgId =
+    akte.beteiligteBehörden.find(b => b.typ === 'BERUFSGENOSSENSCHAFT')?.id ?? 'BEH-04';
   /** Offene Dokumente mit ISO-Frist, sortiert nach Dringlichkeit (Q-208, Parität AV Q-086). */
   const dokFristen = ausstehendeDokumente
     .filter(d => d.fristDatum && d.frist)
@@ -128,6 +147,73 @@ export default function GruendungPage() {
               Frage jetzt beantworten
               <Icon name="arrow-right" size={16} />
             </Link>
+          </div>
+        </div>
+      )}
+
+      {/* ─── Ruhezustand: kein Bürger-Handeln (Q-621, Parität AV US-AV-001) ─
+          Nach RQ+Unterlagen (optional BG) muss klar sein: warten auf Behörden,
+          optional BG außerhalb bzw. Steuernummer-Stand prüfen. */}
+      {wartetAufBehoerde && (
+        <div
+          className="notice-box notice-box-success"
+          role="status"
+          aria-live="polite"
+          data-testid="ruhezustand-banner"
+        >
+          <Icon name="check-circle" size={20} style={{ flexShrink: 0, marginTop: '2px' }} />
+          <div style={{ flex: 1 }}>
+            <strong
+              style={{ display: 'block', marginBottom: '0.25rem', fontSize: '1rem' }}
+              data-testid="ruhezustand-titel"
+            >
+              Kein Handeln von Ihnen erforderlich
+            </strong>
+            <p style={{ margin: 0, fontSize: '0.9rem' }} data-testid="ruhezustand-naechster">
+              {akte.naechsterSchritt}
+            </p>
+            <p
+              style={{ margin: '0.5rem 0 0', fontSize: '0.85rem', color: 'var(--color-text-muted)' }}
+              data-testid="ruhezustand-status"
+            >
+              {akte.statusBeschreibung}
+            </p>
+            <div
+              style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginTop: '0.75rem' }}
+            >
+              {bgNochOffen ? (
+                <Link
+                  href={`/gruendung/behoerden#beh-${bgId}`}
+                  className="btn btn-secondary btn-inline"
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', minHeight: 44 }}
+                  data-testid="ruhezustand-bg-cta"
+                  aria-label="Zur Berufsgenossenschaft — Anmeldung außerhalb von Open State"
+                >
+                  <Icon name="building" size={16} />
+                  BG-Anmeldung prüfen
+                </Link>
+              ) : (
+                <Link
+                  href={`/gruendung/behoerden#beh-${finanzamtId}`}
+                  className="btn btn-secondary btn-inline"
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', minHeight: 44 }}
+                  data-testid="ruhezustand-steuernummer-cta"
+                  aria-label="Steuernummer-Stand beim Finanzamt ansehen"
+                >
+                  <Icon name="building" size={16} />
+                  Steuernummer-Stand ansehen
+                </Link>
+              )}
+              <Link
+                href="/gruendung/hinweise"
+                className="btn btn-secondary btn-inline"
+                style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', minHeight: 44 }}
+                data-testid="ruhezustand-hinweise-cta"
+              >
+                Zur Verfahrenslage
+                <Icon name="arrow-right" size={16} />
+              </Link>
+            </div>
           </div>
         </div>
       )}

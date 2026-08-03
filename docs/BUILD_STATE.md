@@ -1,6 +1,6 @@
 # BUILD_STATE.md – Aktueller Projektstand
 
-Zuletzt aktualisiert: nach Q-620 AV Widerspruch Session-State
+Zuletzt aktualisiert: nach Q-621 UG Ruhezustand-Banner
 
 Dieser Stand beschreibt, was **tatsächlich existiert und funktioniert** — nicht die Feature-Historie.
 Geplante Schritte → `docs/NEXT_STEPS_QUEUE.md`.  
@@ -55,7 +55,7 @@ Eine Zeile pro Route: Zweck + Story-Bezug. Feinschliff-Details stehen im Code.
 
 | Route | Inhalt (Ist) | Stories | Status |
 |-------|--------------|---------|--------|
-| `/gruendung` | Übersicht: nächster Schritt, Fairness-Kurz-CTAs, Fristen, Session-Quittungen | US-UG-001–006 | ✓ |
+| `/gruendung` | Übersicht: nächster Schritt, Fairness-Kurz-CTAs, Session-Quittungen; **Ruhezustand-Banner** (Q-621) mit BG- bzw. Steuernummer-CTA | US-UG-001–006 | ✓ |
 | `/gruendung/dokumente` | Unterlagen + Upload session-lokal + Quittung/Verlauf | US-UG-003 | ✓ |
 | `/gruendung/rueckfragen` | Rückfragen + Antwort + Verlauf-Tiefenlink | US-UG-004 | ✓ |
 | `/gruendung/behoerden` | Behördenkarten; VS-Status live nach RQ; BG-Demo-Markierung | US-UG-002 | ✓ |

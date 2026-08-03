@@ -1,8 +1,8 @@
 # Session-Handoff – nächste Arbeitsphase
 
-**Stand:** 2026-08-03 · Q-620 AV Widerspruch Session-State erledigt  
+**Stand:** 2026-08-03 · Q-621 UG Ruhezustand-Banner erledigt  
 **Phase:** Demo-Domänen AV/UG/KJ **DEMO-stabil**; Welle Q-400–Q-542 in [`queue-archive/DONE_Q400-Q542.md`](queue-archive/DONE_Q400-Q542.md).  
-**Nächster Einstieg:** oberster `OFFEN` in [`NEXT_STEPS_QUEUE.md`](../NEXT_STEPS_QUEUE.md) = **Q-621** (UG Produkt-Hebel).
+**Nächster Einstieg:** oberster `OFFEN` in [`NEXT_STEPS_QUEUE.md`](../NEXT_STEPS_QUEUE.md) = **Q-622** (Kita Produkt-Hebel).
 
 ---
 
@@ -40,7 +40,7 @@ Autonomie-Loop (optional): Prompt in `AUTONOMOUS_LOOP.md` §6, Intervall ≥5m; 
 
 | Prio | Fokus | Queue | Warum |
 |------|--------|-------|--------|
-| 1 | Ein Produkt-Hebel pro Domäne | Q-620 DONE · **Q-621**–622 | UG → Kita |
+| 1 | Ein Produkt-Hebel pro Domäne | Q-620–621 DONE · **Q-622** | Kita |
 | 2 | Stories / Fairness | Q-610–612 DONE | Registry + Doku |
 | 3 | Architektur light | Q-630 | Session/Fairness Ist-Hinweis |
 

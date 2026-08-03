@@ -27,6 +27,8 @@ test.describe('UG – Übersicht', () => {
     const banner = page.locator('.action-banner');
     await expect(banner).toBeVisible();
     await expect(banner).toContainText('Jetzt handeln');
+    // Ruhezustand erst nach Erledigung offener Bürger-Aktionen (Q-621)
+    await expect(page.getByTestId('ruhezustand-banner')).toHaveCount(0);
   });
 
   test('Direktlink zur Rückfrage im Banner vorhanden', async ({ page }) => {
@@ -426,6 +428,61 @@ test.describe('UG – Übersicht', () => {
     await expect(page.getByText('Wird bearbeitet').first()).toBeVisible();
     await expect(page.getByTestId('rq-quittung')).toBeVisible();
     await expect(page.getByTestId('upload-quittung')).toBeVisible();
+  });
+
+  test('Q-621: Ruhezustand-Banner nach RQ+Upload (BG-CTA) und nach BG (Steuernummer-CTA)', async ({
+    page,
+  }) => {
+    // Produktlücke: AV hat ruhezustand-banner; UG fehlte zentraler Ruhe-Text (Parität).
+    // Kein page.goto nach Session-Interaktion (DEC-012).
+    const { goUgTab } = await import('./helpers/sessionNav');
+
+    // Ausgang: offene RQ → kein Ruhezustand
+    await expect(page.getByTestId('ruhezustand-banner')).toHaveCount(0);
+
+    await goUgTab(page, 'Fragen', /\/gruendung\/rueckfragen/);
+    await page.getByRole('button', { name: /Rückfrage beantworten/i }).click();
+    await expect(page.getByText(/die Behörde wurde informiert|beantwortet/i).first()).toBeVisible();
+
+    await goUgTab(page, 'Unterlagen', /\/gruendung\/dokumente/);
+    await page.getByRole('button', { name: /Als hochgeladen markieren/i }).click();
+    await expect(page.getByTestId('dok-upload-quittung-DOK-03')).toBeVisible();
+
+    await goUgTab(page, 'Übersicht', /\/gruendung$/);
+    // Nach RQ+Unterlagen: Ruhezustand + optional BG prüfen
+    await expect(page.getByTestId('ruhezustand-banner')).toBeVisible();
+    await expect(page.getByTestId('ruhezustand-titel')).toContainText(
+      /Kein Handeln von Ihnen erforderlich/i
+    );
+    await expect(page.getByTestId('ruhezustand-naechster')).toBeVisible();
+    await expect(page.getByTestId('ruhezustand-bg-cta')).toBeVisible();
+    await expect(page.getByTestId('ruhezustand-bg-cta')).toHaveAttribute(
+      'href',
+      /\/gruendung\/behoerden#beh-BEH-04/
+    );
+    await expect(page.getByTestId('ruhezustand-steuernummer-cta')).toHaveCount(0);
+    await expect(page.getByTestId('ruhezustand-hinweise-cta')).toBeVisible();
+
+    // BG erledigen → Banner zeigt Steuernummer-Orientierung
+    await page.getByTestId('ruhezustand-bg-cta').click();
+    await expect(page).toHaveURL(/\/gruendung\/behoerden#beh-BEH-04/);
+    await page.getByTestId('behoerde-bg-erledigt-btn').click();
+    await expect(page.getByTestId('behoerde-bg-erledigt-quittung')).toBeVisible();
+
+    await goUgTab(page, 'Übersicht', /\/gruendung$/);
+    await expect(page.getByTestId('ruhezustand-banner')).toBeVisible();
+    await expect(page.getByTestId('ruhezustand-bg-cta')).toHaveCount(0);
+    await expect(page.getByTestId('ruhezustand-steuernummer-cta')).toBeVisible();
+    await expect(page.getByTestId('ruhezustand-steuernummer-cta')).toHaveAttribute(
+      'href',
+      /\/gruendung\/behoerden#beh-BEH-02/
+    );
+    await expect(page.getByTestId('ruhezustand-steuernummer-cta')).toContainText(
+      /Steuernummer-Stand ansehen/i
+    );
+    await expect(page.getByTestId('ruhezustand-naechster')).toContainText(
+      /Steuernummer|Keine eigene Handlung/i
+    );
   });
 
   test('Fairness-Kurzblock mit Link zu Hinweise', async ({ page }) => {
