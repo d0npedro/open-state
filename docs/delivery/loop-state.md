@@ -9,7 +9,7 @@ Session-Einstieg: `docs/delivery/SESSION_HANDOFF.md`.
 | `next_domain` | `av` |
 | `last_domain` | `cross` |
 | `last_queue_id` | `Q-610` |
-| `last_commit` | (set after commit) |
+| `last_commit` | ca45eda |
 | `fires_total` | 47 |
 | `consecutive_idle` | 0 |
 | `updated` | 2026-08-03 (Q-610 Story-Registry Status-Audit; nächster OFFEN Q-611) |
