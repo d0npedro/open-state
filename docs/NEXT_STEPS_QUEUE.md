@@ -138,12 +138,21 @@ Autonomer Multi-Domain-Loop: [`docs/delivery/AUTONOMOUS_LOOP.md`](delivery/AUTON
 | Q-521 | av | E2E Skip-Link: Fokus `main#main-content` für `/fall/hinweise` und `/fall/dokumente` (Parität Q-451) | DEMO | S | Q-451 | DONE |
 | Q-522 | kita | a11y + E2E: Monatsmeldung Druck/CSV-Buttons mit zugänglichem Namen (Parität Monatsbericht Q-512) | DEMO | S | Q-481 | DONE |
 
+### Loop-Katalog (Auffüllung nach Q-522)
+
+| ID | Domäne | Schritt | Typ | Aufwand | Abhängigkeit | Status |
+|----|--------|---------|-----|---------|--------------|--------|
+| Q-530 | cross | a11y + E2E: `/stories` Domain-Sektionen mit `aria-labelledby` (Landmark-Name) | DEMO | S | Q-411 | DONE |
+| Q-531 | ug | E2E Skip-Link: Fokus `main#main-content` für `/gruendung/dokumente` und `/gruendung/behoerden` (Parität Q-472) | DEMO | S | Q-472 | OFFEN |
+| Q-532 | av | E2E Skip-Link: Fokus `main#main-content` für `/fall/rueckfragen` und `/fall/termine` (Parität Q-521) | DEMO | S | Q-521 | OFFEN |
+
 ---
 
 ## Kürzlicher DONE-Tail (letzte ~10)
 
 | ID | Kurz | Status |
 |----|------|--------|
+| Q-530 | Stories Domain-Sektionen aria-labelledby a11y | DONE |
 | Q-522 | Kita Monatsmeldung Druck/CSV a11y Labels | DONE |
 | Q-521 | AV Skip-Link /fall/hinweise und /fall/dokumente | DONE |
 | Q-520 | Footer/Feedback externe Links a11y + Issue-URL E2E | DONE |
@@ -153,7 +162,6 @@ Autonomer Multi-Domain-Loop: [`docs/delivery/AUTONOMOUS_LOOP.md`](delivery/AUTON
 | Q-502 | Kita Bedarfsplanung Druck/CSV a11y Labels | DONE |
 | Q-501 | ThemeSwitcher data-density + localStorage os-density | DONE |
 | Q-500 | AV Session-Reset nach vollem Ruhezustand stellt Badges/Signale wieder her | DONE |
-| Q-492 | ThemeSwitcher a11y + data-theme-Wechsel | DONE |
 
 ---
 

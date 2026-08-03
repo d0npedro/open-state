@@ -1,6 +1,6 @@
 # BUILD_STATE.md – Aktueller Projektstand
 
-Zuletzt aktualisiert: nach Q-522 Kita Monatsmeldung Druck/CSV a11y
+Zuletzt aktualisiert: nach Q-530 Stories Domain-Sektionen a11y
 
 Dieser Stand beschreibt, was **tatsächlich existiert und funktioniert** — nicht die Feature-Historie.
 Geplante Schritte → `docs/NEXT_STEPS_QUEUE.md`.  
@@ -18,8 +18,8 @@ Detailhistorie → `git log` / `docs/delivery/queue-archive/`.
 | Build-Status | ✓ 27 statische Seiten |
 | Deployment | Vercel, aus `demo/` |
 | Lokaler Start | `cd demo && npm install && npm run dev` |
-| Letzte bekannte Prüfung | lint 2026-08-03; E2E chromium **372** Tests (+ Monatsmeldung Druck/CSV a11y Q-522) |
-| E2E-Skripte | `test:e2e:ci` (chromium, workers=1); Domains: `test:e2e:av` · `test:e2e:ug` · `test:e2e:kita` (Export-a11y inkl. Meldung Q-522); ThemeSwitcher Q-492/Q-501; BuildInfo Q-510; Footer/Feedback extern Q-520; Skip-Link inkl. AV-Unterrouten Q-521; Session-Reset Q-500; `stories-zur-demo.spec.ts` |
+| Letzte bekannte Prüfung | lint 2026-08-03; E2E chromium **373** Tests (+ Stories Domain-Sektionen a11y Q-530) |
+| E2E-Skripte | `test:e2e:ci` (chromium, workers=1); Domains: `test:e2e:av` · `test:e2e:ug` · `test:e2e:kita`; ThemeSwitcher Q-492/Q-501; BuildInfo Q-510; Footer/Feedback Q-520; Skip-Link Q-521; Stories Domain-Landmarks Q-530; Session-Reset Q-500; `stories-zur-demo.spec.ts` |
 | Daten | durchgängig Mock; kein Backend, keine Behörden-Anbindung |
 
 ---
@@ -155,7 +155,7 @@ Traceability-Matrix: Stub → SSOT `demo/data/storyRegistry.ts` / Export `story_
 |-------|-------|--------|
 | `AGENTS.md` | Iterationsablauf | ✓ |
 | `docs/DELIVERY_SYSTEM.md` | 12-Schritte-Detail | ✓ (queue-archive verlinkt) |
-| `docs/NEXT_STEPS_QUEUE.md` | Aktive Arbeitsliste | ✓ Queue leer nach Q-522; nächster Fire füllt Katalog |
+| `docs/NEXT_STEPS_QUEUE.md` | Aktive Arbeitsliste | ✓ Q-531/Q-532 OFFEN; Q-530 DONE |
 | `docs/delivery/AUTONOMOUS_LOOP.md` | Autonomer Loop (Rotation, Katalog, Prompt) | ✓ |
 | `docs/delivery/loop-state.md` | next_domain / idle-Zähler | ✓ |
 | `.grok/workflows/autonomous-develop.rhai` | Ein-Fire-Workflow | ✓ (Q-400) |

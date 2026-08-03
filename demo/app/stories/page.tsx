@@ -66,21 +66,32 @@ export default function StoriesPage() {
             Sie dient der Transparenz über den Entwicklungsstand, nicht als Marketinginstrument.
           </div>
 
-          {/* Domain sections */}
+          {/* Domain sections – aria-labelledby für Landmark-Navigation (Q-530) */}
           {Array.from(grouped.entries())
             .filter(([, stories]) => stories.length > 0)
             .map(([domain, stories]) => {
               const meta = domainMeta[domain] ?? { label: domain, hint: '', farbe: 'var(--color-neutral)' };
               const demoCount = stories.filter(s => s.status === 'DEMONSTRIERBAR').length;
+              const headingId = `story-domain-${domain
+                .toLowerCase()
+                .replace(/[^a-z0-9äöüß]+/gi, '-')
+                .replace(/^-|-$/g, '')}`;
               return (
-                <section key={domain}>
+                <section
+                  key={domain}
+                  aria-labelledby={headingId}
+                  data-testid={`story-domain-section-${domain}`}
+                >
                   {/* Domain header */}
                   <div style={{
                     display: 'flex', alignItems: 'baseline', gap: '1rem', flexWrap: 'wrap',
                     paddingBottom: '0.6rem', marginBottom: '1rem',
                     borderBottom: `2px solid ${meta.farbe}`,
                   }}>
-                    <h2 style={{ fontSize: '1.05rem', fontWeight: 700, color: meta.farbe, margin: 0 }}>
+                    <h2
+                      id={headingId}
+                      style={{ fontSize: '1.05rem', fontWeight: 700, color: meta.farbe, margin: 0 }}
+                    >
                       {meta.label}
                     </h2>
                     <span style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>{meta.hint}</span>

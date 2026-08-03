@@ -5,13 +5,13 @@ Regeln: `docs/delivery/AUTONOMOUS_LOOP.md`.
 
 | Feld | Wert |
 |------|------|
-| `next_domain` | `cross` |
-| `last_domain` | `kita` |
-| `last_queue_id` | `Q-522` |
-| `last_commit` | 751974b |
-| `fires_total` | 39 |
+| `next_domain` | `av` |
+| `last_domain` | `cross` |
+| `last_queue_id` | `Q-530` |
+| `last_commit` | pending |
+| `fires_total` | 40 |
 | `consecutive_idle` | 0 |
-| `updated` | 2026-08-03 (Q-522 Monatsmeldung Druck/CSV a11y) |
+| `updated` | 2026-08-03 (Q-530 Stories Domain-Sektionen a11y) |
 
 ## Domänen-Reihenfolge
 
