@@ -151,7 +151,7 @@ Autonomer Multi-Domain-Loop: [`docs/delivery/AUTONOMOUS_LOOP.md`](delivery/AUTON
 | ID | Domäne | Schritt | Typ | Aufwand | Abhängigkeit | Status |
 |----|--------|---------|-----|---------|--------------|--------|
 | Q-540 | kita | E2E Skip-Link: Fokus `main#main-content` für `/kita/bedarfsplanung` und `/kita/vorlage` (Parität Q-471) | DEMO | S | Q-471 | DONE |
-| Q-541 | kita | E2E Skip-Link: Fokus `main#main-content` für `/kita/einrichtung` und `/kita/tagesstand` (Parität Q-471) | DEMO | S | Q-471 | OFFEN |
+| Q-541 | kita | E2E Skip-Link: Fokus `main#main-content` für `/kita/einrichtung` und `/kita/tagesstand` (Parität Q-471) | DEMO | S | Q-471 | DONE |
 | Q-542 | kita | E2E Skip-Link: Fokus `main#main-content` für `/kita/monatsbericht` und `/kita/meldung` (Parität Q-471) | DEMO | S | Q-471 | OFFEN |
 
 ---
@@ -160,6 +160,7 @@ Autonomer Multi-Domain-Loop: [`docs/delivery/AUTONOMOUS_LOOP.md`](delivery/AUTON
 
 | ID | Kurz | Status |
 |----|------|--------|
+| Q-541 | Kita Skip-Link Einrichtung/Tagesstand | DONE |
 | Q-540 | Kita Skip-Link Bedarfsplanung/Vorlage | DONE |
 | Q-531 | UG Skip-Link Dokumente/Behörden | DONE |
 | Q-532 | AV Skip-Link Rückfragen/Termine | DONE |
