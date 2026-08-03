@@ -10,9 +10,9 @@ Session-Einstieg: `docs/delivery/SESSION_HANDOFF.md`.
 | `last_domain` | `cross` |
 | `last_queue_id` | `Q-640` |
 | `last_commit` | ee1ede9 |
-| `fires_total` | 56 |
-| `consecutive_idle` | 2 |
-| `updated` | 2026-08-03 (idle-no-work #2: Queue leer, Katalog/Lücken Phase-0-extern; consecutive_idle=2) |
+| `fires_total` | 57 |
+| `consecutive_idle` | 3 |
+| `updated` | 2026-08-03 (idle-no-work #3: Queue leer, Katalog/Lücken Phase-0-extern; consecutive_idle≥3 → Scheduler stop) |
 
 ## Domänen-Reihenfolge
 
