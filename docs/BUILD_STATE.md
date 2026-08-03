@@ -20,7 +20,7 @@ Detailhistorie → `git log` / `docs/delivery/queue-archive/`.
 | Deployment | Vercel, aus `demo/` |
 | Lokaler Start | `cd demo && npm install && npm run dev` |
 | Letzte bekannte Prüfung | lint + build + **`test:e2e:ci` 385 passed** (chromium, lokal Q-640) |
-| Prüf-Bezug (Code) | `d0800e5` (Q-630; Full-E2E auf Stand nach Q-612/Q-620–622) |
+| Prüf-Bezug (Code) | `ee1ede9` (Q-640 Full-E2E 385) |
 | E2E-Baseline | **385** passed · `npm run test:e2e:ci` · workers=1 · chromium (Q-640) |
 | E2E-Skripte | Domains: `test:e2e:av` · `test:e2e:ug` · `test:e2e:kita`; `stories-zur-demo` Q-612; AV Widerspruch Q-620; UG Ruhezustand Q-621; Kita Meldekette Q-622; Theme/Skip-Link/Session-Reset |
 | Daten | durchgängig Mock; kein Backend, keine Behörden-Anbindung |
