@@ -39,7 +39,7 @@ Autonomer Loop: [`docs/delivery/AUTONOMOUS_LOOP.md`](delivery/AUTONOMOUS_LOOP.md
 |----|--------|---------|-----|---------|--------------|--------|
 | Q-600 | cross | Session-Handoff: `SESSION_HANDOFF.md`, Queue Q-600+, Katalog-Härtung, README-Verweis | CHORE | S | – | DONE |
 | Q-601 | cross | DONE-Blöcke Q-400–Q-542 aus aktiver Queue nach `docs/delivery/queue-archive/DONE_Q400-Q542.md` auslagern; aktive Queue nur OFFEN + kurzer Tail | DOCS | M | Q-600 | DONE |
-| Q-602 | cross | BUILD_STATE: Delivery-Zeilen und E2E-Zähler auf **378** / Push-Stand `a5a9a3e` synchronisieren; veraltete „Inventory 333“-Lücke entfernen | DOCS | S | Q-600 | OFFEN |
+| Q-602 | cross | BUILD_STATE: Delivery-Zeilen und E2E-Zähler auf **378** / Push-Stand `a5a9a3e` synchronisieren; veraltete „Inventory 333“-Lücke entfernen | DOCS | S | Q-600 | DONE |
 | Q-603 | chore | `demo/.gitignore`: `.next-ci-watcher/`, `playwright-report/`, `test-results/` (Untracked-Rauschen) | CHORE | S | – | DONE |
 | Q-604 | cross | AUTONOMOUS_LOOP §3: verbotene Auffüll-Muster (Skip-Link-Routen-Matrix, CTA-Parität ohne Lücke) explizit; erlaubte Katalog-Beispiele aktualisieren | DOCS | S | Q-600 | DONE |
 
@@ -74,7 +74,7 @@ Autonomer Loop: [`docs/delivery/AUTONOMOUS_LOOP.md`](delivery/AUTONOMOUS_LOOP.md
 | Prio-0 Struktur | Q-299–Q-307 | Refactoring-Plan, Archive, Queue-Split, Anti-Growth | [`DONE_Q001-Q300`](delivery/queue-archive/DONE_Q001-Q300.md) |
 | Autonomie + a11y/E2E | Q-400–Q-542 | Loop, Kita-E2E, Skip-Links, Labels, Stories-CTA, Themes | [`DONE_Q400-Q542`](delivery/queue-archive/DONE_Q400-Q542.md) |
 | Feature-Parität (alt) | bis Q-224 | AV/UG Countdown/CTA | queue-archive (in Q-001–Q-300) |
-| Session-Handoff | Q-600–Q-604* | Handoff, Archiv, gitignore, Katalog (*Q-602 noch OFFEN) | aktive Queue |
+| Session-Handoff | Q-600–Q-604 | Handoff, Archiv, E2E-Sync, gitignore, Katalog | aktive Queue / DONE-Tail |
 
 ---
 
@@ -82,6 +82,7 @@ Autonomer Loop: [`docs/delivery/AUTONOMOUS_LOOP.md`](delivery/AUTONOMOUS_LOOP.md
 
 | ID | Kurz | Status |
 |----|------|--------|
+| Q-602 | BUILD_STATE E2E-Baseline 378 / `a5a9a3e` | DONE |
 | Q-601 | Queue-Archiv Q-400–Q-542 auslagern | DONE |
 | Q-600 | Session-Handoff + Queue-Phase Q-600+ | DONE |
 | Q-604 | Loop-Katalog Anti-Skip-Link-Spam | DONE |
@@ -91,7 +92,6 @@ Autonomer Loop: [`docs/delivery/AUTONOMOUS_LOOP.md`](delivery/AUTONOMOUS_LOOP.md
 | Q-540 | Kita Skip-Link Bedarfsplanung/Vorlage | DONE |
 | Q-532 | AV Skip-Link Rückfragen/Termine | DONE |
 | Q-531 | UG Skip-Link Dokumente/Behörden | DONE |
-| Q-530 | Stories Domain-Sektionen aria-labelledby a11y | DONE |
 
 ---
 
