@@ -304,6 +304,28 @@ test.describe('Accessibility – Grundlegende Checks', () => {
     await assertSkipToMain('/fall/dokumente', /Ihre Unterlagen|Unterlagen/i);
   });
 
+  test('Q-532: Skip-Link Fokus auf /fall/rueckfragen und /fall/termine', async ({ page }) => {
+    // AV-Unterrouten teilen Fall-Layout main#main-content (tabIndex=-1); Parität Q-521
+    async function assertSkipToMain(route: string, h1: RegExp) {
+      await page.goto(route);
+      await expect(page.getByRole('heading', { level: 1, name: h1 })).toBeVisible();
+
+      const main = page.locator('main#main-content');
+      await expect(main).toBeVisible();
+      await expect(page.getByRole('main')).toHaveCount(1);
+
+      await page.keyboard.press('Tab');
+      const skip = page.getByRole('link', { name: /Zum Inhalt springen/i });
+      await expect(skip).toBeFocused();
+      await expect(skip).toHaveAttribute('href', '#main-content');
+      await skip.press('Enter');
+      await expect(main).toBeFocused();
+    }
+
+    await assertSkipToMain('/fall/rueckfragen', /Rückfragen der Behörde/i);
+    await assertSkipToMain('/fall/termine', /Ihre Termine/i);
+  });
+
   test('Q-461: Skip-Link Fokus auf /stories und /feedback', async ({ page }) => {
     // Cross-Routen: Story Coverage + Feedback (Root-Layout SkipLink + main#main-content)
     async function assertSkipToMain(route: string, h1: RegExp) {
