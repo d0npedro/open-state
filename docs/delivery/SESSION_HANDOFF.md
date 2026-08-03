@@ -1,8 +1,8 @@
 # Session-Handoff – nächste Arbeitsphase
 
-**Stand:** 2026-08-03 · Delivery-Chore Q-600–Q-604 erledigt (Archiv + E2E-Sync)  
+**Stand:** 2026-08-03 · Q-610 Story-Registry Status-Audit erledigt  
 **Phase:** Demo-Domänen AV/UG/KJ **DEMO-stabil**; Welle Q-400–Q-542 in [`queue-archive/DONE_Q400-Q542.md`](queue-archive/DONE_Q400-Q542.md).  
-**Nächster Einstieg:** oberster `OFFEN` in [`NEXT_STEPS_QUEUE.md`](../NEXT_STEPS_QUEUE.md) = **Q-610** (Story-Registry Status vs. Demo).
+**Nächster Einstieg:** oberster `OFFEN` in [`NEXT_STEPS_QUEUE.md`](../NEXT_STEPS_QUEUE.md) = **Q-611** (Fairness-Doku-Delta).
 
 ---
 
@@ -40,7 +40,7 @@ Autonomie-Loop (optional): Prompt in `AUTONOMOUS_LOOP.md` §6, Intervall ≥5m; 
 
 | Prio | Fokus | Queue | Warum |
 |------|--------|-------|--------|
-| 1 | Story-Status / Traceability | **Q-610**–612 | Registry vs. Realität |
+| 1 | Story-Status / Traceability | Q-610 DONE · **Q-612** Routes | Registry vs. Realität |
 | 2 | Fairness-Doku-Delta | Q-611 | Code ↔ Docs |
 | 3 | Ein Produkt-Hebel pro Domäne | Q-620–622 | Mehrwert, kein Skip-Link-Spam |
 

@@ -6,8 +6,14 @@ const statusConfig = {
   BEREIT:         { label: 'Bereit',          badge: 'badge-primary', pct: 25 },
   IN_ENTWICKLUNG: { label: 'In Entwicklung',  badge: 'badge-warning', pct: 60 },
   DEMONSTRIERBAR: { label: 'Demonstrierbar',  badge: 'badge-success', pct: 100 },
-  ABGESCHLOSSEN:  { label: 'Abgeschlossen',   badge: 'badge-success', pct: 100 },
+  // dunkleres Grün über Primary-Badge — visuell von DEMONSTRIERBAR unterscheidbar (Q-610)
+  ABGESCHLOSSEN:  { label: 'Abgeschlossen',   badge: 'badge-primary', pct: 100 },
 };
+
+/** In der Demo sichtbar: DEMONSTRIERBAR oder ABGESCHLOSSEN (Q-610). */
+function isDemoVisible(status: string): boolean {
+  return status === 'DEMONSTRIERBAR' || status === 'ABGESCHLOSSEN';
+}
 
 const domainOrder = [
   'Arbeitsverwaltung',
@@ -34,7 +40,8 @@ const domainMeta: Record<string, { label: string; hint: string; farbe: string }>
 };
 
 export default function StoriesPage() {
-  const demonstrierbar = storyRegistry.filter(s => s.status === 'DEMONSTRIERBAR').length;
+  const demoVisible = storyRegistry.filter(s => isDemoVisible(s.status)).length;
+  const abgeschlossen = storyRegistry.filter(s => s.status === 'ABGESCHLOSSEN').length;
 
   // Group by domain, preserving domainOrder; unknown domains appended at end
   const grouped = new Map<string, typeof storyRegistry>();
@@ -58,7 +65,10 @@ export default function StoriesPage() {
           {/* Summary */}
           <div>
             <h1 style={{ marginBottom: '0.5rem' }}>Story Coverage</h1>
-            <p>{demonstrierbar} von {storyRegistry.length} Stories sind in dieser Demo demonstrierbar.</p>
+            <p>
+              {demoVisible} von {storyRegistry.length} Stories sind in dieser Demo sichtbar
+              ({abgeschlossen} davon abgeschlossen, restliche mit offenen Akzeptanzkriterien).
+            </p>
           </div>
 
           <div style={{ background: 'var(--color-primary-light)', borderRadius: 'var(--radius)', padding: '1rem 1.25rem', fontSize: '0.875rem' }}>
@@ -71,7 +81,8 @@ export default function StoriesPage() {
             .filter(([, stories]) => stories.length > 0)
             .map(([domain, stories]) => {
               const meta = domainMeta[domain] ?? { label: domain, hint: '', farbe: 'var(--color-neutral)' };
-              const demoCount = stories.filter(s => s.status === 'DEMONSTRIERBAR').length;
+              const demoCount = stories.filter(s => isDemoVisible(s.status)).length;
+              const doneCount = stories.filter(s => s.status === 'ABGESCHLOSSEN').length;
               const headingId = `story-domain-${domain
                 .toLowerCase()
                 .replace(/[^a-z0-9äöüß]+/gi, '-')
@@ -96,7 +107,8 @@ export default function StoriesPage() {
                     </h2>
                     <span style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>{meta.hint}</span>
                     <span style={{ marginLeft: 'auto', fontSize: '0.8rem', color: 'var(--color-text-muted)', whiteSpace: 'nowrap' }}>
-                      {demoCount} / {stories.length} demonstrierbar
+                      {demoCount} / {stories.length} sichtbar
+                      {doneCount > 0 ? ` · ${doneCount} abgeschlossen` : ''}
                     </span>
                   </div>
 

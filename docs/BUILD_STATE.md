@@ -1,6 +1,6 @@
 # BUILD_STATE.md – Aktueller Projektstand
 
-Zuletzt aktualisiert: nach Q-602 BUILD_STATE E2E-Sync (378 / `a5a9a3e`)
+Zuletzt aktualisiert: nach Q-610 Story-Registry Status-Audit
 
 Dieser Stand beschreibt, was **tatsächlich existiert und funktioniert** — nicht die Feature-Historie.
 Geplante Schritte → `docs/NEXT_STEPS_QUEUE.md`.  
@@ -36,7 +36,7 @@ Eine Zeile pro Route: Zweck + Story-Bezug. Feinschliff-Details stehen im Code.
 | Route | Inhalt (Ist) | Stories | Status |
 |-------|--------------|---------|--------|
 | `/` | Landing: Domänen-Karten + Sekundärlinks (AV/UG Hinweise, Kita Lagebild intern) | – | ✓ |
-| `/stories` | Story-Coverage: pro Story mit `route` CTA „Zur Demo“ (storyRegistry) | – | ✓ |
+| `/stories` | Story-Coverage: 24 Stories (16 ABGESCHLOSSEN, 8 DEMONSTRIERBAR mit offenen AK); CTA „Zur Demo“ | – | ✓ |
 | `/feedback` | Feedback → GitHub Issues | – | ✓ |
 
 ### Arbeitsverwaltung (`/fall/*`)
@@ -86,7 +86,7 @@ Keine Q-xxx-Chronik. Pfade = Einstieg für Code-Lesen.
 | AV Mock-Fall | `demo/data/mockFall.ts` | ALG-I-Fall: Status, Unterlagen, RQ, Termine, Bescheid, Timeline |
 | UG Mock-Fall | `demo/data/mockGruendungsfall.ts` | Gründungsakte: Behörden, VS, Unterlagen, RQ, Verlauf |
 | Kita Mock | `demo/data/mockKitaLagebild.ts`, `mockKitaMeldeeingang.ts`, … | Planungsräume, Kennzahlen, Meldeeingang, Zeitreihe |
-| Story-Registry | `demo/data/storyRegistry.ts` | AV + UG + KJ → Screens/Status; JSON via `npm run registry:export` (Q-305) |
+| Story-Registry | `demo/data/storyRegistry.ts` | 24 Stories · 16 ABGESCHLOSSEN · 8 DEMONSTRIERBAR (offene AK); Export `registry:export` |
 | Fairness AV | `demo/lib/fairness/rules.ts`, `types/fairness.ts` | Regelbasiert (kein ML); Fristen als ISO + Delta zu fiktivem Heute; Verlauf-Tiefenlinks |
 | Fairness UG | `demo/lib/fairness/gruendung-rules.ts` | Signale + CTA-Routing (`fairnessSignalZiel`, `naechsterSchrittZiel`, …) |
 | Fairness UI | `demo/components/fairness/FairnessPanel.tsx` | Darstellung Signale/CTAs |
@@ -123,9 +123,9 @@ Visuell only — **keine** Auswirkung auf Fachlogik, Status oder Zugriffsregeln 
 
 | Domäne | Docs | Registry | Demo-Status |
 |--------|------|----------|-------------|
-| AV | US-AV-001–008 | ✓ 8 | DEMONSTRIERBAR |
-| UG | US-UG-001–006 | ✓ 6 | DEMONSTRIERBAR |
-| KJ | US-KJ-001–010 | ✓ 10 | DEMONSTRIERBAR (Routen vorhanden) |
+| AV | US-AV-001–008 | ✓ 8 | 6 ABGESCHLOSSEN · 2 DEMONSTRIERBAR (001 eID, 003 Format) |
+| UG | US-UG-001–006 | ✓ 6 | 5 ABGESCHLOSSEN · 1 DEMONSTRIERBAR (003 Format) |
+| KJ | US-KJ-001–010 | ✓ 10 | 5 ABGESCHLOSSEN · 5 DEMONSTRIERBAR (005–008, 010) |
 
 Vorlagen/Prinzipien: `docs/stories/STORY_TEMPLATE.md`, `FRONTEND_TRACEABILITY_PRINCIPLES.md`.  
 Traceability-Matrix: Stub → SSOT `demo/data/storyRegistry.ts` / Export `story_registry.json` / UI `/stories` (Q-432).

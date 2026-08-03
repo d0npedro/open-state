@@ -5,6 +5,12 @@
  *   cd demo && npm run registry:export
  *
  * Demo-UI (/stories) importiert diese Datei direkt.
+ *
+ * Status (Q-610 Audit, Phase-0-Demo):
+ * - ABGESCHLOSSEN: Route + Screen + alle gezählten AK + E2E (Domain/Story)
+ * - DEMONSTRIERBAR: Demo sichtbar, aber nicht alle AK (z. B. eID, Dateiformat-Validierung)
+ * - acceptance_criteria_count = demo-relevante AK (Story-MD kann Phase-0-externe AK haben)
+ * Kein Fake-Upgrade bei offenen AK.
  */
 import { StoryRegistryEntry } from '@/types';
 
@@ -19,7 +25,7 @@ export const storyRegistry: StoryRegistryEntry[] = [
     screen: 'Fallübersicht',
     transparency_focus: 'Sofortige Fallnummer und Eingangsbestätigung sichtbar',
     acceptance_criteria_count: 6,
-    implemented_criteria: 5,
+    implemented_criteria: 5, // eID-Verifikation (AK6) nicht in Phase-0-Demo
     route: '/fall',
     source_file: 'docs/stories/arbeitsverwaltung/US-AV-001_Fall_anlegen.md'
   },
@@ -28,7 +34,7 @@ export const storyRegistry: StoryRegistryEntry[] = [
     domain: 'Arbeitsverwaltung',
     title: 'Status einsehen',
     role: 'Bürger',
-    status: 'DEMONSTRIERBAR',
+    status: 'ABGESCHLOSSEN',
     problem: '40–60 % aller BA-Kontakte sind Statusanfragen',
     screen: 'Fallübersicht / Status-Timeline',
     transparency_focus: 'Status in Klartext mit Begründung und nächstem Schritt',
@@ -47,7 +53,7 @@ export const storyRegistry: StoryRegistryEntry[] = [
     screen: 'Dokumente',
     transparency_focus: 'Jede Anforderung mit Rechtsgrundlage und Begründung',
     acceptance_criteria_count: 5,
-    implemented_criteria: 4,
+    implemented_criteria: 4, // echte Dateiformat-/Größenprüfung nicht in Demo-Upload
     route: '/fall/dokumente',
     source_file: 'docs/stories/arbeitsverwaltung/US-AV-003_Unterlagen_nachreichen.md'
   },
@@ -56,7 +62,7 @@ export const storyRegistry: StoryRegistryEntry[] = [
     domain: 'Arbeitsverwaltung',
     title: 'Rückfrage verstehen',
     role: 'Bürger',
-    status: 'DEMONSTRIERBAR',
+    status: 'ABGESCHLOSSEN',
     problem: 'Rückfragen kommen in unverständlicher Behördensprache ohne Erklärung',
     screen: 'Rückfragen',
     transparency_focus: 'Begründung, Frist und Konsequenz je Rückfrage sichtbar',
@@ -70,7 +76,7 @@ export const storyRegistry: StoryRegistryEntry[] = [
     domain: 'Arbeitsverwaltung',
     title: 'Termin einsehen und verstehen',
     role: 'Bürger',
-    status: 'DEMONSTRIERBAR',
+    status: 'ABGESCHLOSSEN',
     problem: 'Termine kommen per Post ohne Zweck und Vorbereitung',
     screen: 'Termine',
     transparency_focus: 'Zweck und Vorbereitung je Termin erläutert',
@@ -84,7 +90,7 @@ export const storyRegistry: StoryRegistryEntry[] = [
     domain: 'Arbeitsverwaltung',
     title: 'Bescheid verstehen',
     role: 'Bürger',
-    status: 'DEMONSTRIERBAR',
+    status: 'ABGESCHLOSSEN',
     problem: 'Bescheide in Juristensprache, Widerspruchsfristen werden versäumt',
     screen: 'Bescheide',
     transparency_focus: 'Zwei-Schichten-Darstellung: rechtlich + erklärt',
@@ -98,7 +104,7 @@ export const storyRegistry: StoryRegistryEntry[] = [
     domain: 'Arbeitsverwaltung',
     title: 'Historie nachvollziehen',
     role: 'Bürger',
-    status: 'DEMONSTRIERBAR',
+    status: 'ABGESCHLOSSEN',
     problem: 'Keine Übersicht über Verlauf – wer hat was wann entschieden?',
     screen: 'Verlauf / Audit-Log',
     transparency_focus: 'Lückenlose chronologische Timeline aller Ereignisse',
@@ -112,7 +118,7 @@ export const storyRegistry: StoryRegistryEntry[] = [
     domain: 'Arbeitsverwaltung',
     title: 'Verfahrenslage verstehen',
     role: 'Bürger',
-    status: 'DEMONSTRIERBAR',
+    status: 'ABGESCHLOSSEN',
     problem: 'Bürger wissen nicht, warum ein Fall stockt oder was als nächstes zu tun ist – ohne direkte Erklärung bleibt der Verfahrensstand unklar',
     screen: 'Hinweise zur Verfahrenslage',
     transparency_focus: 'Regelbasierte Hinweise aus Falldaten: Fristlage, fehlende Unterlagen, Bescheidstatus – erklärt und begründet',
@@ -128,12 +134,12 @@ export const storyRegistry: StoryRegistryEntry[] = [
     domain: 'Kita-Betrieb & Jugendamt-Steuerung',
     title: 'Tagesstand erfassen',
     role: 'Fachkraft / Kita-Leitung',
-    status: 'DEMONSTRIERBAR',
+    status: 'ABGESCHLOSSEN',
     problem: 'Anwesenheiten werden auf Papier oder in Excel erfasst – nicht aggregierbar, nicht für Monatsberichte nutzbar',
     screen: 'Tagesstand-Erfassung (aggregiert, session-lokal)',
     transparency_focus: 'Lückenloser Nachweis für Förderabrechnungen und Betriebskontrollen',
     acceptance_criteria_count: 4,
-    implemented_criteria: 4,
+    implemented_criteria: 4, // demo-relevant; Offline/Kind-Einzelmarkierung nicht in Phase 0
     route: '/kita/tagesstand',
     source_file: 'docs/stories/kita_betrieb_und_jugendamt_steuerung/US-KJ-001_Tagesstand_erfassen.md'
   },
@@ -142,7 +148,7 @@ export const storyRegistry: StoryRegistryEntry[] = [
     domain: 'Kita-Betrieb & Jugendamt-Steuerung',
     title: 'Belegungsstand einsehen',
     role: 'Kita-Leitung',
-    status: 'DEMONSTRIERBAR',
+    status: 'ABGESCHLOSSEN',
     problem: 'Belegungssituation ist nicht tagesgenau abrufbar – Leitungen müssen manuell zählen',
     screen: 'Belegungsübersicht Einrichtung',
     transparency_focus: 'Tagesgenaue Übersicht belegte / freie / reservierte Plätze je Gruppe',
@@ -156,7 +162,7 @@ export const storyRegistry: StoryRegistryEntry[] = [
     domain: 'Kita-Betrieb & Jugendamt-Steuerung',
     title: 'Monatsbericht abrufen',
     role: 'Kita-Leitung',
-    status: 'DEMONSTRIERBAR',
+    status: 'ABGESCHLOSSEN',
     problem: 'Monatliche Auswertungen werden manuell aus heterogenen Quellen zusammengestellt – fehleranfällig und zeitaufwändig',
     screen: 'Monatsbericht Einrichtung',
     transparency_focus: 'Automatisch erzeugter Bericht mit Anwesenheitsquoten, Auslastung, Personalstunden',
@@ -170,7 +176,7 @@ export const storyRegistry: StoryRegistryEntry[] = [
     domain: 'Kita-Betrieb & Jugendamt-Steuerung',
     title: 'Meldung prüfen und freigeben',
     role: 'Kita-Leitung',
-    status: 'DEMONSTRIERBAR',
+    status: 'ABGESCHLOSSEN',
     problem: 'Meldungen an das Jugendamt werden manuell erstellt – vollautomatische Übermittlung ohne Kontrolle ist keine akzeptable Alternative',
     screen: 'Meldefreigabe Monatsmeldung',
     transparency_focus: 'Aktive Freigabe durch Leitung – keine Datenübermittlung ohne Kenntnis und Bestätigung',
@@ -240,7 +246,7 @@ export const storyRegistry: StoryRegistryEntry[] = [
     domain: 'Kita-Betrieb & Jugendamt-Steuerung',
     title: 'Öffentlichen Transparenzbericht einsehen',
     role: 'Bürger / Öffentlichkeit',
-    status: 'DEMONSTRIERBAR',
+    status: 'ABGESCHLOSSEN',
     problem: 'Öffentliche Informationen zur Kitaversorgung sind nicht vorhanden oder auf Presseberichte beschränkt – Bürger können die Lage nicht selbst einschätzen',
     screen: 'Transparenzbericht (öffentlich)',
     transparency_focus: 'Auslastung, Warteliste, freie Plätze – ohne Registrierung, inkl. Methodik und Datenlücken',
@@ -270,7 +276,7 @@ export const storyRegistry: StoryRegistryEntry[] = [
     domain: 'Unternehmensgründung',
     title: 'Gründungsstatus einsehen',
     role: 'Gründerin / Gründer',
-    status: 'DEMONSTRIERBAR',
+    status: 'ABGESCHLOSSEN',
     problem: 'Gründer wissen nicht, wo ihre Gewerbeanmeldung steht, und müssen bei mehreren Behörden nachfragen',
     screen: 'Gründungsakte / Übersicht',
     transparency_focus: 'Klartext-Status, Fortschritt und nächster Schritt ohne internen Code',
@@ -284,7 +290,7 @@ export const storyRegistry: StoryRegistryEntry[] = [
     domain: 'Unternehmensgründung',
     title: 'Beteiligte Behörden einsehen',
     role: 'Gründerin / Gründer',
-    status: 'DEMONSTRIERBAR',
+    status: 'ABGESCHLOSSEN',
     problem: 'Mehrere Behörden sind beteiligt, Zuständigkeiten und Bearbeitungsstände sind nicht an einem Ort sichtbar',
     screen: 'Behördenübersicht',
     transparency_focus: 'Rolle, Status und Kontakt je Behörde erklärbar',
@@ -303,7 +309,7 @@ export const storyRegistry: StoryRegistryEntry[] = [
     screen: 'Unterlagen / Dokumente',
     transparency_focus: 'Anforderung mit Begründung, Rechtsgrundlage und Dokumentenstatus',
     acceptance_criteria_count: 6,
-    implemented_criteria: 5,
+    implemented_criteria: 5, // echte Formatvalidierung analog AV nicht in Demo
     route: '/gruendung/dokumente',
     source_file: 'docs/stories/unternehmensgruendung/US-UG-003_Unterlagen_nachreichen.md'
   },
@@ -312,7 +318,7 @@ export const storyRegistry: StoryRegistryEntry[] = [
     domain: 'Unternehmensgründung',
     title: 'Rückfrage verstehen und beantworten',
     role: 'Gründerin / Gründer',
-    status: 'DEMONSTRIERBAR',
+    status: 'ABGESCHLOSSEN',
     problem: 'Rückfragen kommen in Behördensprache ohne Frist und Konsequenz',
     screen: 'Rückfragen',
     transparency_focus: 'Frage, Begründung, Frist und Konsequenz je Rückfrage',
@@ -326,7 +332,7 @@ export const storyRegistry: StoryRegistryEntry[] = [
     domain: 'Unternehmensgründung',
     title: 'Verfahrensverlauf nachvollziehen',
     role: 'Gründerin / Gründer',
-    status: 'DEMONSTRIERBAR',
+    status: 'ABGESCHLOSSEN',
     problem: 'Es fehlt eine chronologische Übersicht, wer wann was in der Gründungsakte entschieden hat',
     screen: 'Verlauf / Timeline',
     transparency_focus: 'Lückenlose Timeline mit Ereignistyp, Datum und Urheber',
@@ -340,12 +346,12 @@ export const storyRegistry: StoryRegistryEntry[] = [
     domain: 'Unternehmensgründung',
     title: 'Nächste Schritte und Pflichten verstehen',
     role: 'Gründerin / Gründer',
-    status: 'DEMONSTRIERBAR',
+    status: 'ABGESCHLOSSEN',
     problem: 'Generische Checklisten passen nicht zum konkreten Fall; Handlungsträger und Konsequenzen unklar',
     screen: 'Übersicht / Hinweise',
     transparency_focus: 'Fallbezogene nächste Schritte mit Begründung und Handlungsträger',
     acceptance_criteria_count: 5,
-    implemented_criteria: 4,
+    implemented_criteria: 5, // Q-610: Methodik-Hinweis „keine Rechtsauskunft“ auf /gruendung/hinweise
     route: '/gruendung/hinweise',
     source_file: 'docs/stories/unternehmensgruendung/US-UG-006_Naechste_Schritte_verstehen.md'
   },

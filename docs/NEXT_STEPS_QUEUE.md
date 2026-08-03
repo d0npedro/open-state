@@ -47,7 +47,7 @@ Autonomer Loop: [`docs/delivery/AUTONOMOUS_LOOP.md`](delivery/AUTONOMOUS_LOOP.md
 
 | ID | Domäne | Schritt | Typ | Aufwand | Abhängigkeit | Status |
 |----|--------|---------|-----|---------|--------------|--------|
-| Q-610 | cross | Story-Registry: Status/AK gegen Demo-Realität prüfen; wo E2E+Screens vollständig → `ABGESCHLOSSEN` oder ehrlich `DEMONSTRIERBAR` belassen (kein Fake-Upgrade) | DEMO | M | Q-602 | OFFEN |
+| Q-610 | cross | Story-Registry: Status/AK gegen Demo-Realität prüfen; wo E2E+Screens vollständig → `ABGESCHLOSSEN` oder ehrlich `DEMONSTRIERBAR` belassen (kein Fake-Upgrade) | DEMO | M | Q-602 | DONE |
 | Q-611 | cross | `VERFAHRENSFAIRNESS_IN_DER_DEMO.md` an aktuelle AV/UG-Signale, CTAs und Session-Verhalten anbinden (nur Delta, keine Doppel-Doku) | DOCS | M | – | OFFEN |
 | Q-612 | cross | `/stories` + Registry: fehlende oder veraltete `route`-Felder und „Zur Demo“-Stichproben dokumentieren/fixen | DEMO | S | Q-610 | OFFEN |
 
@@ -82,6 +82,7 @@ Autonomer Loop: [`docs/delivery/AUTONOMOUS_LOOP.md`](delivery/AUTONOMOUS_LOOP.md
 
 | ID | Kurz | Status |
 |----|------|--------|
+| Q-610 | Story-Registry Status-Audit: 16× ABGESCHLOSSEN, 8× DEMONSTRIERBAR (offen AK) | DONE |
 | Q-602 | BUILD_STATE E2E-Baseline 378 / `a5a9a3e` | DONE |
 | Q-601 | Queue-Archiv Q-400–Q-542 auslagern | DONE |
 | Q-600 | Session-Handoff + Queue-Phase Q-600+ | DONE |
@@ -91,7 +92,6 @@ Autonomer Loop: [`docs/delivery/AUTONOMOUS_LOOP.md`](delivery/AUTONOMOUS_LOOP.md
 | Q-541 | Kita Skip-Link Einrichtung/Tagesstand | DONE |
 | Q-540 | Kita Skip-Link Bedarfsplanung/Vorlage | DONE |
 | Q-532 | AV Skip-Link Rückfragen/Termine | DONE |
-| Q-531 | UG Skip-Link Dokumente/Behörden | DONE |
 
 ---
 
