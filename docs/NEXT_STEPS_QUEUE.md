@@ -119,7 +119,7 @@ Autonomer Multi-Domain-Loop: [`docs/delivery/AUTONOMOUS_LOOP.md`](delivery/AUTON
 | ID | Domäne | Schritt | Typ | Aufwand | Abhängigkeit | Status |
 |----|--------|---------|-----|---------|--------------|--------|
 | Q-500 | av | E2E: Session-Reset nach RQ+Upload+Termin stellt Tab-Badges und Fairness-Aktions-Signale wieder her (DEC-012) | DEMO | S | Q-440 | DONE |
-| Q-501 | cross | E2E: ThemeSwitcher ändert `data-density` + localStorage (Parität Q-492 theme) | DEMO | S | Q-492 | OFFEN |
+| Q-501 | cross | E2E: ThemeSwitcher ändert `data-density` + localStorage (Parität Q-492 theme) | DEMO | S | Q-492 | DONE |
 | Q-502 | kita | E2E a11y: Bedarfsplanung Druck/CSV-Buttons mit zugänglichem Namen (Parität Lagebild Q-460) | DEMO | S | Q-481 | OFFEN |
 
 ---
@@ -128,6 +128,7 @@ Autonomer Multi-Domain-Loop: [`docs/delivery/AUTONOMOUS_LOOP.md`](delivery/AUTON
 
 | ID | Kurz | Status |
 |----|------|--------|
+| Q-501 | ThemeSwitcher data-density + localStorage os-density | DONE |
 | Q-500 | AV Session-Reset nach vollem Ruhezustand stellt Badges/Signale wieder her | DONE |
 | Q-492 | ThemeSwitcher a11y + data-theme-Wechsel | DONE |
 | Q-491 | Kita Tagesstand Druck/CSV a11y Labels | DONE |
@@ -137,7 +138,6 @@ Autonomer Multi-Domain-Loop: [`docs/delivery/AUTONOMOUS_LOOP.md`](delivery/AUTON
 | Q-480 | Kita Einrichtung Druck/CSV a11y Labels | DONE |
 | Q-472 | UG Skip-Link /gruendung und /gruendung/hinweise | DONE |
 | Q-471 | Kita Skip-Link /kita und /kita/lagebild | DONE |
-| Q-470 | UG Session-Reset nach RQ stellt Fairness-RQ wieder her | DONE |
 
 ---
 

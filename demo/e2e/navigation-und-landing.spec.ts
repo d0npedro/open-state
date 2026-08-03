@@ -363,3 +363,40 @@ test.describe('ThemeSwitcher a11y (Q-492)', () => {
     await expect(dialog.getByText(/Keine Auswirkung auf Fachlogik/i)).toBeVisible();
   });
 });
+
+test.describe('ThemeSwitcher density (Q-501)', () => {
+  test('data-density und localStorage os-density wechseln ohne Fachlogik-Eingriff', async ({
+    page,
+  }) => {
+    // Parität Q-492 (theme): Density visuell only, localStorage os-density (DEC-010)
+    await page.goto('/');
+
+    // Default: density normal → kein data-density-Attribut (ThemeProvider)
+    await expect(page.locator('html')).not.toHaveAttribute('data-density');
+
+    const trigger = page.getByRole('button', { name: /Darstellung ändern/i });
+    await trigger.click();
+    const dialog = page.getByRole('dialog', { name: /Darstellungseinstellungen/i });
+    await expect(dialog).toBeVisible();
+
+    // Kompakt
+    await dialog.getByRole('radio', { name: /^Kompakt\b/i }).check();
+    await expect(page.locator('html')).toHaveAttribute('data-density', 'compact');
+    expect(await page.evaluate(() => localStorage.getItem('os-density'))).toBe('compact');
+
+    // Großschrift (accessible)
+    await dialog.getByRole('radio', { name: /^Großschrift\b/i }).check();
+    await expect(page.locator('html')).toHaveAttribute('data-density', 'accessible');
+    expect(await page.evaluate(() => localStorage.getItem('os-density'))).toBe('accessible');
+
+    // Zurück auf Normal: Attribut entfällt, Storage speichert normal
+    await dialog.getByRole('radio', { name: /^Normal\b/i }).check();
+    await expect(page.locator('html')).not.toHaveAttribute('data-density');
+    expect(await page.evaluate(() => localStorage.getItem('os-density'))).toBe('normal');
+
+    // Persistenz über Reload (Theme unberührt von Density-Wechsel)
+    await page.reload();
+    await expect(page.locator('html')).not.toHaveAttribute('data-density');
+    expect(await page.evaluate(() => localStorage.getItem('os-density'))).toBe('normal');
+  });
+});

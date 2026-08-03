@@ -5,13 +5,13 @@ Regeln: `docs/delivery/AUTONOMOUS_LOOP.md`.
 
 | Feld | Wert |
 |------|------|
-| `next_domain` | `ug` |
-| `last_domain` | `av` |
-| `last_queue_id` | `Q-500` |
-| `last_commit` | e7bb725 |
-| `fires_total` | 31 |
+| `next_domain` | `kita` |
+| `last_domain` | `cross` |
+| `last_queue_id` | `Q-501` |
+| `last_commit` | pending |
+| `fires_total` | 32 |
 | `consecutive_idle` | 0 |
-| `updated` | 2026-08-03 (Q-500 AV Session-Reset Ruhezustand) |
+| `updated` | 2026-08-03 (Q-501 ThemeSwitcher data-density) |
 
 ## Domänen-Reihenfolge
 
