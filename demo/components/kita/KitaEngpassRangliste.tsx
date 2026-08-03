@@ -117,8 +117,10 @@ export function KitaEngpassRangliste({
   }, [hydrated, basen, sorted, meldeMonatsLabel]);
 
   return (
-    <section>
-      <h2 style={{ marginBottom: '0.5rem' }}>Engpass-Rangliste nach Wartelistendruck</h2>
+    <section id="kita-lagebild-engpass" aria-labelledby="kita-lagebild-engpass-heading">
+      <h2 id="kita-lagebild-engpass-heading" style={{ marginBottom: '0.5rem' }}>
+        Engpass-Rangliste nach Wartelistendruck
+      </h2>
       <p style={{ fontSize: '0.875rem', color: 'var(--color-text-muted)', marginBottom: '0.75rem' }}>
         Wartelistendruck = offene Anfragen / real freie Plätze. Wert &gt; 1 bedeutet mehr Anfragen als
         freie Plätze. Kontinuierliche Skala — kein Ampelsystem.

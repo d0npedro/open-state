@@ -49,7 +49,7 @@ Autonomer Loop: [`docs/delivery/AUTONOMOUS_LOOP.md`](delivery/AUTONOMOUS_LOOP.md
 |----|--------|---------|-----|---------|--------------|--------|
 | Q-610 | cross | Story-Registry: Status/AK gegen Demo-Realität prüfen; wo E2E+Screens vollständig → `ABGESCHLOSSEN` oder ehrlich `DEMONSTRIERBAR` belassen (kein Fake-Upgrade) | DEMO | M | Q-602 | DONE |
 | Q-611 | cross | `VERFAHRENSFAIRNESS_IN_DER_DEMO.md` an aktuelle AV/UG-Signale, CTAs und Session-Verhalten anbinden (nur Delta, keine Doppel-Doku) | DOCS | M | – | DONE |
-| Q-612 | cross | `/stories` + Registry: fehlende oder veraltete `route`-Felder und „Zur Demo“-Stichproben dokumentieren/fixen | DEMO | S | Q-610 | OFFEN |
+| Q-612 | cross | `/stories` + Registry: fehlende oder veraltete `route`-Felder und „Zur Demo“-Stichproben dokumentieren/fixen | DEMO | S | Q-610 | DONE |
 
 ### Domänen – ein Hebel (nicht Micro-Parität)
 
@@ -82,6 +82,7 @@ Autonomer Loop: [`docs/delivery/AUTONOMOUS_LOOP.md`](delivery/AUTONOMOUS_LOOP.md
 
 | ID | Kurz | Status |
 |----|------|--------|
+| Q-612 | Stories Zur-Demo: alle routes + Hash-Tiefenlinks KJ-006/010 + E2E AV/UG/KJ | DONE |
 | Q-611 | VERFAHRENSFAIRNESS_IN_DER_DEMO: AV+UG Signale/CTAs/Session Ist | DONE |
 | Q-610 | Story-Registry Status-Audit: 16× ABGESCHLOSSEN, 8× DEMONSTRIERBAR (offen AK) | DONE |
 | Q-602 | BUILD_STATE E2E-Baseline 378 / `a5a9a3e` | DONE |
@@ -91,7 +92,6 @@ Autonomer Loop: [`docs/delivery/AUTONOMOUS_LOOP.md`](delivery/AUTONOMOUS_LOOP.md
 | Q-603 | demo/.gitignore Playwright/CI-Artefakte | DONE |
 | Q-542 | Kita Skip-Link Monatsbericht/Meldung | DONE |
 | Q-541 | Kita Skip-Link Einrichtung/Tagesstand | DONE |
-| Q-540 | Kita Skip-Link Bedarfsplanung/Vorlage | DONE |
 
 ---
 

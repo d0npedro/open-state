@@ -121,14 +121,14 @@ export default function KitaTransparenzberichtPage() {
         massnahmen={lb.massnahmen}
       />
 
-      {/* Monatsvergleich / Trenddarstellung (Q-024, US-KJ-010) */}
-      <section>
+      {/* Monatsvergleich / Trenddarstellung (Q-024, US-KJ-010); Anker Q-612 Zur-Demo */}
+      <section id="kita-transparenz-zeitreihe" aria-labelledby="kita-transparenz-zeitreihe-heading">
         <div style={{ marginBottom: '1rem' }}>
           <div style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginBottom: '0.5rem' }}>
             <span className="badge badge-primary">US-KJ-010</span>
             <span>Zeitreihen · Regionenfilter · CSV-Export · Open-Data-Lizenzhinweis · Saisonale Muster</span>
           </div>
-          <h2>Entwicklung der letzten 12 Monate</h2>
+          <h2 id="kita-transparenz-zeitreihe-heading">Entwicklung der letzten 12 Monate</h2>
         </div>
         <KitaZeitreiheTabelle
           zeitreihe={lb.zeitreihe}
@@ -137,14 +137,14 @@ export default function KitaTransparenzberichtPage() {
         />
       </section>
 
-      {/* Regionenvergleich Zwei-Räume (US-KJ-010 AK 3) */}
-      <section>
+      {/* Regionenvergleich Zwei-Räume (US-KJ-010 AK 3); Anker Q-612 */}
+      <section id="kita-transparenz-regionenvergleich" aria-labelledby="kita-transparenz-regionen-heading">
         <div style={{ marginBottom: '1rem' }}>
           <div style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginBottom: '0.5rem' }}>
             <span className="badge badge-primary">US-KJ-010</span>
             <span>Regionenvergleich · Zwei Planungsräume · 12-Monats-Verlauf · CSV Stichtag/Verlauf · Druck-Filterstand A/B · Lizenzhinweis</span>
           </div>
-          <h2>Regionenvergleich</h2>
+          <h2 id="kita-transparenz-regionen-heading">Regionenvergleich</h2>
         </div>
         <KitaRegionenVergleich
           planungsraeume={lb.planungsraeume}

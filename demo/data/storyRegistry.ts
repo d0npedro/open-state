@@ -11,6 +11,9 @@
  * - DEMONSTRIERBAR: Demo sichtbar, aber nicht alle AK (z. B. eID, Dateiformat-Validierung)
  * - acceptance_criteria_count = demo-relevante AK (Story-MD kann Phase-0-externe AK haben)
  * Kein Fake-Upgrade bei offenen AK.
+ *
+ * Routes (Q-612): jede Story hat `route` → existierende Demo-Seite; optional Hash
+ * für Tiefenlink (z. B. Engpass, Zeitreihe). /stories „Zur Demo“ + e2e/stories-zur-demo.
  */
 import { StoryRegistryEntry } from '@/types';
 
@@ -210,7 +213,7 @@ export const storyRegistry: StoryRegistryEntry[] = [
     transparency_focus: 'Nachvollziehbare Engpasspriorisierung auf Basis messbarer Faktoren – keine Blackbox',
     acceptance_criteria_count: 5,
     implemented_criteria: 3,
-    route: '/kita/lagebild',
+    route: '/kita/lagebild#kita-lagebild-engpass',
     source_file: 'docs/stories/kita_betrieb_und_jugendamt_steuerung/US-KJ-006_Engpass_Regionen_identifizieren.md'
   },
   {
@@ -266,7 +269,7 @@ export const storyRegistry: StoryRegistryEntry[] = [
     transparency_focus: '12-Monats-Zeitreihe mit Deltas, CSV-Export, Methodik je Kennzahl direkt eingeblendet',
     acceptance_criteria_count: 5,
     implemented_criteria: 3,
-    route: '/kita',
+    route: '/kita#kita-transparenz-zeitreihe',
     source_file: 'docs/stories/kita_betrieb_und_jugendamt_steuerung/US-KJ-010_Zeitreihen_Regionenvergleich.md'
   },
 

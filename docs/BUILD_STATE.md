@@ -1,6 +1,6 @@
 # BUILD_STATE.md – Aktueller Projektstand
 
-Zuletzt aktualisiert: nach Q-611 Fairness-Demo-Doku Delta
+Zuletzt aktualisiert: nach Q-612 Stories Zur-Demo Routes/Stichproben
 
 Dieser Stand beschreibt, was **tatsächlich existiert und funktioniert** — nicht die Feature-Historie.
 Geplante Schritte → `docs/NEXT_STEPS_QUEUE.md`.  
@@ -21,8 +21,8 @@ Detailhistorie → `git log` / `docs/delivery/queue-archive/`.
 | Lokaler Start | `cd demo && npm install && npm run dev` |
 | Letzte bekannte Prüfung | lint + build + **`test:e2e:ci` 378 passed** (chromium) + GitHub Actions grün |
 | Prüf-Bezug (Code) | `a5a9a3e` (Push nach Q-542; spätere Commits bis Q-602 docs/chore-only) |
-| E2E-Baseline | **378** passed · `npm run test:e2e:ci` · workers=1 · 20 Spec-Dateien unter `demo/e2e/` |
-| E2E-Skripte | Domains: `test:e2e:av` · `test:e2e:ug` · `test:e2e:kita`; ThemeSwitcher Q-492/Q-501; BuildInfo Q-510; Footer/Feedback Q-520; Skip-Link Q-521/Q-532/Q-531/Q-540–Q-542; Stories Domain-Landmarks Q-530; Session-Reset Q-500; `stories-zur-demo.spec.ts` |
+| E2E-Baseline | zuletzt voll **378** (`a5a9a3e`); Q-612: `stories-zur-demo` **+4** Tests (AV/UG/KJ + Hash) lokal grün — nächster Full-CI-Lauf erwartet **382** |
+| E2E-Skripte | Domains: `test:e2e:av` · `test:e2e:ug` · `test:e2e:kita`; `stories-zur-demo.spec.ts` (Q-411/Q-530/Q-612: alle routes + Stichproben); Theme/BuildInfo/Skip-Link/Session-Reset |
 | Daten | durchgängig Mock; kein Backend, keine Behörden-Anbindung |
 
 ---
@@ -36,7 +36,7 @@ Eine Zeile pro Route: Zweck + Story-Bezug. Feinschliff-Details stehen im Code.
 | Route | Inhalt (Ist) | Stories | Status |
 |-------|--------------|---------|--------|
 | `/` | Landing: Domänen-Karten + Sekundärlinks (AV/UG Hinweise, Kita Lagebild intern) | – | ✓ |
-| `/stories` | Story-Coverage: 24 Stories (16 ABGESCHLOSSEN, 8 DEMONSTRIERBAR mit offenen AK); CTA „Zur Demo“ | – | ✓ |
+| `/stories` | 24 Stories, alle mit `route`; CTA „Zur Demo“; Tiefenlinks KJ-006 Engpass / KJ-010 Zeitreihe; E2E AV+UG+KJ-Stichproben | – | ✓ |
 | `/feedback` | Feedback → GitHub Issues | – | ✓ |
 
 ### Arbeitsverwaltung (`/fall/*`)

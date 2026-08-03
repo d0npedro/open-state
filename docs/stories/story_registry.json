@@ -199,7 +199,7 @@
       "transparency_focus": "Nachvollziehbare Engpasspriorisierung auf Basis messbarer Faktoren – keine Blackbox",
       "acceptance_criteria_count": 5,
       "implemented_criteria": 3,
-      "route": "/kita/lagebild",
+      "route": "/kita/lagebild#kita-lagebild-engpass",
       "source_file": "docs/stories/kita_betrieb_und_jugendamt_steuerung/US-KJ-006_Engpass_Regionen_identifizieren.md"
     },
     {
@@ -255,7 +255,7 @@
       "transparency_focus": "12-Monats-Zeitreihe mit Deltas, CSV-Export, Methodik je Kennzahl direkt eingeblendet",
       "acceptance_criteria_count": 5,
       "implemented_criteria": 3,
-      "route": "/kita",
+      "route": "/kita#kita-transparenz-zeitreihe",
       "source_file": "docs/stories/kita_betrieb_und_jugendamt_steuerung/US-KJ-010_Zeitreihen_Regionenvergleich.md"
     },
     {
