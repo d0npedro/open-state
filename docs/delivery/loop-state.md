@@ -9,7 +9,7 @@ Session-Einstieg: `docs/delivery/SESSION_HANDOFF.md`.
 | `next_domain` | `av` |
 | `last_domain` | `cross` |
 | `last_queue_id` | `Q-630` |
-| `last_commit` | (pending) |
+| `last_commit` | d0800e5 |
 | `fires_total` | 53 |
 | `consecutive_idle` | 0 |
 | `updated` | 2026-08-03 (Q-630 arc42 Session/Fairness Ist; Queue produktiv leer) |
