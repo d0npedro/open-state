@@ -8,7 +8,7 @@ Regeln: `docs/delivery/AUTONOMOUS_LOOP.md`.
 | `next_domain` | `cross` |
 | `last_domain` | `kita` |
 | `last_queue_id` | `Q-522` |
-| `last_commit` | pending |
+| `last_commit` | 751974b |
 | `fires_total` | 39 |
 | `consecutive_idle` | 0 |
 | `updated` | 2026-08-03 (Q-522 Monatsmeldung Druck/CSV a11y) |
