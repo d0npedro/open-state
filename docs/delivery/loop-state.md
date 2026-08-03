@@ -8,7 +8,7 @@ Regeln: `docs/delivery/AUTONOMOUS_LOOP.md`.
 | `next_domain` | `cross` |
 | `last_domain` | `kita` |
 | `last_queue_id` | `Q-542` |
-| `last_commit` | (nach Commit) |
+| `last_commit` | 6abdc4b |
 | `fires_total` | 45 |
 | `consecutive_idle` | 0 |
 | `updated` | 2026-08-03 (Q-542 Skip-Link Kita Monatsbericht/Meldung; Queue leer) |
