@@ -8,7 +8,7 @@ Regeln: `docs/delivery/AUTONOMOUS_LOOP.md`.
 | `next_domain` | `cross` |
 | `last_domain` | `kita` |
 | `last_queue_id` | `Q-502` |
-| `last_commit` | pending |
+| `last_commit` | eb39963 |
 | `fires_total` | 33 |
 | `consecutive_idle` | 0 |
 | `updated` | 2026-08-03 (Q-502 Bedarfsplanung Druck/CSV a11y) |
