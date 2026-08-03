@@ -8,7 +8,7 @@ Regeln: `docs/delivery/AUTONOMOUS_LOOP.md`.
 | `next_domain` | `cross` |
 | `last_domain` | `kita` |
 | `last_queue_id` | `Q-541` |
-| `last_commit` | (nach Commit) |
+| `last_commit` | 40733ac |
 | `fires_total` | 44 |
 | `consecutive_idle` | 0 |
 | `updated` | 2026-08-03 (Q-541 Skip-Link Kita Einrichtung/Tagesstand) |
