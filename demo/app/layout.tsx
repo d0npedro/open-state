@@ -36,6 +36,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <BuildInfo />
               <nav aria-label="Fußzeilen-Navigation" data-testid="footer-nav" style={{ display: 'flex', alignItems: 'center', gap: '1.25rem', fontSize: '0.8rem' }}>
                 <Link href="/stories" style={{ color: 'rgba(255,255,255,0.75)' }}>Story Coverage</Link>
+                <Link href="/graph" style={{ color: 'rgba(255,255,255,0.75)' }}>Netzwerkgraph</Link>
                 <Link href="/feedback" style={{ color: 'rgba(255,255,255,0.75)' }}>Feedback</Link>
                 <a
                   href="https://github.com/d0npedro/open-state"

@@ -71,6 +71,7 @@ Autonomer Loop: [`docs/delivery/AUTONOMOUS_LOOP.md`](delivery/AUTONOMOUS_LOOP.md
 |----|--------|---------|-----|---------|--------------|--------|
 | Q-640 | cross | E2E-Baseline nach Q-612/Q-620–622 neu zählen (`test:e2e:ci`); BUILD_STATE Zähler + Prüf-Bezug sync; veraltete Lücke „Story-Status Q-610“ entfernen | CHORE | S | – | DONE |
 | Q-641 | cross | Push-Readiness: lint + build + full `test:e2e:ci` (385) auf HEAD; Handoff „Push-ready“; **kein** Push ohne Nutzer-Anweisung | CHORE | S | Q-640 | DONE |
+| Q-650 | cross | Netzwerkgraph `/graph`: Repo-Scan → 3 Datasets (Fach, Module, Datenmodell), Canvas+d3-force, Suche/Freeze/Fit | DEMO | M | – | DONE |
 
 ---
 
@@ -89,6 +90,7 @@ Autonomer Loop: [`docs/delivery/AUTONOMOUS_LOOP.md`](delivery/AUTONOMOUS_LOOP.md
 
 | ID | Kurz | Status |
 |----|------|--------|
+| Q-650 | Netzwerkgraph `/graph` aus Repo-Scan | DONE |
 | Q-641 | Push-ready: lint+build+e2e **385** · Handoff | DONE |
 | Q-640 | E2E-Baseline **385** full `test:e2e:ci` + BUILD_STATE-Sync | DONE |
 | Q-630 | arc42 §8.10 + Systemarchitektur: Demo Session/Fairness Ist-Hinweis | DONE |
@@ -98,8 +100,6 @@ Autonomer Loop: [`docs/delivery/AUTONOMOUS_LOOP.md`](delivery/AUTONOMOUS_LOOP.md
 | Q-612 | Stories Zur-Demo: alle routes + Hash-Tiefenlinks KJ-006/010 + E2E AV/UG/KJ | DONE |
 | Q-611 | VERFAHRENSFAIRNESS_IN_DER_DEMO: AV+UG Signale/CTAs/Session Ist | DONE |
 | Q-610 | Story-Registry Status-Audit: 16× ABGESCHLOSSEN, 8× DEMONSTRIERBAR (offen AK) | DONE |
-| Q-602 | BUILD_STATE E2E-Baseline 378 / `a5a9a3e` | DONE |
-| Q-601 | Queue-Archiv Q-400–Q-542 auslagern | DONE |
 
 ---
 

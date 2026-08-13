@@ -129,7 +129,7 @@ test.describe('Story Coverage – Domain-Sektionen a11y (Q-530)', () => {
     await page.goto('/stories');
     await expect(page.getByRole('heading', { level: 1, name: /Story Coverage/i })).toBeVisible();
 
-    const domains = [...new Set(storyRegistry.map(s => s.domain))];
+    const domains = Array.from(new Set(storyRegistry.map(s => s.domain)));
     expect(domains.length).toBeGreaterThanOrEqual(3);
 
     for (const domain of domains) {

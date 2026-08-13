@@ -1,6 +1,6 @@
 # BUILD_STATE.md – Aktueller Projektstand
 
-Zuletzt aktualisiert: nach Q-641 Push-ready (lint+build+e2e 385)
+Zuletzt aktualisiert: nach Q-650 Netzwerkgraph `/graph`
 
 Dieser Stand beschreibt, was **tatsächlich existiert und funktioniert** — nicht die Feature-Historie.
 Geplante Schritte → `docs/NEXT_STEPS_QUEUE.md`.  
@@ -16,7 +16,7 @@ Detailhistorie → `git log` / `docs/delivery/queue-archive/`.
 | Eigenschaft | Wert |
 |-------------|------|
 | Framework | Next.js 14.2.5, React 18, TypeScript 5 strict |
-| Build-Status | ✓ 27 statische Seiten |
+| Build-Status | ✓ 28 statische Seiten |
 | Deployment | Vercel, aus `demo/` |
 | Lokaler Start | `cd demo && npm install && npm run dev` |
 | Letzte bekannte Prüfung | lint + build + **`test:e2e:ci` 385 passed** (chromium) · **Push-ready** |
@@ -38,6 +38,7 @@ Eine Zeile pro Route: Zweck + Story-Bezug. Feinschliff-Details stehen im Code.
 | `/` | Landing: Domänen-Karten + Sekundärlinks (AV/UG Hinweise, Kita Lagebild intern) | – | ✓ |
 | `/stories` | 24 Stories, alle mit `route`; CTA „Zur Demo“; Tiefenlinks KJ-006 Engpass / KJ-010 Zeitreihe; E2E AV+UG+KJ-Stichproben | – | ✓ |
 | `/feedback` | Feedback → GitHub Issues | – | ✓ |
+| `/graph` | Vollflächiger Force-Graph: Fachkonzepte, Demo-Module, Datenmodell; Suche, Freeze, Fit | – | ✓ |
 
 ### Arbeitsverwaltung (`/fall/*`)
 

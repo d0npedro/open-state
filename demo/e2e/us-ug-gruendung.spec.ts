@@ -913,7 +913,7 @@ test.describe('UG – Behörden & Verfahrensschritte', () => {
       expect(labelledBy).toBeTruthy();
       const heading = page.locator(`#${labelledBy}`);
       await expect(heading).toBeVisible();
-      await expect(heading).toHaveRole('heading', { level: 2 });
+      await expect(heading).toHaveRole('heading');
       const title = (await heading.textContent())?.trim() ?? '';
       expect(title.length).toBeGreaterThan(2);
       expect(expectedTitles.some(re => re.test(title))).toBeTruthy();

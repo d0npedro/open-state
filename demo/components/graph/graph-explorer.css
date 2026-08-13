@@ -1,0 +1,209 @@
+.graph-explorer {
+  --color-surface: #121417;
+  --color-raised: #1b1e21;
+  --color-line: #2a2f32;
+  --color-ink: #d7d9d6;
+  --color-muted: #8b908c;
+  --color-primary: #7dd3c0;
+  --color-freeze: #c4a574;
+  --ge-font: ui-sans-serif, system-ui, "Segoe UI", sans-serif;
+
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-surface);
+  color: var(--color-ink);
+  font-family: var(--ge-font);
+}
+
+.graph-explorer *,
+.graph-explorer *::before,
+.graph-explorer *::after {
+  box-sizing: border-box;
+}
+
+.ge-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  border-bottom: 1px solid var(--color-line);
+  background: var(--color-raised);
+  padding: 0.5rem 0.75rem;
+}
+
+.ge-home {
+  color: var(--color-ink);
+  text-decoration: none;
+  font-size: 0.875rem;
+  border: 1px solid var(--color-line);
+  background: var(--color-raised);
+  padding: 0.25rem 0.5rem;
+}
+
+.ge-home:hover {
+  border-color: var(--color-muted);
+}
+
+.ge-select,
+.ge-search,
+.ge-btn {
+  border: 1px solid var(--color-line);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  font: inherit;
+  font-size: 0.875rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 2px;
+}
+
+.ge-btn {
+  background: var(--color-raised);
+  cursor: pointer;
+}
+
+.ge-btn:hover {
+  border-color: var(--color-muted);
+}
+
+.ge-btn-on {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.ge-search-label {
+  display: flex;
+  flex: 1 1 10rem;
+  min-width: 10rem;
+  align-items: center;
+}
+
+.ge-search {
+  width: 100%;
+}
+
+.ge-search::placeholder {
+  color: var(--color-muted);
+}
+
+.ge-stage {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.ge-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  touch-action: none;
+  display: block;
+}
+
+.ge-panel {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  width: 18rem;
+  max-height: 70%;
+  overflow: auto;
+  border: 1px solid var(--color-line);
+  background: rgb(27 30 33 / 0.95);
+  padding: 0.75rem;
+  font-size: 0.875rem;
+}
+
+.ge-panel-empty {
+  pointer-events: none;
+  color: var(--color-muted);
+}
+
+.ge-kicker,
+.ge-neighbors-title {
+  margin: 0;
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+.ge-title {
+  margin: 0.25rem 0 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-ink);
+}
+
+.ge-desc {
+  margin: 0.5rem 0 0;
+  color: var(--color-muted);
+}
+
+.ge-meta {
+  margin: 0.75rem 0 0;
+}
+
+.ge-meta-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin: 0.25rem 0;
+}
+
+.ge-meta-row dt {
+  color: var(--color-muted);
+}
+
+.ge-meta-row dd {
+  margin: 0;
+  color: var(--color-ink);
+}
+
+.ge-neighbors-title {
+  margin-top: 0.75rem;
+}
+
+.ge-neighbors {
+  margin: 0.25rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ge-neighbors li {
+  margin: 0.25rem 0;
+}
+
+.ge-dir,
+.ge-link-label {
+  color: var(--color-muted);
+}
+
+.graph-explorer button:focus-visible,
+.graph-explorer select:focus-visible,
+.graph-explorer input:focus-visible,
+.graph-explorer a:focus-visible {
+  outline: 1px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (max-width: 640px) {
+  .ge-panel {
+    width: calc(100% - 1.5rem);
+    max-height: 40%;
+  }
+}
