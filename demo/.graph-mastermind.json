@@ -1,0 +1,7 @@
+{
+  "package": "graph-mastermind",
+  "source": "https://github.com/d0npedro/graph-mastermind",
+  "applied": true,
+  "appDir": "demo",
+  "start": "cd demo && npm install && npm run dev"
+}
