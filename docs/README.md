@@ -80,6 +80,7 @@ Verwandt (noch nicht unter `domains/`):
 | [`DECISION_LOG.md`](DECISION_LOG.md) | Entscheidungen (u. a. DEC-013 Anti-Growth) |
 | [`REPO_REFACTORING_PLAN.md`](REPO_REFACTORING_PLAN.md) | Refactoring-Plan + Policy §4 (Q-299–Q-307) |
 | [`loops/MULTI_LOOP_BETRIEB.md`](loops/MULTI_LOOP_BETRIEB.md) | Parallele Domain-Loops |
+| [`delivery/VERCEL_FAILED_BUILDS.md`](delivery/VERCEL_FAILED_BUILDS.md) | Vercel ERROR/CANCELED: Fehlermeldung + bewiesene Lösung |
 
 ---
 
