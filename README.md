@@ -1,93 +1,69 @@
-# Open State – Staatliche Verwaltung. Transparent. Zuverlässig. Digital.
+# Open State: Der Standard für den digitalen und fälschungssicheren Staat
 
-**Konzept- und Architekturprojekt** für eine bürgernahe, nachvollziehbare digitale Verwaltungsinfrastruktur — mit klickbarer Demo (Mock-Daten, Phase 0).
+> **Architektur, Prinzipien und Systembrief-Essays für einen funktionierenden, bürgernahen und transparenten digitalen Staat.**
+> Klar in Minuten. Ohne Meinungstheater, ohne Portal-Fassade.
 
-![License](https://img.shields.io/badge/License-MIT-blue)
-![Status](https://img.shields.io/badge/Status-Konzept%20%26%20Architektur-informational)
-
----
-
-## Vision
-
-Der Staat trägt Verantwortung — für jeden Bürger, unabhängig von Bildungsstand, Region oder digitalem Vorwissen.
-
-Open State macht diese Verantwortung sichtbar: klare Prozesse, nachvollziehbare Entscheidungen, sichere Daten, Dienste, die zu den Menschen kommen.
-
-> **„Effizienz ist kein Selbstzweck. Sie ist Ausdruck von Respekt gegenüber jedem Bürger und verantwortungsvoller Umgang mit Steuergeld."**
-
-Open State ist kein Startup-Produkt. Es ist ein transparentes Betriebs- und Vertrauensmodell für einen handlungsfähigen, gerechten und digital kompetenten Staat.
-
-**Kernprinzipien:** Datensouveränität · KI nur als Assistenz · Open Source Kern · WCAG 2.1 AA · DSGVO by Design · keine Werbefinanzierung
+[![Systembrief](https://img.shields.io/badge/Systembrief-Online-blue)](https://systembrief.de/)
+[![Architecture](https://img.shields.io/badge/Architecture-arc42-green)](https://systembrief.de/system/arc42/)
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 ---
 
-## Kerndomänen (mit Demo)
+## 🎯 Worum geht es hier?
 
-| Domäne | Demo | Fachkonzept |
-|--------|------|-------------|
-| **Arbeitsverwaltung** | `/fall/*` | [docs/domains/arbeitsverwaltung/](docs/domains/arbeitsverwaltung/README.md) |
-| **Unternehmensgründung** | `/gruendung/*` | [docs/domains/unternehmensgruendung/](docs/domains/unternehmensgruendung/README.md) |
-| **Kita-Betrieb & Jugendamt** | `/kita/*` | [docs/domains/kita_betrieb_und_jugendamt_steuerung/](docs/domains/kita_betrieb_und_jugendamt_steuerung/README.md) |
-| **Verfahrensfairness** (Querschnitt) | Signale in AV/UG | [docs/engines/verfahrensfairness/](docs/engines/verfahrensfairness/README.md) |
+Digitale Verwaltung scheitert heute selten an fehlender Technik, sondern an **unübersichtlichen Portalen, Medienbrüchen, fehlender Prozessklarheit und Blackbox-Systemen**. 
 
-Weitere geplante Domänen (ohne Demo): Wohnsitz, Steuern, Rechtsstreit, Sozialleistungen — siehe [Master-Blueprint](docs/01_Master_Blueprint.md).
+`open-state` ist der architektonische Entwurf und die strukturierte Sammlung von Prinzipien für einen modernen, dienenden Staat. Es verbindet **Open-Source-Prinzipien, rechtliche Anschlussfähigkeit und radikales Prozess-Redesign** zu einem modularen Gesamtsystem[cite: 1].
 
 ---
 
-## Demo starten
+## 📊 Architektur & Präsentations-Slides
 
-```bash
-cd demo && npm install && npm run dev
-# → http://localhost:3000
-```
+Die folgende Übersicht zeigt die Kernschichten der Architektur auf einen Blick. Nutze diese Folien-Struktur, um das Konzept in Pitches oder Readmes sofort begreifbar zu machen:
 
-| Ressource | Link |
-|-----------|------|
-| Deployment, Branches, Vercel | [docs/DEPLOYMENT_AND_DEMO_STRATEGY.md](docs/DEPLOYMENT_AND_DEMO_STRATEGY.md) |
-| Aktueller Demo-Stand (Routen) | [docs/BUILD_STATE.md](docs/BUILD_STATE.md) |
-| Stories / Coverage | [docs/stories/README.md](docs/stories/README.md) · Route `/stories` |
-
----
-
-## Dokumentation finden
-
-**Map of Content (vollständig):** → **[docs/README.md](docs/README.md)**
-
-Kurz:
-
-| Bedarf | Einstieg |
-|--------|----------|
-| Architektur (arc42) | [architecture/arc42/](architecture/arc42/README.md) |
-| Stories & Traceability | [docs/stories/](docs/stories/README.md) |
-| Recht / Transparenz | [legal/](legal/) · [transparency/](transparency/) |
-| Mitwirken | [CONTRIBUTING.md](CONTRIBUTING.md) |
-
-Nummerierte Module 01–15 und alle Querschnittspfade: in der [Map of Content](docs/README.md).
+| Schicht / Bereich | Kernkomponente | Ziel & Wirkung |
+| :--- | :--- | :--- |
+| **01. Identität & Souveränität** | [Digitaler Datentresor & SSI](https://systembrief.de/system/datentresor/) | Schlüssel beim Bürger, selektive Offenbarung ohne Portallogins[cite: 1]. |
+| **02. Prozess & Orchestrierung** | [Process Orchestrator](https://systembrief.de/system/process-orchestrator/) | Der Fall kennt den Weg – Ende-zu-Ende-Sichtbarkeit statt Amts-Inseln[cite: 1]. |
+| **03. Schnittstellen & Recht** | [Behörden-Backend-Adapter](https://systembrief.de/system/behoerden-adapter/) | Digitalisierung bis ins Fachverfahren – keine Schein-Automatisierung[cite: 1]. |
+| **04. KI & Assistenz** | [KI als Empfehlung, nie Entscheidung](https://systembrief.de/system/ki-empfehlung-nur/) | Transparente Assistenz mit Quellen und Konfidenzwerten, menschliche Letztverantwortung[cite: 1]. |
+| **05. Vertrauen & Audit** | [Audit-Log & Zero-Knowledge](https://systembrief.de/system/audit-log-daten/) | Unveränderliche Zugriffspuren, bürgerlesbar und fälschungssicher[cite: 1]. |
 
 ---
 
-## Delivery (Weiterentwicklung im Repo)
+## 🗂️ Vollständige Projekt-Verlinkung & Themenmatrix
 
-| Datei | Zweck |
-|-------|-------|
-| [AGENTS.md](AGENTS.md) | Verbindlicher Iterationsablauf |
-| [docs/NEXT_STEPS_QUEUE.md](docs/NEXT_STEPS_QUEUE.md) | Offene Schritte |
-| [docs/BUILD_STATE.md](docs/BUILD_STATE.md) | Ist-Stand |
-| [docs/DECISION_LOG.md](docs/DECISION_LOG.md) | Entscheidungen |
-| [docs/DELIVERY_SYSTEM.md](docs/DELIVERY_SYSTEM.md) | 12-Schritte-Detail |
+Das Repository und die begleitenden [Systembrief-Essays](https://systembrief.de/) gliedern sich in folgende Kernbereiche. Klicke auf die Themen, um direkt in die Fachkonzepte einzusteigen:
 
-Befehl: **„Entwickle weiter"** → ein Queue-Schritt, Commit, kein Push (Push nur auf ausdrückliche Anweisung).
+### 🏛️ 1. Staatsarchitektur & Prozesse
+* [User Stories als Verfahrensvertrag](https://systembrief.de/system/user-stories-als-verfahrensvertrag/) – Ein faires Verfahren als prüfbarer Vertrag[cite: 1].
+* [Radikales Prozess-Redesign](https://systembrief.de/system/prozess-redesign/) – Abläufe vor dem Portal neu denken[cite: 1].
+* [Vertikale Slices](https://systembrief.de/system/vertikale-slices/) – Früher Nutzen durch dünne, durchgängige Schnitte[cite: 1].
+* [arc42-Architektur](https://systembrief.de/system/arc42/) – Struktur, Nachvollziehbarkeit und ein gemeinsames Bild[cite: 1].
 
-Strukturelles Aufräumen (DEC-011): [docs/REPO_REFACTORING_PLAN.md](docs/REPO_REFACTORING_PLAN.md) · Historie: [archive/](archive/)
+### 🛡️ 2. Datensouveränität & Sicherheit
+* [Self-Sovereign Identity (SSI)](https://systembrief.de/system/self-sovereign-identity/) – Wallet, verifizierbare Credentials statt Passkopien[cite: 1].
+* [Zero-Trust API Gateway](https://systembrief.de/system/zero-trust-gateway/) – Jede Anfrage beweist Identität und Zweck[cite: 1].
+* [Ende-zu-Ende-Verschlüsselung](https://systembrief.de/system/e2e-verschluesselung/) – Betreiber speichert nur Ciphertext[cite: 1].
+* [Recht auf Löschung per 1-Klick](https://systembrief.de/system/loeschung-1-klick/) – Starten, verstehen und nachweisen[cite: 1].
+
+### 🤖 3. Künstliche Intelligenz im Staat
+* [KI nur Empfehlung, nie Entscheidung](https://systembrief.de/system/ki-empfehlung-nur/) – Verantwortung bleibt beim Menschen[cite: 1].
+* [Erklärbare KI (XAI)](https://systembrief.de/system/erklaerbare-ki/) – Verständliche Begründungen in Alltagssprache[cite: 1].
+* [Bias-Audits und Fairness-Signale](https://systembrief.de/system/bias-audits/) – Systematische Verzerrungen messen und sichtbar machen[cite: 1].
+
+### 🚀 4. Lebenslagen & praktische Anwendung
+* [Firmengründung in Minuten](https://systembrief.de/system/firmengruendung-schnell/) – Ein Vorgang, parallele Prüfungen, klare Haftung[cite: 1].
+* [Wohnsitzmanagement](https://systembrief.de/system/wohnsitzmanagement/) – Einmal melden, mit Auftrag weitergeben[cite: 1].
+* [Sozialleistungen & Bürgergeld](https://systembrief.de/system/sozialleistungen/) – Anspruch statt Labyrinth, Once-Only und Würde[cite: 1].
 
 ---
 
-## Mitmachen
+## 🛠️ Schnellstart & Mitwirken
 
-- Issues & Pull Requests willkommen  
-- Fach / Recht / UX: Label `feedback` · Technik: Label `dev`  
-- Demo-Feedback im laufenden Demonstrator: `/feedback`
+1. **Lesen & Verstehen:** Besuche [Systembrief](https://systembrief.de/) für alle wöchentlichen Analysen und Deep-Dives[cite: 1].
+2. **Mitwirken:** Lies die Richtlinien zur [Open-Source-Mitwirkung an staatlicher Software](https://systembrief.de/system/open-source-mitwirkung-staat/)[cite: 1].
+3. **Forken & Anpassen:** Nutze die Architekturbausteine für eigene föderale oder kommunale Open-Source-Projekte.
 
 ---
-
-**„Der Staat soll für den Bürger da sein – verlässlich, fair, transparent."**
+*Basierend auf den Prinzipien von [Systembrief](https://systembrief.de/)[cite: 1].*
